@@ -1,0 +1,27 @@
+{
+  "name": "shadowsocks-jun",
+  "version": "0.0.1",
+  "description": "shadowsocks with multiuser and traffic control.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyteng/shadowsocks-jun.git"
+  },
+  "keywords": [
+    "shadowsocks"
+  ],
+  "author": "Gyteng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gyteng/shadowsocks-jun/issues"
+  },
+  "homepage": "https://github.com/gyteng/shadowsocks-jun",
+  "dependencies": {
+    "later": "1.1.6",
+    "async" : "0.9.0"
+  },
+  "bin": ""
+}
