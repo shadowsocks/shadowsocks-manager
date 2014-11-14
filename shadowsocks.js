@@ -76,4 +76,3 @@ exports.getTrafficRate = function(name, callback) {
     //         });
     //     }
     // }
-};
