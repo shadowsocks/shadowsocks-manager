@@ -1,9 +1,10 @@
 var ss = require('./shadowsocks');
 var users = require('./config').users;
 
-ss.getTrafficRate('0001', function(err, data) {
-    console.log(data);
+ss.setRateToZero('0002', function(err) {
+    
 });
+//ss.limitTraffic('0002');
 
 
 // console.log('getTrafficRate:');

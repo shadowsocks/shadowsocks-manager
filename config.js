@@ -1,4 +1,4 @@
-exports.serverIp = '0.0.0.0';
+exports.serverIp = '104.131.145.235';
 exports.users = [
     {
         name: '0001',
