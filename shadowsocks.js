@@ -17,31 +17,35 @@ exports.startShadowSocks = function(config, callback) {
     });
 };
 
-exports.setRateToZero = function(config, callback) {
-    var cmd0 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + config.port;
-    var cmd1 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + config.port + ' -j DROP';
-    var cmd2 = 'iptables -I OUTPUT -s ' + ip + ' -p tcp --sport ' + config.port;
-    process.exec(cmd0);
-    process.exec(cmd1);
-    process.exec(cmd2);
-    callback(null);
+exports.setRateToZero = function(name, callback) {
+    users.forEach(function(user) {
+        if (user.name === name) {
+            var cmd0 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + user.port;
+            var cmd1 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + user.port + ' -j DROP';
+            var cmd2 = 'iptables -I OUTPUT -s ' + ip + ' -p tcp --sport ' + user.port;
+            process.exec(cmd0);
+            process.exec(cmd1);
+            process.exec(cmd2);
+            callback(null);
+        }
+    });
 };
 
 exports.limitTraffic = function(name, callback) {
-    for(var user in users) {
-        if (users[user].name === name) {
-            var cmd0 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + users[user].port;
-            var cmd1 = 'iptables -I OUTPUT -s ' + ip + ' -p tcp --sport ' + users[user].port  + ' -j DROP';
+    users.forEach(function(user) {
+        if (user.name === name) {
+            var cmd0 = 'iptables -D OUTPUT -s ' + ip + ' -p tcp --sport ' + user.port;
+            var cmd1 = 'iptables -I OUTPUT -s ' + ip + ' -p tcp --sport ' + user.port + ' -j DROP';
             process.exec(cmd0);
             process.exec(cmd1);
             callback(null);
         }
-    }
+    });
 };
 
 exports.getTrafficRate = function(name, callback) {
     users.forEach(function(user) {
-        if(user.name === name) {
+        if (user.name === name) {
             var cmd = 'iptables -n -L -v -x | grep "spt:' + user.port + '" | awk \'{print $2}\'';
             var iptables = process.exec(cmd, function(error, stdout, stderr) {
                 if (error) {
@@ -53,6 +57,7 @@ exports.getTrafficRate = function(name, callback) {
             });
         }
     });
+};
 
 
     // for(var user in users) {
