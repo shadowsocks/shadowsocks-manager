@@ -1,0 +1,58 @@
+<html lang="zh" ng-app="StarterApp" ng-controller="AppCtrl">
+  <head>
+    <link rel="stylesheet" href="./angular-material.min.css">
+    <link rel="stylesheet" href="./angular.css">
+    <link rel="stylesheet" href="http://fonts.useso.com/css?family=RobotoDraft:300,400,500,700,400italic">
+    <meta name="viewport" content="initial-scale=1" />
+    <title ng-bind="allRate"></title>
+  </head>
+  <body layout="column">
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools">
+        <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
+          <md-icon aria-label="Menu" md-svg-icon="./menu.svg"></md-icon>
+        </md-button>
+        <h1>{{allRate}}</h1>
+      </div>
+    </md-toolbar>
+    <div layout="row" flex>
+        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+            <md-content class="md-padding">
+                <md-list>
+                    <!-- <md-list-item class="md-3-line"> -->
+                        <md-button class="md-primary">
+                            All
+                        </md-button>
+                        <md-button class="md-primary">
+                            Today
+                        </md-button>
+                        <md-button class="md-primary">
+                            Week
+                        </md-button>
+                    <!-- </md-list-item> -->
+                </md-list>
+            </md-content>
+        </md-sidenav>
+        <div layout="column" flex id="content">
+            <md-content layout="column" flex class="md-padding">
+                <md-list>
+      <md-list-item class="md-3-line" ng-repeat="(port, rate) in rate">
+        <div class="md-list-item-text">{{port}}</div>
+        <div class="md-list-item-text">{{rate}}</div>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+    </md-content>
+            </md-content>
+        </div>
+    </div>
+
+
+
+    <script src="./angular.min.js"></script>
+    <script src="./angular-animate.min.js"></script>
+    <script src="./angular-aria.min.js"></script>
+    <script src="./angular-material.min.js"></script>
+    <script src="./angular.js"></script>
+  </body>
+</html>
