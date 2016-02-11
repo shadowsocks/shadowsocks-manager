@@ -27,6 +27,7 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
                 $scope.rate[f.userId] = f[$scope.rateType];
                 $scope.allRate += f[$scope.rateType];
             });
+            $mdSidenav('left').close();
         };
         
         var getRate = function() {
@@ -38,7 +39,6 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
                     $scope.rate[f.userId] = f[$scope.rateType];
                     $scope.allRate += f[$scope.rateType];
                 });
-                
             });
         };
         getRate();

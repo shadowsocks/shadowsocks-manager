@@ -74,6 +74,8 @@ app.use(express.static('public'));
 
 app.get('/rate', function (req, res) {
     var today = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
+    var week  = moment().weekday(0).hour(0).minute(0).second(0).millisecond(0).toDate();
+    var month = moment().date(0).hour(0).minute(0).second(0).millisecond(0).toDate();
     User.aggregate([
         {'$unwind': '$history'},
         {'$project': {
@@ -87,6 +89,16 @@ app.get('/rate', function (req, res) {
                 'today': {
                     '$sum': {
                         '$cond': [ {'$gte': ['$time', today]}, '$number', 0]
+                    }
+                },
+                'week': {
+                    '$sum': {
+                        '$cond': [ {'$gte': ['$time', week]}, '$number', 0]
+                    }
+                },
+                'month': {
+                    '$sum': {
+                        '$cond': [ {'$gte': ['$time', month]}, '$number', 0]
                     }
                 }
             }
