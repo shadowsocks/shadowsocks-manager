@@ -21,6 +21,7 @@
   "homepage": "https://github.com/gyteng/shadowsocks-manager",
   "dependencies": {
     "express": "*",
+    "later": "^1.2.0",
     "moment": "^2.11.2"
   },
   "bin": ""

@@ -2,7 +2,7 @@ var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
 var message = new Buffer('ping');
 var moment = require('moment');
-// var fs = require('fs');
+// var later = require('later');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ss');
 var Schema = mongoose.Schema;
@@ -17,29 +17,11 @@ var User = mongoose.model('User', userSchema);
 // var message = new Buffer('add: {"server_port": 40123, "password":"fuckgfw"}');
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    // console.log('GG');
-    // User.find({}).exec(function(e,d) {console.log(e,d);});
-});
-
-// var rate = {};
-// var myRate = 0;
-
-// var writeRate = function(num) {
-//     myRate = num;
-//     fs.readFile('./rate.txt', function(err, data) {
-//         if(!err) {
-//             myRate = (+data) + num;
-//         }
-//         fs.writeFile('./rate.txt', '' + myRate, function() {
-
-//         });
-//     });
-// };
-
+db.on('error', function() {});
+db.once('open', function() {});
 
 socket.send(message, 0, message.length, 6001, '127.0.0.1', function(err, bytes) {
+    // var rate = {};
     socket.on('message', function(m, r) {
         var msg = String(m);
         console.log(msg);
@@ -48,19 +30,13 @@ socket.send(message, 0, message.length, 6001, '127.0.0.1', function(err, bytes) 
             // console.log(newRate);
             var num = 0;
             for(var nr in newRate) {
+                // if(rate[nr]) {rate[nr] += newRate[nr];}
+                // else {rate[nr] = newRate[nr];}
                 User.findOneAndUpdate({
                     userId: nr
                 }, {
                     $push: {history: {time: new Date(), number: +newRate[nr]}}
-                }, {upsert: true}).exec(function(e, d) {
-                    // console.log(e,d);
-                });
-                // num += (+newRate[nr]);
-                // if(!rate[nr]) {
-                //     rate[nr] = (+newRate[nr]);
-                // } else {
-                //     rate[nr] += (+newRate[nr]);
-                // }
+                }, {upsert: true}).exec();
             }
             // console.log(rate);
         }
@@ -104,30 +80,10 @@ app.get('/rate', function (req, res) {
             }
         }
     ]).exec(function(e, d) {
-        console.log(e, d);
         if(e) {return res.status(500).end;}
         res.send(d);
     });
-    // res.send(rate);
 });
-
-// app.get('/allRate', function (req, res) {
-//     User.aggregate([
-//         {'$unwind': '$history'},
-//         {'$project': {
-//             'userId': '$userId', 'number': '$history.number'
-//         }},
-//         {'$group': {'_id': null, 'number': {'$sum': '$number'}}}
-//     ]).exec(function(e, d) {
-//         console.log(e, d);
-//         if(e) {
-//             res.status(500).end();
-//         } else {
-//             res.send({allRate: d[0].number});
-//         }
-//     });
-    
-// });
 
 var server = app.listen(6002, function () {});
 

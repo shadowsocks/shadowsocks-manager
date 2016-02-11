@@ -10,15 +10,6 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
         $scope.allRate = 0;
         $scope.rateType = 'all';
 
-        // $scope.$watch('rateType', function() {
-        //     $scope.rate = $scope.getRate.map(function(f) {
-        //         return {port: f.userId, rate: f[$scope.rateType]};
-        //     });
-        //     $scope.allRate = 0;
-        //     $scope.rate.forEach(function(f) {
-        //         $scope.allRate += f.rate;
-        //     });
-        // });
         $scope.setType = function(type) {
             $scope.rateType = type;
             $scope.allRate = 0;
@@ -45,7 +36,11 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
         $interval(function() {
             getRate();
         }, 10000);
-
+        document.addEventListener('visibilitychange', function(){
+            if(document.visibilityState === visible) {
+                getRate();
+            }
+        });
     }
 ]).filter('rate1024', function() {
     return function(input) {
