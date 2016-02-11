@@ -1,26 +1,27 @@
 {
-    "name": "shadowsocks-manager",
-    "version": "0.0.1",
-    "description": "undefined",
-    "main": "server.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/gyteng/shadowsocks-manager.git"
-    },
-    "keywords": [
-        "shadowsocks"
-    ],
-    "author": "Gyteng",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/gyteng/shadowsocks-manager/issues"
-    },
-    "homepage": "https://github.com/gyteng/shadowsocks-manager",
-    "dependencies": {
-        "express": "*"
-    },
-    "bin": ""
+  "name": "shadowsocks-manager",
+  "version": "0.0.1",
+  "description": "undefined",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyteng/shadowsocks-manager.git"
+  },
+  "keywords": [
+    "shadowsocks"
+  ],
+  "author": "Gyteng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gyteng/shadowsocks-manager/issues"
+  },
+  "homepage": "https://github.com/gyteng/shadowsocks-manager",
+  "dependencies": {
+    "express": "*",
+    "moment": "^2.11.2"
+  },
+  "bin": ""
 }

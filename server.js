@@ -1,6 +1,7 @@
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
 var message = new Buffer('ping');
+var moment = require('moment');
 // var fs = require('fs');
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/ss');
@@ -72,21 +73,28 @@ var app = express();
 app.use(express.static('public'));
 
 app.get('/rate', function (req, res) {
+    var today = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
     User.aggregate([
         {'$unwind': '$history'},
         {'$project': {
-            'userId': '$userId', 'number': '$history.number'
+            'userId': '$userId', 'number': '$history.number', 'time': '$history.time'
         }},
-        {'$group': {'_id': '$userId', 'userId': {'$first': '$userId'}, 'number': {'$sum': '$number'}}}
+        {'$group':
+            {
+                '_id': '$userId',
+                'userId': {'$first': '$userId'},
+                'all': {'$sum': '$number'},
+                'today': {
+                    '$sum': {
+                        '$cond': [ {'$gte': ['$time', today]}, '$number', 0]
+                    }
+                }
+            }
+        }
     ]).exec(function(e, d) {
         console.log(e, d);
         if(e) {return res.status(500).end;}
-        var ret = {};
-        d.forEach(function(dd) {
-            ret[dd.userId] = dd.number;
-        });
-        console.log(ret);
-        res.send(ret);
+        res.send(d);
     });
     // res.send(rate);
 });

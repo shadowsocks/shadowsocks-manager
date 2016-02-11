@@ -12,7 +12,7 @@
         <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
           <md-icon aria-label="Menu" md-svg-icon="./menu.svg"></md-icon>
         </md-button>
-        <h1>{{allRate}}</h1>
+        <h1>{{allRate | rate1024}}</h1>
       </div>
     </md-toolbar>
     <div layout="row" flex>
@@ -20,10 +20,10 @@
             <md-content class="md-padding">
                 <md-list>
                     <!-- <md-list-item class="md-3-line"> -->
-                        <md-button class="md-primary">
+                        <md-button ng-click="setType('all')" class="md-primary">
                             All
                         </md-button>
-                        <md-button class="md-primary">
+                        <md-button ng-click="setType('today')" class="md-primary">
                             Today
                         </md-button>
                         <md-button class="md-primary">
@@ -38,7 +38,7 @@
                 <md-list>
       <md-list-item class="md-3-line" ng-repeat="(port, rate) in rate">
         <div class="md-list-item-text">{{port}}</div>
-        <div class="md-list-item-text">{{rate}}</div>
+        <div class="md-list-item-text">{{rate | rate1024}}</div>
         <md-divider ng-if="!$last"></md-divider>
       </md-list-item>
     </md-list>

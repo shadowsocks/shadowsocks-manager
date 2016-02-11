@@ -6,38 +6,59 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
             $mdSidenav(menuId).toggle();
         };
         $scope.rate = {};
+        $scope.getRate = [];
+        $scope.allRate = 0;
+        $scope.rateType = 'all';
+
+        // $scope.$watch('rateType', function() {
+        //     $scope.rate = $scope.getRate.map(function(f) {
+        //         return {port: f.userId, rate: f[$scope.rateType]};
+        //     });
+        //     $scope.allRate = 0;
+        //     $scope.rate.forEach(function(f) {
+        //         $scope.allRate += f.rate;
+        //     });
+        // });
+        $scope.setType = function(type) {
+            $scope.rateType = type;
+            $scope.allRate = 0;
+            $scope.rate = {};
+            $scope.getRate.forEach(function(f) {
+                $scope.rate[f.userId] = f[$scope.rateType];
+                $scope.allRate += f[$scope.rateType];
+            });
+        };
         
         var getRate = function() {
             $http.get('./rate').success(function(data) {
+                $scope.getRate = data;
                 $scope.allRate = 0;
-                for(var d in data) {
-                    $scope.allRate += data[d];
-                    if(data[d] < 1000) {
-                        data[d] += ' B';
-                    } else if (data[d] < 1000000) {
-                        data[d] = (data[d]/1000).toFixed(2) + ' KB';
-                    } else if (data[d] < 1000000000) {
-                        data[d] = (data[d]/1000000).toFixed(2) + ' MB';
-                    } else if (data[d] < 1000000000000) {
-                        data[d] = (data[d]/1000000000).toFixed(3) + ' GB';
-                    }
-                }
-                $scope.rate = data;
-
-                if($scope.allRate < 1000) {
-                    $scope.allRate = ($scope.allRate + ' B');
-                } else if ($scope.allRate < 1000000) {
-                    $scope.allRate = ($scope.allRate/1000).toFixed(2) + ' KB';
-                } else if ($scope.allRate < 1000000000) {
-                    $scope.allRate = ($scope.allRate/1000000).toFixed(2) + ' MB';
-                } else if ($scope.allRate < 1000000000000) {
-                    $scope.allRate = ($scope.allRate/1000000000).toFixed(3) + ' GB';
-                }
+                $scope.rate = {};
+                data.forEach(function(f) {
+                    $scope.rate[f.userId] = f[$scope.rateType];
+                    $scope.allRate += f[$scope.rateType];
+                });
+                
             });
         };
         getRate();
         $interval(function() {
             getRate();
         }, 10000);
+
     }
-]);
+]).filter('rate1024', function() {
+    return function(input) {
+        if (input < 1000) {
+            return input +' B';
+        } else if (input < 1000000) {
+            return (input/1000).toFixed(2) +' KB';
+        } else if (input < 1000000000) {
+            return (input/1000000).toFixed(2) +' MB';
+        } else if (input < 1000000000000) {
+            return (input/1000000000).toFixed(2) +' GB';
+        } else {
+            return input;
+        }
+    };
+});
