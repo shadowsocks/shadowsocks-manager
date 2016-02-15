@@ -14,7 +14,7 @@
         <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
           <md-icon aria-label="Menu" md-svg-icon="./menu.svg"></md-icon>
         </md-button>
-        <h1>{{allRate | rate1024}}</h1>
+        <h1>{{rateType | uppercase}} {{allRate | rate1024}}</h1>
       </div>
     </md-toolbar>
     <div layout="row" flex>

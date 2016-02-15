@@ -15,6 +15,7 @@ var userSchema = new Schema({
 });
 var User = mongoose.model('User', userSchema);
 // var message = new Buffer('add: {"server_port": 40123, "password":"fuckgfw"}');
+var message = new Buffer('ping');
 
 var db = mongoose.connection;
 db.on('error', function() {});
@@ -86,7 +87,3 @@ app.get('/rate', function (req, res) {
 });
 
 var server = app.listen(6002, function () {});
-
-
-
-

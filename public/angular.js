@@ -8,7 +8,7 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
         $scope.rate = {};
         $scope.getRate = [];
         $scope.allRate = 0;
-        $scope.rateType = 'all';
+        $scope.rateType = 'today';
 
         $scope.setType = function(type) {
             $scope.rateType = type;
@@ -37,7 +37,7 @@ app.controller('AppCtrl', ['$scope', '$mdSidenav', '$http', '$interval',
             getRate();
         }, 10000);
         document.addEventListener('visibilitychange', function(){
-            if(document.visibilityState === visible) {
+            if(document.visibilityState === 'visible') {
                 getRate();
             }
         });
