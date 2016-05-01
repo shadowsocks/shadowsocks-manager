@@ -45,7 +45,7 @@ socket.send(message, 0, message.length, 6001, '127.0.0.1', function(err, bytes) 
 });
 
 var express = require('express');
-var app = express();
+var app = global.app = express();
 
 app.use(express.static('public'));
 
@@ -85,5 +85,6 @@ app.get('/rate', function (req, res) {
         res.send(d);
     });
 });
-
+require('./server/controllers/shadowsocks');
 var server = app.listen(6002, function () {});
+
