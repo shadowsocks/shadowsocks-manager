@@ -12,3 +12,13 @@ var userSchema = new Schema({
 });
 
 var User = mongoose.model('User', userSchema);
+
+User.find({}).exec(function (err, users) {
+    if(!err && users.length === 0) {
+        var user = new User();
+        user.email = 'igyteng@gmail.com';
+        user.password = '123456';
+        user.isAdmin = true;
+        user.save();
+    }
+});
