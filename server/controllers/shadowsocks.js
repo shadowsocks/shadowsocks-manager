@@ -1,5 +1,5 @@
 // 'use strict';
-console.log('GG');
+// console.log('GG');
 var dgram = require('dgram');
 var socket = dgram.createSocket('udp4');
 /*
@@ -16,14 +16,14 @@ var add = exports.add = function (server, account) {
     var accountPort = account.port;
     var password = account.password;
 
-    var message = 'add: {"server_port": ' + accountPort + ', "password": "' + password + '"}';
-    socket.send(message, 0, message.length, port, ip, function(err, bytes) {
-        console.log(err, bytes);
-        socket.on('message', function(m, r) {
-            var msg = String(m);
-            console.log(msg);
-        });
-    });
+    // var message = 'add: {"server_port": ' + accountPort + ', "password": "' + password + '"}';
+    // socket.send(message, 0, message.length, port, ip, function(err, bytes) {
+    //     console.log(err, bytes);
+    //     socket.on('message', function(m, r) {
+    //         var msg = String(m);
+    //         console.log(msg);
+    //     });
+    // });
 };
 
 
