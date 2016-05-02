@@ -1,6 +1,5 @@
 var app = global.app;
-var router = global.router;
 
-router.use('/aaa').get(function (req, res) {
-    res.send('adsfgarga');
+app.get('/email', function(req, res){
+    res.render('login', {});
 });

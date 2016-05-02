@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/gyteng/shadowsocks-manager",
   "dependencies": {
+    "ejs": "^2.4.1",
     "express": "*",
     "later": "^1.2.0",
     "moment": "^2.11.2",
