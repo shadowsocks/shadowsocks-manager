@@ -1,5 +1,7 @@
 var app = global.app;
 
-app.get('/email', function(req, res){
-    res.render('login', {});
+app.get('/', function(req, res){
+    res.render('login', {
+
+    });
 });
