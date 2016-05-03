@@ -14,7 +14,14 @@
     <script src="/libs/angular-material/angular-material.min.js"></script>
     <script src="/libs/angular-ui-router/release/angular-ui-router.min.js"></script>
 
-    <script type="text/javascript" src="/public/controllers/login.js"></script>
+    <% routes.forEach(function(route) { %>
+    <script src="<%= route %>"></script>
+    <% }); %>
+
+    <% controllers.forEach(function(controller) { %>
+    <script src="<%= controller %>"></script>
+    <% }); %>
+
     <div ui-view></div>
 </body>
 
