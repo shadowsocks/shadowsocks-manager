@@ -1,4 +1,5 @@
 var app = global.app;
+var user = require('../controllers/user');
 
 app.get('/', function(req, res) {
     res.render('login', {
@@ -10,3 +11,5 @@ app.get('/', function(req, res) {
         ]
     });
 });
+
+app.post('/user/signin', user.signin);

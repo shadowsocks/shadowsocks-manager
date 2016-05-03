@@ -8,7 +8,8 @@ var userSchema = new Schema({
         server: String,
         port: Number
     }],
-    isAdmin: {type:Boolean, default: false}
+    isAdmin: {type:Boolean, default: false},
+    createTime: {type:Date, default: new Date()}
 });
 
 var User = mongoose.model('User', userSchema);
