@@ -34,3 +34,8 @@ exports.login = function(req, res) {
         res.send('success');
     });
 };
+
+exports.logout = function(req, res) {
+    req.session.destroy();
+    res.send('logout');
+};

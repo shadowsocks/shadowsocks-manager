@@ -28,3 +28,4 @@ app.get('/', function(req, res) {
 
 app.post('/user/signup', user.signup);
 app.post('/user/login', user.login);
+app.post('/user/logout', user.logout);
