@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 var User = mongoose.model('User');
 
-exports.signin = function (req, res) {
-    console.log(req.body);
+exports.signup = function(req, res) {
+
     var email = req.body.username;
     var password = req.body.password;
 
@@ -17,5 +17,20 @@ exports.signin = function (req, res) {
             if(err) {return res.status(400).end();}
             return res.send('success');
         });
+    });
+};
+
+exports.login = function(req, res) {
+    var email = req.body.username;
+    var password = req.body.password;
+
+    User.findOne({email: email, password: password}).exec(function(err, user) {
+        if(err || !user) {
+            return res.status(400).end();
+        }
+        req.session.user = email;
+        req.session.isAdmin = user.isAdmin;
+        req.session.save();
+        res.send('success');
     });
 };

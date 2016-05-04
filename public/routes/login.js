@@ -20,6 +20,11 @@ app.config(
                     controller: 'LoginController',
                     templateUrl: '/public/views/login.html'
                 })
+                .state('index.signupSuccess', {
+                    url: '/signupSuccess',
+                    controller: 'SignupSuccessController',
+                    templateUrl: '/public/views/signupSuccess.html'
+                })
                 // .state('index.tab2', {
                 //     url: '/tab2',
                 //     controller: function($scope) {
