@@ -1,1 +1,39 @@
-<div ui-view></div>
+<!-- <div layout="column"> -->
+    <md-toolbar layout="row">
+        <div class="md-toolbar-tools">
+            <md-button ng-click="toggleSidenav('left')" hide-gt-sm class="md-icon-button">
+                <i class="material-icons">face</i>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <div layout="row" flex>
+        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+            <md-content class="md-padding">
+                <md-list>
+                    <!-- <md-list-item class="md-3-line"> -->
+                    <md-button ng-click="setType('all')" class="md-primary">
+                        All
+                    </md-button>
+                    <md-button ng-click="setType('today')" class="md-primary">
+                        Today
+                    </md-button>
+                    <md-button ng-click="setType('week')" class="md-primary">
+                        Week
+                    </md-button>
+                    <md-button ng-click="setType('month')" class="md-primary">
+                        Month
+                    </md-button>
+                    <!-- </md-list-item> -->
+                </md-list>
+            </md-content>
+        </md-sidenav>
+        <div layout="column" flex id="content">
+            <md-content layout="column" flex class="md-padding">
+                <div ui-view></div>
+            </md-content>
+        </div>
+    </div>
+<!-- </div> -->
+
+
+
