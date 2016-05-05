@@ -9,12 +9,13 @@ exports.signup = function(req, res) {
     var password = req.body.password;
 
     User.findOne({email: email}).exec(function(err, data) {
-        if(err || data) {return res.status(400).end();}
+        if(err) {return res.status(500).end('数据库操作错误');}
+        else if(data) {return res.status(403).end('该用户已注册');}
         var user = new User();
         user.email = email;
         user.password = password;
         user.save(function(err, data) {
-            if(err) {return res.status(400).end();}
+            if(err) {return res.status(500).end('数据库操作错误');}
             return res.send('success');
         });
     });
