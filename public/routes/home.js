@@ -5,25 +5,25 @@ app.config(
         function($stateProvider, $urlRouterProvider) {
 
             $urlRouterProvider
-                .when('/', '/index/login')
-                .otherwise('/index/login');
+                .when('/', '/home/index')
+                .otherwise('/home/index');
 
             $stateProvider
-                .state('index', {
+                .state('home', {
                     abstract: true,
-                    url: '/index',
-                    templateUrl: '/public/views/index.html',
+                    url: '/home',
+                    templateUrl: '/public/views/home/home.html',
                 })
 
-                .state('index.login', {
-                    url: '/login',
+                .state('home.index', {
+                    url: '/index',
                     controller: 'LoginController',
-                    templateUrl: '/public/views/login.html'
+                    templateUrl: '/public/views/home/index.html'
                 })
-                .state('index.signupSuccess', {
+                .state('home.signupSuccess', {
                     url: '/signupSuccess',
                     controller: 'SignupSuccessController',
-                    templateUrl: '/public/views/signupSuccess.html'
+                    templateUrl: '/public/views/home/signupSuccess.html'
                 })
                 // .state('index.tab2', {
                 //     url: '/tab2',

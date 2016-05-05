@@ -5,10 +5,10 @@ app.get('/', function(req, res) {
     if(!req.session.user) {
         return res.render('login', {
             'controllers': [
-                '/public/controllers/login.js'
+                '/public/controllers/home.js'
             ],
             'routes': [
-                '/public/routes/login.js'
+                '/public/routes/home.js'
             ]
         });
     } else if(req.session.isAdmin) {

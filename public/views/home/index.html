@@ -14,9 +14,10 @@
         <form name="userForm">
             <md-input-container class="md-block">
                 <label>用户名</label>
-                <input required name="username" ng-model="user.username">
+                <input type="email" required name="username" ng-model="user.username">
                 <div ng-messages="userForm.username.$error">
                     <div ng-message="required">用户名不能为空</div>
+                    <div ng-message="email">必须填写一个有效邮箱地址</div>
                 </div>
             </md-input-container>
             <md-input-container class="md-block">

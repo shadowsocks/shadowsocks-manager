@@ -26,9 +26,8 @@ exports.login = function(req, res) {
     var password = req.body.password;
 
     User.findOne({email: email, password: password}).exec(function(err, user) {
-        if(err || !user) {
-            return res.status(400).end();
-        }
+        if(err) {return res.status(500).end('数据库操作错误');}
+        else if(!user) { return res.status(401).end('用户名密码不匹配');}
         req.session.user = email;
         req.session.isAdmin = user.isAdmin;
         req.session.save();
