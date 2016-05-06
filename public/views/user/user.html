@@ -1,59 +1,23 @@
 <div ng-controller="TestCtrl" layout="column" ng-cloak layout-fill>
-  <section layout="row" flex layout-fill>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-      <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Sidenav Left</h1>
-      </md-toolbar>
-      <md-content layout-padding>
-        <md-button ng-click="close()" class="md-primary" hide-gt-md>
-          Close Sidenav Left
-        </md-button>
-        <p hide-md show-gt-md>
-          This sidenav is locked open on your device. To go back to the default behavior,
-          narrow your display.
-        </p>
-      </md-content>
-    </md-sidenav>
-    <md-content flex layout-padding>
-      <div layout="column" layout-fill layout-align="top center">
-        <p>
-        The left sidenav will 'lock open' on a medium (>=960px wide) device.
-        </p>
-        <p>
-        The right sidenav will focus on a specific child element.
-        </p>
-        <div>
-          <md-button ng-click="toggleLeft()"
-            class="md-primary" hide-gt-md>
-            Toggle left
-          </md-button>
-        </div>
-        <div>
-          <md-button ng-click="toggleRight()"
-            ng-hide="isOpenRight()"
-            class="md-primary">
-            Toggle right
-          </md-button>
-        </div>
-      </div>
-      <div flex></div>
-    </md-content>
-    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
-      <md-toolbar class="md-theme-light">
-        <h1 class="md-toolbar-tools">Sidenav Right</h1>
-      </md-toolbar>
-      <md-content layout-padding>
-        <form>
-          <md-input-container>
-            <label for="testInput">Test input</label>
-            <input type="text" id="testInput"
-                   ng-model="data" md-autofocus>
-          </md-input-container>
-        </form>
-        <md-button ng-click="close()" class="md-primary">
-          Close Sidenav Right
-        </md-button>
-      </md-content>
-    </md-sidenav>
-  </section>
+    <section layout="row" flex>
+        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+            <md-content>
+                <md-list-item ng-repeat="setting in settings">
+                    <i class="material-icons">{{setting.icon}}</i>
+                    <p> {{ setting.name }} </p>
+                </md-list-item>
+            </md-content>
+        </md-sidenav>
+        <md-content flex>
+            <div layout="column" layout-fill>
+                <md-toolbar layout="row">
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="menu" hide-gt-md ng-click="showMenu()">
+                            <i class="material-icons">menu</i>
+                        </md-button>
+                    </div>
+                </md-toolbar>
+            </div>
+        </md-content>
+    </section>
 </div>
