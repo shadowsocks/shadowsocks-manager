@@ -4,12 +4,14 @@
             <md-content>
                 <div layout="column" layout-fill>
                     <div flex="80" layout="column" layout-align="start stretch">
-                        <md-list-item ng-repeat="menus in menus">
-                            <md-button>{{menus.name}}</md-button>
+                        <md-list-item ng-repeat="menu in menus">
+                            <md-button>{{menu.name}}</md-button>
                         </md-list-item>
                     </div>
                     <div flex layout="column" layout-align="end stretch">
-                        aaa
+                        <md-list-item ng-repeat="menu in bottomMenus">
+                            <md-button ng-click="menu.click()">{{menu.name}}</md-button>
+                        </md-list-item>
                     </div>
                 </div>
             </md-content>

@@ -3,14 +3,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $http.post('/user/logout');
         };
     })
-    .controller('TestCtrl', function($scope, $http, $state, $mdSidenav) {
+    .controller('TestCtrl', function($scope, $http, $state, $mdSidenav, $window) {
         $scope.showMenu = function() {
             $mdSidenav('left').toggle();
         };
         $scope.menus = [
-            {name: '我的账户'},
-            {name: '修改密码'},
+            {name: '服务器管理'},
+            {name: '用户管理'},
+            {name: '续费码'},
             {name: '流量统计'},
-            {name: '续费'}
+            {name: '历史记录'}
         ];
+        $scope.bottomMenus = [
+            {name: '退出登录', click: function() {
+                console.log('GGGG');
+                $http.post('/user/logout').success(function(data) {
+                    $window.location.reload();
+                });
+            }}
+        ];
+
     });
