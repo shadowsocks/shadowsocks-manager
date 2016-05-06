@@ -1,11 +1,11 @@
-<div ng-controller="TestCtrl" layout="column" ng-cloak layout-fill>
+<div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
                 <div layout="column" layout-fill>
                     <div flex="80" layout="column">
                         <md-list-item ng-repeat="menu in menus">
-                            <div layout="row">
+                            <div layout="row" ng-click="menu.click()">
                                 <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
                                 <div flex><md-button>{{menu.name}}</md-button></div>
                             </div>
@@ -31,6 +31,7 @@
                         </md-button>
                     </div>
                 </md-toolbar>
+                <div ui-view></div>
             </div>
         </md-content>
     </section>

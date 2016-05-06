@@ -1,14 +1,12 @@
-app.controller('AdminIndexController', function($scope, $http, $state) {
-        $scope.logout = function() {
-            $http.post('/user/logout');
-        };
-    })
-    .controller('TestCtrl', function($scope, $http, $state, $mdSidenav, $window) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window) {
         $scope.showMenu = function() {
             $mdSidenav('left').toggle();
         };
         $scope.menus = [
-            {name: '服务器管理', icon: 'cloud'},
+            {name: '服务器管理', icon: 'cloud', click: function() {
+                $state.go('admin.server');
+                $mdSidenav('left').close();
+            }},
             {name: '用户管理', icon: 'face'},
             {name: '续费码', icon: 'shop'},
             {name: '流量统计', icon: 'timeline'},
@@ -21,5 +19,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 });
             }}
         ];
+    })
+    .controller('AdminIndexController', function($scope, $http, $state) {
 
-    });
+    })
+    .controller('AdminServerController', function($scope, $http, $state) {
+
+    })
+;
