@@ -8,15 +8,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $mdSidenav('left').toggle();
         };
         $scope.menus = [
-            {name: '服务器管理'},
-            {name: '用户管理'},
-            {name: '续费码'},
-            {name: '流量统计'},
-            {name: '历史记录'}
+            {name: '服务器管理', icon: 'cloud'},
+            {name: '用户管理', icon: 'face'},
+            {name: '续费码', icon: 'shop'},
+            {name: '流量统计', icon: 'timeline'},
+            {name: '历史记录', icon: 'watch_later'}
         ];
         $scope.bottomMenus = [
-            {name: '退出登录', click: function() {
-                console.log('GGGG');
+            {name: '退出登录', icon: 'exit_to_app', click: function() {
                 $http.post('/user/logout').success(function(data) {
                     $window.location.reload();
                 });

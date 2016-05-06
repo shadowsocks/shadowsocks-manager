@@ -3,14 +3,20 @@
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
                 <div layout="column" layout-fill>
-                    <div flex="80" layout="column" layout-align="start stretch">
+                    <div flex="80" layout="column">
                         <md-list-item ng-repeat="menu in menus">
-                            <md-button>{{menu.name}}</md-button>
+                            <div layout="row">
+                                <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
+                                <div flex><md-button>{{menu.name}}</md-button></div>
+                            </div>
                         </md-list-item>
                     </div>
                     <div flex layout="column" layout-align="end stretch">
                         <md-list-item ng-repeat="menu in bottomMenus">
-                            <md-button ng-click="menu.click()">{{menu.name}}</md-button>
+                            <div layout="row" ng-click="menu.click()">
+                                <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
+                                <div flex><md-button>{{menu.name}}</md-button></div>
+                            </div>
                         </md-list-item>
                     </div>
                 </div>
