@@ -12,7 +12,14 @@ app.get('/', function(req, res) {
             ]
         });
     } else if(req.session.isAdmin) {
-        return res.render('admin', {});
+        return res.render('admin', {
+            'controllers': [
+                '/public/controllers/admin.js'
+            ],
+            'routes': [
+                '/public/routes/admin.js'
+            ]
+        });
     } else {
         return res.render('user', {
             'controllers': [
