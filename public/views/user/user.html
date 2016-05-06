@@ -2,10 +2,16 @@
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
-                <md-list-item ng-repeat="setting in settings">
-                    <i class="material-icons">{{setting.icon}}</i>
-                    <p> {{ setting.name }} </p>
-                </md-list-item>
+                <div layout="column" layout-fill>
+                    <div flex="80" layout="column" layout-align="start stretch">
+                        <md-list-item ng-repeat="menus in menus">
+                            <md-button>{{menus.name}}</md-button>
+                        </md-list-item>
+                    </div>
+                    <div flex layout="column" layout-align="end stretch">
+                        aaa
+                    </div>
+                </div>
             </md-content>
         </md-sidenav>
         <md-content flex>
