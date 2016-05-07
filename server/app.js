@@ -14,11 +14,25 @@ app.use('/public', express.static('./public'));
 var config = require('../config').conf;
 var fs = require('fs');
 
-exports.log4js = function() {
+var log4js = exports.log4js = function() {
     var log4js = require('log4js');
-    var logger = log4js.getLogger();
-    logger.info('log4js');
+    log4js.configure({
+        appenders: [{
+            type: 'console',
+            category: 'server'
+        }, {
+            type: 'dateFile',
+            filename: 'logs/server.log',
+            pattern: '-yyyy-MM-dd',
+            alwaysIncludePattern: true,
+            category: 'server'
+        }]
+    });
+    var logger = log4js.getLogger('server');
+    logger.info('加载log4js');
 };
+log4js();
+var logger = log4js.getLogger('server');
 
 exports.db = function () {
     // var mongoose = require('mongoose');
@@ -27,4 +41,8 @@ exports.db = function () {
         console.log(err);
         console.log(files);
     });
+};
+
+exports.express = function() {
+    
 };
