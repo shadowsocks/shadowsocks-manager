@@ -37,14 +37,25 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.init();
         $scope.server = {};
-        $scope.addServerDialog = function(ev) {
+        $scope.serverPort = {};
+        $scope.addServerDialog = function() {
             $scope.dialog = $mdDialog.show({
-                controller: DialogController,
+                controller: AddServerDialogController,
                 templateUrl: '/public/views/admin/addServer.html',
-                targetEvent: ev,
                 locals : {
                     addServer : $scope.addServer,
                     server : $scope.server
+                }
+            });
+        };
+        $scope.addServerPortDialog = function(serverName) {
+            $scope.dialog = $mdDialog.show({
+                controller: AddServerPortDialogController,
+                templateUrl: '/public/views/admin/addServerPort.html',
+                locals : {
+                    serverName: serverName,
+                    serverPort : $scope.serverPort,
+                    addServerPort : $scope.addServerPort
                 }
             });
         };
@@ -60,10 +71,29 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 console.log(err);
             });
         };
-        function DialogController($scope, $mdDialog, addServer, server) {
+        $scope.addServerPort = function() {
+            console.log($scope.serverPort);
+            $http.post('/admin/serverPort', {
+                name: $scope.serverPort.name,
+                port: $scope.serverPort.port,
+                password: $scope.serverPort.password
+            }).success(function(data) {
+                $scope.init();
+                $mdDialog.cancel();
+            }).error(function(err) {
+                console.log(err);
+            });
+        };
+        var AddServerDialogController = function($scope, $mdDialog, addServer, server) {
             $scope.server = server;
             $scope.cancel = function(){$mdDialog.cancel();};
             $scope.addServer = addServer;
-        }
+        };
+        var AddServerPortDialogController = function($scope, $mdDialog, serverPort, addServerPort, serverName) {
+            $scope.serverPort = serverPort;
+            $scope.serverPort.name = serverName;
+            $scope.cancel = function(){$mdDialog.cancel();};
+            $scope.addServerPort = addServerPort;
+        };
     })
 ;

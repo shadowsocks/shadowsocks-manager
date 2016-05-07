@@ -27,3 +27,22 @@ exports.getServers = function (req, res) {
         return res.send(servers);
     });
 };
+
+exports.addServerPort = function(req, res) {
+    var name = req.body.name;
+    var port = req.body.port;
+    var password = req.body.password;
+
+    Server.findOneAndUpdate({
+        name: name
+    }, {
+        $push: {account: {
+            port: port,
+            password: password,
+            expireTime: new Date()
+        }}
+    }).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        return res.send(data);
+    });
+};
