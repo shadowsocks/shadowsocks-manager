@@ -44,9 +44,18 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.addServer = function() {
             console.log($scope.server);
+            $http.post('/admin/server', {
+                name: $scope.server.name,
+                ip: $scope.server.ip,
+                port: $scope.server.port
+            }).success(function(data) {
+                console.log(data);
+                $mdDialog.cancel();
+            }).error(function(err) {
+                console.log(err);
+            });
         };
         function DialogController($scope, $mdDialog, addServer, server) {
-            console.log(addServer);
             $scope.server = server;
             $scope.cancel = function(){$mdDialog.cancel();};
             $scope.addServer = addServer;

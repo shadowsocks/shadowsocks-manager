@@ -1,4 +1,5 @@
 require('./routes/login');
+require('./routes/admin');
 var express = global.express;
 var app = global.app;
 
