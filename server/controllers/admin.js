@@ -48,7 +48,7 @@ exports.addServerPort = function(req, res) {
         // console.log(data);
         shadowsocks.add({
             ip: data.ip,
-            port: 4545
+            port: data.port
         }, {
             port: port,
             password: password
