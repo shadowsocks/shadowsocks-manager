@@ -56,3 +56,25 @@ exports.addServerPort = function(req, res) {
         return res.send(data);
     });
 };
+
+exports.deleteServerPort = function(req, res) {
+    var name = req.query.name;
+    var port = req.query.port;
+
+    Server.findOneAndUpdate({
+        'name': name,
+        'account.port': port
+    }, {$pull: {
+        account: {port: port}
+    }}).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!data) {return res.send(data);}
+        shadowsocks.del({
+            ip: data.ip,
+            port: data.port
+        }, {
+            port: port
+        });
+        return res.send(data);
+    });
+};

@@ -20,7 +20,7 @@ account: {
     password: ''
 }
 */
-var add = exports.add = function (server, account) {
+exports.add = function (server, account) {
     var socket = dgram.createSocket('udp4');
 
     var ip   = server.ip;
@@ -29,22 +29,26 @@ var add = exports.add = function (server, account) {
     var password = account.password;
 
     var message = 'add: {"server_port": ' + accountPort + ', "password": "' + password + '"}';
-    console.log('message send: ' + message);
+    sendMessageToShadowsocks(ip, port, message);
+};
+
+exports.del = function (server, account) {
+    var socket = dgram.createSocket('udp4');
+
+    var ip   = server.ip;
+    var port = server.port;
+    var accountPort = account.port;
+
+    var message = 'remove: {"server_port": ' + accountPort + '}';
+    sendMessageToShadowsocks(ip, port, message);
+};
+
+var sendMessageToShadowsocks = function(ip, port, message) {
+    var socket = dgram.createSocket('udp4');
+    console.log('Send message to [' + ip + ':' + port + ']: ' + message);
     socket.send(message, 0, message.length, port, ip, function(err, bytes) {
-        // console.log(err, bytes);
         socket.on('message', function(m, r) {
-            var msg = String(m);
-            console.log(msg);
-            if(msg === 'ok') {
-                socket.close();
-            }
+            socket.close();
         });
     });
 };
-
-
-
-// app.post('/ttt', function(req, res) {
-//     add({ip: '188.166.222.115', port: 6001}, {port: 10101, password: 'gyttyg'});
-//     res.send('success');
-// });

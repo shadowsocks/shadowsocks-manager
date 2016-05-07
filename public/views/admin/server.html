@@ -14,6 +14,7 @@
                 <div flex="15">{{a.port}}</div>
                 <div flex="25">{{a.password}}</div>
                 <div flex>{{a.expireTime}}</div>
+                <div flex><md-button ng-click="deleteServerPort(server.name, a.port)">删除</md-button></div>
             </div>
         </md-card-content>
         <md-card-actions layout="row" layout-align="start center">

@@ -72,7 +72,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.addServerPort = function() {
-            console.log($scope.serverPort);
+            // console.log($scope.serverPort);
             $http.post('/admin/serverPort', {
                 name: $scope.serverPort.name,
                 port: $scope.serverPort.port,
@@ -80,6 +80,19 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             }).success(function(data) {
                 $scope.init();
                 $mdDialog.cancel();
+            }).error(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.deleteServerPort = function(name, port) {
+            $http.delete('/admin/serverPort', {
+                params: {
+                    name: name,
+                    port: port
+                }
+            }).success(function(data) {
+                $scope.init();
+                console.log(data);
             }).error(function(err) {
                 console.log(err);
             });
