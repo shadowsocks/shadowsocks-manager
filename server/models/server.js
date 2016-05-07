@@ -12,4 +12,6 @@ var serverSchema = new Schema({
     }]
 });
 
+serverSchema.index({ip: 1, port: 1}, {unique: true});
+
 var Server = mongoose.model('Server', serverSchema);

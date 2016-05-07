@@ -10,6 +10,7 @@
             </div>
         </md-toolbar>
         <md-dialog-content>
+            <div class="md-dialog-content">
             <div flex="10"></div>
             <md-input-container class="md-block">
                 <label>名称</label>
@@ -32,13 +33,14 @@
                     <div ng-message="required">管理端口不能为空</div>
                 </div>
             </md-input-container>
+            </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
             <md-button ng-click="addServer()">
                 确定
             </md-button>
             <span flex></span>
-            <md-button ng-click="cancel()">
+            <md-button ng-click="cancel()" style="margin-right:30px;">
                 取消
             </md-button>
         </md-dialog-actions>

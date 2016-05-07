@@ -1,4 +1,23 @@
-<div>server</div>
+<div flex layout="column">
+    <md-card ng-repeat="server in serverList">
+        <md-card-title>
+            <md-card-title-text>
+                <div class="md-headline">{{server.name}}</div>
+            </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+            <p>
+                <div>地址：{{server.ip}}</div>
+                <div>端口：{{server.port}}</div>
+            </p>
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="start center">
+            <md-button>添加端口</md-button>
+            <md-button>编辑</md-button>
+            <md-button>删除</md-button>
+        </md-card-actions>
+    </md-card>
+</div>
 <md-button class="md-fab md-fab-bottom-right" aria-label="Eat cake">
     <md-icon class="material-icons" ng-click="addServerDialog()">add</md-icon>
 </md-button>

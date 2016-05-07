@@ -20,3 +20,10 @@ exports.addServer = function (req, res) {
         return res.send(data);
     });
 };
+
+exports.getServers = function (req, res) {
+    Server.find({}).exec(function(err, servers) {
+        if(err) {return res.status(500).end('数据库错误');}
+        return res.send(servers);
+    });
+};
