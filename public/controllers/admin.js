@@ -29,7 +29,19 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     .controller('AdminIndexController', function($scope, $http, $state) {
 
     })
-    .controller('AdminServerController', function($scope, $http, $state) {
+    .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
+        $scope.addServer = function(ev) {
+            $mdDialog.show({
+                controller: 'DialogController',
+                templateUrl: '/public/views/admin/addServer.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                fullscreen: useFullScreen
+            });
+        };
+    })
+    .controller('DialogController', function($scope, $http, $state) {
 
     })
 ;
