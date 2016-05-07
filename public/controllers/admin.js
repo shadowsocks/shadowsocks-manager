@@ -30,18 +30,26 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
-        $scope.addServer = function(ev) {
-            $mdDialog.show({
-                controller: 'DialogController',
+        $scope.server = {};
+        $scope.addServerDialog = function(ev) {
+            $scope.dialog = $mdDialog.show({
+                controller: DialogController,
                 templateUrl: '/public/views/admin/addServer.html',
-                parent: angular.element(document.body),
                 targetEvent: ev,
-                clickOutsideToClose:true,
-                fullscreen: useFullScreen
+                locals : {
+                    addServer : $scope.addServer,
+                    server : $scope.server
+                }
             });
         };
-    })
-    .controller('DialogController', function($scope, $http, $state) {
-
+        $scope.addServer = function() {
+            console.log($scope.server);
+        };
+        function DialogController($scope, $mdDialog, addServer, server) {
+            console.log(addServer);
+            $scope.server = server;
+            $scope.cancel = function(){$mdDialog.cancel();};
+            $scope.addServer = addServer;
+        }
     })
 ;

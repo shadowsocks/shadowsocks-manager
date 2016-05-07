@@ -1,1 +1,46 @@
-<div>asdgfg</div>
+<md-dialog layout="row" aria-label="添加服务器" ng-cloak>
+    <form name="serverForm">
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>添加服务器</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon class="material-icons">clear</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div flex="10"></div>
+            <md-input-container class="md-block">
+                <label>名称</label>
+                <input required name="name" ng-model="server.name">
+                <div ng-messages="serverForm.name.$error">
+                    <div ng-message="required">名称不能为空</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>IP/域名</label>
+                <input required name="ip" ng-model="server.ip">
+                <div ng-messages="serverForm.ip.$error">
+                    <div ng-message="required">IP/域名不能为空</div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label>管理端口</label>
+                <input required name="port" ng-model="server.port">
+                <div ng-messages="serverForm.port.$error">
+                    <div ng-message="required">管理端口不能为空</div>
+                </div>
+            </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="addServer()">
+                确定
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                取消
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
