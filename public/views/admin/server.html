@@ -10,6 +10,11 @@
                 <div>地址：{{server.ip}}</div>
                 <div>端口：{{server.port}}</div>
             </p>
+            <div layout="row" ng-repeat="a in server.account">
+                <div flex="15">{{a.port}}</div>
+                <div flex="25">{{a.password}}</div>
+                <div flex>{{a.expireTime}}</div>
+            </div>
         </md-card-content>
         <md-card-actions layout="row" layout-align="start center">
             <md-button ng-click="addServerPortDialog(server.name)">添加端口</md-button>

@@ -3,6 +3,8 @@ var Schema = mongoose.Schema;
 
 var Server = mongoose.model('Server');
 
+var shadowsocks = require('./shadowsocks');
+
 exports.addServer = function (req, res) {
     var name = req.body.name;
     var ip = req.body.ip;
@@ -43,6 +45,14 @@ exports.addServerPort = function(req, res) {
         }}
     }).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
+        // console.log(data);
+        shadowsocks.add({
+            ip: data.ip,
+            port: 4545
+        }, {
+            port: port,
+            password: password
+        });
         return res.send(data);
     });
 };
