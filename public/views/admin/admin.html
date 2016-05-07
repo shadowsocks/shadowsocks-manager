@@ -1,26 +1,26 @@
 <div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
-    <md-toolbar layout="row">
+<!--     <md-toolbar layout="row">
         <div class="md-toolbar-tools">
             <md-button class="md-icon-button" aria-label="menu" hide-gt-md ng-click="showMenu()">
                 <i class="material-icons">menu</i>
             </md-button>
         </div>
-    </md-toolbar>
+    </md-toolbar> -->
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-            <md-content>
+            <md-content style="background-color: #80D8FF">
                 <div layout="column">
                     <div flex="80" layout="column">
                         <md-list-item ng-repeat="menu in menus">
-                            <div layout="row" ng-click="menu.click()">
+                            <div layout="row" ng-click="menuClick($index)">
                                 <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
                                 <div flex><md-button>{{menu.name}}</md-button></div>
                             </div>
                         </md-list-item>
                     </div>
-                    <div flex="auto" layout="column" layout-align="end">
+                    <div flex="20" layout="column" layout-align="end">
                         <md-list-item ng-repeat="menu in bottomMenus">
-                            <div layout="row" ng-click="menu.click()">
+                            <div layout="row" ng-click="bottomMenus[0].click()">
                                 <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
                                 <div flex><md-button>{{menu.name}}</md-button></div>
                             </div>
@@ -31,13 +31,14 @@
         </md-sidenav>
         <md-content flex>
             <div layout="column">
-                <!-- <md-toolbar layout="row">
+                <div layout="row" hide-gt-md>
                     <div class="md-toolbar-tools">
-                        <md-button class="md-icon-button" aria-label="menu" hide-gt-md ng-click="showMenu()">
+                        <md-button class="md-icon-button" aria-label="menu" ng-click="showMenu()">
                             <i class="material-icons">menu</i>
                         </md-button>
+                        <div>{{menus[publicInfo.currentMenu].name}}</div>
                     </div>
-                </md-toolbar> -->
+                </div>
                 <div ui-view></div>
             </div>
         </md-content>
