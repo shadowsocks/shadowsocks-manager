@@ -11,9 +11,9 @@
                 <div>端口：{{server.port}}</div>
             </p>
             <div layout="row" ng-repeat="a in server.account">
-                <div flex="15">{{a.port}}</div>
-                <div flex="25">{{a.password}}</div>
-                <div flex>{{a.expireTime}}</div>
+                <div flex="2">{{a.port}}</div>
+                <div flex="45">{{a.password}}</div>
+                <!-- <div flex>{{a.expireTime}}</div> -->
                 <div flex><md-button ng-click="deleteServerPort(server.name, a.port)">删除</md-button></div>
             </div>
         </md-card-content>

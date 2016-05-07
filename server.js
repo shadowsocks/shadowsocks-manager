@@ -25,3 +25,7 @@ require('./server/app');
 
 
 var server = app.listen(6003, function () {});
+
+var load = require('./server/app');
+load.log4js();
+load.db();
