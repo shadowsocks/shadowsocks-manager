@@ -1,7 +1,9 @@
-require('./routes/login');
-require('./routes/admin');
-var express = global.express;
-var app = global.app;
+// require('./routes/login');
+// require('./routes/admin');
+var express = global.express = require('express');
+var app = global.app = express();
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/Shadowsocks-Manager');
 
 
 app.engine('.html', require('ejs').__express);
@@ -14,7 +16,10 @@ app.use('/public', express.static('./public'));
 var config = require('../config').conf;
 var fs = require('fs');
 
-var log4js = exports.log4js = function() {
+var log4js = require('log4js');
+var logger = log4js.getLogger('server');
+
+var log4js = exports.log4js = function(cb) {
     var log4js = require('log4js');
     log4js.configure({
         appenders: [{
@@ -28,21 +33,39 @@ var log4js = exports.log4js = function() {
             category: 'server'
         }]
     });
-    var logger = log4js.getLogger('server');
-    logger.info('加载log4js');
+    cb(null);
 };
-log4js();
-var logger = log4js.getLogger('server');
 
-exports.db = function () {
+
+exports.db = function (cb) {
+    logger.info('db');
     // var mongoose = require('mongoose');
     // mongoose.connect('mongodb://localhost/Shadowsocks-Manager');
     fs.readdir('./server/models', function(err, files) {
-        console.log(err);
-        console.log(files);
+        if(err) {logger.error(err);}
+        files.forEach(function(file) {
+            require('../server/models/' + file);
+        });
+        cb(err);
     });
 };
 
-exports.express = function() {
-    
+exports.express = function(cb) {
+    var bodyParser = require('body-parser');
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    var session = require('express-session');
+    var MongoStore = require('connect-mongo')(session);
+    app.use(session({
+        secret: 'foo',
+        store: new MongoStore({ mongooseConnection: mongoose.connection }),
+        resave: false,
+        saveUninitialized: false
+    }));
+
+    require('./routes/login');
+    require('./routes/admin');
+
+    var server = app.listen(6003, function () {});
+    cb(null);
 };
