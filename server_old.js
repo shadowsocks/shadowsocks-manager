@@ -94,6 +94,6 @@ app.get('/rate', function (req, res) {
         res.send(d);
     });
 });
-require('./server/controllers/shadowsocks');
+
 var server = app.listen(6002, function () {});
 
