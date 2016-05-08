@@ -1,13 +1,12 @@
-// 'use strict';
-// console.log('GG');
 var dgram = require('dgram');
-// var socket = dgram.createSocket('udp4');
+var mongoose = require('mongoose');
+var Server = mongoose.model('Server');
+var HistoryOriginal = mongoose.model('HistoryOriginal');
 /*
 add: {"server_port": 8001, "password":"7cd308cc059"}
 remove: {"server_port": 8001}
 */
 
-// var express = require('express');
 var app = global.app;
 
 /*
@@ -52,3 +51,33 @@ var sendMessageToShadowsocks = function(ip, port, message) {
         });
     });
 };
+
+var collectUserFlow = function() {
+    var sockets = {};
+    Server.find({}).exec(function(err, servers) {
+        if(err) {return;}
+        servers.forEach(function(server) {
+            sockets[server.name] = dgram.createSocket('udp4');
+            var message = 'ping';
+            sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
+                sockets[server.name].on('message', function(m, r) {
+                    var msg = String(m);
+                    if(msg.substr(0, 4) === 'stat') {
+                        var flow = JSON.parse(msg.substr(6));
+                        for(var f in flow) {
+                            var ho = new HistoryOriginal();
+                            ho.name = server.name;
+                            ho.port = +f;
+                            ho.flow = flow[f];
+                            ho.save();
+                        }
+                    }
+                });
+            });
+            setInterval(function() {
+                sockets[server.name].send(message, 0, message.length, server.port, server.ip);
+            }, 90 * 1000);
+        });
+    });
+};
+collectUserFlow();
