@@ -137,6 +137,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.allFlow = 0;
         $scope.$watch('flow', function() {
             $scope.allFlow = 0;
+            if(!$scope.flow) {return;}
             $scope.flow.forEach(function(f) {
                 $scope.allFlow += f.flow;
             });
