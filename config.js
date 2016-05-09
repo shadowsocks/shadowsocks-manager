@@ -7,5 +7,8 @@ exports.conf = {
     admin: {
         email: 'igyteng@gmail.com',
         password: '123456'
+    },
+    express: {
+        port: 6003
     }
 };

@@ -1,19 +1,9 @@
-// require('./routes/login');
-// require('./routes/admin');
 var express = global.express = require('express');
 var app = global.app = express();
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/Shadowsocks-Manager');
-
-
-// app.engine('.html', require('ejs').__express);
-// app.set('view engine', 'html');
-// app.set('views', __dirname + '/views');
-
-// app.use('/libs', express.static('./bower_components'));
-// app.use('/public', express.static('./public'));
-
 var config = require('../config').conf;
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name);
+
 var fs = require('fs');
 
 var log4js = require('log4js');
@@ -81,14 +71,9 @@ exports.express = function(cb) {
             require('../server/routes/' + file);
             logger.info('加载路由文件 ' + file);
         });
-        var server = app.listen(6003, function () {
-            logger.info('Web服务启动，监听端口 6003');
+        var server = app.listen(config.express.port, function () {
+            logger.info('Web服务启动，监听端口 ' + config.express.port);
         });
         cb(null);
     });
-
-    // var server = app.listen(6003, function () {
-    //     logger.info('Web服务启动，监听端口 6003');
-    // });
-    // cb(null);
 };
