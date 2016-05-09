@@ -7,7 +7,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '服务器管理', icon: 'cloud', click: 'admin.server'},
             {name: '用户管理', icon: 'face'},
             {name: '续费码', icon: 'shop'},
-            {name: '流量统计', icon: 'timeline'},
+            {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
             {name: '历史记录', icon: 'watch_later'}
         ];
         $scope.publicInfo = {
@@ -108,5 +108,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.cancel = function(){$mdDialog.cancel();};
             $scope.addServerPort = addServerPort;
         };
+    })
+    .controller('AdminFlowController', function($scope) {
+
     })
 ;
