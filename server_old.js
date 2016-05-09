@@ -4,7 +4,7 @@ var message = new Buffer('ping');
 var moment = require('moment');
 // var later = require('later');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/ss6');
+mongoose.connect('mongodb://localhost/ss');
 var Schema = mongoose.Schema;
 
 

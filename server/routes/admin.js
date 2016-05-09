@@ -8,3 +8,8 @@ app.get('/admin/server', auth.isAdmin, admin.getServers);
 
 app.post('/admin/serverPort', auth.isAdmin, admin.addServerPort);
 app.delete('/admin/serverPort', auth.isAdmin, admin.deleteServerPort);
+
+app.get('/admin/flow',
+    auth.isAdmin,
+    admin.getFlow
+);

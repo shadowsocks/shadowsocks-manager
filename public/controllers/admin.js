@@ -1,3 +1,18 @@
+app.filter('flow1024', function() {
+    return function(input) {
+        if (input < 1000) {
+            return input +' B';
+        } else if (input < 1000000) {
+            return (input/1000).toFixed(2) +' KB';
+        } else if (input < 1000000000) {
+            return (input/1000000).toFixed(2) +' MB';
+        } else if (input < 1000000000000) {
+            return (input/1000000000).toFixed(2) +' GB';
+        } else {
+            return input;
+        }
+    };
+});
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window) {
         $scope.showMenu = function() {
             $mdSidenav('left').toggle();
@@ -109,7 +124,15 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.addServerPort = addServerPort;
         };
     })
-    .controller('AdminFlowController', function($scope) {
-
+    .controller('AdminFlowController', function($scope, $interval, $http) {
+        $scope.getFlow = function() {
+            $http.get('/admin/flow').success(function(data) {
+                $scope.flow = data;
+            });
+        };
+        $scope.getFlow();
+        $interval(function() {
+            $scope.getFlow();
+        }, 10 * 1000);
     })
 ;

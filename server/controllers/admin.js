@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Server = mongoose.model('Server');
+var HistoryOriginal = mongoose.model('HistoryOriginal');
 
 var shadowsocks = require('./shadowsocks');
 
@@ -76,5 +77,32 @@ exports.deleteServerPort = function(req, res) {
             port: port
         });
         return res.send(data);
+    });
+};
+
+exports.getFlow = function(req, res) {
+    var aggregate = [];
+    aggregate.push({
+        $group: {
+            _id: {
+                name: '$name',
+                port: '$port'
+            },
+            flow: {
+                $sum: '$flow'
+            },
+        }
+    });
+    aggregate.push({
+        $project: {
+            _id: false,
+            name: '$_id.name',
+            port: '$_id.port',
+            flow: '$flow'
+        }
+    });
+    HistoryOriginal.aggregate(aggregate).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        res.send(data);
     });
 };
