@@ -1,0 +1,25 @@
+{
+  "name": "shadowsocks-manager",
+  "description": "undefined",
+  "main": "server.js",
+  "authors": [
+    "Gyteng"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "shadowsocks"
+  ],
+  "homepage": "https://github.com/gyteng/shadowsocks-manager",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "^1.0.8",
+    "angular-ui-router": "^0.2.18",
+    "material-design-icons": "^2.2.3"
+  }
+}

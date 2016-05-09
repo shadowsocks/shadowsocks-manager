@@ -20,10 +20,14 @@
   },
   "homepage": "https://github.com/gyteng/shadowsocks-manager",
   "dependencies": {
+    "async": "^2.0.0-rc.4",
     "body-parser": "^1.15.0",
+    "connect-mongo": "^1.1.0",
     "ejs": "^2.4.1",
     "express": "*",
+    "express-session": "^1.13.0",
     "later": "^1.2.0",
+    "log4js": "^0.6.36",
     "moment": "^2.11.2",
     "mongoose": "^4.4.14"
   },
