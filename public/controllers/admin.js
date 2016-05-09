@@ -134,5 +134,12 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $interval(function() {
             $scope.getFlow();
         }, 10 * 1000);
+        $scope.allFlow = 0;
+        $scope.$watch('flow', function() {
+            $scope.allFlow = 0;
+            $scope.flow.forEach(function(f) {
+                $scope.allFlow += f.flow;
+            });
+        });
     })
 ;

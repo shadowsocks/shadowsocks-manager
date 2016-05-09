@@ -1,8 +1,12 @@
 <div flex layout="column">
     <md-card>
+        <md-card-actions layout="row" layout-align="start center">
+            <div flex><md-button>合计</md-button></div>
+            <div flex></div>
+            <div flex><md-button>{{allFlow | flow1024}}</md-button></div>
+        </md-card-actions>
         <md-card-actions layout="row" layout-align="start center" ng-repeat="f in flow">
             <div flex><md-button>{{f.name}}</md-button></div>
-            
             <div flex><md-button>{{f.port}}</md-button></div>
             <div flex><md-button>{{f.flow | flow1024}}</md-button></div>
         </md-card-actions>
