@@ -8,8 +8,8 @@ var md5 = function(text) {
         return crypto.createHash('md5').update(text).digest('hex');
 };
 
-var createPassword = function(password, date, username) {
-    return md5(password + date + username);
+var createPassword = function(password, username) {
+    return md5(password + username);
 };
 
 exports.signup = function(req, res) {
@@ -22,8 +22,7 @@ exports.signup = function(req, res) {
         else if(data) {return res.status(403).end('该用户已注册');}
         var user = new User();
         user.email = email;
-        user.createTime = new Date();
-        user.password = createPassword(password, createTime, email);
+        user.password = createPassword(password, email);
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误');}
             return res.send('success');
@@ -38,7 +37,7 @@ exports.login = function(req, res) {
     User.findOne({email: email}).exec(function(err, user) {
         if(err) {return res.status(500).end('数据库操作错误');}
         else if(!user) { return res.status(401).end('用户未注册');}
-        var passwordWithMd5 = createPassword(password, user.createTime, user.email);
+        var passwordWithMd5 = createPassword(password, user.email);
         if(passwordWithMd5 !== user.password) {
             return res.status(401).end('用户名或密码错误');
         }

@@ -20,7 +20,7 @@ var md5 = function(text) {
 };
 
 var createPassword = function(password, date, username) {
-    return md5(password + date + username);
+    return md5(password + username);
 };
 
 User.find({}).exec(function (err, users) {
@@ -30,7 +30,7 @@ User.find({}).exec(function (err, users) {
         // user.password = '123456';
         user.isAdmin = true;
         user.createTime = new Date();
-        user.password = createPassword('123456', user.createTime, user.email);
+        user.password = createPassword('123456', user.email);
         user.save();
     }
 });
