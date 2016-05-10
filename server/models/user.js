@@ -14,12 +14,23 @@ var userSchema = new Schema({
 
 var User = mongoose.model('User', userSchema);
 
+var crypto = require('crypto');
+var md5 = function(text) {
+        return crypto.createHash('md5').update(text).digest('hex');
+};
+
+var createPassword = function(password, date, username) {
+    return md5(password + date + username);
+};
+
 User.find({}).exec(function (err, users) {
     if(!err && users.length === 0) {
         var user = new User();
         user.email = 'igyteng@gmail.com';
-        user.password = '123456';
+        // user.password = '123456';
         user.isAdmin = true;
+        user.createTime = new Date();
+        user.password = createPassword('123456', user.createTime, user.email);
         user.save();
     }
 });

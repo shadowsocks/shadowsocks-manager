@@ -83,7 +83,7 @@ exports.deleteServerPort = function(req, res) {
 
 exports.getFlow = function(req, res) {
     var aggregate = [];
-    var date = moment('2016-05-10').toDate();
+    var date = moment().hour(0).minute(0).second(0).toDate();
     aggregate.push({
         $match: {
             time: {$gt: date}
