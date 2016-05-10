@@ -3,6 +3,16 @@
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
                 <div layout="column">
+
+                    <md-toolbar class="md-tall">
+                        <span flex></span>
+                        <div layout="column" class="md-toolbar-tools-bottom inset">
+                            <user-avatar></user-avatar>
+                            <span></span>
+                            <div>Admin</div>
+                        </div>
+                    </md-toolbar>
+
                     <md-list>
                         <md-list-item ng-repeat="menu in menus">
                             <a ng-click="menuClick($index)">
