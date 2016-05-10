@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var Server = mongoose.model('Server');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
+var moment = require('moment');
 
 var shadowsocks = require('./shadowsocks');
 
@@ -82,6 +83,12 @@ exports.deleteServerPort = function(req, res) {
 
 exports.getFlow = function(req, res) {
     var aggregate = [];
+    var date = moment('2016-05-10').toDate();
+    aggregate.push({
+        $match: {
+            time: {$gt: date}
+        }
+    });
     aggregate.push({
         $group: {
             _id: {
