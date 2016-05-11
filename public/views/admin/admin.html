@@ -3,7 +3,6 @@
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
                 <div layout="column">
-
                     <md-toolbar class="md-tall">
                         <span flex></span>
                         <div layout="column" class="md-toolbar-tools-bottom inset">
@@ -12,7 +11,6 @@
                             <div>Admin</div>
                         </div>
                     </md-toolbar>
-
                     <md-list>
                         <md-list-item ng-repeat="menu in menus">
                             <a ng-click="menuClick($index)">
@@ -63,15 +61,25 @@
         <md-content flex>
             <div layout="column">
                 <div layout="row">
-                    <div class="md-toolbar-tools">
-                        <md-button class="md-icon-button" aria-label="menu" ng-click="showMenu()">
-                            <i class="material-icons">menu</i>
-                        </md-button>
-                        <div>{{publicInfo.title}}</div>
-                    </div>
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <md-button class="md-icon-button" aria-label="menu" ng-click="showMenu()">
+                                <i class="material-icons">menu</i>
+                            </md-button>
+                            <div>{{publicInfo.title}}</div>
+                            <span flex></span>
+                            <md-button class="md-icon-button" aria-label="more">
+                                <i class="material-icons">more_vert</i>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
                 </div>
                 <div ui-view></div>
             </div>
+            
         </md-content>
     </section>
+    <md-button class="md-fab md-fab-bottom-right" aria-label="add server">
+        <md-icon class="material-icons" ng-click="addServerDialog()">add</md-icon>
+    </md-button>
 </div>
