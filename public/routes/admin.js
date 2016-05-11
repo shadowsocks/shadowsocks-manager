@@ -25,6 +25,13 @@ app.config(
                     controller: 'AdminServerController',
                     templateUrl: '/public/views/admin/server.html'
                 })
+                .state('admin.addServer', {
+                    url: '/addServer',
+                    controller: 'AdminAddServerController',
+                    templateUrl: '/public/views/admin/addServer.html'
+                })
+
+
                 .state('admin.flow', {
                     url: '/flow',
                     controller: 'AdminFlowController',
