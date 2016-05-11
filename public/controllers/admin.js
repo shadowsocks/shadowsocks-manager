@@ -26,10 +26,12 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '历史记录', icon: 'watch_later'}
         ];
         $scope.publicInfo = {
-            currentMenu: 0
+            title: ''
+        };
+        $scope.setTitle = function(str) {
+            $scope.publicInfo.title = str;
         };
         $scope.menuClick = function(index) {
-            $scope.publicInfo.currentMenu = index;
             $state.go($scope.menus[index].click);
             $mdSidenav('left').close();
         };
@@ -42,9 +44,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         ];
     })
     .controller('AdminIndexController', function($scope, $http, $state) {
-
+        $scope.setTitle('首页');
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
+        $scope.setTitle('服务器管理');
         $scope.init = function() {
             $http.get('/admin/server').success(function(data) {
                 $scope.serverList = data;
@@ -125,6 +128,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
+        $scope.setTitle('流量统计');
         $scope.getFlow = function() {
             $http.get('/admin/flow').success(function(data) {
                 $scope.flow = data;

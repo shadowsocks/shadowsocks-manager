@@ -62,12 +62,12 @@
         </md-sidenav>
         <md-content flex>
             <div layout="column">
-                <div layout="row" hide-gt-md>
+                <div layout="row">
                     <div class="md-toolbar-tools">
                         <md-button class="md-icon-button" aria-label="menu" ng-click="showMenu()">
                             <i class="material-icons">menu</i>
                         </md-button>
-                        <div>{{menus[publicInfo.currentMenu].name}}</div>
+                        <div>{{publicInfo.title}}</div>
                     </div>
                 </div>
                 <div ui-view></div>
