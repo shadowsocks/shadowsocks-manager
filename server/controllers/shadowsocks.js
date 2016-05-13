@@ -60,6 +60,9 @@ var collectUserFlow = function() {
             sockets[server.name] = dgram.createSocket('udp4');
             var message = 'ping';
             sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
+                sockets[server.name].on('error', function() {
+                    console.log('UDP[' + server.name + '] error');
+                });
                 sockets[server.name].on('message', function(m, r) {
                     var msg = String(m);
                     if(msg.substr(0, 4) === 'stat') {
