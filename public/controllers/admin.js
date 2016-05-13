@@ -135,6 +135,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.getFlow = function() {
             $http.get('/admin/flow').success(function(data) {
                 $scope.flow = data;
+                console.log(data);
+                $scope.flow.sort(function(a, b) {
+                    return b.flow - a.flow;
+                });
             });
         };
         $scope.getFlow();
