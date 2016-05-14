@@ -42,11 +42,17 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 });
             }}
         ];
+
+        $scope.fabButtonClick = function() {
+            console.log('Fab');
+            $state.go('admin.addServer');
+        };
     })
     .controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
+        console.log('GGGGG');
         $scope.setTitle('服务器管理');
         $scope.init = function() {
             $http.get('/admin/server').success(function(data) {
@@ -128,7 +134,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         // };
     })
     .controller('AdminAddServerController', function($scope, $interval, $http) {
-        
+        $scope.setTitle('添加服务器');
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
