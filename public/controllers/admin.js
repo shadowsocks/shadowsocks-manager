@@ -133,8 +133,21 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         //     $scope.addServerPort = addServerPort;
         // };
     })
-    .controller('AdminAddServerController', function($scope, $interval, $http) {
+    .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
         $scope.setTitle('添加服务器');
+        $scope.server = {};
+        $scope.addServer = function() {
+            $http.post('/admin/server', {
+                name: $scope.server.name,
+                ip: $scope.server.ip,
+                port: $scope.server.port
+            }).success(function(data) {
+                $state.go('admin.server');
+            }).error(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.cancel = function() {$state.go('admin.server');};
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
