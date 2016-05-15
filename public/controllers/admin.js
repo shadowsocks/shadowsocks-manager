@@ -124,78 +124,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $mdDialog.close();
             });
         };
-        // $scope.server = {};
-        // $scope.serverPort = {};
-        // $scope.addServerDialog = function() {
-        //     $scope.dialog = $mdDialog.show({
-        //         controller: AddServerDialogController,
-        //         templateUrl: '/public/views/admin/addServer.html',
-        //         locals : {
-        //             addServer : $scope.addServer,
-        //             server : $scope.server
-        //         }
-        //     });
-        // };
-        // $scope.addServerPortDialog = function(serverName) {
-        //     $scope.dialog = $mdDialog.show({
-        //         controller: AddServerPortDialogController,
-        //         templateUrl: '/public/views/admin/addServerPort.html',
-        //         locals : {
-        //             serverName: serverName,
-        //             serverPort : $scope.serverPort,
-        //             addServerPort : $scope.addServerPort
-        //         }
-        //     });
-        // };
-        // $scope.addServer = function() {
-        //     $http.post('/admin/server', {
-        //         name: $scope.server.name,
-        //         ip: $scope.server.ip,
-        //         port: $scope.server.port
-        //     }).success(function(data) {
-        //         $scope.init();
-        //         $mdDialog.cancel();
-        //     }).error(function(err) {
-        //         console.log(err);
-        //     });
-        // };
-        // $scope.addServerPort = function() {
-        //     // console.log($scope.serverPort);
-        //     $http.post('/admin/serverPort', {
-        //         name: $scope.serverPort.name,
-        //         port: $scope.serverPort.port,
-        //         password: $scope.serverPort.password
-        //     }).success(function(data) {
-        //         $scope.init();
-        //         $mdDialog.cancel();
-        //     }).error(function(err) {
-        //         console.log(err);
-        //     });
-        // };
-        // $scope.deleteServerPort = function(name, port) {
-        //     $http.delete('/admin/serverPort', {
-        //         params: {
-        //             name: name,
-        //             port: port
-        //         }
-        //     }).success(function(data) {
-        //         $scope.init();
-        //         console.log(data);
-        //     }).error(function(err) {
-        //         console.log(err);
-        //     });
-        // };
-        // var AddServerDialogController = function($scope, $mdDialog, addServer, server) {
-        //     $scope.server = server;
-        //     $scope.cancel = function(){$mdDialog.cancel();};
-        //     $scope.addServer = addServer;
-        // };
-        // var AddServerPortDialogController = function($scope, $mdDialog, serverPort, addServerPort, serverName) {
-        //     $scope.serverPort = serverPort;
-        //     $scope.serverPort.name = serverName;
-        //     $scope.cancel = function(){$mdDialog.cancel();};
-        //     $scope.addServerPort = addServerPort;
-        // };
     })
     .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
         $scope.setTitle('添加服务器');
@@ -241,12 +169,44 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.cancel = function() {$state.go('admin.server');};
     })
-    .controller('AdminServerAccountController', function($scope, $interval, $http, $state, $stateParams) {
+    .controller('AdminServerAccountController', function($scope, $interval, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('帐号设置');
         $scope.setMenuButton('admin.server');
         $scope.setFabButtonClick(function(){
             $state.go('admin.addAccount', {serverName: $stateParams.serverName});
         });
+        $scope.init = function() {
+            $http.get('/admin/server', {params: {
+                serverName: $stateParams.serverName
+            }}).success(function(data) {
+                if(data[0]) {
+                    $scope.server = data[0];
+                } else {
+                    $state.go('admin.server');
+                }
+            }).error(function(err) {
+                $state.go('admin.server');
+            });
+        };
+        $scope.init();
+        $scope.deleteAccount = function(port) {
+            var confirm = $mdDialog.confirm()
+                .title('')
+                .textContent('真的要删除帐号[' + port + ']吗？')
+                .ariaLabel('delete')
+                .ok('确定')
+                .cancel('取消');
+            $mdDialog.show(confirm).then(function() {
+                $http.delete('/admin/account', {params: {
+                    name: $stateParams.serverName,
+                    port: port
+                }}).success(function(data) {
+                    $scope.init();
+                });
+            }, function() {
+                $mdDialog.close();
+            });
+        };
     })
     .controller('AdminAddAccountController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
