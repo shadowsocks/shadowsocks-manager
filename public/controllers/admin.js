@@ -15,13 +15,15 @@ app.filter('flow1024', function() {
 });
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
         $scope.loading = function(isLoading) {
+            dialog = $mdDialog.prompt({
+                templateUrl: '/public/views/admin/loading.html',
+                escapeToClose : false
+            });
             if(isLoading) {
-                $mdDialog.show({
-                    templateUrl: '/public/views/admin/loading.html',
-                    escapeToClose : false
-                });
+                $mdDialog.show(dialog);
             } else {
-                $mdDialog.hide();
+                console.log($mdDialog);
+                $mdDialog.cancel(dialog);
             }
         };
         // $scope.loading(true);
@@ -79,6 +81,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.menuButtonIcon = 'menu';
             $scope.publicInfo.menuButtonState = '';
             $scope.publicInfo.fabButtonClick = '';
+
+            // $scope.loading(false);
         });
     })
     .controller('AdminIndexController', function($scope, $http, $state) {
@@ -97,6 +101,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.init();
+        $scope.account = function(serverName) {
+            $state.go('admin.serverAccount', {serverName: serverName});
+        };
         $scope.edit = function(serverName) {
             $state.go('admin.editServer', {serverName: serverName});
         };
@@ -233,6 +240,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.cancel = function() {$state.go('admin.server');};
+    })
+    .controller('AdminServerAccountController', function($scope, $interval, $http) {
+        $scope.setTitle('帐号设置');
+        $scope.setMenuButton('admin.server');
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');

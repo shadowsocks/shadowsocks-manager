@@ -35,6 +35,11 @@ app.config(
                     controller: 'AdminEditServerController',
                     templateUrl: '/public/views/admin/addServer.html'
                 })
+                .state('admin.serverAccount', {
+                    url: '/serverAccount/:serverName',
+                    controller: 'AdminServerAccountController',
+                    templateUrl: '/public/views/admin/serverAccount.html'
+                })
 
 
                 .state('admin.flow', {

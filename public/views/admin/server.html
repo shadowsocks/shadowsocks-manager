@@ -10,20 +10,12 @@
                 <div>地址：{{server.ip}}</div>
                 <div>端口：{{server.port}}</div>
             </p>
-            <div layout="row" ng-repeat="a in server.account">
-                <div flex="2">{{a.port}}</div>
-                <div flex="45">{{a.password}}</div>
-                <!-- <div flex>{{a.expireTime}}</div> -->
-                <div flex><md-button ng-click="deleteServerPort(server.name, a.port)">删除</md-button></div>
-            </div>
         </md-card-content>
         <md-card-actions layout="row" layout-align="start center">
+            <md-button ng-click="account(server.name)">帐号</md-button>
             <md-button ng-click="edit(server.name)">编辑</md-button>
             <md-button ng-click="delete(server.name)">删除</md-button>
         </md-card-actions>
     </md-card>
-    <!-- <md-button class="md-fab md-fab-bottom-right" aria-label="add server">
-        <md-icon class="material-icons" ng-click="addServerDialog()">add</md-icon>
-    </md-button> -->
 </div>
 
