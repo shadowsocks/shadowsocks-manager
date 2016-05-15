@@ -77,7 +77,7 @@
         </md-content>
     </div>
     </section>
-    <md-button class="md-fab md-fab-bottom-right">
-        <md-icon class="material-icons" ng-click="fabButtonClick()">add</md-icon>
+    <md-button ng-if="publicInfo.fabButtonClick" class="md-fab md-fab-bottom-right">
+        <md-icon class="material-icons" ng-click="publicInfo.fabButtonClick()">add</md-icon>
     </md-button>
 </div>

@@ -42,8 +42,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         ];
         $scope.publicInfo = {
             title: '',              //标题
-            menuButtonIcon: 'menu', //菜单/返回按钮
-            menuButtonState: ''     //返回按钮跳转页面，非空时为返回按钮
+            menuButtonIcon: 'menu', //菜单或返回按钮
+            menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
+            fabButtonIcon: '',
+            fabButtonClick: ''
         };
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
@@ -57,6 +59,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $scope.publicInfo.menuButtonState = str;
             }
         };
+        $scope.setFabButtonClick = function(fn) {
+            $scope.publicInfo.fabButtonClick = fn;
+        };
         $scope.menuClick = function(index) {
             $state.go($scope.menus[index].click);
             $mdSidenav('left').close();
@@ -69,10 +74,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             }}
         ];
 
-        $scope.fabButtonClick = function() {
-            console.log('Fab');
-            $state.go('admin.addServer');
-        };
+        $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            $scope.publicInfo.menuButtonIcon = 'menu';
+            $scope.publicInfo.menuButtonState = '';
+            $scope.publicInfo.fabButtonClick = '';
+        });
     })
     .controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
@@ -81,6 +87,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
         $scope.setTitle('服务器管理');
         $scope.setMenuButton('default');
+        $scope.setFabButtonClick(function(){
+            $state.go('admin.addServer');
+        });
         $scope.init = function() {
             $http.get('/admin/server').success(function(data) {
                 $scope.serverList = data;
