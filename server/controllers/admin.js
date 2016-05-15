@@ -7,6 +7,17 @@ var moment = require('moment');
 
 var shadowsocks = require('./shadowsocks');
 
+exports.getServers = function (req, res) {
+    var query = {};
+    if(req.query.serverName) {
+        query.name = req.query.serverName;
+    }
+    Server.find(query).exec(function(err, servers) {
+        if(err) {return res.status(500).end('数据库错误');}
+        return res.send(servers);
+    });
+};
+
 exports.addServer = function (req, res) {
     var name = req.body.name;
     var ip = req.body.ip;
@@ -25,16 +36,34 @@ exports.addServer = function (req, res) {
     });
 };
 
-exports.getServers = function (req, res) {
-    var query = {};
-    if(req.query.serverName) {
-        query.name = req.query.serverName;
-    }
-    Server.find(query).exec(function(err, servers) {
+exports.editServer = function(req, res) {
+    var name = req.body.name;
+    var ip = req.body.ip;
+    var port = req.body.port;
+
+    Server.findOneAndUpdate({name: name}, {
+        $set: {
+            ip: ip,
+            port: port
+        }
+    }).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
-        return res.send(servers);
+        if(!data) {return res.status(401).end('找不到ServerName');}
+        return res.send(data);
     });
 };
+
+exports.deleteServer = function(req, res) {
+    var name = req.query.name;
+    if(!name) {return res.status(401).end('必须提供ServerName');}
+    Server.findOneAndRemove({name: name}).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!data) {return res.status(401).end('找不到ServerName');}
+        return res.send(data);
+    });
+};
+
+
 
 exports.addServerPort = function(req, res) {
     var name = req.body.name;

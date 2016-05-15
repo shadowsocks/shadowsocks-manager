@@ -78,6 +78,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.edit = function(serverName) {
             $state.go('admin.editServer', {serverName: serverName});
         };
+        $scope.delete = function(serverName) {
+            $http.delete('/admin/server', {params: {
+                name: serverName
+            }}).success(function(data) {
+                $scope.init();
+            });
+        };
         // $scope.server = {};
         // $scope.serverPort = {};
         // $scope.addServerDialog = function() {
@@ -174,8 +181,26 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $http.get('/admin/server', {params: {
             serverName: $stateParams.serverName
         }}).success(function(data) {
-            $scope.server = data[0];
+            if(data[0]) {
+                $scope.server = data[0];
+            } else {
+                $state.go('admin.server');
+            }
+        }).error(function(err) {
+            $state.go('admin.server');
         });
+        $scope.addServer = function() {
+            $http.put('/admin/server', {
+                name: $scope.server.name,
+                ip: $scope.server.ip,
+                port: $scope.server.port
+            }).success(function(data) {
+                $state.go('admin.server');
+            }).error(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.cancel = function() {$state.go('admin.server');};
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
