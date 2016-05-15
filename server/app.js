@@ -21,7 +21,17 @@ var log4js = exports.log4js = function(cb) {
             pattern: '-yyyy-MM-dd',
             alwaysIncludePattern: true,
             category: 'server'
-        }]
+        }, {
+            type: 'console',
+            category: 'admin'
+        }, {
+            type: 'dateFile',
+            filename: 'logs/admin.log',
+            pattern: '-yyyy-MM-dd',
+            alwaysIncludePattern: true,
+            category: 'admin'
+        }
+        ]
     });
     cb(null);
 };

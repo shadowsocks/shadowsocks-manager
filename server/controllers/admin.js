@@ -5,6 +5,9 @@ var Server = mongoose.model('Server');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
 var moment = require('moment');
 
+var log4js = require('log4js');
+var logger = log4js.getLogger('admin');
+
 var shadowsocks = require('./shadowsocks');
 
 exports.getServers = function (req, res) {
@@ -32,6 +35,7 @@ exports.addServer = function (req, res) {
 
     server.save(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
+        logger.info('新增服务器: [' + name + '][' + ip + ':' + port + ']');
         return res.send(data);
     });
 };

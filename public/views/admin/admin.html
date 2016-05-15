@@ -1,5 +1,5 @@
 <div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
-    <!-- <section layout="row" flex> -->
+    <section layout="row" flex>
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
         <md-content>
             <div layout="column">
@@ -57,29 +57,26 @@
             </div>
         </md-content>
     </md-sidenav>
-    <!-- </section> -->
-    <div>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
-                    <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
-                </md-button>
-                <div>{{publicInfo.title}}</div>
-                <span flex></span>
-                <md-button class="md-icon-button" aria-label="more">
-                    <i class="material-icons">more_vert</i>
-                </md-button>
-            </div>
-        </md-toolbar>
+    <div flex layout="column">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                        <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
+                    </md-button>
+                    <div>{{publicInfo.title}}</div>
+                    <span flex></span>
+                    <md-button class="md-icon-button" aria-label="more">
+                        <i class="material-icons">more_vert</i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+        </div>
+        <md-content flex>
+            <div ui-view></div>
+        </md-content>
     </div>
-    <md-content flex>
-        <!-- <div layout="column">
-            <div layout="row">
-                
-            </div> -->
-        <div ui-view></div>
-        <!-- </div> -->
-    </md-content>
+    </section>
     <md-button class="md-fab md-fab-bottom-right">
         <md-icon class="material-icons" ng-click="fabButtonClick()">add</md-icon>
     </md-button>
