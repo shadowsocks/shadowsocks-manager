@@ -168,9 +168,14 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.cancel = function() {$state.go('admin.server');};
     })
-    .controller('AdminEditServerController', function($scope, $interval, $http, $state) {
+    .controller('AdminEditServerController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('编辑服务器');
         $scope.setMenuButton('admin.server');
+        $http.get('/admin/server', {params: {
+            serverName: $stateParams.serverName
+        }}).success(function(data) {
+            $scope.server = data[0];
+        });
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');

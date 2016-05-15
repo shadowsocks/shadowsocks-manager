@@ -26,7 +26,11 @@ exports.addServer = function (req, res) {
 };
 
 exports.getServers = function (req, res) {
-    Server.find({}).exec(function(err, servers) {
+    var query = {};
+    if(req.query.serverName) {
+        query.name = req.query.serverName;
+    }
+    Server.find(query).exec(function(err, servers) {
         if(err) {return res.status(500).end('数据库错误');}
         return res.send(servers);
     });
