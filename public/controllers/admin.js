@@ -14,8 +14,12 @@ app.filter('flow1024', function() {
     };
 });
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window) {
-        $scope.showMenu = function() {
-            $mdSidenav('left').toggle();
+        $scope.menuButton = function() {
+            if(!$scope.publicInfo.menuButtonState) {
+                $mdSidenav('left').toggle();
+            } else {
+                $state.go($scope.publicInfo.menuButtonState);
+            }
         };
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'admin.index'},
@@ -26,10 +30,21 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '历史记录', icon: 'watch_later'}
         ];
         $scope.publicInfo = {
-            title: ''
+            title: '',
+            menuButtonIcon: 'menu',
+            menuButtonState: ''
         };
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
+        };
+        $scope.setMenuButton = function(str) {
+            if(str === 'default') {
+                $scope.publicInfo.menuButtonIcon = 'menu';
+                $scope.publicInfo.menuButtonState = '';
+            } else {
+                $scope.publicInfo.menuButtonIcon = 'arrow_back';
+                $scope.publicInfo.menuButtonState = str;
+            }
         };
         $scope.menuClick = function(index) {
             $state.go($scope.menus[index].click);
@@ -52,8 +67,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.setTitle('首页');
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
-        console.log('GGGGG');
         $scope.setTitle('服务器管理');
+        $scope.setMenuButton('default');
         $scope.init = function() {
             $http.get('/admin/server').success(function(data) {
                 $scope.serverList = data;
@@ -135,6 +150,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
         $scope.setTitle('添加服务器');
+        $scope.setMenuButton('admin.server');
         $scope.server = {};
         $scope.addServer = function() {
             $http.post('/admin/server', {
