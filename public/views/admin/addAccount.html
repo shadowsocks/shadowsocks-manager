@@ -1,0 +1,36 @@
+<div layout="row">
+    <div flex="10" flex-gt-sm="30"></div>
+    <div flex>
+        <form name="accountForm">
+            <md-dialog-content>
+                <div class="md-dialog-content">
+                    <div flex="10"></div>
+                    <md-input-container class="md-block">
+                        <label>端口</label>
+                        <input required name="port" ng-model="account.port">
+                        <div ng-messages="accountForm.port.$error">
+                            <div ng-message="required">端口不能为空</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>密码</label>
+                        <input required name="password" ng-model="account.password">
+                        <div ng-messages="accountForm.password.$error">
+                            <div ng-message="required">密码不能为空</div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </md-dialog-content>
+            <md-dialog-actions layout="row">
+                <md-button ng-click="addAccount()">
+                    确定
+                </md-button>
+                <span flex></span>
+                <md-button ng-click="cancel()">
+                    取消
+                </md-button>
+            </md-dialog-actions>
+        </form>
+    </div>
+    <div flex="10" flex-gt-sm="30"></div>
+</div>

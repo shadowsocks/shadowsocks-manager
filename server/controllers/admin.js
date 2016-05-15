@@ -71,7 +71,7 @@ exports.deleteServer = function(req, res) {
 
 
 
-exports.addServerPort = function(req, res) {
+exports.addAccount = function(req, res) {
     var name = req.body.name;
     var port = req.body.port;
     var password = req.body.password;
@@ -98,7 +98,7 @@ exports.addServerPort = function(req, res) {
     });
 };
 
-exports.deleteServerPort = function(req, res) {
+exports.deleteAccount = function(req, res) {
     var name = req.query.name;
     var port = req.query.port;
 

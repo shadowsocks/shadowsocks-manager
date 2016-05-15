@@ -241,9 +241,29 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.cancel = function() {$state.go('admin.server');};
     })
-    .controller('AdminServerAccountController', function($scope, $interval, $http) {
+    .controller('AdminServerAccountController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('帐号设置');
         $scope.setMenuButton('admin.server');
+        $scope.setFabButtonClick(function(){
+            $state.go('admin.addAccount', {serverName: $stateParams.serverName});
+        });
+    })
+    .controller('AdminAddAccountController', function($scope, $interval, $http, $state, $stateParams) {
+        $scope.setTitle('添加帐号');
+        $scope.setMenuButton('admin.serverAccount');
+        $scope.account = {};
+        $scope.addAccount = function() {
+            $http.post('/admin/account', {
+                name: $stateParams.serverName,
+                port: $scope.account.port,
+                password: $scope.account.password,
+            }).success(function(data) {
+                $state.go('admin.serverAccount', {serverName: $stateParams.serverName,});
+            }).error(function(err) {
+                console.log(err);
+            });
+        };
+        $scope.cancel = function() {$state.go('admin.serverAccount', {serverName: $stateParams.serverName,});};
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
