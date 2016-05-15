@@ -53,6 +53,7 @@ exports.editServer = function(req, res) {
     }).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!data) {return res.status(401).end('找不到ServerName');}
+        logger.info('修改服务器: [' + name + '][' + ip + ':' + port + ']');
         return res.send(data);
     });
 };
@@ -63,6 +64,7 @@ exports.deleteServer = function(req, res) {
     Server.findOneAndRemove({name: name}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!data) {return res.status(401).end('找不到ServerName');}
+        logger.info('删除服务器: [' + data.name + '][' + data.ip + ':' + data.port + ']');
         return res.send(data);
     });
 };
