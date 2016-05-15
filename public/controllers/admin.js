@@ -75,6 +75,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         ];
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            $scope.publicInfo.title = '';
             $scope.publicInfo.menuButtonIcon = 'menu';
             $scope.publicInfo.menuButtonState = '';
             $scope.publicInfo.fabButtonClick = '';
@@ -86,7 +87,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
         $scope.setTitle('服务器管理');
-        $scope.setMenuButton('default');
+        // $scope.setMenuButton('default');
         $scope.setFabButtonClick(function(){
             $state.go('admin.addServer');
         });
@@ -100,10 +101,20 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $state.go('admin.editServer', {serverName: serverName});
         };
         $scope.delete = function(serverName) {
-            $http.delete('/admin/server', {params: {
-                name: serverName
-            }}).success(function(data) {
-                $scope.init();
+            var confirm = $mdDialog.confirm()
+                .title('')
+                .textContent('真的要删除服务器[' + serverName + ']吗？')
+                .ariaLabel('delete')
+                .ok('确定')
+                .cancel('取消');
+            $mdDialog.show(confirm).then(function() {
+                $http.delete('/admin/server', {params: {
+                    name: serverName
+                }}).success(function(data) {
+                    $scope.init();
+                });
+            }, function() {
+                $mdDialog.close();
             });
         };
         // $scope.server = {};
@@ -225,7 +236,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
-        $scope.setMenuButton('default');
+        // $scope.setMenuButton('default');
         $scope.getFlow = function() {
             $http.get('/admin/flow').success(function(data) {
                 $scope.flow = data;
