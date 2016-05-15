@@ -7,7 +7,7 @@
                     <div flex="10"></div>
                     <md-input-container class="md-block">
                         <label>名称</label>
-                        <input required name="name" ng-model="server.name">
+                        <input ng-readonly="publicInfo.title==='编辑服务器'" required name="name" ng-model="server.name">
                         <div ng-messages="serverForm.name.$error">
                             <div ng-message="required">名称不能为空</div>
                         </div>

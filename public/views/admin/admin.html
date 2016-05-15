@@ -1,84 +1,85 @@
 <div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
-    <section layout="row" flex>
-        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
-            <md-content>
-                <div layout="column">
-                    <md-toolbar class="md-tall">
-                        <span flex></span>
-                        <div layout="column" class="md-toolbar-tools-bottom inset">
-                            <user-avatar></user-avatar>
-                            <span></span>
-                            <div>Admin</div>
-                        </div>
-                    </md-toolbar>
-                    <md-list>
-                        <md-list-item ng-repeat="menu in menus">
-                            <a ng-click="menuClick($index)">
-                                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                                    <div class="inset">
-                                        <md-icon class="material-icons">{{menu.icon}}</md-icon>
-                                    </div>
-                                    <div class="inset">
-                                        {{menu.name}}
-                                    </div>
-                                </md-item-content>
-                            </a>
-                        </md-list-item>
-                        <md-divider></md-divider>
-                        <md-list-item ng-repeat="menu in bottomMenus">
-                            <a ng-click="bottomMenus[0].click()">
-                                <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                                    <div class="inset">
-                                        <md-icon class="material-icons">{{menu.icon}}</md-icon>
-                                    </div>
-                                    <div class="inset">
-                                        {{menu.name}}
-                                    </div>
-                                </md-item-content>
-                            </a>
-                        </md-list-item>
-                    </md-list>
-
-                    <!-- <div flex="80" layout="column">
-                        <md-list-item ng-repeat="menu in menus">
-                            <div layout="row" ng-click="menuClick($index)">
-                                <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
-                                <div flex><md-button>{{menu.name}}</md-button></div>
-                            </div>
-                        </md-list-item>
-                    </div>
-                    <div flex="20" layout="column" layout-align="end">
-                        <md-list-item ng-repeat="menu in bottomMenus">
-                            <div layout="row" ng-click="bottomMenus[0].click()">
-                                <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
-                                <div flex><md-button>{{menu.name}}</md-button></div>
-                            </div>
-                        </md-list-item>
-                    </div> -->
-                </div>
-            </md-content>
-        </md-sidenav>
-        <md-content flex>
+    <!-- <section layout="row" flex> -->
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+        <md-content>
             <div layout="column">
-                <div layout="row">
-                    <md-toolbar>
-                        <div class="md-toolbar-tools">
-                            <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
-                                <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
-                            </md-button>
-                            <div>{{publicInfo.title}}</div>
-                            <span flex></span>
-                            <md-button class="md-icon-button" aria-label="more">
-                                <i class="material-icons">more_vert</i>
-                            </md-button>
+                <md-toolbar class="md-tall">
+                    <span flex></span>
+                    <div layout="column" class="md-toolbar-tools-bottom inset">
+                        <user-avatar></user-avatar>
+                        <span></span>
+                        <div>Admin</div>
+                    </div>
+                </md-toolbar>
+                <md-list>
+                    <md-list-item ng-repeat="menu in menus">
+                        <a ng-click="menuClick($index)">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                </div>
+                                <div class="inset">
+                                    {{menu.name}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-repeat="menu in bottomMenus">
+                        <a ng-click="bottomMenus[0].click()">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                </div>
+                                <div class="inset">
+                                    {{menu.name}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                    </md-list-item>
+                </md-list>
+                <!-- <div flex="80" layout="column">
+                    <md-list-item ng-repeat="menu in menus">
+                        <div layout="row" ng-click="menuClick($index)">
+                            <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
+                            <div flex><md-button>{{menu.name}}</md-button></div>
                         </div>
-                    </md-toolbar>
+                    </md-list-item>
                 </div>
-                <div ui-view></div>
+                <div flex="20" layout="column" layout-align="end">
+                    <md-list-item ng-repeat="menu in bottomMenus">
+                        <div layout="row" ng-click="bottomMenus[0].click()">
+                            <div flex="40" layout="row" layout-align="center center"><md-icon class="material-icons">{{menu.icon}}</md-icon></div>
+                            <div flex><md-button>{{menu.name}}</md-button></div>
+                        </div>
+                    </md-list-item>
+                </div> -->
             </div>
-            
         </md-content>
-    </section>
+    </md-sidenav>
+    <!-- </section> -->
+    <div>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                    <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
+                </md-button>
+                <div>{{publicInfo.title}}</div>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="more">
+                    <i class="material-icons">more_vert</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+    </div>
+    <md-content flex>
+        <!-- <div layout="column">
+            <div layout="row">
+                
+            </div> -->
+        <div ui-view></div>
+        <!-- </div> -->
+    </md-content>
     <md-button class="md-fab md-fab-bottom-right">
         <md-icon class="material-icons" ng-click="fabButtonClick()">add</md-icon>
     </md-button>
