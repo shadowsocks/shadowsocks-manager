@@ -8,7 +8,8 @@ remove: {"server_port": 8001}
 */
 
 var app = global.app;
-
+var log4js = require('log4js');
+var logger = log4js.getLogger('shadow');
 /*
 server: {
     ip: '',
@@ -44,7 +45,7 @@ exports.del = function (server, account) {
 
 var sendMessageToShadowsocks = function(ip, port, message) {
     var socket = dgram.createSocket('udp4');
-    console.log('Send message to [' + ip + ':' + port + ']: ' + message);
+    logger.info('Send message to [' + ip + ':' + port + ']: ' + message);
     socket.send(message, 0, message.length, port, ip, function(err, bytes) {
         socket.on('message', function(m, r) {
             socket.close();
@@ -61,7 +62,7 @@ var collectUserFlow = function() {
             var message = 'ping';
             sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
                 sockets[server.name].on('error', function() {
-                    console.log('UDP[' + server.name + '] error');
+                    logger.error('UDP[' + server.name + '] error');
                 });
                 sockets[server.name].on('message', function(m, r) {
                     var msg = String(m);
