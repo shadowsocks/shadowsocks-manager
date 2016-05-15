@@ -75,6 +75,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.init();
+        $scope.edit = function(serverName) {
+            $state.go('admin.editServer', {serverName: serverName});
+        };
         // $scope.server = {};
         // $scope.serverPort = {};
         // $scope.addServerDialog = function() {
@@ -164,6 +167,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.cancel = function() {$state.go('admin.server');};
+    })
+    .controller('AdminEditServerController', function($scope, $interval, $http, $state) {
+        $scope.setTitle('编辑服务器');
+        $scope.setMenuButton('admin.server');
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
