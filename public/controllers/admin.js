@@ -13,7 +13,18 @@ app.filter('flow1024', function() {
         }
     };
 });
-app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
+        $scope.loading = function(isLoading) {
+            if(isLoading) {
+                $mdDialog.show({
+                    templateUrl: '/public/views/admin/loading.html',
+                    escapeToClose : false
+                });
+            } else {
+                $mdDialog.hide();
+            }
+        };
+        // $scope.loading(true);
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
@@ -30,9 +41,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '历史记录', icon: 'watch_later'}
         ];
         $scope.publicInfo = {
-            title: '',
-            menuButtonIcon: 'menu',
-            menuButtonState: ''
+            title: '',              //标题
+            menuButtonIcon: 'menu', //菜单/返回按钮
+            menuButtonState: ''     //返回按钮跳转页面，非空时为返回按钮
         };
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
@@ -65,6 +76,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
+        $scope.setMenuButton('default');
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
         $scope.setTitle('服务器管理');
@@ -204,6 +216,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
+        $scope.setMenuButton('default');
         $scope.getFlow = function() {
             $http.get('/admin/flow').success(function(data) {
                 $scope.flow = data;
