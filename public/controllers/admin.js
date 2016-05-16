@@ -286,13 +286,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $http.get('/admin/server').success(function(data) {
             $scope.servers = data;
         });
-        // setInterval(function() {
-        //     console.log($scope.accounts);
-        //     // console.log($scope.server);
-        // }, 1000);
-
         $scope.$watch('server', function() {
-            $scope.accounts = JSON.parse($scope.server).account;
+            if($scope.server) {
+                $scope.accounts = JSON.parse($scope.server).account;
+            }
         });
     })
 ;
