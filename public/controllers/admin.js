@@ -31,7 +31,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
             } else {
-                $state.go($scope.publicInfo.menuButtonState);
+                $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
             }
         };
         $scope.menus = [
@@ -46,19 +46,24 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             title: '',              //标题
             menuButtonIcon: 'menu', //菜单或返回按钮
             menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
+            menuButtonStateParams: {},
             fabButtonIcon: '',
             fabButtonClick: ''
         };
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
         };
-        $scope.setMenuButton = function(str) {
+        $scope.setMenuButton = function(str, obj) {
             if(str === 'default') {
                 $scope.publicInfo.menuButtonIcon = 'menu';
                 $scope.publicInfo.menuButtonState = '';
+                $scope.publicInfo.menuButtonStateParams = {};
             } else {
                 $scope.publicInfo.menuButtonIcon = 'arrow_back';
                 $scope.publicInfo.menuButtonState = str;
+                if(obj) {
+                    $scope.publicInfo.menuButtonStateParams = obj;
+                }
             }
         };
         $scope.setFabButtonClick = function(fn) {
@@ -80,6 +85,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.title = '';
             $scope.publicInfo.menuButtonIcon = 'menu';
             $scope.publicInfo.menuButtonState = '';
+            $scope.publicInfo.menuButtonStateParams = {};
             $scope.publicInfo.fabButtonClick = '';
 
             // $scope.loading(false);
@@ -263,9 +269,18 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('用户管理');
-
-        // $http.get('/admin/user').success(function(data) {
-        //     $scope.users = data;
-        // });
+        $scope.setMenuButton('admin.user');
+        $scope.setFabButtonClick(function(){
+            $state.go('admin.userAddAccount', {userName: $stateParams.userName});
+        });
+        $http.get('/admin/user', {params: {
+            userName: $stateParams.userName
+        }}).success(function(data) {
+            $scope.user = data[0];
+        });
+    })
+    .controller('AdminUserAddAccountController', function($scope, $http, $state, $stateParams) {
+        $scope.setTitle('添加帐号');
+        $scope.setMenuButton('admin.userPage', {userName: $stateParams.userName});
     })
 ;

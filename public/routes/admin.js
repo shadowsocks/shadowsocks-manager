@@ -63,6 +63,11 @@ app.config(
                     controller: 'AdminUserPageController',
                     templateUrl: '/public/views/admin/userPage.html'
                 })
+                .state('admin.userAddAccount', {
+                    url: '/user/:userName/addAccount',
+                    controller: 'AdminUserAddAccountController',
+                    templateUrl: '/public/views/admin/userAddAccount.html'
+                })
 
 
             ;

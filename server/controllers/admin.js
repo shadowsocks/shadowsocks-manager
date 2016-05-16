@@ -155,7 +155,11 @@ exports.getFlow = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
-    User.find({isAdmin: false}).exec(function(err, data) {
+    var query = {isAdmin: false};
+    if(req.query.userName) {
+        query.email = req.query.userName;
+    }
+    User.find(query).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         res.send(data);
     });
