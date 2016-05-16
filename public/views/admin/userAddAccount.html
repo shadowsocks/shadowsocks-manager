@@ -1,1 +1,25 @@
-<div>12345</div>
+<div layout="row">
+    <md-input-container>
+        <label>服务器</label>
+        <md-select ng-model="server">
+            <md-option ng-repeat="server in servers" value="{{server}}">{{server.name}}</md-option>
+        </md-select>
+    </md-input-container>
+    <md-input-container>
+    <label>端口</label>
+        <md-select ng-model="account">
+            <md-option ng-repeat="account in accounts" value="{{account}}">{{account.port}}</md-option>
+        </md-select>
+    </md-input-container>
+    <!-- <md-input-container>
+        <label>端口</label>
+        <md-select ng-model="selectedToppings" multiple>
+            <md-optgroup label="Meats">
+                <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
+            </md-optgroup>
+            <md-optgroup label="Veggies">
+                <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
+            </md-optgroup>
+        </md-select>
+    </md-input-container> -->
+</div>

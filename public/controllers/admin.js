@@ -282,5 +282,17 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
     .controller('AdminUserAddAccountController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
         $scope.setMenuButton('admin.userPage', {userName: $stateParams.userName});
+
+        $http.get('/admin/server').success(function(data) {
+            $scope.servers = data;
+        });
+        // setInterval(function() {
+        //     console.log($scope.accounts);
+        //     // console.log($scope.server);
+        // }, 1000);
+
+        $scope.$watch('server', function() {
+            $scope.accounts = JSON.parse($scope.server).account;
+        });
     })
 ;
