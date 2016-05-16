@@ -52,6 +52,19 @@ app.config(
                     controller: 'AdminFlowController',
                     templateUrl: '/public/views/admin/flow.html'
                 })
+
+                .state('admin.user', {
+                    url: '/user',
+                    controller: 'AdminUserController',
+                    templateUrl: '/public/views/admin/user.html'
+                })
+                .state('admin.userPage', {
+                    url: '/user/:userName',
+                    controller: 'AdminUserPageController',
+                    templateUrl: '/public/views/admin/userPage.html'
+                })
+
+
             ;
         }
     ]

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Server = mongoose.model('Server');
+var User = mongoose.model('User');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
 var moment = require('moment');
 
@@ -148,6 +149,13 @@ exports.getFlow = function(req, res) {
         }
     });
     HistoryOriginal.aggregate(aggregate).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        res.send(data);
+    });
+};
+
+exports.getUsers = function(req, res) {
+    User.find({isAdmin: false}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         res.send(data);
     });

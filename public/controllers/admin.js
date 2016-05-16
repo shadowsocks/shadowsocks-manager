@@ -37,7 +37,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'admin.index'},
             {name: '服务器管理', icon: 'cloud', click: 'admin.server'},
-            {name: '用户管理', icon: 'face'},
+            {name: '用户管理', icon: 'face', click: 'admin.user'},
             {name: '续费码', icon: 'shop'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
             {name: '历史记录', icon: 'watch_later'}
@@ -249,5 +249,23 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $scope.allFlow += f.flow;
             });
         });
+    })
+
+    .controller('AdminUserController', function($scope, $state, $http) {
+        $scope.setTitle('用户管理');
+
+        $http.get('/admin/user').success(function(data) {
+            $scope.users = data;
+        });
+        $scope.userPage = function(userName) {
+            $state.go('admin.userPage', {userName: userName});
+        };
+    })
+    .controller('AdminUserPageController', function($scope, $http, $state, $stateParams) {
+        $scope.setTitle('用户管理');
+
+        // $http.get('/admin/user').success(function(data) {
+        //     $scope.users = data;
+        // });
     })
 ;

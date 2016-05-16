@@ -1,0 +1,12 @@
+<md-list>
+    <md-list-item ng-repeat="user in users">
+        <a ng-click="userPage(user.email)">
+            <md-item-content md-ink-ripple layout="row" layout-align="end center">
+                <div class="inset">
+                    {{user.email}}
+                </div>
+            </md-item-content>
+        </a>
+        <md-divider ng-hide="$last"></md-divider>
+    </md-list-item>
+</md-list>
