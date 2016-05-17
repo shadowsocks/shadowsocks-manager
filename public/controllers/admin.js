@@ -107,28 +107,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.init();
-        $scope.account = function(serverName) {
-            $state.go('admin.serverAccount', {serverName: serverName});
-        };
-        $scope.edit = function(serverName) {
-            $state.go('admin.editServer', {serverName: serverName});
-        };
-        $scope.delete = function(serverName) {
-            var confirm = $mdDialog.confirm()
-                .title('')
-                .textContent('真的要删除服务器[' + serverName + ']吗？')
-                .ariaLabel('delete')
-                .ok('确定')
-                .cancel('取消');
-            $mdDialog.show(confirm).then(function() {
-                $http.delete('/admin/server', {params: {
-                    name: serverName
-                }}).success(function(data) {
-                    $scope.init();
-                });
-            }, function() {
-                $mdDialog.close();
-            });
+        $scope.serverPage = function(serverName) {
+            $state.go('admin.serverPage', {serverName: serverName});
         };
     })
     .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
@@ -175,8 +155,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.cancel = function() {$state.go('admin.server');};
     })
-    .controller('AdminServerAccountController', function($scope, $interval, $http, $state, $stateParams, $mdDialog) {
-        $scope.setTitle('帐号设置');
+    .controller('AdminServerPageController', function($scope, $interval, $http, $state, $stateParams, $mdDialog) {
+        $scope.setTitle('服务器设置');
         $scope.setMenuButton('admin.server');
         $scope.setFabButtonClick(function(){
             $state.go('admin.addAccount', {serverName: $stateParams.serverName});
@@ -195,6 +175,26 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.init();
+        $scope.editServer = function(serverName) {
+            $state.go('admin.editServer', {serverName: serverName});
+        };
+        $scope.deleteServer = function(serverName) {
+            var confirm = $mdDialog.confirm()
+                .title('')
+                .textContent('真的要删除服务器[' + serverName + ']吗？')
+                .ariaLabel('delete')
+                .ok('确定')
+                .cancel('取消');
+            $mdDialog.show(confirm).then(function() {
+                $http.delete('/admin/server', {params: {
+                    name: serverName
+                }}).success(function(data) {
+                    $state.go('admin.server');
+                });
+            }, function() {
+                $mdDialog.cancel(confirm);
+            });
+        };
         $scope.deleteAccount = function(port) {
             var confirm = $mdDialog.confirm()
                 .title('')
@@ -210,7 +210,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.init();
                 });
             }, function() {
-                $mdDialog.close();
+                $mdDialog.cancel(confirm);
             });
         };
     })
@@ -224,7 +224,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 port: $scope.account.port,
                 password: $scope.account.password,
             }).success(function(data) {
-                $state.go('admin.serverAccount', {serverName: $stateParams.serverName,});
+                $state.go('admin.serverPage', {serverName: $stateParams.serverName,});
             }).error(function(err) {
                 console.log(err);
             });
@@ -237,7 +237,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.getFlow = function() {
             $http.get('/admin/flow').success(function(data) {
                 $scope.flow = data;
-                console.log(data);
                 $scope.flow.sort(function(a, b) {
                     return b.flow - a.flow;
                 });

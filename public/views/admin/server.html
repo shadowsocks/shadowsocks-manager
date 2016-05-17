@@ -1,4 +1,4 @@
-<div flex layout="column">
+<!-- <div flex layout="column">
     <md-card ng-repeat="server in serverList">
         <md-card-title>
             <md-card-title-text>
@@ -17,5 +17,18 @@
             <md-button ng-click="delete(server.name)">删除</md-button>
         </md-card-actions>
     </md-card>
-</div>
+</div> -->
+
+
+<md-list>
+    <md-list-item class="md-3-line" ng-repeat="server in serverList">
+        <div class="md-list-item-text" ng-click="serverPage(server.name)">
+            <h3>{{server.name}}</h3>
+            <h4>地址：{{server.ip}}</h4>
+            <h4>端口：{{server.port}}</h4>
+        </div>
+        <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+</md-list>
+
 

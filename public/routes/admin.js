@@ -35,10 +35,10 @@ app.config(
                     controller: 'AdminEditServerController',
                     templateUrl: '/public/views/admin/addServer.html'
                 })
-                .state('admin.serverAccount', {
-                    url: '/serverAccount/:serverName',
-                    controller: 'AdminServerAccountController',
-                    templateUrl: '/public/views/admin/serverAccount.html'
+                .state('admin.serverPage', {
+                    url: '/serverPage/:serverName',
+                    controller: 'AdminServerPageController',
+                    templateUrl: '/public/views/admin/serverPage.html'
                 })
                 .state('admin.addAccount', {
                     url: '/serverAccount/:serverName/addAccount',

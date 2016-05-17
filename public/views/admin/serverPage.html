@@ -1,0 +1,51 @@
+<!-- <md-list>
+    <md-list-item ng-repeat="account in server.account">
+        <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div class="inset">
+                {{account.port}}
+            </div>
+            <div class="inset">
+                {{account.password}}
+            </div>
+            <div class="inset">
+                <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
+                    <i class="material-icons">close</i>
+                </md-button>
+            </div>
+        </md-item-content>
+    </md-list-item>
+</md-list> -->
+<md-list>
+    <md-list-item class="md-3-line">
+        <div class="md-list-item-text">
+            <h3>{{server.name}}</h3>
+            <h4>地址：{{server.ip}}</h4>
+            <h4>端口：{{server.port}}</h4>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="end center">
+        <md-button class="md-icon-button" aria-label="edit" ng-click="editServer(server.name)">
+            <i class="material-icons">create</i>
+        </md-button>
+        <md-button class="md-icon-button" aria-label="delete" ng-click="deleteServer(server.name)">
+            <i class="material-icons">close</i>
+        </md-button>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item ng-repeat="account in server.account">
+        <md-item-content md-ink-ripple layout="row" layout-align="start center">
+            <div class="inset">
+                {{account.port}}
+            </div>
+            <div class="inset">
+                {{account.password}}
+            </div>
+            <div class="inset">
+                <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
+                    <i class="material-icons">close</i>
+                </md-button>
+            </div>
+        </md-item-content>
+    </md-list-item>
+</md-list>
