@@ -116,6 +116,7 @@ var startSocket = function(server) {
 var stopSocket = function(name) {
     clearInterval(servers[name].interval);
     servers[name].close();
+    delete servers[name];
 };
 
 exports.updateServerList = function() {
@@ -123,6 +124,7 @@ exports.updateServerList = function() {
         if(err) { return; }
         data.forEach(function(server) {
             if(!servers[server.name]) {
+                console.log('start' + server.name);
                 startSocket(server);
             }
         });
@@ -130,6 +132,7 @@ exports.updateServerList = function() {
             if(!data.filter(function(f) {
                 return f.name === s;
             })[0]) {
+                console.log('stop' + s);
                 stopSocket(s);
             }
         }
