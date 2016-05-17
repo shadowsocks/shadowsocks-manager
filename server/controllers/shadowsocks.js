@@ -53,6 +53,7 @@ var sendMessageToShadowsocks = function(ip, port, message) {
     });
 };
 
+
 var collectUserFlow = function() {
     var sockets = {};
     Server.find({}).exec(function(err, servers) {
@@ -84,4 +85,56 @@ var collectUserFlow = function() {
         });
     });
 };
-collectUserFlow();
+// collectUserFlow();
+
+var servers = {};
+var startSocket = function(server) {
+    servers[server.name] = dgram.createSocket('udp4');
+    var message = 'ping';
+    servers[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
+        servers[server.name].on('error', function() {
+            logger.error('UDP[' + server.name + '] error');
+        });
+        servers[server.name].on('message', function(m, r) {
+            var msg = String(m);
+            if (msg.substr(0, 4) === 'stat') {
+                var flow = JSON.parse(msg.substr(6));
+                for (var f in flow) {
+                    var ho = new HistoryOriginal();
+                    ho.name = server.name;
+                    ho.port = +f;
+                    ho.flow = flow[f];
+                    ho.save();
+                }
+            }
+        });
+    });
+    servers[server.name].interval = setInterval(function() {
+        servers[server.name].send(message, 0, message.length, server.port, server.ip);
+    }, 90 * 1000);
+};
+var stopSocket = function(name) {
+    clearInterval(servers[name].interval);
+    servers[name].close();
+};
+
+exports.updateServerList = function() {
+    Server.find({}).exec(function(err, data) {
+        if(err) { return; }
+        data.forEach(function(server) {
+            if(!servers[server.name]) {
+                startSocket(server);
+            }
+        });
+        for(var s in servers) {
+            if(!data.filter(function(f) {
+                return f.name === s;
+            })[0]) {
+                stopSocket(s);
+            }
+        }
+        for(var ss in servers) {
+            console.log(ss);
+        }
+    });
+};
