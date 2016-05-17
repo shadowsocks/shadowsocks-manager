@@ -8,5 +8,6 @@ var sched = later.parse.text(text);
 var timer = later.setInterval(function() {
     console.log(new Date());
     shadowsocks.updateServerList();
+    shadowsocks.checkAccount();
 }, sched);
 shadowsocks.updateServerList();

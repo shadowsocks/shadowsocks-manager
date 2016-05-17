@@ -20,7 +20,7 @@ account: {
     password: ''
 }
 */
-exports.add = function (server, account) {
+var add = exports.add = function (server, account) {
     var socket = dgram.createSocket('udp4');
 
     var ip   = server.ip;
@@ -32,7 +32,7 @@ exports.add = function (server, account) {
     sendMessageToShadowsocks(ip, port, message);
 };
 
-exports.del = function (server, account) {
+var del = exports.del = function (server, account) {
     var socket = dgram.createSocket('udp4');
 
     var ip   = server.ip;
@@ -54,37 +54,37 @@ var sendMessageToShadowsocks = function(ip, port, message) {
 };
 
 
-var collectUserFlow = function() {
-    var sockets = {};
-    Server.find({}).exec(function(err, servers) {
-        if(err) {return;}
-        servers.forEach(function(server) {
-            sockets[server.name] = dgram.createSocket('udp4');
-            var message = 'ping';
-            sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
-                sockets[server.name].on('error', function() {
-                    logger.error('UDP[' + server.name + '] error');
-                });
-                sockets[server.name].on('message', function(m, r) {
-                    var msg = String(m);
-                    if(msg.substr(0, 4) === 'stat') {
-                        var flow = JSON.parse(msg.substr(6));
-                        for(var f in flow) {
-                            var ho = new HistoryOriginal();
-                            ho.name = server.name;
-                            ho.port = +f;
-                            ho.flow = flow[f];
-                            ho.save();
-                        }
-                    }
-                });
-            });
-            setInterval(function() {
-                sockets[server.name].send(message, 0, message.length, server.port, server.ip);
-            }, 90 * 1000);
-        });
-    });
-};
+// var collectUserFlow = function() {
+//     var sockets = {};
+//     Server.find({}).exec(function(err, servers) {
+//         if(err) {return;}
+//         servers.forEach(function(server) {
+//             sockets[server.name] = dgram.createSocket('udp4');
+//             var message = 'ping';
+//             sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
+//                 sockets[server.name].on('error', function() {
+//                     logger.error('UDP[' + server.name + '] error');
+//                 });
+//                 sockets[server.name].on('message', function(m, r) {
+//                     var msg = String(m);
+//                     if(msg.substr(0, 4) === 'stat') {
+//                         var flow = JSON.parse(msg.substr(6));
+//                         for(var f in flow) {
+//                             var ho = new HistoryOriginal();
+//                             ho.name = server.name;
+//                             ho.port = +f;
+//                             ho.flow = flow[f];
+//                             ho.save();
+//                         }
+//                     }
+//                 });
+//             });
+//             setInterval(function() {
+//                 sockets[server.name].send(message, 0, message.length, server.port, server.ip);
+//             }, 90 * 1000);
+//         });
+//     });
+// };
 // collectUserFlow();
 
 var servers = {};
@@ -105,6 +105,15 @@ var startSocket = function(server) {
                     ho.port = +f;
                     ho.flow = flow[f];
                     ho.save();
+
+                    Server.findOneAndUpdate({
+                        'name': server.name,
+                        'account.port': +f 
+                    }, {
+                        $inc: {
+                            'account.$.flow': 0 - flow[f]
+                        }
+                    }).exec();
                 }
             }
         });
@@ -124,7 +133,6 @@ exports.updateServerList = function() {
         if(err) { return; }
         data.forEach(function(server) {
             if(!servers[server.name]) {
-                console.log('start' + server.name);
                 startSocket(server);
             }
         });
@@ -132,12 +140,39 @@ exports.updateServerList = function() {
             if(!data.filter(function(f) {
                 return f.name === s;
             })[0]) {
-                console.log('stop' + s);
                 stopSocket(s);
             }
         }
-        for(var ss in servers) {
-            console.log(ss);
+    });
+};
+
+exports.checkAccount = function() {
+    Server.find({}).exec(function(err, data) {
+        if (err) {
+            return;
         }
+        data.forEach(function(server) {
+            server.account.forEach(function(f) {
+                if (f.status === 0) {
+                    if (f.flow > 0 && f.expireTime - new Date() > 0) {
+                        add({
+                            ip: server.ip,
+                            port: server.port
+                        }, {
+                            port: f.port,
+                            password: f.password
+                        });
+                    } else {
+                        del({
+                            ip: server.ip,
+                            port: server.port
+                        }, {
+                            port: f.port
+                        });
+                    }
+                }
+            });
+
+        });
     });
 };
