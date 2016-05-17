@@ -7,12 +7,15 @@
         </md-item-content>
         <md-divider></md-divider>
     </md-list-item>
-    <!-- <md-list-item ng-repeat="account in user.account">
+    <md-list-item ng-repeat="account in user.account">
         <md-item-content md-ink-ripple layout="row" layout-align="start center">
             <div class="inset">
                 {{account}}
             </div>
+            <md-button class="md-icon-button" aria-label="delete" ng-click="delete(account)">
+                <i class="material-icons">close</i>
+            </md-button>
         </md-item-content>
         <md-divider ng-hide="$last"></md-divider>
-    </md-list-item> -->
+    </md-list-item>
 </md-list>

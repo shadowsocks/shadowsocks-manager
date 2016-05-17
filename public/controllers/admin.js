@@ -266,17 +266,40 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $state.go('admin.userPage', {userName: userName});
         };
     })
-    .controller('AdminUserPageController', function($scope, $http, $state, $stateParams) {
+    .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');
         $scope.setMenuButton('admin.user');
         $scope.setFabButtonClick(function(){
             $state.go('admin.userAddAccount', {userName: $stateParams.userName});
         });
-        $http.get('/admin/user', {params: {
-            userName: $stateParams.userName
-        }}).success(function(data) {
-            $scope.user = data[0];
-        });
+        $scope.init = function() {
+            $http.get('/admin/user', {params: {
+                userName: $stateParams.userName
+            }}).success(function(data) {
+                $scope.user = data[0];
+            });
+        };
+        $scope.init();
+
+        $scope.delete = function(account) {
+            var confirm = $mdDialog.confirm()
+                .title('')
+                .textContent('真的要删除帐号[' + account.port + ']吗？')
+                .ariaLabel('delete')
+                .ok('确定')
+                .cancel('取消');
+            $mdDialog.show(confirm).then(function() {
+                $http.delete('/admin/userAccount', {params: {
+                    name: $stateParams.userName,
+                    server: account.server,
+                    port: account.port
+                }}).success(function(data) {
+                    $scope.init();
+                });
+            }, function() {
+                $mdDialog.cancel(confirm);
+            });
+        };
     })
     .controller('AdminUserAddAccountController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
@@ -287,8 +310,25 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         });
         $scope.$watch('server', function() {
             if($scope.server) {
-                $scope.accounts = JSON.parse($scope.server).account;
+                $scope.serverObj = JSON.parse($scope.server);
+                $scope.accounts = $scope.serverObj.account;
             }
         });
+
+        $scope.addAccount = function() {
+            if(!$scope.account) {return;}
+            $scope.accountObj = JSON.parse($scope.account);
+            $http.post('/admin/userAccount', {
+                name: $stateParams.userName,
+                serverName: $scope.serverObj.name,
+                port: $scope.accountObj.port
+            }).success(function(data) {
+                $state.go('admin.userPage', {userName: $stateParams.userName});
+            });
+        };
+
+        $scope.cancel = function() {
+            $state.go('admin.userPage', {userName: $stateParams.userName});
+        };
     })
 ;

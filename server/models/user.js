@@ -1,13 +1,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var accountSchema = new Schema({
+    server: {type:String, required:true},
+    port: {type:Number, required:true},
+}, { _id: false });
+
+accountSchema.index({server: 1, port: 1}, {unique: true});
+
 var userSchema = new Schema({
     email: {type:String, required:true, unique:true},
     password: String,
-    account: [{
-        server: String,
-        port: Number
-    }],
+    account: [accountSchema],
     isAdmin: {type:Boolean, default: false},
     createTime: {type:Date, default: new Date()}
 });

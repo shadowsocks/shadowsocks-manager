@@ -34,18 +34,20 @@
     </md-list-item>
     <md-divider></md-divider>
     <md-list-item ng-repeat="account in server.account">
-        <md-item-content md-ink-ripple layout="row" layout-align="start center">
+        <md-item-content md-ink-ripple layout="row">
+
             <div class="inset">
                 {{account.port}}
             </div>
+
+
             <div class="inset">
                 {{account.password}}
             </div>
-            <div class="inset">
-                <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
-                    <i class="material-icons">close</i>
-                </md-button>
-            </div>
+            <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
+                <i class="material-icons">close</i>
+            </md-button>
+
         </md-item-content>
     </md-list-item>
 </md-list>

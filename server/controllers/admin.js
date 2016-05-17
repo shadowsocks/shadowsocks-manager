@@ -121,6 +121,42 @@ exports.deleteAccount = function(req, res) {
     });
 };
 
+exports.addUserAccount = function(req, res) {
+    var name = req.body.name;
+    var serverName = req.body.serverName;
+    var port = req.body.port;
+    User.findOneAndUpdate({email: name}, {
+        $addToSet: {
+            account: {
+                server: serverName,
+                port: port
+            }
+        }
+    }).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!data) {return res.status(401).end('找不到对应数据');}
+        return res.send(data);
+    });
+};
+
+exports.deleteUserAccount = function(req, res) {
+    var name = req.query.name;
+    var serverName = req.query.server;
+    var port = req.query.port;
+    User.findOneAndUpdate({email: name}, {
+        $pull: {
+            account: {
+                server: serverName,
+                port: port
+            }
+        }
+    }).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!data) {return res.status(401).end('找不到对应数据');}
+        return res.send(data);
+    });
+};
+
 exports.getFlow = function(req, res) {
     var aggregate = [];
     var date = moment().hour(0).minute(0).second(0).toDate();

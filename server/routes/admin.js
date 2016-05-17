@@ -12,6 +12,9 @@ app.delete('/admin/server', auth.isAdmin, admin.deleteServer);
 app.post('/admin/account', auth.isAdmin, admin.addAccount);
 app.delete('/admin/account', auth.isAdmin, admin.deleteAccount);
 
+app.post('/admin/userAccount', auth.isAdmin, admin.addUserAccount);
+app.delete('/admin/userAccount', auth.isAdmin, admin.deleteUserAccount);
+
 app.get('/admin/user', auth.isAdmin, admin.getUsers);
 
 app.get('/admin/flow',
