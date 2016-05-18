@@ -41,9 +41,14 @@ app.config(
                     templateUrl: '/public/views/admin/serverPage.html'
                 })
                 .state('admin.addAccount', {
-                    url: '/serverAccount/:serverName/addAccount',
+                    url: '/serverPage/:serverName/addAccount',
                     controller: 'AdminAddAccountController',
                     templateUrl: '/public/views/admin/addAccount.html'
+                })
+                .state('admin.editAccount', {
+                    url: '/serverPage/:serverName/editAccount/:accountPort',
+                    controller: 'AdminEditAccountController',
+                    templateUrl: '/public/views/admin/editAccount.html'
                 })
 
 

@@ -213,10 +213,16 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $mdDialog.cancel(confirm);
             });
         };
+        $scope.editAccount = function(account) {
+            $state.go('admin.editAccount', {
+                serverName: $stateParams.serverName,
+                accountPort: account.port
+            });
+        };
     })
     .controller('AdminAddAccountController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
-        $scope.setMenuButton('admin.serverAccount');
+        $scope.setMenuButton('admin.serverPage');
         $scope.account = {};
         $scope.addAccount = function() {
             $http.post('/admin/account', {
@@ -224,12 +230,36 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 port: $scope.account.port,
                 password: $scope.account.password,
             }).success(function(data) {
-                $state.go('admin.serverPage', {serverName: $stateParams.serverName,});
+                $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }).error(function(err) {
                 console.log(err);
             });
         };
-        $scope.cancel = function() {$state.go('admin.serverAccount', {serverName: $stateParams.serverName,});};
+        $scope.cancel = function() {$state.go('admin.serverPage', {serverName: $stateParams.serverName,});};
+    })
+    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams) {
+        $scope.setTitle('编辑帐号');
+        $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
+        $scope.init = function() {
+            $http.get('/admin/server', {params: {
+                serverName: $stateParams.serverName
+            }}).success(function(data) {
+                if(data[0]) {
+                    $scope.server = data[0];
+                    $scope.account = $scope.server.account.filter(function(f) {
+                        return f.port === +$stateParams.accountPort;
+                    })[0];
+                    console.log($stateParams.accountPort);
+                    console.log($scope.server);
+                    console.log($scope.account);
+                } else {
+                    $state.go('admin.serverPage', {serverName: $stateParams.serverName});
+                }
+            }).error(function(err) {
+                $state.go('admin.serverPage', {serverName: $stateParams.serverName});
+            });
+        };
+        $scope.init();
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
