@@ -23,9 +23,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '首页', icon: 'home', click: 'admin.index'},
             {name: '服务器管理', icon: 'cloud', click: 'admin.server'},
             {name: '用户管理', icon: 'face', click: 'admin.user'},
-            {name: '续费码', icon: 'shop'},
+            {name: '续费码', icon: 'shop', click: 'admin.unfinish'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
-            {name: '历史记录', icon: 'watch_later'}
+            {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
         $scope.publicInfo = {
             title: '',              //标题

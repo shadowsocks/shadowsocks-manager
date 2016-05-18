@@ -298,4 +298,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userPage', {userName: $stateParams.userName});
         };
     })
+    .controller('AdminUnfinishController', function($scope) {
+        $scope.setTitle('404 Not Found');
+    })
 ;
