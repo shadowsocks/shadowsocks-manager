@@ -24,6 +24,7 @@ app.get('/', function(req, res) {
     } else {
         return res.render('user', {
             'controllers': [
+                '/public/controllers/userMain.js',
                 '/public/controllers/user.js'
             ],
             'routes': [

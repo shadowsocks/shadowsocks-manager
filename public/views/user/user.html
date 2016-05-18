@@ -1,4 +1,4 @@
-<div ng-controller="TestCtrl" layout="column" ng-cloak layout-fill>
+<!-- <div ng-controller="TestCtrl" layout="column" ng-cloak layout-fill>
     <section layout="row" flex>
         <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
             <md-content>
@@ -26,4 +26,73 @@
             </div>
         </md-content>
     </section>
+</div> -->
+
+<div ng-controller="UserMainController" layout="column" ng-cloak layout-fill>
+    <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
+        <md-content>
+            <div layout="column">
+                <md-toolbar class="md-tall">
+                    <span flex></span>
+                    <div layout="column" class="md-toolbar-tools-bottom inset">
+                        <user-avatar></user-avatar>
+                        <span></span>
+                        <div>Admin</div>
+                    </div>
+                </md-toolbar>
+                <md-list>
+                    <md-list-item ng-repeat="menu in menus">
+                        <a ng-click="menuClick($index)">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                </div>
+                                <div class="inset">
+                                    {{menu.name}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-repeat="menu in bottomMenus">
+                        <a ng-click="bottomMenus[0].click()">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                </div>
+                                <div class="inset">
+                                    {{menu.name}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </md-content>
+    </md-sidenav>
+    <div flex layout="column">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                        <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
+                    </md-button>
+                    <div>{{publicInfo.title}}</div>
+                    <span flex></span>
+                    <md-button class="md-icon-button" aria-label="more">
+                        <i class="material-icons">more_vert</i>
+                    </md-button>
+                </div>
+            </md-toolbar>
+        </div>
+        <md-content flex>
+            <div ui-view></div>
+        </md-content>
+    </div>
+    </section>
+    <md-button ng-if="publicInfo.fabButtonClick" class="md-fab md-fab-bottom-right">
+        <md-icon class="material-icons" ng-click="publicInfo.fabButtonClick()">add</md-icon>
+    </md-button>
 </div>
+
