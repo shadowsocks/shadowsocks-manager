@@ -10,6 +10,7 @@ app.put('/admin/server', auth.isAdmin, admin.editServer);
 app.delete('/admin/server', auth.isAdmin, admin.deleteServer);
 
 app.post('/admin/account', auth.isAdmin, admin.addAccount);
+app.put('/admin/account', auth.isAdmin, admin.editAccount);
 app.delete('/admin/account', auth.isAdmin, admin.deleteAccount);
 
 app.post('/admin/userAccount', auth.isAdmin, admin.addUserAccount);

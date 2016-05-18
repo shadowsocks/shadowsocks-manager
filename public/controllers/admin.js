@@ -249,9 +249,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.account = $scope.server.account.filter(function(f) {
                         return f.port === +$stateParams.accountPort;
                     })[0];
-                    console.log($stateParams.accountPort);
-                    console.log($scope.server);
-                    console.log($scope.account);
                 } else {
                     $state.go('admin.serverPage', {serverName: $stateParams.serverName});
                 }
@@ -260,6 +257,24 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             });
         };
         $scope.init();
+        $scope.addFlow = function(flow) {
+            $http.put('/admin/account', {
+                name: $stateParams.serverName,
+                port: $stateParams.accountPort,
+                flow: flow
+            }).success(function(data) {
+                $scope.init();
+            });
+        };
+        $scope.addTime = function(time) {
+            $http.put('/admin/account', {
+                name: $stateParams.serverName,
+                port: $stateParams.accountPort,
+                time: time
+            }).success(function(data) {
+                $scope.init();
+            });
+        };
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');

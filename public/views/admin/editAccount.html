@@ -1,1 +1,38 @@
-<div>{{account}}</div>
+<md-list>
+    <md-list-item>
+        <md-item-content md-ink-ripple layout="column">
+            <div class="inset">
+                {{account.port}}
+            </div>
+            <div class="inset">
+                {{account.password}}
+            </div>
+            <div class="inset">
+                {{account.flow | flow1024}}
+            </div>
+            <div class="inset">
+                {{account.expireTime}}
+            </div>
+        </md-item-content>
+        <md-divider></md-divider>
+    </md-list-item>
+    <md-list-item layout="row">
+        <div flex>
+            <md-button class="md-raised md-primary" ng-click="addFlow(10 * 1000 * 1000)">+10M</md-button>
+            <md-button class="md-raised md-primary" ng-click="addFlow(100 * 1000 * 1000)">+100M</md-button>
+        </div>
+    </md-list-item>
+    <md-list-item layout="row">
+        <div flex>
+            <md-button class="md-raised md-warn" ng-click="addFlow(-10 * 1000 * 1000)">-10M</md-button>
+            <md-button class="md-raised md-warn" ng-click="addFlow(-100 * 1000 * 1000)">-100M</md-button>
+        </div>
+    </md-list-item>
+    <md-list-item layout="row">
+        <div flex>
+            <md-button class="md-raised md-primary" ng-click="addTime(1)">+0d</md-button>
+            <md-button class="md-raised md-primary" ng-click="addTime(1 * 86400 * 1000)">+1d</md-button>
+            <md-button class="md-raised md-primary" ng-click="addTime(10 * 86400 * 1000)">+10d</md-button>
+        </div>
+    </md-list-item>
+</md-list>
