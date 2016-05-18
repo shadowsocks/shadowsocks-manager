@@ -2,9 +2,9 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'admin.index'},
             {name: '我的帐户', icon: 'cloud', click: 'admin.server'},
-            {name: '修改密码', icon: 'face', click: 'admin.user'},
+            {name: '修改密码', icon: 'lock_outline', click: 'admin.user'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
-            {name: '续费', icon: 'watch_later', click: 'admin.unfinish'}
+            {name: '续费', icon: 'vpn_key', click: 'admin.unfinish'}
         ];
         $scope.publicInfo = {
             title: '',              //标题
@@ -44,5 +44,18 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             $state.go($scope.menus[index].click);
             $mdSidenav('left').close();
         };
+        $scope.bottomMenus = [
+            {name: '退出登录', icon: 'exit_to_app', click: function() {
+                $http.post('/user/logout').success(function(data) {
+                    $window.location.reload();
+                });
+            }}
+        ];
+        $scope.init = function() {
+            $http.get('/user/userInfo').success(function(data) {
+
+            });
+        };
+        $scope.init();
     })
 ;
