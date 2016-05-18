@@ -14,6 +14,7 @@ app.get('/', function(req, res) {
     } else if(req.session.isAdmin) {
         return res.render('admin', {
             'controllers': [
+                '/public/controllers/adminMain.js',
                 '/public/controllers/admin.js'
             ],
             'routes': [
