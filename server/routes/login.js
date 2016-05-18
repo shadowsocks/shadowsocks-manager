@@ -1,5 +1,5 @@
 var app = global.app;
-var user = require('../controllers/user');
+var home = require('../controllers/home');
 
 app.get('/', function(req, res) {
     if(!req.session.user) {
@@ -35,6 +35,6 @@ app.get('/', function(req, res) {
     
 });
 
-app.post('/user/signup', user.signup);
-app.post('/user/login', user.login);
-app.post('/user/logout', user.logout);
+app.post('/user/signup', home.signup);
+app.post('/user/login', home.login);
+app.post('/user/logout', home.logout);
