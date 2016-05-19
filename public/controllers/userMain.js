@@ -53,7 +53,6 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         ];
         $scope.init = function() {
             $http.get('/user/userInfo').success(function(data) {
-                console.log(data);
                 $scope.publicInfo.user = data;
             });
         };
