@@ -20,22 +20,26 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.setMenuButton('user.account');
 
         $scope.qrCode = '';
-
-        $scope.$watch('publicInfo', function() {
-            if(!$scope.publicInfo.user) {return;}
-            $scope.account = $scope.publicInfo.user.account.filter(function(f) {
-                return (f.server === $stateParams.serverName && +f.port === +$stateParams.accountPort);
-            })[0];
-            if(!$scope.account) {
-                $state.go('user.index');
-            }
-            $scope.qrCode = 'ss://' + b64EncodeUnicode('aes-256-cfb:' + $scope.account.password + '@' + $scope.account.address + ':' + $scope.account.port);
-        }, true);
-
         var b64EncodeUnicode = function(str) {
             return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
                 return String.fromCharCode('0x' + p1);
             }));
         };
+
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.user) {return;}
+            $scope.account = $scope.publicInfo.user.account.filter(function(f) {
+                return (f.server === $stateParams.serverName && +f.port === +$stateParams.accountPort);
+            })[0];
+            if(!$scope.account) {
+                return $state.go('user.index');
+            }
+            $scope.qrCode = 'ss://' + b64EncodeUnicode('aes-256-cfb:' + $scope.account.password + '@' + $scope.account.address + ':' + $scope.account.port);
+        };
+        $scope.init();
     })
 ;

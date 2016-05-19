@@ -5,7 +5,21 @@
             <h4>地址：{{account.address}}:{{account.port}}</h4>
             <h4>密码：{{account.password}}</h4>
         </div>
-        <md-divider></md-divider>
     </md-list-item>
-    <qr text="qrCode"></qr>
+    <md-divider></md-divider>
+    <md-list-item class="md-3-line">
+        <div class="md-list-item-text">
+            <h4>剩余流量：{{account.flow}}</h4>
+            <h4>到期时间：{{account.expireTime}}</h4>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="center center">
+        <div layout-margin layout-padding>
+            <qr text="qrCode" ng-if="qrCode"></qr>
+        </div>
+        
+    </md-list-item>
+    <md-divider></md-divider>
+    
 </md-list>
