@@ -3,6 +3,12 @@ Shadowsocks-Manager
 
 Shadowsocks with multi user and traffic control.
 
+Dependencies
+------------
+
+    Nodejs 4.4
+    Mongo  3.2
+
 Install
 -------
 
@@ -10,4 +16,9 @@ Install
     cd shadowsocks-manager
     npm install
     bower install
+
+Usage
+-----
+
+    cd shadowsocks-manager
     node server
