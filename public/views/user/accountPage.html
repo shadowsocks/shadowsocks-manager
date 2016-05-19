@@ -10,7 +10,7 @@
     <md-list-item class="md-3-line">
         <div class="md-list-item-text">
             <h4>剩余流量：{{account.flow}}</h4>
-            <h4>到期时间：{{account.expireTime}}</h4>
+            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</h4>
         </div>
     </md-list-item>
     <md-divider></md-divider>
