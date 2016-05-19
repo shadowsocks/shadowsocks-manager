@@ -6,6 +6,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
     })
     .controller('UserAccountController', function($scope, $http, $state) {
         $scope.setTitle('我的帐户');
+        $scope.string = 'YOUR TEXT TO ENCODE';
     })
     .controller('UserAccountPageController', function($scope, $http, $state) {
         $scope.setTitle('');

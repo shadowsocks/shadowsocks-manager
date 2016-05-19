@@ -20,6 +20,7 @@
   "dependencies": {
     "angular-material": "^1.0.8",
     "angular-ui-router": "^0.2.18",
-    "material-design-icons": "^2.2.3"
+    "material-design-icons": "^2.2.3",
+    "angular-qr": "^0.2.0"
   }
 }
