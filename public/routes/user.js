@@ -25,6 +25,11 @@ app.config(
                     controller: 'UserAccountController',
                     templateUrl: '/public/views/user/account.html'
                 })
+                .state('user.accountPage', {
+                    url: '/account/:serverName/:accountPort',
+                    controller: 'UserAccountPageController',
+                    templateUrl: '/public/views/user/accountPage.html'
+                })
 
             ;
         }

@@ -32,6 +32,7 @@ exports.getUserInfo = function (req, res) {
             if(server[0]) {
                 return {
                     server: server[0].name,
+                    address: server[0].ip,
                     port: server[0].account.port,
                     password: server[0].account.password,
                     flow: server[0].account.flow,

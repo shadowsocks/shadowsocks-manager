@@ -1,0 +1,11 @@
+<md-list>
+    <md-list-item class="md-3-line" ng-repeat="account in publicInfo.user.account">
+        <div class="md-list-item-text">
+            <h3>节点：{{account.server}}</h3>
+            <h4>地址：{{account.address}}:{{account.port}}</h4>
+            <h4>密码：{{account.password}}</h4>
+        </div>
+        <md-button class="md-secondary">详情</md-button>
+        <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+</md-list>
