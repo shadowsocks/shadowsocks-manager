@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var log4js = require('log4js');
+var logger = log4js.getLogger('auth');
+
 var User = mongoose.model('User');
 
 var crypto = require('crypto');
@@ -39,11 +42,13 @@ exports.login = function(req, res) {
         else if(!user) { return res.status(401).end('用户未注册');}
         var passwordWithMd5 = createPassword(password, user.email);
         if(passwordWithMd5 !== user.password) {
+            logger.warn('[' + email + '][' + password + ']登陆失败');
             return res.status(401).end('用户名或密码错误');
         }
         req.session.user = email;
         req.session.isAdmin = user.isAdmin;
         req.session.save();
+        logger.info('[' + email + '][********]登陆成功');
         res.send('success');
     });
 };

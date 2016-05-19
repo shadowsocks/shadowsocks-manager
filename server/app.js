@@ -30,15 +30,26 @@ var log4js = exports.log4js = function(cb) {
             pattern: '-yyyy-MM-dd',
             alwaysIncludePattern: true,
             category: 'admin'
-        }, {
-            type: 'console',
-            category: 'shadow'
-        }, {
+        },
+        // {
+        //     type: 'console',
+        //     category: 'shadow'
+        // },
+        {
             type: 'dateFile',
             filename: 'logs/shadow.log',
             pattern: '-yyyy-MM-dd',
             alwaysIncludePattern: true,
             category: 'shadow'
+        }, {
+            type: 'console',
+            category: 'auth'
+        }, {
+            type: 'dateFile',
+            filename: 'logs/auth.log',
+            pattern: '-yyyy-MM-dd',
+            alwaysIncludePattern: true,
+            category: 'auth'
         }]
     });
     cb(null);
