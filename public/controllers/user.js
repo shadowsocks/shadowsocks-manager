@@ -3,4 +3,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             $http.post('/user/logout');
         };
     })
+    .controller('UserAccountController', function($scope, $http, $state) {
+        
+    })
 ;
