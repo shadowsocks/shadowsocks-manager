@@ -17,7 +17,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
-            {name: '修改密码', icon: 'lock_outline', click: 'admin.user'},
+            {name: '修改密码', icon: 'lock_outline', click: 'user.changePassword'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
             {name: '续费', icon: 'vpn_key', click: 'admin.unfinish'}
         ];

@@ -30,7 +30,11 @@ app.config(
                     controller: 'UserAccountPageController',
                     templateUrl: '/public/views/user/accountPage.html'
                 })
-
+                .state('user.changePassword', {
+                    url: '/changePassword',
+                    controller: 'UserChangePasswordController',
+                    templateUrl: '/public/views/user/changePassword.html'
+                })
             ;
         }
     ]
