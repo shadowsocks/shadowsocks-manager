@@ -49,3 +49,7 @@ exports.getUserInfo = function (req, res) {
         res.send(data.combine);
     });
 };
+
+exports.changePassword = function(req, res) {
+    var password = req.body.password;
+};
