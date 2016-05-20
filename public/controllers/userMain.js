@@ -1,3 +1,18 @@
+app.filter('flow1024', function() {
+    return function(input) {
+        if (input < 1000) {
+            return input +' B';
+        } else if (input < 1000000) {
+            return (input/1000).toFixed(2) +' KB';
+        } else if (input < 1000000000) {
+            return (input/1000000).toFixed(2) +' MB';
+        } else if (input < 1000000000000) {
+            return (input/1000000000).toFixed(2) +' GB';
+        } else {
+            return input;
+        }
+    };
+});
 app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
