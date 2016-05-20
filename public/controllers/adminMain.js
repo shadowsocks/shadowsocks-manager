@@ -35,6 +35,12 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             fabButtonIcon: '',
             fabButtonClick: ''
         };
+        $scope.init = function() {
+            $http.get('/admin/server').then(function(success) {
+                $scope.publicInfo.servers = success.data;
+            });
+        };
+        $scope.init();
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
         };

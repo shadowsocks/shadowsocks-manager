@@ -23,12 +23,15 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setFabButtonClick(function(){
             $state.go('admin.addServer');
         });
+
         $scope.init = function() {
-            $http.get('/admin/server').success(function(data) {
-                $scope.serverList = data;
-            });
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.serverList = $scope.publicInfo.servers;
         };
         $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
         $scope.serverPage = function(serverName) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
