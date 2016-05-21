@@ -1,5 +1,5 @@
 <md-list>
-    <md-list-item>
+    <!-- <md-list-item>
         <md-item-content md-ink-ripple layout="column">
             <div class="inset">
                 {{account.port}}
@@ -15,6 +15,13 @@
             </div>
         </md-item-content>
         <md-divider></md-divider>
+    </md-list-item> -->
+    <md-list-item class="md-3-line">
+        <div class="md-list-item-text">
+            <h3>节点：{{server.name}}</h3>
+            <h4>地址：{{server.ip}}:{{account.port}}</h4>
+            <h4>密码：{{account.password}}</h4>
+        </div>
     </md-list-item>
     <md-list-item layout="row">
         <div flex>

@@ -168,23 +168,40 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('编辑帐号');
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
+        // $scope.init = function() {
+        //     $http.get('/admin/server', {params: {
+        //         serverName: $stateParams.serverName
+        //     }}).success(function(data) {
+        //         if(data[0]) {
+        //             $scope.server = data[0];
+        //             $scope.account = $scope.server.account.filter(function(f) {
+        //                 return f.port === +$stateParams.accountPort;
+        //             })[0];
+        //         } else {
+        //             $state.go('admin.serverPage', {serverName: $stateParams.serverName});
+        //         }
+        //     }).error(function(err) {
+        //         $state.go('admin.serverPage', {serverName: $stateParams.serverName});
+        //     });
+        // };
+        // $scope.init();
+
         $scope.init = function() {
-            $http.get('/admin/server', {params: {
-                serverName: $stateParams.serverName
-            }}).success(function(data) {
-                if(data[0]) {
-                    $scope.server = data[0];
-                    $scope.account = $scope.server.account.filter(function(f) {
-                        return f.port === +$stateParams.accountPort;
-                    })[0];
-                } else {
-                    $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-                }
-            }).error(function(err) {
-                $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-            });
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.server = $scope.publicInfo.servers.filter(function(f) {
+                return f.name === $stateParams.serverName;
+            })[0];
+            if(!$scope.server) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
+            $scope.account = $scope.server.account.filter(function(f) {
+                return f.port === +$stateParams.accountPort;
+            })[0];
+            if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
         };
         $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+
         $scope.addFlow = function(flow) {
             $http.put('/admin/account', {
                 name: $stateParams.serverName,
