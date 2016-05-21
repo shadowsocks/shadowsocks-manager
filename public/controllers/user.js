@@ -42,9 +42,12 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         };
         $scope.init();
     })
-    .controller('UserChangePasswordController', function($scope, $http) {
+    .controller('UserChangePasswordController', function($scope, $http, $state) {
         $scope.setTitle('修改密码');
 
         $scope.password = {};
+        $scope.changePassword = function() {
+            $http.put();
+        };
     })
 ;
