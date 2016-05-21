@@ -116,6 +116,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $http.delete('/admin/server', {params: {
                     name: serverName
                 }}).success(function(data) {
+                    $scope.initPublicInfo();
                     $state.go('admin.server');
                 });
             }, function() {

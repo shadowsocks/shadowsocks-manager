@@ -12,34 +12,22 @@ var logger = log4js.getLogger('admin');
 var shadowsocks = require('./shadowsocks');
 
 exports.getServers = function (req, res) {
-    var query = {};
-    if(req.query.serverName) {
-        query.name = req.query.serverName;
-    }
-    Server.find(query).exec(function(err, servers) {
+    Server.searchByName(req.query.serverName, function(err, servers) {
         if(err) {return res.status(500).end('数据库错误');}
         return res.send(servers);
     });
 };
 
 exports.addServer = function (req, res) {
-    var name = req.body.name;
-    var ip = req.body.ip;
-    var port = req.body.port;
-    
-
-    var server = new Server();
-    
-    server.name = name;
-    server.ip = ip;
-    server.port = port;
-
-    server.save(function(err, data) {
+    Server.newServer({
+        name: req.body.name,
+        ip: req.body.ip,
+        port: req.body.port
+    }, function(err, data) {
         if(err) {
-
             return res.status(500).end('数据库错误');
         }
-        logger.info('新增服务器: [' + name + '][' + ip + ':' + port + ']');
+        logger.info('新增服务器: [' + req.body.name + '][' + req.body.ip + ':' + req.body.port + ']');
         return res.send(data);
     });
 };
