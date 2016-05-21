@@ -23,6 +23,14 @@
             <h4>密码：{{account.password}}</h4>
         </div>
     </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item class="md-2-line">
+        <div class="md-list-item-text">
+            <h4>剩余流量：{{account.flow | flow1024}}</h4>
+            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</h4>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
     <md-list-item layout="row">
         <div flex>
             <md-button class="md-raised md-primary" ng-click="addFlow(10 * 1000 * 1000)">+10M</md-button>
