@@ -35,7 +35,10 @@ exports.addServer = function (req, res) {
     server.port = port;
 
     server.save(function(err, data) {
-        if(err) {return res.status(500).end('数据库错误');}
+        if(err) {
+
+            return res.status(500).end('数据库错误');
+        }
         logger.info('新增服务器: [' + name + '][' + ip + ':' + port + ']');
         return res.send(data);
     });
@@ -86,8 +89,9 @@ exports.addAccount = function(req, res) {
             expireTime: new Date()
         }}
     }).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库错误');}
-        // console.log(data);
+        if(err) {
+            logger.error('[addAccount]' + err);
+            return res.status(500).end('数据库错误');}
         shadowsocks.add({
             ip: data.ip,
             port: data.port
@@ -95,6 +99,7 @@ exports.addAccount = function(req, res) {
             port: port,
             password: password
         });
+        console.log(data);
         return res.send(data);
     });
 };

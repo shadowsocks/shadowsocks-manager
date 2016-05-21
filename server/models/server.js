@@ -6,7 +6,7 @@ var serverSchema = new Schema({
     ip: String,
     port: Number,
     account: [new Schema({
-        port: {type:Number, required:true, unique:true},
+        port: Number,
         password: String,
         expireTime: {type: Date, default: new Date()},
         flow: {type: Number, default: 0},
