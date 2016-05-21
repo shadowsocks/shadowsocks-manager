@@ -76,12 +76,13 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 ip: $scope.server.ip,
                 port: $scope.server.port
             }).success(function(data) {
-                $state.go('admin.server');
+                $scope.initPublicInfo();
+                $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }).error(function(err) {
                 console.log(err);
             });
         };
-        $scope.cancel = function() {$state.go('admin.server');};
+        $scope.cancel = function() {$state.go('admin.serverPage', {serverName: $stateParams.serverName});};
     })
     .controller('AdminServerPageController', function($scope, $interval, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('服务器设置');
