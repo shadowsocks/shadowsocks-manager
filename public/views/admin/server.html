@@ -22,11 +22,12 @@
 
 <md-list>
     <md-list-item class="md-3-line" ng-repeat="server in serverList">
-        <div class="md-list-item-text" ng-click="serverPage(server.name)">
+        <div class="md-list-item-text">
             <h3>{{server.name}}</h3>
             <h4>地址：{{server.ip}}</h4>
             <h4>端口：{{server.port}}</h4>
         </div>
+        <md-button class="md-secondary md-primary" ng-click="serverPage(server.name)">详情</md-button>
         <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
 </md-list>

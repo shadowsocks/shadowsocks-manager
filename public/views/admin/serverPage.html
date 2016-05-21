@@ -1,19 +1,20 @@
 <md-list>
-    <md-list-item class="md-3-line">
-        <div class="md-list-item-text">
+    <md-list-item class="md-3-line" style="padding: 16px;">
+        <div class="md-list-item-text" flex="60">
             <h3>{{server.name}}</h3>
             <h4>地址：{{server.ip}}</h4>
             <h4>端口：{{server.port}}</h4>
         </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item layout="row" layout-align="end center">
-        <md-button class="md-icon-button" aria-label="edit" ng-click="editServer(server.name)">
-            <i class="material-icons">create</i>
-        </md-button>
-        <md-button class="md-icon-button" aria-label="delete" ng-click="deleteServer(server.name)">
-            <i class="material-icons">close</i>
-        </md-button>
+        <div class="md-list-item-text" flex="40">
+            <div layout="row" layout-align="end center">
+                <md-button class="md-icon-button" aria-label="edit" ng-click="editServer(server.name)">
+                    <i class="material-icons">create</i>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="delete" ng-click="deleteServer(server.name)">
+                    <i class="material-icons">close</i>
+                </md-button>
+            </div>
+        </div>
     </md-list-item>
     <md-divider></md-divider>
     <md-list-item ng-repeat="account in server.account">
