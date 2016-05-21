@@ -99,7 +99,6 @@ exports.addAccount = function(req, res) {
             port: port,
             password: password
         });
-        console.log(data);
         return res.send(data);
     });
 };

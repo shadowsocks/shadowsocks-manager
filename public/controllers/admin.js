@@ -46,6 +46,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 ip: $scope.server.ip,
                 port: $scope.server.port
             }).success(function(data) {
+                $scope.initPublicInfo();
                 $state.go('admin.server');
             }).error(function(err) {
                 console.log(err);
@@ -56,17 +57,19 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminEditServerController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('编辑服务器');
         $scope.setMenuButton('admin.server');
-        $http.get('/admin/server', {params: {
-            serverName: $stateParams.serverName
-        }}).success(function(data) {
-            if(data[0]) {
-                $scope.server = data[0];
-            } else {
-                $state.go('admin.server');
-            }
-        }).error(function(err) {
-            $state.go('admin.server');
-        });
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.server = $scope.publicInfo.servers.filter(function(f) {
+                return f.name === $stateParams.serverName;
+            })[0];
+            if(!$scope.server) {return $state.go('admin.server');}
+        };
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+
         $scope.addServer = function() {
             $http.put('/admin/server', {
                 name: $scope.server.name,
@@ -87,19 +90,17 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.addAccount', {serverName: $stateParams.serverName});
         });
         $scope.init = function() {
-            $http.get('/admin/server', {params: {
-                serverName: $stateParams.serverName
-            }}).success(function(data) {
-                if(data[0]) {
-                    $scope.server = data[0];
-                } else {
-                    $state.go('admin.server');
-                }
-            }).error(function(err) {
-                $state.go('admin.server');
-            });
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.server = $scope.publicInfo.servers.filter(function(f) {
+                return f.name === $stateParams.serverName;
+            })[0];
+            if(!$scope.server) {return $state.go('admin.server');}
         };
         $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+        
         $scope.editServer = function(serverName) {
             $state.go('admin.editServer', {serverName: serverName});
         };
