@@ -1,20 +1,26 @@
 <div layout="row">
+    <div flex="10" flex-gt-sm="30"></div>
     <div flex>
-        <md-input-container>
-            <label>服务器</label>
-            <md-select ng-model="server">
-                <md-option ng-repeat="server in servers" value="{{server}}">{{server.name + '[' + server.ip + ']'}}</md-option>
-            </md-select>
-        </md-input-container>
+        <md-list>
+            <md-list-item>
+                <md-input-container>
+                    <label>选择服务器</label>
+                    <md-select ng-model="server" style="min-width: 250px;">
+                        <md-option ng-repeat="server in servers" value="{{server}}">{{server.name + '[' + server.ip + ']'}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </md-list-item>
+            <md-list-item>
+                <md-input-container>
+                    <label>端口</label>
+                    <md-select ng-model="account" style="min-width: 250px;">
+                        <md-option ng-repeat="account in accounts" value="{{account}}">{{account.port + '[' + account.password + ']'}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </md-list-item>
+        </<md-list>
     </div>
-    <div flex>
-    <md-input-container>
-        <label>端口</label>
-            <md-select ng-model="account">
-                <md-option ng-repeat="account in accounts" value="{{account}}">{{account.port + '[' + account.password + ']'}}</md-option>
-            </md-select>
-        </md-input-container>
-    </div>
+    <div flex="10" flex-gt-sm="30"></div>
 </div>
 <div layout="row">
     <div flex>
