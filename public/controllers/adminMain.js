@@ -1,4 +1,4 @@
-app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q) {
         
 
         $scope.menuButton = function() {
@@ -49,12 +49,31 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         //         $scope.publicInfo.closeDialog();
         //     }
         // };
-        $scope.initPublicInfo = function() {
-            // $scope.loading(1);
-            $http.get('/admin/server').then(function(success) {
-                $scope.publicInfo.servers = success.data;
-                // $scope.loading(0);
+        $scope.initPublicInfo = function(type) {
+            // $http.get('/admin/server').then(function(success) {
+            //     $scope.publicInfo.servers = success.data;
+            // });
+            var promises = [];
+            if(!type || type === 'server') {
+                promises[0] = $http.get('/admin/server');
+            } else {
+                promises[0] = undefined;
+            }
+            if(!type || type === 'user') {
+                promises[1] = $http.get('/admin/user');
+            } else {
+                promises[1] = undefined;
+            }
+            $q.all(promises).then(function(success) {
+                if(success[0]) {
+                    $scope.publicInfo.servers = success[0].data;
+                }
+                if(success[1]) {
+                    $scope.publicInfo.users = success[1].data;
+                    console.log($scope.publicInfo.users);
+                }
             });
+
         };
         $scope.initPublicInfo();
         $scope.setTitle = function(str) {

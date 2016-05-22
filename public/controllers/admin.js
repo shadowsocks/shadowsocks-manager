@@ -241,9 +241,19 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');
 
-        $http.get('/admin/user').success(function(data) {
-            $scope.users = data;
-        });
+        // $http.get('/admin/user').success(function(data) {
+        //     $scope.users = data;
+        // });
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.users) {return;}
+            $scope.users = $scope.publicInfo.users;
+        };
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+
         $scope.userPage = function(userName) {
             $state.go('admin.userPage', {userName: userName});
         };
