@@ -135,7 +135,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     name: $stateParams.serverName,
                     port: port
                 }}).success(function(data) {
-                    $scope.init();
+                    $scope.initPublicInfo();
                 });
             }, function() {
                 $mdDialog.cancel(confirm);
@@ -158,6 +158,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 port: $scope.account.port,
                 password: $scope.account.password,
             }).success(function(data) {
+                $scope.initPublicInfo();
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }).error(function(err) {
                 console.log(err);
@@ -199,7 +200,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 port: $stateParams.accountPort,
                 flow: flow
             }).success(function(data) {
-                $scope.init();
+                $scope.initPublicInfo();
             });
         };
         $scope.addTime = function(time) {
@@ -208,7 +209,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 port: $stateParams.accountPort,
                 time: time
             }).success(function(data) {
-                $scope.init();
+                $scope.initPublicInfo();
             });
         };
     })
