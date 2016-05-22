@@ -168,23 +168,13 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('编辑帐号');
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
-        // $scope.init = function() {
-        //     $http.get('/admin/server', {params: {
-        //         serverName: $stateParams.serverName
-        //     }}).success(function(data) {
-        //         if(data[0]) {
-        //             $scope.server = data[0];
-        //             $scope.account = $scope.server.account.filter(function(f) {
-        //                 return f.port === +$stateParams.accountPort;
-        //             })[0];
-        //         } else {
-        //             $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-        //         }
-        //     }).error(function(err) {
-        //         $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-        //     });
-        // };
-        // $scope.init();
+
+        $scope.qrCode = '';
+        var b64EncodeUnicode = function(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+                return String.fromCharCode('0x' + p1);
+            }));
+        };
 
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
@@ -196,6 +186,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return f.port === +$stateParams.accountPort;
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
+            $scope.qrCode = 'ss://' + b64EncodeUnicode('aes-256-cfb:' + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {

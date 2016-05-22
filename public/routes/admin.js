@@ -1,4 +1,4 @@
-var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ngAnimate']);
+var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr']);
 
 app.config(
     ['$stateProvider', '$urlRouterProvider',
