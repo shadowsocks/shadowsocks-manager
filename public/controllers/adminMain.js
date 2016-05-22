@@ -1,19 +1,6 @@
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
-        $scope.loading = function(isLoading) {
-            dialog = $mdDialog.prompt({
-                templateUrl: '/public/views/admin/loading.html',
-                escapeToClose : false,
-                controller: function($scope) {
-                }
-            });
-            if(isLoading) {
-                $mdDialog.show(dialog);
-            } else {
-                console.log($mdDialog);
-                $mdDialog.cancel(dialog);
-            }
-        };
-        // $scope.loading(true);
+        
+
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
@@ -35,13 +22,38 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
             fabButtonIcon: '',
-            fabButtonClick: ''
+            fabButtonClick: '',
+            closeDialog: ''
         };
+        // var dialog = $mdDialog.prompt({
+        //     templateUrl: '/public/views/admin/loading.html',
+        //     escapeToClose : false,
+        //     scope: $scope,
+        //     controller: function($scope, $mdDialog, $timeout) {
+        //         // console.log($scope.publicInfo);
+        //         $scope.publicInfo.closeDialog = function() {
+        //             $mdDialog.cancel();
+        //         };
+        //         // $timeout(function() {$mdDialog.cancel();}, 5000);
+        //     }
+        // });
+
+        // $scope.loadingText = '正在加载';
+
+        // $scope.loading = function(isLoading) {
+        //     if(isLoading) {
+        //         $mdDialog.show(dialog);
+        //     } else {
+        //         console.log($scope.publicInfo);
+        //         console.log($scope.publicInfo.closeDialog);
+        //         $scope.publicInfo.closeDialog();
+        //     }
+        // };
         $scope.initPublicInfo = function() {
-            $scope.loading(true);
+            // $scope.loading(1);
             $http.get('/admin/server').then(function(success) {
                 $scope.publicInfo.servers = success.data;
-                $scope.loading(false);
+                // $scope.loading(0);
             });
         };
         $scope.initPublicInfo();
