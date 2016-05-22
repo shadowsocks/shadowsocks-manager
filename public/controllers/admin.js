@@ -241,10 +241,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');
 
-        // $http.get('/admin/user').success(function(data) {
-        //     $scope.users = data;
-        // });
-
         $scope.init = function() {
             if(!$scope.publicInfo.users) {return;}
             $scope.users = $scope.publicInfo.users;
@@ -265,13 +261,18 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userAddAccount', {userName: $stateParams.userName});
         });
         $scope.init = function() {
-            $http.get('/admin/user', {params: {
-                userName: $stateParams.userName
-            }}).success(function(data) {
-                $scope.user = data[0];
-            });
+            if(!$scope.publicInfo.users) {return;}
+            $scope.user = $scope.publicInfo.users.filter(function(f) {
+                return f.email === $stateParams.userName;
+            })[0];
+            if(!$scope.user) {
+                return $state.go('admin.user');
+            }
         };
         $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
 
         $scope.delete = function(account) {
             var confirm = $mdDialog.confirm()
@@ -292,14 +293,27 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $mdDialog.cancel(confirm);
             });
         };
+
+        $scope.edit = function(account) {
+            $state.go('admin.editAccount', {
+                serverName: account.server,
+                accountPort: account.port
+            });
+        };
     })
     .controller('AdminUserAddAccountController', function($scope, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
         $scope.setMenuButton('admin.userPage', {userName: $stateParams.userName});
 
-        $http.get('/admin/server').success(function(data) {
-            $scope.servers = data;
-        });
+        $scope.init = function() {
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.servers = $scope.publicInfo.servers;
+        };
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+
         $scope.$watch('server', function() {
             if($scope.server) {
                 $scope.serverObj = JSON.parse($scope.server);
@@ -315,6 +329,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 serverName: $scope.serverObj.name,
                 port: $scope.accountObj.port
             }).success(function(data) {
+                $scope.initPublicInfo();
                 $state.go('admin.userPage', {userName: $stateParams.userName});
             });
         };

@@ -262,8 +262,4 @@ exports.getUsers = function(req, res) {
         if(err) {return res.status(500).end('查询失败');}
         res.send(data.combine);
     });
-    // User.find(query).exec(function(err, data) {
-    //     if(err) {return res.status(500).end('数据库错误');}
-    //     res.send(data);
-    // });
 };
