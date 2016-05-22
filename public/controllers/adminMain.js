@@ -1,17 +1,4 @@
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
-        $scope.loading = function(isLoading) {
-            dialog = $mdDialog.prompt({
-                templateUrl: '/public/views/admin/loading.html',
-                escapeToClose : false
-            });
-            if(isLoading) {
-                $mdDialog.show(dialog);
-            } else {
-                console.log($mdDialog);
-                $mdDialog.cancel(dialog);
-            }
-        };
-        // $scope.loading(true);
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
@@ -78,8 +65,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.menuButtonState = '';
             $scope.publicInfo.menuButtonStateParams = {};
             $scope.publicInfo.fabButtonClick = '';
-
-            // $scope.loading(false);
         });
 
     });

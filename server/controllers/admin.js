@@ -24,9 +24,7 @@ exports.addServer = function (req, res) {
         ip: req.body.ip,
         port: req.body.port
     }, function(err, data) {
-        if(err) {
-            return res.status(500).end('数据库错误');
-        }
+        if(err) {return res.status(500).end('数据库错误'); }
         logger.info('新增服务器: [' + req.body.name + '][' + req.body.ip + ':' + req.body.port + ']');
         return res.send(data);
     });
