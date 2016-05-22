@@ -9,21 +9,30 @@ var moment = require('moment');
 var log4js = require('log4js');
 var logger = log4js.getLogger('admin');
 
+var async = require('async');
+
 var shadowsocks = require('./shadowsocks');
 
 exports.getServers = function (req, res) {
-    Server.searchByName(req.query.serverName, function(err, servers) {
+    var query = {};
+    if(req.query.name) {query.name = req.query.name;}
+    Server.find(query).exec(function(err, servers) {
         if(err) {return res.status(500).end('数据库错误');}
         return res.send(servers);
     });
 };
 
 exports.addServer = function (req, res) {
-    Server.newServer({
-        name: req.body.name,
-        ip: req.body.ip,
-        port: req.body.port
-    }, function(err, data) {
+    var name = req.body.name;
+    var ip = req.body.ip;
+    var port = req.body.port;
+
+    var server = new Server();
+    server.name = name;
+    server.ip = ip;
+    server.port = port;
+
+    server.save(function(err, data) {
         if(err) {return res.status(500).end('数据库错误'); }
         logger.info('新增服务器: [' + req.body.name + '][' + req.body.ip + ':' + req.body.port + ']');
         return res.send(data);
@@ -213,8 +222,48 @@ exports.getUsers = function(req, res) {
     if(req.query.userName) {
         query.email = req.query.userName;
     }
-    User.find(query).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库错误');}
-        res.send(data);
+
+    var step = {};
+
+    step.user = function(callback) {
+        User.find(query).exec(callback);
+    };
+    step.server = function(callback) {
+        Server.aggregate([{$unwind: '$account'}]).exec(function(err, data) {
+            callback(err, data);
+        });
+    };
+    step.combine = ['user', 'server', function(results, callback) {
+        var data = results.user.map(function(m) {
+            return {
+                email: m.email,
+                account: m.account.map(function(m) {
+                    var server = results.server.filter(function(f) {
+                        return (f.name === m.server && f.account.port === m.port);
+                    });
+                    if(server[0]) {
+                        return {
+                            server: server[0].name,
+                            address: server[0].ip,
+                            port: server[0].account.port,
+                            password: server[0].account.password,
+                            flow: server[0].account.flow,
+                            expireTime: server[0].account.expireTime
+                        };
+                    } else {
+                        return null;
+                    }
+                })
+            };
+        });
+        callback(null, data);
+    }];
+    async.auto(step, function(err, data) {
+        if(err) {return res.status(500).end('查询失败');}
+        res.send(data.combine);
     });
+    // User.find(query).exec(function(err, data) {
+    //     if(err) {return res.status(500).end('数据库错误');}
+    //     res.send(data);
+    // });
 };
