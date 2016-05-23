@@ -1,4 +1,4 @@
-app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval) {
         
 
         $scope.menuButton = function() {
@@ -17,13 +17,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
         $scope.publicInfo = {
-            title: '',              //标题
-            menuButtonIcon: 'menu', //菜单或返回按钮
-            menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
+            lastUpdate: '',            //上次刷新时间
+            title: '',                 //标题
+            menuButtonIcon: 'menu',    //菜单或返回按钮
+            menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
             fabButtonIcon: '',
-            fabButtonClick: '',
-            closeDialog: ''
+            fabButtonClick: ''
         };
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
@@ -42,32 +42,49 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $mdDialog.cancel(dialog);
             }
         };
-        $scope.initPublicInfo = function(type) {
-            $scope.loading(1);
+
+        /*
+        options: {
+            type   : 'server'/'user'
+            loading: true/false
+        }
+        */
+        $scope.initPublicInfo = function(options) {
+            if(!options) {options = {
+                loading: true
+            };}
+            if(!options.loading && $scope.publicInfo.lastUpdate) {
+                var time = +new Date() - $scope.publicInfo.lastUpdate;
+                if(time < 30 * 1000) {return;}
+            }
+            console.log(new Date());
+            $scope.loading(options.loading);
             var promises = [];
-            if(!type || type === 'server') {
+            if(!options.type || options.type === 'server') {
                 promises[0] = $http.get('/admin/server');
             } else {
                 promises[0] = undefined;
             }
-            if(!type || type === 'user') {
+            if(!options.type || options.type === 'user') {
                 promises[1] = $http.get('/admin/user');
             } else {
                 promises[1] = undefined;
             }
             $q.all(promises).then(function(success) {
-                $scope.loading(0);
+                $scope.loading(false);
+                $scope.publicInfo.lastUpdate = new Date();
                 if(success[0]) {
                     $scope.publicInfo.servers = success[0].data;
                 }
                 if(success[1]) {
                     $scope.publicInfo.users = success[1].data;
-                    console.log($scope.publicInfo.users);
                 }
             });
-
         };
         $scope.initPublicInfo();
+        $interval(function() {
+            $scope.initPublicInfo({loading: false});
+        }, 10 * 1000);
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
         };
