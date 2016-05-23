@@ -23,14 +23,17 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
             fabButtonIcon: '',
-            fabButtonClick: ''
+            fabButtonClick: '',
+            isLoading: false
         };
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
             escapeToClose : false,
             scope: $scope,
             preserveScope: true,
-            controller: function($scope) {}
+            controller: function($scope) {
+                $scope.publicInfo.isLoading = true;
+            }
         });
 
         $scope.loadingText = '正在加载';
@@ -39,7 +42,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             if(isLoading) {
                 $mdDialog.show(dialog);
             } else {
-                $mdDialog.cancel(dialog);
+                var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
+                    if($scope.publicInfo.isLoading) {
+                        $mdDialog.cancel();
+                        waitToCancel();
+                        $scope.publicInfo.isLoading = false;
+                    }
+                });
             }
         };
 
@@ -57,7 +66,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
                 if(time < 30 * 1000) {return;}
             }
-            console.log(new Date());
             $scope.loading(options.loading);
             var promises = [];
             if(!options.type || options.type === 'server') {

@@ -13,7 +13,7 @@ app.filter('flow1024', function() {
         }
     };
 });
-app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog) {
+app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval) {
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
@@ -22,12 +22,39 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             {name: '续费', icon: 'vpn_key', click: 'admin.unfinish'}
         ];
         $scope.publicInfo = {
+            lastUpdate: '',
             title: '',              //标题
             menuButtonIcon: 'menu', //菜单或返回按钮
             menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
             fabButtonIcon: '',
-            fabButtonClick: ''
+            fabButtonClick: '',
+            isLoading: false
+        };
+        var dialog = $mdDialog.prompt({
+            templateUrl: '/public/views/user/loading.html',
+            escapeToClose : false,
+            scope: $scope,
+            preserveScope: true,
+            controller: function($scope) {
+                $scope.publicInfo.isLoading = true;
+            }
+        });
+
+        $scope.loadingText = '正在加载';
+
+        $scope.loading = function(isLoading) {
+            if(isLoading) {
+                $mdDialog.show(dialog);
+            } else {
+                var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
+                    if($scope.publicInfo.isLoading) {
+                        $mdDialog.cancel();
+                        waitToCancel();
+                        $scope.publicInfo.isLoading = false;
+                    }
+                });
+            }
         };
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
@@ -66,11 +93,31 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 });
             }}
         ];
-        $scope.init = function() {
+        // $scope.init = function() {
+        //     $http.get('/user/userInfo').success(function(data) {
+        //         $scope.publicInfo.user = data;
+        //     });
+        // };
+        // $scope.init();
+
+        $scope.initPublicInfo = function(options) {
+            if(!options) {options = {
+                loading: true
+            };}
+            if(!options.loading && $scope.publicInfo.lastUpdate) {
+                var time = +new Date() - $scope.publicInfo.lastUpdate;
+                if(time < 30 * 1000) {return;}
+            }
+            $scope.loading(options.loading);
             $http.get('/user/userInfo').success(function(data) {
+                $scope.loading(false);
+                $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = data;
             });
         };
-        $scope.init();
+        $scope.initPublicInfo();
+        $interval(function() {
+            $scope.initPublicInfo({loading: false});
+        }, 10 * 1000);
     })
 ;
