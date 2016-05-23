@@ -99,30 +99,50 @@ exports.addAccount = function(req, res) {
 };
 
 exports.editAccount = function(req, res) {
+    var type = req.body.type;
     var name = req.body.name;
     var port = req.body.port;
     var flow = req.body.flow;
     var time = req.body.time;
 
-    var update = {};
-    if(flow) {
-        update.$inc = {
-            'account.$.flow': +flow
-        };
-    }
-    if(time) {
-        update.$set = {
-            'account.$.expireTime': new Date(+new Date() + time)
-        };
-    }
+    var update = function(number) {
+        var update = {};
+        if((flow || flow === 0) && type === 'add') {
+            update.$inc = {
+                'account.$.flow': +flow
+            };
+        } else if((flow || flow === 0) && type === 'set') {
+            update.$set = {
+                'account.$.flow': +flow
+            };
+        } else if((time || time === 0) && type === 'set') {
+            update.$set = {
+                'account.$.expireTime': new Date(+new Date() + time)
+            };
+        } else if((time || time === 0) && type === 'add') {
+            update.$set = {
+                'account.$.expireTime': new Date(+number + time)
+            };
+        }
+        return update;
+    };
 
-    Server.findOneAndUpdate({
+    Server.findOne({
         'name': name,
         'account.port': port
-    }, update).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库错误');}
-        if(!data) {return res.status(401).end('找不到相应帐号');}
+    }).then(function(data) {
+        var time = data.account.filter(function(f) {
+            return +f.port === +port;
+        })[0].expireTime;
+        return Server.update({
+            'name': name,
+            'account.port': port
+        }, update(time));
+    }).then(function(data) {
+        if(!data.nModified) {return res.status(401).end('找不到相应帐号');}
         return res.send(data);
+    }).catch(function(err) {
+        return res.status(500).end('数据库错误');
     });
 };
 

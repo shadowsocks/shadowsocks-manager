@@ -194,8 +194,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.init();
         }, true);
 
-        $scope.addFlow = function(flow) {
+        $scope.setFlow = function(type, flow) {
             $http.put('/admin/account', {
+                type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
                 flow: flow
@@ -203,8 +204,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $scope.initPublicInfo();
             });
         };
-        $scope.addTime = function(time) {
+        $scope.setTime = function(type, time) {
             $http.put('/admin/account', {
+                type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
                 time: time
@@ -215,7 +217,15 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
 
         $scope.flowBottomSheet = function() {
             $mdBottomSheet.show({
-                templateUrl: '/public/views/admin/editAccountFlowOrTime.html',
+                templateUrl: '/public/views/admin/editAccountFlow.html',
+                preserveScope: true,
+                scope: $scope,
+                controller: function($scope) {}
+            });
+        };
+        $scope.timeBottomSheet = function() {
+            $mdBottomSheet.show({
+                templateUrl: '/public/views/admin/editAccountTime.html',
                 preserveScope: true,
                 scope: $scope,
                 controller: function($scope) {}
@@ -297,7 +307,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     server: account.server,
                     port: account.port
                 }}).success(function(data) {
-                    $scope.init();
+                    $scope.initPublicInfo();
                 });
             }, function() {
                 $mdDialog.cancel(confirm);
