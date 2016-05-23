@@ -6,8 +6,6 @@ var accountSchema = new Schema({
     port: {type:Number, required:true},
 }, { _id: false });
 
-accountSchema.index({server: 1, port: 1}, {unique: true});
-
 var userSchema = new Schema({
     email: {type:String, required:true, unique:true},
     password: String,
