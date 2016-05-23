@@ -166,7 +166,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.cancel = function() {$state.go('admin.serverPage', {serverName: $stateParams.serverName,});};
     })
-    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams) {
+    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast) {
         $scope.setTitle('编辑帐号');
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
 
@@ -212,6 +212,16 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $scope.initPublicInfo();
             });
         };
+
+        $scope.flowBottomSheet = function() {
+            $mdBottomSheet.show({
+                templateUrl: '/public/views/admin/editAccountFlowOrTime.html',
+                preserveScope: true,
+                scope: $scope,
+                controller: function($scope) {}
+            });
+        };
+
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
