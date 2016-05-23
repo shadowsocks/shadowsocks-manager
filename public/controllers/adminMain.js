@@ -25,34 +25,25 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             fabButtonClick: '',
             closeDialog: ''
         };
-        // var dialog = $mdDialog.prompt({
-        //     templateUrl: '/public/views/admin/loading.html',
-        //     escapeToClose : false,
-        //     scope: $scope,
-        //     controller: function($scope, $mdDialog, $timeout) {
-        //         // console.log($scope.publicInfo);
-        //         $scope.publicInfo.closeDialog = function() {
-        //             $mdDialog.cancel();
-        //         };
-        //         // $timeout(function() {$mdDialog.cancel();}, 5000);
-        //     }
-        // });
+        var dialog = $mdDialog.prompt({
+            templateUrl: '/public/views/admin/loading.html',
+            escapeToClose : false,
+            scope: $scope,
+            preserveScope: true,
+            controller: function($scope) {}
+        });
 
-        // $scope.loadingText = '正在加载';
+        $scope.loadingText = '正在加载';
 
-        // $scope.loading = function(isLoading) {
-        //     if(isLoading) {
-        //         $mdDialog.show(dialog);
-        //     } else {
-        //         console.log($scope.publicInfo);
-        //         console.log($scope.publicInfo.closeDialog);
-        //         $scope.publicInfo.closeDialog();
-        //     }
-        // };
+        $scope.loading = function(isLoading) {
+            if(isLoading) {
+                $mdDialog.show(dialog);
+            } else {
+                $mdDialog.cancel(dialog);
+            }
+        };
         $scope.initPublicInfo = function(type) {
-            // $http.get('/admin/server').then(function(success) {
-            //     $scope.publicInfo.servers = success.data;
-            // });
+            $scope.loading(1);
             var promises = [];
             if(!type || type === 'server') {
                 promises[0] = $http.get('/admin/server');
@@ -65,6 +56,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 promises[1] = undefined;
             }
             $q.all(promises).then(function(success) {
+                $scope.loading(0);
                 if(success[0]) {
                     $scope.publicInfo.servers = success[0].data;
                 }
