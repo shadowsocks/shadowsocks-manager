@@ -237,19 +237,34 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('流量统计');
 
         $scope.tabs = [];
-
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             if($scope.tabs.length === 0) {
                 $scope.tabs = $scope.publicInfo.servers;
-                return;
+            } else {
+                $scope.tabs.forEach(function(tab, index) {
+                    var server = $scope.publicInfo.servers.filter(function(f) {
+                        return f.name === tab.name;
+                    })[0];
+                    $scope.tabs[index].account = server.account;
+                });
             }
-            $scope.tabs.forEach(function(tab, index) {
-                var server = $scope.publicInfo.servers.filter(function(f) {
-                    return f.name === tab.name;
-                })[0];
-                $scope.tabs[index].account = server.account;
+            $scope.tabs.forEach(function(tab) {
+                tab.sum = {};
+                tab.sum.today = tab.account.reduce(function(r, e) {
+                    if(e.today) {return r + e.today;}
+                    return r;
+                }, 0);
+                tab.sum.week = tab.account.reduce(function(r, e) {
+                    if(e.week) {return r + e.week;}
+                    return r;
+                }, 0);
+                tab.sum.month = tab.account.reduce(function(r, e) {
+                    if(e.month) {return r + e.month;}
+                    return r;
+                }, 0);
             });
+            
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
