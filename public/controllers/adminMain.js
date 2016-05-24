@@ -78,6 +78,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             } else {
                 promises[1] = undefined;
             }
+            if(!options.type || options.type === 'flow') {
+                promises[2] = $http.get('/admin/flow');
+            } else {
+                promises[2] = undefined;
+            }
             $q.all(promises).then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
@@ -86,6 +91,24 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 }
                 if(success[1]) {
                     $scope.publicInfo.users = success[1].data;
+                }
+                if(success[2]) {
+                    $scope.publicInfo.servers.map(function(server) {
+                        return server.account.map(function(account) {
+                            var flow = success[2].data.filter(function(f) {
+                                return (
+                                    f.name === server.name &&
+                                    f.port === account.port
+                                    );
+                            })[0];
+                            if(flow) {
+                                account.today = flow.today;
+                                account.week = flow.week;
+                                account.month = flow.month;
+                            }
+                            return account;
+                        });
+                    });
                 }
             });
         };

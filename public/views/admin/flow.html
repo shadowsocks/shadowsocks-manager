@@ -1,4 +1,4 @@
-<div flex layout="column">
+<!-- <div flex layout="column">
     <md-card>
         <md-card-actions layout="row" layout-align="start center">
             <div flex><md-button>合计</md-button></div>
@@ -11,4 +11,22 @@
             <div flex><md-button>{{f.flow | flow1024}}</md-button></div>
         </md-card-actions>
     </md-card>
-</div>
+</div> -->
+<md-tabs md-selected="tabIndex" md-border-bottom>
+    <md-tab ng-repeat="server in tabs" label="{{server.name}}">
+        <md-list>
+            <md-list-item>
+                <div flex>端口</div>
+                <div flex>今日</div>
+                <div flex>本周</div>
+                <div flex>本月</div>
+            </md-list-item>
+            <md-list-item ng-repeat="a in server.account" ng-if="a.today">
+                <div flex>{{a.port}}</div>
+                <div flex>{{a.today | flow1024}}</div>
+                <div flex>{{a.week | flow1024}}</div>
+                <div flex>{{a.month | flow1024}}</div>
+            </md-list-item>
+        </md-list>
+    </md-tab>
+</md-tabs>

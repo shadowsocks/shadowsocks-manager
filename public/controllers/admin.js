@@ -235,27 +235,26 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     })
     .controller('AdminFlowController', function($scope, $interval, $http) {
         $scope.setTitle('流量统计');
-        // $scope.setMenuButton('default');
-        $scope.getFlow = function() {
-            $http.get('/admin/flow').success(function(data) {
-                $scope.flow = data;
-                $scope.flow.sort(function(a, b) {
-                    return b.flow - a.flow;
-                });
+
+        $scope.tabs = [];
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.servers) {return;}
+            if($scope.tabs.length === 0) {
+                $scope.tabs = $scope.publicInfo.servers;
+                return;
+            }
+            $scope.tabs.forEach(function(tab, index) {
+                var server = $scope.publicInfo.servers.filter(function(f) {
+                    return f.name === tab.name;
+                })[0];
+                $scope.tabs[index].account = server.account;
             });
         };
-        $scope.getFlow();
-        $interval(function() {
-            $scope.getFlow();
-        }, 10 * 1000);
-        $scope.allFlow = 0;
-        $scope.$watch('flow', function() {
-            $scope.allFlow = 0;
-            if(!$scope.flow) {return;}
-            $scope.flow.forEach(function(f) {
-                $scope.allFlow += f.flow;
-            });
-        });
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
     })
 
     .controller('AdminUserController', function($scope, $state, $http) {

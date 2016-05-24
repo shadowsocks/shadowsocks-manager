@@ -14,6 +14,14 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
+    <md-list-item class="md-3-line">
+        <div class="md-list-item-text">
+            <h4>本日：{{account.today | flow1024}}</h4>
+            <h4>本周：{{account.week | flow1024}}</h4>
+            <h4>本月：{{account.month | flow1024}}</h4>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
     <!-- <md-list-item layout="row">
         <div flex>
             <md-button class="md-raised md-primary" ng-click="addFlow(10 * 1000 * 1000)">+10M</md-button>

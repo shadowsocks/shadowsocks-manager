@@ -67,10 +67,6 @@ exports.changePassword = function(req, res) {
     User.findOne({email: req.session.user}).exec(function(err, user) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!user) {return res.status(401).end('找不到对应的用户');}
-        console.log(req.body.oldPassword);
-        console.log(req.session.user);
-        console.log(createPassword(req.body.oldPassword, req.session.user));
-        console.log(user.password);
         if(createPassword(req.body.oldPassword,req.session.user) !== user.password) {return res.status(401).end('原密码错误');}
         User.update({email: req.session.user}, {
             $set: {

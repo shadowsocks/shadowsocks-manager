@@ -18,8 +18,8 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             {name: '首页', icon: 'home', click: 'user.index'},
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
             {name: '修改密码', icon: 'lock_outline', click: 'user.changePassword'},
-            {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
-            {name: '续费', icon: 'vpn_key', click: 'admin.unfinish'}
+            {name: '流量统计', icon: 'timeline', click: 'user.unfinish'},
+            {name: '续费', icon: 'vpn_key', click: 'user.unfinish'}
         ];
         $scope.publicInfo = {
             lastUpdate: '',

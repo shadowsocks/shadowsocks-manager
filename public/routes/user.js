@@ -35,6 +35,12 @@ app.config(
                     controller: 'UserChangePasswordController',
                     templateUrl: '/public/views/user/changePassword.html'
                 })
+
+                .state('user.unfinish', {
+                    url: '/unfinish',
+                    controller: 'UserUnfinishController',
+                    templateUrl: '/public/views/user/unfinish.html'
+                })
             ;
         }
     ]

@@ -206,7 +206,14 @@ exports.deleteUserAccount = function(req, res) {
 
 exports.getFlow = function(req, res) {
     var aggregate = [];
-    var date = moment().hour(0).minute(0).second(0).toDate();
+
+    var date = moment(new Date()).add(-32, 'd').hour(0).minute(0).second(0).toDate();
+
+    var time = {
+        today: moment(new Date()).hour(0).minute(0).second(0).toDate(),
+        week: moment(new Date()).day(0).hour(0).minute(0).second(0).toDate(),
+        month: moment(new Date()).date(1).hour(0).minute(0).second(0).toDate(),
+    };
     aggregate.push({
         $match: {
             time: {$gt: date}
@@ -218,8 +225,14 @@ exports.getFlow = function(req, res) {
                 name: '$name',
                 port: '$port'
             },
-            flow: {
-                $sum: '$flow'
+            flowToday: {
+                $sum: {$cond: [{$gte: ['$time', time.today]}, '$flow', 0]}
+            },
+            flowWeek: {
+                $sum: {$cond: [{$gte: ['$time', time.week]}, '$flow', 0]}
+            },
+            flowMonth: {
+                $sum: {$cond: [{$gte: ['$time', time.month]}, '$flow', 0]}
             },
         }
     });
@@ -228,7 +241,9 @@ exports.getFlow = function(req, res) {
             _id: false,
             name: '$_id.name',
             port: '$_id.port',
-            flow: '$flow'
+            today: '$flowToday',
+            week: '$flowWeek',
+            month: '$flowMonth'
         }
     });
     HistoryOriginal.aggregate(aggregate).exec(function(err, data) {

@@ -53,4 +53,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             });
         };
     })
+    .controller('UserUnfinishController', function($scope) {
+        $scope.setTitle('404 Not Found');
+    })
 ;

@@ -74,7 +74,7 @@ app.config(
                     templateUrl: '/public/views/admin/userAddAccount.html'
                 })
                 .state('admin.unfinish', {
-                    url: '/admin/unfinish',
+                    url: '/unfinish',
                     controller: 'AdminUnfinishController',
                     templateUrl: '/public/views/admin/unfinish.html'
                 })
