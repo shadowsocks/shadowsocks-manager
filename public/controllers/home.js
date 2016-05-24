@@ -29,6 +29,12 @@ app.controller('LoginController', function($scope, $http, $state, $mdToast, $win
             .position('bottom right');
         $mdToast.show(toast);
     };
+
+    $scope.passwordKeypress = function(e) {
+        if(e.keyCode === 13) {
+            $scope.login();
+        }
+    };
 })
 .controller('SignupSuccessController', function($scope, $http, $interval, $state) {
     $scope.time = 5;
