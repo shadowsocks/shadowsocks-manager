@@ -5,6 +5,15 @@ var Server = mongoose.model('Server');
 var User = mongoose.model('User');
 var async = require('async');
 
+var crypto = require('crypto');
+var md5 = function(text) {
+        return crypto.createHash('md5').update(text).digest('hex');
+};
+
+var createPassword = function(password, username) {
+    return md5(password + username);
+};
+
 exports.getUserInfo = function (req, res) {
     var userName = req.session.user;
 
@@ -50,6 +59,28 @@ exports.getUserInfo = function (req, res) {
     });
 };
 
+
+
 exports.changePassword = function(req, res) {
-    var password = req.body.password;
+    if(!req.body.newPassword) {return res.status(401).end('新密码不能为空');}
+    if(req.body.newPassword !== req.body.newPasswordAgain) {return res.status(401).end('两次输入的新密码不同');}
+    User.findOne({email: req.session.user}).exec(function(err, user) {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!user) {return res.status(401).end('找不到对应的用户');}
+        console.log(req.body.oldPassword);
+        console.log(req.session.user);
+        console.log(createPassword(req.body.oldPassword, req.session.user));
+        console.log(user.password);
+        if(createPassword(req.body.oldPassword,req.session.user) !== user.password) {return res.status(401).end('原密码错误');}
+        User.update({email: req.session.user}, {
+            $set: {
+                password: createPassword(req.body.newPassword, req.session.user)
+            }
+        }).exec(function(err, data) {
+            if(err) {return res.status(500).end('数据库错误');}
+            if(!data.nModified) {return res.status(401).end('找不到对应的用户');}
+            req.session.destroy();
+            return res.send(data);
+        });
+    });
 };

@@ -93,12 +93,6 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 });
             }}
         ];
-        // $scope.init = function() {
-        //     $http.get('/user/userInfo').success(function(data) {
-        //         $scope.publicInfo.user = data;
-        //     });
-        // };
-        // $scope.init();
 
         $scope.initPublicInfo = function(options) {
             if(!options) {options = {
