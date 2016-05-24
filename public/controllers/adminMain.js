@@ -141,15 +141,16 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     });
                 }
             }, function(err) {
+                if(!options.loading) {return;}
                 $scope.loadingError({
-                    error: 'er',
+                    error: '数据加载错误(' + err.status + ')',
                     fn: function() {
-                        $scope.loading();
+                        $window.location.reload();
                     }
                 });
             });
         };
-        $scope.initPublicInfo({type: ['server','user','flow']});
+        $scope.initPublicInfo({type: ['server','user','flow'], loading: true});
         $interval(function() {
             $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
         }, 10 * 1000);

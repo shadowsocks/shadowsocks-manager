@@ -4,10 +4,12 @@
     <div flex>{{publicInfo.loadingText}}</div>
 </div>
 <div ng-show="publicInfo.loadingError" layout="column" layout-padding style="height: 120px;" layout-align="center center">
+    <div flex="15"></div>
     <div flex>{{publicInfo.loadingError}}</div>
     <div flex>
         <md-button class="md-secondary md-primary" ng-click="publicInfo.loadingErrorFn()">
             确定
         </md-button>
     </div>
+    <div flex="5"></div>
 </div>
