@@ -41,6 +41,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.loadingText = '正在加载';
             $scope.publicInfo.loadingError = '';
             $scope.publicInfo.loadingErrorFn = function() {};
+
+            $mdDialog.cancel();
         });
         
         var dialog = $mdDialog.prompt({

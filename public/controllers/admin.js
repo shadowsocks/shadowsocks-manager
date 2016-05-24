@@ -19,7 +19,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     })
     .controller('AdminServerController', function($scope, $http, $state, $mdDialog) {
         $scope.setTitle('服务器管理');
-        // $scope.setMenuButton('default');
         $scope.setFabButtonClick(function(){
             $state.go('admin.addServer');
         });
@@ -36,20 +35,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
     })
-    .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
+    .controller('AdminAddServerController', function($scope, $interval, $http, $state, $timeout) {
         $scope.setTitle('添加服务器');
         $scope.setMenuButton('admin.server');
         $scope.server = {};
         $scope.addServer = function() {
+            $scope.loading(true);
             $http.post('/admin/server', {
                 name: $scope.server.name,
                 ip: $scope.server.ip,
                 port: $scope.server.port
-            }).success(function(data) {
+            }).then(function(success) {
+                $scope.loading(false);
                 $scope.initPublicInfo();
                 $state.go('admin.server');
-            }).error(function(err) {
-                console.log(err);
+            }, function(error) {
+                $scope.loadingError({error: '添加服务器失败', fn: function() {
+                    $state.go('admin.server');
+                }});
             });
         };
         $scope.cancel = function() {$state.go('admin.server');};
