@@ -16,21 +16,32 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
             {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
-        var publicInfo = function() {
-            $scope.publicInfo = {
-                title: '',                 //标题
-                menuButtonIcon: 'menu',    //菜单或返回按钮
-                menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
-                menuButtonStateParams: {},
-                fabButtonIcon: '',
-                fabButtonClick: '',
-                isLoading: false,
-                loadingText: '正在加载',
-                loadingError: '',
-                loadingErrorFn: function() {}
-            };
+
+        $scope.publicInfo = {
+            title: '',                 //标题
+            menuButtonIcon: 'menu',    //菜单或返回按钮
+            menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
+            menuButtonStateParams: {},
+            fabButtonIcon: '',
+            fabButtonClick: '',
+            isLoading: false,
+            loadingText: '正在加载',
+            loadingError: '',
+            loadingErrorFn: function() {}
         };
-        publicInfo();
+
+        $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            $scope.publicInfo.title = '';
+            $scope.publicInfo.menuButtonIcon = 'menu';
+            $scope.publicInfo.menuButtonState = '';
+            $scope.publicInfo.menuButtonStateParams = {};
+            $scope.publicInfo.fabButtonIcon = '';
+            $scope.publicInfo.fabButtonClick = '';
+            $scope.publicInfo.isLoading = false;
+            $scope.publicInfo.loadingText = '正在加载';
+            $scope.publicInfo.loadingError = '';
+            $scope.publicInfo.loadingErrorFn = function() {};
+        });
         
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
@@ -69,32 +80,35 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
         /*
         options: {
-            type   : 'server'/'user'
+            type   : ['server','user','flow']
             loading: true/false
         }
         */
         $scope.initPublicInfo = function(options) {
             if($scope.publicInfo.isLoading) {return;}
             if(!options) {options = {
+                type: ['server','user'],
                 loading: true
             };}
+            if(!options.type) {options.type = ['server','user'];}
+
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
                 if(time < 30 * 1000) {return;}
             }
             $scope.loading(options.loading);
             var promises = [];
-            if(!options.type || options.type === 'server') {
+            if(options.type.indexOf('server') >= 0) {
                 promises[0] = $http.get('/admin/server');
             } else {
                 promises[0] = undefined;
             }
-            if(!options.type || options.type === 'user') {
+            if(options.type.indexOf('user') >= 0) {
                 promises[1] = $http.get('/admin/user');
             } else {
                 promises[1] = undefined;
             }
-            if(!options.type || options.type === 'flow') {
+            if(options.type.indexOf('flow') >= 0) {
                 promises[2] = $http.get('/admin/flow');
             } else {
                 promises[2] = undefined;
@@ -135,9 +149,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 });
             });
         };
-        $scope.initPublicInfo();
+        $scope.initPublicInfo({type: ['server','user','flow']});
         $interval(function() {
-            $scope.initPublicInfo({loading: false});
+            $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
         }, 10 * 1000);
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
@@ -170,8 +184,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             }}
         ];
 
-        $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-            publicInfo();
-        });
+        
 
     });

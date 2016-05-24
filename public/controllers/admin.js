@@ -30,6 +30,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
+            console.log('XX');
             $scope.init();
         }, true);
         $scope.serverPage = function(serverName) {
