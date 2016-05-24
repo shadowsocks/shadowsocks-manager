@@ -47,7 +47,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 port: $scope.server.port
             }).then(function(success) {
                 $scope.loading(false);
-                $scope.initPublicInfo();
+                $scope.publicInfo.servers.push(success.data);
                 $state.go('admin.server');
             }, function(error) {
                 $scope.loadingError({error: '添加服务器失败', fn: function() {
