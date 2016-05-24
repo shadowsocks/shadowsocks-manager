@@ -16,16 +16,22 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
             {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
-        $scope.publicInfo = {
-            lastUpdate: '',            //上次刷新时间
-            title: '',                 //标题
-            menuButtonIcon: 'menu',    //菜单或返回按钮
-            menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
-            menuButtonStateParams: {},
-            fabButtonIcon: '',
-            fabButtonClick: '',
-            isLoading: false
+        var publicInfo = function() {
+            $scope.publicInfo = {
+                title: '',                 //标题
+                menuButtonIcon: 'menu',    //菜单或返回按钮
+                menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
+                menuButtonStateParams: {},
+                fabButtonIcon: '',
+                fabButtonClick: '',
+                isLoading: false,
+                loadingText: '正在加载',
+                loadingError: '',
+                loadingErrorFn: function() {}
+            };
         };
+        publicInfo();
+        
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
             escapeToClose : false,
@@ -35,8 +41,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $scope.publicInfo.isLoading = true;
             }
         });
-
-        $scope.loadingText = '正在加载';
 
         $scope.loading = function(isLoading) {
             if(isLoading) {
@@ -54,11 +58,23 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
         /*
         options: {
+            error
+            fn
+        }
+        */
+        $scope.loadingError = function(options) {
+            $scope.publicInfo.loadingError = options.error;
+            $scope.publicInfo.loadingErrorFn = options.fn;
+        };
+
+        /*
+        options: {
             type   : 'server'/'user'
             loading: true/false
         }
         */
         $scope.initPublicInfo = function(options) {
+            if($scope.publicInfo.isLoading) {return;}
             if(!options) {options = {
                 loading: true
             };}
@@ -110,6 +126,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                         });
                     });
                 }
+            }, function(err) {
+                $scope.loadingError({
+                    error: 'er',
+                    fn: function() {
+                        $scope.loading();
+                    }
+                });
             });
         };
         $scope.initPublicInfo();
@@ -148,11 +171,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         ];
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-            $scope.publicInfo.title = '';
-            $scope.publicInfo.menuButtonIcon = 'menu';
-            $scope.publicInfo.menuButtonState = '';
-            $scope.publicInfo.menuButtonStateParams = {};
-            $scope.publicInfo.fabButtonClick = '';
+            publicInfo();
         });
 
     });
