@@ -2,6 +2,7 @@ var express = global.express = require('express');
 var app = global.app = express();
 var config = require('../config').conf;
 var mongoose = require('mongoose');
+mongoose.Promise = require('q').Promise;
 mongoose.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name);
 
 var fs = require('fs');

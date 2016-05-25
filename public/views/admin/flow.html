@@ -22,7 +22,7 @@
                     <div flex layout="row" layout-align="end center">本周</div>
                     <div flex layout="row" layout-align="end center">本月</div>
                 </md-list-item>
-                <md-list-item ng-repeat="a in server.account" ng-if="a.month">
+                <md-list-item ng-repeat="a in server.account | orderBy:  ['-today', '-week', '-month']" ng-if="a.month">
                     <div flex="15" layout="row" layout-align="end center">{{a.port}}</div>
                     <div flex layout="row" layout-align="end center">{{a.today | flow1024}}</div>
                     <div flex layout="row" layout-align="end center">{{a.week | flow1024}}</div>

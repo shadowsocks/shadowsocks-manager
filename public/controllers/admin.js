@@ -217,13 +217,22 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
         $scope.setTime = function(type, time) {
+            $scope.loading(true);
             $http.put('/admin/account', {
                 type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
                 time: time
-            }).success(function(data) {
-                $scope.initPublicInfo();
+            }).then(function(success) {
+                $scope.loading(false);
+                $scope.account.time = +success.data.time;
+            }, function(error) {
+                $scope.loadingError({
+                    error: '设置有效期出错',
+                    fn: function() {
+                        $scope.loading(false);
+                    }
+                });
             });
         };
 
