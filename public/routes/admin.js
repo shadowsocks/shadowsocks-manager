@@ -1,4 +1,4 @@
-var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr']);
+var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr']);//, 'chart.js']);
 
 app.config(
     ['$stateProvider', '$urlRouterProvider',
