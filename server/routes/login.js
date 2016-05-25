@@ -15,6 +15,7 @@ app.get('/', function(req, res) {
         return res.render('admin', {
             'controllers': [
                 '/public/controllers/adminMain.js',
+                '/public/controllers/adminServer.js',
                 '/public/controllers/admin.js'
             ],
             'routes': [

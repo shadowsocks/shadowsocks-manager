@@ -159,6 +159,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $interval(function() {
             $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
         }, 10 * 1000);
+        document.addEventListener('visibilitychange', function(){
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
+            }
+        });
         $scope.setTitle = function(str) {
             $scope.publicInfo.title = str;
         };

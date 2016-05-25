@@ -49,7 +49,7 @@ exports.editServer = function(req, res) {
             ip: ip,
             port: port
         }
-    }).exec(function(err, data) {
+    }, {new: true}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!data) {return res.status(401).end('找不到ServerName');}
         logger.info('修改服务器: [' + name + '][' + ip + ':' + port + ']');
@@ -75,26 +75,38 @@ exports.addAccount = function(req, res) {
     var port = req.body.port;
     var password = req.body.password;
 
-    Server.findOneAndUpdate({
-        name: name
-    }, {
-        $push: {account: {
-            port: port,
-            password: password,
-            expireTime: new Date()
-        }}
-    }).exec(function(err, data) {
-        if(err) {
-            logger.error('[addAccount]' + err);
-            return res.status(500).end('数据库错误');}
-        shadowsocks.add({
-            ip: data.ip,
-            port: data.port
+    Server.findOne({
+        'name': name,
+        'account.port': port
+    }).then(function(success) {
+        if(success) {
+            res.status(403).end('该端口已被占用');
+            return Promise.reject('端口被占用');
+        }
+        return Server.findOneAndUpdate({
+            name: name
         }, {
-            port: port,
+            $push: {account: {
+                port: port,
+                password: password,
+                expireTime: new Date()
+            }}
+        }, {new: true});
+    }).then(function(success) {
+        shadowsocks.add({
+            ip: success.ip,
+            port: +success.port
+        }, {
+            port: +port,
             password: password
         });
-        return res.send(data);
+        var ret = success.account.filter(function(f) {
+            return +f.port === +port;
+        })[0];
+        return res.send(ret);
+    }).catch(function(err) {
+        logger.error('[addAccount]' + err);
+        return res.status(500).end('数据库错误');
     });
 };
 

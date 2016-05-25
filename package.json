@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "description": "undefined",
   "main": "server.js",
   "scripts": {
@@ -29,7 +29,8 @@
     "later": "^1.2.0",
     "log4js": "^0.6.36",
     "moment": "^2.11.2",
-    "mongoose": "^4.4.14"
+    "mongoose": "^4.4.14",
+    "q": "^1.4.1"
   },
   "bin": ""
 }
