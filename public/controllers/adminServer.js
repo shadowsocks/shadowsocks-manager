@@ -138,7 +138,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
     })
     .controller('AdminAddAccountController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
-        $scope.setMenuButton('admin.serverPage');
+        $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
         $scope.account = {};
         $scope.addAccount = function() {
             $scope.loading(true);
