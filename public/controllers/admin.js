@@ -214,7 +214,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                         $scope.loading(false);
                     }
                 });
-                // $scope.initPublicInfo();
             });
         };
         $scope.setTime = function(type, time) {
