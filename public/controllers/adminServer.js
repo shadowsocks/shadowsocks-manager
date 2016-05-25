@@ -32,7 +32,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 $state.go('admin.server');
             }, function(error) {
                 $scope.loadingError({error: '添加服务器失败', fn: function() {
-                    $state.go('admin.server');
+                    $scope.loading(false);
                 }});
             });
         };
@@ -101,14 +101,18 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 .ok('确定')
                 .cancel('取消');
             $mdDialog.show(confirm).then(function() {
-                $http.delete('/admin/server', {params: {
+                $scope.loading(true);
+                return $http.delete('/admin/server', {params: {
                     name: serverName
-                }}).success(function(data) {
-                    $scope.initPublicInfo();
-                    $state.go('admin.server');
+                }});
+            }).then(function() {
+                $scope.publicInfo.servers = $scope.publicInfo.servers.filter(function(f) {
+                    return f.name !== $stateParams.serverName;
                 });
-            }, function() {
+                $state.go('admin.server');
+            }).catch(function(error) {
                 $mdDialog.cancel(confirm);
+                $state.go('admin.server');
             });
         };
         $scope.deleteAccount = function(port) {

@@ -95,7 +95,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 type: ['server','user', 'flow'],
                 loading: true
             };}
-            if(!options.type) {options.type = ['server','user'];}
+            if(!options.type) {options.type = ['server','user', 'flow'];}
 
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
@@ -145,6 +145,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                         });
                     });
                 }
+
             }, function(err) {
                 if(!options.loading) {return;}
                 $scope.loadingError({
