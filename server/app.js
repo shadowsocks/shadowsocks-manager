@@ -101,7 +101,7 @@ exports.express = function(cb) {
             require('../server/routes/' + file);
             logger.info('加载路由文件 ' + file);
         });
-        var server = app.listen(config.express.port, function () {
+        var server = app.listen(config.express.port, '0.0.0.0', function () {
             logger.info('Web服务启动，监听端口 ' + config.express.port);
         });
         cb(null);
