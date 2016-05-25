@@ -26,4 +26,4 @@ Usage
 More
 ----
 
-    visit [WiKi](http://github.com/)
+visit [WiKi](http://github.com/)
