@@ -22,3 +22,8 @@ Usage
 
     cd shadowsocks-manager
     node server
+
+More
+----
+
+    visit [WiKi](http://github.com/)
