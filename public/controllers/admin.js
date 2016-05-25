@@ -206,7 +206,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 flow: flow
             }).then(function(success) {
                 $scope.loading(false);
-                $scope.initPublicInfo();
+                $scope.account.flow = +success.data.flow;
             }, function(error) {
                 $scope.loadingError({
                     error: '设置流量出错',

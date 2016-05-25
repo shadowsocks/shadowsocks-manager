@@ -134,13 +134,16 @@ exports.editAccount = function(req, res) {
         var time = data.account.filter(function(f) {
             return +f.port === +port;
         })[0].expireTime;
-        return Server.update({
+        return Server.findOneAndUpdate({
             'name': name,
             'account.port': port
-        }, update(time));
+        }, update(time), {new: true});
     }).then(function(data) {
-        if(!data.nModified) {return res.status(401).end('找不到相应帐号');}
-        return res.send(data);
+        if(!data) {return res.status(401).end('找不到相应帐号');}
+        var ret = data.account.filter(function(f) {
+            return +f.port === +port;
+        })[0];
+        return res.send(ret);
     }).catch(function(err) {
         return res.status(500).end('数据库错误');
     });
