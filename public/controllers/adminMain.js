@@ -87,7 +87,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         }
         */
         $scope.initPublicInfo = function(options) {
-            if($scope.publicInfo.isLoading) {return;}
+            if($scope.publicInfo.loadingError) {return;}
             if(!options) {options = {
                 type: ['server','user', 'flow'],
                 loading: true

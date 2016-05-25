@@ -198,13 +198,23 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         }, true);
 
         $scope.setFlow = function(type, flow) {
+            $scope.loading(true);
             $http.put('/admin/account', {
                 type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
                 flow: flow
-            }).success(function(data) {
+            }).then(function(success) {
+                $scope.loading(false);
                 $scope.initPublicInfo();
+            }, function(error) {
+                $scope.loadingError({
+                    error: '设置流量出错',
+                    fn: function() {
+                        $scope.loading(false);
+                    }
+                });
+                // $scope.initPublicInfo();
             });
         };
         $scope.setTime = function(type, time) {
