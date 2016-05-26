@@ -10,7 +10,8 @@ var serverSchema = new Schema({
         password: String,
         expireTime: {type: Date, default: new Date()},
         flow: {type: Number, default: 0},
-        status: {type:Number, default: 0}
+        status: {type:Number, default: 0},
+        lastActive: Date
         /*
         status定义: 0 根据expireTime和flow自动开启和关闭
                     1 关闭

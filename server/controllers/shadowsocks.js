@@ -54,39 +54,6 @@ var sendMessageToShadowsocks = function(ip, port, message) {
 };
 
 
-// var collectUserFlow = function() {
-//     var sockets = {};
-//     Server.find({}).exec(function(err, servers) {
-//         if(err) {return;}
-//         servers.forEach(function(server) {
-//             sockets[server.name] = dgram.createSocket('udp4');
-//             var message = 'ping';
-//             sockets[server.name].send(message, 0, message.length, server.port, server.ip, function(err, bytes) {
-//                 sockets[server.name].on('error', function() {
-//                     logger.error('UDP[' + server.name + '] error');
-//                 });
-//                 sockets[server.name].on('message', function(m, r) {
-//                     var msg = String(m);
-//                     if(msg.substr(0, 4) === 'stat') {
-//                         var flow = JSON.parse(msg.substr(6));
-//                         for(var f in flow) {
-//                             var ho = new HistoryOriginal();
-//                             ho.name = server.name;
-//                             ho.port = +f;
-//                             ho.flow = flow[f];
-//                             ho.save();
-//                         }
-//                     }
-//                 });
-//             });
-//             setInterval(function() {
-//                 sockets[server.name].send(message, 0, message.length, server.port, server.ip);
-//             }, 90 * 1000);
-//         });
-//     });
-// };
-// collectUserFlow();
-
 var servers = {};
 var startSocket = function(server) {
     servers[server.name] = dgram.createSocket('udp4');
@@ -114,6 +81,15 @@ var startSocket = function(server) {
                             'account.$.flow': 0 - flow[f]
                         }
                     }).exec();
+
+                    Server.findOneAndUpdate({
+                        'name': server.name,
+                        'account.port': +f 
+                    }, {
+                        $set: {
+                            'account.$.lastActive': new Date()
+                        }
+                    }, {new: true}).exec();
                 }
             }
         });
