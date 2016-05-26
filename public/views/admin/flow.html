@@ -1,17 +1,3 @@
-<!-- <div flex layout="column">
-    <md-card>
-        <md-card-actions layout="row" layout-align="start center">
-            <div flex><md-button>合计</md-button></div>
-            <div flex></div>
-            <div flex><md-button>{{allFlow | flow1024}}</md-button></div>
-        </md-card-actions>
-        <md-card-actions layout="row" layout-align="start center" ng-repeat="f in flow">
-            <div flex><md-button>{{f.name}}</md-button></div>
-            <div flex><md-button>{{f.port}}</md-button></div>
-            <div flex><md-button>{{f.flow | flow1024}}</md-button></div>
-        </md-card-actions>
-    </md-card>
-</div> -->
 <md-tabs md-selected="tabIndex" md-border-bottom md-dynamic-height>
     <md-tab ng-repeat="server in tabs" label="{{server.name}}">
         <md-content>
@@ -22,7 +8,7 @@
                     <div flex layout="row" layout-align="end center">本周</div>
                     <div flex layout="row" layout-align="end center">本月</div>
                 </md-list-item>
-                <md-list-item ng-repeat="a in server.account | orderBy:  ['-today', '-week', '-month']" ng-if="a.month">
+                <md-list-item ng-repeat="a in server.account | orderBy:  ['-today', '-week', '-month']" ng-if="a.month" md-ink-ripple ng-click="accountPage(server.name, a.port)">
                     <div flex="15" layout="row" layout-align="end center">{{a.port}}</div>
                     <div flex layout="row" layout-align="end center">{{a.today | flow1024}}</div>
                     <div flex layout="row" layout-align="end center">{{a.week | flow1024}}</div>

@@ -102,7 +102,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
 
     })
-    .controller('AdminFlowController', function($scope, $interval, $http) {
+    .controller('AdminFlowController', function($scope, $interval, $http, $state) {
         $scope.setTitle('流量统计');
 
         $scope.tabs = [];
@@ -139,6 +139,13 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
+
+        $scope.accountPage = function(serverName, accountPort) {
+            $state.go('admin.editAccount', {
+                serverName: serverName,
+                accountPort: accountPort
+            });
+        };
     })
 
     .controller('AdminUserController', function($scope, $state, $http) {
