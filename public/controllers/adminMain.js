@@ -1,6 +1,4 @@
 app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval, $stateParams) {
-        
-
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();

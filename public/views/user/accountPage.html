@@ -7,10 +7,11 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
-    <md-list-item class="md-2-line">
+    <md-list-item class="md-3-line">
         <div class="md-list-item-text">
             <h4>剩余流量：{{account.flow | flow1024}}</h4>
-            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</h4>
+            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.expireTime | relativeTime}}）</h4>
+            <h4 ng-if="account.lastActive">最近连接：{{account.lastActive | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.lastActive | relativeTime}}）</h4>
         </div>
     </md-list-item>
     <md-divider></md-divider>

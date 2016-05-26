@@ -45,7 +45,8 @@ exports.getUserInfo = function (req, res) {
                     port: server[0].account.port,
                     password: server[0].account.password,
                     flow: server[0].account.flow,
-                    expireTime: server[0].account.expireTime
+                    expireTime: server[0].account.expireTime,
+                    lastActive: server[0].account.lastActive
                 };
             } else {
                 return null;

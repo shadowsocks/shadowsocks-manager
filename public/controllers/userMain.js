@@ -13,6 +13,27 @@ app.filter('flow1024', function() {
         }
     };
 });
+app.filter('relativeTime', function() {
+    return function(input) {
+        
+        var ret = '';
+        var retTail = '';
+
+        var time = (+new Date()) - (new Date(input));
+        if(time < 0) {time = -time;}
+        else retTail = '前';
+
+        var day = Math.trunc(time/(24 * 3600 * 1000));
+        var hour = Math.trunc(time%(24 * 3600 * 1000)/(3600* 1000));
+        var minute = Math.trunc(time%(24 * 3600 * 1000)%(3600* 1000)/(60 * 1000));
+        if(day) {ret += day + '天';}
+        if(day || hour) {ret += hour + '小时';}
+        if(!day && (hour || minute)) {ret += minute + '分钟';}
+        if(time < (60 * 1000)) {ret = '几秒';}
+
+        return ret + retTail;
+    };
+});
 app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval) {
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
@@ -22,15 +43,34 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             {name: '续费', icon: 'vpn_key', click: 'user.unfinish'}
         ];
         $scope.publicInfo = {
-            lastUpdate: '',
             title: '',              //标题
             menuButtonIcon: 'menu', //菜单或返回按钮
             menuButtonState: '',    //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
             fabButtonIcon: '',
             fabButtonClick: '',
-            isLoading: false
+            isLoading: false,
+            loadingText: '正在加载',
+            loadingError: '',
+            loadingErrorFn: function() {}
         };
+        $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            $scope.publicInfo.title = '';
+            $scope.publicInfo.menuButtonIcon = 'menu';
+            $scope.publicInfo.menuButtonState = '';
+            $scope.publicInfo.menuButtonStateParams = {};
+            $scope.publicInfo.fabButtonIcon = '';
+            $scope.publicInfo.fabButtonClick = '';
+            $scope.publicInfo.isLoading = false;
+            $scope.publicInfo.loadingText = '正在加载';
+            $scope.publicInfo.loadingError = '';
+            $scope.publicInfo.loadingErrorFn = function() {};
+
+            $mdDialog.cancel();
+        });
+        $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        });
+
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/user/loading.html',
             escapeToClose : false,
@@ -41,8 +81,6 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             }
         });
 
-        $scope.loadingText = '正在加载';
-
         $scope.loading = function(isLoading) {
             if(isLoading) {
                 $mdDialog.show(dialog);
@@ -52,10 +90,14 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                         $mdDialog.cancel();
                         waitToCancel();
                         $scope.publicInfo.isLoading = false;
+                        $scope.publicInfo.loadingText = '正在加载';
+                        $scope.publicInfo.loadingError = '';
+                        $scope.publicInfo.loadingErrorFn = function() {};
                     }
                 });
             }
         };
+
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
@@ -95,6 +137,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         ];
 
         $scope.initPublicInfo = function(options) {
+            if($scope.publicInfo.loadingError) {return;}
             if(!options) {options = {
                 loading: true
             };}
@@ -103,10 +146,18 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 if(time < 30 * 1000) {return;}
             }
             $scope.loading(options.loading);
-            $http.get('/user/userInfo').success(function(data) {
+            $http.get('/user/userInfo').then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
-                $scope.publicInfo.user = data;
+                $scope.publicInfo.user = success.data;
+            }, function(error) {
+                if(!options.loading) {return;}
+                $scope.loadingError({
+                    error: '数据加载错误(' + err.status + ')',
+                    fn: function() {
+                        $window.location.reload();
+                    }
+                });
             });
         };
         $scope.initPublicInfo();
