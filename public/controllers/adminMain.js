@@ -1,4 +1,4 @@
-app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval, $stateParams) {
         
 
         $scope.menuButton = function() {
@@ -44,6 +44,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
             $mdDialog.cancel();
         });
+        $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        });
+        
         
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
