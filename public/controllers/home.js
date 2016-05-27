@@ -6,32 +6,26 @@ app.controller('LoginController', function($scope, $http, $state, $mdDialog, $md
 
     $scope.signup = function() {
         if(!$scope.user.username || !$scope.user.password) {return;}
-        $http.post('/user/signup', $scope.user).success(function(data) {
+        $scope.loading(true);
+        $http.post('/user/signup', $scope.user).then(function(success) {
+            $scope.loading(false);
             $state.go('home.signupSuccess');
-        }).error(function(err) {
-            // $scope.showActionToast(err || '发生未知错误');
+        }, function(err) {
+            $scope.loading(true, err.data || '发生未知错误', function() {
+                $scope.loading(false);
+            });
         });
     };
 
     $scope.login = function() {
         $scope.loading(true);
-        $http.post('/user/login', $scope.user).success(function(data) {
+        $http.post('/user/login', $scope.user).then(function(success) {
             $window.location.reload();
-        }).error(function(err) {
-            $scope.loading(true, err || '发生未知错误', function() {
+        }, function(err) {
+            $scope.loading(true, err.data || '发生未知错误', function() {
                 $scope.loading(false);
             });
-            // $scope.showActionToast(err || '发生未知错误');
         });
-    };
-
-    $scope.showActionToast = function(message) {
-        var toast = $mdToast.simple()
-            .textContent(message)
-            .action('确定')
-            .highlightAction(false)
-            .position('bottom right');
-        $mdToast.show(toast);
     };
 
     $scope.passwordKeypress = function(e) {
