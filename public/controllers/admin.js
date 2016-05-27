@@ -162,6 +162,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         }, true);
 
         $scope.accountPage = function(serverName, accountPort) {
+            $scope.setMenuButtonHistoryBack();
             $state.go('admin.editAccount', {
                 serverName: serverName,
                 accountPort: accountPort

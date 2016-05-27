@@ -1,9 +1,9 @@
 var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js']);
 
 app.config(
-    ['$stateProvider', '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {
-
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider) {
+            // $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/admin/index')
                 .otherwise('/admin/index');

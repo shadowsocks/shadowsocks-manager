@@ -2,8 +2,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
                 $mdSidenav('left').toggle();
-            } else {
+            } else if(!$scope.publicInfo.menuButtonHistoryBackState) {
                 $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
+            } else {
+                $state.go($scope.publicInfo.menuButtonHistoryBackState, $scope.publicInfo.menuButtonHistoryBackStateParams);
             }
         };
         $scope.menus = [
@@ -20,15 +22,20 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             menuButtonIcon: 'menu',    //菜单或返回按钮
             menuButtonState: '',       //返回按钮跳转页面，非空时为返回按钮
             menuButtonStateParams: {},
+            menuButtonHistoryBackState: '',
+            menuButtonHistoryBackStateParams: {},
+            menuButtonHistoryBackMark: false,
             fabButtonIcon: '',
             fabButtonClick: '',
             isLoading: false,
             loadingText: '正在加载',
             loadingError: '',
-            loadingErrorFn: function() {}
+            loadingErrorFn: function() {},
         };
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+            // console.log($state.current.name);
+            // console.log($scope.publicInfo);
             $scope.publicInfo.title = '';
             $scope.publicInfo.menuButtonIcon = 'menu';
             $scope.publicInfo.menuButtonState = '';
@@ -41,6 +48,14 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.loadingErrorFn = function() {};
 
             $mdDialog.cancel();
+
+            if(!$scope.publicInfo.menuButtonHistoryBackMark && $scope.publicInfo.menuButtonHistoryBackState) {
+                $scope.publicInfo.menuButtonHistoryBackMark = true;
+            } else if($scope.publicInfo.menuButtonHistoryBackMark) {
+                $scope.publicInfo.menuButtonHistoryBackState = '';
+                $scope.publicInfo.menuButtonHistoryBackStateParams = {};
+                $scope.publicInfo.menuButtonHistoryBackMark = false;
+            }
         });
         $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
         });
@@ -181,6 +196,12 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.publicInfo.menuButtonStateParams = obj;
                 }
             }
+        };
+        $scope.setMenuButtonHistoryBack = function() {
+            var str = $state.current.name;
+            var obj = $state.params;
+            $scope.publicInfo.menuButtonHistoryBackState = str;
+            $scope.publicInfo.menuButtonHistoryBackStateParams = obj;
         };
         $scope.setFabButtonClick = function(fn) {
             $scope.publicInfo.fabButtonClick = fn;
