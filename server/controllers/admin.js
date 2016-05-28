@@ -26,6 +26,7 @@ exports.addServer = function (req, res) {
     var name = req.body.name;
     var ip = req.body.ip;
     var port = req.body.port;
+    var method = req.body.method;
 
     var server = new Server();
     server.name = name;
