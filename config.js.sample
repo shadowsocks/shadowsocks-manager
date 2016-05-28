@@ -5,8 +5,8 @@ exports.conf = {
         name: 'Shadowsocks-Manager'
     },
     admin: {
-        email: 'igyteng@gmail.com',
-        password: '123456'
+        email: 'youremailaddress@gmail.com',
+        password: 'yourpassword'
     },
     express: {
         port: 6003
