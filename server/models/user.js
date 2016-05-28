@@ -25,7 +25,7 @@ var createPassword = function(password, username) {
     return md5(password + username);
 };
 
-var config = require('../config').conf;
+var config = require('../../config').conf;
 
 User.find({}).exec(function (err, users) {
     if(!err && users.length === 0) {
