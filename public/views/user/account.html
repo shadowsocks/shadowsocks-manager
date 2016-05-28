@@ -3,7 +3,7 @@
         <div class="md-list-item-text">
             <h3>节点：{{account.server}}</h3>
             <h4>地址：{{account.address}}:{{account.port}}</h4>
-            <h4>密码：{{account.password}}</h4>
+            <h4>密码：{{account.password}}（{{account.method}}）</h4>
         </div>
         <md-button class="md-secondary" ng-click="accountPage(account)">详情</md-button>
         <md-divider ng-if="!$last"></md-divider>
