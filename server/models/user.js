@@ -25,13 +25,15 @@ var createPassword = function(password, username) {
     return md5(password + username);
 };
 
+var config = require('../config').conf;
+
 User.find({}).exec(function (err, users) {
     if(!err && users.length === 0) {
         var user = new User();
-        user.email = 'igyteng@gmail.com';
+        user.email = config.admin.email;
         user.isAdmin = true;
         user.createTime = new Date();
-        user.password = createPassword('123456', user.email);
+        user.password = createPassword(config.admin.password, user.email);
         user.save();
     }
 });
