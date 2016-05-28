@@ -6,14 +6,15 @@ Shadowsocks with multi user and traffic control.
 Dependencies
 ------------
 
-    Nodejs 4.4
-    Mongo  3.2
+    Nodejs  4.4
+    Mongodb 3.2
 
 Install
 -------
 
     git clone git@github.com:gyteng/shadowsocks-manager.git
     cd shadowsocks-manager
+    npm install -g bower
     npm install
     bower install
 
@@ -26,4 +27,4 @@ Usage
 More
 ----
 
-visit [WiKi](https://github.com/gyteng/shadowsocks-manager/wiki/Install)
+Please visit [WiKi](https://github.com/gyteng/shadowsocks-manager/wiki).
