@@ -31,7 +31,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             loadingText: '正在加载',
             loadingError: '',
             loadingErrorFn: function() {},
-            methods: ['aes-256-cfb', 'table']
+            methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf']
         };
 
 

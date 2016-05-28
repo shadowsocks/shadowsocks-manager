@@ -22,6 +22,7 @@ Usage
 -----
 
     cd shadowsocks-manager
+    mv config.js.sample config.js
     node server
 
 More
