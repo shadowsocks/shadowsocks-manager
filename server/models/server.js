@@ -5,6 +5,7 @@ var serverSchema = new Schema({
     name: {type:String, required:true, unique:true},
     ip: String,
     port: Number,
+    method: String,
     account: [new Schema({
         port: Number,
         password: String,

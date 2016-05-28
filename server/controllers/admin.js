@@ -43,11 +43,13 @@ exports.editServer = function(req, res) {
     var name = req.body.name;
     var ip = req.body.ip;
     var port = req.body.port;
+    var method = req.body.method;
 
     Server.findOneAndUpdate({name: name}, {
         $set: {
             ip: ip,
-            port: port
+            port: port,
+            method: method
         }
     }, {new: true}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}

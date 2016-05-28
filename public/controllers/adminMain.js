@@ -31,7 +31,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             loadingText: '正在加载',
             loadingError: '',
             loadingErrorFn: function() {},
+            methods: ['aes-256-cfb', 'table']
         };
+
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             // console.log($state.current.name);

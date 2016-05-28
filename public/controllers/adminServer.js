@@ -25,7 +25,8 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $http.post('/admin/server', {
                 name: $scope.server.name,
                 ip: $scope.server.ip,
-                port: $scope.server.port
+                port: $scope.server.port,
+                method: $scope.server.method
             }).then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.servers.push(success.data);
@@ -59,7 +60,8 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $http.put('/admin/server', {
                 name: $scope.server.name,
                 ip: $scope.server.ip,
-                port: $scope.server.port
+                port: $scope.server.port,
+                method: $scope.server.method
             }).then(function(success) {
                 $scope.loading(false);
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
@@ -149,7 +151,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $http.post('/admin/account', {
                 name: $stateParams.serverName,
                 port: $scope.account.port,
-                password: $scope.account.password,
+                password: $scope.account.password
             }).then(function(success) {
                 var server = $scope.publicInfo.servers.filter(function(f) {
                     return f.name === $stateParams.serverName;
