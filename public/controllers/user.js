@@ -38,7 +38,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             if(!$scope.account) {
                 return $state.go('user.index');
             }
-            $scope.qrCode = 'ss://' + b64EncodeUnicode('aes-256-cfb:' + $scope.account.password + '@' + $scope.account.address + ':' + $scope.account.port);
+            $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.account.method + ':' + $scope.account.password + '@' + $scope.account.address + ':' + $scope.account.port);
         };
         $scope.init();
     })

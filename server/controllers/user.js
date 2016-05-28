@@ -43,6 +43,7 @@ exports.getUserInfo = function (req, res) {
                     server: server[0].name,
                     address: server[0].ip,
                     port: server[0].account.port,
+                    method: server[0].method,
                     password: server[0].account.password,
                     flow: server[0].account.flow,
                     expireTime: server[0].account.expireTime,

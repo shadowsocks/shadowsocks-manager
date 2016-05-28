@@ -59,7 +59,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return f.port === +$stateParams.accountPort;
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
-            $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.server.method + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
+            $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.server.method + ':' + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
