@@ -70,13 +70,13 @@ exports.changePassword = function(req, res) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!user) {return res.status(401).end('找不到对应的用户');}
         if(createPassword(req.body.oldPassword,req.session.user) !== user.password) {return res.status(401).end('原密码错误');}
-        User.update({email: req.session.user}, {
+        User.findOneAndUpdate({email: req.session.user}, {
             $set: {
                 password: createPassword(req.body.newPassword, req.session.user)
             }
         }).exec(function(err, data) {
             if(err) {return res.status(500).end('数据库错误');}
-            if(!data.nModified) {return res.status(401).end('找不到对应的用户');}
+            if(!data) {return res.status(401).end('找不到对应的用户');}
             req.session.destroy();
             return res.send(data);
         });

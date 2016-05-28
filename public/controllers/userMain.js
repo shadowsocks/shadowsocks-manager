@@ -97,6 +97,16 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 });
             }
         };
+        /*
+        options: {
+            error
+            fn
+        }
+        */
+        $scope.loadingError = function(options) {
+            $scope.publicInfo.loadingError = options.error;
+            $scope.publicInfo.loadingErrorFn = options.fn;
+        };
 
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
