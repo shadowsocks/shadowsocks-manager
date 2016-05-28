@@ -189,6 +189,7 @@ exports.addUserAccount = function(req, res) {
     var name = req.body.name;
     var serverName = req.body.serverName;
     var port = req.body.port;
+    if(!name || !serverName || !port) {return res.status(400).end('缺少必要的字段');}
     User.findOneAndUpdate({email: name}, {
         $addToSet: {
             account: {
@@ -207,6 +208,7 @@ exports.deleteUserAccount = function(req, res) {
     var name = req.query.name;
     var serverName = req.query.server;
     var port = req.query.port;
+    if(!name || !serverName || !port) {return res.status(400).end('缺少必要的字段');}
     User.findOneAndUpdate({email: name}, {
         $pull: {
             account: {
