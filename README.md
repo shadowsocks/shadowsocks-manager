@@ -13,8 +13,8 @@ Install
 -------
 
     git clone git@github.com:gyteng/shadowsocks-manager.git
-    cd shadowsocks-manager
     npm install -g bower
+    cd shadowsocks-manager
     npm install
     bower install
 
