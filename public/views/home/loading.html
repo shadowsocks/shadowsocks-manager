@@ -6,9 +6,12 @@
 <div ng-show="loadingError" layout="column" layout-padding style="height: 120px;" layout-align="center center">
     <div flex="15"></div>
     <div flex>{{loadingError}}</div>
-    <div flex>
+    <div flex layout="row">
         <md-button class="md-secondary md-primary" ng-click="loadingErrorFn()">
             确定
+        </md-button>
+        <md-button ng-if="customButton" class="md-secondary md-primary" ng-click="customButtonFn()">
+            {{customButton}}
         </md-button>
     </div>
     <div flex="5"></div>

@@ -5,6 +5,7 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('auth');
 
 var User = mongoose.model('User');
+var mail = require('./mail');
 
 var crypto = require('crypto');
 var md5 = function(text) {
@@ -26,6 +27,8 @@ exports.signup = function(req, res) {
         var user = new User();
         user.email = email;
         user.password = createPassword(password, email);
+        user.signupIp = req.connection.remoteAddress;
+        user.activeKey = createPassword(email, new Date());
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误');}
             return res.send('success');
@@ -45,6 +48,9 @@ exports.login = function(req, res) {
             logger.warn('[' + email + '][' + password + ']登陆失败');
             return res.status(401).end('用户名或密码错误');
         }
+        if(!user.isActive) {
+            return res.status(401).end('该用户的邮箱未验证');
+        }
         req.session.user = email;
         req.session.isAdmin = user.isAdmin;
         req.session.save();
@@ -56,4 +62,22 @@ exports.login = function(req, res) {
 exports.logout = function(req, res) {
     req.session.destroy();
     res.send('logout');
+};
+
+exports.sendEmail = function(req, res) {
+    var username = req.body.username;
+    mail.addMail(username);
+    res.send({});
+};
+
+exports.activeEmail = function(req, res) {
+    var activeKey = req.body.activeKey;
+    console.log(activeKey);
+    User.findOneAndUpdate({
+        isActive: false,
+        activeKey: activeKey
+    }).exec(function(err, data) {
+        res.send(data);
+    });
+    
 };

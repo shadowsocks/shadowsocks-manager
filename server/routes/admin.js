@@ -3,6 +3,7 @@ var app = global.app;
 var admin = require('../controllers/admin');
 var auth = require('../controllers/auth');
 var later = require('../controllers/cron');
+// var mail = require('../controllers/mail');
 
 app.post('/admin/server', auth.isAdmin, admin.addServer);
 app.get('/admin/server', auth.isAdmin, admin.getServers);

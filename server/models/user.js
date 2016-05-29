@@ -10,6 +10,10 @@ var userSchema = new Schema({
     email: {type:String, required:true, unique:true},
     password: String,
     account: [accountSchema],
+    signupIp: String,
+    isActive: {type:Boolean, default: false},
+    activeKey: String,
+    sendEmailTime: Date,
     isAdmin: {type:Boolean, default: false},
     createTime: {type:Date, default: new Date()}
 });
@@ -33,6 +37,7 @@ User.find({}).exec(function (err, users) {
         user.email = config.admin.email;
         user.isAdmin = true;
         user.createTime = new Date();
+        user.isActive = true;
         user.password = createPassword(config.admin.password, user.email);
         user.save();
     }

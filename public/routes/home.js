@@ -21,17 +21,15 @@ app.config(
                     templateUrl: '/public/views/home/index.html'
                 })
                 .state('home.signupSuccess', {
-                    url: '/signupSuccess',
+                    url: '/info',
                     controller: 'SignupSuccessController',
                     templateUrl: '/public/views/home/signupSuccess.html'
                 })
-                // .state('index.tab2', {
-                //     url: '/tab2',
-                //     controller: function($scope) {
-
-                //     },
-                //     templateUrl: '/public/views/tab2.html'
-                // })
+                .state('home.active', {
+                    url: '/active/:activeKey',
+                    controller: 'LoginActiveController',
+                    templateUrl: '/public/views/home/active.html'
+                })
             ;
         }
     ]

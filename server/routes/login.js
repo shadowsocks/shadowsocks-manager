@@ -39,3 +39,6 @@ app.get('/', function(req, res) {
 app.post('/user/signup', home.signup);
 app.post('/user/login', home.login);
 app.post('/user/logout', home.logout);
+
+app.post('/home/email', home.sendEmail);
+app.post('/home/active', home.activeEmail);

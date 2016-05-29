@@ -26,8 +26,9 @@
     <% controllers.forEach(function(controller) { %>
     <script src="<%= controller %>"></script>
     <% }); %>
-
-    <div ui-view></div>
+    <div ng-controller="MainController">
+        <div ui-view></div>
+    </div>
 </body>
 
 </html>

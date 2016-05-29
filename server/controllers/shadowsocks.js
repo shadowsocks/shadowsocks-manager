@@ -71,6 +71,7 @@ var startSocket = function(server) {
                     ho.name = server.name;
                     ho.port = +f;
                     ho.flow = flow[f];
+                    ho.time = new Date();
                     ho.save();
 
                     Server.findOneAndUpdate({
