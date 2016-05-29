@@ -91,8 +91,8 @@ exports.express = function(cb) {
     app.use('/libs', express.static('./bower_components'));
     app.use('/public', express.static('./public'));
 
-    require('./routes/login');
-    require('./routes/admin');
+    // require('./routes/login');
+    // require('./routes/admin');
 
     logger.info('开始加载Express路由配置文件');
     fs.readdir('./server/routes', function(err, files) {
