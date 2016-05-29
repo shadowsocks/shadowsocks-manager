@@ -75,8 +75,16 @@ exports.activeEmail = function(req, res) {
     console.log(activeKey);
     User.findOneAndUpdate({
         isActive: false,
-        activeKey: activeKey
+        activeKey: activeKey,
+        sendEmailTime: {$lt: new Date(+new Date() - 15 * 60 * 1000)}
+    }, {
+        $set: {
+            isActive: true
+        }
     }).exec(function(err, data) {
+        if(err || !data) {
+            return res.status(403).end();
+        }
         res.send(data);
     });
     

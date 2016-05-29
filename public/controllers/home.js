@@ -104,6 +104,9 @@ app.controller('MainController', function($scope) {
         $http.post('/home/active', {activeKey: $stateParams.activeKey}).then(function(success) {
             $scope.publicInfo.message = '激活成功！';
             $state.go('home.signupSuccess');
+        }, function(error) {
+            $scope.publicInfo.message = '激活失败！';
+            $state.go('home.signupSuccess');
         });
     })
 ;
