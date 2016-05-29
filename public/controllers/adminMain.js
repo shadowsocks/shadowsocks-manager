@@ -176,7 +176,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.initPublicInfo({type: ['server','user','flow'], loading: true});
         $interval(function() {
-            $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
+            }
         }, 10 * 1000);
         document.addEventListener('visibilitychange', function(){
             if(document.visibilityState === 'visible') {

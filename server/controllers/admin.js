@@ -227,13 +227,17 @@ exports.deleteUserAccount = function(req, res) {
 exports.getFlow = function(req, res) {
     var aggregate = [];
 
-    var date = moment(new Date()).add(-32, 'd').hour(0).minute(0).second(0).toDate();
+    var now = new Date();
+
+    var date = moment(now).add(-32, 'd').hour(0).minute(0).second(0).toDate();
 
     var time = {
-        today: moment(new Date()).hour(0).minute(0).second(0).toDate(),
-        week: moment(new Date()).day(0).hour(0).minute(0).second(0).toDate(),
-        month: moment(new Date()).date(1).hour(0).minute(0).second(0).toDate(),
+        today: moment(now).hour(0).minute(0).second(0).toDate(),
+        week: moment(now).day(0).hour(0).minute(0).second(0).toDate(),
+        month: moment(now).date(1).hour(0).minute(0).second(0).toDate(),
     };
+    console.log(now);
+    console.log(time);
     aggregate.push({
         $match: {
             time: {$gt: date}
