@@ -4,6 +4,8 @@ var config = require('../config').conf;
 var mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
 mongoose.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name);
+var moment = require('moment-timezone');
+moment().tz('Asia/Shanghai').format();
 
 var fs = require('fs');
 
