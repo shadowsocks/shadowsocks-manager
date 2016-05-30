@@ -84,8 +84,6 @@ exports.express = function(cb) {
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-    
-    // app.use(log4js.connectLogger(loggerExpress));
 
     var session = require('express-session');
     var MongoStore = require('connect-mongo')(session);
