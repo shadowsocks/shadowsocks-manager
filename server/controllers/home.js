@@ -17,10 +17,8 @@ var createPassword = function(password, username) {
 };
 
 exports.signup = function(req, res) {
-
     var email = req.body.username;
     var password = req.body.password;
-
     User.findOne({email: email}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库操作错误');}
         else if(data) {return res.status(403).end('该用户已注册');}
@@ -31,6 +29,7 @@ exports.signup = function(req, res) {
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误');}
             mail.addMail(email);
+            logger.info('[' + email + ']注册成功');
             return res.send('success');
         });
     });
