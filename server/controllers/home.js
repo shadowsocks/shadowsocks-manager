@@ -28,9 +28,9 @@ exports.signup = function(req, res) {
         user.email = email;
         user.password = createPassword(password, email);
         user.signupIp = req.connection.remoteAddress;
-        user.activeKey = createPassword(email, new Date());
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误');}
+            mail.addMail(email);
             return res.send('success');
         });
     });

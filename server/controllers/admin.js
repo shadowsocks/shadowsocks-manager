@@ -268,7 +268,6 @@ exports.getFlow = function(req, res) {
         }
     });
     HistoryOriginal.aggregate(aggregate).exec(function(err, data) {
-        console.log((new Date() - now) + ' ms');
         if(err) {return res.status(500).end('数据库错误');}
         res.send(data);
     });
