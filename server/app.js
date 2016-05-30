@@ -11,6 +11,8 @@ var fs = require('fs');
 
 var log4js = require('log4js');
 var logger = log4js.getLogger('server');
+var loggerExpress = log4js.getLogger('express');
+app.use(log4js.connectLogger(loggerExpress));
 
 var log4js = exports.log4js = function(cb) {
     var log4js = require('log4js');
@@ -53,6 +55,12 @@ var log4js = exports.log4js = function(cb) {
             pattern: '-yyyy-MM-dd',
             alwaysIncludePattern: true,
             category: 'auth'
+        }, {
+            type: 'dateFile',
+            filename: 'logs/express.log',
+            pattern: '-yyyy-MM-dd',
+            alwaysIncludePattern: true,
+            category: 'express'
         }]
     });
     cb(null);
@@ -71,11 +79,13 @@ exports.db = function (cb) {
     });
 };
 
-exports.express = function(cb) {
 
+exports.express = function(cb) {
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
+    
+    // app.use(log4js.connectLogger(loggerExpress));
 
     var session = require('express-session');
     var MongoStore = require('connect-mongo')(session);
