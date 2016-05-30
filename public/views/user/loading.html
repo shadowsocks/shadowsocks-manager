@@ -1,14 +1,18 @@
-<div ng-hide="publicInfo.loadingError" layout="column" layout-padding style="height: 90px;" layout-align="center center">
+<div ng-show="publicInfo.loadingText" layout="column" layout-padding style="height: 110px;" layout-align="center center">
     <div flex><md-progress-circular md-mode="indeterminate"></md-progress-circular></div>
-    <div flex="30"></div>
-    <div flex>{{publicInfo.loadingText}}</div>
-</div>
-<div ng-show="publicInfo.loadingError" layout="column" layout-padding style="height: 120px;" layout-align="center center">
     <div flex="15"></div>
-    <div flex>{{publicInfo.loadingError}}</div>
+    <div flex>{{publicInfo.loadingText}}</div>
+    <div flex="5"></div>
+</div>
+<div ng-show="publicInfo.MessageData" layout="column" layout-padding style="height: 120px;" layout-align="center center">
+    <div flex="15"></div>
+    <div flex>{{publicInfo.MessageData}}</div>
     <div flex>
-        <md-button class="md-secondary md-primary" ng-click="publicInfo.loadingErrorFn()">
-            确定
+        <md-button ng-show="publicInfo.buttonLeft" class="md-secondary" ng-click="publicInfo.buttonLeft[1]()">
+            {{publicInfo.buttonLeft[0] || '取消'}}
+        </md-button>
+        <md-button ng-show="publicInfo.buttonRight" class="md-secondary md-primary" ng-click="publicInfo.buttonRight[1]()">
+            {{publicInfo.buttonRight[0] || '确定'}}
         </md-button>
     </div>
     <div flex="5"></div>

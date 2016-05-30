@@ -47,16 +47,29 @@ app.controller('UserIndexController', function($scope, $http, $state) {
 
         $scope.password = {};
         $scope.changePassword = function() {
-            $scope.loading(true);
+            $scope.loading({
+                isLoading: 1,
+                loadingText: '正在加载'
+            });
             $http.put('/api/user/password', $scope.password)
             .then(function(success) {
-                $scope.loadingError({error: '修改密码成功，点确定重新登录', fn:function() {
-                    $window.location.reload();
-                }});
+                $scope.loading({
+                    isLoading: -1,
+                    loadingText: '',
+                    MessageData: '修改密码成功，点击确定重新登录',
+                    buttonRight: ['确定', function() {
+                        $window.location.reload();
+                    }]
+                });
             }, function(error) {
-                $scope.loadingError({error: '修改密码失败', fn:function() {
-                    $scope.loading(false);
-                }});
+                $scope.loading({
+                    isLoading: -1,
+                    loadingText: '',
+                    MessageData: '修改密码失败(' + error.status + ')',
+                    buttonRight: ['确定', function() {
+                        $scope.loading({isLoading: 0});
+                    }]
+                });
             });
         };
     })

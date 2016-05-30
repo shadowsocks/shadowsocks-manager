@@ -34,7 +34,7 @@ app.filter('relativeTime', function() {
         return ret + retTail;
     };
 });
-app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval) {
+app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval, $timeout) {
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
@@ -50,9 +50,11 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             fabButtonIcon: '',
             fabButtonClick: '',
             isLoading: false,
-            loadingText: '正在加载',
-            loadingError: '',
-            loadingErrorFn: function() {}
+            loadingText: '',
+            MessageTitle: '',
+            MessageData: '',
+            buttonLeft: '',
+            buttonRight: '',
         };
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             $scope.publicInfo.title = '';
@@ -62,9 +64,11 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             $scope.publicInfo.fabButtonIcon = '';
             $scope.publicInfo.fabButtonClick = '';
             $scope.publicInfo.isLoading = false;
-            $scope.publicInfo.loadingText = '正在加载';
-            $scope.publicInfo.loadingError = '';
-            $scope.publicInfo.loadingErrorFn = function() {};
+            $scope.publicInfo.loadingText = '';
+            $scope.publicInfo.MessageTitle = '';
+            $scope.publicInfo.MessageData = '';
+            $scope.publicInfo.buttonLeft = '';
+            $scope.publicInfo.buttonRight = '';
 
             $mdDialog.cancel();
         });
@@ -81,31 +85,49 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             }
         });
 
-        $scope.loading = function(isLoading) {
-            if(isLoading) {
-                $mdDialog.show(dialog);
-            } else {
-                var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
-                    if($scope.publicInfo.isLoading) {
-                        $mdDialog.cancel();
-                        waitToCancel();
-                        $scope.publicInfo.isLoading = false;
-                        $scope.publicInfo.loadingText = '正在加载';
-                        $scope.publicInfo.loadingError = '';
-                        $scope.publicInfo.loadingErrorFn = function() {};
-                    }
-                });
-            }
-        };
         /*
         options: {
-            error
-            fn
+            isLoading     0, 1, -1
+            loadingText
+            MessageTitle
+            MessageData
+            buttonLeft
+            buttonRight
         }
         */
-        $scope.loadingError = function(options) {
-            $scope.publicInfo.loadingError = options.error;
-            $scope.publicInfo.loadingErrorFn = options.fn;
+        $scope.loading = function(options) {
+            if(!options) {options = {};}
+
+            $scope.publicInfo.loadingText = options.loadingText;
+            $scope.publicInfo.MessageTitle = options.MessageTitle;
+            $scope.publicInfo.MessageData = options.MessageData;
+            $scope.publicInfo.buttonLeft = options.buttonLeft;
+            $scope.publicInfo.buttonRight = options.buttonRight;
+
+            var isLoading = options.isLoading;
+            if(isLoading === 1) {
+                $mdDialog.show(dialog);
+            } else if(isLoading === 0) {
+                var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
+                    if($scope.publicInfo.isLoading) {
+                        $timeout(function() {
+                            $mdDialog.cancel();
+                            $scope.publicInfo.isLoading = false;
+                        $scope.publicInfo.loadingText = '';
+                        $scope.publicInfo.MessageTitle = '';
+                        $scope.publicInfo.MessageData = '';
+                        $scope.publicInfo.buttonLeft = '';
+                        $scope.publicInfo.buttonRight = '';
+                        }, 250);
+                        
+                        waitToCancel();
+                    }
+                });
+            } else if(isLoading === -1) {
+
+            } else {
+                return;
+            }
         };
 
         $scope.menuButton = function() {
@@ -147,32 +169,46 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         ];
 
         $scope.initPublicInfo = function(options) {
-            if($scope.publicInfo.loadingError) {return;}
+            if($scope.publicInfo.MessageData) {return;}
             if(!options) {options = {
                 loading: true
             };}
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
-                if(time < 30 * 1000) {return;}
+                if(time < 60 * 1000) {return;}
             }
-            $scope.loading(options.loading);
+            $scope.loading({
+                isLoading: options.loading? 1: 0,
+                loadingText: '正在加载'
+            });
             $http.get('/api/user/userInfo').then(function(success) {
-                $scope.loading(false);
+                $scope.loading({
+                    isLoading: 0,
+                });
                 $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = success.data;
             }, function(error) {
                 if(!options.loading) {return;}
-                $scope.loadingError({
-                    error: '数据加载错误(' + err.status + ')',
-                    fn: function() {
+                $scope.loading({
+                    isLoading: -1,
+                    loadingText: '',
+                    MessageData: '数据加载错误(' + error.status + ')',
+                    buttonRight: ['确定', function() {
                         $window.location.reload();
-                    }
+                    }]
                 });
             });
         };
         $scope.initPublicInfo();
         $interval(function() {
-            $scope.initPublicInfo({loading: false});
-        }, 10 * 1000);
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({loading: false});
+            }
+        }, 25 * 1000);
+        document.addEventListener('visibilitychange', function(){
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({loading: false});
+            }
+        });
     })
 ;
