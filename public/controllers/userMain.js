@@ -110,16 +110,15 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             } else if(isLoading === 0) {
                 var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
                     if($scope.publicInfo.isLoading) {
+                        $mdDialog.cancel();
                         $timeout(function() {
-                            $mdDialog.cancel();
                             $scope.publicInfo.isLoading = false;
-                        $scope.publicInfo.loadingText = '';
-                        $scope.publicInfo.MessageTitle = '';
-                        $scope.publicInfo.MessageData = '';
-                        $scope.publicInfo.buttonLeft = '';
-                        $scope.publicInfo.buttonRight = '';
-                        }, 250);
-                        
+                            $scope.publicInfo.loadingText = '';
+                            $scope.publicInfo.MessageTitle = '';
+                            $scope.publicInfo.MessageData = '';
+                            $scope.publicInfo.buttonLeft = '';
+                            $scope.publicInfo.buttonRight = '';
+                        }, 200);
                         waitToCancel();
                     }
                 });
