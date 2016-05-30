@@ -1,7 +1,7 @@
 var app = global.app;
 var home = require('../controllers/home');
 
-app.get('/', function(req, res) {
+var render = function(req, res) {
     if(!req.session.user) {
         return res.render('login', {
             'controllers': [
@@ -33,12 +33,17 @@ app.get('/', function(req, res) {
             ]
         });
     }
-    
-});
+};
 
-app.post('/user/signup', home.signup);
-app.post('/user/login', home.login);
-app.post('/user/logout', home.logout);
 
-app.post('/home/email', home.sendEmail);
-app.post('/home/active', home.activeEmail);
+app.get('/', render);
+app.get(/^\/user\/[\s\S]/, render);
+app.get(/^\/home\/[\s\S]/, render);
+app.get(/^\/admin\/[\s\S]/, render);
+
+app.post('/api/home/signup', home.signup);
+app.post('/api/home/login', home.login);
+app.post('/api/home/logout', home.logout);
+
+app.post('/api/home/email', home.sendEmail);
+app.post('/api/home/active', home.activeEmail);

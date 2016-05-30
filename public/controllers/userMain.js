@@ -140,7 +140,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         };
         $scope.bottomMenus = [
             {name: '退出登录', icon: 'exit_to_app', click: function() {
-                $http.post('/user/logout').success(function(data) {
+                $http.post('/api/home/logout').success(function(data) {
                     $window.location.reload();
                 });
             }}
@@ -156,7 +156,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 if(time < 30 * 1000) {return;}
             }
             $scope.loading(options.loading);
-            $http.get('/user/userInfo').then(function(success) {
+            $http.get('/api/user/userInfo').then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = success.data;

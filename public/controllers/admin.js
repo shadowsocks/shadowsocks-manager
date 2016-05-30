@@ -68,7 +68,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
 
         $scope.setFlow = function(type, flow) {
             $scope.loading(true);
-            $http.put('/admin/account', {
+            $http.put('/api/admin/account', {
                 type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
@@ -87,7 +87,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.setTime = function(type, time) {
             $scope.loading(true);
-            $http.put('/admin/account', {
+            $http.put('/api/admin/account', {
                 type: type,
                 name: $stateParams.serverName,
                 port: $stateParams.accountPort,
@@ -214,7 +214,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 .ok('确定')
                 .cancel('取消');
             $mdDialog.show(confirm).then(function() {
-                $http.delete('/admin/userAccount', {params: {
+                $http.delete('/api/admin/userAccount', {params: {
                     name: $stateParams.userName,
                     server: account.server,
                     port: account.port
@@ -257,7 +257,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.addAccount = function() {
             if(!$scope.account) {return;}
             $scope.accountObj = JSON.parse($scope.account);
-            $http.post('/admin/userAccount', {
+            $http.post('/api/admin/userAccount', {
                 name: $stateParams.userName,
                 serverName: $scope.serverObj.name,
                 port: $scope.accountObj.port

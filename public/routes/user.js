@@ -1,9 +1,9 @@
 var app = angular.module('UserApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr']);
 
 app.config(
-    ['$stateProvider', '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {
-
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider) {
+            $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/user/index')
                 .otherwise('/user/index');

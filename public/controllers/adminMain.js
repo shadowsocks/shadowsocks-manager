@@ -122,17 +122,17 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.loading(options.loading);
             var promises = [];
             if(options.type.indexOf('server') >= 0) {
-                promises[0] = $http.get('/admin/server');
+                promises[0] = $http.get('/api/admin/server');
             } else {
                 promises[0] = undefined;
             }
             if(options.type.indexOf('user') >= 0) {
-                promises[1] = $http.get('/admin/user');
+                promises[1] = $http.get('/api/admin/user');
             } else {
                 promises[1] = undefined;
             }
             if(options.type.indexOf('flow') >= 0) {
-                promises[2] = $http.get('/admin/flow');
+                promises[2] = $http.get('/api/admin/flow');
             } else {
                 promises[2] = undefined;
             }
@@ -216,7 +216,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
         $scope.bottomMenus = [
             {name: '退出登录', icon: 'exit_to_app', click: function() {
-                $http.post('/user/logout').success(function(data) {
+                $http.post('/api/home/logout').success(function(data) {
                     $window.location.reload();
                 });
             }}

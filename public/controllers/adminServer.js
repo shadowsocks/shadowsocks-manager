@@ -22,7 +22,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
         $scope.server = {};
         $scope.addServer = function() {
             $scope.loading(true);
-            $http.post('/admin/server', {
+            $http.post('/api/admin/server', {
                 name: $scope.server.name,
                 ip: $scope.server.ip,
                 port: $scope.server.port,
@@ -57,7 +57,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
 
         $scope.addServer = function() {
             $scope.loading(true);
-            $http.put('/admin/server', {
+            $http.put('/api/admin/server', {
                 name: $scope.server.name,
                 ip: $scope.server.ip,
                 port: $scope.server.port,
@@ -104,7 +104,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 .cancel('取消');
             $mdDialog.show(confirm).then(function() {
                 $scope.loading(true);
-                return $http.delete('/admin/server', {params: {
+                return $http.delete('/api/admin/server', {params: {
                     name: serverName
                 }});
             }).then(function() {
@@ -125,7 +125,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 .ok('确定')
                 .cancel('取消');
             $mdDialog.show(confirm).then(function() {
-                $http.delete('/admin/account', {params: {
+                $http.delete('/api/admin/account', {params: {
                     name: $stateParams.serverName,
                     port: port
                 }}).success(function(data) {
@@ -148,7 +148,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
         $scope.account = {};
         $scope.addAccount = function() {
             $scope.loading(true);
-            $http.post('/admin/account', {
+            $http.post('/api/admin/account', {
                 name: $stateParams.serverName,
                 port: $scope.account.port,
                 password: $scope.account.password

@@ -5,21 +5,21 @@ var auth = require('../controllers/auth');
 var later = require('../controllers/cron');
 // var mail = require('../controllers/mail');
 
-app.post('/admin/server', auth.isAdmin, admin.addServer);
-app.get('/admin/server', auth.isAdmin, admin.getServers);
-app.put('/admin/server', auth.isAdmin, admin.editServer);
-app.delete('/admin/server', auth.isAdmin, admin.deleteServer);
+app.post('/api/admin/server', auth.isAdmin, admin.addServer);
+app.get('/api/admin/server', auth.isAdmin, admin.getServers);
+app.put('/api/admin/server', auth.isAdmin, admin.editServer);
+app.delete('/api/admin/server', auth.isAdmin, admin.deleteServer);
 
-app.post('/admin/account', auth.isAdmin, admin.addAccount);
-app.put('/admin/account', auth.isAdmin, admin.editAccount);
-app.delete('/admin/account', auth.isAdmin, admin.deleteAccount);
+app.post('/api/admin/account', auth.isAdmin, admin.addAccount);
+app.put('/api/admin/account', auth.isAdmin, admin.editAccount);
+app.delete('/api/admin/account', auth.isAdmin, admin.deleteAccount);
 
-app.post('/admin/userAccount', auth.isAdmin, admin.addUserAccount);
-app.delete('/admin/userAccount', auth.isAdmin, admin.deleteUserAccount);
+app.post('/api/admin/userAccount', auth.isAdmin, admin.addUserAccount);
+app.delete('/api/admin/userAccount', auth.isAdmin, admin.deleteUserAccount);
 
-app.get('/admin/user', auth.isAdmin, admin.getUsers);
+app.get('/api/admin/user', auth.isAdmin, admin.getUsers);
 
-app.get('/admin/flow',
+app.get('/api/admin/flow',
     auth.isAdmin,
     admin.getFlow
 );

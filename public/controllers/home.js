@@ -10,7 +10,7 @@ app.controller('MainController', function($scope) {
         $scope.signup = function() {
             if(!$scope.user.username || !$scope.user.password) {return;}
             $scope.loading(true);
-            $http.post('/user/signup', $scope.user).then(function(success) {
+            $http.post('/api/home/signup', $scope.user).then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.message = '注册成功！';
                 $state.go('home.signupSuccess');
@@ -23,14 +23,14 @@ app.controller('MainController', function($scope) {
 
         $scope.login = function() {
             $scope.loading(true);
-            $http.post('/user/login', $scope.user).then(function(success) {
+            $http.post('/api/home/login', $scope.user).then(function(success) {
                 $window.location.reload();
             }, function(err) {
                 if(err.data === '该用户的邮箱未验证') {
                     $scope.customButton = '重发邮件';
                     $scope.customButtonFn = function() {
                         $scope.customButton = '';
-                        $http.post('/home/email', {username: $scope.user.username});
+                        $http.post('/api/home/email', {username: $scope.user.username});
                         $scope.loading(false);
                         $scope.customButtonFn = function() {};
                     };
@@ -101,7 +101,7 @@ app.controller('MainController', function($scope) {
         }, 1000);
     })
     .controller('LoginActiveController', function($scope, $http, $interval, $state, $stateParams) {
-        $http.post('/home/active', {activeKey: $stateParams.activeKey}).then(function(success) {
+        $http.post('/api/home/active', {activeKey: $stateParams.activeKey}).then(function(success) {
             $scope.publicInfo.message = '激活成功！';
             $state.go('home.signupSuccess');
         }, function(error) {

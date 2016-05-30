@@ -2,7 +2,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
         $scope.setMenuButton('default');
         $scope.logout = function() {
-            $http.post('/user/logout');
+            $http.post('/api/home/logout');
         };
     })
     .controller('UserAccountController', function($scope, $http, $state) {
@@ -48,7 +48,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.password = {};
         $scope.changePassword = function() {
             $scope.loading(true);
-            $http.put('/user/password', $scope.password)
+            $http.put('/api/user/password', $scope.password)
             .then(function(success) {
                 $scope.loadingError({error: '修改密码成功，点确定重新登录', fn:function() {
                     $window.location.reload();
