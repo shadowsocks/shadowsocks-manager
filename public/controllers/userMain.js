@@ -111,14 +111,14 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
                     if($scope.publicInfo.isLoading) {
                         $mdDialog.cancel();
-                        $timeout(function() {
+                        // $timeout(function() {
                             $scope.publicInfo.isLoading = false;
                             $scope.publicInfo.loadingText = '';
                             $scope.publicInfo.MessageTitle = '';
                             $scope.publicInfo.MessageData = '';
                             $scope.publicInfo.buttonLeft = '';
                             $scope.publicInfo.buttonRight = '';
-                        }, 200);
+                        // }, 200);
                         waitToCancel();
                     }
                 });
