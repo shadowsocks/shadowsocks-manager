@@ -1,9 +1,9 @@
 var app = angular.module('LoginApp', ['ngMaterial', 'ui.router', 'ngMessages']);
 
 app.config(
-    ['$stateProvider', '$urlRouterProvider',
-        function($stateProvider, $urlRouterProvider) {
-
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider) {
+            $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/home/index')
                 .otherwise('/home/index');

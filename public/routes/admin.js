@@ -3,7 +3,7 @@ var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', '
 app.config(
     ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         function($stateProvider, $urlRouterProvider, $locationProvider) {
-            // $locationProvider.html5Mode(true);
+            $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/admin/index')
                 .otherwise('/admin/index');
