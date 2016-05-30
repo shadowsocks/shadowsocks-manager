@@ -50,20 +50,23 @@
                     </md-button>
                     <div>{{publicInfo.title}}</div>
                     <span flex></span>
-                    <md-button class="md-icon-button" aria-label="more">
+                    <!-- <md-button class="md-icon-button" aria-label="more">
                         <i class="material-icons">more_vert</i>
-                    </md-button>
+                    </md-button> -->
 
-                    <!-- <md-menu>
+                    <md-menu>
                         <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                            <md-icon md-menu-origin md-svg-icon="call:email"></md-icon>
+                            <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
                         </md-button>
                         <md-menu-content width="4">
                             <md-menu-item>
-                                <md-button ng-click="ctrl.announceClick($index)"> <span md-menu-align-target>Option</span> 123456 </md-button>
+                                <md-button ng-click="">
+                                    <md-icon md-menu-align-target class="material-icons">face</md-icon>
+                                    帮助
+                                </md-button>
                             </md-menu-item>
                         </md-menu-content>
-                    </md-menu> -->
+                    </md-menu>
 
 
                 </div>

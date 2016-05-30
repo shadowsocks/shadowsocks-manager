@@ -71,7 +71,6 @@ exports.sendEmail = function(req, res) {
 
 exports.activeEmail = function(req, res) {
     var activeKey = req.body.activeKey;
-    console.log(activeKey);
     User.findOneAndUpdate({
         isActive: false,
         activeKey: activeKey,
@@ -81,9 +80,11 @@ exports.activeEmail = function(req, res) {
             isActive: true
         }
     }).exec(function(err, data) {
+
         if(err || !data) {
             return res.status(403).end();
         }
+        logger.info('[' + email + ']激活成功');
         res.send(data);
     });
     
