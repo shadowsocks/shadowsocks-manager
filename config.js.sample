@@ -8,6 +8,12 @@ exports.conf = {
         email: 'youremailaddress@gmail.com',
         password: 'yourpassword'
     },
+    mail: {
+        address: 'youremailaddress@gmail.com',
+        password: 'yourpassword',
+        smtp: 'smtp.gmail.com',
+        webaddress: 'http://yourwebsiteaddress.com:6003'
+    },
     express: {
         port: 6003
     }
