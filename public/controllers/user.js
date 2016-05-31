@@ -50,13 +50,19 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             $scope.loading(true);
             $http.put('/api/user/password', $scope.password)
             .then(function(success) {
-                $scope.loadingError({error: '修改密码成功，点确定重新登录', fn:function() {
-                    $window.location.reload();
-                }});
+                $scope.loadingMessage({
+                    message: '修改密码成功，点确定重新登陆',
+                    right: function() {
+                        $window.location.reload();
+                    }
+                });
             }, function(error) {
-                $scope.loadingError({error: '修改密码失败', fn:function() {
-                    $scope.loading(false);
-                }});
+                $scope.loadingMessage({
+                    message: '修改密码失败(' + error.status + ')',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
             });
         };
     })
