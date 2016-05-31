@@ -208,6 +208,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
+
+        $scope.accountPage = function(serverName, accountPort) {
+            $scope.setMenuButtonHistoryBack();
+            $state.go('admin.editAccount', {
+                serverName: serverName,
+                accountPort: accountPort
+            });
+        };
     })
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');
