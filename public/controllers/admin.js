@@ -77,9 +77,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $scope.loading(false);
                 $scope.account.flow = +success.data.flow;
             }, function(error) {
-                $scope.loadingError({
-                    error: '设置流量出错',
-                    fn: function() {
+                $scope.loadingMessage({
+                    message: '设置流量出错',
+                    right: function() {
                         $scope.loading(false);
                     }
                 });
@@ -96,9 +96,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $scope.loading(false);
                 $scope.account.expireTime = success.data.expireTime;
             }, function(error) {
-                $scope.loadingError({
-                    error: '设置有效期出错',
-                    fn: function() {
+                $scope.loadingMessage({
+                    message: '设置有效期出错',
+                    right: function() {
                         $scope.loading(false);
                     }
                 });

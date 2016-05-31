@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var codeSchema = new Schema({
-    code  : String,
+    code: {type:String, required:true, unique:true},
     isUsed: Boolean,
     type  : {type:Number, default: 0},
     flow  : Number,

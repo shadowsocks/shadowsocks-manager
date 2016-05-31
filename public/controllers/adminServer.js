@@ -32,9 +32,12 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 $scope.publicInfo.servers.push(success.data);
                 $state.go('admin.server');
             }, function(error) {
-                $scope.loadingError({error: '添加服务器失败', fn: function() {
-                    $scope.loading(false);
-                }});
+                $scope.loadingMessage({
+                    message: '添加服务器失败',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
             });
         };
         $scope.cancel = function() {$state.go('admin.server');};
@@ -66,7 +69,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 $scope.loading(false);
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }, function(error) {
-                $scope.loadingError({error: '编辑服务器失败', fn: function() {
+                $scope.loadingMessage({message: '编辑服务器失败', right: function() {
                     $scope.initPublicInfo({loading: false});
                     $state.go('admin.serverPage', {serverName: $stateParams.serverName});
                 }});
@@ -159,7 +162,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 server.account.push(success.data);
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }, function(error) {
-                $scope.loadingError({error: '添加账号失败', fn: function() {
+                $scope.loadingMessage({message: '添加账号失败', right: function() {
                     $state.go('admin.serverPage', {serverName: $stateParams.serverName});
                 }});
             });

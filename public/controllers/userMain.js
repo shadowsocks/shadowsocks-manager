@@ -166,7 +166,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             };}
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
-                if(time < 30 * 1000) {return;}
+                if(time < 60 * 1000) {return;}
             }
             $scope.loading(options.loading);
             $http.get('/api/user/userInfo').then(function(success) {
@@ -185,7 +185,14 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         };
         $scope.initPublicInfo();
         $interval(function() {
-            $scope.initPublicInfo({loading: false});
-        }, 10 * 1000);
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({loading: false});
+            }
+        }, 25 * 1000);
+        document.addEventListener('visibilitychange', function(){
+            if(document.visibilityState === 'visible') {
+                $scope.initPublicInfo({loading: false});
+            }
+        });
     })
 ;

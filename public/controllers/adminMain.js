@@ -29,15 +29,15 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             fabButtonClick: '',
             isLoading: false,
             loadingText: '正在加载',
-            loadingError: '',
-            loadingErrorFn: function() {},
+            messageTitle: '',
+            messageData: '',
+            buttonLeftFn: '',
+            buttonRightFn: '',
             methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf']
         };
 
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-            // console.log($state.current.name);
-            // console.log($scope.publicInfo);
             $scope.publicInfo.title = '';
             $scope.publicInfo.menuButtonIcon = 'menu';
             $scope.publicInfo.menuButtonState = '';
@@ -46,8 +46,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.fabButtonClick = '';
             $scope.publicInfo.isLoading = false;
             $scope.publicInfo.loadingText = '正在加载';
-            $scope.publicInfo.loadingError = '';
-            $scope.publicInfo.loadingErrorFn = function() {};
+            $scope.publicInfo.MessageTitle = '';
+            $scope.publicInfo.MessageData = '';
+            $scope.publicInfo.buttonLeftFn = '';
+            $scope.publicInfo.buttonRightFn = '';
 
             $mdDialog.cancel();
 
@@ -79,12 +81,15 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             } else {
                 var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
                     if($scope.publicInfo.isLoading) {
-                        $mdDialog.cancel();
+                        $mdDialog.cancel().finally(function() {
+                            $scope.publicInfo.isLoading = false;
+                            $scope.publicInfo.loadingText = '正在加载';
+                            $scope.publicInfo.messageTitle = '';
+                            $scope.publicInfo.messageData = '';
+                            $scope.publicInfo.buttonLeftFn = '';
+                            $scope.publicInfo.buttonRightFn = '';
+                        });
                         waitToCancel();
-                        $scope.publicInfo.isLoading = false;
-                        $scope.publicInfo.loadingText = '正在加载';
-                        $scope.publicInfo.loadingError = '';
-                        $scope.publicInfo.loadingErrorFn = function() {};
                     }
                 });
             }
@@ -92,13 +97,19 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
         /*
         options: {
-            error
-            fn
+            title
+            message
+            left
+            right
         }
         */
-        $scope.loadingError = function(options) {
-            $scope.publicInfo.loadingError = options.error;
-            $scope.publicInfo.loadingErrorFn = options.fn;
+        $scope.loadingMessage = function(options) {
+            if(!options) {options = {};}
+            $scope.publicInfo.loadingText = '';
+            $scope.publicInfo.messageTitle = options.title;
+            $scope.publicInfo.messageData = options.message;
+            $scope.publicInfo.buttonLeftFn = options.left;
+            $scope.publicInfo.buttonRightFn = options.right;
         };
 
         /*
@@ -108,7 +119,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         }
         */
         $scope.initPublicInfo = function(options) {
-            if($scope.publicInfo.loadingError) {return;}
+            if($scope.publicInfo.messageData) {return;}
             if(!options) {options = {
                 type: ['server','user', 'flow'],
                 loading: true
@@ -164,11 +175,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     });
                 }
 
-            }, function(err) {
+            }, function(error) {
                 if(!options.loading) {return;}
-                $scope.loadingError({
-                    error: '数据加载错误(' + err.status + ')',
-                    fn: function() {
+                $scope.loadingMessage({
+                    message: '数据加载错误(' + error.status + ')',
+                    right: function() {
                         $window.location.reload();
                     }
                 });
