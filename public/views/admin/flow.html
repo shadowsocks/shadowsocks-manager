@@ -1,6 +1,6 @@
-<md-tabs md-selected="tabIndex" md-border-bottom md-stretch-tabs="always" md-dynamic-height>
-    <md-tab ng-repeat="server in tabs" label="{{server.name}}">
-        <md-content layout="column" style="height: -webkit-calc(100% - 104px)">
+<md-tabs md-selected="tabIndex" md-border-bottom md-stretch-tabs="always">
+    <md-tab ng-repeat="server in tabs" label="{{server.name}}" ng-click="tabClick(server.name)">
+        <!-- <md-content layout="column" style="height: -webkit-calc(100% - 104px)">
             <md-list>
                 <md-list-item>
                     <div flex="15" layout="row" layout-align="end center">端口</div>
@@ -21,6 +21,7 @@
                     <div flex layout="row" layout-align="end center">{{server.sum.month | flow1024}}</div>
                 </md-list-item>
             </md-list>
-        </md-content>
+        </md-content> -->
     </md-tab>
 </md-tabs>
+<div ui-view></div>

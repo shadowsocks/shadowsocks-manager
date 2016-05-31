@@ -54,8 +54,14 @@ app.config(
 
                 .state('admin.flow', {
                     url: '/flow',
+                    abstract: true,
                     controller: 'AdminFlowController',
                     templateUrl: '/public/views/admin/flow.html'
+                })
+                .state('admin.flow.server', {
+                    url: '/:serverName',
+                    controller: 'AdminFlowServerController',
+                    templateUrl: '/public/views/admin/flowServer.html'
                 })
 
                 .state('admin.user', {

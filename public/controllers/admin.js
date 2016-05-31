@@ -123,7 +123,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
 
     })
-    .controller('AdminFlowController', function($scope, $interval, $http, $state) {
+    .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('流量统计');
 
         $scope.tabs = [];
@@ -154,7 +154,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     return r;
                 }, 0);
             });
-            
+            if(!$stateParams.serverName) {
+                $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
+            }
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
@@ -168,8 +170,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 accountPort: accountPort
             });
         };
+        $scope.tabClick = function(serverName) {
+            $state.go('admin.flow.server', {serverName: serverName});
+        };
     })
-
+    .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams) {
+        $scope.init = function() {
+            if(!$scope.publicInfo.servers) {return;}
+            $scope.servers = $scope.publicInfo.servers;
+            $scope.server = $scope.publicInfo.servers.filter(function(f) {
+                return f.name === $stateParams.serverName;
+            })[0];
+            if(!$scope.server) {$state.go('admin.index');}
+        };
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+    })
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');
 

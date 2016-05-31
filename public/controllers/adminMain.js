@@ -13,7 +13,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '服务器管理', icon: 'cloud', click: 'admin.server'},
             {name: '用户管理', icon: 'face', click: 'admin.user'},
             {name: '续费码', icon: 'shop', click: 'admin.unfinish'},
-            {name: '流量统计', icon: 'timeline', click: 'admin.flow'},
+            {name: '流量统计', icon: 'timeline', click: 'admin.flow.server'},
             {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
 
