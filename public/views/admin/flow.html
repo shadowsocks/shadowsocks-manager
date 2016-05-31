@@ -1,4 +1,4 @@
-<md-tabs md-selected="tabIndex" md-border-bottom md-stretch-tabs="always">
+<md-tabs md-selected="tabIndex.value" md-border-bottom md-stretch-tabs="always" md-dynamic-height>
     <md-tab ng-repeat="server in tabs" label="{{server.name}}" ng-click="tabClick(server.name)">
         <!-- <md-content layout="column" style="height: -webkit-calc(100% - 104px)">
             <md-list>

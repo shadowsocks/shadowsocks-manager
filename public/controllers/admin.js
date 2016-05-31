@@ -127,64 +127,82 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('流量统计');
 
         $scope.tabs = [];
+        $scope.tabIndex = {
+            value: 0
+        };
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             if($scope.tabs.length === 0) {
                 $scope.tabs = $scope.publicInfo.servers;
-            } else {
-                $scope.tabs.forEach(function(tab, index) {
-                    var server = $scope.publicInfo.servers.filter(function(f) {
-                        return f.name === tab.name;
-                    })[0];
-                    $scope.tabs[index].account = server.account;
-                });
             }
-            $scope.tabs.forEach(function(tab) {
-                tab.sum = {};
-                tab.sum.today = tab.account.reduce(function(r, e) {
-                    if(e.today) {return r + e.today;}
-                    return r;
-                }, 0);
-                tab.sum.week = tab.account.reduce(function(r, e) {
-                    if(e.week) {return r + e.week;}
-                    return r;
-                }, 0);
-                tab.sum.month = tab.account.reduce(function(r, e) {
-                    if(e.month) {return r + e.month;}
-                    return r;
-                }, 0);
-            });
-            console.log('GG');
-            console.log($state);
-            if(!$stateParams.serverName && $state.current.name === 'admin.flow.server') {
-                $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
-            }
+            //  else {
+            //     $scope.tabs.forEach(function(tab, index) {
+            //         var server = $scope.publicInfo.servers.filter(function(f) {
+            //             return f.name === tab.name;
+            //         })[0];
+            //         $scope.tabs[index].account = server.account;
+            //     });
+            // }
+            // $scope.tabs.forEach(function(tab) {
+            //     tab.sum = {};
+            //     tab.sum.today = tab.account.reduce(function(r, e) {
+            //         if(e.today) {return r + e.today;}
+            //         return r;
+            //     }, 0);
+            //     tab.sum.week = tab.account.reduce(function(r, e) {
+            //         if(e.week) {return r + e.week;}
+            //         return r;
+            //     }, 0);
+            //     tab.sum.month = tab.account.reduce(function(r, e) {
+            //         if(e.month) {return r + e.month;}
+            //         return r;
+            //     }, 0);
+            // });
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
 
-        $scope.accountPage = function(serverName, accountPort) {
-            $scope.setMenuButtonHistoryBack();
-            $state.go('admin.editAccount', {
-                serverName: serverName,
-                accountPort: accountPort
-            });
-        };
+        // $scope.accountPage = function(serverName, accountPort) {
+        //     $scope.setMenuButtonHistoryBack();
+        //     $state.go('admin.editAccount', {
+        //         serverName: serverName,
+        //         accountPort: accountPort
+        //     });
+        // };
         $scope.tabClick = function(serverName) {
             $state.go('admin.flow.server', {serverName: serverName});
         };
     })
     .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams) {
+        $scope.setTitle('流量统计');
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             $scope.servers = $scope.publicInfo.servers;
-            // if(!$stateParams.serverName)
-            $scope.server = $scope.publicInfo.servers.filter(function(f) {
-                return f.name === $stateParams.serverName;
+            if(!$stateParams.serverName && $state.current.name === 'admin.flow.server') {
+                $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
+            }
+            $scope.server = $scope.publicInfo.servers.filter(function(f, i) {
+                if(f.name === $stateParams.serverName) {
+                    $scope.tabIndex.value = i;
+                    return true;
+                }
             })[0];
-            // if(!$scope.server) {$state.go('admin.index');}
+            $scope.server.sum = {};
+            $scope.server.sum.today = $scope.server.account.reduce(function(r, e) {
+                if(e.today) {return r + e.today;}
+                return r;
+            }, 0);
+            $scope.server.sum.week = $scope.server.account.reduce(function(r, e) {
+                if(e.week) {return r + e.week;}
+                return r;
+            }, 0);
+            $scope.server.sum.month = $scope.server.account.reduce(function(r, e) {
+                if(e.month) {return r + e.month;}
+                return r;
+            }, 0);
+        if(!$scope.server) {$state.go('admin.index');}
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
