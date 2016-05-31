@@ -154,7 +154,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     return r;
                 }, 0);
             });
-            if(!$stateParams.serverName) {
+            console.log('GG');
+            console.log($state);
+            if(!$stateParams.serverName && $state.current.name === 'admin.flow.server') {
                 $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
             }
         };
@@ -178,10 +180,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             $scope.servers = $scope.publicInfo.servers;
+            // if(!$stateParams.serverName)
             $scope.server = $scope.publicInfo.servers.filter(function(f) {
                 return f.name === $stateParams.serverName;
             })[0];
-            if(!$scope.server) {$state.go('admin.index');}
+            // if(!$scope.server) {$state.go('admin.index');}
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
