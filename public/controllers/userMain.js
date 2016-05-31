@@ -40,7 +40,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
             {name: '修改密码', icon: 'lock_outline', click: 'user.changePassword'},
             {name: '流量统计', icon: 'timeline', click: 'user.unfinish'},
-            {name: '续费', icon: 'vpn_key', click: 'user.unfinish'}
+            {name: '续费', icon: 'vpn_key', click: 'user.renew'}
         ];
         $scope.publicInfo = {
             title: '',              //标题

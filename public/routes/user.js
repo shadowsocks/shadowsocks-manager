@@ -35,6 +35,11 @@ app.config(
                     controller: 'UserChangePasswordController',
                     templateUrl: '/public/views/user/changePassword.html'
                 })
+                .state('user.renew', {
+                    url: '/renew',
+                    controller: 'UserRenewController',
+                    templateUrl: '/public/views/user/renew.html'
+                })
 
                 .state('user.unfinish', {
                     url: '/unfinish',
