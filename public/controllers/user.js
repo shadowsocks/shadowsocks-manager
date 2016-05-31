@@ -47,31 +47,28 @@ app.controller('UserIndexController', function($scope, $http, $state) {
 
         $scope.password = {};
         $scope.changePassword = function() {
-            $scope.loading({
-                isLoading: 1,
-                loadingText: '正在加载'
-            });
+            $scope.loading(true);
             $http.put('/api/user/password', $scope.password)
             .then(function(success) {
-                $scope.loading({
-                    isLoading: -1,
-                    loadingText: '',
-                    MessageData: '修改密码成功，点击确定重新登录',
-                    buttonRight: ['确定', function() {
+                $scope.loadingMessage({
+                    message: '修改密码成功，点确定重新登陆',
+                    right: function() {
                         $window.location.reload();
-                    }]
+                    }
                 });
             }, function(error) {
-                $scope.loading({
-                    isLoading: -1,
-                    loadingText: '',
-                    MessageData: '修改密码失败(' + error.status + ')',
-                    buttonRight: ['确定', function() {
-                        $scope.loading({isLoading: 0});
-                    }]
+                $scope.loadingMessage({
+                    message: '修改密码失败(' + error.status + ')',
+                    right: function() {
+                        $scope.loading(false);
+                    }
                 });
             });
         };
+    })
+    .controller('UserRenewController', function($scope, $http, $state) {
+        $scope.setTitle('续费');
+        $scope.setMenuButton('default');
     })
     .controller('UserUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');

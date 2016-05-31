@@ -4,15 +4,16 @@
     <div flex>{{publicInfo.loadingText}}</div>
     <div flex="5"></div>
 </div>
-<div ng-show="publicInfo.MessageData" layout="column" layout-padding style="height: 120px;" layout-align="center center">
+<div ng-show="publicInfo.messageData" layout="column" layout-padding style="height: 125px;" layout-align="center center">
     <div flex="15"></div>
-    <div flex>{{publicInfo.MessageData}}</div>
+    <div flex ng-show="publicInfo.messageTitle">{{publicInfo.messageTitle}}</div>
+    <div flex>{{publicInfo.messageData}}</div>
     <div flex>
-        <md-button ng-show="publicInfo.buttonLeft" class="md-secondary" ng-click="publicInfo.buttonLeft[1]()">
-            {{publicInfo.buttonLeft[0] || '取消'}}
+        <md-button class="md-secondary" ng-show="publicInfo.buttonLeftFn" ng-click="publicInfo.buttonLeftFn()">
+            取消
         </md-button>
-        <md-button ng-show="publicInfo.buttonRight" class="md-secondary md-primary" ng-click="publicInfo.buttonRight[1]()">
-            {{publicInfo.buttonRight[0] || '确定'}}
+        <md-button class="md-secondary md-primary" ng-show="publicInfo.buttonRightFn" ng-click="publicInfo.buttonRightFn()">
+            确定
         </md-button>
     </div>
     <div flex="5"></div>
