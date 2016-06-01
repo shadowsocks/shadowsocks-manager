@@ -319,3 +319,7 @@ exports.getUsers = function(req, res) {
         res.send(data.combine);
     });
 };
+
+exports.getCode = function(req, res) {};
+
+exports.addCode = function(req, res) {};

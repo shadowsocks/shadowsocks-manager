@@ -19,7 +19,7 @@ app.delete('/api/admin/userAccount', auth.isAdmin, admin.deleteUserAccount);
 
 app.get('/api/admin/user', auth.isAdmin, admin.getUsers);
 
-app.get('/api/admin/flow',
-    auth.isAdmin,
-    admin.getFlow
-);
+app.get('/api/admin/flow', auth.isAdmin, admin.getFlow);
+
+app.get('/api/admin/code', auth.isAdmin, admin.getCode);
+app.post('/api/admin/code', auth.isAdmin, admin.addCode);
