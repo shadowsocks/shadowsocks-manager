@@ -69,6 +69,17 @@ app.controller('UserIndexController', function($scope, $http, $state) {
     .controller('UserRenewController', function($scope, $http, $state) {
         $scope.setTitle('续费');
         $scope.setMenuButton('default');
+
+        $scope.renew = {renewCode: ''};
+        $scope.renewIt = function() {
+            $http.post('/api/user/code', {
+                code: $scope.renew.renewCode
+            }).then(function(success) {
+
+            }, function(error) {
+
+            });
+        };
     })
     .controller('UserUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');
