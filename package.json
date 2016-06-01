@@ -14,7 +14,7 @@
     "shadowsocks"
   ],
   "author": "Gyteng",
-  "license": "MIT",
+  "license": "GPL",
   "bugs": {
     "url": "https://github.com/gyteng/shadowsocks-manager/issues"
   },
