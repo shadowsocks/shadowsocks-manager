@@ -318,6 +318,34 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userPage', {userName: $stateParams.userName});
         };
     })
+    .controller('AdminRenewController', function($scope, $http) {
+        $scope.setTitle('续费码');
+        $scope.setFabButtonClick(function(){
+            $scope.loading(true);
+            $http.post('/api/admin/code', {
+                flow: 0, time: 0
+            }).then(function(success) {
+                $scope.loading(false);
+                $scope.publicInfo.codes.push(success.data);
+            }, function(error) {
+                $scope.loadingMessage({
+                    message: '添加续费码失败',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            });
+        });
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.codes) {return;}
+            $scope.codes = $scope.publicInfo.codes;
+        };
+        $scope.init();
+        $scope.$watch('publicInfo', function() {
+            $scope.init();
+        }, true);
+    })
     .controller('AdminUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');
     })

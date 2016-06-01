@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 var codeSchema = new Schema({
     code: {type:String, required:true, unique:true},
-    isUsed: Boolean,
+    isUsed: {type:Boolean, default: false},
     type  : {type:Number, default: 0},
     flow  : Number,
     time  : Number,

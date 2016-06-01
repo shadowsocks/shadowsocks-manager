@@ -12,7 +12,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '首页', icon: 'home', click: 'admin.index'},
             {name: '服务器管理', icon: 'cloud', click: 'admin.server'},
             {name: '用户管理', icon: 'face', click: 'admin.user'},
-            {name: '续费码', icon: 'shop', click: 'admin.unfinish'},
+            {name: '续费码', icon: 'shop', click: 'admin.renew'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow.server'},
             {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
         ];
@@ -121,10 +121,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.initPublicInfo = function(options) {
             if($scope.publicInfo.messageData) {return;}
             if(!options) {options = {
-                type: ['server','user', 'flow'],
+                type: ['server','user', 'flow', 'code'],
                 loading: true
             };}
-            if(!options.type) {options.type = ['server','user', 'flow'];}
+            if(!options.type) {options.type = ['server','user', 'flow', 'code'];}
 
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
@@ -146,6 +146,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 promises[2] = $http.get('/api/admin/flow');
             } else {
                 promises[2] = undefined;
+            }
+            if(options.type.indexOf('code') >= 0) {
+                promises[3] = $http.get('/api/admin/code');
+            } else {
+                promises[3] = undefined;
             }
             $q.all(promises).then(function(success) {
                 $scope.loading(false);
@@ -174,7 +179,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                         });
                     });
                 }
-
+                if(success[3]) {
+                    $scope.publicInfo.codes = success[3].data;
+                }
             }, function(error) {
                 if(!options.loading) {return;}
                 $scope.loadingMessage({
@@ -185,15 +192,15 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 });
             });
         };
-        $scope.initPublicInfo({type: ['server','user','flow'], loading: true});
+        $scope.initPublicInfo({loading: true});
         $interval(function() {
             if(document.visibilityState === 'visible') {
-                $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
+                $scope.initPublicInfo({loading: false});
             }
         }, 10 * 1000);
         document.addEventListener('visibilitychange', function(){
             if(document.visibilityState === 'visible') {
-                $scope.initPublicInfo({type: ['server','user','flow'],loading: false});
+                $scope.initPublicInfo({loading: false});
             }
         });
         $scope.setTitle = function(str) {

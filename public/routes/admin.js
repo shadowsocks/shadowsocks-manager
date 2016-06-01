@@ -79,6 +79,12 @@ app.config(
                     controller: 'AdminUserAddAccountController',
                     templateUrl: '/public/views/admin/userAddAccount.html'
                 })
+
+                .state('admin.renew', {
+                    url: '/renew',
+                    controller: 'AdminRenewController',
+                    templateUrl: '/public/views/admin/renew.html'
+                })
                 .state('admin.unfinish', {
                     url: '/unfinish',
                     controller: 'AdminUnfinishController',

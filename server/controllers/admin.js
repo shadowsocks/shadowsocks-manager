@@ -4,6 +4,8 @@ var Schema = mongoose.Schema;
 var Server = mongoose.model('Server');
 var User = mongoose.model('User');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
+var Code = mongoose.model('Code');
+
 var moment = require('moment');
 
 var log4js = require('log4js');
@@ -320,6 +322,22 @@ exports.getUsers = function(req, res) {
     });
 };
 
-exports.getCode = function(req, res) {};
+exports.getCode = function(req, res) {
+    Code.find({}).exec(function(err, data) {
+        if(err) {return res.status(500).end('数据库错误');}
+        res.send(data);
+    });
+};
 
-exports.addCode = function(req, res) {};
+exports.addCode = function(req, res) {
+    var flow = req.body.flow;
+    var time = req.body.time;
+    var code = new Code();
+    code.code = Math.random().toString(36).substr(2, 10);
+    code.flow = flow;
+    code.time = time;
+    code.save(function(err, code) {
+        if(err) {return res.status(500).end('数据库错误');}
+        res.send(code);
+    });
+};
