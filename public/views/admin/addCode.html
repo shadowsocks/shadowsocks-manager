@@ -2,8 +2,8 @@
     <md-list>
         <md-list-item class="md-2-line">
             <div class="md-list-item-text">
-                <h3>流量：{{newCode.flow}}</h3>
-                <h3>时间：{{newCode.time}}</h3>
+                <h3>流量：{{newCode.flow | flow1024}}</h3>
+                <h3>时间：{{newCode.time | renewTime}}</h3>
             </div>
         </md-list-item>
         <md-divider></md-divider>

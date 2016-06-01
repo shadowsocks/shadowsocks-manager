@@ -34,6 +34,24 @@ app.filter('relativeTime', function() {
         return ret + retTail;
     };
 });
+app.filter('renewTime', function() {
+    return function(input) {
+
+        var time = input;
+        var ret = '';
+
+        var day = Math.trunc(time/(24 * 3600 * 1000));
+        var hour = Math.trunc(time%(24 * 3600 * 1000)/(3600* 1000));
+        var minute = Math.trunc(time%(24 * 3600 * 1000)%(3600* 1000)/(60 * 1000));
+        var secend = Math.trunc(time%(24 * 3600 * 1000)%(3600* 1000)%(60 * 1000)/1000);
+        if(day) {ret += day + '天';}
+        if(day || hour) {ret += hour + '小时';}
+        if(!day && (hour || minute)) {ret += minute + '分钟';}
+        if(time < (60 * 1000)) {ret += secend +'秒';}
+
+        return ret;
+    };
+});
 app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
         $scope.setMenuButton('default');
@@ -349,6 +367,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.init();
         }, true);
 
+        $scope.newDate = function() {return new Date();};
         $scope.newCode = {
             flow: 0,
             time: 0,
