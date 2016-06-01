@@ -1,4 +1,6 @@
 var nodemailer = require('nodemailer');
+var log4js = require('log4js');
+var logger = log4js.getLogger('auth');
 
 var config = require('../../config').conf;
 
@@ -27,12 +29,13 @@ exports.sendActiveMail = function() {
             from: '"Shadowsocks" <'+ config.mail.address +'>',
             to: data.email,
             subject: 'Shadowsocks激活邮件',
-            text: '您好，请点击下列链接激活您的账户：' + config.mail.webaddress + '/#/home/active/' + data.activeKey + '，该链接15分钟内有效'
+            text: '您好，请点击下列链接激活您的账户：\n\n' + config.mail.webaddress + '/home/active/' + data.activeKey + '\n\n该链接15分钟内有效'
         }, function(error, info){
             if(error){
-                return console.log(error);
+                logger.warn('[' + data.activeKey + '][' + data.email + ']激活码发送失败\n' + error);
+                return;
             }
-            console.log('Message sent: ' + info.response);
+            logger.info('[' + data.activeKey + '][' + data.email + ']激活码发送成功');
         });
     });
 };

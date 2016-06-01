@@ -48,6 +48,7 @@ exports.login = function(req, res) {
             return res.status(401).end('用户名或密码错误');
         }
         if(!user.isActive) {
+            logger.warn('[' + email + '][********]邮箱未验证用户尝试登录');
             return res.status(401).end('该用户的邮箱未验证');
         }
         req.session.user = email;
@@ -80,11 +81,11 @@ exports.activeEmail = function(req, res) {
             isActive: true
         }
     }).exec(function(err, data) {
-
         if(err || !data) {
+            logger.info('[' + activeKey + ']激活失败');
             return res.status(403).end();
         }
-        logger.info('[' + email + ']激活成功');
+        logger.info('[' + activeKey + '][' + data.email + ']激活成功');
         res.send(data);
     });
     
