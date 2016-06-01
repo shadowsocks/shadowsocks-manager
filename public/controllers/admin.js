@@ -183,12 +183,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if(!$stateParams.serverName && $state.current.name === 'admin.flow.server') {
                 $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
             }
+            if(!$stateParams.serverName) {$stateParams.serverName = $scope.tabs[0].name;}
             $scope.server = $scope.publicInfo.servers.filter(function(f, i) {
                 if(f.name === $stateParams.serverName) {
                     $scope.tabIndex.value = i;
                     return true;
                 }
             })[0];
+            if(!$scope.server) {return $state.go('admin.index');}
             $scope.server.sum = {};
             $scope.server.sum.today = $scope.server.account.reduce(function(r, e) {
                 if(e.today) {return r + e.today;}
@@ -202,7 +204,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 if(e.month) {return r + e.month;}
                 return r;
             }, 0);
-        if(!$scope.server) {$state.go('admin.index');}
+            
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
@@ -318,23 +320,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userPage', {userName: $stateParams.userName});
         };
     })
-    .controller('AdminRenewController', function($scope, $http) {
+    .controller('AdminRenewController', function($scope, $http, $mdBottomSheet) {
         $scope.setTitle('续费码');
         $scope.setFabButtonClick(function(){
-            $scope.loading(true);
-            $http.post('/api/admin/code', {
-                flow: 0, time: 0
-            }).then(function(success) {
-                $scope.loading(false);
-                $scope.publicInfo.codes.push(success.data);
-            }, function(error) {
-                $scope.loadingMessage({
-                    message: '添加续费码失败',
-                    right: function() {
-                        $scope.loading(false);
-                    }
-                });
-            });
+            // $scope.loading(true);
+            // $http.post('/api/admin/code', {
+            //     flow: 0, time: 0
+            // }).then(function(success) {
+            //     $scope.loading(false);
+            //     $scope.publicInfo.codes.push(success.data);
+            // }, function(error) {
+            //     $scope.loadingMessage({
+            //         message: '添加续费码失败',
+            //         right: function() {
+            //             $scope.loading(false);
+            //         }
+            //     });
+            // });
+            $scope.addCode();
         });
 
         $scope.init = function() {
@@ -345,6 +348,29 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
+
+        $scope.newCode = {
+            flow: 0,
+            time: 0,
+            add: function(type, number) {
+                if(type === 'flow') {
+                    $scope.newCode.flow += number;
+                    if($scope.newCode.flow < 0) {$scope.newCode.flow = 0;}
+                }
+                if(type === 'time') {
+                    $scope.newCode.time += number;
+                    if($scope.newCode.time < 0) {$scope.newCode.time = 0;}
+                }
+            }
+        };
+        $scope.addCode = function() {
+            $mdBottomSheet.show({
+                templateUrl: '/public/views/admin/addCode.html',
+                preserveScope: true,
+                scope: $scope,
+                controller: function($scope) {}
+            });
+        };
     })
     .controller('AdminUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');

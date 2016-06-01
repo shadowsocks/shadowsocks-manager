@@ -2,8 +2,8 @@
     <md-list-item class="md-3-line" ng-repeat="code in codes">
         <div class="md-list-item-text">
             <h3>{{code.code}}</h3>
-            <!-- <h4>地址：{{server.ip}}</h4>
-            <h4>端口：{{server.port}}</h4> -->
+            <h4>流量：{{code.flow}}</h4>
+            <h4>时间：{{code.time}}</h4>
         </div>
         <md-button class="md-secondary md-primary" ng-click="serverPage(server.name)">详情</md-button>
         <md-divider ng-if="!$last"></md-divider>
