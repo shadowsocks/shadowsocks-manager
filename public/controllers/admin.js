@@ -361,6 +361,27 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     $scope.newCode.time += number;
                     if($scope.newCode.time < 0) {$scope.newCode.time = 0;}
                 }
+            },
+            post: function() {
+                $scope.loading(true);
+                $http.post('/api/admin/code', {
+                    flow: $scope.newCode.flow,
+                    time: $scope.newCode.time
+                }).then(function(success) {
+                    $mdBottomSheet.cancel();
+                    $scope.newCode.flow = 0;
+                    $scope.newCode.time = 0;
+                    $scope.loading(false);
+                    $scope.publicInfo.codes.push(success.data);
+                }, function(error) {
+                    $mdBottomSheet.cancel();
+                    $scope.loadingMessage({
+                        message: '添加续费码失败',
+                        right: function() {
+                            $scope.loading(false);
+                        }
+                    });
+                });
             }
         };
         $scope.addCode = function() {
