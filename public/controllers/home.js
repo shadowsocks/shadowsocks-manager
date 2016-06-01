@@ -12,7 +12,7 @@ app.controller('MainController', function($scope) {
             $scope.loading(true);
             $http.post('/api/home/signup', $scope.user).then(function(success) {
                 $scope.loading(false);
-                $scope.publicInfo.message = '注册成功！';
+                $scope.publicInfo.message = '注册成功，请前往邮箱激活此帐户';
                 $state.go('home.signupSuccess');
             }, function(err) {
                 $scope.loading(true, err.data || '发生未知错误', function() {
@@ -92,13 +92,16 @@ app.controller('MainController', function($scope) {
         };
     })
     .controller('SignupSuccessController', function($scope, $http, $interval, $state) {
-        $scope.time = 5;
-        $interval(function() {
-            $scope.time--;
-            if($scope.time === 0) {
+        $scope.time = 10;
+        var i = $interval(function() {
+            $scope.time -= 0.1;
+            $scope.timeStr = $scope.time.toString().split('.')[0];
+            if($scope.time <= 0) {
+                $scope.timeStr = '0';
+                $interval.cancel(i);
                 $state.go('home.index');
             }
-        }, 1000);
+        }, 100);
     })
     .controller('LoginActiveController', function($scope, $http, $interval, $state, $stateParams) {
         $http.post('/api/home/active', {activeKey: $stateParams.activeKey}).then(function(success) {
