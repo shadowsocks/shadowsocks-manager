@@ -89,7 +89,7 @@ exports.useCode = function(req, res) {
     var user = req.session.user;
     Code.findOneAndUpdate({code: code, isUsed: false}, {
         $set: {
-            isUsed: false,
+            isUsed: true,
             useTime: new Date(),
             userName: user
         }

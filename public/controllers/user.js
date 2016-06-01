@@ -72,12 +72,23 @@ app.controller('UserIndexController', function($scope, $http, $state) {
 
         $scope.renew = {renewCode: ''};
         $scope.renewIt = function() {
+            $scope.loading(true);
             $http.post('/api/user/code', {
                 code: $scope.renew.renewCode
             }).then(function(success) {
-
+                $scope.loadingMessage({
+                    message: '续费码使用成功',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
             }, function(error) {
-
+                $scope.loadingMessage({
+                    message: '续费码使用失败',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
             });
         };
     })
