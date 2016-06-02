@@ -14,10 +14,10 @@
         <div flex layout="column" layout-align="space-around stretch">
             <form name="userForm">
                 <md-input-container class="md-block">
-                    <label>用户名</label>
+                    <label>邮箱</label>
                     <input type="email" required name="username" ng-model="user.username" ng-keypress="usernameKeypress($event)" autofocus>
                     <div ng-messages="userForm.username.$error">
-                        <div ng-message="required">用户名不能为空</div>
+                        <div ng-message="required">邮箱不能为空</div>
                         <div ng-message="email">必须填写一个有效邮箱地址</div>
                     </div>
                 </md-input-container>
