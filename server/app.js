@@ -12,7 +12,9 @@ var fs = require('fs');
 var log4js = require('log4js');
 var logger = log4js.getLogger('server');
 var loggerExpress = log4js.getLogger('express');
-app.use(log4js.connectLogger(loggerExpress));
+app.use(log4js.connectLogger(loggerExpress, 
+    '[:remote-addr][:method][:url][:status][:response-time ms]'
+));
 
 var log4js = exports.log4js = function(cb) {
     var log4js = require('log4js');
