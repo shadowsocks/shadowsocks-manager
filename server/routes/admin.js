@@ -3,7 +3,7 @@ var app = global.app;
 var admin = require('../controllers/admin');
 var auth = require('../controllers/auth');
 var later = require('../controllers/cron');
-// var mail = require('../controllers/mail');
+var flow = require('../controllers/flow');
 
 app.post('/api/admin/server', auth.isAdmin, admin.addServer);
 app.get('/api/admin/server', auth.isAdmin, admin.getServers);
@@ -23,3 +23,5 @@ app.get('/api/admin/flow', auth.isAdmin, admin.getFlow);
 
 app.get('/api/admin/code', auth.isAdmin, admin.getCode);
 app.post('/api/admin/code', auth.isAdmin, admin.addCode);
+
+app.post('/api/admin/flowtest', flow.getFlowChartToday);
