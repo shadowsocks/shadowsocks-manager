@@ -1,8 +1,8 @@
 var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js']);
 
 app.config(
-    ['$stateProvider', '$urlRouterProvider', '$locationProvider',
-        function($stateProvider, $urlRouterProvider, $locationProvider) {
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'ChartJsProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider, ChartJsProvider) {
             $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/admin/index')

@@ -56,7 +56,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
         $scope.setMenuButton('default');
     })
-    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast) {
+    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter) {
         $scope.setTitle('编辑帐号');
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
 
@@ -140,19 +140,30 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
 
-        // $http.post('/api/admin/flowtest', {
-        //     server: $stateParams.serverName,
-        //     port: $stateParams.accountPort
-        // }).then(function(success) {
-        //     $scope.flowtest = success.data;
-        //     $scope.labels = [];
-        //     $scope.series = ['Today'];
-        //     $scope.data = [[]];
-        //     success.data.forEach(function(f,i) {
-        //         $scope.labels[i] = '';
-        //         $scope.data[0][i] = f.flow;
-        //     });
-        // });
+        $http.post('/api/admin/flowtest', {
+            server: $stateParams.serverName,
+            port: $stateParams.accountPort
+        }).then(function(success) {
+            $scope.flowtest = success.data;
+            $scope.labels = [];
+            $scope.series = [];
+            $scope.data = [[]];
+            success.data.forEach(function(f, i) {
+                $scope.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                $scope.data[0][i] = f.flow;
+            });
+            $scope.options = {
+                // scaleShowHorizontalLines: false,
+                // scaleShowVerticalLines: false,
+                pointHitDetectionRadius: 1,
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
+            };
+        });
     })
     .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('流量统计');
