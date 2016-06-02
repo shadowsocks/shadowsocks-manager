@@ -75,7 +75,7 @@ exports.activeEmail = function(req, res) {
     User.findOneAndUpdate({
         isActive: false,
         activeKey: activeKey,
-        sendEmailTime: {$lt: new Date(+new Date() + 15 * 60 * 1000)}
+        sendEmailTime: {$gt: new Date(+new Date() - 15 * 60 * 1000)}
     }, {
         $set: {
             isActive: true
