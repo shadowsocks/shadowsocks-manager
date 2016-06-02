@@ -8,9 +8,9 @@ exports.getFlowChartToday = function (req, res) {
     var port = req.body.port;
     var today = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
     var chart = [];
-    for(var i = 0; i < 288; i++) {
+    for(var i = 0; i < 48; i++) {
         chart[i] = {
-            time: moment(today).add(i * 5, 'minutes'),
+            time: moment(today).add(i * 30, 'minutes'),
             flow: 0
         };
     }
