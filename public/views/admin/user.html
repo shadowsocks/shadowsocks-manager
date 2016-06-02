@@ -1,6 +1,9 @@
 <md-list>
     <md-list-item ng-repeat="user in users">
-        <a ng-click="userPage(user.email)">
+        <md-button flex="15" class="md-icon-button" aria-label="check">
+            <i class="material-icons"  ng-show="user.isActive">check</i>
+        </md-button>
+        <a ng-click="userPage(user.email)" flex="85">
             <md-item-content md-ink-ripple layout="row" layout-align="start center">
                 <div class="inset">
                     {{user.email}}
