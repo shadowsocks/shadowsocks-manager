@@ -156,7 +156,21 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $scope.options = {
                     // scaleShowHorizontalLines: false,
                     // scaleShowVerticalLines: false,
-                    pointHitDetectionRadius: 1
+                    pointHitDetectionRadius: 1,
+                    scaleLabel: function(chart) {
+                        var input = chart.value;
+                        if (input < 1000) {
+                            return input +' B';
+                        } else if (input < 1000000) {
+                            return (input/1000).toFixed(0) +' KB';
+                        } else if (input < 1000000000) {
+                            return (input/1000000).toFixed(0) +' MB';
+                        } else if (input < 1000000000000) {
+                            return (input/1000000000).toFixed(1) +' GB';
+                        } else {
+                            return input;
+                        }
+                    }
                 };
             });
         };

@@ -23,25 +23,6 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
-    <!-- <md-list-item layout="row">
-        <div flex>
-            <md-button class="md-raised md-primary" ng-click="addFlow(10 * 1000 * 1000)">+10M</md-button>
-            <md-button class="md-raised md-primary" ng-click="addFlow(100 * 1000 * 1000)">+100M</md-button>
-        </div>
-    </md-list-item>
-    <md-list-item layout="row">
-        <div flex>
-            <md-button class="md-raised md-warn" ng-click="addFlow(-10 * 1000 * 1000)">-10M</md-button>
-            <md-button class="md-raised md-warn" ng-click="addFlow(-100 * 1000 * 1000)">-100M</md-button>
-        </div>
-    </md-list-item>
-    <md-list-item layout="row">
-        <div flex>
-            <md-button class="md-raised md-primary" ng-click="addTime(1)">+0d</md-button>
-            <md-button class="md-raised md-primary" ng-click="addTime(1 * 86400 * 1000)">+1d</md-button>
-            <md-button class="md-raised md-primary" ng-click="addTime(10 * 86400 * 1000)">+10d</md-button>
-        </div>
-    </md-list-item> -->
 
 
     <md-list-item layout="row">
@@ -49,11 +30,6 @@
         <md-button flex="50" class="md-primary md-raised" ng-click="timeBottomSheet()">设置有效期</md-button>
     </md-list-item>
     <md-divider></md-divider>
-    <md-list-item layout="row" layout-align="center center">
-        <div layout-margin layout-padding>
-            <qr text="qrCode" image="true" ng-if="qrCode"></qr>
-        </div>
-    </md-list-item>
     <md-list-item layout="row" layout-align="center center">
         <div>
             <canvas id="line" class="chart chart-line" chart-data="data"
@@ -63,4 +39,9 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="center center">
+        <div layout-margin layout-padding>
+            <qr text="qrCode" image="true" ng-if="qrCode"></qr>
+        </div>
+    </md-list-item>
 </md-list>
