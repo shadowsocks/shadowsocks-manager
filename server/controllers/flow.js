@@ -7,8 +7,8 @@ exports.getFlowChartToday = function (req, res) {
     var server = req.body.server;
     var port = req.body.port;
     var startTime = moment().second(0).millisecond(0).add(-1, 'hours').toDate();
-    var interval = 5;
-    var number = 12;
+    var interval = 4 * 60;
+    var number = 15;
     // var chart = [];
     // for(var i = 0; i < 24; i++) {
     //     chart[i] = {
@@ -43,7 +43,7 @@ var getFlowChart = function(server, port, startTime, interval, number, cb) {
     var chart = [];
     for(var i = 0; i < number; i++) {
         chart[i] = {
-            time: moment(time).add(i * interval, 'minutes'),
+            time: moment(time).add(i * interval, 'seconds'),
             flow: 0
         };
     }
