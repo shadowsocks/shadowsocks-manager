@@ -140,6 +140,19 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
 
+        // $http.post('/api/admin/flowtest', {
+        //     server: $stateParams.serverName,
+        //     port: $stateParams.accountPort
+        // }).then(function(success) {
+        //     $scope.flowtest = success.data;
+        //     $scope.labels = [];
+        //     $scope.series = ['Today'];
+        //     $scope.data = [[]];
+        //     success.data.forEach(function(f,i) {
+        //         $scope.labels[i] = '';
+        //         $scope.data[0][i] = f.flow;
+        //     });
+        // });
     })
     .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('流量统计');
