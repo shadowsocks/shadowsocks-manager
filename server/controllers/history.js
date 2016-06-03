@@ -12,9 +12,12 @@ var createHistoryHour = {};
 createHistoryHour.getTimeStart = function(cb) {
     HistoryHour.findOne({}).sort({time: -1}).exec(function (err, data) {
         if(err) {return cb(err);}
+        var query = {};
         if(data) {
-            return cb(null, moment(data.time).add(1, 'hour').toDate());}
-        HistoryOriginal.findOne({}).sort({time: 1}).exec(function (err, data) {
+            // return cb(null, moment(data.time).add(1, 'hour').toDate());
+            query.time = {$gte: moment(data.time).add(1, 'hour').toDate()};
+        }
+        HistoryOriginal.findOne(query).sort({time: 1}).exec(function (err, data) {
             if(err) {return cb(err);}
             if(!data) {return cb('no history');}
             cb(null, moment(data.time).minute(0).second(0).millisecond(0).toDate());
@@ -48,19 +51,7 @@ createHistoryHour.getHistory = ['getTimeStart', function(results, cb) {
             flow: '$flow'
         }
     };
-    var hasFlow = true;
-    while(!hasFlow) {
-        HistoryOriginal.aggregate(query).exec(function(err, data) {
-            if(err) {hasFlow = true; return cb(err);}
-            if(!data) {
-                timeStart = moment(timeStart).add(1, 'day').toDate();
-                timeEnd = moment(timeEnd).add(1, 'day').toDate();
-            }
-            hasFlow = true;
-            console.log(data);
-            return cb(err, data);
-        });
-    }
+    HistoryOriginal.aggregate(query).exec(cb);
     
 }];
 createHistoryHour.addHistory = ['getHistory', function(results, cb) {
@@ -80,7 +71,6 @@ createHistoryHour.addHistory = ['getHistory', function(results, cb) {
 
 exports.historyHour = function() {
     async.auto(createHistoryHour, function(err, results) {
-        console.log(results.getHistory);
-        // console.log(results.getTimeStart);
+        console.log(err);
     });
 };
