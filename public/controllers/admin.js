@@ -212,7 +212,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.deselectTab = true;
         };
     })
-    .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams) {
+    .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams, $filter) {
         $scope.setTitle('流量统计');
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
@@ -255,6 +255,49 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 accountPort: accountPort
             });
         };
+
+        var scaleLabel = function(chart) {
+            var input = chart.value;
+            if (input < 1000) {
+                return input +' B';
+            } else if (input < 1000000) {
+                return (input/1000).toFixed(0) +' KB';
+            } else if (input < 1000000000) {
+                return (input/1000000).toFixed(0) +' MB';
+            } else if (input < 1000000000000) {
+                return (input/1000000000).toFixed(1) +' GB';
+            } else {
+                return input;
+            }
+        };
+        $scope.chart = [{}, {}, {}];
+        $scope.getChart = function(chart, type) {
+            $http.post('/api/admin/flowChart', {
+                server: $stateParams.serverName,
+                port: 0,
+                type: type
+            }).then(function(success) {
+                chart.labels = [];
+                chart.series = [];
+                chart.data = [[]];
+                success.data.forEach(function(f, i) {
+                    if(type === 'week') {
+                        chart.labels[i] = $filter('date')(f.time, 'EEE');
+                    } else {
+                        chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                    }
+                    chart.data[0][i] = f.flow;
+                });
+                chart.options = {
+                    pointHitDetectionRadius: 1,
+                    scaleLabel: scaleLabel
+                };
+                console.log($scope.chart);
+            });
+        };
+        $scope.getChart($scope.chart[0], 'lastHour');
+        $scope.getChart($scope.chart[1], 'today');
+        $scope.getChart($scope.chart[2], 'week');
     })
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');

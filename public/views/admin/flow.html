@@ -1,27 +1,5 @@
 <md-tabs md-selected="tabIndex.value" md-border-bottom md-stretch-tabs="always" md-dynamic-height>
     <md-tab ng-repeat="server in tabs" label="{{server.name}}" md-on-select="select(server.name, $index)" md-on-deselect="deselect($index)" ng-click="tabClick(server.name, $index)">
-        <!-- <md-content layout="column" style="height: -webkit-calc(100% - 104px)">
-            <md-list>
-                <md-list-item>
-                    <div flex="15" layout="row" layout-align="end center">端口</div>
-                    <div flex layout="row" layout-align="end center">今日</div>
-                    <div flex layout="row" layout-align="end center">本周</div>
-                    <div flex layout="row" layout-align="end center">本月</div>
-                </md-list-item>
-                <md-list-item ng-repeat="a in server.account | orderBy:  ['-today', '-week', '-month']" ng-if="a.month" md-ink-ripple ng-click="accountPage(server.name, a.port)">
-                    <div flex="15" layout="row" layout-align="end center">{{a.port}}</div>
-                    <div flex layout="row" layout-align="end center">{{a.today | flow1024}}</div>
-                    <div flex layout="row" layout-align="end center">{{a.week | flow1024}}</div>
-                    <div flex layout="row" layout-align="end center">{{a.month | flow1024}}</div>
-                </md-list-item>
-                <md-list-item>
-                    <div flex="15" layout="row" layout-align="end center">合计</div>
-                    <div flex layout="row" layout-align="end center">{{server.sum.today | flow1024}}</div>
-                    <div flex layout="row" layout-align="end center">{{server.sum.week | flow1024}}</div>
-                    <div flex layout="row" layout-align="end center">{{server.sum.month | flow1024}}</div>
-                </md-list-item>
-            </md-list>
-        </md-content> -->
     </md-tab>
 </md-tabs>
 <div ui-view></div>
