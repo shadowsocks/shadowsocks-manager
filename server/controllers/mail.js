@@ -11,6 +11,13 @@ var md5 = function(text) {
 
 var transporter = nodemailer.createTransport('smtps://' + config.mail.address.split('@')[0] +'%40' + config.mail.address.split('@')[1] + ': ' + config.mail.password + '@' + config.mail.smtp);
 
+// var transporter = nodemailer.createTransport({ 
+//     host: 'smtp.' + config.mail.address.split('@')[1], 
+//     port: 465, 
+//     auth: { user: config.mail.address, pass: config.mail.password },
+//     secure: true
+// });
+
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 

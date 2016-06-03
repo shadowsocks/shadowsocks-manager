@@ -108,7 +108,7 @@ app.controller('MainController', function($scope) {
             $scope.publicInfo.message = '激活成功！';
             $state.go('home.signupSuccess');
         }, function(error) {
-            $scope.publicInfo.message = '激活失败！';
+            $scope.publicInfo.message = '激活失败，请重发激活邮件';
             $state.go('home.signupSuccess');
         });
     })
