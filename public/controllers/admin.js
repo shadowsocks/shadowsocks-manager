@@ -181,7 +181,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     })
     .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('流量统计');
-
+        $scope.flowType = 0;
+        $scope.deselectTab = false;
         $scope.tabs = [];
         $scope.tabIndex = {
             value: 0
@@ -191,44 +192,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if($scope.tabs.length === 0) {
                 $scope.tabs = $scope.publicInfo.servers;
             }
-            //  else {
-            //     $scope.tabs.forEach(function(tab, index) {
-            //         var server = $scope.publicInfo.servers.filter(function(f) {
-            //             return f.name === tab.name;
-            //         })[0];
-            //         $scope.tabs[index].account = server.account;
-            //     });
-            // }
-            // $scope.tabs.forEach(function(tab) {
-            //     tab.sum = {};
-            //     tab.sum.today = tab.account.reduce(function(r, e) {
-            //         if(e.today) {return r + e.today;}
-            //         return r;
-            //     }, 0);
-            //     tab.sum.week = tab.account.reduce(function(r, e) {
-            //         if(e.week) {return r + e.week;}
-            //         return r;
-            //     }, 0);
-            //     tab.sum.month = tab.account.reduce(function(r, e) {
-            //         if(e.month) {return r + e.month;}
-            //         return r;
-            //     }, 0);
-            // });
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
 
-        // $scope.accountPage = function(serverName, accountPort) {
-        //     $scope.setMenuButtonHistoryBack();
-        //     $state.go('admin.editAccount', {
-        //         serverName: serverName,
-        //         accountPort: accountPort
-        //     });
-        // };
-        $scope.tabClick = function(serverName) {
-            $state.go('admin.flow.server', {serverName: serverName});
+        $scope.select = function(serverName, index) {
+        };
+        $scope.tabClick = function(serverName, index) {
+            if($scope.deselectTab) {
+                $scope.deselectTab = false;
+                $state.go('admin.flow.server', {serverName: serverName});
+            } else {
+                $scope.flowType = 1 - $scope.flowType;
+            }
+        };
+        $scope.deselect = function(index) {
+            $scope.deselectTab = true;
         };
     })
     .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams) {
