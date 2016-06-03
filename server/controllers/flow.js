@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var HistoryOriginal = mongoose.model('HistoryOriginal');
+var HistoryHour = mongoose.model('HistoryHour');
 var moment = require('moment');
 
 exports.getFlowChart = function (req, res) {
@@ -11,6 +12,8 @@ exports.getFlowChart = function (req, res) {
     var startTime;
     var interval;
     var number;
+
+    var table = HistoryOriginal;
 
     if(type === 'lastHour') {
         startTime = moment().second(0).millisecond(0).add(-1, 'hours').toDate();
@@ -23,6 +26,7 @@ exports.getFlowChart = function (req, res) {
         number = 24;
     }
     if(type === 'week') {
+        table = HistoryHour;
         startTime = moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate();
         interval = 60 * 60 * 24;
         number = 7;
@@ -32,13 +36,13 @@ exports.getFlowChart = function (req, res) {
         interval = 60 * 60 * 24;
         number = 30;
     }
-    getFlowChart(server, port, startTime, interval, number, function(err, data) {
+    getFlowChart(server, port, startTime, interval, number, table, function(err, data) {
         if(err) {return res.status(500).end();}
         return res.send(data);
     });
 };
 
-var getFlowChart = function(server, port, startTime, interval, number, cb) {
+var getFlowChart = function(server, port, startTime, interval, number, table, cb) {
     var time = startTime;
     var chart = [];
     for(var i = 0; i < number; i++) {
@@ -54,7 +58,7 @@ var getFlowChart = function(server, port, startTime, interval, number, cb) {
     if(port) {
         query.port = +port;
     }
-    HistoryOriginal.find(query).exec(function(err, data) {
+    table.find(query).exec(function(err, data) {
         if(err) {return cb(err);}
         data.forEach(function(d, di) {
             chart.forEach(function(c, ci) {

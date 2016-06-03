@@ -1,4 +1,5 @@
 var shadowsocks = require('./shadowsocks');
+var history = require('./history');
 var mail = require('./mail');
 var later = require('later');
 later.date.localTime();
@@ -10,5 +11,7 @@ var timer = later.setInterval(function() {
     shadowsocks.updateServerList();
     shadowsocks.checkAccount();
     mail.sendActiveMail();
+    // history.historyHour();
 }, sched);
 shadowsocks.updateServerList();
+// history.historyHour();

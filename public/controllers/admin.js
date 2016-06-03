@@ -292,7 +292,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     pointHitDetectionRadius: 1,
                     scaleLabel: scaleLabel
                 };
-                console.log($scope.chart);
             });
         };
         $scope.getChart($scope.chart[0], 'lastHour');

@@ -20,8 +20,8 @@
         </md-list-item>
     </md-list>
     <md-list ng-show="flowType === 1">
-        <md-list-item ng-repeat="c in chart">
-            <div layout="row" layout-align="center center">
+        <md-list-item ng-repeat="c in chart" layout="row" layout-align="center center">
+            <div>
                 <canvas id="lineLastHour" class="chart chart-line" chart-data="c.data"
                 chart-labels="c.labels" chart-legend="false" chart-series="c.series"
                 chart-options="c.options">
