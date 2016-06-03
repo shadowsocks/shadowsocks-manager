@@ -24,4 +24,4 @@ app.get('/api/admin/flow', auth.isAdmin, admin.getFlow);
 app.get('/api/admin/code', auth.isAdmin, admin.getCode);
 app.post('/api/admin/code', auth.isAdmin, admin.addCode);
 
-app.post('/api/admin/flowtest', flow.getFlowChartToday);
+app.post('/api/admin/flowChart',auth.isAdmin, flow.getFlowChart);

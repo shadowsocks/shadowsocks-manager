@@ -141,7 +141,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
 
         $scope.getChart = function() {
-            $http.post('/api/admin/flowtest', {
+            $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
                 port: $stateParams.accountPort
             }).then(function(success) {
@@ -174,9 +174,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 };
             });
         };
-        $interval(function() {
-            $scope.getChart();
-        }, 120 * 1000);
+        // $interval(function() {
+        //     $scope.getChart();
+        // }, 120 * 1000);
         $scope.getChart();
     })
     .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
@@ -379,20 +379,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminRenewController', function($scope, $http, $mdBottomSheet) {
         $scope.setTitle('续费码');
         $scope.setFabButtonClick(function(){
-            // $scope.loading(true);
-            // $http.post('/api/admin/code', {
-            //     flow: 0, time: 0
-            // }).then(function(success) {
-            //     $scope.loading(false);
-            //     $scope.publicInfo.codes.push(success.data);
-            // }, function(error) {
-            //     $scope.loadingMessage({
-            //         message: '添加续费码失败',
-            //         right: function() {
-            //             $scope.loading(false);
-            //         }
-            //     });
-            // });
             $scope.addCode();
         });
 
