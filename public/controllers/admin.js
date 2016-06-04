@@ -214,6 +214,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     })
     .controller('AdminFlowServerController', function($scope, $interval, $http, $state, $stateParams, $filter) {
         $scope.setTitle('流量统计');
+        $scope.serverName = $stateParams.serverName;
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             $scope.servers = $scope.publicInfo.servers;
@@ -272,6 +273,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.chart = [{}, {}, {}];
         $scope.getChart = function(chart, type) {
+            if(chart) {
+
+            }
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
                 port: 0,
@@ -294,9 +298,16 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 };
             });
         };
-        $scope.getChart($scope.chart[0], 'lastHour');
-        $scope.getChart($scope.chart[1], 'today');
-        $scope.getChart($scope.chart[2], 'week');
+        if(!$scope.flowChart[$stateParams.serverName]) {
+            $scope.flowChart[$stateParams.serverName] = [{}, {}, {}];
+        }
+        
+        $scope.getChart($scope.flowChart[$stateParams.serverName][0], 'lastHour');
+        $scope.getChart($scope.flowChart[$stateParams.serverName][1], 'today');
+        $scope.getChart($scope.flowChart[$stateParams.serverName][2], 'week');
+        // $scope.getChart($scope.chart[0], 'lastHour');
+        // $scope.getChart($scope.chart[1], 'today');
+        // $scope.getChart($scope.chart[2], 'week');
     })
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');

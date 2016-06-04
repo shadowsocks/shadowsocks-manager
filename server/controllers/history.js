@@ -71,6 +71,6 @@ createHistoryHour.addHistory = ['getHistory', function(results, cb) {
 
 exports.historyHour = function() {
     async.auto(createHistoryHour, function(err, results) {
-        console.log(err);
+        
     });
 };

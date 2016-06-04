@@ -35,7 +35,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             buttonRightFn: '',
             methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf']
         };
-
+        $scope.flowChart = {};
 
         $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
             $scope.publicInfo.title = '';
