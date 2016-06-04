@@ -142,3 +142,7 @@ exports.useCode = function(req, res) {
         });
     });
 };
+
+exports.getFlowChart = function(req, res) {
+    
+};

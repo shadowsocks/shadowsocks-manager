@@ -140,37 +140,37 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
 
+        $scope.chart = {};
+        var scaleLabel = function(chart) {
+            var input = chart.value;
+            if (input < 1000) {
+                return input +' B';
+            } else if (input < 1000000) {
+                return (input/1000).toFixed(0) +' KB';
+            } else if (input < 1000000000) {
+                return (input/1000000).toFixed(0) +' MB';
+            } else if (input < 1000000000000) {
+                return (input/1000000000).toFixed(1) +' GB';
+            } else {
+                return input;
+            }
+        };
         $scope.getChart = function() {
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
                 port: $stateParams.accountPort
             }).then(function(success) {
-                $scope.flowtest = success.data;
-                $scope.labels = [];
-                $scope.series = [];
-                $scope.data = [[]];
+                $scope.chart.labels = [];
+                $scope.chart.series = [];
+                $scope.chart.data = [[]];
                 success.data.forEach(function(f, i) {
-                    $scope.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
-                    $scope.data[0][i] = f.flow;
+                    $scope.chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                    $scope.chart.data[0][i] = f.flow;
                 });
-                $scope.options = {
-                    // scaleShowHorizontalLines: false,
-                    // scaleShowVerticalLines: false,
+                $scope.chart.options = {
                     pointHitDetectionRadius: 1,
-                    scaleLabel: function(chart) {
-                        var input = chart.value;
-                        if (input < 1000) {
-                            return input +' B';
-                        } else if (input < 1000000) {
-                            return (input/1000).toFixed(0) +' KB';
-                        } else if (input < 1000000000) {
-                            return (input/1000000).toFixed(0) +' MB';
-                        } else if (input < 1000000000000) {
-                            return (input/1000000000).toFixed(1) +' GB';
-                        } else {
-                            return input;
-                        }
-                    }
+                    scaleLabel: scaleLabel,
+                    tooltipTemplate: scaleLabel
                 };
             });
         };

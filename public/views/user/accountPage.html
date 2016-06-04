@@ -16,6 +16,15 @@
     </md-list-item>
     <md-divider></md-divider>
     <md-list-item layout="row" layout-align="center center">
+        <div>
+            <canvas id="line" class="chart chart-line" chart-data="chart.data"
+                chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
+                chart-options="chart.options">
+            </canvas>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="center center">
         <div layout-margin layout-padding>
             <qr text="qrCode" image="true" ng-if="qrCode"></qr>
         </div>

@@ -15,7 +15,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             });
         };
     })
-    .controller('UserAccountPageController', function($scope, $http, $state, $stateParams) {
+    .controller('UserAccountPageController', function($scope, $http, $state, $stateParams, $filter) {
         $scope.setTitle('帐户详情');
         $scope.setMenuButton('user.account');
 
@@ -41,6 +41,42 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.account.method + ':' + $scope.account.password + '@' + $scope.account.address + ':' + $scope.account.port);
         };
         $scope.init();
+
+        $scope.chart = {};
+        var scaleLabel = function(chart) {
+            var input = chart.value;
+            if (input < 1000) {
+                return input +' B';
+            } else if (input < 1000000) {
+                return (input/1000).toFixed(0) +' KB';
+            } else if (input < 1000000000) {
+                return (input/1000000).toFixed(0) +' MB';
+            } else if (input < 1000000000000) {
+                return (input/1000000000).toFixed(1) +' GB';
+            } else {
+                return input;
+            }
+        };
+        $scope.getChart = function() {
+            $http.post('/api/user/flowChart', {
+                server: $stateParams.serverName,
+                port: $stateParams.accountPort
+            }).then(function(success) {
+                $scope.chart.labels = [];
+                $scope.chart.series = [];
+                $scope.chart.data = [[]];
+                success.data.forEach(function(f, i) {
+                    $scope.chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                    $scope.chart.data[0][i] = f.flow;
+                });
+                $scope.chart.options = {
+                    pointHitDetectionRadius: 1,
+                    scaleLabel: scaleLabel,
+                    tooltipTemplate: scaleLabel
+                };
+            });
+        };
+        $scope.getChart();
     })
     .controller('UserChangePasswordController', function($scope, $http, $state, $window) {
         $scope.setTitle('修改密码');
