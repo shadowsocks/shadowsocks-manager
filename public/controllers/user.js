@@ -58,6 +58,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             }
         };
         $scope.getChart = function() {
+            $scope.chart.sum = 0;
             $http.post('/api/user/flowChart', {
                 server: $stateParams.serverName,
                 port: $stateParams.accountPort
@@ -68,6 +69,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                 success.data.forEach(function(f, i) {
                     $scope.chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
                     $scope.chart.data[0][i] = f.flow;
+                    $scope.chart.sum += f.flow;
                 });
                 $scope.chart.options = {
                     pointHitDetectionRadius: 1,

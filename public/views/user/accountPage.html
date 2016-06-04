@@ -15,7 +15,8 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
-    <md-list-item layout="row" layout-align="center center">
+    <md-list-item layout="column" layout-align="center center">
+        <div class="md-list-item-text"><h5>近一小时流量 {{chart.sum | flow1024}}</h5></div>
         <div>
             <canvas id="line" class="chart chart-line" chart-data="chart.data"
                 chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
