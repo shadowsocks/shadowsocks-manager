@@ -12,7 +12,7 @@ Dependencies
 Install
 -------
 
-    git clone git@github.com:gyteng/shadowsocks-manager.git
+    git clone https://github.com/gyteng/shadowsocks-manager.git
     npm install -g bower
     cd shadowsocks-manager
     npm install
