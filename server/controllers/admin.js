@@ -184,6 +184,19 @@ exports.deleteAccount = function(req, res) {
         }, {
             port: port
         });
+        User.update({
+            'account.server': name,
+            'account.port': port,
+        }, {
+            $pull: {
+                account: {
+                    'server': name,
+                    'port': port,
+                }
+            }
+        }).exec(function(err, data) {
+            console.log(err, data);
+        });
         return res.send(data);
     });
 };

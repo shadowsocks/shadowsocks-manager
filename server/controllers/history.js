@@ -14,7 +14,6 @@ createHistoryHour.getTimeStart = function(cb) {
         if(err) {return cb(err);}
         var query = {};
         if(data) {
-            // return cb(null, moment(data.time).add(1, 'hour').toDate());
             query.time = {$gte: moment(data.time).add(1, 'hour').toDate()};
         }
         HistoryOriginal.findOne(query).sort({time: 1}).exec(function (err, data) {

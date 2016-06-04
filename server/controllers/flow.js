@@ -65,10 +65,6 @@ var getFlowChart = function(server, port, startTime, interval, number, table, cb
         if(err) {return cb(err);}
         data.forEach(function(d, di) {
             chart.forEach(function(c, ci) {
-                // if(ci === 0) {return;}
-                // if(d.time >= chart[ci - 1].time && d.time < c.time) {
-                //     chart[ci - 1].flow += d.flow;
-                // }
                 if(ci < chart.length - 1) {
                     if(d.time >= c.time && d.time < chart[ci + 1].time) {
                         chart[ci].flow += d.flow;
