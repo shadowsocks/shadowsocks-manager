@@ -294,7 +294,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 });
                 chart.options = {
                     pointHitDetectionRadius: 1,
-                    scaleLabel: scaleLabel
+                    scaleLabel: scaleLabel,
+                    tooltipTemplate: scaleLabel
                 };
             });
         };
