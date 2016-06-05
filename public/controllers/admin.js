@@ -493,18 +493,16 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
         $scope.detail = function(code) {
-            console.log(code);
-            var confirm = $mdDialog.alert()
-                .clickOutsideToClose(true)
-                .title(code.code)
-                .textContent('用户：' + code.userName + '<br>使用时间： ' + code.useTime)
-                .ariaLabel('code')
-                .ok('确定');
-            $mdDialog.show(confirm).then(function() {
-                $mdDialog.cancel(confirm);
-            }, function() {
-                $mdDialog.cancel(confirm);
+            var dialog = $mdDialog.prompt({
+                templateUrl: '/public/views/admin/renewCode.html',
+                escapeToClose : true,
+                clickOutsideToClose:true,
+                locals: {code: code},
+                controller: function($scope, code) {
+                    $scope.code = code;
+                }
             });
+            $mdDialog.show(dialog);
         };
     })
     .controller('AdminUnfinishController', function($scope) {
