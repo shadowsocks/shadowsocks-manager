@@ -101,6 +101,7 @@ exports.addAccount = function(req, res) {
     }).then(function(success) {
         if(success) {
             res.status(403).end('该端口已被占用');
+            logger.error('添加帐号出错: 端口' + port + '已被占用');
             return Promise.reject('端口被占用');
         }
         return Server.findOneAndUpdate({
@@ -123,9 +124,10 @@ exports.addAccount = function(req, res) {
         var ret = success.account.filter(function(f) {
             return +f.port === +port;
         })[0];
+        logger.info('添加帐号: [' + name + '][' + port + '][' + password + ']');
         return res.send(ret);
     }).catch(function(err) {
-        logger.error('[addAccount]' + err);
+        logger.error('添加帐号出错: \n' + err);
         return res.status(500).end('数据库错误');
     });
 };
@@ -171,12 +173,17 @@ exports.editAccount = function(req, res) {
             'account.port': port
         }, update(time), {new: true});
     }).then(function(data) {
-        if(!data) {return res.status(401).end('找不到相应帐号');}
+        if(!data) {
+            logger.error('修改帐号出错: 找不到原帐号');
+            return res.status(401).end('找不到相应帐号');
+        }
         var ret = data.account.filter(function(f) {
             return +f.port === +port;
         })[0];
+        logger.info('修改帐号: [' + name + '][' + port + ']');
         return res.send(ret);
     }).catch(function(err) {
+        logger.error('修改帐号出错: \n' + err);
         return res.status(500).end('数据库错误');
     });
 };

@@ -411,15 +411,37 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userPage', {userName: $stateParams.userName});
         };
     })
-    .controller('AdminRenewController', function($scope, $http, $mdBottomSheet) {
+    .controller('AdminRenewController', function($scope, $http, $mdBottomSheet, $mdDialog) {
         $scope.setTitle('续费码');
         $scope.setFabButtonClick(function(){
             $scope.addCode();
         });
 
+        $scope.type = {
+            unuse: true,
+            use : false
+        };
+        $scope.codeFilter = function() {
+            $scope.codeF = $scope.codes.filter(function(f) {
+                if(f.isUsed && $scope.type.use) {
+                    return true;
+                }
+                if(!f.isUsed && $scope.type.unuse) {
+                    return true;
+                }
+                return false;
+            });
+        };
+
+        $scope.$watch('type', function() {
+            if(!$scope.codes) {return;}
+            $scope.codeFilter();
+        }, true);
+
         $scope.init = function() {
             if(!$scope.publicInfo.codes) {return;}
             $scope.codes = $scope.publicInfo.codes;
+            $scope.codeFilter();
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
@@ -468,6 +490,20 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 preserveScope: true,
                 scope: $scope,
                 controller: function($scope) {}
+            });
+        };
+        $scope.detail = function(code) {
+            console.log(code);
+            var confirm = $mdDialog.alert()
+                .clickOutsideToClose(true)
+                .title(code.code)
+                .textContent('用户：' + code.userName + '<br>使用时间： ' + code.useTime)
+                .ariaLabel('code')
+                .ok('确定');
+            $mdDialog.show(confirm).then(function() {
+                $mdDialog.cancel(confirm);
+            }, function() {
+                $mdDialog.cancel(confirm);
             });
         };
     })
