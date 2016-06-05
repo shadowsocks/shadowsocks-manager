@@ -161,7 +161,8 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $http.post('/api/admin/account', {
                 name: $stateParams.serverName,
                 port: $scope.account.port,
-                password: $scope.account.password
+                password: $scope.account.password,
+                userName: $scope.account.userName
             }).then(function(success) {
                 var server = $scope.publicInfo.servers.filter(function(f) {
                     return f.name === $stateParams.serverName;

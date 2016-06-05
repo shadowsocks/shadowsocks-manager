@@ -94,7 +94,7 @@ exports.addAccount = function(req, res) {
     var name = req.body.name;
     var port = req.body.port;
     var password = req.body.password;
-
+    var userName = req.body.userName;
     Server.findOne({
         'name': name,
         'account.port': port
@@ -125,6 +125,16 @@ exports.addAccount = function(req, res) {
             return +f.port === +port;
         })[0];
         logger.info('添加帐号: [' + name + '][' + port + '][' + password + ']');
+        if(userName) {
+            User.findOneAndUpdate({email: userName}, {
+                $addToSet: {
+                    account: {
+                        server: name,
+                        port: +port
+                    }
+                }
+            }).exec();
+        }
         return res.send(ret);
     }).catch(function(err) {
         logger.error('添加帐号出错: \n' + err);
