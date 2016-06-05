@@ -128,11 +128,18 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 .ok('确定')
                 .cancel('取消');
             $mdDialog.show(confirm).then(function() {
+                $mdDialog.cancel(confirm);
+                $scope.loading(true);
                 $http.delete('/api/admin/account', {params: {
                     name: $stateParams.serverName,
                     port: port
-                }}).success(function(data) {
-                    $scope.initPublicInfo();
+                }}).then(function(success) {
+                    $scope.server.account = success.data.account;
+                    $scope.loading(false);
+                }, function(error) {
+                    $scope.loadingMessage({message: '删除账号失败', right: function() {
+                        $scope.loading(false);
+                    }});
                 });
             }, function() {
                 $mdDialog.cancel(confirm);

@@ -175,7 +175,7 @@ exports.deleteAccount = function(req, res) {
         'account.port': port
     }, {$pull: {
         account: {port: port}
-    }}).exec(function(err, data) {
+    }}, {new: true}).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
         if(!data) {return res.send(data);}
         shadowsocks.del({
