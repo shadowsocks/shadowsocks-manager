@@ -271,7 +271,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return input;
             }
         };
-        // $scope.chart = [{}, {}, {}];
         $scope.chartType = 'hour';
         $scope.chartChange = function(type) {
             if(type === 'hour') {
@@ -288,7 +287,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
                 port: 0,
-                type: type
+                type: type,
+                page: $scope.flowChart[$stateParams.serverName][type].page
             }).then(function(success) {
                 chart.labels = [];
                 chart.series = [];
@@ -310,11 +310,23 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         if(!$scope.flowChart[$stateParams.serverName]) {
             $scope.flowChart[$stateParams.serverName] = {
-                hour: {},
-                day: {},
-                week: {}
+                hour: {page: 0},
+                day: {page :0},
+                week: {page: 0}
             };
         }
+
+        $scope.prev = function() {
+            $scope.flowChart[$stateParams.serverName][$scope.chartType].page += 1;
+            $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
+        };
+        $scope.next = function() {
+            if($scope.flowChart[$stateParams.serverName][$scope.chartType].page === 0) {
+                return;
+            }
+            $scope.flowChart[$stateParams.serverName][$scope.chartType].page -= 1;
+            $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
+        };
         
         $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
         $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');

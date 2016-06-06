@@ -8,6 +8,7 @@ exports.getFlowChart = function (req, res) {
     var server = req.body.server;
     var port = req.body.port;
     var type = req.body.type || 'hour';
+    var page = req.body.page || 0;
 
     var startTime;
     var interval;
@@ -21,18 +22,18 @@ exports.getFlowChart = function (req, res) {
         number = 15;
     }
     if(type === 'hour') {
-        startTime = moment().minute(0).second(0).millisecond(0).toDate();
+        startTime = moment().add(-page, 'hour').minute(0).second(0).millisecond(0).toDate();
         interval = 4 * 60;
         number = 15;
     }
     if(type === 'day') {
-        startTime = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
+        startTime = moment().add(-page, 'day').hour(0).minute(0).second(0).millisecond(0).toDate();
         interval = 60 * 60;
         number = 24;
     }
     if(type === 'week') {
         table = HistoryHour;
-        startTime = moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate();
+        startTime = moment().add(-page * 7, 'day').day(0).hour(0).minute(0).second(0).millisecond(0).toDate();
         interval = 60 * 60 * 24;
         number = 7;
     }
