@@ -28,6 +28,11 @@
             </md-radio-group>
         </md-list-item>
         <md-divider></md-divider>
+            <md-list-item layout="column">
+                <p>开始时间：{{flowChart[serverName][chartType].startTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                <p>结束时间：{{flowChart[serverName][chartType].endTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+            </md-list-item>
+        <md-divider></md-divider>
         <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
             <div>
                 <canvas class="chart chart-line" chart-data="c.data"
@@ -37,17 +42,17 @@
             </div>
         </md-list-item>
         <md-divider></md-divider>
-            
+        <md-list-item layout="row" layout-align="center center">
+            <div flex="50" layout="row" layout-align="center center">
+                <md-button class="md-primary md-raised" ng-click="prev()">
+                    Prev
+                </md-button>
+            </div>
+            <div flex="50" layout="row" layout-align="center center">
+                <md-button class="md-primary md-raised" ng-click="next()">
+                    Next
+                </md-button>
+            </div>
+        </md-list-item>
     </md-list>
-    <div layout="row" layout-align="center center">
-
-            <md-button flex="50" class="md-primary md-raised" ng-click="prev()">
-                Prev
-            </md-button>
-
-            <md-button flex="50" class="md-primary md-raised" ng-click="next()">
-                Next
-            </md-button>
-
-    </div>
 </md-content>

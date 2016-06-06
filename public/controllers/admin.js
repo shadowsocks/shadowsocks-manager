@@ -274,6 +274,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.chartType = 'hour';
         $scope.chartChange = function(type) {
             if(type === 'hour') {
+
                 $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
             }
             if(type === 'day') {
@@ -290,6 +291,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 type: type,
                 page: $scope.flowChart[$stateParams.serverName][type].page
             }).then(function(success) {
+                chart.startTime = success.data[0].time;
+                chart.endTime = success.data[success.data.length - 1].time;
                 chart.labels = [];
                 chart.series = [];
                 chart.data = [[]];
