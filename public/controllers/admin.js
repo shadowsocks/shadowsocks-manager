@@ -189,14 +189,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
-            if($scope.tabs.length === 0) {
-                $scope.tabs = $scope.publicInfo.servers;
-            }
+            // if($scope.tabs.length === 0) {
+            $scope.tabs = $scope.publicInfo.servers;
+            // }
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.servers', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.select = function(serverName, index) {
         };
@@ -245,9 +245,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.servers', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.accountPage = function(serverName, accountPort) {
             $scope.setMenuButtonHistoryBack();
@@ -291,6 +291,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 type: type,
                 page: $scope.flowChart[$stateParams.serverName][type].page
             }).then(function(success) {
+                chart.sum = 0;
                 chart.startTime = success.data[0].time;
                 chart.endTime = success.data[success.data.length - 1].time;
                 chart.labels = [];
@@ -303,6 +304,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                         chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
                     }
                     chart.data[0][i] = f.flow;
+                    chart.sum += f.flow;
                 });
                 chart.options = {
                     pointHitDetectionRadius: 1,

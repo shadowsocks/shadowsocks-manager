@@ -6,7 +6,7 @@
             <div flex layout="row" layout-align="end center">本周</div>
             <div flex layout="row" layout-align="end center">本月</div>
         </md-list-item>
-        <md-list-item ng-repeat="a in server.account | orderBy:  ['-today', '-week', '-month']" ng-if="a.month" md-ink-ripple ng-click="accountPage(server.name, a.port)">
+        <md-list-item ng-repeat="a in server.account | orderBy: ['-today', '-week', '-month'] track by a.port" ng-if="a.month" md-ink-ripple ng-click="accountPage(server.name, a.port)">
             <div flex="15" layout="row" layout-align="end center">{{a.port}}</div>
             <div flex layout="row" layout-align="end center">{{a.today | flow1024}}</div>
             <div flex layout="row" layout-align="end center">{{a.week | flow1024}}</div>
@@ -31,6 +31,7 @@
             <md-list-item layout="column">
                 <p>开始时间：{{flowChart[serverName][chartType].startTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
                 <p>结束时间：{{flowChart[serverName][chartType].endTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                <p>合计：{{flowChart[serverName][chartType].sum | flow1024}}</p>
             </md-list-item>
         <md-divider></md-divider>
         <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
