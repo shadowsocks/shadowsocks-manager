@@ -20,7 +20,15 @@
         </md-list-item>
     </md-list>
     <md-list ng-show="flowType === 1">
-        <md-list-item ng-repeat="c in flowChart[serverName]" layout="row" layout-align="center center">
+        <md-list-item>
+            <md-radio-group layout="row" layout-align="center center" ng-model="chartType" ng-change="chartChange(chartType)">
+                <md-radio-button value="hour">小时</md-radio-button>
+                <md-radio-button value="day">天</md-radio-button>
+                <md-radio-button value="week">周</md-radio-button>
+            </md-radio-group>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
             <div>
                 <canvas class="chart chart-line" chart-data="c.data"
                 chart-labels="c.labels" chart-legend="false" chart-series="c.series"

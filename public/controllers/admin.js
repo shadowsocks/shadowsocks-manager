@@ -271,11 +271,20 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return input;
             }
         };
-        $scope.chart = [{}, {}, {}];
-        $scope.getChart = function(chart, type) {
-            if(chart) {
-
+        // $scope.chart = [{}, {}, {}];
+        $scope.chartType = 'hour';
+        $scope.chartChange = function(type) {
+            if(type === 'hour') {
+                $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
             }
+            if(type === 'day') {
+                $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+            }
+            if(type === 'week') {
+                $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
+            }
+        };
+        $scope.getChart = function(chart, type) {
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
                 port: 0,
@@ -300,15 +309,16 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
         if(!$scope.flowChart[$stateParams.serverName]) {
-            $scope.flowChart[$stateParams.serverName] = [{}, {}, {}];
+            $scope.flowChart[$stateParams.serverName] = {
+                hour: {},
+                day: {},
+                week: {}
+            };
         }
         
-        $scope.getChart($scope.flowChart[$stateParams.serverName][0], 'lastHour');
-        $scope.getChart($scope.flowChart[$stateParams.serverName][1], 'today');
-        $scope.getChart($scope.flowChart[$stateParams.serverName][2], 'week');
-        // $scope.getChart($scope.chart[0], 'lastHour');
-        // $scope.getChart($scope.chart[1], 'today');
-        // $scope.getChart($scope.chart[2], 'week');
+        $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
+        $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+        $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
     })
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');

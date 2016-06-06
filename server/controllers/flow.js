@@ -7,7 +7,7 @@ var moment = require('moment');
 exports.getFlowChart = function (req, res) {
     var server = req.body.server;
     var port = req.body.port;
-    var type = req.body.type || 'lastHour';
+    var type = req.body.type || 'hour';
 
     var startTime;
     var interval;
@@ -20,7 +20,12 @@ exports.getFlowChart = function (req, res) {
         interval = 4 * 60;
         number = 15;
     }
-    if(type === 'today') {
+    if(type === 'hour') {
+        startTime = moment().minute(0).second(0).millisecond(0).toDate();
+        interval = 4 * 60;
+        number = 15;
+    }
+    if(type === 'day') {
         startTime = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
         interval = 60 * 60;
         number = 24;
