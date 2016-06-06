@@ -16,7 +16,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $state.go('admin.serverPage', {serverName: serverName});
         };
     })
-    .controller('AdminAddServerController', function($scope, $interval, $http, $state, $timeout) {
+    .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
         $scope.setTitle('添加服务器');
         $scope.setMenuButton('admin.server');
         $scope.server = {};
