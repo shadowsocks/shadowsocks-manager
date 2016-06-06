@@ -198,6 +198,25 @@ exports.editAccount = function(req, res) {
     });
 };
 
+exports.accountAutoRemove = function(req, res) {
+    var name = req.body.name;
+    var port = req.body.port;
+    var value = req.body.value;
+    Server.findOneAndUpdate({
+        'name': name,
+        'account.port': port
+    }, {
+        $set: {
+            'account.$.autoRemove': value
+        }
+    }, {new: true}).exec(function(err, data) {
+        if(err || !data) {
+            return res.status(500).end();
+        }
+        return res.send('GGG');
+    });
+};
+
 exports.deleteAccount = function(req, res) {
     var name = req.query.name;
     var port = req.query.port;

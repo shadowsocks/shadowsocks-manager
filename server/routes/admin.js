@@ -12,6 +12,7 @@ app.delete('/api/admin/server', auth.isAdmin, admin.deleteServer);
 
 app.post('/api/admin/account', auth.isAdmin, admin.addAccount);
 app.put('/api/admin/account', auth.isAdmin, admin.editAccount);
+app.post('/api/admin/accountAutoRemove', auth.isAdmin, admin.accountAutoRemove);
 app.delete('/api/admin/account', auth.isAdmin, admin.deleteAccount);
 
 app.post('/api/admin/userAccount', auth.isAdmin, admin.addUserAccount);

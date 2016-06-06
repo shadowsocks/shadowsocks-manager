@@ -12,6 +12,7 @@ var serverSchema = new Schema({
         expireTime: {type: Date, default: new Date()},
         flow: {type: Number, default: 0},
         status: {type:Number, default: 0},
+        autoRemove: {type:Boolean, default: false},
         lastActive: Date
         /*
         status定义: 0 根据expireTime和flow自动开启和关闭

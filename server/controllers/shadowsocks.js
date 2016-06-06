@@ -1,6 +1,7 @@
 var dgram = require('dgram');
 var mongoose = require('mongoose');
 var Server = mongoose.model('Server');
+var User = mongoose.model('User');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
 /*
 add: {"server_port": 8001, "password":"7cd308cc059"}
@@ -148,8 +149,28 @@ exports.checkAccount = function() {
                         });
                     }
                 }
+                if((f.flow <= 0 || f.expireTime - new Date() <= 0) && f.autoRemove) {
+                    logger.info('自动删除过期账户：[' + server.name + '][' + f.port + ']');
+                    Server.findOneAndUpdate({
+                        'name': server.name,
+                        'account.port': f.port
+                    }, {$pull: {
+                        account: {port: f.port}
+                    }}).exec();
+                    User.update({
+                        'account.server': server.name,
+                        'account.port': f.port,
+                    }, {
+                        $pull: {
+                            account: {
+                                'server': server.name,
+                                'port': f.port,
+                            }
+                        }
+                    }).exec();
+                }
             });
-
+            
         });
     });
 };

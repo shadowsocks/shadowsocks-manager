@@ -23,8 +23,14 @@
         </div>
     </md-list-item>
     <md-divider></md-divider>
-
-
+    </md-list-item>
+        <div class="inset">
+            <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()">
+                失效自动删除
+            </md-switch>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
     <md-list-item layout="row">
         <md-button flex="50" class="md-primary md-raised" ng-click="flowBottomSheet()">设置流量</md-button>
         <md-button flex="50" class="md-primary md-raised" ng-click="timeBottomSheet()">设置有效期</md-button>

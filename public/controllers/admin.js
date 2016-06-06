@@ -178,6 +178,20 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         //     $scope.getChart();
         // }, 120 * 1000);
         $scope.getChart();
+
+        $scope.changeAutoRemove = function() {
+            $scope.loading(true);
+            $http.post('/api/admin/accountAutoRemove', {
+                name: $stateParams.serverName,
+                port: $stateParams.accountPort,
+                value: $scope.account.autoRemove
+            }).then(function(success) {
+                $scope.loading(false);
+            }, function(error) {
+                $scope.loading(false);
+                $scope.account.autoRemove = !$scope.account.autoRemove;
+            });
+        };
     })
     .controller('AdminFlowController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('流量统计');
