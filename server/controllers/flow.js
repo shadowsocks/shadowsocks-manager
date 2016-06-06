@@ -23,10 +23,11 @@ exports.getFlowChart = function (req, res) {
     }
     if(type === 'hour') {
         startTime = moment().add(-page, 'hour').minute(0).second(0).millisecond(0).toDate();
-        interval = 4 * 60;
-        number = 15;
+        interval = 5 * 60;
+        number = 12;
     }
     if(type === 'day') {
+        table = HistoryHour;
         startTime = moment().add(-page, 'day').hour(0).minute(0).second(0).millisecond(0).toDate();
         interval = 60 * 60;
         number = 24;

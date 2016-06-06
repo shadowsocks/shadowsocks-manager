@@ -323,6 +323,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.flowChart[$stateParams.serverName][$scope.chartType].page += 1;
             $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
         };
+        $scope.reset = function() {
+            $scope.flowChart[$stateParams.serverName].hour.page = 0;
+            $scope.flowChart[$stateParams.serverName].day.page = 0;
+            $scope.flowChart[$stateParams.serverName].week.page = 0;
+            $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
+            $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+            $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
+        };
         $scope.next = function() {
             if($scope.flowChart[$stateParams.serverName][$scope.chartType].page === 0) {
                 return;
