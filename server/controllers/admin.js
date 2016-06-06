@@ -208,7 +208,10 @@ exports.deleteAccount = function(req, res) {
     }, {$pull: {
         account: {port: port}
     }}, {new: true}).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库错误');}
+        if(err) {
+            logger.error('删除帐号出错: \n' + err);
+            return res.status(500).end('数据库错误');
+        }
         if(!data) {return res.send(data);}
         shadowsocks.del({
             ip: data.ip,
@@ -227,9 +230,9 @@ exports.deleteAccount = function(req, res) {
                 }
             }
         }).exec(function(err, data) {
-            console.log(err, data);
+            logger.info('删除帐号: [' + name + '][' + port + ']');
+            return res.send(data);
         });
-        return res.send(data);
     });
 };
 
