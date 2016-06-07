@@ -133,9 +133,24 @@ app.controller('UserIndexController', function($scope, $http, $state) {
     .controller('UserFlowController', function($scope, $http, $filter) {
         $scope.setTitle('流量统计');
 
+        $scope.$watch('publicInfo.user', function() {
+            $scope.init();
+        }, true);
+
+        $scope.init = function() {
+            if(!$scope.publicInfo.user) {return;}
+            if($scope.publicInfo.user.account[0]) {
+                var server = $scope.publicInfo.user.account[0].server;
+                var port = $scope.publicInfo.user.account[0].port;
+                $scope.account[server + ':' + port] = true;
+            }
+        };
+
         $scope.chartType = 'hour';
         $scope.page = 0;
         $scope.account = {};
+        
+
         $scope.accountSum = {};
         $scope.refresh = function() {
             var promises = [];
