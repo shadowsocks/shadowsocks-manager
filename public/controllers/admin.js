@@ -78,8 +78,24 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
             $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.server.method + ':' + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
+            $scope.initUserList();
+        };
+        $scope.initUserList = function() {
+            $scope.accountUsers = [];
+            $scope.publicInfo.users.forEach(function(user) {
+                user.account.forEach(function(account) {
+                    if(account.server === $stateParams.serverName && account.port === +$stateParams.accountPort) {
+                        $scope.accountUsers.push(user.email);
+                    }
+                });
+            });
+        };
+        $scope.toUserPage = function(userName) {
+            $scope.setMenuButtonHistoryBack();
+            $state.go('admin.userPage', {userName: userName});
         };
         $scope.init();
+        if($scope.publicInfo.users) {$scope.initUserList();}
         $scope.$watch('publicInfo', function() {
             $scope.init();
         }, true);
