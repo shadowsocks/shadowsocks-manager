@@ -167,7 +167,9 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 var server = $scope.publicInfo.servers.filter(function(f) {
                     return f.name === $stateParams.serverName;
                 })[0];
-                server.account.push(success.data);
+                $scope.$apply(function() {
+                    server.account.push(success.data);
+                });
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }, function(error) {
                 $scope.loadingMessage({message: '添加账号失败', right: function() {

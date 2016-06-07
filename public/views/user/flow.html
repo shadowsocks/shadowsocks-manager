@@ -1,4 +1,4 @@
-<md-list>
+<md-list ng-hide="publicInfo.user.account.length === 0">
     <md-list-item>
         <div layout="column">
             <div ng-repeat="a in publicInfo.user.account">
@@ -52,4 +52,13 @@
                 </md-button>
             </div>
         </md-list-item>
+</md-list>
+<md-list ng-show="publicInfo.user.account.length === 0">
+    <md-list-item>
+        <div>
+            <p>当前用户未分配Shadowsocks帐户</p>
+            <p>请等待管理员给您分配</p>
+            <p>此页面将会自动刷新</p>
+        </div>
+    </md-list-item>
 </md-list>
