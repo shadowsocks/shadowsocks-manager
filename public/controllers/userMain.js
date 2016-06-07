@@ -173,7 +173,6 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = success.data;
-                console.log(success.data);
             }, function(error) {
                 if(!options.loading) {return;}
                 $scope.loadingMessage({
