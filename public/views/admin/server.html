@@ -1,5 +1,5 @@
 <md-list>
-    <md-list-item class="md-3-line" ng-repeat="server in serverList">
+    <md-list-item class="md-3-line" ng-repeat="server in serverList track by server.name">
         <div class="md-list-item-text">
             <h3>{{server.name}}</h3>
             <h4>地址：{{server.ip}}</h4>

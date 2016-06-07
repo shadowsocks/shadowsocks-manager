@@ -391,9 +391,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             }
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.users', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.delete = function(account) {
             var confirm = $mdDialog.confirm()
@@ -432,9 +432,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.servers = $scope.publicInfo.servers;
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.servers', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.$watch('server', function() {
             if($scope.server) {
@@ -493,9 +493,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.codeFilter();
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.codes', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.newDate = function() {return new Date();};
         $scope.newCode = {

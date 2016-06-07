@@ -9,9 +9,9 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $scope.serverList = $scope.publicInfo.servers;
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.servers', function() {
             $scope.init();
-        }, true);
+        }, false);
         $scope.serverPage = function(serverName) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
@@ -54,9 +54,9 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             if(!$scope.server) {return $state.go('admin.server');}
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.servers', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.addServer = function() {
             $scope.loading(true);
