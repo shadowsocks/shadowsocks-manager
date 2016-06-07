@@ -1,0 +1,29 @@
+<md-list>
+    <md-list-item>
+        <div layout="column">
+            <div ng-repeat="a in publicInfo.user.account">
+                <md-checkbox aria-label="accountCheckBox" ng-model="account[a.server + ':' + a.port]">
+                    {{a.address}}:{{a.port}}
+                </md-checkbox>
+            </div>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="center center">
+        <md-radio-group layout="row" layout-align="center center" ng-model="chartType" ng-change="refresh()">
+            <md-radio-button value="hour">小时</md-radio-button>
+            <md-radio-button value="day">天</md-radio-button>
+            <md-radio-button value="week">周</md-radio-button>
+        </md-radio-group>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item layout="row" layout-align="center center">
+        <div layout layout-padding>
+            <canvas class="chart chart-line" chart-data="chart.data"
+            chart-labels="chart.labels" chart-legend="true" chart-series="chart.series"
+            chart-options="chart.options">
+            </canvas>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+</md-list>

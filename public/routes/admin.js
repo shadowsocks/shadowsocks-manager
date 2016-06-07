@@ -1,8 +1,9 @@
 var app = angular.module('AdminApp', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js']);
 
 app.config(
-    ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'ChartJsProvider',
-        function($stateProvider, $urlRouterProvider, $locationProvider, ChartJsProvider) {
+    ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider',
+        function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+            $httpProvider.defaults.timeout = 15 * 1000;
             $locationProvider.html5Mode(true);
             $urlRouterProvider
                 .when('/', '/admin/index')

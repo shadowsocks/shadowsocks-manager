@@ -26,7 +26,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             }));
         };
 
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.user', function() {
             $scope.init();
         }, true);
 
@@ -127,6 +127,56 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                         $scope.loading(false);
                     }
                 });
+            });
+        };
+    })
+    .controller('UserFlowController', function($scope, $http, $filter) {
+        $scope.setTitle('流量统计');
+
+        $scope.chartType = 'hour';
+        $scope.account = {};
+        $scope.refresh = function() {
+            var promises = [];
+            for(var a in $scope.account) {
+                promises.push($scope.getChart(a.split(':')[0], +a.split(':')[1], $scope.chartType));
+            }
+            Promise.all(promises).then(function(s) {
+                console.log($scope.publicInfo.user.account);
+            });
+        };
+
+        $scope.$watch('account', $scope.refresh, true);
+
+        $scope.chart = {};
+        var scaleLabel = function(chart) {
+            var input = chart.value;
+            if (input < 1000) {
+                return input +' B';
+            } else if (input < 1000000) {
+                return (input/1000).toFixed(0) +' KB';
+            } else if (input < 1000000000) {
+                return (input/1000000).toFixed(0) +' MB';
+            } else if (input < 1000000000000) {
+                return (input/1000000000).toFixed(1) +' GB';
+            } else {
+                return input;
+            }
+        };
+        $scope.getChart = function(server, port, type) {
+            var account = $scope.publicInfo.user.account.filter(function(f) {
+                return (f.server === server && f.port === port);
+            })[0];
+            if(!account) {return Promise.reject();}
+            if(!account.chart) {account.chart = {hour:{}, day: {}, week:{}};}
+            $http.post('/api/user/flowChart', {
+                server: server,
+                port: port,
+                type: type
+            }).then(function(success) {
+                account.chart[type] = success.data;
+                return Promise.resolve();
+            }, function(error) {
+                return Promise.reject();
             });
         };
     })

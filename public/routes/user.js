@@ -40,6 +40,11 @@ app.config(
                     controller: 'UserRenewController',
                     templateUrl: '/public/views/user/renew.html'
                 })
+                .state('user.flow', {
+                    url: '/flow',
+                    controller: 'UserFlowController',
+                    templateUrl: '/public/views/user/flow.html'
+                })
 
                 .state('user.unfinish', {
                     url: '/unfinish',
