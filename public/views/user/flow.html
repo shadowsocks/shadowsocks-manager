@@ -3,7 +3,7 @@
         <div layout="column">
             <div ng-repeat="a in publicInfo.user.account">
                 <md-checkbox aria-label="accountCheckBox" ng-model="account[a.server + ':' + a.port]">
-                    {{a.address}}:{{a.port}}
+                    ({{a.server}}){{a.address}}:{{a.port}}
                 </md-checkbox>
             </div>
         </div>
@@ -16,6 +16,14 @@
             <md-radio-button value="week">周</md-radio-button>
         </md-radio-group>
     </md-list-item>
+    <md-divider></md-divider>
+            <md-list-item layout="column">
+                <p>开始时间：{{startTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                <p>结束时间：{{endTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                <p ng-repeat="(key, value) in account">
+                    <span ng-show="value">合计（{{key}}）：{{accountSum[key] | flow1024}}</span>
+                </p>
+            </md-list-item>
     <md-divider></md-divider>
     <md-list-item layout="row" layout-align="center center">
         <div layout layout-padding>

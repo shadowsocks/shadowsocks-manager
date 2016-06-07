@@ -136,6 +136,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.chartType = 'hour';
         $scope.page = 0;
         $scope.account = {};
+        $scope.accountSum = {};
         $scope.refresh = function() {
             var promises = [];
             var createChart = function() {
@@ -153,13 +154,21 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                         return (f.server === server && f.port === port);
                     })[0];
                     if(!account) {return;}
-                    account.chart[$scope.chartType].forEach(function(f, fi) {  
-                        if($scope.chartType === 'week') {
-                            $scope.chart.labels[fi] = $filter('date')(f.time, 'EEE');
-                        } else {
-                            $scope.chart.labels[fi] = (fi%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                    $scope.accountSum[k] = 0;
+                    account.chart[$scope.chartType].forEach(function(f, fi) {
+                        if(ki === 0) {
+                            if(fi === 0) {$scope.startTime = f.time;}
+                            if(fi === account.chart[$scope.chartType].length - 1) {
+                                $scope.endTime = f.time;
+                            }
+                            if($scope.chartType === 'week') {
+                                $scope.chart.labels[fi] = $filter('date')(f.time, 'EEE');
+                            } else {
+                                $scope.chart.labels[fi] = (fi%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                            }
                         }
                         $scope.chart.data[ki][fi] = f.flow;
+                        $scope.accountSum[k] += f.flow;
                     });
                 });
             };
