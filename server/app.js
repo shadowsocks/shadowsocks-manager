@@ -1,5 +1,6 @@
 var express = global.express = require('express');
 var app = global.app = express();
+var compression = require('compression');
 var config = require('../config').conf;
 var mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
@@ -85,6 +86,7 @@ exports.db = function (cb) {
 exports.express = function(cb) {
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
+    app.use(compression());
     app.use(bodyParser.urlencoded({ extended: true }));
 
     var session = require('express-session');
