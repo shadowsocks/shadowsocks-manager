@@ -10,4 +10,6 @@ app.put('/api/user/password', auth.isUser, user.changePassword);
 
 app.post('/api/user/code', auth.isUser, user.useCode);
 
+app.post('/api/user/oneSecond', auth.isUser, user.oneSecond);
+
 app.post('/api/user/flowChart', auth.isUser, flow.getFlowChart);

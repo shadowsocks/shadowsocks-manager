@@ -1,8 +1,23 @@
 app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
         $scope.setMenuButton('default');
-        $scope.logout = function() {
-            $http.post('/api/home/logout');
+        $scope.oneSecond = function() {
+            $scope.loading(true);
+            $http.post('/api/user/oneSecond').then(function(success) {
+                $scope.loadingMessage({
+                    message: '您已经成功续了1秒',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            }, function(error) {
+                $scope.loadingMessage({
+                    message: error.data || '发生未知错误',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            });
         };
     })
     .controller('UserAccountController', function($scope, $http, $state) {

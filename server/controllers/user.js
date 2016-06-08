@@ -4,7 +4,9 @@ var Schema = mongoose.Schema;
 var Server = mongoose.model('Server');
 var User = mongoose.model('User');
 var Code = mongoose.model('Code');
+var OneSecond = mongoose.model('OneSecond');
 var async = require('async');
+var moment = require('moment');
 
 var crypto = require('crypto');
 var md5 = function(text) {
@@ -143,6 +145,28 @@ exports.useCode = function(req, res) {
     });
 };
 
-exports.getFlowChart = function(req, res) {
-    
+exports.oneSecond = function(req, res) {
+    var startTime = moment().hour(0).minute(0).second(0).millisecond(0).toDate();
+    var endTime = moment(startTime).add(1, 'day').toDate();
+    var userName = req.session.user;
+    OneSecond.findOne({
+        user: userName,
+        time: {
+            $gte: startTime,
+            $lt: endTime
+        }
+    }).exec(function(err, data) {
+        if(err) {
+            return res.status(500).end();
+        }
+        if(data) {
+            return res.status(403).end('今天已经续过了，请明天再试');
+        }
+        var oneSecond = new OneSecond();
+        oneSecond.user = userName;
+        oneSecond.save(function() {
+            res.send('GGG');
+        });
+    });
+
 };
