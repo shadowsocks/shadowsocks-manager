@@ -13,7 +13,7 @@
     </md-list-item>
     <md-list-item class="md-3-line" ng-repeat="code in codeF">
         <div class="md-list-item-text">
-            <h3>{{code.code}}</h3>
+            <h3>{{code.code | uppercase}}</h3>
             <h4>流量：{{code.flow | flow1024}}</h4>
             <h4>时间：{{code.time | renewTime}}</h4>
         </div>

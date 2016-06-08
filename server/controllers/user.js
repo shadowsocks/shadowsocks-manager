@@ -89,58 +89,64 @@ exports.changePassword = function(req, res) {
 exports.useCode = function(req, res) {
     var code = req.body.code;
     var user = req.session.user;
-    Code.findOneAndUpdate({code: code, isUsed: false}, {
-        $set: {
-            isUsed: true,
-            useTime: new Date(),
-            userName: user
-        }
-    }).exec(function(err, codeResult) {
-        if(err || !codeResult) {return res.status(500).end('数据库错误');}
-        res.send(codeResult);
-        
-        var findAccount = {};
-        var updateAccount = {};
-        findAccount.findUser = function(cb) {
-            User.findOne({email: user}).exec(function(err, user) {
-                if(err || !user) {return cb('user not found');}
-                cb(null, user);
-            });
-        };
-        findAccount.findServer = ['findUser', function(results, cb) {
-            results.findUser.account.forEach(function(account) {
-                updateAccount[account.server + (+account.port)] = function(cb) {
-                    Server.findOne({name: account.server, 'account.port': account.port}).exec(function(err, data) {
-                        if(err || !data) {return cb('server not found');}
-                        var ret = data.account.filter(function(f) {
-                            return +f.port === +account.port;
-                        })[0];
-                        if(!ret) {return cb('server not found');}
-                        cb(null, ret);
-                    });
-                };
-                updateAccount[account.server + (+account.port) + 'update'] = [account.server + (+account.port), function(results, cb) {
-                    Server.findOneAndUpdate({
-                        name: account.server,
-                        'account.port': account.port
-                    }, {
-                        $set: {
-                            'account.$.flow': results[account.server + (+account.port)].flow + codeResult.flow,
-                            'account.$.expireTime': new Date(codeResult.time + (+results[account.server + (+account.port)].expireTime))
-                        }
-                    }).exec(function(err, data) {
-                        if(err || !data) {return cb('server update not fail');}
-                        cb(null, data);
-                    });
-                }];
-                
-            });
-            return cb(null, 'Server');
-        }];
+    if(code) {code = code.toLowerCase();}
+    User.findOne({email: user}).exec(function(e, u) {
+        if(e) {return res.status(500).end('数据库错误');}
+        if(!u) {return res.status(403).end('用户不存在');}
+        if(u.account.length === 0) {return res.status(403).end('该用户尚未分配帐号');}
+        Code.findOneAndUpdate({code: code, isUsed: false}, {
+            $set: {
+                isUsed: true,
+                useTime: new Date(),
+                userName: user
+            }
+        }).exec(function(err, codeResult) {
+            if(err || !codeResult) {return res.status(500).end('数据库错误');}
+            res.send(codeResult);
+            
+            var findAccount = {};
+            var updateAccount = {};
+            findAccount.findUser = function(cb) {
+                User.findOne({email: user}).exec(function(err, user) {
+                    if(err || !user) {return cb('user not found');}
+                    cb(null, user);
+                });
+            };
+            findAccount.findServer = ['findUser', function(results, cb) {
+                results.findUser.account.forEach(function(account) {
+                    updateAccount[account.server + (+account.port)] = function(cb) {
+                        Server.findOne({name: account.server, 'account.port': account.port}).exec(function(err, data) {
+                            if(err || !data) {return cb('server not found');}
+                            var ret = data.account.filter(function(f) {
+                                return +f.port === +account.port;
+                            })[0];
+                            if(!ret) {return cb('server not found');}
+                            cb(null, ret);
+                        });
+                    };
+                    updateAccount[account.server + (+account.port) + 'update'] = [account.server + (+account.port), function(results, cb) {
+                        Server.findOneAndUpdate({
+                            name: account.server,
+                            'account.port': account.port
+                        }, {
+                            $set: {
+                                'account.$.flow': results[account.server + (+account.port)].flow + codeResult.flow,
+                                'account.$.expireTime': new Date(codeResult.time + (+results[account.server + (+account.port)].expireTime))
+                            }
+                        }).exec(function(err, data) {
+                            if(err || !data) {return cb('server update not fail');}
+                            cb(null, data);
+                        });
+                    }];
+                    
+                });
+                return cb(null, 'Server');
+            }];
 
-        async.auto(findAccount, function(err, result) {
-            if(err) {return;}
-            async.auto(updateAccount);
+            async.auto(findAccount, function(err, result) {
+                if(err) {return;}
+                async.auto(updateAccount);
+            });
         });
     });
 };

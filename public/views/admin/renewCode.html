@@ -1,7 +1,7 @@
 <md-dialog aria-label="code detail" ng-cloak>
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div>续费码：{{code.code}}</div>
+            <div>续费码：{{code.code | uppercase}}</div>
             <div>流量：{{code.flow | flow1024}}</div>
             <div>时长：{{code.time | renewTime}}</div>
             <div>用户：{{code.userName}}</div>
