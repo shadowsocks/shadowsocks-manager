@@ -164,8 +164,11 @@ exports.oneSecond = function(req, res) {
         }
         var oneSecond = new OneSecond();
         oneSecond.user = userName;
-        oneSecond.save(function() {
-            res.send('GGG');
+        oneSecond.save(function(err, data) {
+            if(err) {
+                return res.status(500).end();
+            }
+            return res.send(data);
         });
     });
 
