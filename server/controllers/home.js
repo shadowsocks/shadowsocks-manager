@@ -6,6 +6,7 @@ var logger = log4js.getLogger('auth');
 
 var User = mongoose.model('User');
 var mail = require('./mail');
+var freeAccount = require('./freeAccount');
 
 var crypto = require('crypto');
 var md5 = function(text) {
@@ -87,6 +88,6 @@ exports.activeEmail = function(req, res) {
         }
         logger.info('[' + activeKey + '][' + data.email + ']激活成功');
         res.send(data);
+        freeAccount.create(data.email);
     });
-    
 };
