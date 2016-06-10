@@ -60,12 +60,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if(!$scope.publicInfo.servers) {return;}
             $scope.users = angular.copy($scope.publicInfo.users);
             if(!$scope.users) {return;}
-            $scope.user = $scope.users.sort(function(a, b) {
+            $scope.userLastSign = $scope.users.sort(function(a, b) {
                 if(a.createTime > b.createTime) {return -1;}
                 if(a.createTime <= b.createTime) {return 1;}
                 return 0;
             })[0];
-            console.log($scope.user);
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {

@@ -50,15 +50,10 @@ exports.sendActiveMail = function() {
 var sendMailQueue = [];
 
 exports.addMail = function(userName) {
-    if(userName.match(new RegExp('@mail.bccto.me'), 'i')) {
-        return;
-    }
-    if(userName.match(new RegExp('@chacuo.net'), 'i')) {
-        return;
-    }
-    if(userName.match(new RegExp('@dispostable.com'), 'i')) {
-        return;
-    }
+    if(userName.match(new RegExp('@mail.bccto.me'), 'i')) {return;}
+    if(userName.match(new RegExp('@chacuo.net'), 'i')) {return;}
+    if(userName.match(new RegExp('@dispostable.com'), 'i')) {return;}
+    if(userName.match(new RegExp('@trbvn.com'), 'i')) {return;}
     if(sendMailQueue.indexOf(userName) < 0) {
         sendMailQueue.push(userName);
     }

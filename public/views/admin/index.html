@@ -1,9 +1,9 @@
 <md-list>
     <md-list-item class="md-3-line" >
         <div class="md-list-item-text">
-            <h3>首页</h3>
-            <h4></h4>
-            <h4>首页不知道放什么内容好</h4>
+            <h3>最新注册用户：</h3>
+            <h4>{{userLastSign.email}}</h4>
+            <h4>{{userLastSign.createTime | relativeTime}}</h4>
         </div>
         <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
