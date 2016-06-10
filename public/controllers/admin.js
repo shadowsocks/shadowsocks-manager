@@ -72,6 +72,12 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 if(a.lastLogin <= b.lastLogin) {return 1;}
                 return 0;
             })[0];
+            $scope.serverSum = 0;
+            $scope.publicInfo.servers.forEach(function(server) {
+                server.account.forEach(function(a) {
+                    if(a.month) {$scope.serverSum += a.month;}
+                });
+            });
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
