@@ -15,7 +15,7 @@ var userSchema = new Schema({
     activeKey: String,
     sendEmailTime: Date,
     isAdmin: {type:Boolean, default: false},
-    createTime: {type:Date, default: new Date()}
+    createTime: {type:Date, default: Date.now}
 });
 
 var User = mongoose.model('User', userSchema);

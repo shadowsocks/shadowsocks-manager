@@ -7,7 +7,7 @@ var codeSchema = new Schema({
     type  : {type:Number, default: 0},
     flow  : Number,
     time  : Number,
-    createTime: {type:Date, default: new Date()},
+    createTime: {type:Date, default: Date.now},
     useTime: Date,
     userName: String
 });
