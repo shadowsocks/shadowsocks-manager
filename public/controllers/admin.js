@@ -107,6 +107,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.accountUsers = [];
             $scope.publicInfo.users.forEach(function(user) {
                 user.account.forEach(function(account) {
+                    // if(!account) {
+                    //     console.log(user);
+                    // }
                     if(account.server === $stateParams.serverName && account.port === +$stateParams.accountPort) {
                         $scope.accountUsers.push(user.email);
                     }

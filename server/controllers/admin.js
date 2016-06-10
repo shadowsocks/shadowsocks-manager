@@ -213,7 +213,7 @@ exports.accountAutoRemove = function(req, res) {
         if(err || !data) {
             return res.status(500).end();
         }
-        return res.send('GGG');
+        return res.send(data);
     });
 };
 
@@ -238,8 +238,8 @@ exports.deleteAccount = function(req, res) {
             port: port
         });
         User.update({
-            'account.server': name,
-            'account.port': port,
+            // 'account.server': name,
+            // 'account.port': port,
         }, {
             $pull: {
                 account: {
@@ -247,7 +247,10 @@ exports.deleteAccount = function(req, res) {
                     'port': port,
                 }
             }
+        }, {
+            multi: true
         }).exec(function(err, user) {
+            console.log(err || user);
             logger.info('删除帐号: [' + name + '][' + port + ']');
             return res.send(data);
         });

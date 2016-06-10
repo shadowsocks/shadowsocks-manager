@@ -158,8 +158,6 @@ exports.checkAccount = function() {
                         account: {port: f.port}
                     }}).exec();
                     User.update({
-                        'account.server': server.name,
-                        'account.port': f.port,
                     }, {
                         $pull: {
                             account: {
@@ -167,6 +165,8 @@ exports.checkAccount = function() {
                                 'port': f.port,
                             }
                         }
+                    }, {
+                        multi: true
                     }).exec();
                 }
             });
