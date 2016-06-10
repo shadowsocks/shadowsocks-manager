@@ -68,12 +68,10 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.userLastLogin = $scope.users.filter(function(f) {
                 return f.lastLogin;
             }).sort(function(a, b) {
-                console.log(a, b);
                 if(a.lastLogin > b.lastLogin) {return -1;}
                 if(a.lastLogin <= b.lastLogin) {return 1;}
                 return 0;
             })[0];
-            console.log($scope.userLastLogin);
         };
         $scope.init();
         $scope.$watch('publicInfo', function() {
