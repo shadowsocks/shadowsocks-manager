@@ -363,6 +363,7 @@ exports.getUsers = function(req, res) {
                 email: m.email,
                 isActive: m.isActive,
                 createTime: m.createTime,
+                lastLogin: m.lastLogin,
                 account: m.account.map(function(m) {
                     var server = results.server.filter(function(f) {
                         return (f.name === m.server && f.account.port === m.port);

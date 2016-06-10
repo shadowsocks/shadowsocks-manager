@@ -56,6 +56,7 @@ exports.login = function(req, res) {
         req.session.isAdmin = user.isAdmin;
         req.session.save();
         logger.info('[' + email + '][********]登陆成功');
+        User.findOneAndUpdate({email: email}, {$set: {lastLogin: new Date()}}).exec();
         res.send('success');
     });
 };

@@ -1,9 +1,17 @@
 <md-list>
-    <md-list-item class="md-3-line" >
+    <md-list-item class="md-3-line" ng-show="userLastSign.email">
         <div class="md-list-item-text">
             <h3>最新注册用户：</h3>
             <h4>{{userLastSign.email}}</h4>
             <h4>{{userLastSign.createTime | relativeTime}}</h4>
+        </div>
+        <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+    <md-list-item class="md-3-line" ng-show="userLastLogin.lastLogin">
+        <div class="md-list-item-text">
+            <h3>最近登录用户：</h3>
+            <h4>{{userLastLogin.email}}</h4>
+            <h4>{{userLastLogin.lastLogin | relativeTime}}</h4>
         </div>
         <md-divider ng-if="!$last"></md-divider>
     </md-list-item>
