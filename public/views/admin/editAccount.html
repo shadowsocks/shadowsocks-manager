@@ -1,59 +1,71 @@
-<md-list>
-    <md-list-item class="md-3-line">
-        <div class="md-list-item-text">
-            <h3>节点：{{server.name}}</h3>
-            <h4>地址：{{server.ip}}:{{account.port}}</h4>
-            <h4>密码：{{account.password}}（{{server.method}}）</h4>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item class="md-3-line">
-        <div class="md-list-item-text">
-            <h4>剩余流量：{{account.flow | flow1024}}</h4>
-            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.expireTime | relativeTime}}）</h4>
-            <h4 ng-if="account.lastActive">最近连接：{{account.lastActive | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.lastActive | relativeTime}}）</h4>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item class="md-3-line">
-        <div class="md-list-item-text">
-            <h4>本日：{{account.today | flow1024}}</h4>
-            <h4>本周：{{account.week | flow1024}}</h4>
-            <h4>本月：{{account.month | flow1024}}</h4>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    </md-list-item>
-        <div class="inset">
-            <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()">
-                失效自动删除
-            </md-switch>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item layout="column" layout-margin>
-        <p ng-repeat="user in accountUsers">
-            <span ng-click="toUserPage(user)">{{user}}</span>
-        </p>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item layout="row">
-        <md-button flex="50" class="md-primary md-raised" ng-click="flowBottomSheet()">设置流量</md-button>
-        <md-button flex="50" class="md-primary md-raised" ng-click="timeBottomSheet()">设置有效期</md-button>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item layout="row" layout-align="center center">
-        <div>
-            <canvas id="line" class="chart chart-line" chart-data="chart.data"
-                chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
-                chart-options="chart.options">
-            </canvas>
-        </div>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item layout="row" layout-align="center center">
-        <div layout-margin layout-padding>
-            <qr text="qrCode" image="true" ng-if="qrCode"></qr>
-        </div>
-    </md-list-item>
-</md-list>
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <h2>{{server.name}}:{{account.port}}</h2>
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item class="md-3-line">
+                        <div class="md-list-item-text">
+                            <h4>节点：{{server.name}}</h4>
+                            <h4>地址：{{server.ip}}:{{account.port}}</h4>
+                            <h4>密码：{{account.password}}（{{server.method}}）</h4>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item class="md-3-line">
+                        <div class="md-list-item-text">
+                            <h4>剩余流量：{{account.flow | flow1024}}</h4>
+                            <h4>到期时间：{{account.expireTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.expireTime | relativeTime}}）</h4>
+                            <h4 ng-if="account.lastActive">最近连接：{{account.lastActive | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}} （{{account.lastActive | relativeTime}}）</h4>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item class="md-3-line">
+                        <div class="md-list-item-text">
+                            <h4>本日：{{account.today | flow1024}}</h4>
+                            <h4>本周：{{account.week | flow1024}}</h4>
+                            <h4>本月：{{account.month | flow1024}}</h4>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    </md-list-item>
+                        <div class="inset">
+                            <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()">
+                                失效自动删除
+                            </md-switch>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item layout="column" layout-margin>
+                        <p ng-repeat="user in accountUsers">
+                            <span ng-click="toUserPage(user)">{{user}}</span>
+                        </p>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item layout="row">
+                        <md-button flex="50" class="md-primary md-raised" ng-click="flowBottomSheet()">设置流量</md-button>
+                        <md-button flex="50" class="md-primary md-raised" ng-click="timeBottomSheet()">设置有效期</md-button>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item layout="row" layout-align="center center">
+                        <div>
+                            <canvas id="line" class="chart chart-line" chart-data="chart.data"
+                                chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
+                                chart-options="chart.options">
+                            </canvas>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item layout="row" layout-align="center center">
+                        <div layout-margin layout-padding>
+                            <qr text="qrCode" image="true" ng-if="qrCode"></qr>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
