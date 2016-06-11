@@ -23,25 +23,25 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
-                        <div class="md-list-item-text">
+                        <div class="md-list-item-text" flex="50">
                             <h4>本日：{{account.today | flow1024}}</h4>
                             <h4>本周：{{account.week | flow1024}}</h4>
                             <h4>本月：{{account.month | flow1024}}</h4>
                         </div>
-                    </md-list-item>
-                    <md-divider></md-divider>
-                    </md-list-item>
-                        <div class="inset">
+                        <div class="md-list-item-text" flex="50" layout="row" layout-align="end center">
                             <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()">
                                 失效自动删除
                             </md-switch>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
-                    <md-list-item layout="column" layout-margin>
-                        <p ng-repeat="user in accountUsers">
-                            <span ng-click="toUserPage(user)">{{user}}</span>
-                        </p>
+                    <md-list-item layout="column" layout-align="center center">
+                        <div ng-show="accountUsers.length === 0">
+                            <p>尚未分配用户</p>
+                        </div>
+                        <div ng-repeat="user in accountUsers">
+                            <div layout layout-padding ng-click="toUserPage(user)">{{user}}</div>
+                        </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item layout="row">
