@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 9
+# version 13
 
 CACHE:
     /libs/angular/angular.min.js
@@ -13,9 +13,9 @@ CACHE:
     /libs/Chart.js/Chart.js
     /libs/angular-chart.js/dist/angular-chart.min.js
     /public/routes/admin.js
-    #/public/controllers/adminMain.js
-    #/public/controllers/adminServer.js
-    #/public/controllers/admin.js
+    /public/controllers/adminMain.js
+    /public/controllers/adminServer.js
+    /public/controllers/admin.js
 
     /libs/angular-material/angular-material.min.css
     /libs/angular-chart.js/dist/angular-chart.min.css
