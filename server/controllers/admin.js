@@ -64,7 +64,7 @@ exports.editServer = function(req, res) {
         }
         if(!data) {
             logger.warn('修改服务器出错: 找到不原有的ServerName');
-            return res.status(401).end('找不到ServerName');
+            return res.status(403).end('找不到ServerName');
         }
         logger.info('修改服务器: [' + name + '][' + ip + ':' + port + ']');
         return res.send(data);
@@ -73,7 +73,7 @@ exports.editServer = function(req, res) {
 
 exports.deleteServer = function(req, res) {
     var name = req.query.name;
-    if(!name) {return res.status(401).end('必须提供ServerName');}
+    if(!name) {return res.status(400).end('必须提供ServerName');}
     Server.findOneAndRemove({name: name}).exec(function(err, data) {
         if(err) {
             logger.warn('删除服务器出错:\n' + err);
@@ -81,7 +81,7 @@ exports.deleteServer = function(req, res) {
         }
         if(!data) {
             logger.warn('删除服务器出错: 找到不原有的ServerName');
-            return res.status(401).end('找不到ServerName');
+            return res.status(403).end('找不到ServerName');
         }
         logger.info('删除服务器: [' + data.name + '][' + data.ip + ':' + data.port + ']');
         return res.send(data);
@@ -185,7 +185,7 @@ exports.editAccount = function(req, res) {
     }).then(function(data) {
         if(!data) {
             logger.error('修改帐号出错: 找不到原帐号');
-            return res.status(401).end('找不到相应帐号');
+            return res.status(403).end('找不到相应帐号');
         }
         var ret = data.account.filter(function(f) {
             return +f.port === +port;
@@ -271,7 +271,7 @@ exports.addUserAccount = function(req, res) {
         }
     }).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
-        if(!data) {return res.status(401).end('找不到对应数据');}
+        if(!data) {return res.status(403).end('找不到对应数据');}
         return res.send(data);
     });
 };
@@ -290,7 +290,7 @@ exports.deleteUserAccount = function(req, res) {
         }
     }).exec(function(err, data) {
         if(err) {return res.status(500).end('数据库错误');}
-        if(!data) {return res.status(401).end('找不到对应数据');}
+        if(!data) {return res.status(403).end('找不到对应数据');}
         return res.send(data);
     });
 };

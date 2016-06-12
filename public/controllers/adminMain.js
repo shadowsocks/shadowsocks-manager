@@ -183,6 +183,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.publicInfo.codes = success[3].data;
                 }
             }, function(error) {
+                console.log(error);
+                if(error.status === 401) {
+                    $window.location.href = '/';
+                }
                 if(!options.loading) {return;}
                 $scope.loadingMessage({
                     message: '数据加载错误(' + error.status + ')',
@@ -235,7 +239,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.bottomMenus = [
             {name: '退出登录', icon: 'exit_to_app', click: function() {
                 $http.post('/api/home/logout').success(function(data) {
-                    $window.location.reload();
+                    $window.location.href = '/';
                 });
             }}
         ];

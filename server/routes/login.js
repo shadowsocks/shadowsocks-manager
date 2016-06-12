@@ -1,5 +1,6 @@
 var app = global.app;
 var home = require('../controllers/home');
+var auth = require('../controllers/auth');
 
 var render = function(req, res) {
     if(!req.session.user) {
@@ -52,8 +53,8 @@ app.get('/', render);
 
 app.get(/^\/user\/[\s\S]/, render);
 app.get(/^\/home\/[\s\S]/, render);
-app.get('/admin', renderAdmin);
-app.get(/^\/admin[\s\S]/, renderAdmin);
+app.get('/admin', auth.isAdmin, renderAdmin);
+app.get(/^\/admin[\s\S]/, auth.isAdmin, renderAdmin);
 
 app.post('/api/home/signup', home.signup);
 app.post('/api/home/login', home.login);
