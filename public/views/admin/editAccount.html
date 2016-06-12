@@ -96,7 +96,7 @@
                 </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
-                    <div layout layout-padding>
+                    <div>
                         <canvas class="chart chart-line" chart-data="c.data"
                         chart-labels="c.labels" chart-legend="false" chart-series="c.series"
                         chart-options="c.options">
