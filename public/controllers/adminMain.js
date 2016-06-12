@@ -183,7 +183,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.publicInfo.codes = success[3].data;
                 }
             }, function(error) {
-                console.log(error);
                 if(error.status === 401) {
                     $window.location.href = '/';
                 }

@@ -1,0 +1,40 @@
+CACHE MANIFEST
+# version 0
+
+CACHE:
+    /libs/angular/angular.min.js
+    /libs/angular-animate/angular-animate.min.js
+    /libs/angular-aria/angular-aria.min.js
+    /libs/angular-messages/angular-messages.min.js
+    /libs/angular-material/angular-material.min.js
+    /libs/angular-ui-router/release/angular-ui-router.min.js
+    /libs/qrcode/lib/qrcode.min.js
+    /libs/angular-qr/angular-qr.min.js
+    /libs/Chart.js/Chart.js
+    /libs/angular-chart.js/dist/angular-chart.min.js
+    /public/routes/user.js
+    #/public/controllers/userMain.js
+    #/public/controllers/user.js
+
+    /libs/angular-material/angular-material.min.css
+    /libs/angular-chart.js/dist/angular-chart.min.css
+    /public/assets/css/user.css
+    /public/assets/img/favicon.png
+
+    /libs/material-design-icons/iconfont/MaterialIcons-Regular.woff2
+    /libs/material-design-icons/iconfont/MaterialIcons-Regular.woff
+    /libs/material-design-icons/iconfont/MaterialIcons-Regular.ttf
+    /libs/material-design-icons/iconfont/MaterialIcons-Regular.eot
+
+    /public/views/user/account.html
+    /public/views/user/accountPage.html
+    /public/views/user/changePassword.html
+    /public/views/user/flow.html
+    /public/views/user/index.html
+    /public/views/user/loading.html
+    /public/views/user/renew.html
+    /public/views/user/unfinish.html
+    /public/views/user/user.html
+
+NETWORK:
+    *

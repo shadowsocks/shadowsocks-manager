@@ -67,19 +67,19 @@ exports.getUserInfo = function (req, res) {
 
 
 exports.changePassword = function(req, res) {
-    if(!req.body.newPassword) {return res.status(401).end('新密码不能为空');}
-    if(req.body.newPassword !== req.body.newPasswordAgain) {return res.status(401).end('两次输入的新密码不同');}
+    if(!req.body.newPassword) {return res.status(400).end('新密码不能为空');}
+    if(req.body.newPassword !== req.body.newPasswordAgain) {return res.status(400).end('两次输入的新密码不同');}
     User.findOne({email: req.session.user}).exec(function(err, user) {
         if(err) {return res.status(500).end('数据库错误');}
-        if(!user) {return res.status(401).end('找不到对应的用户');}
-        if(createPassword(req.body.oldPassword,req.session.user) !== user.password) {return res.status(401).end('原密码错误');}
+        if(!user) {return res.status(403).end('找不到对应的用户');}
+        if(createPassword(req.body.oldPassword,req.session.user) !== user.password) {return res.status(403).end('原密码错误');}
         User.findOneAndUpdate({email: req.session.user}, {
             $set: {
                 password: createPassword(req.body.newPassword, req.session.user)
             }
         }).exec(function(err, data) {
             if(err) {return res.status(500).end('数据库错误');}
-            if(!data) {return res.status(401).end('找不到对应的用户');}
+            if(!data) {return res.status(403).end('找不到对应的用户');}
             req.session.destroy();
             return res.send(data);
         });

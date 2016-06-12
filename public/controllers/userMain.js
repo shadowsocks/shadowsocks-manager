@@ -154,7 +154,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
         $scope.bottomMenus = [
             {name: '退出登录', icon: 'exit_to_app', click: function() {
                 $http.post('/api/home/logout').success(function(data) {
-                    $window.location.reload();
+                    $window.location.href = '/';
                 });
             }}
         ];
@@ -174,6 +174,9 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = success.data;
             }, function(error) {
+                if(error.status === 401) {
+                    $window.location.href = '/';
+                }
                 if(!options.loading) {return;}
                 $scope.loadingMessage({
                     message: '数据加载错误(' + error.status + ')',

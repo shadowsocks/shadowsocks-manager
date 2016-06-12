@@ -14,26 +14,8 @@ var render = function(req, res) {
         });
     } else if(req.session.isAdmin) {
         res.redirect('/admin');
-        // return res.render('admin', {
-        //     'controllers': [
-        //         '/public/controllers/adminMain.js',
-        //         '/public/controllers/adminServer.js',
-        //         '/public/controllers/admin.js'
-        //     ],
-        //     'routes': [
-        //         '/public/routes/admin.js'
-        //     ]
-        // });
     } else {
-        return res.render('user', {
-            'controllers': [
-                '/public/controllers/userMain.js',
-                '/public/controllers/user.js'
-            ],
-            'routes': [
-                '/public/routes/user.js'
-            ]
-        });
+        res.redirect('/user');
     }
 };
 
@@ -49,9 +31,24 @@ var renderAdmin = function(req, res) {
         ]
     });
 };
+var renderUser = function(req, res) {
+    return res.render('user', {
+        'controllers': [
+            '/public/controllers/userMain.js',
+            '/public/controllers/user.js'
+        ],
+        'routes': [
+            '/public/routes/user.js'
+        ]
+    });
+};
+
 app.get('/', render);
 
-app.get(/^\/user\/[\s\S]/, render);
+app.get('/user', auth.isUser, renderUser);
+app.get('/user/', auth.isUser, renderUser);
+app.get(/^\/user\/[\s\S]/, auth.isUser, renderUser);
+
 app.get(/^\/home\/[\s\S]/, render);
 
 app.get('/admin', auth.isAdmin, renderAdmin);
