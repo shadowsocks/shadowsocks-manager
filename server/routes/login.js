@@ -53,8 +53,10 @@ app.get('/', render);
 
 app.get(/^\/user\/[\s\S]/, render);
 app.get(/^\/home\/[\s\S]/, render);
+
 app.get('/admin', auth.isAdmin, renderAdmin);
-app.get(/^\/admin[\s\S]/, auth.isAdmin, renderAdmin);
+app.get('/admin/', auth.isAdmin, renderAdmin);
+app.get(/^\/admin\/[\s\S]/, auth.isAdmin, renderAdmin);
 
 app.post('/api/home/signup', home.signup);
 app.post('/api/home/login', home.login);
