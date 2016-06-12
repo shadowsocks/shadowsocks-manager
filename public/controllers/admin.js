@@ -216,7 +216,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.getChart = function(chart, type) {
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
-                port: 0,
+                port: $stateParams.accountPort,
                 type: type,
                 page: $scope.flowChart[$stateParams.serverName][type].page
             }).then(function(success) {

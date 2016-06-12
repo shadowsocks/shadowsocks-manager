@@ -89,14 +89,20 @@
                     </md-radio-group>
                 </md-list-item>
                 <md-divider></md-divider>
+                <md-list-item layout="column">
+                    <p>开始时间：{{flowChart[serverName][chartType].startTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                    <p>结束时间：{{flowChart[serverName][chartType].endTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</p>
+                    <p>合计：{{flowChart[serverName][chartType].sum | flow1024}}</p>
+                </md-list-item>
+                <md-divider></md-divider>
                 <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
-            <div layout layout-padding>
-                <canvas class="chart chart-line" chart-data="c.data"
-                chart-labels="c.labels" chart-legend="false" chart-series="c.series"
-                chart-options="c.options">
-                </canvas>
-            </div>
-        </md-list-item>
+                    <div layout layout-padding>
+                        <canvas class="chart chart-line" chart-data="c.data"
+                        chart-labels="c.labels" chart-legend="false" chart-series="c.series"
+                        chart-options="c.options">
+                        </canvas>
+                    </div>
+                </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item layout="row" layout-align="center center">
                     <div flex="50" layout="row" layout-align="center center">
