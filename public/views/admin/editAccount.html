@@ -45,10 +45,14 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item layout="row">
-                        <md-button flex="50" class="md-primary md-raised" ng-click="flowBottomSheet()">设置流量</md-button>
-                        <md-button flex="50" class="md-primary md-raised" ng-click="timeBottomSheet()">设置有效期</md-button>
+                        <div flex="50" layout="row" layout-align="center center">
+                            <md-button class="md-primary" ng-click="flowBottomSheet()">设置流量</md-button>
+                        </div>
+                        <div flex="50" layout="row" layout-align="center center">
+                            <md-button class="md-primary" ng-click="timeBottomSheet()">设置有效期</md-button>
+                        </div>
                     </md-list-item>
-                    <md-divider></md-divider>
+<!--                     <md-divider></md-divider>
                     <md-list-item layout="row" layout-align="center center">
                         <div>
                             <canvas id="line" class="chart chart-line" chart-data="chart.data"
@@ -56,14 +60,49 @@
                                 chart-options="chart.options">
                             </canvas>
                         </div>
-                    </md-list-item>
-                    <md-divider></md-divider>
+                    </md-list-item> -->
+                    <!-- <md-divider></md-divider>
                     <md-list-item layout="row" layout-align="center center">
                         <div layout-margin layout-padding>
                             <qr text="qrCode" image="true" ng-if="qrCode"></qr>
                         </div>
-                    </md-list-item>
+                    </md-list-item> -->
                 </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <div layout-margin style="font-size: 1.25em;">流量统计</div>
+                <md-list-item layout="row" layout-align="center center">
+                    <div>
+                        <canvas id="line" class="chart chart-line" chart-data="chart.data"
+                            chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
+                            chart-options="chart.options">
+                        </canvas>
+                    </div>
+                </md-list-item>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <div layout-margin style="font-size: 1.25em;">二维码</div>
+                <md-list-item layout="row" layout-align="center center">
+                    <div layout-margin layout-padding>
+                        <qr text="qrCode" image="true" ng-if="qrCode"></qr>
+                    </div>
+                </md-list-item>
             </md-card-content>
         </md-card>
     </div>
