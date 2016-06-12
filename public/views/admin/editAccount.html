@@ -79,12 +79,40 @@
         <md-card>
             <md-card-content>
                 <div layout-margin style="font-size: 1.25em;">流量统计</div>
+                <md-divider></md-divider>
+                <md-list-item layout="row" layout-align="space-around center">
+                    <div>统计周期：</div>
+                    <md-radio-group layout="row" layout-align="center center" ng-model="chartType" ng-change="chartChange(chartType)">
+                        <md-radio-button value="hour">小时</md-radio-button>
+                        <md-radio-button value="day">天</md-radio-button>
+                        <md-radio-button value="week">周</md-radio-button>
+                    </md-radio-group>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
+            <div layout layout-padding>
+                <canvas class="chart chart-line" chart-data="c.data"
+                chart-labels="c.labels" chart-legend="false" chart-series="c.series"
+                chart-options="c.options">
+                </canvas>
+            </div>
+        </md-list-item>
+                <md-divider></md-divider>
                 <md-list-item layout="row" layout-align="center center">
-                    <div>
-                        <canvas id="line" class="chart chart-line" chart-data="chart.data"
-                            chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
-                            chart-options="chart.options">
-                        </canvas>
+                    <div flex="50" layout="row" layout-align="center center">
+                        <md-button class="md-primary" ng-click="prev()">
+                            Prev
+                        </md-button>
+                    </div>
+                    <div flex="50" layout="row" layout-align="center center">
+                        <md-button class="md-primary" ng-click="reset()">
+                            Reset
+                        </md-button>
+                    </div>
+                    <div flex="50" layout="row" layout-align="center center">
+                        <md-button class="md-primary" ng-click="next()">
+                            Next
+                        </md-button>
                     </div>
                 </md-list-item>
             </md-card-content>

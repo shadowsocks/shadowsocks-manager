@@ -87,6 +87,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     })
     .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval) {
         $scope.setTitle('编辑帐号');
+        $scope.serverName = $stateParams.serverName;
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
 
         $scope.qrCode = '';
@@ -113,9 +114,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.accountUsers = [];
             $scope.publicInfo.users.forEach(function(user) {
                 user.account.forEach(function(account) {
-                    // if(!account) {
-                    //     console.log(user);
-                    // }
                     if(account.server === $stateParams.serverName && account.port === +$stateParams.accountPort) {
                         $scope.accountUsers.push(user.email);
                     }
@@ -188,7 +186,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
 
-        $scope.chart = {};
         var scaleLabel = function(chart) {
             var input = chart.value;
             if (input < 1000) {
@@ -203,29 +200,79 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return input;
             }
         };
-        $scope.getChart = function() {
+        $scope.chartType = 'hour';
+        $scope.chartChange = function(type) {
+            if(type === 'hour') {
+
+                $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
+            }
+            if(type === 'day') {
+                $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+            }
+            if(type === 'week') {
+                $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
+            }
+        };
+        $scope.getChart = function(chart, type) {
             $http.post('/api/admin/flowChart', {
                 server: $stateParams.serverName,
-                port: $stateParams.accountPort
+                port: 0,
+                type: type,
+                page: $scope.flowChart[$stateParams.serverName][type].page
             }).then(function(success) {
-                $scope.chart.labels = [];
-                $scope.chart.series = [];
-                $scope.chart.data = [[]];
+                chart.sum = 0;
+                chart.startTime = success.data[0].time;
+                chart.endTime = success.data[success.data.length - 1].time;
+                chart.labels = [];
+                chart.series = [];
+                chart.data = [[]];
                 success.data.forEach(function(f, i) {
-                    $scope.chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
-                    $scope.chart.data[0][i] = f.flow;
+                    if(type === 'week') {
+                        chart.labels[i] = $filter('date')(f.time, 'EEE');
+                    } else {
+                        chart.labels[i] = (i%4===0)?$filter('date')(f.time, 'HH:mm'):'';
+                    }
+                    chart.data[0][i] = f.flow;
+                    chart.sum += f.flow;
                 });
-                $scope.chart.options = {
+                chart.options = {
                     pointHitDetectionRadius: 1,
                     scaleLabel: scaleLabel,
                     tooltipTemplate: scaleLabel
                 };
             });
         };
-        // $interval(function() {
-        //     $scope.getChart();
-        // }, 120 * 1000);
-        $scope.getChart();
+        if(!$scope.flowChart[$stateParams.serverName]) {
+            $scope.flowChart[$stateParams.serverName] = {
+                hour: {page: 0},
+                day: {page :0},
+                week: {page: 0}
+            };
+        }
+
+        $scope.prev = function() {
+            $scope.flowChart[$stateParams.serverName][$scope.chartType].page += 1;
+            $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
+        };
+        $scope.reset = function() {
+            $scope.flowChart[$stateParams.serverName].hour.page = 0;
+            $scope.flowChart[$stateParams.serverName].day.page = 0;
+            $scope.flowChart[$stateParams.serverName].week.page = 0;
+            $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
+            $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+            $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
+        };
+        $scope.next = function() {
+            if($scope.flowChart[$stateParams.serverName][$scope.chartType].page === 0) {
+                return;
+            }
+            $scope.flowChart[$stateParams.serverName][$scope.chartType].page -= 1;
+            $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
+        };
+        
+        $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
+        $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
+        $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
 
         $scope.changeAutoRemove = function() {
             $scope.loading(true);
@@ -251,9 +298,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
-            // if($scope.tabs.length === 0) {
             $scope.tabs = $scope.publicInfo.servers;
-            // }
         };
         $scope.init();
         $scope.$watch('publicInfo.servers', function() {
