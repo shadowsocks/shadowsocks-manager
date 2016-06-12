@@ -30,6 +30,9 @@ exports.addServer = function (req, res) {
     var port = req.body.port;
     var method = req.body.method;
 
+    if(!name || !port || !ip) {return res.status(400).end('请求数据错误');}
+    if(!method) {method='aes-256-cfb';}
+
     var server = new Server();
     server.name = name;
     server.ip = ip;
