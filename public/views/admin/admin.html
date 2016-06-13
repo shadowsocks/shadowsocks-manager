@@ -50,8 +50,11 @@
                     </md-button>
                     <div>{{publicInfo.title}}</div>
                     <span flex></span>
+                    <md-button aria-label="search" class="md-icon-button" ng-show="false">
+                        <md-icon class="material-icons">search</md-icon>
+                    </md-button>
                     <md-menu>
-                        <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-button aria-label="menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                             <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
                         </md-button>
                         <md-menu-content width="4">
