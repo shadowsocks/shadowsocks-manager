@@ -50,7 +50,7 @@ exports.create = function(userName) {
                 port: port,
                 password: Math.random().toString(36).substr(2, 10),
                 expireTime: moment().add(12, 'hour').toDate(),
-                flow: 100 * 1000 * 1000,
+                flow: 60 * 1000 * 1000,
                 autoRemove: true,
             }}
         }).exec(function(err, data) {
