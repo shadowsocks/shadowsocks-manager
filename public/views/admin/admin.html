@@ -44,13 +44,13 @@
     <div flex layout="column">
         <div>
             <md-toolbar>
-                <div class="md-toolbar-tools">
+                <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
                     <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
                         <i class="material-icons">{{publicInfo.menuButtonIcon}}</i>
                     </md-button>
                     <div>{{publicInfo.title}}</div>
                     <span flex></span>
-                    <md-button aria-label="search" class="md-icon-button" ng-show="false">
+                    <md-button aria-label="search" class="md-icon-button" ng-show="publicInfo.search" ng-click="publicInfo.searchBar = !publicInfo.searchBar">
                         <md-icon class="material-icons">search</md-icon>
                     </md-button>
                     <md-menu>
@@ -66,6 +66,15 @@
                             </md-menu-item>
                         </md-menu-content>
                     </md-menu>
+                </div>
+                <div class="md-toolbar-tools" ng-show="publicInfo.searchBar">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="publicInfo.searchBar = !publicInfo.searchBar">
+                        <i class="material-icons">arrow_back</i>
+                    </md-button>
+                    <md-input-container class="search-input" flex>
+                        <label>&nbsp;</label>
+                        <input ng-model="user.address">
+                    </md-input-container>
                 </div>
             </md-toolbar>
         </div>

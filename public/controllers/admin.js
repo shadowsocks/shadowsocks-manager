@@ -467,6 +467,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.userPage = function(userName) {
             $state.go('admin.userPage', {userName: userName});
         };
+
+        $scope.publicInfo.search = '1';
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');

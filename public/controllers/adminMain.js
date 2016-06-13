@@ -33,7 +33,9 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             messageData: '',
             buttonLeftFn: '',
             buttonRightFn: '',
-            methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf']
+            methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf'],
+            searchBar: false,
+            search: ''
         };
         $scope.flowChart = {};
 
@@ -50,6 +52,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.MessageData = '';
             $scope.publicInfo.buttonLeftFn = '';
             $scope.publicInfo.buttonRightFn = '';
+            $scope.publicInfo.searchBar = false;
+            $scope.publicInfo.search = '';
 
             $mdDialog.cancel();
 
@@ -242,6 +246,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 });
             }}
         ];
+
+        $scope.showSearchBar = function() {
+            $scope.publicInfo.searchBar = true;
+        };
+        $scope.hideSearchBar = function() {
+            $scope.publicInfo.searchBar = false;
+        };
 
         
 
