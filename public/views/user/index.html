@@ -1,36 +1,22 @@
-<!-- <md-list>
-    <md-list-item class="md-3-line" >
-        <div class="md-list-item-text">
-            <h3>首页</h3>
-            <h4></h4>
-            <h4>首页不知道放什么内容好</h4>
-        </div>
-        <md-divider ng-if="!$last"></md-divider>
-    </md-list-item>
-</md-list> -->
-<md-card>
-    <md-card-title>
-        <md-card-title-text>
-            <span class="md-headline">公告</span>
-        </md-card-title-text>
-    </md-card-title>
-    <md-card-content>
-        <p></p>
-        <p>
-            有任何疑问，请发邮件至igyteng[AT]gmail.com咨询
-        </p>
-    </md-card-content>
-</md-card>
-<md-card>
-    <md-card-title>
-        <md-card-title-text>
-            <span class="md-headline">+1s</span>
-        </md-card-title-text>
-    </md-card-title>
-    <md-card-content>
-        <p></p>
-        <div layout="row" layout-align="center center">
-            <md-button class="md-raised md-primary" ng-click="oneSecond()">续一秒</md-button>
-        </div>
-    </md-card-content>
-</md-card>
+<div layout="row" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <h3>公告</h3>
+                <p>
+                    有任何疑问，请发邮件至igyteng[AT]gmail.com咨询
+                </p>
+            </md-card-content>
+        </md-card>
+        <md-card>
+            <md-card-content>
+                <h3>+1s</h3>
+                <div layout="row" layout-align="center center">
+                    <md-button class="md-raised md-primary" ng-click="oneSecond()">续一秒</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
