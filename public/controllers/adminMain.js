@@ -35,7 +35,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             buttonRightFn: '',
             methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf'],
             searchBar: false,
-            search: ''
+            searchText: '',
+            search: false
         };
         $scope.flowChart = {};
 
@@ -53,7 +54,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.buttonLeftFn = '';
             $scope.publicInfo.buttonRightFn = '';
             $scope.publicInfo.searchBar = false;
-            $scope.publicInfo.search = '';
+            $scope.publicInfo.searchText = '';
+            $scope.publicInfo.search = false;
 
             $mdDialog.cancel();
 

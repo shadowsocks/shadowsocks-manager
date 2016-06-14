@@ -443,20 +443,31 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminUserController', function($scope, $state, $http) {
         $scope.setTitle('用户管理');
 
+        $scope.usersF = [];
+
         $scope.init = function() {
             if(!$scope.publicInfo.users) {return;}
             $scope.users = $scope.publicInfo.users;
+            if(!$scope.usersF.length) {$scope.usersF = $scope.users;}
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
+        $scope.$watch('publicInfo.users', function() {
             $scope.init();
-        }, true);
+        }, false);
 
         $scope.userPage = function(userName) {
             $state.go('admin.userPage', {userName: userName});
         };
 
-        $scope.publicInfo.search = '1';
+        $scope.publicInfo.search = true;
+        $scope.$watch('publicInfo.searchText', function() {
+            if(!$scope.users) {return;}
+            if($scope.publicInfo.searchText === '') {$scope.usersF = $scope.users;}
+            var reg = new RegExp($scope.publicInfo.searchText);
+            $scope.usersF = $scope.users.filter(function(f) {
+                return  f.email.match(reg);
+            });
+        });
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');
