@@ -93,7 +93,7 @@ exports.useCode = function(req, res) {
     User.findOne({email: user}).exec(function(e, u) {
         if(e) {return res.status(500).end('数据库错误');}
         if(!u) {return res.status(403).end('用户不存在');}
-        if(u.account.length === 0) {return res.status(403).end('该用户尚未分配帐号');}
+        if(u.account.length === 0) {return res.status(403).end('该用户尚未分配帐号，无法使用续费码');}
         Code.findOneAndUpdate({code: code, isUsed: false}, {
             $set: {
                 isUsed: true,

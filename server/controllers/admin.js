@@ -18,9 +18,32 @@ var shadowsocks = require('./shadowsocks');
 exports.getServers = function (req, res) {
     var query = {};
     if(req.query.name) {query.name = req.query.name;}
-    Server.find(query).exec(function(err, servers) {
+    Server.find(query).lean().exec(function(err, servers) {
         if(err) {return res.status(500).end('数据库错误');}
-        return res.send(servers);
+        User.aggregate([{
+            $unwind: '$account'
+        }, {
+            $project: {
+                email: '$email',
+                server: '$account.server',
+                port: '$account.port'
+            }
+        }]).exec(function(err, users) {
+            servers = servers.map(function(server) {
+                server.account = server.account.map(function(a) {
+                    a.users = [];
+                    var u = users.forEach(function(f) {
+                        if(f.server === server.name && +f.port === +a.port) {
+                            a.users.push(f.email);
+                        }
+                    });
+                    return a;
+                });
+                return server;
+            });
+            if(err) {return res.status(500).end('数据库错误');}
+            return res.send(servers);
+        });
     });
 };
 
