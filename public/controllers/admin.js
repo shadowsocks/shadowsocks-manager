@@ -651,4 +651,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');
     })
+    .controller('AdminOptionsController', function($scope) {
+        $scope.setTitle('系统设置');
+
+        $scope.options = {
+            freeServer: false
+        };
+    })
 ;

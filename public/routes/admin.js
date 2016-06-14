@@ -91,8 +91,11 @@ app.config(
                     controller: 'AdminUnfinishController',
                     templateUrl: '/public/views/admin/unfinish.html'
                 })
-
-
+                .state('admin.options', {
+                    url: '/options',
+                    controller: 'AdminOptionsController',
+                    templateUrl: '/public/views/admin/options.html'
+                })
             ;
         }
     ]

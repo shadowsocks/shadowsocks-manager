@@ -28,4 +28,4 @@ app.post('/api/admin/code', auth.isAdmin, admin.addCode);
 
 app.post('/api/admin/flowChart',auth.isAdmin, flow.getFlowChart);
 
-app.post('/api/admin/option', auth.isAdmin, flow.getOptions);
+app.post('/api/admin/option', auth.isAdmin, option.getOptions);

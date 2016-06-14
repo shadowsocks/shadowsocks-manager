@@ -14,7 +14,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '用户管理', icon: 'face', click: 'admin.user'},
             {name: '续费码', icon: 'shop', click: 'admin.renew'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow.server'},
-            {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'}
+            {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'},
+            {name: '系统设置', icon: 'settings', click: 'admin.options'}
         ];
 
         $scope.publicInfo = {
