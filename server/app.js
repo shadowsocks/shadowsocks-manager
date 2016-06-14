@@ -12,6 +12,8 @@ var moment = require('moment-timezone');
 moment().tz('Asia/Shanghai').format();
 
 var fs = require('fs');
+var http = require('http');
+var https = require('https');
 
 var log4js = require('log4js');
 var logger = log4js.getLogger('server');
@@ -87,6 +89,12 @@ exports.db = function (cb) {
 
 
 exports.express = function(cb) {
+    // var keyPath = '/home/gyt/ssl/domain.key';
+    // var certPath = '/home/gyt/ssl/chained.pem';
+
+    // var hskey = fs.readFileSync(keyPath);
+    // var hscert = fs.readFileSync(certPath);
+
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
     app.use(compression());
@@ -108,9 +116,6 @@ exports.express = function(cb) {
     app.use('/libs', express.static('./bower_components'));
     app.use('/public', express.static('./public'));
 
-    // require('./routes/login');
-    // require('./routes/admin');
-
     logger.info('开始加载Express路由配置文件');
     fs.readdir('./server/routes', function(err, files) {
         if(err) {logger.error(err);}
@@ -118,9 +123,15 @@ exports.express = function(cb) {
             require('../server/routes/' + file);
             logger.info('加载路由文件 ' + file);
         });
-        var server = app.listen(config.express.port, '0.0.0.0', function () {
-            logger.info('Web服务启动，监听端口 ' + config.express.port);
+        var httpserver = app.listen(config.express.port, '0.0.0.0', function () {
+            logger.info('http 服务启动，监听端口 ' + config.express.port);
         });
+        // var httpsserver = https.createServer({
+        //     key: hskey,
+        //     cert: hscert
+        // }, app).listen(443, function() {
+        //     logger.info('https服务启动，监听端口 443');
+        // });
         cb(null);
     });
 };
