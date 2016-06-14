@@ -49,8 +49,8 @@ exports.create = function(userName) {
             $push: {account: {
                 port: port,
                 password: Math.random().toString(36).substr(2, 10),
-                expireTime: moment().add(12, 'hour').toDate(),
-                flow: 60 * 1000 * 1000,
+                expireTime: moment().add(8, 'hour').toDate(),
+                flow: 50 * 1000 * 1000,
                 autoRemove: true,
             }}
         }).exec(function(err, data) {

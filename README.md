@@ -25,6 +25,14 @@ Usage
     mv config.js.sample config.js
     node server
 
+Screenshot
+----------
+
+[[https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png|width=240px]]
+[[https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png|width=240px]]
+[[https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png|width=240px]]
+[[https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png|width=240px]]
+
 More
 ----
 
