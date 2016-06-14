@@ -22,6 +22,7 @@
     "angular-ui-router": "^0.2.18",
     "material-design-icons": "^2.2.3",
     "angular-qr": "^0.2.0",
-    "angular-chart.js": "^0.10.2"
+    "angular-chart.js": "^0.10.2",
+    "fingerprintjs2": "^1.4.0"
   }
 }

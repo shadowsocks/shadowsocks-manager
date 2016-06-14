@@ -20,6 +20,7 @@ var createPassword = function(password, username) {
 exports.signup = function(req, res) {
     var email = req.body.username;
     var password = req.body.password;
+    var fingerprint = req.body.fingerprint;
     if(!email || !password) {return res.status(400).end('请求数据不合法');}
     if(password.length < 6) {return res.status(400).end('密码长度太短');}
     User.findOne({email: email}).exec(function(err, data) {
@@ -29,6 +30,7 @@ exports.signup = function(req, res) {
         user.email = email;
         user.password = createPassword(password, email);
         user.signupIp = req.connection.remoteAddress;
+        user.signupFp = fingerprint;
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误');}
             mail.addMail(email);

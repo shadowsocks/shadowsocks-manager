@@ -11,6 +11,7 @@ var userSchema = new Schema({
     password: String,
     account: [accountSchema],
     signupIp: String,
+    signupFp: String,
     isActive: {type:Boolean, default: false},
     activeKey: String,
     sendEmailTime: Date,

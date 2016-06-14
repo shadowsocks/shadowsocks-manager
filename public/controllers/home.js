@@ -1,16 +1,25 @@
+var fingerprint = '';
+new Fingerprint2().get(function(result, components){
+    fingerprint = result;
+});
+
 app.controller('MainController', function($scope) {
         $scope.publicInfo = {};
     })
     .controller('LoginController', function($scope, $http, $state, $mdDialog, $mdToast, $window) {
         $scope.user = {
             username: '',
-            password: ''
+            password: '',
         };
 
         $scope.signup = function() {
             if(!$scope.user.username || !$scope.user.password) {return;}
             $scope.loading(true);
-            $http.post('/api/home/signup', $scope.user).then(function(success) {
+            $http.post('/api/home/signup', {
+                username: $scope.user.username,
+                password: $scope.user.password,
+                fingerprint: fingerprint
+            }).then(function(success) {
                 $scope.loading(false);
                 $scope.publicInfo.message = '注册成功，请前往邮箱激活此帐户';
                 $state.go('home.signupSuccess');
