@@ -89,11 +89,11 @@ exports.db = function (cb) {
 
 
 exports.express = function(cb) {
-    // var keyPath = '/home/gyt/ssl/domain.key';
-    // var certPath = '/home/gyt/ssl/chained.pem';
 
-    // var hskey = fs.readFileSync(keyPath);
-    // var hscert = fs.readFileSync(certPath);
+    if(config.express.key && config.express.cert) {
+        var httpskey = fs.readFileSync(config.express.key);
+        var httpscert = fs.readFileSync(config.express.cert);
+    }
 
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
@@ -123,15 +123,17 @@ exports.express = function(cb) {
             require('../server/routes/' + file);
             logger.info('加载路由文件 ' + file);
         });
-        var httpserver = app.listen(config.express.port, '0.0.0.0', function () {
-            logger.info('http 服务启动，监听端口 ' + config.express.port);
+        var httpserver = app.listen(config.express.http, '0.0.0.0', function () {
+            logger.info('http 服务启动，监听端口 ' + config.express.http);
         });
-        // var httpsserver = https.createServer({
-        //     key: hskey,
-        //     cert: hscert
-        // }, app).listen(443, function() {
-        //     logger.info('https服务启动，监听端口 443');
-        // });
+        if(config.express.key && config.express.cert) {
+            var httpsserver = https.createServer({
+                key: httpskey,
+                cert: httpscert
+            }, app).listen(443, function() {
+                logger.info('https服务启动，监听端口 443');
+            });
+        }
         cb(null);
     });
 };
