@@ -28,10 +28,10 @@ Usage
 Screenshot
 ----------
 
-![](https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png =240px)
-![](https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png =240px)
-![](https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png =240px)
-![](https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png =240px)
+<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png" width="240">
+<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png" width="240">
+<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png" width="240">
+<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png" width="240">
 
 More
 ----
