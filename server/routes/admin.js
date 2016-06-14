@@ -4,6 +4,7 @@ var admin = require('../controllers/admin');
 var auth = require('../controllers/auth');
 var later = require('../controllers/cron');
 var flow = require('../controllers/flow');
+var option = require('../controllers/option');
 
 app.post('/api/admin/server', auth.isAdmin, admin.addServer);
 app.get('/api/admin/server', auth.isAdmin, admin.getServers);
@@ -26,3 +27,5 @@ app.get('/api/admin/code', auth.isAdmin, admin.getCode);
 app.post('/api/admin/code', auth.isAdmin, admin.addCode);
 
 app.post('/api/admin/flowChart',auth.isAdmin, flow.getFlowChart);
+
+app.post('/api/admin/option', auth.isAdmin, flow.getOptions);
