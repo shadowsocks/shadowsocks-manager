@@ -3,7 +3,15 @@
     <div flex>
         <md-card>
             <md-card-content>
-                <h2>{{server.name}}:{{account.port}}</h2>
+                <div layout="row" layout-align="space-between center">
+                    <h2 flex>{{server.name}}:{{account.port}}</h2>
+                    <div style="width: 1.5rem;">
+                        <md-grid-list flex md-cols="1" md-row-height="1.5rem">
+                            <md-grid-tile style="background: #662288;"></md-grid-tile>
+                        </md-grid-list>
+                    </div>
+                </div>
+                
                 <md-list>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
