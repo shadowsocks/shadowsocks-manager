@@ -107,7 +107,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return f.port === +$stateParams.accountPort;
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
-            console.log($scope.account);
             $scope.colorStyle = {
                 'background-color': $scope.account.color
             };
