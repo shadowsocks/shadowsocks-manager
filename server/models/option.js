@@ -6,4 +6,4 @@ var optionSchema = new Schema({
     value: Schema.Types.Mixed
 });
 
-var OptionOriginal = mongoose.model('Option', optionSchema);
+var Option = mongoose.model('Option', optionSchema);
