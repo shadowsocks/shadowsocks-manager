@@ -176,6 +176,14 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 controller: function($scope) {}
             });
         };
+        $scope.colorBottomSheet = function() {
+            $mdBottomSheet.show({
+                templateUrl: '/public/views/admin/editAccountColor.html',
+                preserveScope: true,
+                scope: $scope,
+                controller: function($scope) {}
+            });
+        };
 
         var scaleLabel = function(chart) {
             var input = chart.value;
