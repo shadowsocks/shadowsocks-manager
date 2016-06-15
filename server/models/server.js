@@ -9,6 +9,7 @@ var serverSchema = new Schema({
     account: [new Schema({
         port: Number,
         password: String,
+        color: {type: String, default: 'FFFFFF'},
         expireTime: {type: Date, default: Date.now},
         flow: {type: Number, default: 0},
         status: {type:Number, default: 0},

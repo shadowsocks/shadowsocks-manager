@@ -107,6 +107,10 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return f.port === +$stateParams.accountPort;
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
+            console.log($scope.account);
+            $scope.colorStyle = {
+                'background-color': $scope.account.color
+            };
             $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.server.method + ':' + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
         };
         $scope.toUserPage = function(userName) {

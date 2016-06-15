@@ -5,9 +5,9 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <h2 flex>{{server.name}}:{{account.port}}</h2>
-                    <div style="width: 1.5rem;">
+                    <div style="width: 1.5rem;border-style: solid; border-width: 1px;">
                         <md-grid-list flex md-cols="1" md-row-height="1.5rem">
-                            <md-grid-tile style="background: #662288;"></md-grid-tile>
+                            <md-grid-tile ng-style="colorStyle"></md-grid-tile>
                         </md-grid-list>
                     </div>
                 </div>
