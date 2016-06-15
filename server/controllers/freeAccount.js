@@ -85,6 +85,6 @@ exports.create = function(userName) {
         }).exec(cb);
     }];
     async.auto(createAccount, function(err, data) {
-        console.log(err, data);
+        // console.log(err, data);
     });
 };
