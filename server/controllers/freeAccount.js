@@ -3,22 +3,37 @@ var Schema = mongoose.Schema;
 
 var User = mongoose.model('User');
 var Server = mongoose.model('Server');
+var Option = mongoose.model('Option');
 
 
 var moment = require('moment');
 var async = require('async');
 
 exports.create = function(userName) {
-    // console.log(userName);
-    var serverName = 'V1';
-    var startPort = 39001;
+    var serverName;
+    var time;
+    var flow;
+    var startPort = 40000;
     var createAccount = {};
-    createAccount.findServer = function(cb) {
+    createAccount.getOption = function(cb) {
+        Option.findOne({name: 'freeServer'}).exec(function(err, option) {
+            if(err) {return cb(err);}
+            if(!option) {return cb('option not found');}
+            if(!option.value) {return cb('value not found');}
+            if(!option.value.isEnable) {return cb('disable');}
+            if(!option.value.server || !option.value.time || !option.value.flow) {return cb('not enough value');}
+            serverName = option.value.server;
+            time = option.value.time;
+            flow = option.value.flow;
+            cb(null);
+        });
+    };
+    createAccount.findServer = ['getOption', function(results ,cb) {
         Server.findOne({name: serverName}).exec(function(err, server) {
             if(err || !server) {return cb('server not found');}
             cb(null, server);
         });
-    };
+    }];
     createAccount.findPort = ['findServer', function(results, cb) {
         Server.aggregate([{
             $match: {name: serverName}
@@ -49,8 +64,8 @@ exports.create = function(userName) {
             $push: {account: {
                 port: port,
                 password: Math.random().toString(36).substr(2, 10),
-                expireTime: moment().add(8, 'hour').toDate(),
-                flow: 50 * 1000 * 1000,
+                expireTime: moment().add(+time, 'second').toDate(),
+                flow: +flow,
                 autoRemove: true,
             }}
         }).exec(function(err, data) {
@@ -70,6 +85,6 @@ exports.create = function(userName) {
         }).exec(cb);
     }];
     async.auto(createAccount, function(err, data) {
-
+        console.log(err, data);
     });
 };

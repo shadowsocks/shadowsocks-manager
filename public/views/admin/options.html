@@ -4,17 +4,72 @@
         <md-card>
             <md-card-content>
                 <md-list>
-                    <md-divider></md-divider>
                     <md-list-item>
                         <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                             <div flex="75">自动分配免费节点</div>
-                            <div flex layout="row" layout-align="end center"><md-switch ng-model="options.freeServer" aria-label="Switch freeServer"></md-switch></div>
+                            <div flex layout="row" layout-align="end center"><md-switch ng-model="options.freeServer.isEnable" aria-label="Switch freeServer"></md-switch></div>
                         </div>
-                        <md-divider></md-divider>
                     </md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>
+        <md-card ng-show="options.freeServer.isEnable">
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <div layout="column" style="width: 100%;">
+                            <div class="md-list-item-text">
+                                <md-input-container class="md-block">
+                                    <label>选择服务器</label>
+                                    <md-select ng-model="options.freeServer.server">
+                                        <md-option ng-repeat="server in publicInfo.servers" value="{{server.name}}">{{server.name + '[' + server.ip + ']'}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div class="md-list-item-text">
+                                <md-input-container class="md-block">
+                                    <label>流量</label>
+                                    <md-select ng-model="options.freeServer.flow">
+                                        <md-option ng-repeat="f in flow" value="{{f.number}}">{{f.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div class="md-list-item-text">
+                                <md-input-container class="md-block">
+                                    <label>时间</label>
+                                    <md-select ng-model="options.freeServer.time">
+                                        <md-option ng-repeat="t in time" value="{{t.number}}">{{t.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <!-- <div layout="row" layout-align="center center" style="width: 100%;">
+                                <div flex>
+                                    <md-input-container class="md-block">
+                                        <label>流量</label>
+                                        <md-select ng-model="options.freeServer.flow">
+                                            <md-option ng-repeat="f in flow" value="{{f.number}}">{{f.name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                                <div flex>
+                                    <md-input-container class="md-block">
+                                        <label>时间</label>
+                                        <md-select ng-model="options.freeServer.time">
+                                            <md-option ng-repeat="t in time" value="{{t.number}}">{{t.name}}</md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </div>
+                            </div> -->
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+        <div layout="row" layout-align="center center">
+            <md-button class="md-primary" ng-click="setOptions()">
+                确定
+            </md-button>
+        </div>
     </div>
     <div flex="0" flex-gt-md="10"></div>
 </div>

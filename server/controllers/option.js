@@ -11,7 +11,7 @@ exports.getOptions = function (req, res) {
     getOptions.freeServer = function(cb) {
         Option.findOne({name: 'freeServer'}).exec(function(err, data) {
             if(err) {return cb(err);}
-            options.freeServer = data || {};
+            options.freeServer = data? data.value: {};
             cb(null);
         });
     };

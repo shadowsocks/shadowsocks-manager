@@ -681,11 +681,45 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
     .controller('AdminUnfinishController', function($scope) {
         $scope.setTitle('404 Not Found');
     })
-    .controller('AdminOptionsController', function($scope) {
+    .controller('AdminOptionsController', function($scope, $http) {
         $scope.setTitle('系统设置');
 
-        $scope.options = {
-            freeServer: false
+        $scope.flow = [
+            {number: 50 * 1000 * 1000, name:'50 MB'},
+            {number: 100 * 1000 * 1000, name:'100 MB'},
+            {number: 200 * 1000 * 1000, name:'200 MB'}
+        ];
+        $scope.time = [
+            {number: 2 * 3600, name: '2小时'},
+            {number: 4 * 3600, name: '4小时'},
+            {number: 8 * 3600, name: '8小时'},
+            {number: 12 * 3600, name: '12小时'}
+        ];
+
+        $http.get('/api/admin/option').then(function(success) {
+            $scope.options = success.data;
+        });
+
+        $scope.setOptions = function() {
+            $scope.loading(true);
+            $http.post('/api/admin/option', {
+                name: 'freeServer',
+                value: $scope.options.freeServer
+            }).then(function(success) {
+                $scope.loadingMessage({
+                    message: '设置成功',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            }, function(error) {
+                $scope.loadingMessage({
+                    message: '设置失败',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            });
         };
     })
 ;

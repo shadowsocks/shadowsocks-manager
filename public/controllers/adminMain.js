@@ -129,10 +129,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.initPublicInfo = function(options) {
             if($scope.publicInfo.messageData) {return;}
             if(!options) {options = {
-                type: ['server','user', 'flow', 'code', 'option'],
+                type: ['server','user', 'flow', 'code'],
                 loading: true
             };}
-            if(!options.type) {options.type = ['server','user', 'flow', 'code', 'option'];}
+            if(!options.type) {options.type = ['server','user', 'flow', 'code'];}
 
             if(!options.loading && $scope.publicInfo.lastUpdate) {
                 var time = +new Date() - $scope.publicInfo.lastUpdate;
@@ -159,11 +159,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 promises[3] = $http.get('/api/admin/code');
             } else {
                 promises[3] = undefined;
-            }
-            if(options.type.indexOf('option') >= 0) {
-                promises[4] = $http.get('/api/admin/option');
-            } else {
-                promises[4] = undefined;
             }
             $q.all(promises).then(function(success) {
                 $scope.loading(false);
@@ -194,9 +189,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 }
                 if(success[3]) {
                     $scope.publicInfo.codes = success[3].data;
-                }
-                if(success[4]) {
-                    $scope.publicInfo.options = success[4].data;
                 }
             }, function(error) {
                 if(error.status === 401) {
