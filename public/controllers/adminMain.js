@@ -35,7 +35,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             buttonLeftFn: '',
             buttonRightFn: '',
             methods: ['aes-256-cfb', 'aes-192-cfb','aes-128-cfb', 'table', 'rc4', 'rc4-md5', 'chacha20', 'chacha20-ietf'],
-            colors: ['CC4499', '2299AA'],
+            colors: ['FFFFFF', 'CC4499', '2299AA'],
             searchBar: false,
             searchText: '',
             search: false

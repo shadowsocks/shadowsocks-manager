@@ -159,6 +159,25 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 });
             });
         };
+        $scope.setColor = function(color) {
+            $scope.loading(true);
+            $http.post('/api/admin/accountColor', {
+                name: $stateParams.serverName,
+                port: $stateParams.accountPort,
+                color: color
+            }).then(function(success) {
+                $scope.account.color = success.data;
+                $scope.loading(false);
+                $mdBottomSheet.cancel();
+            }, function(error) {
+                $scope.loadingMessage({
+                    message: '设置颜色出错',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            });
+        };
 
         $scope.flowBottomSheet = function() {
             $mdBottomSheet.show({

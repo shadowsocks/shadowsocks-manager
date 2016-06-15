@@ -224,6 +224,25 @@ exports.editAccount = function(req, res) {
     });
 };
 
+exports.accountColor = function(req, res) {
+    var server = req.body.name;
+    var color = req.body.color;
+    var port = req.body.port;
+    Server.findOneAndUpdate({
+        'name': server,
+        'account.port': port
+    }, {
+        $set: {
+            'account.$.color': color
+        }
+    }, {new: true}).exec(function(err, data) {
+        if(err || !data) {
+            return res.status(500).end('数据库错误');
+        }
+        return res.send(color);
+    });
+};
+
 exports.accountAutoRemove = function(req, res) {
     var name = req.body.name;
     var port = req.body.port;
