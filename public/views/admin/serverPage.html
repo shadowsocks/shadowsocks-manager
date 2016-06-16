@@ -36,12 +36,13 @@
                         </div>
                         <div class="md-list-item-text" flex="40">
                             <div layout="row" layout-align="end center">
-                                <md-button class="md-icon-button" aria-label="edit" ng-click="editAccount(account)">
+                                <md-button class="md-secondary md-primary" ng-click="editAccount(account)">详情[{{account.users.length}}]</md-button>
+                                <!-- <md-button class="md-icon-button" aria-label="edit" ng-click="editAccount(account)">
                                     <i class="material-icons">create</i>
-                                </md-button>
-                                <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
+                                </md-button> -->
+                                <!-- <md-button class="md-icon-button" aria-label="delete" ng-click="deleteAccount(account.port)">
                                     <i class="material-icons">close</i>
-                                </md-button>
+                                </md-button> -->
                             </div>
                         </div>
                         <md-divider></md-divider>
