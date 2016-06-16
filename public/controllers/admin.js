@@ -85,7 +85,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         }, true);
 
     })
-    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval) {
+    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval, $mdDialog) {
         $scope.setTitle('编辑帐号');
         $scope.serverName = $stateParams.serverName;
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
@@ -107,9 +107,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return f.port === +$stateParams.accountPort;
             })[0];
             if(!$scope.account) {$state.go('admin.serverPage', {serverName: $stateParams.serverName});}
-            $scope.colorStyle = {
-                'background-color': $scope.account.color
-            };
             $scope.qrCode = 'ss://' + b64EncodeUnicode($scope.server.method + ':' + $scope.account.password + '@' + $scope.server.ip + ':' + $scope.account.port);
         };
         $scope.toUserPage = function(userName) {
@@ -221,7 +218,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.chartType = 'hour';
         $scope.chartChange = function(type) {
             if(type === 'hour') {
-
                 $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
             }
             if(type === 'day') {
@@ -303,6 +299,32 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             }, function(error) {
                 $scope.loading(false);
                 $scope.account.autoRemove = !$scope.account.autoRemove;
+            });
+        };
+
+        $scope.deleteAccount = function(port) {
+            var confirm = $mdDialog.confirm()
+                .title('')
+                .textContent('真的要删除帐号[' + port + ']吗？')
+                .ariaLabel('delete')
+                .ok('确定')
+                .cancel('取消');
+            $mdDialog.show(confirm).then(function() {
+                $mdDialog.cancel(confirm);
+                $scope.loading(true);
+                $http.delete('/api/admin/account', {params: {
+                    name: $stateParams.serverName,
+                    port: port
+                }}).then(function(success) {
+                    $scope.server.account = success.data.account;
+                    $state.go('admin.serverPage', {serverName: $stateParams.serverName});
+                }, function(error) {
+                    $scope.loadingMessage({message: '删除账号失败', right: function() {
+                        $scope.loading(false);
+                    }});
+                });
+            }, function() {
+                $mdDialog.cancel(confirm);
             });
         };
     })
