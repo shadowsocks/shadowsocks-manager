@@ -9,7 +9,7 @@ var serverSchema = new Schema({
     account: [new Schema({
         port: Number,
         password: String,
-        color: {type: String, default: 'FFFFFF'},
+        color: {type: String, default: 'BDBDBD'},
         expireTime: {type: Date, default: Date.now},
         flow: {type: Number, default: 0},
         status: {type:Number, default: 0},
@@ -26,3 +26,20 @@ var serverSchema = new Schema({
 serverSchema.index({ip: 1, port: 1}, {unique: true});
 
 var Server = mongoose.model('Server', serverSchema);
+
+// Server.find({}).exec(function(err, servers) {
+//     servers.forEach(function(server) {
+//         server.account.forEach(function(a) {
+//             Server.findOneAndUpdate({
+//                 name: server.name,
+//                 'account.port': a.port
+//             }, {
+//                 $set: {
+//                     'account.$.color': 'BDBDBD'
+//                 }
+//             }).exec(function(e) {
+//                 console.log(server.name + ' ' + a.port + ' ' + e);
+//             });
+//         });
+//     });
+// });

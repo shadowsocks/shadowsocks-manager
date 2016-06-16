@@ -30,11 +30,15 @@
                         </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat="account in server.account" class="md-2-line" style="padding-left: 16px;">
-                        <div class="md-list-item-text" flex="60">
+                        <!-- <div class="md-list-item-text" flex> -->
+                            <!-- <md-icon md-svg-icon="person" class="md-avatar-icon" ng-style="{'background-color': '#' + account.color };"></md-icon> -->
+                            <i class="material-icons md-avatar-icon" ng-style="{'background-color': '#' + account.color };">person</i>
+                        <!-- </div> -->
+                        <div class="md-list-item-text" flex>
                             <h4>端口：{{account.port}}</h4>
                             <h4>密码：{{account.password}}</h4>
                         </div>
-                        <div class="md-list-item-text" flex="40">
+                        <div class="md-list-item-text" flex>
                             <div layout="row" layout-align="end center">
                                 <md-button class="md-secondary md-primary" ng-click="editAccount(account)">详情[{{account.users.length}}]</md-button>
                                 <!-- <md-button class="md-icon-button" aria-label="edit" ng-click="editAccount(account)">
