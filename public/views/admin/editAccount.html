@@ -31,15 +31,17 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
-                        <div class="md-list-item-text" flex="50">
+                        <div class="md-list-item-text">
                             <h4>本日：{{account.today | flow1024}}</h4>
                             <h4>本周：{{account.week | flow1024}}</h4>
                             <h4>本月：{{account.month | flow1024}}</h4>
                         </div>
-                        <div class="md-list-item-text" flex="50" layout="row" layout-align="end center">
-                            <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()">
-                                失效自动删除
-                            </md-switch>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                            <div flex="75">失效自动删除</div>
+                            <div flex layout="row" layout-align="end center"><md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-change="changeAutoRemove()"></md-switch></div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
@@ -60,21 +62,6 @@
                             <md-button class="md-primary" ng-click="timeBottomSheet()">设置有效期</md-button>
                         </div>
                     </md-list-item>
-<!--                     <md-divider></md-divider>
-                    <md-list-item layout="row" layout-align="center center">
-                        <div>
-                            <canvas id="line" class="chart chart-line" chart-data="chart.data"
-                                chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
-                                chart-options="chart.options">
-                            </canvas>
-                        </div>
-                    </md-list-item> -->
-                    <!-- <md-divider></md-divider>
-                    <md-list-item layout="row" layout-align="center center">
-                        <div layout-margin layout-padding>
-                            <qr text="qrCode" image="true" ng-if="qrCode"></qr>
-                        </div>
-                    </md-list-item> -->
                 </md-list>
             </md-card-content>
         </md-card>
