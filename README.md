@@ -12,7 +12,7 @@ Dependencies
 Install
 -------
 
-    git clone https://github.com/gyteng/shadowsocks-manager.git
+    git clone https://github.com/shadowsocks/shadowsocks-manager.git
     npm install -g bower
     cd shadowsocks-manager
     npm install
@@ -28,12 +28,12 @@ Usage
 Screenshot
 ----------
 
-<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png" width="240">
-<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png" width="240">
-<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png" width="240">
-<img src="https://github.com/gyteng/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png" width="240">
+<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png" width="240">
+<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png" width="240">
+<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png" width="240">
+<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png" width="240">
 
 More
 ----
 
-Please visit [WiKi](https://github.com/gyteng/shadowsocks-manager/wiki).
+Please visit [WiKi](https://github.com/shadowsocks/shadowsocks-manager/wiki).
