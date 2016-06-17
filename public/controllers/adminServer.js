@@ -151,6 +151,34 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 accountPort: account.port
             });
         };
+        $scope.onSwipeLeft = function() {
+            if($scope.publicInfo.servers.length <= 1) {return;}
+            var currentIndex;
+            $scope.publicInfo.servers.forEach(function(f, i) {
+                if(f.name === $stateParams.serverName) {currentIndex = i;}
+            });
+            if(!currentIndex && currentIndex !== 0) {return;}
+            var nextIndex = 0;
+            if(currentIndex < $scope.publicInfo.servers.length - 1) {
+                nextIndex = currentIndex + 1;
+            }
+            var serverName = $scope.publicInfo.servers[nextIndex].name;
+            $state.go('admin.serverPage', {serverName: serverName});
+        };
+        $scope.onSwipeRight = function() {
+            if($scope.publicInfo.servers.length <= 1) {return;}
+            var currentIndex;
+            $scope.publicInfo.servers.forEach(function(f, i) {
+                if(f.name === $stateParams.serverName) {currentIndex = i;}
+            });
+            if(!currentIndex && currentIndex !== 0) {return;}
+            var nextIndex = $scope.publicInfo.servers.length - 1;
+            if(currentIndex !== 0) {
+                nextIndex = currentIndex - 1;
+            }
+            var serverName = $scope.publicInfo.servers[nextIndex].name;
+            $state.go('admin.serverPage', {serverName: serverName});
+        };
     })
     .controller('AdminAddAccountController', function($scope, $interval, $http, $state, $stateParams) {
         $scope.setTitle('添加帐号');
