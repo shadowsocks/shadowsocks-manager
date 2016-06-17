@@ -366,6 +366,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             $scope.servers = $scope.publicInfo.servers;
+            if($scope.servers && $scope.servers.length === 0) {
+                return $state.go('admin.index');
+            }
             if(!$stateParams.serverName && $state.current.name === 'admin.flow.server') {
                 $state.go('admin.flow.server', {serverName: $scope.tabs[0].name});
             }
