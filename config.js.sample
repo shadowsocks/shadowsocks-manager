@@ -3,8 +3,8 @@ exports.conf = {
         host: '127.0.0.1',
         port: '27017',
         name: 'Shadowsocks-Manager',
-        user: 'user',
-        pass: 'password'
+        user: '',
+        pass: ''
     },
     admin: {
         email: 'youremailaddress@gmail.com',
