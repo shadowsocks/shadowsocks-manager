@@ -4,10 +4,10 @@ var compression = require('compression');
 var config = require('../config').conf;
 var mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
-mongoose.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name, {
-    user: config.db.user,
-    pass: config.db.pass
-});
+var mongoAuth = {};
+if(config.db.user) {mongoAuth.user = config.db.user;}
+if(config.db.pass) {mongoAuth.pass = config.db.pass;}
+mongoose.connect('mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name, mongoAuth);
 var moment = require('moment-timezone');
 moment().tz('Asia/Shanghai').format();
 
