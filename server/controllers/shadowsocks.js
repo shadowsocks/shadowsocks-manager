@@ -66,7 +66,7 @@ var startSocket = function(server) {
         servers[server.name].on('message', function(m, r) {
             var msg = String(m);
             if (msg.substr(0, 4) === 'stat') {
-                var flow = JSON.parse(msg.substr(6));
+                var flow = JSON.parse(msg.substr(6).replace(/\0$/,''));
                 for (var f in flow) {
                     var ho = new HistoryOriginal();
                     ho.name = server.name;
