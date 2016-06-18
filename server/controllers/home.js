@@ -24,7 +24,7 @@ exports.signup = function(req, res) {
     if(!email || !password) {return res.status(400).end('请求数据不合法');}
     if(password.length < 6) {return res.status(400).end('密码长度太短');}
     User.findOne({email: email}).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库操作错误');}
+        if(err) {return res.status(500).end('数据库操作错误：' + err);}
         else if(data) {return res.status(403).end('该用户已注册');}
         var user = new User();
         user.email = email;
@@ -32,7 +32,7 @@ exports.signup = function(req, res) {
         user.signupIp = req.connection.remoteAddress;
         user.signupFp = fingerprint;
         user.save(function(err, data) {
-            if(err) {return res.status(500).end('数据库操作错误');}
+            if(err) {return res.status(500).end('数据库操作错误：' + err);}
             mail.addMail(email);
             logger.info('[' + email + ']注册成功');
             return res.send('success');
@@ -45,7 +45,7 @@ exports.login = function(req, res) {
     var password = req.body.password;
 
     User.findOne({email: email}).exec(function(err, user) {
-        if(err) {return res.status(500).end('数据库操作错误');}
+        if(err) {return res.status(500).end('数据库操作错误：' + err);}
         else if(!user) { return res.status(401).end('用户未注册');}
         var passwordWithMd5 = createPassword(password, user.email);
         if(passwordWithMd5 !== user.password) {

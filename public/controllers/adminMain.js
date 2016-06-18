@@ -1,7 +1,13 @@
-app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval, $stateParams) {
+app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $q, $interval, $stateParams, $mdMedia) {
+        $scope.innerSideNav = true;
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
-                $mdSidenav('left').toggle();
+                if($mdMedia('gt-sm')) {
+                    $scope.innerSideNav = !$scope.innerSideNav;
+                } else {
+                    $mdSidenav('left').toggle();
+                }
+
             } else if(!$scope.publicInfo.menuButtonHistoryBackState) {
                 $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
             } else {
