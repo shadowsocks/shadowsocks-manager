@@ -1,5 +1,5 @@
 .md-scroll-mask {
-    position: initial;
+  position: initial;
 }
 
 @font-face {
@@ -41,8 +41,36 @@
 }
 
 .search-input > input {
-    color: #FFF;
+  color: #FFF;
 }
 .search-input > .md-errors-spacer {
-    min-height: 0px;
+  min-height: 0px;
+}
+
+.animate-show-hide-sidenav {
+
+}
+
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 30px;
+  /*border: 1px solid black;*/
+  /*background: white;*/
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 30 0px;
+}
+
+.check-element {
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
 }
