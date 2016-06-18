@@ -206,7 +206,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.initPublicInfo({loading: true});
         $interval(function() {
             if(document.visibilityState === 'visible') {
-                $scope.initPublicInfo({loading: false});
+                if($scope.publicInfo.lastUpdate && (+new Date() - $scope.publicInfo.lastUpdate) > 5 * 30 * 1000) {
+                    $scope.initPublicInfo({loading: true});
+                } else {
+                    $scope.initPublicInfo({loading: false});
+                }
             }
         }, 10 * 1000);
         document.addEventListener('visibilitychange', function(){
