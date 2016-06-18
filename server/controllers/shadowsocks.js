@@ -73,7 +73,13 @@ var startSocket = function(server) {
                     ho.port = +f;
                     ho.flow = flow[f];
                     ho.time = new Date();
-                    ho.save();
+                    ho.save(function(err, data) {
+                        if(err) {
+                            logger.warn('保存历史记录出错：' + err);
+                        } else {
+                            logger.info(flow);
+                        }
+                    });
 
                     Server.findOneAndUpdate({
                         'name': server.name,
