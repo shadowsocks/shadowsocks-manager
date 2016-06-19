@@ -56,6 +56,7 @@ exports.addMail = function(userName) {
     if(userName.match(new RegExp('@trbvn.com'), 'i')) {return;}
     if(userName.match(new RegExp('@leeching.net'), 'i')) {return;}
     if(userName.match(new RegExp('@top1post.ru'), 'i')) {return;}
+    if(userName.match(new RegExp('@hmamail.com'), 'i')) {return;}
     if(sendMailQueue.indexOf(userName) < 0) {
         sendMailQueue.push(userName);
     }
