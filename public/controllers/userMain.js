@@ -34,7 +34,8 @@ app.filter('relativeTime', function() {
         return ret + retTail;
     };
 });
-app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval, $timeout) {
+app.controller('UserMainController', function($scope, $http, $state, $mdSidenav, $window, $mdDialog, $interval, $timeout, $mdMedia) {
+        $scope.innerSideNav = true;
         $scope.menus = [
             {name: '首页', icon: 'home', click: 'user.index'},
             {name: '我的帐户', icon: 'cloud', click: 'user.account'},
@@ -123,7 +124,11 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
 
         $scope.menuButton = function() {
             if(!$scope.publicInfo.menuButtonState) {
-                $mdSidenav('left').toggle();
+                if($mdMedia('gt-sm')) {
+                    $scope.innerSideNav = !$scope.innerSideNav;
+                } else {
+                    $mdSidenav('left').toggle();
+                }
             } else {
                 $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
             }
