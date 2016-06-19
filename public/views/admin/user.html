@@ -1,15 +1,26 @@
-<md-list>
-    <md-list-item ng-repeat="user in usersF">
-        <md-button class="md-icon-button" aria-label="check">
-            <i class="material-icons"  ng-show="user.isActive">check</i>
-        </md-button>
-        <a ng-click="userPage(user.email)" flex="85">
-            <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                <div class="inset">
-                    {{user.email}}
-                </div>
-            </md-item-content>
-        </a>
-        <md-divider ng-hide="$last"></md-divider>
-    </md-list-item>
-</md-list>
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item ng-repeat="user in usersF">
+                        <md-button class="md-icon-button" aria-label="check">
+                            <i class="material-icons"  ng-show="user.isActive">check</i>
+                        </md-button>
+                        <a ng-click="userPage(user.email)" flex="85">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    {{user.email}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
