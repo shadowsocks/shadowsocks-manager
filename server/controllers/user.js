@@ -179,7 +179,7 @@ exports.oneSecond = function(req, res) {
             if(err) {
                 return res.status(500).end();
             }
-            logger.info('用户[' + username + ']成功续了一秒');
+            logger.info('用户[' + userName + ']成功续了一秒');
             oneSecondAccount(userName);
             return res.send(data);
         });
@@ -197,9 +197,16 @@ var oneSecondAccount = function(userName) {
             if(err) {return cb(err);}
             if(!user) {return cb('user not found');}
             if(!user.account.length) {
-                freeAccount.create(userName, 'V1', time, flow, function(err, data) {
+                Server.aggregate([{$sample: 
+                    { size: 1 }
+                }]).exec(function(err, server) {
                     if(err) {return cb(err);}
-                    return cb(null, user);
+                    if(!server) {return cb('server not found');}
+                    if(!server[0]) {return cb('server not found');}
+                    freeAccount.create(userName, server[0].name, time, flow, function(err, data) {
+                        if(err) {return cb(err);}
+                        return cb(null, user);
+                    });
                 });
             } else {
                 cb(null, user);
