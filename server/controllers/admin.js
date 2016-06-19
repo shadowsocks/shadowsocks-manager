@@ -295,7 +295,6 @@ exports.deleteAccount = function(req, res) {
         }, {
             multi: true
         }).exec(function(err, user) {
-            console.log(err || user);
             logger.info('删除帐号: [' + name + '][' + port + ']');
             return res.send(data);
         });

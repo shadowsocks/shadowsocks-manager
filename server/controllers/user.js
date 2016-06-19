@@ -8,6 +8,11 @@ var OneSecond = mongoose.model('OneSecond');
 var async = require('async');
 var moment = require('moment');
 
+var log4js = require('log4js');
+var logger = log4js.getLogger('admin');
+
+var freeAccount = require('./freeAccount');
+
 var crypto = require('crypto');
 var md5 = function(text) {
         return crypto.createHash('md5').update(text).digest('hex');
@@ -174,8 +179,68 @@ exports.oneSecond = function(req, res) {
             if(err) {
                 return res.status(500).end();
             }
+            logger.info('用户[' + username + ']成功续了一秒');
+            oneSecondAccount(userName);
             return res.send(data);
         });
     });
+};
 
+var oneSecondAccount = function(userName) {
+    var flow = 20 * 1000 * 1000;
+    var time = 3 * 3600;
+
+    var getAccountInfo = {};
+    var parallel = [];
+    getAccountInfo.getUser = function(cb) {
+        User.findOne({email: userName}).exec(function(err, user) {
+            if(err) {return cb(err);}
+            if(!user) {return cb('user not found');}
+            if(!user.account.length) {
+                freeAccount.create(userName, 'V1', time, flow, function(err, data) {
+                    if(err) {return cb(err);}
+                    return cb(null, user);
+                });
+            } else {
+                cb(null, user);
+            }
+        });
+    };
+    getAccountInfo.getAccount = ['getUser', function(results, cb) {
+        results.getUser.account.forEach(function(f) {
+            parallel.push(function(cb) {
+                Server.findOne({name: f.server}).exec(function(err, server) {
+                    if(err || !server) {return cb(null);}
+                    var account = server.account.filter(function(account) {
+                        return +account.port === +f.port;
+                    })[0];
+                    if(!account) {return cb(null);}
+                    if(account.flow < flow) {
+                        Server.findOneAndUpdate({
+                            name: f.server,
+                            'account.port': +f.port
+                        }, {
+                            $set: {
+                                'account.$.flow': flow
+                            }
+                        }).exec();
+                    }
+                    if(account.expireTime - Date.now() < time * 1000) {
+                        Server.findOneAndUpdate({
+                            name: f.server,
+                            'account.port': +f.port
+                        }, {
+                            $set: {
+                                'account.$.expireTime': new Date(+Date.now() + time * 1000)
+                            }
+                        }).exec();
+                    }
+                });
+            });
+            cb(null);
+        });
+    }];
+    async.auto(getAccountInfo, function(err, data) {
+        async.parallel(parallel);
+    });
 };

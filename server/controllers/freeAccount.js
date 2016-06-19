@@ -9,13 +9,13 @@ var Option = mongoose.model('Option');
 var moment = require('moment');
 var async = require('async');
 
-exports.create = function(userName) {
-    var serverName;
-    var time;
-    var flow;
+exports.create = function(userName, serverName, time, flow, cb) {
     var startPort = 40000;
     var createAccount = {};
     createAccount.getOption = function(cb) {
+        if(serverName && time && flow) {
+            return cb(null);
+        }
         Option.findOne({name: 'freeServer'}).exec(function(err, option) {
             if(err) {return cb(err);}
             if(!option) {return cb('option not found');}
@@ -85,6 +85,6 @@ exports.create = function(userName) {
         }).exec(cb);
     }];
     async.auto(createAccount, function(err, data) {
-        // console.log(err, data);
+        if(cb) {cb(err, data);}
     });
 };
