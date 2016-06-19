@@ -80,11 +80,11 @@
         </div>
 
         <div flex layout="row">
-            <md-sidenav class="md-sidenav-left md-whiteframe-z2 animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav">
+            <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px;">
                 <md-content>
-                    <div layout="column">
+                    <div layout="column" layout-align="center start">
                         <md-list>
-                            <md-list-item ng-repeat="menu in menus">
+                            <md-list-item ng-repeat="menu in menus" style="padding-left: 8px;">
                                 <a ng-click="menuClick($index)">
                                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
                                         <div class="inset">
@@ -97,7 +97,7 @@
                                 </a>
                             </md-list-item>
                             <md-divider></md-divider>
-                            <md-list-item ng-repeat="menu in bottomMenus">
+                            <md-list-item ng-repeat="menu in bottomMenus" style="padding-left: 8px;">
                                 <a ng-click="bottomMenus[0].click()">
                                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
                                         <div class="inset">
