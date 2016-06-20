@@ -90,12 +90,14 @@
                     <p>合计：{{flowChart[serverName][chartType].sum | flow1024}}</p>
                 </md-list-item>
                 <md-divider></md-divider>
-                <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
-                    <div>
-                        <canvas class="chart chart-line" chart-data="c.data"
-                        chart-labels="c.labels" chart-legend="false" chart-series="c.series"
-                        chart-options="c.options">
-                        </canvas>
+                <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="column" layout-align="center stretch">
+                    <div layout="row" layout-align="center center">
+                        <div style="width: 100%; max-width: 500px;">
+                            <canvas class="chart chart-line" chart-data="c.data"
+                            chart-labels="c.labels" chart-legend="false" chart-series="c.series"
+                            chart-options="c.options">
+                            </canvas>
+                        </div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>

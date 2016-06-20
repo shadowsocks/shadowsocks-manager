@@ -85,7 +85,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         }, true);
 
     })
-    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval, $mdDialog) {
+    .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval, $mdDialog, $timeout) {
         $scope.setTitle('编辑帐号');
         $scope.serverName = $stateParams.serverName;
         $scope.setMenuButton('admin.serverPage', {serverName: $stateParams.serverName});
@@ -215,16 +215,16 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 return input;
             }
         };
-        $scope.chartType = 'hour';
+        $scope.chartType = '';
         $scope.chartChange = function(type) {
             if(type === 'hour') {
                 $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
-            }
-            if(type === 'day') {
+            } else if(type === 'day') {
                 $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
-            }
-            if(type === 'week') {
+            } else if(type === 'week') {
                 $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
+            } else {
+                $scope.chartType = 'day';
             }
         };
         $scope.getChart = function(chart, type) {
@@ -254,6 +254,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     scaleLabel: scaleLabel,
                     tooltipTemplate: scaleLabel
                 };
+                if(!$scope.chartType) {$scope.chartType = 'day';}
             });
         };
         if(!$scope.flowChart[$stateParams.serverName]) {
