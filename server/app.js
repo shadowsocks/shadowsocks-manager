@@ -94,7 +94,7 @@ exports.express = function(cb) {
         var httpskey = fs.readFileSync(config.express.key);
         var httpscert = fs.readFileSync(config.express.cert);
     }
-
+    // app.enable('trust proxy');
     var bodyParser = require('body-parser');
     app.use(bodyParser.json());
     app.use(compression());
@@ -130,8 +130,8 @@ exports.express = function(cb) {
             var httpsserver = https.createServer({
                 key: httpskey,
                 cert: httpscert
-            }, app).listen(443, function() {
-                logger.info('https服务启动，监听端口 443');
+            }, app).listen(config.express.https, function() {
+                logger.info('https服务启动，监听端口 ' + config.express.https);
             });
         }
         cb(null);
