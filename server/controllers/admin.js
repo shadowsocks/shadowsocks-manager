@@ -216,7 +216,7 @@ exports.editAccount = function(req, res) {
         var ret = data.account.filter(function(f) {
             return +f.port === +port;
         })[0];
-        logger.info('修改帐号: [' + name + '][' + port + ']');
+        // logger.info('修改帐号: [' + name + '][' + port + ']');
         return res.send(ret);
     }).catch(function(err) {
         logger.error('修改帐号出错: \n' + err);
@@ -454,6 +454,7 @@ exports.addCode = function(req, res) {
     code.time = time;
     code.save(function(err, code) {
         if(err) {return res.status(500).end('数据库错误');}
+        logger.info('添加续费码：[' + code.code + ']');
         res.send(code);
     });
 };
