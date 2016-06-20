@@ -7,7 +7,7 @@
                 <md-list>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line" ng-show="userLastSign.email">
-                        <div class="md-list-item-text">
+                        <div class="md-list-item-text" ng-click="toUser(userLastSign.email)">
                             <h3>最新注册用户：</h3>
                             <h4>{{userLastSign.email}}</h4>
                             <h4>{{userLastSign.createTime | relativeTime}}</h4>
@@ -15,7 +15,7 @@
                         <md-divider></md-divider>
                     </md-list-item>
                     <md-list-item class="md-3-line" ng-show="userLastLogin.lastLogin">
-                        <div class="md-list-item-text">
+                        <div class="md-list-item-text" ng-click="toUser(userLastLogin.email)">
                             <h3>最近登录用户：</h3>
                             <h4>{{userLastLogin.email}}</h4>
                             <h4>{{userLastLogin.lastLogin | relativeTime}}</h4>

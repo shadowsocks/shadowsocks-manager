@@ -84,6 +84,10 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.init();
         }, true);
 
+        $scope.toUser = function(userName) {
+            $state.go('admin.userPage', {userName: userName});
+        };
+
     })
     .controller('AdminEditAccountController', function($scope, $http, $state, $stateParams, $mdBottomSheet, $mdToast, $filter, $interval, $mdDialog, $timeout) {
         $scope.setTitle('编辑帐号');
