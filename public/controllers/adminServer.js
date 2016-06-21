@@ -3,22 +3,15 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
         $scope.setFabButtonClick(function(){
             $state.go('admin.addServer');
         });
-
         $scope.init = function() {
             if(!$scope.publicInfo.servers) {return;}
             $scope.serverList = $scope.publicInfo.servers;
         };
         $scope.init();
-        // $scope.$watch('publicInfo.servers', function() {
-        //     $scope.init();
-        // }, false);
         $scope.serverPage = function(serverName) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
-
         $scope.$on('initData', function(event, data) {
-            console.log(event);
-            console.log(data);
             if(data === 'server') {
                 $scope.init();
             }
@@ -62,9 +55,12 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             if(!$scope.server) {return $state.go('admin.server');}
         };
         $scope.init();
-        $scope.$watch('publicInfo.servers', function() {
-            $scope.init();
-        }, false);
+
+        $scope.$on('initData', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
 
         $scope.addServer = function() {
             $scope.loading(true);
