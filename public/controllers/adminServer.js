@@ -11,7 +11,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
         $scope.serverPage = function(serverName) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
-        $scope.$on('initData', function(event, data) {
+        $scope.$on('initPublicInfo', function(event, data) {
             if(data === 'server') {
                 $scope.init();
             }
@@ -56,7 +56,7 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
         };
         $scope.init();
 
-        $scope.$on('initData', function(event, data) {
+        $scope.$on('initPublicInfo', function(event, data) {
             if(data === 'server') {
                 $scope.init();
             }
@@ -95,9 +95,11 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             if(!$scope.server) {return $state.go('admin.server');}
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
-            $scope.init();
-        }, true);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
         
         $scope.editServer = function(serverName) {
             $state.go('admin.editServer', {serverName: serverName});
