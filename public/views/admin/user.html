@@ -5,7 +5,7 @@
             <md-card-content>
                 <md-list>
                     <md-divider></md-divider>
-                    <md-list-item ng-repeat="user in usersF">
+                    <md-list-item ng-repeat="user in usersF | limitTo: pageSize: pageSize * (page - 1)">
                         <md-button class="md-icon-button" aria-label="check">
                             <i class="material-icons"  ng-show="user.isActive">check</i>
                         </md-button>
@@ -17,6 +17,14 @@
                             </md-item-content>
                         </a>
                         <md-divider></md-divider>
+                    </md-list-item>
+                    <md-list-item layout="row">
+                        <div flex="50" layout="row" layout-align="center center">
+                            <md-button class="md-primary" ng-click="prev()">上一页</md-button>
+                        </div>
+                        <div flex="50" layout="row" layout-align="center center">
+                            <md-button class="md-primary" ng-click="next()">下一页</md-button>
+                        </div>
                     </md-list-item>
                 </md-list>
             </md-card-content>

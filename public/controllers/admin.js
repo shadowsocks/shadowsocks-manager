@@ -534,7 +534,21 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.usersF = $scope.users.filter(function(f) {
                 return  f.email.match(reg);
             });
+            if($scope.page > Math.ceil($scope.usersF.length/$scope.pageSize)) {
+                $scope.page = 1;
+            }
         });
+
+        $scope.pageSize = 15;
+        $scope.page = 1;
+        $scope.prev = function() {
+            if($scope.page === 1) {return;}
+            $scope.page -= 1;
+        };
+        $scope.next = function() {
+            if($scope.page === Math.ceil($scope.usersF.length/$scope.pageSize)) {return;}
+            $scope.page += 1;
+        };
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');

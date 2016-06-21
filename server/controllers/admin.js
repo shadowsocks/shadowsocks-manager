@@ -397,7 +397,9 @@ exports.getUsers = function(req, res) {
     var step = {};
 
     step.user = function(callback) {
-        User.find(query).exec(callback);
+        User.find(query).sort({
+            createTime: -1
+        }).exec(callback);
     };
     step.server = function(callback) {
         Server.aggregate([{$unwind: '$account'}]).exec(function(err, data) {
