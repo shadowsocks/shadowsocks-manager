@@ -1,6 +1,7 @@
 var app = global.app;
 var home = require('../controllers/home');
 var auth = require('../controllers/auth');
+var path = require('path');
 
 var render = function(req, res) {
     if(!req.session.user) {
@@ -42,6 +43,10 @@ var renderUser = function(req, res) {
         ]
     });
 };
+
+app.get('/admin/sw.js', function(req, res) {
+    res.sendFile('sw.js', { root: path.join(__dirname, '../views') });
+});
 
 app.get('/', render);
 

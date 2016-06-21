@@ -118,9 +118,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $state.go('admin.userPage', {userName: userName});
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
-            $scope.init();
-        }, true);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
 
         $scope.setFlow = function(type, flow) {
             $scope.loading(true);
@@ -347,9 +349,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.tabs = $scope.publicInfo.servers;
         };
         $scope.init();
-        $scope.$watch('publicInfo.servers', function() {
-            $scope.init();
-        }, false);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
 
         $scope.select = function(serverName, index) {
         };
@@ -401,9 +405,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             
         };
         $scope.init();
-        $scope.$watch('publicInfo.servers', function() {
-            $scope.init();
-        }, false);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
 
         $scope.accountPage = function(serverName, accountPort) {
             $scope.setMenuButtonHistoryBack();
@@ -587,9 +593,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.servers = $scope.publicInfo.servers;
         };
         $scope.init();
-        $scope.$watch('publicInfo.servers', function() {
-            $scope.init();
-        }, false);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
 
         $scope.$watch('server', function() {
             if($scope.server) {
