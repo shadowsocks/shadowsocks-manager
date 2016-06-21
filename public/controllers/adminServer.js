@@ -9,12 +9,20 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
             $scope.serverList = $scope.publicInfo.servers;
         };
         $scope.init();
-        $scope.$watch('publicInfo.servers', function() {
-            $scope.init();
-        }, false);
+        // $scope.$watch('publicInfo.servers', function() {
+        //     $scope.init();
+        // }, false);
         $scope.serverPage = function(serverName) {
             $state.go('admin.serverPage', {serverName: serverName});
         };
+
+        $scope.$on('initData', function(event, data) {
+            console.log(event);
+            console.log(data);
+            if(data === 'server') {
+                $scope.init();
+            }
+        });
     })
     .controller('AdminAddServerController', function($scope, $interval, $http, $state) {
         $scope.setTitle('添加服务器');

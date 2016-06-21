@@ -171,6 +171,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 $scope.publicInfo.lastUpdate = new Date();
                 if(success[0]) {
                     $scope.publicInfo.servers = success[0].data;
+                    $scope.$broadcast('initData', 'server');
                 }
                 if(success[1]) {
                     $scope.publicInfo.users = success[1].data;
