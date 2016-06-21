@@ -3,13 +3,20 @@
     <div flex>
         <md-card>
             <md-card-content>
+                <h4>{{user.email}}</h4>
                 <md-list>
-                    <md-list-item>
-                        <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                    <md-divider></md-divider>
+                    <md-list-item class="md-2-line">
+                        <div class="md-list-item-text">
+                            <!-- <h4>邮箱：{{user.email}}</h4> -->
+                            <h4>注册时间：{{user.createTime | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</h4>
+                            <h4>上次登录：{{user.lastLogin | date: 'yyyy-MM-dd HH:mm:ss': '+0800'}}</h4>
+                        </div>
+                        <!-- <md-item-content md-ink-ripple layout="row" layout-align="start center">
                             <div class="inset">
                                 {{user.email}}
                             </div>
-                        </md-item-content>
+                        </md-item-content> -->
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line" ng-repeat="account in user.account" style="padding-left: 16px;">
