@@ -20,7 +20,8 @@
         </md-list-item>
     </md-list>
     <md-list ng-show="flowType === 1">
-        <md-list-item layout="row" layout-align="center center">
+        <md-list-item layout="row" layout-align="space-around center">
+            <div>统计周期：</div>
             <md-radio-group layout="row" layout-align="center center" ng-model="chartType" ng-change="chartChange(chartType)">
                 <md-radio-button value="hour">小时</md-radio-button>
                 <md-radio-button value="day">天</md-radio-button>
@@ -34,28 +35,30 @@
                 <p>合计：{{flowChart[serverName][chartType].sum | flow1024}}</p>
             </md-list-item>
         <md-divider></md-divider>
-        <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="row" layout-align="center center">
-            <div layout layout-padding>
-                <canvas class="chart chart-line" chart-data="c.data"
-                chart-labels="c.labels" chart-legend="false" chart-series="c.series"
-                chart-options="c.options">
-                </canvas>
+        <md-list-item ng-show="key === chartType" ng-repeat="(key, c) in flowChart[serverName]" layout="column" layout-align="center stretch">
+            <div layout="row" layout-align="center center">
+                <div style="width: 100%; max-width: 500px;">
+                    <canvas class="chart chart-line" chart-data="c.data"
+                    chart-labels="c.labels" chart-legend="false" chart-series="c.series"
+                    chart-options="c.options">
+                    </canvas>
+                </div>
             </div>
         </md-list-item>
         <md-divider></md-divider>
-        <md-list-item layout="row" layout-align="center center">
+        <md-list-item layout="row">
             <div flex="50" layout="row" layout-align="center center">
-                <md-button class="md-primary md-raised" ng-click="prev()">
+                <md-button class="md-primary" ng-click="prev()">
                     Prev
                 </md-button>
             </div>
             <div flex="50" layout="row" layout-align="center center">
-                <md-button class="md-primary md-raised" ng-click="reset()">
+                <md-button class="md-primary" ng-click="reset()">
                     Reset
                 </md-button>
             </div>
             <div flex="50" layout="row" layout-align="center center">
-                <md-button class="md-primary md-raised" ng-click="next()">
+                <md-button class="md-primary" ng-click="next()">
                     Next
                 </md-button>
             </div>
