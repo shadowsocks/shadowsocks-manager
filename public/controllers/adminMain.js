@@ -175,6 +175,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 }
                 if(success[1]) {
                     $scope.publicInfo.users = success[1].data;
+                    $scope.$broadcast('initPublicInfo', 'user');
                 }
                 if(success[2]) {
                     $scope.publicInfo.servers.map(function(server) {
@@ -193,6 +194,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                             return account;
                         });
                     });
+                    $scope.$broadcast('initPublicInfo', 'flow');
                 }
                 if(success[3]) {
                     $scope.publicInfo.codes = success[3].data;
