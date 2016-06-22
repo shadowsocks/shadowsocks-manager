@@ -45,7 +45,10 @@ exports.login = function(req, res) {
     var password = req.body.password;
 
     User.findOne({email: email}).exec(function(err, user) {
-        if(err) {return res.status(500).end('数据库操作错误：' + err);}
+        if(err) {
+            req.session.destroy();
+            return res.status(500).end('数据库操作错误：' + err);
+        }
         else if(!user) { return res.status(401).end('用户未注册');}
         var passwordWithMd5 = createPassword(password, user.email);
         if(passwordWithMd5 !== user.password) {
