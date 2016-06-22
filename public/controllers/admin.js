@@ -436,7 +436,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.chartType = 'hour';
         $scope.chartChange = function(type) {
             if(type === 'hour') {
-
                 $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
             }
             if(type === 'day') {
@@ -507,7 +506,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
         $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
     })
-    .controller('AdminUserController', function($scope, $state, $http) {
+    .controller('AdminUserController', function($scope, $state, $http, $window) {
         $scope.setTitle('用户管理');
 
         $scope.usersF = [];
@@ -518,9 +517,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if(!$scope.usersF.length) {$scope.usersF = $scope.users;}
         };
         $scope.init();
-        $scope.$watch('publicInfo.users', function() {
-            $scope.init();
-        }, false);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'user') {
+                $scope.init();
+            }
+        });
 
         $scope.userPage = function(userName) {
             $state.go('admin.userPage', {userName: userName});
@@ -539,7 +540,9 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             }
         });
 
-        $scope.pageSize = 15;
+        // $scope.pageSize = 15;
+        $scope.pageSize = Math.floor(($window.innerHeight - 165)/49);
+        if($scope.pageSize < 6) {$scope.pageSize = 6;}
         $scope.page = 1;
         $scope.prev = function() {
             if($scope.page === 1) {return;}
@@ -549,6 +552,8 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if($scope.page === Math.ceil($scope.usersF.length/$scope.pageSize)) {return;}
             $scope.page += 1;
         };
+
+        console.log($window.innerHeight);
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');
