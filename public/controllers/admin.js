@@ -552,8 +552,6 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             if($scope.page === Math.ceil($scope.usersF.length/$scope.pageSize)) {return;}
             $scope.page += 1;
         };
-
-        console.log($window.innerHeight);
     })
     .controller('AdminUserPageController', function($scope, $http, $state, $stateParams, $mdDialog) {
         $scope.setTitle('用户管理');
