@@ -22,13 +22,17 @@
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
-                    <md-list-item layout="column" layout-align="center center">
-                        <div class="md-list-item-text" layout-margin>近一小时流量：{{chart.sum | flow1024}}</div>
-                        <div>
-                            <canvas id="line" class="chart chart-line" chart-data="chart.data"
-                                chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
-                                chart-options="chart.options">
-                            </canvas>
+                    <md-list-item layout="column" layout-align="center stretch">
+                        <div class="md-list-item-text" layout="row" layout-margin layout-align="center center">
+                            <div>近一小时流量：{{chart.sum | flow1024}}</div>
+                        </div>
+                        <div layout="row" layout-align="center center">
+                            <div style="width: 100%; max-width: 500px;">
+                                <canvas id="line" class="chart chart-line" chart-data="chart.data"
+                                    chart-labels="chart.labels" chart-legend="false" chart-series="chart.series"
+                                    chart-options="chart.options">
+                                </canvas>
+                            </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
