@@ -6,6 +6,8 @@ var User = mongoose.model('User');
 var HistoryOriginal = mongoose.model('HistoryOriginal');
 var Code = mongoose.model('Code');
 
+var version = require('../../package.json').version;
+
 var moment = require('moment');
 
 var log4js = require('log4js');
@@ -459,4 +461,8 @@ exports.addCode = function(req, res) {
         logger.info('添加续费码：[' + code.code + ']');
         res.send(code);
     });
+};
+
+exports.getVersion = function(req, res) {
+    res.send(version);
 };

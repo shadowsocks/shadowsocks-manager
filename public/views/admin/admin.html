@@ -1,6 +1,6 @@
 <div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
     <section layout="row" flex>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false" layout="column"       layout-align="space-between none">
         <md-content>
             <div layout="column">
                 <md-toolbar class="md-tall">
@@ -40,6 +40,7 @@
                 </md-list>
             </div>
         </md-content>
+        <div>{{version}}</div>
     </md-sidenav>
     <div flex layout="column">
         <div>

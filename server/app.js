@@ -1,3 +1,4 @@
+var version = require('../package.json').version;
 var express = global.express = require('express');
 var app = global.app = express();
 var compression = require('compression');
@@ -21,6 +22,8 @@ var loggerExpress = log4js.getLogger('express');
 app.use(log4js.connectLogger(loggerExpress, 
     '[:remote-addr][:method][:url][:status][:response-time ms]'
 ));
+
+logger.info('当前程序版本：' + version);
 
 var log4js = exports.log4js = function(cb) {
     var log4js = require('log4js');
