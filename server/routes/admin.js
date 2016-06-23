@@ -6,6 +6,8 @@ var later = require('../controllers/cron');
 var flow = require('../controllers/flow');
 var option = require('../controllers/option');
 
+app.get('/api/admin/version', auth.isAdmin, admin.getVersion);
+
 app.post('/api/admin/server', auth.isAdmin, admin.addServer);
 app.get('/api/admin/server', auth.isAdmin, admin.getServers);
 app.put('/api/admin/server', auth.isAdmin, admin.editServer);

@@ -271,6 +271,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             $scope.publicInfo.searchBar = false;
         };
 
-        
-
+        $scope.version = '0.0.0';
+        $http.get('/api/admin/version').then(function(success) {
+            $scope.version = success.data;
+        });
     });
