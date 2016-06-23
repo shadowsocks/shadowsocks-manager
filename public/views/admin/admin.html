@@ -1,6 +1,6 @@
 <div ng-controller="AdminMainController" layout="column" ng-cloak layout-fill>
     <section layout="row" flex>
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false">
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false" layout="column" layout-align="space-between stretch">
         <md-content>
             <div layout="column">
                 <md-toolbar class="md-tall">
@@ -40,6 +40,7 @@
                 </md-list>
             </div>
         </md-content>
+        <div style="font-size: 0.6em;">ver: {{version}} powered by <a href="https://github.com/shadowsocks/shadowsocks-manager">Gyteng</a></div>
     </md-sidenav>
     <div flex layout="column">
         <div>
@@ -80,7 +81,7 @@
         </div>
 
         <div flex layout="row">
-            <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;">
+            <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;" layout="column" layout-align="space-between stretch">
                 <md-content>
                     <div layout="column" layout-align="center start">
                         <md-list>
@@ -112,6 +113,7 @@
                         </md-list>
                     </div>
                 </md-content>
+                <div style="font-size: 0.6em;">ver: {{version}} powered by <a href="https://github.com/shadowsocks/shadowsocks-manager">Gyteng</a></div>
             </md-sidenav>
             <md-content flex layout="row">
                 <div ui-view flex></div>
