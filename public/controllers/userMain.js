@@ -202,5 +202,10 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
                 $scope.initPublicInfo({loading: false});
             }
         });
+
+        $scope.version = '0.0.0';
+        $http.get('/api/home/version').then(function(success) {
+            $scope.version = success.data;
+        });
     })
 ;

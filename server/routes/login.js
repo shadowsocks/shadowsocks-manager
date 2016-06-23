@@ -62,3 +62,5 @@ app.post('/api/home/logout', home.logout);
 
 app.post('/api/home/email', home.sendEmail);
 app.post('/api/home/active', home.activeEmail);
+
+app.get('/api/home/version', home.getVersion);

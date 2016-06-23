@@ -272,7 +272,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         };
 
         $scope.version = '0.0.0';
-        $http.get('/api/admin/version').then(function(success) {
+        $http.get('/api/home/version').then(function(success) {
             $scope.version = success.data;
         });
     });

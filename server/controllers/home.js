@@ -4,6 +4,8 @@ var Schema = mongoose.Schema;
 var log4js = require('log4js');
 var logger = log4js.getLogger('auth');
 
+var version = require('../../package.json').version;
+
 var User = mongoose.model('User');
 var mail = require('./mail');
 var freeAccount = require('./freeAccount');
@@ -98,4 +100,8 @@ exports.activeEmail = function(req, res) {
         res.send(data);
         freeAccount.create(data.email);
     });
+};
+
+exports.getVersion = function(req, res) {
+    res.send(version);
 };
