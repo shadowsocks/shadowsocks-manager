@@ -15,6 +15,8 @@ var userSchema = new Schema({
     isActive: {type:Boolean, default: false},
     activeKey: String,
     sendEmailTime: Date,
+    resetPasswordKey: String,
+    resetPasswordTime: Date,
     isAdmin: {type:Boolean, default: false},
     createTime: {type:Date, default: Date.now},
     lastLogin: Date
@@ -24,7 +26,7 @@ var User = mongoose.model('User', userSchema);
 
 var crypto = require('crypto');
 var md5 = function(text) {
-        return crypto.createHash('md5').update(text).digest('hex');
+    return crypto.createHash('md5').update(text).digest('hex');
 };
 
 var createPassword = function(password, username) {
