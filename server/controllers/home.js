@@ -100,3 +100,7 @@ exports.activeEmail = function(req, res) {
 };
 
 exports.getVersion = (req, res) => res.send(version);
+
+exports.findPassword = (req, res) => {
+    
+};

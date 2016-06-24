@@ -68,6 +68,10 @@ app.controller('MainController', function($scope) {
             });
         };
 
+        $scope.findPassword = function() {
+            
+        };
+
         $scope.passwordKeypress = function(e) {
             if(e.keyCode === 13) {
                 $scope.login();
