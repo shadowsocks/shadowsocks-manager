@@ -13,7 +13,13 @@ app.controller('MainController', function($scope) {
         };
 
         $scope.signup = function() {
-            if(!$scope.user.username || !$scope.user.password) {return;}
+            if(!$scope.user.username || !$scope.user.password) {
+                $scope.loading(true);
+                $scope.loading(true, '请填写完整的邮箱和密码，并点击“注册”按钮', function() {
+                    $scope.loading(false);
+                });
+                return;
+            }
             $scope.loading(true);
             $http.post('/api/home/signup', {
                 username: $scope.user.username,
@@ -31,6 +37,13 @@ app.controller('MainController', function($scope) {
         };
 
         $scope.login = function() {
+            if(!$scope.user.username || !$scope.user.password) {
+                $scope.loading(true);
+                $scope.loading(true, '请填写完整的邮箱和密码，并点击“登录”按钮', function() {
+                    $scope.loading(false);
+                });
+                return;
+            }
             $scope.loading(true);
             $http.post('/api/home/login', $scope.user).then(function(success) {
                 $window.location.reload();
