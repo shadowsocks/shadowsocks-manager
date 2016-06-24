@@ -102,6 +102,4 @@ exports.activeEmail = function(req, res) {
     });
 };
 
-exports.getVersion = function(req, res) {
-    res.send(version);
-};
+exports.getVersion = (req, res) => res.send(version);
