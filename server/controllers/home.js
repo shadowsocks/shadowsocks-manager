@@ -11,13 +11,10 @@ var mail = require('./mail');
 var freeAccount = require('./freeAccount');
 
 var crypto = require('crypto');
-var md5 = function(text) {
-        return crypto.createHash('md5').update(text).digest('hex');
-};
+var md5 = (text) => crypto.createHash('md5').update(text).digest('hex');
 
-var createPassword = function(password, username) {
-    return md5(password + username);
-};
+var createPassword = (password, username) => md5(password + username);
+
 
 exports.signup = function(req, res) {
     var email = req.body.username;
