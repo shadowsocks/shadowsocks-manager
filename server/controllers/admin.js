@@ -265,6 +265,7 @@ exports.accountAutoRemove = function(req, res) {
 exports.deleteAccount = function(req, res) {
     var name = req.query.name;
     var port = req.query.port;
+    if(!name || !port) {return res.status(400).end('提供数据不合法');}
 
     Server.findOneAndUpdate({
         'name': name,
