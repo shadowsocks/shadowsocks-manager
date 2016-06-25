@@ -32,7 +32,7 @@ exports.signup = function(req, res) {
         user.signupFp = fingerprint;
         user.save(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误：' + err);}
-            mail.addMail(email);
+            mail.addMail(email, 1);
             logger.info('[' + email + ']注册成功');
             return res.send('success');
         });
@@ -74,7 +74,7 @@ exports.logout = function(req, res) {
 
 exports.sendEmail = function(req, res) {
     var username = req.body.username;
-    mail.addMail(username);
+    mail.addMail(username, 1);
     res.send({});
 };
 
