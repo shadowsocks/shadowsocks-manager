@@ -541,8 +541,12 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         });
 
         // $scope.pageSize = 15;
+        $scope.$watch('usersF.length', function() {
+            $scope.pages = Math.ceil($scope.usersF.length/$scope.pageSize);
+        });
         $scope.pageSize = Math.floor(($window.innerHeight - 165)/49);
         if($scope.pageSize < 6) {$scope.pageSize = 6;}
+        
         $scope.page = 1;
         $scope.prev = function() {
             if($scope.page === 1) {return;}
