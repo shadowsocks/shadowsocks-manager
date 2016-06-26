@@ -156,4 +156,13 @@ app.controller('MainController', function($scope) {
             $state.go('home.signupSuccess');
         });
     })
+    .controller('ResetPasswordController', function($scope, $http, $interval, $state, $stateParams) {
+        $http.get('/api/home/findPassword', {key: $stateParams.resetPasswordKey}).then(function(success) {
+            $scope.publicInfo.message = success.data.email;
+            $state.go('home.signupSuccess');
+        }, function(error) {
+            $scope.publicInfo.message = '无效的key';
+            $state.go('home.signupSuccess');
+        });
+    })
 ;

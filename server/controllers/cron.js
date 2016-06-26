@@ -12,6 +12,7 @@ var timer = later.setInterval(function() {
     shadowsocks.updateServerList();
     shadowsocks.checkAccount();
     mail.sendActiveMail();
+    mail.sendResetPasswordMail();
     history.historyHour();
 }, sched);
 shadowsocks.updateServerList();

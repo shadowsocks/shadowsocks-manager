@@ -103,17 +103,27 @@ exports.getVersion = (req, res) => res.send(version);
 
 exports.findPassword = (req, res) => {
     var email = req.body.username;
-    User.findOneAndUpdate({
+    User.findOne({
         email: email,
         isAdmin: false
-    }, {
-        $set: {
-            resetPasswordKey: md5(email + Date.now()),
-            sendResetKeyTime: Date.now()
-        }
     }).exec((err, user) => {
         if(err) {return res.status(500).end('数据库错误');}
         if(!user) {return res.status(403).end('用户不存在');}
+        mail.addMail(email, 2);
         return res.send('success');
+    });
+};
+
+exports.findPasswordUser = (req, res) => {
+    var key = req.query.key;
+    User.findOne({
+        isAdmin: false,
+        resetPasswordKey: key
+    }).exec((err, user) => {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!user) {return res.status(403).end('无效的key');}
+        return res.send({
+            email: user.email
+        });
     });
 };

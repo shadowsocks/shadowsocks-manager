@@ -30,6 +30,11 @@ app.config(
                     controller: 'LoginActiveController',
                     templateUrl: '/public/views/home/active.html'
                 })
+                .state('home.resetPassword', {
+                    url: '/resetPassword/:resetPasswordKey',
+                    controller: 'ResetPasswordController',
+                    templateUrl: '/public/views/home/resetPassword.html'
+                })
             ;
         }
     ]
