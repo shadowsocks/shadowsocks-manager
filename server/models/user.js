@@ -16,7 +16,7 @@ var userSchema = new Schema({
     activeKey: String,
     sendEmailTime: Date,
     resetPasswordKey: String,
-    resetPasswordTime: Date,
+    sendResetKeyTime: Date,
     isAdmin: {type:Boolean, default: false},
     createTime: {type:Date, default: Date.now},
     lastLogin: Date

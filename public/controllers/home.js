@@ -69,7 +69,25 @@ app.controller('MainController', function($scope) {
         };
 
         $scope.findPassword = function() {
-            
+            if(!$scope.user.username) {
+                $scope.loading(true);
+                $scope.loading(true, '请填写完整的邮箱，并点击“找回密码”按钮', function() {
+                    $scope.loading(false);
+                });
+                return;
+            }
+            $scope.loading(true);
+            $http.post('/api/home/findPassword', {
+                username: $scope.user.username
+            }).then(function(success) {
+                $scope.loading(false);
+                $scope.publicInfo.message = '重置密码邮件已发送，请注意查收';
+                $state.go('home.signupSuccess');
+            }, function(err) {
+                $scope.loading(true, err.data || '发生未知错误', function() {
+                    $scope.loading(false);
+                });
+            });
         };
 
         $scope.passwordKeypress = function(e) {
