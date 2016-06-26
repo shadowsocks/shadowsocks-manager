@@ -10,6 +10,7 @@ var User = mongoose.model('User');
 var mail = require('./mail');
 var freeAccount = require('./freeAccount');
 
+var moment = require('moment');
 var crypto = require('crypto');
 var md5 = (text) => crypto.createHash('md5').update(text).digest('hex');
 
@@ -116,14 +117,46 @@ exports.findPassword = (req, res) => {
 
 exports.findPasswordUser = (req, res) => {
     var key = req.query.key;
+    if(!key) {return res.status(400).end('请提供reset key');}
     User.findOne({
         isAdmin: false,
         resetPasswordKey: key
     }).exec((err, user) => {
         if(err) {return res.status(500).end('数据库错误');}
         if(!user) {return res.status(403).end('无效的key');}
-        return res.send({
-            email: user.email
+        return res.send('success');
+    });
+};
+
+exports.resetPassword = (req, res) => {
+    var key = req.body.key;
+    var password = req.body.password;
+    if(!key || !password) {return res.status(400).end('请求数据格式错误');}
+    User.findOne({
+        isAdmin: false,
+        resetPasswordKey: key,
+    }).exec((err, user) => {
+        if(err) {return res.status(500).end('数据库错误');}
+        if(!user) {return res.status(403).end('无效的key');}
+        User.findOneAndUpdate({
+            isAdmin: false,
+            resetPasswordKey: key,
+            sendResetKeyTime: {
+                $gte: moment().add(-15, 'minute').toDate()
+            }
+        }, {
+            $set: {
+                password: md5(password + user.email)
+            },
+            $unset: {
+                resetPasswordKey: '',
+                sendResetKeyTime: ''
+            }
+        }).exec((err, user) => {
+            if(err) {return res.status(500).end('数据库错误');}
+            if(!user) {return res.status(403).end('无效的key');}
+            logger.info('[' + user.email + ']重置密码成功');
+            return res.send('success');
         });
     });
 };

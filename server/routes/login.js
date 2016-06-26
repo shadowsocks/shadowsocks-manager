@@ -66,4 +66,6 @@ app.post('/api/home/active', home.activeEmail);
 app.get('/api/home/findPassword', home.findPasswordUser);
 app.post('/api/home/findPassword', home.findPassword);
 
+app.post('/api/home/resetPassword', home.resetPassword);
+
 app.get('/api/home/version', home.getVersion);
