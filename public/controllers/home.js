@@ -3,8 +3,47 @@ new Fingerprint2().get(function(result, components){
     fingerprint = result;
 });
 
-app.controller('MainController', function($scope) {
+app.controller('MainController', function($scope, $http, $state, $mdDialog, $mdToast, $window) {
         $scope.publicInfo = {};
+        $scope.isLoading = false;
+        $scope.loadingText = '正在加载';
+        $scope.loadingError = '';
+        $scope.loadingErrorFn = function() {};
+        $scope.customButton = '';
+        $scope.customButtonFn = function() {};
+
+        var dialog = $mdDialog.prompt({
+            templateUrl: '/public/views/home/loading.html',
+            escapeToClose : false,
+            scope: $scope,
+            preserveScope: true,
+            controller: function($scope) {
+                $scope.isLoading = true;
+            }
+        });
+
+        $scope.loading = function(isLoading, error, fn) {
+            if(isLoading) {
+                if(!error) {
+                    $mdDialog.show(dialog);
+                } else {
+                    $scope.loadingError = error;
+                    $scope.loadingErrorFn = fn || function() {};
+                }
+            } else {
+                var waitToCancel = $scope.$watch('isLoading', function() {
+                    if($scope.isLoading) {
+                        $mdDialog.cancel();
+                        waitToCancel();
+                        $scope.isLoading = false;
+                        $scope.loadingText = '正在加载';
+                        $scope.loadingError = '';
+                        $scope.loadingErrorFn = function() {};
+                    }
+                });
+            }
+        };
+
     })
     .controller('LoginController', function($scope, $http, $state, $mdDialog, $mdToast, $window) {
         $scope.user = {
@@ -96,44 +135,7 @@ app.controller('MainController', function($scope) {
             }
         };
 
-        $scope.isLoading = false;
-        $scope.loadingText = '正在加载';
-        $scope.loadingError = '';
-        $scope.loadingErrorFn = function() {};
-        $scope.customButton = '';
-        $scope.customButtonFn = function() {};
-
-        var dialog = $mdDialog.prompt({
-            templateUrl: '/public/views/home/loading.html',
-            escapeToClose : false,
-            scope: $scope,
-            preserveScope: true,
-            controller: function($scope) {
-                $scope.isLoading = true;
-            }
-        });
-
-        $scope.loading = function(isLoading, error, fn) {
-            if(isLoading) {
-                if(!error) {
-                    $mdDialog.show(dialog);
-                } else {
-                    $scope.loadingError = error;
-                    $scope.loadingErrorFn = fn || function() {};
-                }
-            } else {
-                var waitToCancel = $scope.$watch('isLoading', function() {
-                    if($scope.isLoading) {
-                        $mdDialog.cancel();
-                        waitToCancel();
-                        $scope.isLoading = false;
-                        $scope.loadingText = '正在加载';
-                        $scope.loadingError = '';
-                        $scope.loadingErrorFn = function() {};
-                    }
-                });
-            }
-        };
+        
     })
     .controller('SignupSuccessController', function($scope, $http, $interval, $state) {
         $scope.time = 10;
@@ -160,14 +162,14 @@ app.controller('MainController', function($scope) {
         $scope.user = {
             password: '',
         };
+        $scope.isLoading = true;
         $http.get('/api/home/findPassword', {
             params: {
                 key: $stateParams.resetPasswordKey
             }
         }).then(function(success) {
-
+            $scope.isLoading = false;
         }, function(error) {
-            console.log(error);
             $scope.publicInfo.message = '无效的key';
             $state.go('home.signupSuccess');
         });
@@ -177,9 +179,11 @@ app.controller('MainController', function($scope) {
                 key: $stateParams.resetPasswordKey,
                 password: $scope.user.password
             }).then(function(success) {
-
+                $scope.publicInfo.message = '重置密码成功，请重新登录';
+                $state.go('home.signupSuccess');
             }, function(error) {
-
+                $scope.publicInfo.message = '重置密码失败';
+                $state.go('home.signupSuccess');
             });
         };
     })
