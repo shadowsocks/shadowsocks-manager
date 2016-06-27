@@ -118,11 +118,8 @@ exports.findPassword = (req, res) => {
 exports.findPasswordUser = (req, res) => {
     req.checkQuery('key', '请求数据格式错误').notEmpty();
     var errors = req.validationErrors();
-    if(errors) {
-        // console.log(errors);
-        return res.status(400).end(errors[0].msg);}
+    if(errors) {return res.status(400).end(errors[0].msg);}
     var key = req.query.key;
-    if(!key) {return res.status(400).end('请提供reset key');}
     User.findOne({
         isAdmin: false,
         resetPasswordKey: key
@@ -134,9 +131,13 @@ exports.findPasswordUser = (req, res) => {
 };
 
 exports.resetPassword = (req, res) => {
+    req.checkBody('key', '请求数据格式错误').notEmpty();
+    req.checkBody('password', '请求数据格式错误').notEmpty();
+    var errors = req.validationErrors();
+    if(errors) {return res.status(400).end(errors[0].msg);}
     var key = req.body.key;
     var password = req.body.password;
-    if(!key || !password) {return res.status(400).end('请求数据格式错误');}
+    // if(!key || !password) {return res.status(400).end('请求数据格式错误');}
     User.findOne({
         isAdmin: false,
         resetPasswordKey: key,
