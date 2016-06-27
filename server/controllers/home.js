@@ -116,6 +116,11 @@ exports.findPassword = (req, res) => {
 };
 
 exports.findPasswordUser = (req, res) => {
+    req.checkQuery('key', '请求数据格式错误').notEmpty();
+    var errors = req.validationErrors();
+    if(errors) {
+        // console.log(errors);
+        return res.status(400).end(errors[0].msg);}
     var key = req.query.key;
     if(!key) {return res.status(400).end('请提供reset key');}
     User.findOne({
