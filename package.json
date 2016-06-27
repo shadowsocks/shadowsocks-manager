@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "undefined",
   "main": "server.js",
   "scripts": {
@@ -34,7 +34,8 @@
     "moment-timezone": "^0.5.4",
     "mongoose": "^4.4.14",
     "nodemailer": "^2.4.2",
-    "q": "^1.4.1"
+    "q": "^1.4.1",
+    "request": "^2.72.0"
   },
   "bin": ""
 }

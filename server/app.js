@@ -73,7 +73,13 @@ var log4js = exports.log4js = function(cb) {
             pattern: '-yyyy-MM-dd',
             alwaysIncludePattern: true,
             category: 'express'
-        }]
+        }, {
+            type: 'dateFile',
+            filename: 'logs/system.log',
+            pattern: '-yyyy-MM-dd',
+            alwaysIncludePattern: true,
+            category: 'system'
+        },]
     });
     cb(null);
 };
