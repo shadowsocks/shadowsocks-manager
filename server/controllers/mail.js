@@ -41,7 +41,7 @@ var sendActiveMail = function() {
                 from: '"Shadowsocks" <'+ config.mail.address +'>',
                 to: user.email,
                 subject: 'Shadowsocks激活邮件',
-                text: '您好，请点击下列链接激活您的账户：\n\n' + config.mail.webaddress + '/home/active/' + user.activeKey + '\n\n该链接15分钟内有效'
+                text: '您好，请点击下列链接激活您的账户：\n\n' + config.mail.webaddress + '/home/active/' + user.activeKey + '\n\n该链接60分钟内有效'
             }, function(error, info){
                 if(error){
                     logger.warn('[' + user.activeKey + '][' + user.email + ']激活码发送失败\n' + error);
