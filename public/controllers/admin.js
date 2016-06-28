@@ -80,10 +80,15 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             });
         };
         $scope.init();
-        $scope.$watch('publicInfo', function() {
-            $scope.init();
-        }, true);
+        // $scope.$watch('publicInfo', function() {
 
+        //     $scope.init();
+        // }, true);
+        $scope.$on('initPublicInfo', function(event, data) {
+            if(data === 'user') {
+                $scope.init();
+            }
+        });
         $scope.toUser = function(userName) {
             $state.go('admin.userPage', {userName: userName});
         };
