@@ -7,8 +7,9 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                 $scope.loadingMessage({
                     message: '您已经成功续了1秒',
                     right: function() {
-                        $scope.initPublicInfo({loading: false});
                         $scope.loading(false);
+                        $scope.publicInfo.messageData = '';
+                        $scope.initPublicInfo({loading: true});
                     }
                 });
             }, function(error) {

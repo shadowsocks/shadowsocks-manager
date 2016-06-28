@@ -175,6 +175,7 @@ app.controller('UserMainController', function($scope, $http, $state, $mdSidenav,
             }
             $scope.loading(options.loading);
             $http.get('/api/user/userInfo').then(function(success) {
+
                 $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
                 $scope.publicInfo.user = success.data;
