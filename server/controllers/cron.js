@@ -19,7 +19,7 @@ var timer0 = later.setInterval(function() {
 shadowsocks.updateServerList();
 history.historyHour();
 
-var text1 = 'every 1 hours';
+var text1 = 'every 30 mins';
 var sched1 = later.parse.text(text1);
 
 var timer1 = later.setInterval(function() {
