@@ -139,7 +139,6 @@ exports.useCode = function(req, res) {
     var parallel = [];
     var accountParallel = (account, flow, time) => {
         account.forEach((a) => {
-            console.log(a);
             parallel.push((cb) => {
                 Server.findOne({
                     'name': a.server,
@@ -149,7 +148,6 @@ exports.useCode = function(req, res) {
                     var accountInfo = data.account.filter((f) => {
                         return f.port === a.port;
                     })[0];
-                    console.log(accountInfo);
                     Server.findOneAndUpdate({
                         'name': a.server,
                         'account.port': a.port
