@@ -169,11 +169,8 @@ exports.useCode = function(req, res) {
     async.auto(steps, (err, data) => {
         if(err) {return res.status(403).end();}
         if(Array.isArray(data.getAccount)) {
-            console.log('GG');
             accountParallel(data.getAccount, data.getCodeInfo.flow, data.getCodeInfo.time);
-            console.log('HH');
             async.parallel(parallel, (err, data) => {
-                console.log(err, data);
                 if(err) {return res.status(403).end();}
                 return res.send('success');
             });
