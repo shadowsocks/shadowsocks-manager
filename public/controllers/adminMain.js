@@ -169,7 +169,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 promises[3] = undefined;
             }
             $q.all(promises).then(function(success) {
-                $scope.loading(false);
                 $scope.publicInfo.lastUpdate = new Date();
                 if(success[0]) {
                     $scope.publicInfo.servers = success[0].data;
@@ -208,6 +207,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     return Promise.resolve('success');
                 }
             }).then(function(success) {
+                $scope.loading(false);
                 if(options.type.indexOf('flow') >= 0) {
                     $scope.publicInfo.servers.map(function(server) {
                         return server.account.map(function(account) {
