@@ -85,7 +85,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         //     $scope.init();
         // }, true);
         $scope.$on('initPublicInfo', function(event, data) {
-            if(data === 'user') {
+            if(data === 'flow') {
                 $scope.init();
             }
         });
