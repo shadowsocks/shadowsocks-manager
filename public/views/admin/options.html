@@ -47,6 +47,18 @@
                 </md-list>
             </md-card-content>
         </md-card>
+        <md-card>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                            <div flex="75">开放注册</div>
+                            <div flex layout="row" layout-align="end center"><md-switch ng-model="options.signInEnable" aria-label="Switch freeServer"></md-switch></div>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
         <div layout="row" layout-align="center center">
             <md-button class="md-primary" ng-click="setOptions()">
                 确定

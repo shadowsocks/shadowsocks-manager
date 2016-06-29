@@ -753,7 +753,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             {number: 50 * 1000 * 1000, name:'50 MB'},
             {number: 100 * 1000 * 1000, name:'100 MB'},
             {number: 200 * 1000 * 1000, name:'200 MB'},
-            {number: 200 * 1000 * 1000, name:'300 MB'}
+            {number: 300 * 1000 * 1000, name:'300 MB'}
         ];
         $scope.time = [
             {number: 2 * 3600, name: '2小时'},
@@ -772,6 +772,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $http.post('/api/admin/option', {
                 name: 'freeServer',
                 value: $scope.options.freeServer
+            }).then(function(success) {
+                $http.post('/api/admin/option', {
+                    name: 'signInEnable',
+                    value: $scope.options.signInEnable
+                });
             }).then(function(success) {
                 $scope.loadingMessage({
                     message: '设置成功',

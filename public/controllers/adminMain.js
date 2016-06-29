@@ -91,9 +91,10 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
 
         $scope.loading = function(isLoading) {
             if(isLoading) {
-                $mdDialog.cancel().finally(function() {
+                if($scope.publicInfo.isLoading) {return;}
+                // $mdDialog.cancel().finally(function() {
                     $mdDialog.show(dialog);
-                });
+                // });
             } else {
                 var waitToCancel = $scope.$watch('publicInfo.isLoading', function() {
                     if($scope.publicInfo.isLoading) {

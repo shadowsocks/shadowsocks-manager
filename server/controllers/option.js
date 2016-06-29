@@ -15,6 +15,13 @@ exports.getOptions = function (req, res) {
             cb(null);
         });
     };
+    getOptions.signInEnable = (cb) => {
+        Option.findOne({name: 'signInEnable'}).exec((err, data) => {
+            if(err) {return cb(err);}
+            options.signInEnable = data? data.value: false;
+            cb(null);
+        });
+    };
     async.auto(getOptions, function(err, data) {
         if(err) {return res.status(403).end();}
         res.send(options);
