@@ -10,6 +10,8 @@ var User = mongoose.model('User');
 var mail = require('./mail');
 var freeAccount = require('./freeAccount');
 
+var Option = mongoose.model('Option');
+
 var moment = require('moment');
 var crypto = require('crypto');
 var md5 = (text) => crypto.createHash('md5').update(text).digest('hex');
@@ -18,24 +20,31 @@ var createPassword = (password, username) => md5(password + username);
 
 
 exports.signup = function(req, res) {
-    var email = req.body.username;
-    var password = req.body.password;
-    var fingerprint = req.body.fingerprint;
-    if(!email || !password) {return res.status(400).end('请求数据不合法');}
-    if(password.length < 6) {return res.status(400).end('密码长度太短');}
-    User.findOne({email: email}).exec(function(err, data) {
-        if(err) {return res.status(500).end('数据库操作错误：' + err);}
-        else if(data) {return res.status(403).end('该用户已注册');}
-        var user = new User();
-        user.email = email;
-        user.password = createPassword(password, email);
-        user.signupIp = req.connection.remoteAddress;
-        user.signupFp = fingerprint;
-        user.save(function(err, data) {
+    Option.findOne({
+        name: 'signInEnable'
+    }).exec((err, signInEnable) => {
+        if(err || !signInEnable || !signInEnable.value) {
+            return res.status(400).end('当前时段尚未开放注册');
+        }   
+        var email = req.body.username;
+        var password = req.body.password;
+        var fingerprint = req.body.fingerprint;
+        if(!email || !password) {return res.status(400).end('请求数据不合法');}
+        if(password.length < 6) {return res.status(400).end('密码长度太短');}
+        User.findOne({email: email}).exec(function(err, data) {
             if(err) {return res.status(500).end('数据库操作错误：' + err);}
-            mail.addMail(email, 1);
-            logger.info('[' + email + ']注册成功');
-            return res.send('success');
+            else if(data) {return res.status(403).end('该用户已注册');}
+            var user = new User();
+            user.email = email;
+            user.password = createPassword(password, email);
+            user.signupIp = req.connection.remoteAddress;
+            user.signupFp = fingerprint;
+            user.save(function(err, data) {
+                if(err) {return res.status(500).end('数据库操作错误：' + err);}
+                mail.addMail(email, 1);
+                logger.info('[' + email + ']注册成功');
+                return res.send('success');
+            });
         });
     });
 };
