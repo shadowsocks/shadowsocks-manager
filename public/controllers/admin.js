@@ -751,6 +751,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
 
         $scope.flow = [
             {number: 50 * 1000 * 1000, name:'50 MB'},
+            {number: 80 * 1000 * 1000, name:'80 MB'},
             {number: 100 * 1000 * 1000, name:'100 MB'},
             {number: 200 * 1000 * 1000, name:'200 MB'},
             {number: 300 * 1000 * 1000, name:'300 MB'}
