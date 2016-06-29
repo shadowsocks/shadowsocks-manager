@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.7.12",
+  "version": "0.7.13",
   "description": "undefined",
   "main": "server.js",
   "scripts": {

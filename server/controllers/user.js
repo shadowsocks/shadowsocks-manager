@@ -116,6 +116,7 @@ exports.useCode = function(req, res) {
             }
         }).exec((err, code) => {
             if(err || !code) {return cb('Code not found');}
+            logger.info('续费码[' + code.code + '][' + user + ']使用成功');
             return cb(null, code);
         });
     }];
@@ -127,7 +128,7 @@ exports.useCode = function(req, res) {
                 if(err) {return cb(err);}
                 if(!server) {return cb('Server not found');}
                 if(!server[0]) {return cb('Server not found');}
-                freeAccount.create(user, server[0].name, results.getCodeInfo.flow/1000, results.getCodeInfo.time, (err, data) => {
+                freeAccount.create(user, server[0].name, results.getCodeInfo.time/1000, results.getCodeInfo.flow, (err, data) => {
                     if(err) {return cb(err);}
                     return cb(null, user);
                 });

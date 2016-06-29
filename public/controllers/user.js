@@ -135,6 +135,8 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                     message: '续费码使用成功',
                     right: function() {
                         $scope.loading(false);
+                        $scope.publicInfo.messageData = '';
+                        $scope.initPublicInfo({loading: true});
                     }
                 });
             }, function(error) {
