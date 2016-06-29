@@ -185,7 +185,7 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                 if(success[3]) {
                     $scope.publicInfo.codes = success[3].data;
                 }
-                $scope.loading(false);
+                if(options.loading) {$scope.loading(false);}
             }).catch(function(error) {
                 if(error.status === 401) {
                     $window.location.href = '/';
