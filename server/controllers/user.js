@@ -187,8 +187,8 @@ exports.oneSecond = function(req, res) {
 };
 
 var oneSecondAccount = function(userName) {
-    var flow = 20 * 1000 * 1000;
-    var time = 3 * 3600;
+    var flow = 60 * 1000 * 1000;
+    var time = 8 * 3600;
 
     var getAccountInfo = {};
     var parallel = [];

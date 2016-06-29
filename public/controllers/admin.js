@@ -752,13 +752,15 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.flow = [
             {number: 50 * 1000 * 1000, name:'50 MB'},
             {number: 100 * 1000 * 1000, name:'100 MB'},
-            {number: 200 * 1000 * 1000, name:'200 MB'}
+            {number: 200 * 1000 * 1000, name:'200 MB'},
+            {number: 200 * 1000 * 1000, name:'300 MB'}
         ];
         $scope.time = [
             {number: 2 * 3600, name: '2小时'},
             {number: 4 * 3600, name: '4小时'},
             {number: 8 * 3600, name: '8小时'},
-            {number: 12 * 3600, name: '12小时'}
+            {number: 12 * 3600, name: '12小时'},
+            {number: 18 * 3600, name: '18小时'}
         ];
 
         $http.get('/api/admin/option').then(function(success) {

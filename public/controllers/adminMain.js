@@ -158,11 +158,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             } else {
                 promises[1] = undefined;
             }
-            // if(options.type.indexOf('flow') >= 0) {
-            //     promises[2] = $http.get('/api/admin/flow1');
-            // } else {
-            //     promises[2] = undefined;
-            // }
+            if(options.type.indexOf('flow') >= 0) {
+                promises[2] = $http.get('/api/admin/flow');
+            } else {
+                promises[2] = undefined;
+            }
             if(options.type.indexOf('code') >= 0) {
                 promises[3] = $http.get('/api/admin/code');
             } else {
@@ -178,46 +178,16 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                     $scope.publicInfo.users = success[1].data;
                     $scope.$broadcast('initPublicInfo', 'user');
                 }
-                // if(success[2]) {
-                //     $scope.publicInfo.servers.map(function(server) {
-                //         return server.account.map(function(account) {
-                //             var flow = success[2].data.filter(function(f) {
-                //                 return (
-                //                     f.name === server.name &&
-                //                     f.port === account.port
-                //                     );
-                //             })[0];
-                //             if(flow) {
-                //                 account.today = flow.today;
-                //                 account.week = flow.week;
-                //                 account.month = flow.month;
-                //             }
-                //             return account;
-                //         });
-                //     });
-                //     $scope.$broadcast('initPublicInfo', 'flow');
-                // }
-                if(success[3]) {
-                    $scope.publicInfo.codes = success[3].data;
-                }
-
-                if(options.type.indexOf('flow') >= 0) {
-                    return $http.get('/api/admin/flow');
-                } else {
-                    return Promise.resolve('success');
-                }
-            }).then(function(success) {
-                $scope.loading(false);
-                if(options.type.indexOf('flow') >= 0) {
+                if(success[2]) {
                     $scope.publicInfo.servers.map(function(server) {
                         return server.account.map(function(account) {
-                            var flow = success.data.filter(function(f) {
+                            var flow = success[2].data.filter(function(f) {
                                 return (
                                     f.name === server.name &&
                                     f.port === account.port
-                                );
+                                    );
                             })[0];
-                            if (flow) {
+                            if(flow) {
                                 account.today = flow.today;
                                 account.week = flow.week;
                                 account.month = flow.month;
@@ -226,8 +196,11 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
                         });
                     });
                     $scope.$broadcast('initPublicInfo', 'flow');
-                    return Promise.resolve('success');
                 }
+                if(success[3]) {
+                    $scope.publicInfo.codes = success[3].data;
+                }
+                $scope.loading(false);
             }).catch(function(error) {
                 if(error.status === 401) {
                     $window.location.href = '/';
