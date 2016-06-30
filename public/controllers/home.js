@@ -4,13 +4,16 @@ new Fingerprint2().get(function(result, components){
 });
 
 app.controller('MainController', function($scope, $http, $state, $mdDialog, $mdToast, $window) {
-        $scope.publicInfo = {};
+        $scope.publicInfo = {
+            customButton: '',
+            customButtonFn: function() {}
+        };
         $scope.isLoading = false;
         $scope.loadingText = '正在加载';
         $scope.loadingError = '';
         $scope.loadingErrorFn = function() {};
-        $scope.customButton = '';
-        $scope.customButtonFn = function() {};
+        // $scope.customButton = '';
+        // $scope.customButtonFn = function() {};
 
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/home/loading.html',
@@ -88,12 +91,12 @@ app.controller('MainController', function($scope, $http, $state, $mdDialog, $mdT
                 $window.location.reload();
             }, function(err) {
                 if(err.data === '该用户的邮箱未验证') {
-                    $scope.customButton = '重发邮件';
-                    $scope.customButtonFn = function() {
-                        $scope.customButton = '';
+                    $scope.publicInfo.customButton = '重发邮件';
+                    $scope.publicInfo.customButtonFn = function() {
+                        $scope.publicInfo.customButton = '';
                         $http.post('/api/home/email', {username: $scope.user.username});
                         $scope.loading(false);
-                        $scope.customButtonFn = function() {};
+                        $scope.publicInfo.customButtonFn = function() {};
                     };
                     $scope.loading(true, '该用户的邮箱未验证，如未收到激活邮件，请点击“重发邮件”按钮', function() {
                         $scope.loading(false);
