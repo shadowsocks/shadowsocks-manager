@@ -286,7 +286,7 @@ var oneSecondAccount = function(userName) {
             return cb(null, option);
         });
     };
-    getAccountInfo.getUser = function(cb) {
+    getAccountInfo.getUser = ['getOption', function(results, cb) {
         User.findOne({email: userName}).exec(function(err, user) {
             if(err) {return cb(err);}
             if(!user) {return cb('user not found');}
@@ -308,8 +308,8 @@ var oneSecondAccount = function(userName) {
                 cb(null, user);
             }
         });
-    };
-    getAccountInfo.getAccount = ['getOption', 'getUser', function(results, cb) {
+    }];
+    getAccountInfo.getAccount = ['getUser', function(results, cb) {
         results.getUser.account.forEach(function(f) {
             parallel.push(function(cb) {
                 Server.findOne({name: f.server}).exec(function(err, server) {
