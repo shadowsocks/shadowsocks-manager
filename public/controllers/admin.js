@@ -763,6 +763,20 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             {number: 12 * 3600, name: '12小时'},
             {number: 18 * 3600, name: '18小时'}
         ];
+        $scope.osFlow = [
+            {name: '10 MB', value: 10 * 1000 * 1000},
+            {name: '20 MB', value: 20 * 1000 * 1000},
+            {name: '40 MB', value: 40 * 1000 * 1000},
+            {name: '80 MB', value: 80 * 1000 * 1000},
+            {name: '160 MB', value: 160 * 1000 * 1000}
+        ];
+        $scope.osTime = [
+            {name: '1小时', value: 1 * 3600},
+            {name: '2小时', value: 2 * 3600},
+            {name: '4小时', value: 4 * 3600},
+            {name: '8小时', value: 8 * 3600},
+            {name: '16小时', value: 16 * 3600}
+        ];
 
         $http.get('/api/admin/option').then(function(success) {
             $scope.options = success.data;
@@ -777,6 +791,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 $http.post('/api/admin/option', {
                     name: 'signInEnable',
                     value: $scope.options.signInEnable
+                });
+            }).then(function(success) {
+                $http.post('/api/admin/option', {
+                    name: 'oneSecond',
+                    value: $scope.options.oneSecond
                 });
             }).then(function(success) {
                 $scope.loadingMessage({

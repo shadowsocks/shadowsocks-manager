@@ -59,6 +59,32 @@
                 </md-list>
             </md-card-content>
         </md-card>
+        <md-card>
+            <md-card-content>
+                <md-list>
+                    <md-list-item>
+                        <div layout="column" style="width: 100%;">
+                            <div class="md-list-item-text">
+                                <md-input-container class="md-block">
+                                    <label>续一秒流量</label>
+                                    <md-select ng-model="options.oneSecond.flow">
+                                        <md-option ng-repeat="f in osFlow" value="{{f.value}}">{{f.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                            <div class="md-list-item-text">
+                                <md-input-container class="md-block">
+                                    <label>续一秒时长</label>
+                                    <md-select ng-model="options.oneSecond.time">
+                                        <md-option ng-repeat="t in osTime" value="{{t.value}}">{{t.name}}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
         <div layout="row" layout-align="center center">
             <md-button class="md-primary" ng-click="setOptions()">
                 确定

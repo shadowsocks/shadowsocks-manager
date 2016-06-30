@@ -5,6 +5,7 @@ var Server = mongoose.model('Server');
 var User = mongoose.model('User');
 var Code = mongoose.model('Code');
 var OneSecond = mongoose.model('OneSecond');
+var Option = mongoose.model('Option');
 var async = require('async');
 var moment = require('moment');
 
@@ -271,11 +272,20 @@ exports.oneSecond = function(req, res) {
 };
 
 var oneSecondAccount = function(userName) {
-    var flow = 60 * 1000 * 1000;
-    var time = 8 * 3600;
+    var flow;
+    var time;
 
     var getAccountInfo = {};
     var parallel = [];
+    getAccountInfo.getOption = (cb) => {
+        Option.findOne({name: 'oneSecond'}).exec((err, option) => {
+            if(err || !option) {cb('option not found');}
+            flow = option.flow;
+            time = option.time;
+            if(!flow || !time) {cb('value not found');}
+            cb(null, option);
+        });
+    };
     getAccountInfo.getUser = function(cb) {
         User.findOne({email: userName}).exec(function(err, user) {
             if(err) {return cb(err);}
@@ -297,7 +307,7 @@ var oneSecondAccount = function(userName) {
             }
         });
     };
-    getAccountInfo.getAccount = ['getUser', function(results, cb) {
+    getAccountInfo.getAccount = ['getOption', 'getUser', function(results, cb) {
         results.getUser.account.forEach(function(f) {
             parallel.push(function(cb) {
                 Server.findOne({name: f.server}).exec(function(err, server) {
