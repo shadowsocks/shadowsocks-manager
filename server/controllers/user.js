@@ -279,11 +279,11 @@ var oneSecondAccount = function(userName) {
     var parallel = [];
     getAccountInfo.getOption = (cb) => {
         Option.findOne({name: 'oneSecond'}).exec((err, option) => {
-            if(err || !option) {cb('option not found');}
-            flow = option.flow;
-            time = option.time;
-            if(!flow || !time) {cb('value not found');}
-            cb(null, option);
+            if(err || !option || !option.value) {return cb('option not found');}
+            flow = option.value.flow;
+            time = option.value.time;
+            if(!flow || !time) {return cb('value not found');}
+            return cb(null, option);
         });
     };
     getAccountInfo.getUser = function(cb) {
@@ -297,6 +297,8 @@ var oneSecondAccount = function(userName) {
                     if(err) {return cb(err);}
                     if(!server) {return cb('server not found');}
                     if(!server[0]) {return cb('server not found');}
+                    console.log(time);
+                    console.log(flow);
                     freeAccount.create(userName, server[0].name, time, flow, function(err, data) {
                         if(err) {return cb(err);}
                         return cb(null, user);
