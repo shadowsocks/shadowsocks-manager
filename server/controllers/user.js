@@ -297,8 +297,6 @@ var oneSecondAccount = function(userName) {
                     if(err) {return cb(err);}
                     if(!server) {return cb('server not found');}
                     if(!server[0]) {return cb('server not found');}
-                    console.log(time);
-                    console.log(flow);
                     freeAccount.create(userName, server[0].name, time, flow, function(err, data) {
                         if(err) {return cb(err);}
                         return cb(null, user);
