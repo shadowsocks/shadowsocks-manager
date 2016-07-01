@@ -328,9 +328,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     name: $stateParams.serverName,
                     port: port
                 }}).then(function(success) {
-                    // $scope.server.account = success.data.account;
                     $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-                    $scope.initPublicInfo();
+                    // $scope.initPublicInfo();
+                    $scope.server.account = $scope.server.account.filter(function(f) {
+                        return f.port !== port;
+                    });
                 }, function(error) {
                     $scope.loadingMessage({message: '删除账号失败', right: function() {
                         $scope.loading(false);
