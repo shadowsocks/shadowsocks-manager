@@ -68,6 +68,7 @@ var startSocket = function(server) {
             if (msg.substr(0, 4) === 'stat') {
                 var flow = JSON.parse(msg.substr(6).replace(/\0$/,''));
                 for (var f in flow) {
+                    if(flow[f] === 0) {return;}
                     var ho = new HistoryOriginal();
                     ho.name = server.name;
                     ho.port = +f;
