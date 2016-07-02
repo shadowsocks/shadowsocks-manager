@@ -201,6 +201,10 @@ app.controller('AdminServerController', function($scope, $http, $state, $mdDialo
                 var server = $scope.publicInfo.servers.filter(function(f) {
                     return f.name === $stateParams.serverName;
                 })[0];
+                success.data.users = [];
+                if($scope.account.userName) {
+                    success.data.users.push($scope.account.userName);
+                }
                 server.account.push(success.data);
                 $state.go('admin.serverPage', {serverName: $stateParams.serverName});
             }, function(error) {
