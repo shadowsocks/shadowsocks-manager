@@ -450,6 +450,10 @@ exports.getCode = function(req, res) {
 };
 
 exports.addCode = function(req, res) {
+    req.checkBody('flow', '请求数据格式错误').isNumeric();
+    req.checkBody('time', '请求数据格式错误').isNumeric();
+    var errors = req.validationErrors();
+    if(errors) {return res.status(400).end(errors[0].msg);}
     var flow = req.body.flow;
     var time = req.body.time;
     var code = new Code();
