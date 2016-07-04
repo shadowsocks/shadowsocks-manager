@@ -357,7 +357,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init();
         $scope.$on('initPublicInfo', function(event, data) {
-            if(data === 'server') {
+            if(data === 'flow') {
                 $scope.init();
             }
         });
@@ -413,7 +413,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init();
         $scope.$on('initPublicInfo', function(event, data) {
-            if(data === 'server') {
+            if(data === 'flow') {
                 $scope.init();
             }
         });
