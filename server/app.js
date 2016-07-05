@@ -116,7 +116,8 @@ exports.express = function(cb) {
         secret: 'foo',
         store: new MongoStore({ mongooseConnection: mongoose.connection }),
         resave: false,
-        saveUninitialized: false
+        saveUninitialized: false,
+        maxAge: 2 * 24 * 60 * 60 * 1000
     }));
 
     app.engine('.html', require('ejs').__express);
