@@ -257,6 +257,13 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         $scope.hideSearchBar = function() {
             $scope.publicInfo.searchBar = false;
         };
+        // $scope.searchButton = function() {
+        //     if($scope.publicInfo.search) {
+        //         $scope.publicInfo.search = false;
+        //     } else {
+        //         $scope.publicInfo.search = true;
+        //     }
+        // };
 
         $scope.version = '0.0.0';
         $http.get('/api/home/version').then(function(success) {
