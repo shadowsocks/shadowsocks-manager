@@ -68,36 +68,48 @@ var startSocket = function(server) {
             if (msg.substr(0, 4) === 'stat') {
                 var flow = JSON.parse(msg.substr(6).replace(/\0$/,''));
                 for (var f in flow) {
-                    var ho = new HistoryOriginal();
-                    ho.name = server.name;
-                    ho.port = +f;
-                    ho.flow = flow[f];
-                    ho.time = new Date();
-                    ho.save(function(err, data) {
-                        if(err) {
-                            logger.warn('保存历史记录出错：' + err);
-                        } else {
-                            logger.info(flow);
+                    Server.findOne({
+                        name: server.name,
+                        'account.port': +f
+                    }).exec((e, d) => {
+                        if(!d) {
+                            logger.warn('删除异常端口: [' + server.name + '][' + f + ']');
+                            del(server, {port: +f});
                         }
                     });
 
-                    Server.findOneAndUpdate({
-                        'name': server.name,
-                        'account.port': +f 
-                    }, {
-                        $inc: {
-                            'account.$.flow': 0 - flow[f]
-                        }
-                    }).exec();
+                    if(flow[f] !== 0) {
+                        var ho = new HistoryOriginal();
+                        ho.name = server.name;
+                        ho.port = +f;
+                        ho.flow = flow[f];
+                        ho.time = new Date();
+                        ho.save(function(err, data) {
+                            if(err) {
+                                logger.warn('保存历史记录出错：' + err);
+                            } else {
+                                logger.info(flow);
+                            }
+                        });
 
-                    Server.findOneAndUpdate({
-                        'name': server.name,
-                        'account.port': +f 
-                    }, {
-                        $set: {
-                            'account.$.lastActive': new Date()
-                        }
-                    }, {new: true}).exec();
+                        Server.findOneAndUpdate({
+                            'name': server.name,
+                            'account.port': +f 
+                        }, {
+                            $inc: {
+                                'account.$.flow': 0 - flow[f]
+                            }
+                        }).exec();
+
+                        Server.findOneAndUpdate({
+                            'name': server.name,
+                            'account.port': +f 
+                        }, {
+                            $set: {
+                                'account.$.lastActive': new Date()
+                            }
+                        }, {new: true}).exec();
+                    }
                 }
             }
         });

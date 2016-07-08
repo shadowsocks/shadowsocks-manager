@@ -9,7 +9,7 @@
   "keywords": [
     "shadowsocks"
   ],
-  "homepage": "https://github.com/gyteng/shadowsocks-manager",
+  "homepage": "https://github.com/shadowsocks/shadowsocks-manager",
   "ignore": [
     "**/.*",
     "node_modules",

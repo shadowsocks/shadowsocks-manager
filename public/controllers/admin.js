@@ -52,6 +52,26 @@ app.filter('renewTime', function() {
         return ret;
     };
 });
+app.directive('focusMe', function($timeout, $parse) {
+    return {
+        //scope: true,   // optionally create a child scope
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.focusMe);
+            scope.$watch(model, function(value) {
+                if (value === true) {
+                    $timeout(function() {
+                        element[0].focus();
+                    });
+                }
+            });
+            // to address @blesh's comment, set attribute value to 'false'
+            // on blur event:
+            element.bind('blur', function() {
+                scope.$apply(model.assign(scope, false));
+            });
+        }
+    };
+});
 app.controller('AdminIndexController', function($scope, $http, $state) {
         $scope.setTitle('首页');
         $scope.setMenuButton('default');
@@ -328,9 +348,11 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                     name: $stateParams.serverName,
                     port: port
                 }}).then(function(success) {
-                    // $scope.server.account = success.data.account;
                     $state.go('admin.serverPage', {serverName: $stateParams.serverName});
-                    $scope.initPublicInfo();
+                    // $scope.initPublicInfo();
+                    $scope.server.account = $scope.server.account.filter(function(f) {
+                        return f.port !== port;
+                    });
                 }, function(error) {
                     $scope.loadingMessage({message: '删除账号失败', right: function() {
                         $scope.loading(false);
@@ -355,7 +377,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init();
         $scope.$on('initPublicInfo', function(event, data) {
-            if(data === 'server') {
+            if(data === 'flow') {
                 $scope.init();
             }
         });
@@ -411,7 +433,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         };
         $scope.init();
         $scope.$on('initPublicInfo', function(event, data) {
-            if(data === 'server') {
+            if(data === 'flow') {
                 $scope.init();
             }
         });

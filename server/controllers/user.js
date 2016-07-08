@@ -279,14 +279,14 @@ var oneSecondAccount = function(userName) {
     var parallel = [];
     getAccountInfo.getOption = (cb) => {
         Option.findOne({name: 'oneSecond'}).exec((err, option) => {
-            if(err || !option) {cb('option not found');}
-            flow = option.flow;
-            time = option.time;
-            if(!flow || !time) {cb('value not found');}
-            cb(null, option);
+            if(err || !option || !option.value) {return cb('option not found');}
+            flow = option.value.flow;
+            time = option.value.time;
+            if(!flow || !time) {return cb('value not found');}
+            return cb(null, option);
         });
     };
-    getAccountInfo.getUser = function(cb) {
+    getAccountInfo.getUser = ['getOption', function(results, cb) {
         User.findOne({email: userName}).exec(function(err, user) {
             if(err) {return cb(err);}
             if(!user) {return cb('user not found');}
@@ -306,8 +306,8 @@ var oneSecondAccount = function(userName) {
                 cb(null, user);
             }
         });
-    };
-    getAccountInfo.getAccount = ['getOption', 'getUser', function(results, cb) {
+    }];
+    getAccountInfo.getAccount = ['getUser', function(results, cb) {
         results.getUser.account.forEach(function(f) {
             parallel.push(function(cb) {
                 Server.findOne({name: f.server}).exec(function(err, server) {

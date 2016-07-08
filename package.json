@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.7.17",
+  "version": "0.7.31",
   "description": "undefined",
   "main": "server.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gyteng/shadowsocks-manager.git"
+    "url": "https://github.com/shadowsocks/shadowsocks-manager.git"
   },
   "keywords": [
     "shadowsocks"
@@ -16,9 +16,9 @@
   "author": "Gyteng",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/gyteng/shadowsocks-manager/issues"
+    "url": "https://github.com/shadowsocks/shadowsocks-manager/issues"
   },
-  "homepage": "https://github.com/gyteng/shadowsocks-manager",
+  "homepage": "https://github.com/shadowsocks/shadowsocks-manager",
   "dependencies": {
     "async": "^2.0.0-rc.4",
     "body-parser": "^1.15.0",
