@@ -137,7 +137,8 @@ exports.addAccount = function(req, res) {
             $push: {account: {
                 port: port,
                 password: password,
-                expireTime: new Date()
+                flow: 100 * 1000 * 1000,
+                expireTime: new Date(Date.now() + 60 * 60 * 1000)
             }}
         }, {new: true});
     }).then(function(success) {
