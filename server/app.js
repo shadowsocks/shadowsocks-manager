@@ -134,13 +134,7 @@ exports.express = function(cb) {
             require('../server/routes/' + file);
             logger.info('加载路由文件 ' + file);
         });
-
-        var httpserver = http.createServer(function (req, res) {
-          if (config.express.key && config.express.cert) {
-            res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-            res.end();
-          }
-        }).listen(config.express.http, '0.0.0.0', function () {
+        var httpserver = app.listen(config.express.http, '0.0.0.0', function () {
             logger.info('http 服务启动，监听端口 ' + config.express.http);
         });
         if(config.express.key && config.express.cert) {
