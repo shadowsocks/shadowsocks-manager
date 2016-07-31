@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.7.33",
+  "version": "0.7.34",
   "description": "undefined",
   "main": "server.js",
   "scripts": {
@@ -28,6 +28,8 @@
     "express": "*",
     "express-session": "^1.13.0",
     "express-validator": "^2.20.8",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^1.5.4",
     "later": "^1.2.0",
     "log4js": "^0.6.36",
     "moment": "^2.11.2",
