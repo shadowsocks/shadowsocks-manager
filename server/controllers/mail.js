@@ -11,7 +11,7 @@ var config = require('../../config').conf;
 var crypto = require('crypto');
 var md5 = (text) => crypto.createHash('md5').update(text).digest('hex');
 
-var transporter = nodemailer.createTransport('smtps://' + config.mail.address.split('@')[0] +'%40' + config.mail.address.split('@')[1] + ': ' + config.mail.password + '@' + config.mail.smtp);
+var transporter = nodemailer.createTransport('smtps://' + config.mail.address.split('@')[0] +'%40' + config.mail.address.split('@')[1] + ':' + config.mail.password + '@' + config.mail.smtp);
 
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
