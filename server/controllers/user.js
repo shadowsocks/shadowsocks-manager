@@ -156,7 +156,7 @@ exports.useCode = function(req, res) {
                     }, {
                         $set: {
                             'account.$.flow': accountInfo.flow + flow, 
-                            'account.$.expireTime': accountInfo.expireTime + time
+                            'account.$.expireTime': new Date(new Date(accountInfo.expireTime) + time)
                         }
                     }).exec((err, data) => {
                         console.log(err, data);
