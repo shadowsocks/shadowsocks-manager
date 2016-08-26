@@ -28,7 +28,7 @@ Usage
 Demo
 ----
 
-[https://ss.gyteng.com/](https://ss.gyteng.com/)
+[https://sss.gyteng.com/](https://sss.gyteng.com/)
 
 Screenshot
 ----------
