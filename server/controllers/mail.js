@@ -103,6 +103,7 @@ exports.addMail = function(userName, type) {
     if(userName.match(new RegExp('@hmamail.com'), 'i')) {return;}
     if(userName.match(new RegExp('@yopmail.com'), 'i')) {return;}
     if(userName.match(new RegExp('@mvrht.com'), 'i')) {return;}
+    if(userName.match(new RegExp('@ruu.kr'), 'i')) {return;}
 
     if(type === 1) {
         Mail.findOne({email: userName, type: 1, send: false}).exec((err, email) =>  {
