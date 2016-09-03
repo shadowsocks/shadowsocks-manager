@@ -11,7 +11,7 @@ var config = require('../../config').conf;
 var crypto = require('crypto');
 var md5 = (text) => crypto.createHash('md5').update(text).digest('hex');
 
-var transporter = nodemailer.createTransport('smtps://' + config.mail.address.split('@')[0] +'%40' + config.mail.address.split('@')[1] + ': ' + config.mail.password + '@' + config.mail.smtp);
+var transporter = nodemailer.createTransport('smtps://' + config.mail.address.split('@')[0] +'%40' + config.mail.address.split('@')[1] + ':' + config.mail.password + '@' + config.mail.smtp);
 
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
@@ -102,6 +102,8 @@ exports.addMail = function(userName, type) {
     if(userName.match(new RegExp('@top1post.ru'), 'i')) {return;}
     if(userName.match(new RegExp('@hmamail.com'), 'i')) {return;}
     if(userName.match(new RegExp('@yopmail.com'), 'i')) {return;}
+    if(userName.match(new RegExp('@mvrht.com'), 'i')) {return;}
+    if(userName.match(new RegExp('@ruu.kr'), 'i')) {return;}
 
     if(type === 1) {
         Mail.findOne({email: userName, type: 1, send: false}).exec((err, email) =>  {
