@@ -94,6 +94,7 @@ exports.sendResetPasswordMail = sendResetPasswordMail;
 
 exports.addMail = function(userName, type) {
 
+    if(userName.match(new RegExp('@bccto.me'), 'i')) {return;}
     if(userName.match(new RegExp('@mail.bccto.me'), 'i')) {return;}
     if(userName.match(new RegExp('@chacuo.net'), 'i')) {return;}
     if(userName.match(new RegExp('@dispostable.com'), 'i')) {return;}
