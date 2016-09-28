@@ -3,6 +3,10 @@ Shadowsocks-Manager
 
 Shadowsocks with multi user and traffic control.
 
+Notice
+------
+I am developing [version 2](https://github.com/shadowsocks/shadowsocks-manager/tree/version2), so the old version won't add any feature.
+
 Dependencies
 ------------
 
