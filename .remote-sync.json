@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": false,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "v2.gyteng.com",
+  "port": "22",
+  "target": "/home/gyt/smc",
+  "ignore": [
+    ".remote-sync.json",
+    ".git/**"
+  ],
+  "username": "gyt",
+  "password": "gytvul112358",
+  "watch": [],
+  "transport": "scp"
+}

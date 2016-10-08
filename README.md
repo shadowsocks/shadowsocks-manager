@@ -1,48 +1,30 @@
-Shadowsocks-Manager
-===================
+# shadowsocks-manager
 
-Shadowsocks with multi user and traffic control.
+A shadowsocks manager tool for multi user and traffic control.  
+Base on Node.js and SQLite.
 
-Notice
-------
-I am developing [version 2](https://github.com/shadowsocks/shadowsocks-manager/tree/version2), so the old version won't add any feature.
+## Dependencies
 
-Dependencies
-------------
+Node.js 4.*
 
-    Nodejs  4.4
-    Mongodb 3.2
+## Install
 
-Install
--------
+### From source:
 
-    git clone https://github.com/shadowsocks/shadowsocks-manager.git
-    npm install -g bower
-    cd shadowsocks-manager
-    npm install
-    bower install
+```
+git clone https://github.com/shadowsocks/shadowsocks-manager.git
+cd shadowsocks-manager
+npm i
+```
+use `node server.js` to run this program.  
 
-Usage
------
+### From npm:
+```
+npm i -g shadowsocks-manager
+```
+use `ssmgr` to run this program.
 
-    cd shadowsocks-manager
-    mv config.js.sample config.js
-    node server
-
-Demo
-----
-
-[https://sss.gyteng.com/](https://sss.gyteng.com/)
-
-Screenshot
-----------
-
-<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot0.png" width="240">
-<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot1.png" width="240">
-<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot2.png" width="240">
-<img src="https://github.com/shadowsocks/shadowsocks-manager/blob/master/wiki/img/Screenshot3.png" width="240">
-
-More
-----
-
-Please visit [WiKi](https://github.com/shadowsocks/shadowsocks-manager/wiki).
+### Plugins
+cli  
+flowSaver  
+telegram  

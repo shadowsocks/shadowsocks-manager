@@ -1,0 +1,20 @@
+type: s
+empty: false
+
+shadowsocks:
+  address: 127.0.0.1:6001
+
+manager:
+  address: 127.0.0.1:6002
+  password: '123456'
+
+plugins:
+  telegram:
+    use: false
+    token: ''
+  cli:
+    use: false
+  flowSaver:
+    use: false
+
+db: ''

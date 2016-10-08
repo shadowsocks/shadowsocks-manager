@@ -1,5 +1,0 @@
-<md-tabs md-selected="tabIndex.value" md-border-bottom md-stretch-tabs="always" md-dynamic-height>
-    <md-tab ng-repeat="server in tabs track by server.name" label="{{server.name}}" md-on-select="select(server.name, $index)" md-on-deselect="deselect($index)" ng-click="tabClick(server.name, $index)">
-    </md-tab>
-</md-tabs>
-<div ui-view></div>
