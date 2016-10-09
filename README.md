@@ -27,6 +27,8 @@ npm i -g shadowsocks-manager
 use `ssmgr` to run this program.
 
 ### Plugins
-cli  
-flowSaver  
-telegram  
+[cli](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/cli)  
+[flowSaver](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/flowSaver)  
+[telegram](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/telegram)  
+
+### Usage
