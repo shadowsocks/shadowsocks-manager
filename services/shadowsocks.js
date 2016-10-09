@@ -78,7 +78,10 @@ client.on('message', async (msg, rinfo) => {
         sendMessage(`remove: {"server_port": ${ fe.port }}`);
       }
     });
-    knex('flow').insert(insertFlow).then();
+    console.log(insertFlow);
+    if(insertFlow.length > 0) {
+      knex('flow').insert(insertFlow).then();
+    }
   };
 });
 
