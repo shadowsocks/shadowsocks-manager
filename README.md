@@ -39,3 +39,9 @@ For example, you can run this command:
 `ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002`
 3. If you have several servers, you have to run step 1 and step 2 in every server.
 4. Now you can use the plugins to manager them.
+
+### Donate
+If you find this project helpful, please consider making a donation:  
+
+* Alipay  
+<img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/alipay.jpg" width="160">
