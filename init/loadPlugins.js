@@ -9,7 +9,6 @@ const loadPlugins = () => {
   if(config.type !== 'm') {
     return;
   }
-  console.log(config);
   for(const name in config.plugins) {
     if(config.plugins[name].use) {
       console.log(`Load plugin: ${ name }`);
