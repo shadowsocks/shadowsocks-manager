@@ -32,14 +32,10 @@ use `ssmgr` to run this program.
 [telegram](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/telegram)  
 
 ### Usage
-1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it support `shadowsocks-python` and `shadowsocks-libev`.
+1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it supports `shadowsocks-python` and `shadowsocks-libev`.
 For example, you can run this command:  
-```
-ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001
-```
+`ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001`
 2. run ssmgr with type s:  
-```
-ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002
-```
-3. If you have several servers, you have to run step 1 and 2 in every server.
+`ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002`
+3. If you have several servers, you have to run step 1 and step 2 in every server.
 4. Now you can use the plugins to manager them.
