@@ -1,3 +1,5 @@
+'use strict';
+
 const config = appRequire('services/config');
 
 const knex = require('knex')({

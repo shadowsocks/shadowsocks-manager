@@ -1,3 +1,1 @@
-module.exports = async function (ctx) {
-
-};
+'use strict';

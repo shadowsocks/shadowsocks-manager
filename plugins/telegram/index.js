@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 appRequire('plugins/telegram/db');
 const TelegramBot = require('node-telegram-bot-api');

@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -16,7 +18,6 @@ program
   .option('-s, --shadowsocks [address]', 'ss-manager address, default: 127.0.0.1:6001')
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
-  .option('-v, --verbose', 'show verbose info')
   .parse(process.argv);
 
 if(program.type) {config.set('type', program.type);}
@@ -29,6 +30,3 @@ if(program.db) {
 } else {
   config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
 }
-// } else {
-//   config.knex.connection.filename = path.resolve(ssmgrPath + '/' + config.knex.connection.filename);
-// }

@@ -1,8 +1,10 @@
-module.exports = async function (ctx) {
-  const knex = ctx.get('knex.client');
-  const tableName = 'saveFlow';
+'use strict';
 
-  const config = ctx.config.all();
+const knex = appRequire('init/knex').knex;
+const tableName = 'saveFlow';
+
+const config = appRequire('services/config').all();
+const createTable = async() => {
   if(config.empty) {
     await knex.schema.dropTableIfExists(tableName);
   }
@@ -13,3 +15,4 @@ module.exports = async function (ctx) {
     table.dateTime('time');
   });
 };
+createTable().then();

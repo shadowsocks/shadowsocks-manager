@@ -1,3 +1,5 @@
+'use strict';
+
 const crypto = require('crypto');
 const path = require('path');
 const config = appRequire('services/config').all();
