@@ -7,7 +7,7 @@ const token = config.plugins.telegram.token;
 
 const bot = new TelegramBot(token, {polling: true});
 
-const knex = ctx.get('knex.client');
+const knex = appRequire('init/knex').knex;
 
 const setManager = async (id) => {
   const findId = await knex('telegram').select(['value']).where({
