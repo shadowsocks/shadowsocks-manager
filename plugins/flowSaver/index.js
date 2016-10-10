@@ -33,6 +33,9 @@ const saveFlow = async () => {
           port: server.port,
           password: server.password,
         });
+        if(flow.length === 0) {
+          return;
+        }
         await knex('saveFlow').insert(flow.map(f => {
           return {
             name: server.name,

@@ -2,13 +2,14 @@
 
 const path = require('path');
 appRequire('plugins/telegram/db');
-appRequire('plugins/telegram/server');
 const TelegramBot = require('node-telegram-bot-api');
 const manager = appRequire('services/manager');;
 const config = appRequire('services/config').all();
 const token = config.plugins.telegram.token;
 
 const bot = new TelegramBot(token, {polling: true});
+
+exports.bot = bot;
 
 const knex = appRequire('init/knex').knex;
 
@@ -37,6 +38,10 @@ const isManager = async (id) => {
     return Promise.reject('Unauthorized');
   }
 };
+
+exports.isManager = isManager;
+
+appRequire('plugins/telegram/server');
 
 bot.onText(/\/auth/, (msg, match) => {
   const fromId = msg.from.id;
