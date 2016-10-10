@@ -45,3 +45,6 @@ If you find this project helpful, please consider making a donation:
 
 * Alipay  
 <img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/alipay.jpg" width="160">
+
+* Wechat  
+<img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/wechat.png" width="160">
