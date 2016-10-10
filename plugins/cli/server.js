@@ -4,9 +4,38 @@ const _ = require('lodash');
 const config = appRequire('services/config').all();
 const isFlowSaverUse = _.get(config, 'plugins.flowSaver.use');
 const index = appRequire('plugins/cli/index');
+const flow = appRequire('plugins/flowSaver/flow');
 const inquirer = require('inquirer');
 
 let server;
+
+const flowMenu = async (time) => {
+
+  const flowNumber = (number) => {
+    if(number < 1000) return number + ' B';
+    else if(number < 1000 * 1000) return number / 1000 + ' KB';
+    else if(number < 1000 * 1000 * 1000) return (number / 1000000).toFixed(2) + ' MB';
+    else if(number < 1000 * 1000 * 1000 * 1000) return (number / 1000000000).toFixed(3) + ' GB';
+  };
+
+  const startTime = Date.now() - time;
+  const endTime = Date.now();
+  const list = await server.list();
+  const managerAddress = index.getManagerAddress();
+  const name = list.filter(f => {
+    return (f.host === managerAddress.host && f.port === managerAddress.port);
+  })[0].name;
+
+  const flows = await flow.getFlow(name, startTime, endTime);
+  console.log();
+  console.log(flows.map(m => {
+    return {
+      port: m.port,
+      flow: flowNumber(m.sumFlow),
+    };
+  }));
+  return flows;
+}
 
 const command = {
   '* server add': () => {
@@ -180,6 +209,15 @@ const command = {
       });
     // }
   },
+  '- flow 5 mins': () => {
+    flowMenu(5 * 60 * 1000).then();
+  },
+  '- flow 1 hour': () => {
+    flowMenu(60 * 60 * 1000).then();
+  },
+  '- flow today': () => {
+    flowMenu(24* 60 * 60 * 1000).then();
+  }
 };
 
 const init = async () => {

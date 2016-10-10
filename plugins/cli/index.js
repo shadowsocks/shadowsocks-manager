@@ -17,6 +17,10 @@ const setManagerAddress = (host, port, password) => {
   managerAddress.password = password;
 };
 
+const getManagerAddress = () => {
+  return managerAddress;
+};
+
 const main = {
   type: 'list',
   name: 'main',
@@ -157,7 +161,7 @@ const mainMenu = () => {
       return list();
     } else if (answer.main === 'change password') {
       return inquirer.prompt(changePassword);
-    } else if (answer.main[0] === '*') {
+    } else if (answer.main[0] === '*' || answer.main[0] === '-') {
       return appRequire('plugins/cli/server').flowSaverCommand(answer.main);
     } else {
       return Promise.reject();
@@ -178,5 +182,6 @@ const mainMenu = () => {
 exports.main = main;
 exports.mainMenu = mainMenu;
 exports.setManagerAddress = setManagerAddress;
+exports.getManagerAddress = getManagerAddress;
 
 appRequire('plugins/cli/server');
