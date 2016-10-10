@@ -3,6 +3,7 @@
 const knex = appRequire('init/knex').knex;
 
 const add = (name, host, port, password) => {
+  console.log(name, host, port, password);
   return knex('server').insert({
     name,
     host,

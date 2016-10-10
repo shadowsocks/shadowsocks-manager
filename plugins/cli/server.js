@@ -10,7 +10,65 @@ let server;
 
 const command = {
   '* server add': () => {
-    console.log('ZZZ');
+    return inquirer.prompt([
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Enter server name: ',
+        validate: function (value) {
+          if(value === '') {
+            return 'You can not set an empty name';
+          } else {
+            return true;
+          }
+        },
+      }, {
+        type: 'input',
+        name: 'host',
+        message: 'Enter server host: ',
+        validate: function (value) {
+          if(value === '') {
+            return 'You can not set an empty host';
+          } else {
+            return true;
+          }
+        },
+      }, {
+        type: 'input',
+        name: 'port',
+        message: 'Enter server port: ',
+        validate: function (value) {
+          if(Number.isNaN(+value)) {
+            return 'Please enter a valid port number';
+          } else if (+value <= 0 || +value >= 65536) {
+            return 'Port number must between 1 to 65535';
+          } else {
+            return true;
+          }
+        }
+      }, {
+        type: 'input',
+        name: 'password',
+        message: 'Enter password: ',
+        validate: function (value) {
+          if(value === '') {
+            return 'You can not set an empty password';
+          } else {
+            return true;
+          }
+        },
+      },
+      {
+        type: 'confirm',
+        name: 'confirm',
+        message: 'Is this correct?',
+        default: true,
+        when: (answer) => {
+          answer.function = 'add';
+          return answer;
+        },
+      },
+    ]);
   },
   '* server del': () => {
     console.log('ZZZ');
@@ -57,7 +115,19 @@ const init = async () => {
 init();
 
 const flowSaverCommand = (data) => {
-  return command[data]();
+  return command[data]()
+  .then(answer => {
+    if(!answer.confirm) {
+      return Promise.reject();
+    }
+    if(answer.function === 'add') {
+      return server.add(answer.name, answer.host, +answer.port, answer.password);
+    }
+  }).then(() => {
+    return Promise.reject();
+  }).catch(() => {
+    return Promise.reject();
+  });
 }
 
 exports.flowSaverCommand = flowSaverCommand;
