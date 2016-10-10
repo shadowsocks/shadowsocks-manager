@@ -8,8 +8,12 @@ require('./init/moveConfigFile');
 require('./init/checkConfig');
 require('./init/knex');
 
-require('./models/flow');
-require('./models/account');
+// require('./models/flow');
+// require('./models/account');
 
-require('./init/loadServices');
-require('./init/loadPlugins');
+const initDb = require('./init/loadModels').init;
+
+initDb().then(() => {
+  require('./init/loadServices');
+  require('./init/loadPlugins');
+});
