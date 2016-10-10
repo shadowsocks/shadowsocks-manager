@@ -7,7 +7,7 @@ const main = {
   type: 'list',
   name: 'main',
   message: 'Select command: ',
-  choices: ['add port', 'del port', 'change password','list port']
+  choices: ['add port', 'del port', 'change password', 'list port']
 };
 
 const add = [{
@@ -142,7 +142,9 @@ const mainMenu = () => {
     } else if (answer.main === 'list port') {
       return list();
     } else if (answer.main === 'change password') {
-      return inquirer.prompt(changePassword);;
+      return inquirer.prompt(changePassword);
+    } else if (answer.main[0] === '*') {
+      return appRequire('plugins/cli/server').flowSaverCommand(answer.main);
     } else {
       return Promise.reject();
     }
@@ -159,4 +161,8 @@ const mainMenu = () => {
   });;
 };
 
-mainMenu();
+// mainMenu();
+exports.main = main;
+exports.mainMenu = mainMenu;
+
+appRequire('plugins/cli/server');

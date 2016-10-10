@@ -25,7 +25,7 @@ const saveFlow = async () => {
         const options = {
           clear: true,
         };
-        const flow = await manager.send({
+        let flow = await manager.send({
           command: 'flow',
           options: options,
         }, {
@@ -33,10 +33,7 @@ const saveFlow = async () => {
           port: server.port,
           password: server.password,
         });
-        if(flow.length === 0) {
-          return;
-        }
-        await knex('saveFlow').insert(flow.map(f => {
+        flow = flow.map(f => {
           return {
             name: server.name,
             port: f.port,
@@ -45,7 +42,11 @@ const saveFlow = async () => {
           };
         }).filter(f => {
           return f.flow > 0;
-        }));
+        });
+        if(flow.length === 0) {
+          return;
+        }
+        await knex('saveFlow').insert(flow);
       }
     });
   } catch(err) {
