@@ -28,6 +28,6 @@ const list = () => {
 };
 
 exports.add = add;
-exports.del = del
+exports.del = del;
 exports.edit = edit;
 exports.list = list;

@@ -2,6 +2,7 @@
 
 const path = require('path');
 appRequire('plugins/telegram/db');
+appRequire('plugins/telegram/server');
 const TelegramBot = require('node-telegram-bot-api');
 const manager = appRequire('services/manager');;
 const config = appRequire('services/config').all();
