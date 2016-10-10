@@ -3,6 +3,20 @@
 const manager = appRequire('services/manager');
 const inquirer = require('inquirer');
 
+const config = appRequire('services/config').all();
+
+let managerAddress = {
+  host: config.manager.address.split(':')[0],
+  port: +config.manager.address.split(':')[1],
+  password: config.manager.password,
+}
+
+const setManagerAddress = (host, port, password) => {
+  managerAddress.host = host;
+  managerAddress.port = port;
+  managerAddress.password = password;
+};
+
 const main = {
   type: 'list',
   name: 'main',
@@ -124,7 +138,7 @@ const list = async () => {
   try {
     const result = await manager.send({
       command: 'list',
-    });
+    }, managerAddress);
     console.log(result);
   } finally {
     return { confirm: false };
@@ -150,7 +164,7 @@ const mainMenu = () => {
     }
   }).then(answer => {
     if(answer.confirm) {
-      return manager.send(answer.cmd);
+      return manager.send(answer.cmd, managerAddress);
     } else {
       return Promise.reject();
     }
@@ -161,8 +175,8 @@ const mainMenu = () => {
   });;
 };
 
-// mainMenu();
 exports.main = main;
 exports.mainMenu = mainMenu;
+exports.setManagerAddress = setManagerAddress;
 
 appRequire('plugins/cli/server');

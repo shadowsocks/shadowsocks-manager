@@ -162,8 +162,23 @@ const command = {
       return { confirm: false };
     }
   },
-  '* server change': () => {
-    console.log('ZZZ');
+  '* server change': async () => {
+    // try {
+      console.log();
+      const result = await server.list();
+      return inquirer.prompt({
+        type: 'list',
+        name: 'main',
+        message: 'Select server: ',
+        choices: result.map(m => {return m.name}),
+      }).then(answer => {
+        const serverSelected = result.filter(f => {
+          return f.name === answer.main;
+        })[0]
+        index.setManagerAddress(serverSelected.host, +serverSelected.port, serverSelected.password);
+        return;
+      });
+    // }
   },
 };
 

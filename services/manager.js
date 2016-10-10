@@ -46,6 +46,9 @@ const sendMessage = (data, options) => {
       }
       client.end();
     });
+    client.on('error', err => {
+      console.log(err);
+    })
   });
 };
 
