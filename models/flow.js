@@ -14,4 +14,5 @@ const createTable = async() => {
     table.dateTime('time');
   });
 };
-createTable().then();
+// createTable().then();
+exports.createTable = createTable;

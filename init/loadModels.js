@@ -6,9 +6,10 @@ const init = async () => {
   if(!list) {
     return Promise.reject('load models error');
   }
-  list.forEach(f => {
-    
-  });
+  for (let l of list) {
+    await appRequire('models/' + l).createTable();
+  }
+  return;
 };
 
 exports.init = init;

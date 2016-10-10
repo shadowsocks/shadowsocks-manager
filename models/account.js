@@ -13,4 +13,5 @@ const createTable = async() => {
     table.string('password');
   });
 };
-createTable().then();
+// createTable().then();
+exports.createTable = createTable;
