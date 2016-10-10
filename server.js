@@ -2,6 +2,10 @@
 
 require('babel-core/register');
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
 require('./init/utils');
 require('./init/log');
 require('./init/moveConfigFile');

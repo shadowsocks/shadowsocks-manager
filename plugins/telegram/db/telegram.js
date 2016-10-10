@@ -13,4 +13,5 @@ const createTable = async() => {
     table.string('value');
   });
 };
-createTable().then();
+
+exports.createTable = createTable;

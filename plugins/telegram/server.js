@@ -30,7 +30,7 @@ const init = async () => {
       bot.sendMessage(fromId, 'Error');
     });
   });
-  
+
 };
 
 init();
