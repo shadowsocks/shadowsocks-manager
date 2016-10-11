@@ -4,7 +4,6 @@ const knex = appRequire('init/knex').knex;
 const tableName = 'server';
 const config = appRequire('services/config').all();
 
-const config = appRequire('services/config').all();
 const createTable = async() => {
   if(config.empty) {
     await knex.schema.dropTableIfExists(tableName);
@@ -20,7 +19,12 @@ const createTable = async() => {
     const host = config.manager.address.split(':')[0];
     const port = +config.manager.address.split(':')[1];
     const password = config.manager.password;
-    await server.add('default', host, port, password);
+    await knex('server').insert({
+      name: 'default',
+      host,
+      port,
+      password,
+    });
   }
   return;
 };
