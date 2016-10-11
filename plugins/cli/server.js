@@ -35,7 +35,7 @@ const flowMenu = async (time) => {
     };
   }));
   return flows;
-}
+};
 
 const command = {
   '* server add': () => {
@@ -199,11 +199,11 @@ const command = {
         type: 'list',
         name: 'main',
         message: 'Select server: ',
-        choices: result.map(m => {return m.name}),
+        choices: result.map(m => {return m.name;}),
       }).then(answer => {
         const serverSelected = result.filter(f => {
           return f.name === answer.main;
-        })[0]
+        })[0];
         index.setManagerAddress(serverSelected.host, +serverSelected.port, serverSelected.password);
         return;
       });
@@ -265,6 +265,6 @@ const flowSaverCommand = (data) => {
   }).catch(() => {
     return Promise.reject();
   });
-}
+};
 
 exports.flowSaverCommand = flowSaverCommand;
