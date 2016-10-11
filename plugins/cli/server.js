@@ -226,14 +226,13 @@ const init = async () => {
     return;
   }
   server = appRequire('plugins/flowSaver/server');
-  const list = await server.list();
-  // console.log(list);
-  if(list.length === 0) {
-    const host = config.manager.address.split(':')[0];
-    const port = +config.manager.address.split(':')[1];
-    const password = config.manager.password;
-    await server.add('default', host, port, password);
-  }
+  // const list = await server.list();
+  // if(list.length === 0) {
+  //   const host = config.manager.address.split(':')[0];
+  //   const port = +config.manager.address.split(':')[1];
+  //   const password = config.manager.password;
+  //   await server.add('default', host, port, password);
+  // }
 
   for (const menu in command) {
     index.main.choices.push(menu);
