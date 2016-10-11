@@ -12,9 +12,6 @@ require('./init/moveConfigFile');
 require('./init/checkConfig');
 require('./init/knex');
 
-// require('./models/flow');
-// require('./models/account');
-
 const initDb = require('./init/loadModels').init;
 
 initDb().then(() => {
