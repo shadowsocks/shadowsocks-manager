@@ -1,6 +1,7 @@
 'use strict';
 
 require('babel-core/register');
+global.Promise = require('bluebird');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -17,4 +18,6 @@ const initDb = require('./init/loadModels').init;
 initDb().then(() => {
   require('./init/loadServices');
   require('./init/loadPlugins');
+}).catch(err => {
+  console.log(err);
 });

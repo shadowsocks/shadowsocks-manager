@@ -1,13 +1,12 @@
 'use strict';
+//
+// const path = require('path');
 
-const path = require('path');
-// appRequire('plugins/telegram/db');
-const TelegramBot = require('node-telegram-bot-api');
 const manager = appRequire('services/manager');;
 const config = appRequire('services/config').all();
 const token = config.plugins.telegram.token;
-console.log(token);
 
+const TelegramBot = require('node-telegram-bot-api');
 const bot = new TelegramBot(token, {polling: true});
 
 const knex = appRequire('init/knex').knex;
