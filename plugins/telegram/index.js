@@ -10,16 +10,12 @@ const url = `https://api.telegram.org/bot${ token }/`;
 const setUpdateId = async (id) => {
   try {
     const result = await knex('telegram').select(['value']).where({key: 'updateId'});
-
     if(result.length === 0) {
       await knex('telegram').insert({
         key: 'updateId',
-        value: id || 1,
+        value: id,
       });
     } else {
-      if(!id) {
-        id = (+result.value) + 1;
-      }
       await knex('telegram').where({key: 'updateId'}).update({
         value: id,
       });
@@ -34,7 +30,6 @@ const getUpdateId = async () => {
   try {
     const result = await knex('telegram').select(['value']).where({key: 'updateId'});
     if(result.length === 0) {
-      await setUpdateId(1);
       return 1;
     } else {
       return result[0].value;
@@ -76,20 +71,21 @@ const sendMessage = (chat_id, reply_to_message_id) => {
     },
     simple: false,
   });
-}
+};
 
 let uid;
 setInterval(() => {
 
 
 getUpdateId().then(id => {
-  return getMessages(id)
+  return getMessages(id);
 }).then(s => {
   console.log(JSON.stringify(s, null, 4));
-  return sendMessage(s[0].message.chat.id, s[0].message.message_id);
+
   console.log(uid);
   uid = s[0].update_id + 1;
   console.log(uid);
+  return sendMessage(s[0].message.chat.id, s[0].message.message_id);
 }).then(s => {
   console.log('zzz' + uid);
   return setUpdateId(uid);
