@@ -59,8 +59,11 @@ const compareWithLastFlow = (flow, lastFlow) => {
 client.on('message', async (msg, rinfo) => {
   const msgStr = new String(msg);
   if(msgStr.substr(0, 5) === 'stat:') {
+    console.log(msgStr);
     let flow = JSON.parse(msgStr.substr(5));
     const realFlow = compareWithLastFlow(flow, lastFlow);
+    console.log(realFlow);
+    console.log()
     lastFlow = flow;
     const insertFlow = Object.keys(realFlow).map(m => {
       return {
