@@ -61,7 +61,10 @@ client.on('message', async (msg, rinfo) => {
   if(msgStr.substr(0, 5) === 'stat:') {
     let flow = JSON.parse(msgStr.substr(5));
     const realFlow = compareWithLastFlow(flow, lastFlow);
-    console.log()
+    console.log('realFlow');
+    console.log(flow);
+    console.log(realFlow);
+    console.log();
     lastFlow = flow;
     const insertFlow = Object.keys(realFlow).map(m => {
       return {
@@ -178,6 +181,9 @@ const getFlow = async (options) => {
     if(options.clear) {
       await knex('flow').whereBetween('time', [ startTime, endTime ]).delete();
     }
+    console.log('accounts');
+    console.log(accounts);
+    console.log();
     return accounts;
   } catch(err) {
     console.log(err);

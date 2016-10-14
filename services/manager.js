@@ -48,7 +48,7 @@ const sendMessage = (data, options) => {
     });
     client.on('error', err => {
       console.log(err);
-    })
+    });
   });
 };
 
