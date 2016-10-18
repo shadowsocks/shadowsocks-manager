@@ -109,7 +109,7 @@ const server = net.createServer(socket => {
     // console.log('close');
   });
 }).on('error', (err) => {
-  throw err;
+  console.log(`socket error:\n${err.stack}`);
 });
 
 server.listen(socketPath || {
