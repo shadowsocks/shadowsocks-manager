@@ -32,6 +32,9 @@ const sendMessage = (message) => {
     client.on('close', () => {
       return rej('close');
     });
+    client.on('error', (err) => {
+      console.log(`client error:\n${err.stack}`);
+    });
   });
 };
 
