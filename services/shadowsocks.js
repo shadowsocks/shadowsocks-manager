@@ -10,6 +10,8 @@ const port = +config.shadowsocks.address.split(':')[1];
 const knex = appRequire('init/knex').knex;
 
 const moment = require('moment');
+
+let shadowsocksType = 'libev';
 let lastFlow;
 
 const sendPing = () => {
@@ -47,12 +49,21 @@ const startUp = async () => {
 };
 
 const compareWithLastFlow = (flow, lastFlow) => {
+  if(shadowsocksType === 'python') {
+    return flow;
+  }
+  console.log('----');
+  console.log(flow);
+  console.log(lastFlow);
+  console.log('----');
   const realFlow = {};
   if(!lastFlow) {
     return flow;
   }
   for(const f in flow) {
-    if(lastFlow[f] !== flow[f]) {
+    if(lastFlow[f]) {
+      realFlow[f] = flow[f] - lastFlow[f];
+    } else {
       realFlow[f] = flow[f];
     }
   }
@@ -61,7 +72,9 @@ const compareWithLastFlow = (flow, lastFlow) => {
 
 client.on('message', async (msg, rinfo) => {
   const msgStr = new String(msg);
-  if(msgStr.substr(0, 5) === 'stat:') {
+  if(msgStr.substr(0, 4) === 'pong') {
+    shadowsocksType = 'python';
+  } else if(msgStr.substr(0, 5) === 'stat:') {
     let flow = JSON.parse(msgStr.substr(5));
     const realFlow = compareWithLastFlow(flow, lastFlow);
     console.log('realFlow');
