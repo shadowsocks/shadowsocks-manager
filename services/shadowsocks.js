@@ -1,7 +1,7 @@
 'use strict';
 
 const dgram = require('dgram');
-const client = dgram.createSocket('udp4');
+let client = dgram.createSocket('udp4');
 
 const config = appRequire('services/config').all();
 const host = config.shadowsocks.address.split(':')[0];
@@ -13,6 +13,57 @@ const moment = require('moment');
 
 let shadowsocksType = 'libev';
 let lastFlow;
+
+const connect = (reconnect = false) => {
+  if(reconnect) {
+    client.close();
+    console.log('reconnect');
+    lastFlow = null;
+  }
+  client = dgram.createSocket('udp4');
+  client.on('message', async (msg, rinfo) => {
+    const msgStr = new String(msg);
+    if(msgStr.substr(0, 4) === 'pong') {
+      shadowsocksType = 'python';
+    } else if(msgStr.substr(0, 5) === 'stat:') {
+      let flow = JSON.parse(msgStr.substr(5));
+      const realFlow = compareWithLastFlow(flow, lastFlow);
+      console.log('--------');
+      console.log(flow);
+      console.log(lastFlow);
+      console.log(realFlow);
+      console.log('========');
+      lastFlow = flow;
+      const insertFlow = Object.keys(realFlow).map(m => {
+        return {
+          port: +m,
+          flow: +realFlow[m],
+          time: Date.now(),
+        };
+      }).filter(f => {
+        return f.flow > 0;
+      });
+      const accounts = await knex('account').select([ 'port' ]);
+      insertFlow.forEach(fe => {
+        const account = accounts.filter(f => {
+          return fe.port === f.port;
+        })[0];
+        if(!account) {
+          sendMessage(`remove: {"server_port": ${ fe.port }}`);
+        }
+      });
+      // console.log(insertFlow);
+      if(insertFlow.length > 0) {
+        console.log(insertFlow);
+        knex('flow').insert(insertFlow).then();
+      }
+    };
+  });
+
+  client.on('error', (err) => {
+    console.log(`client error:\n${err.stack}`);
+  });
+};
 
 const sendPing = () => {
   client.send(new Buffer('ping'), port, host);
@@ -52,10 +103,10 @@ const compareWithLastFlow = (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
   }
-  console.log('----');
-  console.log(flow);
-  console.log(lastFlow);
-  console.log('----');
+  // console.log('----');
+  // console.log(flow);
+  // console.log(lastFlow);
+  // console.log('----');
   const realFlow = {};
   if(!lastFlow) {
     return flow;
@@ -70,52 +121,16 @@ const compareWithLastFlow = (flow, lastFlow) => {
   return realFlow;
 };
 
-client.on('message', async (msg, rinfo) => {
-  const msgStr = new String(msg);
-  if(msgStr.substr(0, 4) === 'pong') {
-    shadowsocksType = 'python';
-  } else if(msgStr.substr(0, 5) === 'stat:') {
-    let flow = JSON.parse(msgStr.substr(5));
-    const realFlow = compareWithLastFlow(flow, lastFlow);
-    console.log('realFlow');
-    console.log(flow);
-    console.log(realFlow);
-    console.log();
-    lastFlow = flow;
-    const insertFlow = Object.keys(realFlow).map(m => {
-      return {
-        port: +m,
-        flow: +flow[m],
-        time: Date.now(),
-      };
-    }).filter(f => {
-      return f.flow > 0;
-    });
-    const accounts = await knex('account').select([ 'port' ]);
-    insertFlow.forEach(fe => {
-      const account = accounts.filter(f => {
-        return fe.port === f.port;
-      })[0];
-      if(!account) {
-        sendMessage(`remove: {"server_port": ${ fe.port }}`);
-      }
-    });
-    // console.log(insertFlow);
-    if(insertFlow.length > 0) {
-      knex('flow').insert(insertFlow).then();
-    }
-  };
-});
 
-client.on('error', (err) => {
-  console.log(`client error:\n${err.stack}`);
-});
-
+connect();
 startUp();
 // sendPing();
 setInterval(() => {
   sendPing();
-}, 60 * 1000);
+}, 30 * 1000);
+// setInterval(() => {
+//   connect(true);
+// }, 60 * 1000);
 
 const addAccount = async (port, password) => {
   try {
