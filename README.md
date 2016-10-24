@@ -37,8 +37,9 @@ For example, you can run this command:
 `ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001`
 2. run ssmgr with type s:  
 `ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002`
-3. If you have several servers, you have to run step 1 and step 2 in every server.
-4. Now you can use the plugins to manager them.
+3. If you have several servers, you have to run step 1 and step 2 in every server.  
+The listening address in `--manager-address` of step 1 and in `-s` of step 2 must be same. For security reseon, we recommend you to use `127.0.0.1` instead of `0.0.0.0`.
+4. Now you can use the plugins to manager them. You can read the details in plugins readme page.
 
 ### Donate
 If you find this project helpful, please consider making a donation:  
