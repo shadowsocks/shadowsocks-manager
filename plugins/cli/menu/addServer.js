@@ -59,6 +59,7 @@ const add = async () => {
     await flowSaverServer.add(addServer.name, addServer.host, +addServer.port, addServer.password);
     return;
   } catch(err) {
+    console.log(err);
     return Promise.reject(err);
   }
 };
