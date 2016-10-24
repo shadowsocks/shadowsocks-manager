@@ -17,14 +17,14 @@ const loadPlugins = () => {
   for(const name in config.plugins) {
     if(config.plugins[name].use) {
       const promises = [];
-      console.log(`Load plugin: ${ name }`);
+      // console.log(`Load plugin: ${ name }`);
       try {
         const files = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }`));
 
         if(files.indexOf('db') >= 0) {
           const dbFiles = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }/db`));
           dbFiles.forEach(f => {
-            console.log(`Load plugin db: ${ name }/db/${ f }`);
+            // console.log(`Load plugin db: ${ name }/db/${ f }`);
             promises.push(appRequire(`plugins/${ name }/db/${ f }`).createTable());
           });
         }
@@ -38,7 +38,7 @@ const loadPlugins = () => {
         // appRequire(`plugins/${ name }/index`);
       }
       Promise.all(promises).then(() => {
-        console.log(`Load plugin index: ${ name }/index`);
+        // console.log(`Load plugin index: ${ name }/index`);
         appRequire(`plugins/${ name }/index`);
       }).catch(err => {
         console.log(err);

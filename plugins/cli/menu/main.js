@@ -9,7 +9,7 @@ const main = [
   {
     type: 'list',
     name: 'mainMeun',
-    message: 'What do you need?',
+    message: 'Main Meun',
     choices: ['add port', 'list port', 'exit'],
     // filter: function(val) {
     //   return val.toLowerCase();
@@ -17,4 +17,8 @@ const main = [
   }
 ];
 
-inquirer.prompt(main).then().catch();
+inquirer.prompt(main)
+.then(success => {
+  console.log(success);
+})
+.catch();
