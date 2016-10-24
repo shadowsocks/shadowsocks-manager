@@ -30,7 +30,7 @@ const connect = (reconnect = false) => {
       const realFlow = compareWithLastFlow(flow, lastFlow);
       console.log('--------');
       console.log(flow);
-      console.log(lastFlow);
+      // console.log(lastFlow);
       console.log(realFlow);
       console.log('========');
       lastFlow = flow;
@@ -54,7 +54,7 @@ const connect = (reconnect = false) => {
       });
       // console.log(insertFlow);
       if(insertFlow.length > 0) {
-        console.log(insertFlow);
+        // console.log(insertFlow);
         knex('flow').insert(insertFlow).then();
       }
     };
@@ -127,10 +127,10 @@ startUp();
 // sendPing();
 setInterval(() => {
   sendPing();
-}, 30 * 1000);
+}, 60 * 1000);
 // setInterval(() => {
 //   connect(true);
-// }, 60 * 1000);
+// }, 90 * 1000);
 
 const addAccount = async (port, password) => {
   try {
@@ -212,9 +212,9 @@ const getFlow = async (options) => {
     if(options.clear) {
       await knex('flow').whereBetween('time', [ startTime, endTime ]).delete();
     }
-    console.log('accounts');
-    console.log(accounts);
-    console.log();
+    // console.log('accounts');
+    // console.log(accounts);
+    // console.log();
     return accounts;
   } catch(err) {
     console.log(err);
