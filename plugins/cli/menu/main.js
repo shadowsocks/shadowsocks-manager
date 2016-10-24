@@ -2,6 +2,7 @@
 
 const inquirer = require('inquirer');
 const listPort = appRequire('plugins/cli/menu/listPort');
+const addPort = appRequire('plugins/cli/menu/addPort');
 
 const main = [
   {
@@ -18,6 +19,8 @@ const mainMeun = () => {
   .then(success => {
     if(success.mainMeun === 'list port') {
       return listPort.list();
+    } else if(success.mainMeun === 'add port') {
+      return addPort.add();
     }
   }).then(() => {
     return mainMeun();

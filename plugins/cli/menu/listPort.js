@@ -15,7 +15,14 @@ const menu = [
     type: 'list',
     name: 'act',
     message: 'What do you want?',
-    choices: ['Delete port', 'Change password'],
+    choices: ['Delete port', 'Change password', 'Exit'],
+    when: function (answers) {
+      if(answers.port === 'Exit') {
+        return Promise.reject();
+      } else {
+        return answers;
+      }
+    }
   }
 ];
 
@@ -42,6 +49,7 @@ const listPort = async () => {
       const choice = (f.port + '     ').substr(0, 5) + ', ' + f.password;
       menu[0].choices.push(choice);
     });
+    menu[0].choices.push('Exit');
     return;
   } catch(err) {
     console.log(err);
@@ -66,6 +74,8 @@ const list = async () => {
         port: selectPort.port.split(',')[0],
         password: newPassword.password,
       }, index.getManagerAddress());
+      return;
+    } else if (selectPort.act === 'Exit') {
       return;
     }
   } catch(err) {
