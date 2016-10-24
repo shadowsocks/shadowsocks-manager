@@ -8,6 +8,7 @@ const listPort = appRequire('plugins/cli/menu/listPort');
 const addPort = appRequire('plugins/cli/menu/addPort');
 const listServer = appRequire('plugins/cli/menu/listServer');
 const addServer = appRequire('plugins/cli/menu/addServer');
+const flow = appRequire('plugins/cli/menu/flow');
 
 const main = [
   {
@@ -19,7 +20,7 @@ const main = [
 ];
 
 if(isFlowSaverUse) {
-  main[0].choices.push('add server', 'list server');
+  main[0].choices.push('add server', 'list server', 'flow');
 }
 
 const mainMeun = () => {
@@ -34,6 +35,8 @@ const mainMeun = () => {
       return listServer.list();
     } else if(success.mainMeun === 'add server') {
       return addServer.add();
+    } else if(success.mainMeun === 'flow') {
+      return flow.getFlow();
     }
   }).then(() => {
     return mainMeun();
