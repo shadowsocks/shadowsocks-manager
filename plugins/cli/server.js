@@ -215,7 +215,7 @@ const command = {
   '- flow 1 hour': () => {
     flowMenu(60 * 60 * 1000).then();
   },
-  '- flow 25 hours': () => {
+  '- flow 24 hours': () => {
     flowMenu(24* 60 * 60 * 1000).then();
   }
 };
