@@ -20,5 +20,8 @@ const main = [
 inquirer.prompt(main)
 .then(success => {
   console.log(success);
+  if(success.mainMeun === 'list port') {
+    listPort.list().then(console.log);
+  }
 })
 .catch();

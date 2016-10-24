@@ -5,23 +5,23 @@ appRequire('plugins/cli/menu/main');
 // const manager = appRequire('services/manager');
 // const inquirer = require('inquirer');
 //
-// const config = appRequire('services/config').all();
-//
-// let managerAddress = {
-//   host: config.manager.address.split(':')[0],
-//   port: +config.manager.address.split(':')[1],
-//   password: config.manager.password,
-// };
-//
-// const setManagerAddress = (host, port, password) => {
-//   managerAddress.host = host;
-//   managerAddress.port = port;
-//   managerAddress.password = password;
-// };
-//
-// const getManagerAddress = () => {
-//   return managerAddress;
-// };
+const config = appRequire('services/config').all();
+
+let managerAddress = {
+  host: config.manager.address.split(':')[0],
+  port: +config.manager.address.split(':')[1],
+  password: config.manager.password,
+};
+
+const setManagerAddress = (host, port, password) => {
+  managerAddress.host = host;
+  managerAddress.port = port;
+  managerAddress.password = password;
+};
+
+const getManagerAddress = () => {
+  return managerAddress;
+};
 //
 // const main = {
 //   type: 'list',
@@ -183,7 +183,7 @@ appRequire('plugins/cli/menu/main');
 //
 // exports.main = main;
 // exports.mainMenu = mainMenu;
-// exports.setManagerAddress = setManagerAddress;
-// exports.getManagerAddress = getManagerAddress;
+exports.setManagerAddress = setManagerAddress;
+exports.getManagerAddress = getManagerAddress;
 //
 // appRequire('plugins/cli/server');
