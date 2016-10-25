@@ -84,14 +84,15 @@ const list = async () => {
     });
     const selectServer = await inquirer.prompt(menu);
     if(selectServer.act === 'Switch to it') {
-      // const server = listServer.filter(f => {
-      //   return f.name === selectServer.server;
-      // })[0];
       index.setManagerAddress(selectServer.server.host, selectServer.server.port, selectServer.server.password);
       return;
     } else if (selectServer.act === 'Edit server') {
+      editServer[0].default = selectServer.server.name;
+      editServer[1].default = selectServer.server.host;
+      editServer[2].default = selectServer.server.port;
+      editServer[3].default = selectServer.server.password;
       const edit = await inquirer.prompt(editServer);
-      await flowSaverServer.edit(selectServer.server, edit.name, edit.host, edit.port, edit.password);
+      await flowSaverServer.edit(selectServer.server.name, edit.name, edit.host, edit.port, edit.password);
       return;
     } else if (selectServer.act === 'Delete server') {
       await flowSaverServer.del(selectServer.server);
