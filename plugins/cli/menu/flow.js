@@ -38,7 +38,7 @@ const getFlow = async () => {
     } else if(flowTime.flow === '24 hours') {
       startTime -= 24 * 60 * 60 * 1000;
     }
-    const myFlow = await flow.getFlow(serverName, startTime, endTime);
+    const myFlow = await flow.getFlow(managerAddress.host, managerAddress.port, startTime, endTime);
     console.log(myFlow.map(m => {
       return {
         port: m.port,
