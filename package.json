@@ -1,21 +1,23 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/index.js",
     "start": "node server.js"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.16.0",
-    "babel-eslint": "^6.1.2"
+    "babel-eslint": "^6.1.2",
+    "mocha": "^3.1.2"
   },
   "dependencies": {
     "babel-core": "^6.14.0",
     "babel-preset-stage-3": "^6.11.0",
+    "chai": "^3.5.0",
     "commander": "^2.9.0",
     "fs-extra": "^0.30.0",
     "inquirer": "^1.1.3",
