@@ -73,18 +73,28 @@ const list = async () => {
     const listServer = await flowSaverServer.list();
     menu[0].choices = [];
     listServer.forEach(f => {
-      menu[0].choices.push(f.name);
+      const name = f.name + ' ' + f.host + ':' + f.port;
+      const value = {
+        name: f.name,
+        host: f.host,
+        port: f.port,
+        password: f.password,
+      };
+      menu[0].choices.push({name, value});
     });
     const selectServer = await inquirer.prompt(menu);
     if(selectServer.act === 'Switch to it') {
-      const server = listServer.filter(f => {
-        return f.name === selectServer.server;
-      })[0];
-      index.setManagerAddress(server.host, server.port, server.password);
+      // const server = listServer.filter(f => {
+      //   return f.name === selectServer.server;
+      // })[0];
+      index.setManagerAddress(selectServer.server.host, selectServer.server.port, selectServer.server.password);
       return;
     } else if (selectServer.act === 'Edit server') {
       const edit = await inquirer.prompt(editServer);
       await flowSaverServer.edit(selectServer.server, edit.name, edit.host, edit.port, edit.password);
+      return;
+    } else if (selectServer.act === 'Delete server') {
+      await flowSaverServer.del(selectServer.server);
       return;
     }
   } catch(err) {

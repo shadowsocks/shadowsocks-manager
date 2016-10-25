@@ -12,17 +12,18 @@ const add = (name, host, port, password) => {
 };
 
 const del = (name) => {
-  return knex('server').where({name}).delete();
+  // return knex('server').where({name}).delete();
+  return knex.transaction(trx => {
+    return knex('server').transacting(trx).where({name}).delete()
+    .then(() => {
+      return knex('saveFlow').transacting(trx).where({name}).delete();
+    })
+    .then(trx.commit)
+    .catch(trx.rollback);
+  });
 };
 
 const edit = (oldName, name, host, port, password) => {
-  // return knex('server').where({name: oldName}).update({
-  //   name,
-  //   host,
-  //   port,
-  //   password,
-  // });
-
   return knex.transaction(trx => {
     return knex('server').transacting(trx).where({name: oldName}).update({
       name,

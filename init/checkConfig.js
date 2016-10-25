@@ -4,7 +4,6 @@ const os = require('os');
 const path = require('path');
 const program = require('commander');
 const version = appRequire('package').version;
-const config = appRequire('services/config');
 
 let ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
 
@@ -18,6 +17,10 @@ program
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
   .parse(process.argv);
+
+if(program.config) {global.configFile = program.config;}
+
+const config = appRequire('services/config');
 
 if(program.type) {config.set('type', program.type);}
 if(program.empty) {config.set('empty', program.empty);}

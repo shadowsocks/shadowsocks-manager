@@ -18,7 +18,7 @@ const menu = [
     choices: ['Delete port', 'Change password', 'Exit'],
     when: function (answers) {
       if(answers.port === 'Exit') {
-        return Promise.reject();
+        return Promise.resolve();
       } else {
         return answers;
       }
@@ -46,10 +46,16 @@ const listPort = async () => {
     }, index.getManagerAddress());
     menu[0].choices = [];
     result.forEach(f => {
-      const choice = (f.port + '     ').substr(0, 5) + ', ' + f.password;
-      menu[0].choices.push(choice);
+      const name = (f.port + '     ').substr(0, 5) + ', ' + f.password;
+      const value = f.port;
+      menu[0].choices.push({
+        name,
+        value,
+      });
     });
-    menu[0].choices.push('Exit');
+    menu[0].choices.push({
+      name: 'Exit', value: 'Exit'
+    });
     return;
   } catch(err) {
     console.log(err);
@@ -64,14 +70,14 @@ const list = async () => {
     if(selectPort.act === 'Delete port') {
       await manager.send({
         command: 'del',
-        port: selectPort.port.split(',')[0],
+        port: selectPort.port,
       }, index.getManagerAddress());
       return;
     } else if (selectPort.act === 'Change password') {
       const newPassword = await inquirer.prompt(password);
       await manager.send({
         command: 'pwd',
-        port: selectPort.port.split(',')[0],
+        port: selectPort.port,
         password: newPassword.password,
       }, index.getManagerAddress());
       return;
@@ -79,6 +85,7 @@ const list = async () => {
       return;
     }
   } catch(err) {
+    console.log(err);
     return Promise.reject(err);
   }
 };

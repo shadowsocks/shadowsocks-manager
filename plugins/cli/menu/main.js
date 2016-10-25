@@ -9,12 +9,15 @@ const addPort = appRequire('plugins/cli/menu/addPort');
 const listServer = appRequire('plugins/cli/menu/listServer');
 const addServer = appRequire('plugins/cli/menu/addServer');
 const flow = appRequire('plugins/cli/menu/flow');
+const index = appRequire('plugins/cli/index');
 
 const main = [
   {
     type: 'list',
     name: 'mainMeun',
-    message: 'Main Meun',
+    message: () => {
+      return 'Main menu [' + index.getManagerAddress().host + ':' + index.getManagerAddress().port + ']';
+    },
     choices: ['add port', 'list port'],
   }
 ];
