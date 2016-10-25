@@ -25,10 +25,6 @@ const getFlow = async () => {
   try {
     const flowTime = await inquirer.prompt(menu);
     const managerAddress = index.getManagerAddress();
-    const listServer = await flowSaverServer.list();
-    const serverName = listServer.filter(f => {
-      return f.host === managerAddress.host && f.port === managerAddress.port;
-    })[0].name;
     let startTime = Date.now();
     const endTime = Date.now();
     if(flowTime.flow === '5 mins') {
