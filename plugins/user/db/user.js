@@ -11,7 +11,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.string('username').primary();
     table.string('email').unique();
-    table.string('password').unique();
+    table.string('password');
     table.string('type');
     table.dateTime('createTime');
   });

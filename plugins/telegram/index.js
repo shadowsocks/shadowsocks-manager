@@ -53,57 +53,54 @@ const getMessages = async (updateId) => {
     if(data.ok && data.result.length) {
       return data.result;
     } else {
-      return Promise.reject();
+      return;
     }
   } catch(err) {
     return Promise.reject(err);
   }
 };
 
-const sendMessage = (chat_id, reply_to_message_id) => {
+const sendMessage = (text, chat_id, reply_to_message_id) => {
   return rp({
     method: 'GET',
     uri: url + 'sendMessage',
     qs: {
       chat_id,
-      text: 'ok',
+      text,
       reply_to_message_id,
     },
     simple: false,
   });
 };
 
-let uid;
+const EventEmitter = require('events');
+class Telegram extends EventEmitter {}
+const telegram = new Telegram();
+telegram.on('reply', (message, text) => {
+  const chat_id = message.message.chat.id;
+  const reply_to_message_id = message.message.message_id;
+  sendMessage(text, chat_id, reply_to_message_id);
+});
+telegram.on('send', (message, text) => {
+  const chat_id = message.message.chat.id;
+  sendMessage(text, chat_id);
+});
 
 setInterval(async() => {
-  // getUpdateId().then(id => {
-  //   return getMessages(id);
-  // }).then(s => {
-  //   console.log(JSON.stringify(s, null, 4));
-  //   console.log(uid);
-  //   uid = s[0].update_id + 1;
-  //   console.log(uid);
-  //   return sendMessage(s[0].message.chat.id, s[0].message.message_id);
-  // }).then(s => {
-  //   console.log('zzz' + uid);
-  //   return setUpdateId(uid);
-  // }).then(id => {
-  //   console.log(id);
-  // }).catch(e => {
-  //   console.log(e);
-  // });
   try {
     const id = await getUpdateId();
-    console.log('id: ' + id);
     const messages = await getMessages(id);
-    console.log(messages);
     if(messages) {
       await setUpdateId(messages[messages.length - 1].update_id + 1);
       messages.forEach(message => {
-        sendMessage(message.message.chat.id, message.message.message_id);
+        telegram.emit('message', message);
       });
     }
   } catch(err) {
     console.log(err);
   }
 }, 2 * 1000);
+
+exports.telegram = telegram;
+
+appRequire('plugins/telegram/auth');
