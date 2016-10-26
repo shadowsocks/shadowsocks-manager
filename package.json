@@ -1,12 +1,11 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.1.33",
+  "version": "0.1.36",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha test",
-    "start": "node server.js",
-    "babel": "babel . --ignore node_modules,test,lib --out-dir lib --copy-files"
+    "start": "node server.js"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "MIT",

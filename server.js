@@ -1,8 +1,6 @@
 'use strict';
 
-if(process.env.NODE_ENV !== 'production') {
-  require('babel-core/register');
-}
+require('babel-core/register');
 
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
