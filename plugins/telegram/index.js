@@ -74,25 +74,36 @@ const sendMessage = (chat_id, reply_to_message_id) => {
 };
 
 let uid;
-setInterval(() => {
 
-
-getUpdateId().then(id => {
-  return getMessages(id);
-}).then(s => {
-  console.log(JSON.stringify(s, null, 4));
-
-  console.log(uid);
-  uid = s[0].update_id + 1;
-  console.log(uid);
-  return sendMessage(s[0].message.chat.id, s[0].message.message_id);
-}).then(s => {
-  console.log('zzz' + uid);
-  return setUpdateId(uid);
-}).then(id => {
-  console.log(id);
-}).catch(e => {
-  console.log(e);
-});
-
-}, 10 * 1000);
+setInterval(async() => {
+  // getUpdateId().then(id => {
+  //   return getMessages(id);
+  // }).then(s => {
+  //   console.log(JSON.stringify(s, null, 4));
+  //   console.log(uid);
+  //   uid = s[0].update_id + 1;
+  //   console.log(uid);
+  //   return sendMessage(s[0].message.chat.id, s[0].message.message_id);
+  // }).then(s => {
+  //   console.log('zzz' + uid);
+  //   return setUpdateId(uid);
+  // }).then(id => {
+  //   console.log(id);
+  // }).catch(e => {
+  //   console.log(e);
+  // });
+  try {
+    const id = await getUpdateId();
+    console.log('id: ' + id);
+    const messages = await getMessages(id);
+    console.log(messages);
+    if(messages) {
+      await setUpdateId(messages[messages.length - 1].update_id + 1);
+      messages.forEach(message => {
+        sendMessage(message.message.chat.id, message.message.message_id);
+      });
+    }
+  } catch(err) {
+    console.log(err);
+  }
+}, 2 * 1000);
