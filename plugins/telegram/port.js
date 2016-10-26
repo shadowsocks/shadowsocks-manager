@@ -12,6 +12,7 @@ const list = (message) => {
     if(ports.length === 0) {
       str = 'No ports.';
     } else {
+      str += `${managerAddress.get().host}:${managerAddress.get().port}\n\n`;
       ports.forEach(port => {
         str += port.port + ', ' + port.password + '\n';
       });

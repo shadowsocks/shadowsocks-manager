@@ -119,6 +119,7 @@ exports.telegram = telegram;
 
 appRequire('plugins/telegram/auth');
 appRequire('plugins/telegram/port');
+appRequire('plugins/telegram/help');
 if(isFlowSaverUse) {
   appRequire('plugins/telegram/server');
   appRequire('plugins/telegram/flow');
