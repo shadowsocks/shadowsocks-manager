@@ -9,9 +9,13 @@ const list = (message) => {
     command: 'list'
   }, managerAddress.get()).then(ports => {
     let str = '';
-    ports.forEach(port => {
-      str += port.port + ', ' + port.password + '\n';
-    });
+    if(ports.length === 0) {
+      str = 'No ports.';
+    } else {
+      ports.forEach(port => {
+        str += port.port + ', ' + port.password + '\n';
+      });
+    }
     telegram.emit('send', message, str);
   }).catch(err => {
     console.log(err);
