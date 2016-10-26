@@ -26,9 +26,47 @@ const add = (message, name, host, port, password) => {
   });
 };
 
+const edit = (message, oldName, name, host, port, password) => {
+  flowSaverServer.edit(oldName, name, host, port, password)
+  .then(success => {
+    telegram.emit('send', message, `Edit server ${name} success.`);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+};
+
+const del = (message, name) => {
+  flowSaverServer.del(name)
+  .then(success => {
+    telegram.emit('send', message, `Delete server ${name} success.`);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+};
+
+const switchServer = (message, name) => {
+  flowSaverServer.list().then(servers => {
+    const server = servers.filter(f => {
+      return f.name === name;
+    })[0];
+    if(!server) {
+      return;
+    }
+    managerAddress.set(server.host, server.port, server.password);
+    telegram.emit('send', message, `Switch to server ${name}.`);
+  }).catch(err => {
+    console.log(err);
+  });
+};
+
 telegram.on('manager', message => {
 
   const addReg = new RegExp(/^addserver ([\w\.]{0,}) ([\w\.]{0,}) (\d{0,5}) ([\w]{0,})$/);
+  const editReg = new RegExp(/^editserver ([\w\.]{0,}) ([\w\.]{0,}) ([\w\.]{0,}) (\d{0,5}) ([\w]{0,})$/);
+  const delReg = new RegExp(/^delserver ([\w\.]{0,})$/);
+  const switchReg = new RegExp(/^switchserver ([\w\.]{0,})$/);
 
   if(message.message.text === 'listserver') {
     list(message);
@@ -39,5 +77,21 @@ telegram.on('manager', message => {
     const port = +reg[3];
     const password = reg[4];
     add(message, name, host, port, password);
+  } else if(message.message.text.match(editReg)) {
+    const reg = message.message.text.match(editReg);
+    const oldName = reg[1];
+    const name = reg[2];
+    const host = reg[3];
+    const port = +reg[4];
+    const password = reg[5];
+    edit(message, oldName, name, host, port, password);
+  } else if(message.message.text.match(delReg)) {
+    const reg = message.message.text.match(delReg);
+    const name = reg[1];
+    del(message, name);
+  } else if(message.message.text.match(switchReg)) {
+    const reg = message.message.text.match(switchReg);
+    const name = reg[1];
+    switchServer(message, name);
   }
 });
