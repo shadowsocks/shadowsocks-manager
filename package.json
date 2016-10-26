@@ -1,10 +1,9 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.1.36",
+  "version": "0.1.37",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
     "start": "node server.js"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
