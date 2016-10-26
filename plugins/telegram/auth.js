@@ -42,7 +42,7 @@ const isManager = async (message) => {
 };
 
 telegram.on('message', message => {
-  if (message.message.text === '/auth') {
+  if (message.message.text === 'auth') {
     setManager(message);
   } else {
     isManager(message);

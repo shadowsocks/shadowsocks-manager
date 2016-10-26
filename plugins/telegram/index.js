@@ -2,7 +2,9 @@
 
 const rp = require('request-promise');
 const knex = appRequire('init/knex').knex;
+const _ = require('lodash');
 const config = appRequire('services/config').all();
+const isFlowSaverUse = _.get(config, 'plugins.flowSaver.use');
 const token = config.plugins.telegram.token;
 
 const url = `https://api.telegram.org/bot${ token }/`;
@@ -117,3 +119,6 @@ exports.telegram = telegram;
 
 appRequire('plugins/telegram/auth');
 appRequire('plugins/telegram/port');
+if(isFlowSaverUse) {
+  appRequire('plugins/telegram/server');
+}

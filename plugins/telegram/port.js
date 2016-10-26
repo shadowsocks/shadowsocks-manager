@@ -8,7 +8,11 @@ const list = (message) => {
   manager.send({
     command: 'list'
   }, managerAddress.get()).then(ports => {
-    telegram.emit('send', message, JSON.stringify(ports));
+    let str = '';
+    ports.forEach(port => {
+      str += port.port + ', ' + port.password + '\n';
+    });
+    telegram.emit('send', message, str);
   }).catch(err => {
     console.log(err);
   });
@@ -20,7 +24,7 @@ const add = (message, port, password) => {
     port,
     password,
   }, managerAddress.get()).then(success => {
-    telegram.emit('send', message, `add port ${success.port} success.`);
+    telegram.emit('send', message, `Add port ${success.port} success.`);
   });
 };
 
@@ -29,16 +33,27 @@ const del = (message, port) => {
     command: 'del',
     port,
   }, managerAddress.get()).then(success => {
-    telegram.emit('send', message, `delete port ${success.port} success.`);
+    telegram.emit('send', message, `Delete port ${success.port} success.`);
+  });
+};
+
+const pwd = (message, port, password) => {
+  manager.send({
+    command: 'pwd',
+    port,
+    password,
+  }, managerAddress.get()).then(success => {
+    telegram.emit('send', message, `Change password for port ${success.port} success.`);
   });
 };
 
 telegram.on('manager', message => {
 
-  const addReg = new RegExp(/^\/add (\d{0,5}) ([\w]{0,})$/);
-  const delReg = new RegExp(/^\/del (\d{0,5})$/);
+  const addReg = new RegExp(/^add (\d{0,5}) ([\w]{0,})$/);
+  const delReg = new RegExp(/^del (\d{0,5})$/);
+  const pwdReg = new RegExp(/^pwd (\d{0,5}) ([\w]{0,})$/);
 
-  if(message.message.text === '/list') {
+  if(message.message.text === 'list') {
     list(message);
   } else if(message.message.text.match(addReg)) {
     const reg = message.message.text.match(addReg);
@@ -49,5 +64,10 @@ telegram.on('manager', message => {
     const reg = message.message.text.match(delReg);
     const port = +reg[1];
     del(message, port);
+  } else if(message.message.text.match(pwdReg)) {
+    const reg = message.message.text.match(pwdReg);
+    const port = +reg[1];
+    const password = reg[2];
+    pwd(message, port, password);
   }
 });
