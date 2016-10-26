@@ -46,6 +46,7 @@ const getMessages = async (updateId) => {
       uri: url + 'getUpdates',
       qs: {
         offset: updateId,
+        timeout: 30,
       },
       simple: false,
     });
@@ -86,7 +87,8 @@ telegram.on('send', (message, text) => {
   sendMessage(text, chat_id);
 });
 
-setInterval(async() => {
+// setInterval(async() => {
+const pullingMessage = async () => {
   try {
     const id = await getUpdateId();
     const messages = await getMessages(id);
@@ -99,8 +101,19 @@ setInterval(async() => {
   } catch(err) {
     console.log(err);
   }
-}, 2 * 1000);
+};
+// }, 2 * 1000);
+
+const main = () => {
+  pullingMessage().then(() => {
+    main();
+  }, () => {
+    main();
+  });
+};
+main();
 
 exports.telegram = telegram;
 
 appRequire('plugins/telegram/auth');
+appRequire('plugins/telegram/port');

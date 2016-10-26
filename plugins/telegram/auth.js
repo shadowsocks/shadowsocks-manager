@@ -26,8 +26,25 @@ const setManager = async (message) => {
   }
 };
 
+const isManager = async (message) => {
+  try {
+    const manager = await knex('telegram').select(['value']).where({
+      key: 'manager',
+      value: message.message.from.id + '',
+    });
+    if(manager.length > 0) {
+      telegram.emit('manager', message);
+    }
+  } catch(err) {
+    console.log(err);
+    return Promise.reject(err);
+  }
+};
+
 telegram.on('message', message => {
-  if(message.message.text === '/auth') {
+  if (message.message.text === '/auth') {
     setManager(message);
+  } else {
+    isManager(message);
   }
 });
