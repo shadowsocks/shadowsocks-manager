@@ -20,6 +20,7 @@ const getFlow = (message, time) => {
     if(ports.length === 0) {
       str = 'No flows.';
     } else {
+      str += `${managerAddress.get().host}:${managerAddress.get().port}\n\n`;
       ports.forEach(port => {
         str += port.port + ', ' + flowNumber(port.sumFlow) + '\n';
       });
@@ -36,7 +37,7 @@ telegram.on('manager', message => {
   const hourReg = new RegExp(/^flow(\d{0,2})hour$/);
 
   if(message.message.text === 'flow') {
-    getFlow(message, 5 * 60 * 1000);
+    getFlow(message, 10 * 60 * 1000);
   } else if(message.message.text.match(minReg)) {
     const reg = message.message.text.match(minReg);
     const time = reg[1] * 60 * 1000;

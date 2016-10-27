@@ -17,4 +17,4 @@ plugins:
   flowSaver:
     use: false
 
-db: ''
+db: 'db.sqlite'

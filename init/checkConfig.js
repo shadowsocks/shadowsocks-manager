@@ -28,7 +28,7 @@ if(program.shadowsocks) {config.set('shadowsocks.address', program.shadowsocks);
 if(program.manager) {config.set('manager.address', program.manager);}
 if(program.password) {config.set('manager.password', program.password);}
 if(program.db) {
-  config.set('db', path.resolve(program.db));
-} else {
   config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
+} else {
+  config.set('db', path.resolve(ssmgrPath + '/' + config.get('db')));
 }
