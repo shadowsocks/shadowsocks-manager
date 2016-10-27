@@ -30,9 +30,10 @@ const isManager = async (message) => {
   try {
     const manager = await knex('telegram').select(['value']).where({
       key: 'manager',
-      value: message.message.from.id + '',
     });
-    if(manager.length > 0) {
+    if(manager.length === 0) {
+      telegram.emit('send', message, 'Send \'auth\' to become manager.');
+    } else if(manager.length > 0 && manager[0].value === message.message.from.id + '') {
       telegram.emit('manager', message);
     }
   } catch(err) {

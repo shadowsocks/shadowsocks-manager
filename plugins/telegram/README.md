@@ -22,6 +22,10 @@ This plugin can control shadowsocks through a telegram bot.
 
 ## Command
 
+### Auth
+
+* `auth` Set manager user, the first user send 'auth' to bot will be the manager.
+
 ### Help
 
 * `help` Show help message
