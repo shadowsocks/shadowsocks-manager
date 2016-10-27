@@ -22,8 +22,27 @@ This plugin can control shadowsocks through a telegram bot.
 
 ## Command
 
+### Help
+
 * `help` Show help message
+
+### Port
+
 * `list` Show port and password in current server
 * `del {port}` Delete port
 * `add {port} {password}` Add port and set password
 * `pwd {port} {password}` Change password
+
+### Server
+
+* `listserver`
+* `switchserver {name}`
+* `delserver {name}`
+* `addserver {name} {host} {port} {password}`
+* `editserver {name} {newName} {host} {port} {password}`
+
+### Flow
+
+* `flow`
+* `flow{number}min`
+* `flow{number}hour`
