@@ -7,26 +7,26 @@ telegram.on('message', message => {
     let str = '';
     str += `Command:
 
-    auth
+  auth
 
-    list
-    add
-    del {port}
-    add {port} {password}
-    pwd {port} {password}
+  list
+  add
+  del {port}
+  add {port} {password}
+  pwd {port} {password}
 
-    listserver
-    switchserver {name}
-    delserver {name}
-    addserver {name} {host} {port} {password}
-    editserver {name} {newName} {host} {port} {password}
+  listserver
+  switchserver {name}
+  delserver {name}
+  addserver {name} {host} {port} {password}
+  editserver {name} {newName} {host} {port} {password}
 
-    flow
-    flow{number}min
-    flow{number}hour
+  flow
+  flow{number}min
+  flow{number}hour
 
-    Read more info at https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/telegram/README.md
-    `;
+Read more info at https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/telegram/README.md
+`;
     telegram.emit('send', message, str);
   }
 });
