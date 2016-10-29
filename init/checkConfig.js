@@ -19,6 +19,7 @@ program
   .option('-s, --shadowsocks [address]', 'ss-manager address, default: 127.0.0.1:6001')
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
+  .option('--debug', 'show debug message')
   .parse(process.argv);
 
 if(program.config) {global.configFile = program.config;}
@@ -37,3 +38,6 @@ if(program.db) {
 }
 
 logger.info('Config:\n', JSON.stringify(config.all(), null, 2));
+if(!program.debug) {
+  logger.setLevel(log4js.levels.ERROR);
+}
