@@ -5,6 +5,9 @@ const path = require('path');
 const program = require('commander');
 const version = appRequire('package').version;
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
+
 let ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
 
 program
@@ -32,3 +35,5 @@ if(program.db) {
 } else {
   config.set('db', path.resolve(ssmgrPath + '/' + config.get('db')));
 }
+
+logger.info('Config:\n', JSON.stringify(config.all(), null, 2));
