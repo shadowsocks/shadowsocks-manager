@@ -27,9 +27,9 @@ npm i -g shadowsocks-manager
 use `ssmgr` to run this program.
 
 ### Plugins
-[cli](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/cli)  
-[flowSaver](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/flowSaver)  
-[telegram](https://github.com/shadowsocks/shadowsocks-manager/tree/master/plugins/telegram)  
+[cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
+[flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
+[telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
 
 ### Usage
 1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it supports `shadowsocks-python` and `shadowsocks-libev`.

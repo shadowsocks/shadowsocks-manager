@@ -2,12 +2,20 @@
 
 require('babel-core/register');
 
+require('./init/log');
+
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
+
+// logger.setLevel(log4js.levels.ERROR);
+logger.info('System start.');
+
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
 require('./init/utils');
-require('./init/log');
+
 require('./init/moveConfigFile');
 require('./init/checkConfig');
 require('./init/knex');
@@ -18,5 +26,5 @@ initDb().then(() => {
   require('./init/loadServices');
   require('./init/loadPlugins');
 }).catch(err => {
-  console.log(err);
+  logger.error(err);
 });
