@@ -1,5 +1,14 @@
 'use strict';
 
+const log4js = require('log4js');
+log4js.configure({
+  appenders: [{
+      type: 'console',
+      category: 'telegram',
+  }]
+});
+const logger = log4js.getLogger('telegram');
+
 const rp = require('request-promise');
 const knex = appRequire('init/knex').knex;
 const _ = require('lodash');
@@ -59,6 +68,7 @@ const getMessages = async (updateId) => {
       return;
     }
   } catch(err) {
+    logger.error(err);
     return Promise.reject(err);
   }
 };
@@ -89,25 +99,26 @@ telegram.on('send', (message, text) => {
   sendMessage(text, chat_id);
 });
 
-// setInterval(async() => {
 const pullingMessage = async () => {
   try {
     const id = await getUpdateId();
     const messages = await getMessages(id);
     if(messages) {
+      logger.info(`Get messages, id: ${id}, message: ${messages.length}`);
       await setUpdateId(messages[messages.length - 1].update_id + 1);
       messages.forEach(message => {
+        logger.info(`[${message.update_id}][${message.message.from.username}][${message.message.text}]`);
         telegram.emit('message', message);
       });
     }
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
-// }, 2 * 1000);
 
 const main = () => {
-  pullingMessage().then(() => {
+  pullingMessage()
+  .then(() => {
     main();
   }, () => {
     main();
