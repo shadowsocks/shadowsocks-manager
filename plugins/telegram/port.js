@@ -4,6 +4,9 @@ const telegram = appRequire('plugins/telegram/index').telegram;
 const manager = appRequire('services/manager');
 const managerAddress = appRequire('plugins/telegram/managerAddress');
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('telegram');
+
 const list = (message) => {
   manager.send({
     command: 'list'
@@ -19,7 +22,7 @@ const list = (message) => {
     }
     telegram.emit('send', message, str);
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 

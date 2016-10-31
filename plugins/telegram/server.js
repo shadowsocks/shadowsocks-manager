@@ -4,6 +4,9 @@ const telegram = appRequire('plugins/telegram/index').telegram;
 const managerAddress = appRequire('plugins/telegram/managerAddress');
 const flowSaverServer = appRequire('plugins/flowSaver/server');
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('telegram');
+
 const list = (message) => {
   flowSaverServer.list().then(servers => {
     let str = '';
@@ -12,7 +15,7 @@ const list = (message) => {
     });
     telegram.emit('send', message, str);
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 
@@ -22,7 +25,7 @@ const add = (message, name, host, port, password) => {
     telegram.emit('send', message, `Add server ${name} success.`);
   })
   .catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 
@@ -32,7 +35,7 @@ const edit = (message, oldName, name, host, port, password) => {
     telegram.emit('send', message, `Edit server ${name} success.`);
   })
   .catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 
@@ -42,7 +45,7 @@ const del = (message, name) => {
     telegram.emit('send', message, `Delete server ${name} success.`);
   })
   .catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 
@@ -57,7 +60,7 @@ const switchServer = (message, name) => {
     managerAddress.set(server.host, server.port, server.password);
     telegram.emit('send', message, `Switch to server ${name}.`);
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 

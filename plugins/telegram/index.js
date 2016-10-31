@@ -107,7 +107,7 @@ const pullingMessage = async () => {
       logger.info(`Get messages, id: ${id}, message: ${messages.length}`);
       await setUpdateId(messages[messages.length - 1].update_id + 1);
       messages.forEach(message => {
-        logger.info(`[${message.update_id}][${message.message.from.username}][${message.message.text}]`);
+        logger.info(`Message ${message.update_id} from ${message.message.from.username}: ${message.message.text}`);
         telegram.emit('message', message);
       });
     }
