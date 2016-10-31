@@ -4,6 +4,9 @@ const telegram = appRequire('plugins/telegram/index').telegram;
 const managerAddress = appRequire('plugins/telegram/managerAddress');
 const flow = appRequire('plugins/flowSaver/flow');
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('telegram');
+
 const flowNumber = (number) => {
   if(number < 1000) return number + ' B';
   else if(number < 1000 * 1000) return number / 1000 + ' KB';
@@ -27,7 +30,7 @@ const getFlow = (message, time) => {
     }
     telegram.emit('send', message, str);
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
   });
 };
 

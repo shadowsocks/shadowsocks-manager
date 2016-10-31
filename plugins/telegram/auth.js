@@ -3,6 +3,9 @@
 const telegram = appRequire('plugins/telegram/index').telegram;
 const knex = appRequire('init/knex').knex;
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('telegram');
+
 const setManager = async (message) => {
   try {
     const manager = await knex('telegram').select(['value']).where({
@@ -21,7 +24,7 @@ const setManager = async (message) => {
     }
     return;
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     return Promise.reject(err);
   }
 };
@@ -37,7 +40,7 @@ const isManager = async (message) => {
       telegram.emit('manager', message);
     }
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     return Promise.reject(err);
   }
 };
