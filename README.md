@@ -26,11 +26,6 @@ npm i -g shadowsocks-manager
 ```
 use `ssmgr` to run this program.
 
-### Plugins
-[cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
-[flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
-[telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
-
 ### Usage
 1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it supports `shadowsocks-python` and `shadowsocks-libev`.
 For example, you can run this command:  
@@ -40,6 +35,31 @@ For example, you can run this command:
 3. If you have several servers, you have to run step 1 and step 2 in every server.  
 The listening address in `--manager-address` of step 1 and in `-s` of step 2 must be same. For security reseon, we recommend you to use `127.0.0.1` instead of `0.0.0.0`.
 4. Now you can use the plugins to manager them. You can read the details in plugins readme page.
+
+```
++-------------+   +-------------+
+| Shadowsocks |   | Shadowsocks |  ... more Shadowsocks
+| manager API |   | manager API |         |
++-------------+   +-------------+         |
+       |                 |                |
+       |                 |                |
++-------------+   +-------------+
+| ssmgr       |   | ssmgr       |  ... more ssmgr
+| with type s |   | with type s |
++-------------+   +-------------+         |
+       |                 |                |
+       +--------+--------+----------------+
+                |
+         +---------------+
+         | ssmgr plugins |
+         |  with type m  |
+         +---------------+
+```
+
+### Plugins
+[cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
+[flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
+[telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)
 
 ### Donate
 If you find this project helpful, please consider making a donation:  
