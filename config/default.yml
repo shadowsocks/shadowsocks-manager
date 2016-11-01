@@ -16,5 +16,10 @@ plugins:
     use: false
   flowSaver:
     use: false
+  email:
+    use: false
+    user: 'username'
+    password: 'password',
+    host: 'smtp.your-email.com'
 
 db: 'db.sqlite'
