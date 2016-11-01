@@ -37,23 +37,24 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 4. Now you can use the plugins to manager them. You can read the details in plugins readme page.
 
 ```
-+-------------+   +-------------+
-| Shadowsocks |   | Shadowsocks |  ... more Shadowsocks
-| manager API |   | manager API |         |
-+-------------+   +-------------+         |
-       |                 |                |
-       |                 |                |
-+-------------+   +-------------+
-| ssmgr       |   | ssmgr       |  ... more ssmgr
-| with type s |   | with type s |
-+-------------+   +-------------+         |
-       |                 |                |
-       +--------+--------+----------------+
-                |
-         +---------------+
-         | ssmgr plugins |
-         |  with type m  |
-         +---------------+
++-------------+    +-------------+       +------+
+| Shadowsocks |    | Shadowsocks |  ...  |      |
+| manager API |    | manager API |       |      |
++-------------+    +-------------+       +------+
+       |                 |                  |
+       |                 |                  |
++-------------+    +-------------+       +------+
+| ssmgr       |    | ssmgr       |  ...  |      |
+| with type s |    | with type s |       |      |
++-------------+    +-------------+       +------+
+       |                 |                  |
+       +------------+----+--------  ...  ---+
+                    |
+                    |
+             +---------------+
+             | ssmgr plugins |
+             |  with type m  |
+             +---------------+
 ```
 
 ### Plugins
