@@ -53,5 +53,10 @@ This plugin can control shadowsocks through a telegram bot.
 
 ## Screenshot
 
-![Telegram01](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram01.png)  
-![Telegram02](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram02.png)  
+### List
+
+![Telegram01](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram01.png)
+
+### Flow
+
+![Telegram02](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram02.png)
