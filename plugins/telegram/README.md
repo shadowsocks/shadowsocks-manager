@@ -50,3 +50,8 @@ This plugin can control shadowsocks through a telegram bot.
 * `flow`
 * `flow{number}min`
 * `flow{number}hour`
+
+## Screenshot
+
+![Telegram01](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram01.png)  
+![Telegram02](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/screenshot/telegram02.png)  
