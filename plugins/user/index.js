@@ -13,17 +13,24 @@ const checkExist = async (obj) => {
 
 const addUser = async (options) => {
   try {
-    if(options.username) { await checkExist({username: options.username}); }
-    if(options.email) { await checkExist({email: options.email}); }
-    if(options.telegram) { await checkExist({telegram: options.telegram}); }
-    return knex('user').insert({
-      username: options.username,
-      email: options.email,
-      telegram: options.telegram,
-      password: options.password,
+    const insert = {};
+    if(options.username) {
+      await checkExist({username: options.username});
+      Object.assign(insert, {username: options.username});
+    }
+    if(options.email) {
+      await checkExist({email: options.email});
+      Object.assign(insert, {email: options.email});
+    }
+    if(options.telegram) {
+      await checkExist({telegram: options.telegram});
+      Object.assign(insert, {telegram: options.telegram});
+    }
+    Object.assign(insert, {
       type: options.type,
-      createTime: Date.now(),
+      createTime: Date.now()
     });
+    return knex('user').insert(insert);
   } catch(err) {
     return Promise.reject(err);
   }
