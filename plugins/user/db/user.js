@@ -9,11 +9,14 @@ const createTable = async() => {
     await knex.schema.dropTableIfExists(tableName);
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
-    table.string('username').primary();
-    table.string('email').unique();
+    table.increments('id').primary();
+    table.string('username');
+    table.string('email');
+    table.string('telegram');
     table.string('password');
     table.string('type');
     table.dateTime('createTime');
+    table.dateTime('LastLogin');
   });
 };
 
