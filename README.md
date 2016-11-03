@@ -64,7 +64,7 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[====20%-------------]` [email]()  
 `[==10%---------------]` [user]()  
 `[0%------------------]` [account]()  
-`[0%------------------]` [webgui]()  
+`[1%------------------]` [webgui]()  
 
 ### Donate
 If you find this project helpful, please consider making a donation:  
