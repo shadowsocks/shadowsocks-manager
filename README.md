@@ -61,7 +61,8 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[================100%]` [cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
 `[================100%]` [telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
 `[================100%]` [flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
-`[===10%--------------]` [user]()  
+`[====20%-------------]` [email]()  
+`[==10%---------------]` [user]()  
 `[0%------------------]` [account]()  
 `[0%------------------]` [webgui]()  
 

@@ -16,7 +16,7 @@ const createTable = async() => {
     table.string('password');
     table.string('type');
     table.dateTime('createTime');
-    table.dateTime('LastLogin');
+    table.dateTime('lastLogin');
   });
 };
 

@@ -1,6 +1,7 @@
 'use strict';
 
 const knex = appRequire('init/knex').knex;
+const crypto = require('crypto');
 
 const checkExist = async (obj) => {
   const user = await knex('user').select().where(obj);
@@ -9,6 +10,14 @@ const checkExist = async (obj) => {
   } else {
     return Promise.reject();
   }
+};
+
+const md5 = function(text) {
+  return crypto.createHash('md5').update(text).digest('hex');
+};
+
+const createPassword = function(password, username) {
+  return md5(password + username);
 };
 
 const addUser = async (options) => {
@@ -30,10 +39,31 @@ const addUser = async (options) => {
       type: options.type,
       createTime: Date.now()
     });
+    if(options.username && options.password) {
+      Object.assign(insert, {
+        password: createPassword(options.password, options.username)
+      });
+    }
     return knex('user').insert(insert);
   } catch(err) {
     return Promise.reject(err);
   }
 };
 
-const checkPassword = () => {};
+const checkPassword = async (username, password) => {
+  try {
+    const user = knex('user').select(['username', 'password']).where({
+      username,
+    });
+    if(user.length === 0) {
+      return Promise.reject();
+    }
+    if(createPassword(password, username) === user[0].password) {
+      return;
+    } else {
+      return Promise.reject();
+    }
+  } catch(err) {
+    return Promise.reject(err);
+  }
+};
