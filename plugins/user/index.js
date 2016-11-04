@@ -67,3 +67,18 @@ const checkPassword = async (username, password) => {
     return Promise.reject(err);
   }
 };
+
+const editUser = async (userInfo, edit) => {
+  try {
+    if(edit.password) {
+      edit.password = createPassword(edit.password, userInfo.username);
+    }
+    const user = knex('user').update(edit).where(userInfo);
+    return;
+  } catch(err) {
+    return Promise.reject(err);
+  }
+};
+
+exports.add = addUser;
+exports.edit = editUser;
