@@ -16,6 +16,7 @@ app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views', path.resolve('./plugins/freeAccount/views'));
 
+app.use('/libs', express.static(path.resolve('./plugins/freeAccount/libs')));
 app.use('/public', express.static(path.resolve('./plugins/freeAccount/public')));
 
 const httpserver = app.listen(80, '0.0.0.0', function () {
