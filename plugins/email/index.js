@@ -23,7 +23,7 @@ const sendMail = async (options) => {
   });
 };
 
-const sendCode = async (to) => {
+const sendCode = async (to, subject = 'subject', text) => {
   const sendEmailTime = 10;
   try {
     const findEmail = await knex('email').select(['remark']).where({
@@ -34,16 +34,17 @@ const sendCode = async (to) => {
       return findEmail[0].remark;
     }
     const code = Math.random().toString().substr(2, 6);
+    text += '\n' + code;
     await transporter.sendMail({
       from: config.plugins.email.username,
         to,
-        subject: 'Hello',
-        text: 'Your code is [' + code + ']',
+        subject,
+        text,
     });
     await knex('email').insert({
       to,
-      subject: 'Hello',
-      text: 'Your code is [' + code + ']',
+      subject,
+      text,
       type: 'code',
       remark: code,
       time: Date.now(),
@@ -71,7 +72,8 @@ const checkCode = async (email, code) => {
   }
 };
 
-
+exports.checkCode = checkCode;
+exports.sendCode = sendCode;
 // checkCode('igyteng@gmail.com', '505740').then();
 // sendCode('igyteng@gmail.com').then(console.log);
 // sendMail({
