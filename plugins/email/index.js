@@ -63,7 +63,6 @@ const checkCode = async (email, code) => {
       remark: code,
       type: 'code',
     }).whereNotBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
-    console.log(findEmail);
     if(findEmail.length === 0) {
       return Promise.reject();
     }
