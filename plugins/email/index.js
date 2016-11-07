@@ -49,8 +49,10 @@ const sendCode = async (to, subject = 'subject', text) => {
       remark: code,
       time: Date.now(),
     });
+    console.log(code);
     return code;
   } catch (err) {
+    console.log(err);
     return Promise.reject(err);
   }
 };
@@ -62,11 +64,12 @@ const checkCode = async (email, code) => {
       to: email,
       remark: code,
       type: 'code',
-    }).whereNotBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
+    }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
     if(findEmail.length === 0) {
       return Promise.reject();
     }
   } catch(err) {
+    console.log(err);
     return Promise.reject(err);
   }
 };

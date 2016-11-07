@@ -11,12 +11,14 @@ app.post('/email', (req, res) => {
     return res.send(errors, 400);
   }
   const emailAddress = req.body.email;
-  email.sendCode(emailAddress, 'Hello', 'Your code is:').then(s => res.send(s), e => res.send(e));
+  email.sendCode(emailAddress, 'Hello', 'Your code is:')
+  .then(s => res.send('success'), e => res.status(403).end());
 });
 app.post('/code', (req, res) => {
   const emailAddress = req.body.email;
   const code = req.body.code;
-  email.checkCode(emailAddress, code).then(s => res.send(s), e => res.send(e));
+  email.checkCode(emailAddress, code)
+  .then(s => res.send('success'), e => res.status(403).end());
 });
 
 app.get('/', (req, res) => {
