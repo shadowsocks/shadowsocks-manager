@@ -1,0 +1,36 @@
+<div layout="column" layout-fill>
+    <div layout="column">
+        <md-toolbar layout="row">
+            <div class="md-toolbar-tools">
+                <md-button class="md-icon-button" aria-label="More">
+                    <i class="material-icons">face</i>
+                </md-button>
+            </div>
+        </md-toolbar>
+    </div>
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <form name="userForm">
+                <md-input-container class="md-block">
+                    <label>邮箱</label>
+                    <input type="email" name="email" ng-model="user.email" ng-keypress="usernameKeypress($event)" autofocus>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>验证码</label>
+                    <input type="code" name="code" ng-model="user.code" ng-keypress="passwordKeypress($event)">
+                </md-input-container>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-raised" ng-click="sendCode()">发送验证码</md-button>
+            <md-button class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>

@@ -3,23 +3,22 @@ var app = angular.module('LoginApp', ['ngMaterial', 'ui.router', 'ngMessages']);
 app.config(
   ['$stateProvider', '$urlRouterProvider', '$locationProvider',
     function($stateProvider, $urlRouterProvider, $locationProvider) {
-      $locationProvider.html5Mode(true);
+      // $locationProvider.html5Mode(true);
       $urlRouterProvider
-        .when('/', '/home/index')
-        .otherwise('/home/index');
-
-      // $stateProvider
+        .when('/', '/')
+        .otherwise('/');
+      $stateProvider
       //   .state('home', {
       //     abstract: true,
       //     url: '/home',
       //     templateUrl: '/public/views/home/home.html',
       //   })
       //
-      // .state('home.index', {
-      //     url: '/index',
-      //     controller: 'LoginController',
-      //     templateUrl: '/public/views/home/index.html'
-      //   })
+      .state('index', {
+        url: '/',
+        controller: 'IndexController',
+        templateUrl: '/public/views/index.html'
+      });
       //   .state('home.signupSuccess', {
       //     url: '/info',
       //     controller: 'SignupSuccessController',
