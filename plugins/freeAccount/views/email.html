@@ -1,14 +1,14 @@
 <html lang="zh-cn">
-<head>
+  <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <link rel="stylesheet" href="/libs/angular-material.min.css">
     <title>A</title>
-    <!-- <base href="/"> -->
-</head>
-<body ng-app="LoginApp" ng-cloak>
+    <base href="/">
+  </head>
+  <body ng-app="LoginApp" ng-cloak>
     <script src="/libs/angular.min.js"></script>
     <script src="/libs/angular-animate.min.js"></script>
     <script src="/libs/angular-aria.min.js"></script>
@@ -16,6 +16,15 @@
     <script src="/libs/angular-material.min.js"></script>
     <script src="/libs/angular-ui-router.min.js"></script>
 
-</body>
+    <% routes.forEach(function(route) { %>
+    <script src="<%= route %>"></script>
+    <% }); %>
 
+    <% controllers.forEach(function(controller) { %>
+    <script src="<%= controller %>"></script>
+    <% }); %>
+    <div ng-controller="MainController">
+      <div ui-view></div>
+    </div>
+  </body>
 </html>

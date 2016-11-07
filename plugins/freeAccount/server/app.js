@@ -2,6 +2,7 @@
 
 const app = appRequire('plugins/freeAccount/index').app;
 const email = appRequire('plugins/email/index');
+const path = require('path');
 
 app.post('/email', (req, res) => {
   req.checkBody('email', 'Email address error').notEmpty().isEmail();
@@ -19,5 +20,12 @@ app.post('/code', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  return res.render('email');
+  return res.render('email', {
+    'controllers': [
+      '/public/controllers/email.js',
+    ],
+    'routes': [
+      '/public/routes/email.js'
+    ]
+  });
 });
