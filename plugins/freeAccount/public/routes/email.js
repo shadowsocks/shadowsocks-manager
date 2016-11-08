@@ -1,4 +1,4 @@
-var app = angular.module('LoginApp', ['ngMaterial', 'ui.router', 'ngMessages']);
+var app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages']);
 
 app.config(
   ['$stateProvider', '$urlRouterProvider', '$locationProvider',
