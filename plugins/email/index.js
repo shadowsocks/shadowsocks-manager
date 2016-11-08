@@ -29,7 +29,7 @@ const sendCode = async (to, subject = 'subject', text) => {
     const findEmail = await knex('email').select(['remark']).where({
       to,
       type: 'code',
-    }).whereNotBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
+    }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
     if(findEmail.length > 0) {
       return findEmail[0].remark;
     }

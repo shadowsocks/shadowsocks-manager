@@ -24,4 +24,6 @@ const httpserver = app.listen(80, '0.0.0.0', function () {
 });
 
 exports.app = app;
+
 appRequire('plugins/freeAccount/server/app');
+appRequire('plugins/freeAccount/server/account');
