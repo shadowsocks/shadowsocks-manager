@@ -68,6 +68,19 @@ app.post('/code', (req, res) => {
   });
 });
 
+app.post('/account', (req, res) => {
+  const address = req.body.address;
+  knex('freeAccount').select().where({address}).then(success => {
+    if(success.length > 0) {
+      res.send(success[0]);
+    } else {
+      res.status(403).end();
+    }
+  }).catch(err => {
+    res.status(403).end();
+  });
+});
+
 app.get('/', (req, res) => {
   return res.render('email', {
     'controllers': [

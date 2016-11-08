@@ -22,7 +22,7 @@ app.config(
       .state('account', {
         url: '/:id',
         controller: 'AccountController',
-        templateUrl: '/public/views/index.html'
+        templateUrl: '/public/views/account.html'
       })
       ;
       //   .state('home.signupSuccess', {
