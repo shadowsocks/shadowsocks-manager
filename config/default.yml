@@ -21,5 +21,11 @@ plugins:
     username: 'username'
     password: 'password'
     host: 'smtp.your-email.com'
+  freeAccount:
+    use: true
+    startPort: 55000
+    endPort: 65000
+    flow: 10
+    time: 60
 
 db: 'db.sqlite'
