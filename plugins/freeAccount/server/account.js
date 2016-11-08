@@ -4,6 +4,10 @@ const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const flow = appRequire('plugins/flowSaver/flow');
 
+const createAccount = () => {
+  
+};
+
 const checkAccount = async () => {
   try {
     const list = await manager.send({

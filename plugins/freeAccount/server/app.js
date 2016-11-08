@@ -37,7 +37,7 @@ const randomAccount = async (email, flow) => {
       expired: Date.now() + config.plugins.freeAccount.time * 60 * 1000,
       isDisabled: false,
     });
-    return;
+    return address;
   } catch(err) {
     console.log(err);
     return Promise.reject(err);
@@ -62,8 +62,9 @@ app.post('/code', (req, res) => {
   .then(success => {
     return randomAccount(emailAddress, 100000);
   }).then(success => {
-    res.send('success');
+    res.send(success);
   }).catch(error => {
+    console.log(error);
     res.status(403).end();
   });
 });
