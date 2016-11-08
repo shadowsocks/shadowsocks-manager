@@ -10,13 +10,13 @@
                         <div class="md-list-item-text">
                             <h4>地址：{{accountInfo.host}}:{{accountInfo.port}}</h4>
                             <h4>密码：{{accountInfo.password}}</h4>
-                            <h4>到期：{{accountInfo.expired | date : 'yyyy-MM-dd HH:mm:ss' }}</h4>
+                            <h4>到期：{{accountInfo.expired | date : 'yyyy-MM-dd HH:mm:ss' }} ( {{accountInfo.expired | relativeTime }} )</h4>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
                         <div class="md-list-item-text">
-                            <h4>流量：{{accountInfo.currentFlow}}/{{accountInfo.flow}}</h4>
+                            <h4>流量：{{accountInfo.currentFlow | flow1024}}/{{accountInfo.flow | flow1024}}</h4>
                             <h4></h4>
                             <md-progress-linear md-mode="determinate" value="{{accountInfo.currentFlow / accountInfo.flow * 100}}"></md-progress-linear>
                         </div>
