@@ -21,14 +21,20 @@ app
      });
    };
   })
-  .controller('AccountController', function($scope, $http, $state, $stateParams) {
+  .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {
     console.log($stateParams.id);
-    $http.post('/account', {address: $stateParams.id}).then(function(success) {
-      console.log(success.data);
-      $scope.accountInfo = success.data;
-    }, function(error) {
-      console.log(error);
-      $state.go('index');
-    });
+    $scope.getAccount = function() {
+      $http.post('/account', {address: $stateParams.id}).then(function(success) {
+        console.log(success.data);
+        $scope.accountInfo = success.data;
+      }, function(error) {
+        console.log(error);
+        $state.go('index');
+      });
+    };
+    $scope.getAccount();
+    $interval(function() {
+      $scope.getAccount();
+    }, 60 * 1000);
   })
 ;

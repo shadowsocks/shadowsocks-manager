@@ -52,6 +52,7 @@ app.post('/account', (req, res) => {
     if(!port) {
       res.status(403).end();
     } else {
+      accountInfo.host = config.manager.address.split(':')[0];
       accountInfo.password = port.password;
       res.send(accountInfo);
     }
