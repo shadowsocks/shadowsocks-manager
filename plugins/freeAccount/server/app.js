@@ -25,7 +25,7 @@ app.post('/code', (req, res) => {
   const code = req.body.code;
   email.checkCode(emailAddress, code)
   .then(success => {
-    return account.createAccount(emailAddress, 100000);
+    return account.createAccount(emailAddress);
   }).then(success => {
     res.send(success);
   }).catch(error => {
@@ -63,10 +63,10 @@ app.post('/account', (req, res) => {
 app.get('/', (req, res) => {
   return res.render('index', {
     'controllers': [
-      '/public/controllers/email.js',
+      '/public/controllers/index.js',
     ],
     'routes': [
-      '/public/routes/email.js'
+      '/public/routes/index.js'
     ]
   });
 });

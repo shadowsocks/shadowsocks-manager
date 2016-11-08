@@ -12,7 +12,7 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const createAccount = async (email, flow) => {
+const createAccount = async (email) => {
   const min = config.plugins.freeAccount.startPort;
   const max = config.plugins.freeAccount.endPort;
   const port = getRandomInt(min, max);
