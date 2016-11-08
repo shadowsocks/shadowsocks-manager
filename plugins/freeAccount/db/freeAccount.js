@@ -13,6 +13,7 @@ const createTable = async() => {
     table.string('email');
     table.integer('port');
     table.integer('flow');
+    table.integer('currentFlow');
     table.dateTime('time');
     table.dateTime('expired');
     table.boolean('isDisabled');

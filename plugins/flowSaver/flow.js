@@ -1,8 +1,10 @@
 'use strict';
 
 const knex = appRequire('init/knex').knex;
-
+const config = appRequire('services/config').all();
 /*
+arguments: startTime, endTime
+  or
 arguments: name, startTime, endTime
   or
 arguments: host, port, startTime, endTime
@@ -22,7 +24,7 @@ const getFlow = function () {
       'server.port': port,
     })
     .whereBetween('time', [startTime, endTime]);
-  } else {
+  } else if (arguments[2]) {
     const name = arguments[0];
     const startTime = arguments[1];
     const endTime = arguments[2];
@@ -32,10 +34,21 @@ const getFlow = function () {
     .select(['port'])
     .where({name})
     .whereBetween('time', [startTime, endTime]);
+  } else {
+    const host = config.manager.address.split(':')[0];
+    const port = +config.manager.address.split(':')[1];
+    const startTime = arguments[0];
+    const endTime = arguments[1];
+    return knex('saveFlow').innerJoin('server', 'server.name', 'saveFlow.name')
+    .sum('flow as sumFlow')
+    .groupBy('saveFlow.port')
+    .select(['saveFlow.port as port'])
+    .where({
+      'server.host': host,
+      'server.port': port,
+    })
+    .whereBetween('time', [startTime, endTime]);
   }
 };
 
-// const start = Date.now() - 5 * 60 * 1000;
-// const end = Date.now();
-// list('v1', start, end).then(s => console.log(s)).catch(e => console.log(e));
 exports.getFlow = getFlow;

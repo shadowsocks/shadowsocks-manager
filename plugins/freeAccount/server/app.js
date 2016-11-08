@@ -1,23 +1,41 @@
 'use strict';
 
+const crypto = require('crypto');
+const config = appRequire('services/config').all();
 const app = appRequire('plugins/freeAccount/index').app;
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const email = appRequire('plugins/email/index');
 const path = require('path');
+const flow = appRequire('plugins/flowSaver/flow');
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 const randomAccount = async (email, flow) => {
-  const port = 56342;
-  const password = '12345';
+  const min = config.plugins.freeAccount.startPort;
+  const max = config.plugins.freeAccount.endPort;
+  const port = getRandomInt(min, max);
+  const password = crypto.randomBytes(6).toString('hex');
   try {
     await manager.send({
       command: 'add',
       port,
       password,
     });
-    const address = 'abcdefg';
+    const address = crypto.randomBytes(16).toString('hex');
     await knex('freeAccount').insert({
-      address, email, port, flow, time: Date.now(), expired: Date.now() + 5 * 60 * 1000, isDisabled: false,
+      address,
+      email,
+      port,
+      flow: config.plugins.freeAccount.flow * 1000 * 1000,
+      currentFlow: 0,
+      time: Date.now(),
+      expired: Date.now() + config.plugins.freeAccount.time * 60 * 1000,
+      isDisabled: false,
     });
     return;
   } catch(err) {
@@ -60,3 +78,45 @@ app.get('/', (req, res) => {
     ]
   });
 });
+
+const account = async () => {
+  try {
+    const list = await manager.send({
+      command: 'list',
+    });
+    console.log(list);
+    const account = await knex('freeAccount').select().where({
+      isDisabled: false
+    });
+    account.forEach(async f => {
+      if(Date.now() >= f.expired || f.currentFlow >= f.flow) {
+        await knex('freeAccount').where({
+          address: f.address,
+        }).update({
+          isDisabled: true,
+        });
+        await manager.send({
+          command: 'del',
+          port: f.port,
+        });
+      }
+      const myFlow = (await flow.getFlow(f.time, f.expired)).filter(fil => {
+        return fil.port === f.port;
+      })[0];
+      if(myFlow) {
+        await knex('freeAccount').where({
+          address: f.address,
+        }).update({
+          currentFlow: myFlow.sumFlow,
+        });
+      }
+    });
+  } catch(err) {
+    console.log(err);
+  }
+};
+
+account();
+setInterval(() => {
+  account();
+}, 60 * 1000);
