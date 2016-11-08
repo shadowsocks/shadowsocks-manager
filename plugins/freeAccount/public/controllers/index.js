@@ -48,7 +48,6 @@ app
           .textContent(text)
           .ariaLabel('alert')
           .ok('确定')
-          // .targetEvent(ev)
       );
     };
     $scope.user = {};
@@ -66,7 +65,6 @@ app
        email: $scope.user.email,
        code: $scope.user.code
      }).then(function(success) {
-       console.log(success);
        $state.go('account', {id: success.data});
      }).catch(function(error) {
        $scope.showAlert('错误', '验证失败。');
