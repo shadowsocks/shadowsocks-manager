@@ -18,4 +18,7 @@ app
      }).then(console.log);
    };
   })
+  .controller('AccountController', function($scope, $http, $state, $stateParams) {
+    console.log($stateParams.id);
+  })
 ;

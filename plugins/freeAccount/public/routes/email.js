@@ -18,7 +18,13 @@ app.config(
         url: '/',
         controller: 'IndexController',
         templateUrl: '/public/views/index.html'
-      });
+      })
+      .state('account', {
+        url: '/:id',
+        controller: 'AccountController',
+        templateUrl: '/public/views/index.html'
+      })
+      ;
       //   .state('home.signupSuccess', {
       //     url: '/info',
       //     controller: 'SignupSuccessController',
