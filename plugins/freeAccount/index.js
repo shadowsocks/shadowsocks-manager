@@ -3,6 +3,7 @@
 const config = appRequire('services/config').all();
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
@@ -12,6 +13,13 @@ app.use(bodyParser.json());
 app.use(expressValidator());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(session({
+  secret: '6d4CEb870aF',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
