@@ -6,16 +6,34 @@ const flow = appRequire('plugins/flowSaver/flow');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
 
-const getRandomInt = (min, max) => {
+const getRandomPort = async (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  let port;
+  let isPortExist = true;
+  let number = 0;
+  while(isPortExist && number < 20) {
+    port = Math.floor(Math.random() * (max - min + 1)) + min;
+    isPortExist = (await knex('freeAccount').select().where({port}))[0];
+    number++;
+  }
+  return isPortExist ? port : Promise.reject();
 };
 
 const createAccount = async (email) => {
+  // check if this email has an account,
+  // if true, return old account instead of create one.
+  const oldAccount = await knex('freeAccount').select().where({email, isDisabled: false});
+  if(oldAccount.length > 0) {
+    console.log(oldAccount);
+    return oldAccount[0].address;
+  }
+  // check if free account out of limit
+
+  // create account
   const min = config.plugins.freeAccount.shadowsocks.startPort;
   const max = config.plugins.freeAccount.shadowsocks.endPort;
-  const port = getRandomInt(min, max);
+  const port = await getRandomPort(min, max);
   const password = crypto.randomBytes(6).toString('hex');
   try {
     await manager.send({
