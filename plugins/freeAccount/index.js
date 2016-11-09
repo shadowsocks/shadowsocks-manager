@@ -4,6 +4,11 @@ const config = appRequire('services/config').all();
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
+const knex = appRequire('init/knex').knex;
+const KnexSessionStore = require('connect-session-knex')(session);
+const store = new KnexSessionStore({
+  knex,
+});
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
@@ -16,9 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
   secret: '6d4CEb870aF',
-  resave: true,
+  resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: false, httpOnly: true },
+  store,
 }));
 
 app.engine('.html', require('ejs').__express);
