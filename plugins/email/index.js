@@ -5,7 +5,7 @@ const knex = appRequire('init/knex').knex;
 const smtpConfig = {
   host: config.plugins.email.host,
   port: 465,
-  secure: true,
+  secure: false,
   auth: {
     user: config.plugins.email.username,
     pass: config.plugins.email.password,

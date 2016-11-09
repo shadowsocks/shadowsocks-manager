@@ -14,7 +14,7 @@ const sendEmail = (req, res) => {
     return res.send(errors, 400);
   }
   const emailAddress = req.body.email;
-  email.sendCode(emailAddress, 'Hello', 'Your code is:')
+  email.sendCode(emailAddress, 'Free Shadowsocks 验证码', '您的验证码是:')
   .then(s => res.send('success'), e => res.status(403).end());
 };
 
