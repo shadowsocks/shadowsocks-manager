@@ -23,9 +23,13 @@ plugins:
     host: 'smtp.your-email.com'
   freeAccount:
     use: true
-    startPort: 55000
-    endPort: 65000
-    flow: 10
-    time: 60
+    host: 'yourhost'
+    port: 80
+    shadowsocks:
+      method: aes-256-cfb
+      startPort: 55000
+      endPort: 65000
+      flow: 100
+      time: 60
 
 db: 'db.sqlite'

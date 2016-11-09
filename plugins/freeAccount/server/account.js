@@ -17,7 +17,7 @@ const getRandomPort = async (min, max) => {
     isPortExist = (await knex('freeAccount').select().where({port}))[0];
     number++;
   }
-  return isPortExist ? port : Promise.reject();
+  return isPortExist ? Promise.reject('Get Random Port Fail') : port;
 };
 
 const createAccount = async (email) => {
@@ -28,7 +28,8 @@ const createAccount = async (email) => {
     console.log(oldAccount);
     return oldAccount[0].address;
   }
-  // check if free account out of limit
+  // TODO: check if free account out of limit
+
 
   // create account
   const min = config.plugins.freeAccount.shadowsocks.startPort;
