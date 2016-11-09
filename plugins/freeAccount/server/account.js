@@ -25,7 +25,6 @@ const createAccount = async (email) => {
   // if true, return old account instead of create one.
   const oldAccount = await knex('freeAccount').select().where({email, isDisabled: false});
   if(oldAccount.length > 0) {
-    console.log(oldAccount);
     return oldAccount[0].address;
   }
   // TODO: check if free account out of limit

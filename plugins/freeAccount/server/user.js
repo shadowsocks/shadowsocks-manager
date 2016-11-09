@@ -5,11 +5,9 @@ const app = appRequire('plugins/freeAccount/index').app;
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const email = appRequire('plugins/email/index');
-const path = require('path');
-const flow = appRequire('plugins/flowSaver/flow');
 const account = appRequire('plugins/freeAccount/server/account');
 
-app.post('/email', (req, res) => {
+const sendEmail = (req, res) => {
   req.checkBody('email', 'Email address error').notEmpty().isEmail();
   var errors = req.validationErrors();
   if (errors) {
@@ -18,9 +16,9 @@ app.post('/email', (req, res) => {
   const emailAddress = req.body.email;
   email.sendCode(emailAddress, 'Hello', 'Your code is:')
   .then(s => res.send('success'), e => res.status(403).end());
-});
+};
 
-app.post('/code', (req, res) => {
+const checkCode = (req, res) => {
   const emailAddress = req.body.email;
   const code = req.body.code;
   email.checkCode(emailAddress, code)
@@ -32,9 +30,9 @@ app.post('/code', (req, res) => {
     console.log(error);
     res.status(403).end();
   });
-});
+};
 
-app.post('/account', (req, res) => {
+const getAccount = (req, res) => {
   const address = req.body.address;
   let accountInfo;
   knex('freeAccount').select().where({address})
@@ -60,9 +58,9 @@ app.post('/account', (req, res) => {
   }).catch(err => {
     res.status(403).end();
   });
-});
+};
 
-app.get('/', (req, res) => {
+const render = (req, res) => {
   return res.render('index', {
     'controllers': [
       '/public/controllers/index.js',
@@ -71,4 +69,9 @@ app.get('/', (req, res) => {
       '/public/routes/index.js'
     ]
   });
-});
+};
+
+exports.render = render;
+exports.sendEmail = sendEmail;
+exports.checkCode = checkCode;
+exports.getAccount = getAccount;

@@ -3,7 +3,7 @@ var app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr
 app.config(
   ['$stateProvider', '$urlRouterProvider', '$locationProvider',
     function($stateProvider, $urlRouterProvider, $locationProvider) {
-      // $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
       $urlRouterProvider
         .when('/', '/')
         .otherwise('/');

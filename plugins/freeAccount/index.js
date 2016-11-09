@@ -24,5 +24,5 @@ const httpserver = app.listen(config.plugins.freeAccount.port, '0.0.0.0', functi
 
 exports.app = app;
 
-appRequire('plugins/freeAccount/server/app');
+appRequire('plugins/freeAccount/server/route');
 appRequire('plugins/freeAccount/server/account');
