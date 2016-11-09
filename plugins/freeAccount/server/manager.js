@@ -2,8 +2,14 @@
 
 const config = appRequire('services/config').all();
 
+const isManager = (req, res, next) => {
+  if(req.session.isManager) {
+    return next();
+  }
+  res.status(401).end();
+};
+
 const checkPassword = (req, res) => {
-  console.log(req.session);
   const password = req.body.password;
   if(password === config.plugins.freeAccount.managerPassword) {
     req.session.isManager = true;
@@ -15,3 +21,4 @@ const checkPassword = (req, res) => {
 };
 
 exports.checkPassword = checkPassword;
+exports.isManager = isManager;
