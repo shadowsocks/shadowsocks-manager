@@ -73,10 +73,17 @@ app
   })
   .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {
     console.log($stateParams.id);
+    $scope.qrcode = '';
+    var b64EncodeUnicode = function (str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    };
     $scope.getAccount = function() {
       $http.post('/account', {address: $stateParams.id}).then(function(success) {
         console.log(success.data);
         $scope.accountInfo = success.data;
+        $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
       }, function(error) {
         console.log(error);
         $state.go('index');
