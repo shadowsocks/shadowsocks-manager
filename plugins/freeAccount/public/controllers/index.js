@@ -81,6 +81,9 @@ app
         $scope.showAlert('错误', '验证失败。');
       });
     };
+    $scope.password = function () {
+      $state.go('password');
+    };
   })
   .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {
     console.log($stateParams.id);

@@ -22,7 +22,7 @@ plugins:
     password: 'password'
     host: 'smtp.your-email.com'
   freeAccount:
-    use: true
+    use: false
     host: 'yourhost'
     port: 80
     shadowsocks:
