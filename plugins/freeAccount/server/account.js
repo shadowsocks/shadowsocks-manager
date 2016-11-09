@@ -13,8 +13,8 @@ const getRandomInt = (min, max) => {
 };
 
 const createAccount = async (email) => {
-  const min = config.plugins.freeAccount.startPort;
-  const max = config.plugins.freeAccount.endPort;
+  const min = config.plugins.freeAccount.shadowsocks.startPort;
+  const max = config.plugins.freeAccount.shadowsocks.endPort;
   const port = getRandomInt(min, max);
   const password = crypto.randomBytes(6).toString('hex');
   try {
@@ -28,10 +28,10 @@ const createAccount = async (email) => {
       address,
       email,
       port,
-      flow: config.plugins.freeAccount.flow * 1000 * 1000,
+      flow: config.plugins.freeAccount.shadowsocks.flow * 1000 * 1000,
       currentFlow: 0,
       time: Date.now(),
-      expired: Date.now() + config.plugins.freeAccount.time * 60 * 1000,
+      expired: Date.now() + config.plugins.freeAccount.shadowsocks.time * 60 * 1000,
       isDisabled: false,
     });
     return address;

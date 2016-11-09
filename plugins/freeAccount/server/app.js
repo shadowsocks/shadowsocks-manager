@@ -52,8 +52,9 @@ app.post('/account', (req, res) => {
     if(!port) {
       res.status(403).end();
     } else {
-      accountInfo.host = config.manager.address.split(':')[0];
+      accountInfo.host = config.plugins.freeAccount.host;
       accountInfo.password = port.password;
+      accountInfo.method = config.plugins.freeAccount.shadowsocks.method;
       res.send(accountInfo);
     }
   }).catch(err => {
