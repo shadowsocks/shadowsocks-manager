@@ -86,7 +86,7 @@ app
         $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
       }, function(error) {
         console.log(error);
-        interval && interval.cancel && interval.cancel();
+        interval && $interval.cancel(interval);
         $state.go('index');
       });
     };
