@@ -64,6 +64,7 @@ const render = (req, res) => {
   return res.render('index', {
     'controllers': [
       '/public/controllers/index.js',
+      '/public/controllers/manager.js',
     ],
     'routes': [
       '/public/routes/index.js'
