@@ -63,7 +63,7 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[================100%]` [flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
 `[====20%-------------]` [email]()  
 `[==10%---------------]` [user]()  
-`[===18%--------------]` [freeAccount]()  
+`[====20%-------------]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
 `[0%------------------]` [account]()  
 `[1%------------------]` [webgui]()  
 
