@@ -20,5 +20,10 @@ const checkPassword = (req, res) => {
   res.status(401).end();
 };
 
+const getConfig = (req, res) => {
+  
+};
+
 exports.checkPassword = checkPassword;
 exports.isManager = isManager;
+exports.getConfig = getConfig;

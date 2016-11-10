@@ -25,6 +25,7 @@ plugins:
     use: false
     host: 'yourhost'
     port: 80
+    managerPassword: '01020304'
     shadowsocks:
       method: aes-256-cfb
       startPort: 55000

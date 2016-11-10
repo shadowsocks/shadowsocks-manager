@@ -7,7 +7,14 @@ app
     $scope.checkPassword = function () {
       $http.post('/password', {
         password: $scope.user.password
-      }).then(console.log);
+      }).then(function() {
+        $state.go('manager');
+      });
+    };
+  })
+  .controller('ManagerController', function($scope, $http, $state) {
+    $scope.back = function () {
+      $state.go('index');
     };
   })
 ;

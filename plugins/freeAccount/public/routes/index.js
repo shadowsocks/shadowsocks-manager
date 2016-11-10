@@ -23,6 +23,11 @@ app.config(
           controller: 'PasswordController',
           templateUrl: '/public/views/password.html'
         })
+        .state('manager', {
+          url: '/manager',
+          controller: 'ManagerController',
+          templateUrl: '/public/views/manager.html'
+        })
       ;
     }
   ]
