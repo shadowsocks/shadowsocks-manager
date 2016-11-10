@@ -13,6 +13,8 @@ app
     };
   })
   .controller('ManagerController', function($scope, $http, $state, $interval) {
+    var oldConfig = '';
+    var newConfig = '';
     $scope.config = {
       shadowsocks: {
         flow: 100,
@@ -22,6 +24,8 @@ app
     $scope.getConfig = function () {
       $http.post('/config').then(function(success) {
         $scope.config = success.data;
+        oldConfig = JSON.stringify($scope.config);
+        newConfig = JSON.stringify($scope.config);
       });
     };
     $scope.getConfig();
@@ -31,11 +35,16 @@ app
       $state.go('index');
     };
     $scope.setConfig = function () {
+      if(newConfig === oldConfig) {
+        return;
+      }
+      oldConfig = newConfig;
       $http.put('/config', {
         shadowsocks: $scope.config.shadowsocks,
       });
     };
     var interval = $interval(function() {
+      newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);
   })
