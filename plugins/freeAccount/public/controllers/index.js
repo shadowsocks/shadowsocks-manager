@@ -84,8 +84,15 @@ app
         $scope.showAlert('错误', '验证失败。');
       });
     };
-    $scope.password = function () {
-      $state.go('manager');
+    $scope.manager = function () {
+      $http.post('/config').then(function() {
+        $state.go('manager');
+      }).catch(function() {
+        $state.go('password');
+      });
+    };
+    $scope.about = function () {
+      $state.go('about');
     };
   })
   .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {
@@ -113,4 +120,7 @@ app
     var interval = $interval(function() {
       $scope.getAccount();
     }, 60 * 1000);
+  })
+  .controller('AboutController', function($scope, $http, $state) {
+
   });

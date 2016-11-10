@@ -6,9 +6,28 @@
                   <span>Free Shadowsocks</span>
                 </h2>
                 <span flex></span>
-                <md-button class="md-icon-button" aria-label="More">
+                <!-- <md-button class="md-icon-button" aria-label="More">
                     <md-icon class="material-icons" ng-click="password()">more_vert</md-icon>
-                </md-button>
+                </md-button> -->
+                <md-menu>
+                    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="manager()">
+                                <md-icon md-menu-align-target class="material-icons">settings</md-icon>
+                                管理
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="about()">
+                                <md-icon md-menu-align-target class="material-icons">info_outline</md-icon>
+                                关于
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </md-toolbar>
     </div>

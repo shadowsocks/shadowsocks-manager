@@ -28,6 +28,11 @@ app.config(
           controller: 'ManagerController',
           templateUrl: '/public/views/manager.html'
         })
+        .state('about', {
+          url: '/about',
+          controller: 'AboutController',
+          templateUrl: '/public/views/about.html'
+        })
       ;
     }
   ]
