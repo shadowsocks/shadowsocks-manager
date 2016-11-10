@@ -11,5 +11,32 @@
                 <span flex></span>
             </div>
         </md-toolbar>
+        <div layout="col" layout-align="center none">
+            <div flex="0" flex-gt-md="10"></div>
+            <div flex>
+                <md-card>
+                    <md-card-content>
+                        <!-- <h3>Shadowsocks信息</h3> -->
+                        <md-list>
+                            <md-divider></md-divider>
+                              <md-slider-container>
+                                <div>流量</div>
+                                <md-slider flex min="0" max="255" ng-model="config.shadowsocks.flow" aria-label="flow">
+                                </md-slider>
+                                <div>{{config.shadowsocks.flow}}</div>
+                              </md-slider-container>
+                              <md-slider-container>
+                                <div>时间</div>
+                                <md-slider flex min="0" max="255" ng-model="config.shadowsocks.time" aria-label="time">
+                                </md-slider>
+                                <div>{{config.shadowsocks.time}}</div>
+                              </md-slider-container>
+                            <md-divider></md-divider>
+                        </md-list>
+                    </md-card-content>
+                </md-card>
+            </div>
+            <div flex="0" flex-gt-md="10"></div>
+        </div>
     </div>
 </div>

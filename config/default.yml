@@ -32,5 +32,14 @@ plugins:
       endPort: 65000
       flow: 100
       time: 60
+    limit:
+      user:
+        day: 0
+        week: 0
+        month: 0
+      global:
+        day: 0
+        week: 0
+        month: 0
 
 db: 'db.sqlite'
