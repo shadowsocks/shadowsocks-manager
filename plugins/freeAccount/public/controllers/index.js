@@ -48,7 +48,6 @@ app
     $scope.loading = function (isLoading) {
       $scope.isLoading = isLoading;
     };
-    $state.go('index');
   })
   .controller('IndexController', function($scope, $http, $state, $mdDialog) {
     $scope.showAlert = function(title, text) {
@@ -122,5 +121,7 @@ app
     }, 60 * 1000);
   })
   .controller('AboutController', function($scope, $http, $state) {
-
+    $scope.back = function () {
+      $state.go('index');
+    };
   });

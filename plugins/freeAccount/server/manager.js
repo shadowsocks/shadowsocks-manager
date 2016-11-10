@@ -20,6 +20,11 @@ const checkPassword = (req, res) => {
   res.status(403).end();
 };
 
+const logout = (req, res) => {
+  req.session.destroy();
+  res.send('success');
+};
+
 const getConfig = (req, res) => {
   const shadowsocks = config.plugins.freeAccount.shadowsocks;
   const limit = config.plugins.freeAccount.limit;
@@ -38,6 +43,7 @@ const setConfig = (req, res) => {
 };
 
 exports.checkPassword = checkPassword;
+exports.logout = logout;
 exports.isManager = isManager;
 exports.getConfig = getConfig;
 exports.setConfig = setConfig;

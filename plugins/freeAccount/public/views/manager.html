@@ -8,7 +8,19 @@
                 <h2>
                   <span></span>
                 </h2>
-                <span flex></span>
+                <md-menu>
+                    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                        <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="4">
+                        <md-menu-item>
+                            <md-button ng-click="logout()">
+                                <md-icon md-menu-align-target class="material-icons">exit_to_app</md-icon>
+                                退出
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
         </md-toolbar>
         <div layout="col" layout-align="center none">

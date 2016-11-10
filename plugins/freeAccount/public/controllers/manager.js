@@ -57,5 +57,10 @@ app
       newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);
+    $scope.logout = function () {
+      $http.post('/logout').then(function() {
+        $state.go('index');
+      });
+    };
   })
 ;
