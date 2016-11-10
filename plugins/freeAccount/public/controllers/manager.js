@@ -17,15 +17,22 @@ app
     var newConfig = '';
     $scope.config = {
       shadowsocks: {
-        flow: 100,
-        time: 100,
+        flow: 300,
+        time: 120,
       }
     };
     $scope.getConfig = function () {
+      $scope.loading(true);
       $http.post('/config').then(function(success) {
+        $scope.loading(false);
         $scope.config = success.data;
         oldConfig = JSON.stringify($scope.config);
         newConfig = JSON.stringify($scope.config);
+      }).catch(function(error) {
+        $scope.loading(false);
+        if(error.status === 401) {
+          $state.go('password');
+        }
       });
     };
     $scope.getConfig();
@@ -44,6 +51,9 @@ app
       });
     };
     var interval = $interval(function() {
+      if($scope.isLoading) {
+        return;
+      }
       newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);

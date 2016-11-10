@@ -27,7 +27,10 @@
     <script src="<%= controller %>"></script>
     <% }); %>
     <div ng-controller="MainController">
-      <div ui-view></div>
+      <div layout="column" layout-fill ng-show="isLoading" layout-align="center center">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+      </div>
+      <div ui-view ng-hide="isLoading"></div>
     </div>
   </body>
 </html>

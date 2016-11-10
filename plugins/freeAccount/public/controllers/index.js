@@ -44,7 +44,10 @@ app
   });
 app
   .controller('MainController', function($scope, $http, $state) {
-    console.log('main');
+    $scope.isLoading = false;
+    $scope.loading = function (isLoading) {
+      $scope.isLoading = isLoading;
+    };
     $state.go('index');
   })
   .controller('IndexController', function($scope, $http, $state, $mdDialog) {
@@ -82,7 +85,7 @@ app
       });
     };
     $scope.password = function () {
-      $state.go('password');
+      $state.go('manager');
     };
   })
   .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {

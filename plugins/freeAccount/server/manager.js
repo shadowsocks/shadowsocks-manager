@@ -17,7 +17,7 @@ const checkPassword = (req, res) => {
     return res.send('success');
   }
   req.session.destroy();
-  res.status(401).end();
+  res.status(403).end();
 };
 
 const getConfig = (req, res) => {
@@ -31,7 +31,7 @@ const getConfig = (req, res) => {
 
 const setConfig = (req, res) => {
   const shadowsocks = req.body.shadowsocks;
-  console.log(shadowsocks);
+  // console.log(shadowsocks);
   config.plugins.freeAccount.shadowsocks.time = shadowsocks.time;
   config.plugins.freeAccount.shadowsocks.flow = shadowsocks.flow;
   res.send('success');
