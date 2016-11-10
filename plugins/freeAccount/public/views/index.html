@@ -43,7 +43,7 @@
                 <div layout="row" layout-align="center start">
                     <md-input-container flex class="md-block">
                         <label>验证码</label>
-                        <input type="code" name="code" ng-model="user.code" ng-pattern="/^\d{6}$/" ng-keypress="passwordKeypress($event)">
+                        <input type="number" name="code" ng-model="user.code" ng-pattern="/^\d{6}$/" ng-keypress="passwordKeypress($event)">
                     </md-input-container>
                     <md-button ng-disabled="!(user.code)" class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
                 </div>

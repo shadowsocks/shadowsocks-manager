@@ -34,7 +34,7 @@ const createAccount = async (email) => {
   const min = config.plugins.freeAccount.shadowsocks.startPort;
   const max = config.plugins.freeAccount.shadowsocks.endPort;
   const port = await getRandomPort(min, max);
-  const password = crypto.randomBytes(6).toString('hex');
+  const password = crypto.randomBytes(4).toString('hex');
   try {
     await manager.send({
       command: 'add',
