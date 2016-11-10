@@ -38,14 +38,14 @@
                         <label>邮箱</label>
                         <input type="email" name="email" ng-model="user.email" ng-keypress="usernameKeypress($event)" autofocus>
                     </md-input-container>
-                    <md-button class="md-raised" ng-click="sendCode()">发送验证码</md-button>
+                    <md-button ng-disabled="!(user.email)" class="md-raised" ng-click="sendCode()">发送验证码</md-button>
                 </div>
                 <div layout="row" layout-align="center start">
                     <md-input-container flex class="md-block">
                         <label>验证码</label>
-                        <input type="code" name="code" ng-model="user.code" ng-keypress="passwordKeypress($event)">
+                        <input type="code" name="code" ng-model="user.code" ng-pattern="/^\d{6}$/" ng-keypress="passwordKeypress($event)">
                     </md-input-container>
-                    <md-button class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
+                    <md-button ng-disabled="!(user.code)" class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
                 </div>
             </form>
             <!-- <div layout="row" layout-align="space-around center" layout-padding layout-margin>
