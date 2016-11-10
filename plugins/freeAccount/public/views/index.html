@@ -12,10 +12,10 @@
             </div>
         </md-toolbar>
     </div>
-    <div flex="15"></div>
+    <div flex="20"></div>
     <div flex layout="row">
         <div flex="10" flex-gt-sm="30"></div>
-        <div flex layout="column" layout-align="space-around stretch">
+        <div flex layout="column" layout-align="start stretch">
             <form name="userForm">
                 <md-input-container class="md-block">
                     <label>邮箱</label>
@@ -26,24 +26,18 @@
                     <input type="code" name="code" ng-model="user.code" ng-keypress="passwordKeypress($event)">
                 </md-input-container>
             </form>
-        </div>
-        <div flex="10" flex-gt-sm="30"></div>
-    </div>
-    <div flex layout="row" layout-align="center start">
-        <div flex="10" flex-gt-sm="30"></div>
-        <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-raised" ng-click="sendCode()">发送验证码</md-button>
-            <md-button class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
-        </div>
-        <div flex="10" flex-gt-sm="30"></div>
-    </div>
-    <div flex layout="row" layout-align="center start">
-        <div flex="10" flex-gt-sm="30"></div>
-        <div flex>
-            <div>
-              说明：填写邮箱，点击“发送验证码”，<br>
-              然后收取邮件，填写验证码并点击“验证”，<br>
-              即可获取免费帐号。
+            <div layout="row" layout-align="space-around center" layout-padding layout-margin>
+                <div>
+                <md-button class="md-raised" ng-click="sendCode()">发送验证码</md-button>
+                <md-button class="md-raised md-primary" ng-click="checkCode()">验证</md-button>
+                </div>
+            </div>
+            <div layout="row">
+                <div style="margin-top: 30px;">
+                  说明：填写邮箱，点击“发送验证码”<br>
+                  收取邮件，填写验证码，点击“验证”<br>
+                  即可获取免费帐号
+                </div>
             </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
