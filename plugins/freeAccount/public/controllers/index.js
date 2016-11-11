@@ -116,14 +116,17 @@ app
       });
     };
     $scope.checkCode = function() {
+      $scope.loading(true);
       $http.post('/code', {
         email: $scope.user.email,
         code: $scope.user.code
       }).then(function(success) {
+        // $scope.loading(false);
         $state.go('account', {
           id: success.data
         });
       }).catch(function(error) {
+        $scope.loading(false);
         if(error.data.startsWith('out of limit, ')) {
           var type = error.data.split(',')[1].split('.')[0].trim();
           var time = error.data.split(',')[1].split('.')[1].trim();
@@ -140,6 +143,16 @@ app
         }
         $scope.showAlert('错误', '验证失败。');
       });
+    };
+    $scope.emailKeypress = function(e) {
+      if(e.keyCode === 13 && $scope.user.email) {
+        $scope.sendCode();
+      }
+    };
+    $scope.codeKeypress = function(e) {
+      if(e.keyCode === 13 && $scope.user.code) {
+        $scope.checkCode();
+      }
     };
     $scope.manager = function () {
       $http.post('/config').then(function() {
