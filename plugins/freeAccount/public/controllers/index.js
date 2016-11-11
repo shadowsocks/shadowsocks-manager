@@ -64,9 +64,15 @@ app
     $scope.setMenu = function(menus) {
       $scope.menus = menus;
     };
+    $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      $scope.title = '';
+      $scope.back = function () {
+        $state.go('index');
+      };
+    });
   })
   .controller('IndexController', function($scope, $http, $state, $mdDialog) {
-    $scope.setTitle('F');
+    $scope.setTitle('Free Shadowsocks');
     $scope.setMenu([{
       icon: 'settings',
       text: '管理',

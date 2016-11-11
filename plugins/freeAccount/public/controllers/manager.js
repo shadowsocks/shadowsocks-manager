@@ -2,9 +2,6 @@ app
   .controller('PasswordController', function($scope, $http, $state) {
     $scope.setMenu([]);
     $scope.user = {};
-    $scope.back = function () {
-      $state.go('index');
-    };
     $scope.checkPassword = function () {
       $http.post('/password', {
         password: $scope.user.password
@@ -19,6 +16,8 @@ app
       text: '退出',
       click: function() {
         $http.post('/logout').then(function() {
+          interval && $interval.cancel(interval);
+          $scope.setConfig();
           $state.go('index');
         });
       }
@@ -46,11 +45,11 @@ app
       });
     };
     $scope.getConfig();
-    $scope.back = function () {
+    $scope.setBackButton(function () {
       interval && $interval.cancel(interval);
       $scope.setConfig();
       $state.go('index');
-    };
+    });
     $scope.setConfig = function () {
       if(newConfig === oldConfig) {
         return;
