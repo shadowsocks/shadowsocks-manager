@@ -69,6 +69,7 @@ app
       $scope.back = function () {
         $state.go('index');
       };
+      $scope.menus = [];
     });
   })
   .controller('IndexController', function($scope, $http, $state, $mdDialog) {
