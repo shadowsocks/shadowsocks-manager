@@ -121,6 +121,20 @@ app
           id: success.data
         });
       }).catch(function(error) {
+        if(error.data.startsWith('out of limit, ')) {
+          var type = error.data.split(',')[1].split('.')[0].trim();
+          var time = error.data.split(',')[1].split('.')[1].trim();
+          if(type === 'user') {
+            if(time === 'day') { return $scope.showAlert('错误', '该邮箱本日申请次数超过限额。'); }
+            if(time === 'week') { return $scope.showAlert('错误', '该邮箱本周申请次数超过限额。'); }
+            if(time === 'month') { return $scope.showAlert('错误', '该邮箱本月申请次数超过限额。'); }
+          }
+          if(type === 'global') {
+            if(time === 'day') { return $scope.showAlert('错误', '本日免费帐号申请次数已达上限。'); }
+            if(time === 'week') { return $scope.showAlert('错误', '本周免费帐号申请次数已达上限。'); }
+            if(time === 'month') { return $scope.showAlert('错误', '本月免费帐号申请次数已达上限。'); }
+          }
+        }
         $scope.showAlert('错误', '验证失败。');
       });
     };

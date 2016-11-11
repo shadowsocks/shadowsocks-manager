@@ -28,6 +28,9 @@ const checkCode = (req, res) => {
     res.send(success);
   }).catch(error => {
     console.log(error);
+    if(error && error.startsWith('out of limit, ')) {
+      return res.status(403).send(error.toString());
+    }
     res.status(403).end();
   });
 };
