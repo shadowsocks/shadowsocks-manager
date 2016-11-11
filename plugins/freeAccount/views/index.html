@@ -29,10 +29,36 @@
     <% }); %>
 
     <div ng-controller="MainController">
-        <div layout="column" layout-fill ng-show="isLoading" layout-align="center center">
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        <div layout="column" layout-fill>
+            <div layout="column">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="back" ng-hide="title">
+                            <md-icon class="material-icons" ng-click="back()">navigate_before</md-icon>
+                        </md-button>
+                        <span flex ng-show="title">{{title}}</span>
+                        <span flex></span>
+                        <md-menu ng-show="menus.length">
+                            <md-button aria-label="menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
+                            </md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item ng-repeat="menu in menus">
+                                    <md-button ng-click="menu.click()">
+                                        <md-icon md-menu-align-target class="material-icons">{{menu.icon}}</md-icon>
+                                        {{menu.text}}
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+                </md-toolbar>
+            </div>
+            <div layout="column" layout-fill ng-show="isLoading" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <div ui-view ng-hide="isLoading" layout="column"></div>
         </div>
-        <div ui-view ng-hide="isLoading"></div>
     </div>
 </body>
 

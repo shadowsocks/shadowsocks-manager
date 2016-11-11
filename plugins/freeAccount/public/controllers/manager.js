@@ -1,5 +1,6 @@
 app
   .controller('PasswordController', function($scope, $http, $state) {
+    $scope.setMenu([]);
     $scope.user = {};
     $scope.back = function () {
       $state.go('index');
@@ -13,6 +14,15 @@ app
     };
   })
   .controller('ManagerController', function($scope, $http, $state, $interval) {
+    $scope.setMenu([{
+      icon: 'exit_to_app',
+      text: '退出',
+      click: function() {
+        $http.post('/logout').then(function() {
+          $state.go('index');
+        });
+      }
+    }]);
     var oldConfig = '';
     var newConfig = '';
     $scope.config = {
@@ -57,10 +67,5 @@ app
       newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);
-    $scope.logout = function () {
-      $http.post('/logout').then(function() {
-        $state.go('index');
-      });
-    };
   })
 ;

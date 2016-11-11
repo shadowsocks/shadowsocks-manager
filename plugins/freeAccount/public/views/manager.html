@@ -1,54 +1,27 @@
-<div layout="column" layout-fill>
-    <div layout="column">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <md-button class="md-icon-button" aria-label="back">
-                    <md-icon class="material-icons" ng-click="back()">navigate_before</md-icon>
-                </md-button>
-                <h2>
-                  <span></span>
-                </h2>
-                <md-menu>
-                    <md-button aria-label="menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                        <md-icon md-menu-origin class="material-icons">more_vert</md-icon>
-                    </md-button>
-                    <md-menu-content width="4">
-                        <md-menu-item>
-                            <md-button ng-click="logout()">
-                                <md-icon md-menu-align-target class="material-icons">exit_to_app</md-icon>
-                                退出
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-        </md-toolbar>
-        <div layout="col" layout-align="center none">
-            <div flex="0" flex-gt-md="10"></div>
-            <div flex>
-                <md-card>
-                    <md-card-content>
-                        <!-- <h3>Shadowsocks信息</h3> -->
-                        <md-list>
-                            <md-divider></md-divider>
-                              <md-slider-container>
-                                <div>流量</div>
-                                <md-slider flex min="0" max="1000" step="10" ng-model="config.shadowsocks.flow" aria-label="flow">
-                                </md-slider>
-                                <div>{{config.shadowsocks.flow}}</div>
-                              </md-slider-container>
-                              <md-slider-container>
-                                <div>时间</div>
-                                <md-slider flex min="30" max="720" step="15" ng-model="config.shadowsocks.time" aria-label="time">
-                                </md-slider>
-                                <div>{{config.shadowsocks.time}}</div>
-                              </md-slider-container>
-                            <md-divider></md-divider>
-                        </md-list>
-                    </md-card-content>
-                </md-card>
-            </div>
-            <div flex="0" flex-gt-md="10"></div>
-        </div>
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <!-- <h3>Shadowsocks信息</h3> -->
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-slider-container>
+                        <div>流量</div>
+                        <md-slider flex min="0" max="1000" step="10" ng-model="config.shadowsocks.flow" aria-label="flow">
+                        </md-slider>
+                        <div>{{config.shadowsocks.flow}}</div>
+                    </md-slider-container>
+                    <md-slider-container>
+                        <div>时间</div>
+                        <md-slider flex min="30" max="720" step="15" ng-model="config.shadowsocks.time" aria-label="time">
+                        </md-slider>
+                        <div>{{config.shadowsocks.time}}</div>
+                    </md-slider-container>
+                    <md-divider></md-divider>
+                </md-list>
+            </md-card-content>
+        </md-card>
     </div>
+    <div flex="0" flex-gt-md="10"></div>
 </div>

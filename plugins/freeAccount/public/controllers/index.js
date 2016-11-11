@@ -50,8 +50,40 @@ app
     $scope.loading = function (isLoading) {
       $scope.isLoading = isLoading;
     };
+    $scope.back = function () {
+      $state.go('index');
+    };
+    $scope.title = '';
+    $scope.setTitle = function (title) {
+      $scope.title = title;
+    };
+    $scope.setBackButton = function (fn) {
+      $scope.back = fn;
+    };
+    $scope.menus = [];
+    $scope.setMenu = function(menus) {
+      $scope.menus = menus;
+    };
   })
   .controller('IndexController', function($scope, $http, $state, $mdDialog) {
+    $scope.setTitle('F');
+    $scope.setMenu([{
+      icon: 'settings',
+      text: '管理',
+      click: function() {
+        $http.post('/config').then(function() {
+          $state.go('manager');
+        }).catch(function() {
+          $state.go('password');
+        });
+      }
+    }, {
+      icon: 'info_outline',
+      text: '关于',
+      click: function() {
+        $state.go('about');
+      }
+    }]);
     $scope.showAlert = function(title, text) {
       $mdDialog.show(
         $mdDialog.alert()
