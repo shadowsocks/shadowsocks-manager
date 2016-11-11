@@ -127,7 +127,12 @@ const createAccount = async (emailAddress) => {
       expired: Date.now() + config.plugins.freeAccount.shadowsocks.time * 60 * 1000,
       isDisabled: false,
     });
-    await email.sendMail(emailAddress, 'Free Shadowsocks 账号', 'Shadowsocks 账号创建成功，请访问下列地址查看\nhttp://' + config.plugins.freeAccount.host + ':' + config.plugins.freeAccount.port + '/' + address);
+    let text = '';
+    text += 'Shadowsocks 账号创建成功，请访问下列地址查看\n';
+    text += 'http://' + config.plugins.freeAccount.host;
+    text += (config.plugins.freeAccount.port === 80) ? '' : (':' + config.plugins.freeAccount.port);
+    text += '/' + address;
+    await email.sendMail(emailAddress, 'Free Shadowsocks 账号', text);
     logger.info(`[${ emailAddress }] Create accout: ${ address }`);
     return address;
   } catch(err) {
