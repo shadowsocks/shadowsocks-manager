@@ -104,11 +104,14 @@ app
     };
     $scope.user = {};
     $scope.sendCode = function() {
+      $scope.loading(true);
       $http.post('/email', {
         email: $scope.user.email
       }).then(function(success) {
+        $scope.loading(false);
         $scope.showAlert('提示', '验证码发送成功。');
       }).catch(function(error) {
+        $scope.loading(false);
         $scope.showAlert('错误', '验证码发送失败。');
       });
     };
@@ -157,13 +160,15 @@ app
       }));
     };
     $scope.getAccount = function() {
+      $scope.loading(true);
       $http.post('/account', {
         address: $stateParams.id
       }).then(function(success) {
+        $scope.loading(false);
         $scope.accountInfo = success.data;
         $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
       }, function(error) {
-        console.log(error);
+        $scope.loading(false);
         interval && $interval.cancel(interval);
         $state.go('index');
       });
