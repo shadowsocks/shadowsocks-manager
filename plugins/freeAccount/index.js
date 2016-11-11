@@ -1,5 +1,14 @@
 'use strict';
 
+const log4js = require('log4js');
+log4js.configure({
+  appenders: [{
+      type: 'console',
+      category: 'freeAccount',
+  }]
+});
+const logger = log4js.getLogger('freeAccount');
+
 const config = appRequire('services/config').all();
 const path = require('path');
 const express = require('express');

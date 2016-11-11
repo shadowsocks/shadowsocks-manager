@@ -1,5 +1,8 @@
 'use strict';
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('freeAccount');
+
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const flow = appRequire('plugins/flowSaver/flow');
@@ -88,9 +91,10 @@ const createAccount = async (emailAddress) => {
   // if true, return old account instead of create one.
   const oldAccount = await knex('freeAccount').select().where({email: emailAddress, isDisabled: false});
   if(oldAccount.length > 0) {
+    logger.info(`Use old accout: ${ oldAccount[0].address }`);
     return oldAccount[0].address;
   }
-  // TODO: check if free account out of limit
+  // check if free account out of limit
   await limit(emailAddress);
 
   // create account
