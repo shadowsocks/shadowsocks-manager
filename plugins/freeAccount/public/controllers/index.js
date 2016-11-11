@@ -119,7 +119,7 @@ app
       $scope.loading(true);
       $http.post('/code', {
         email: $scope.user.email,
-        code: $scope.user.code
+        code: $scope.user.code + ''
       }).then(function(success) {
         // $scope.loading(false);
         $state.go('account', {
