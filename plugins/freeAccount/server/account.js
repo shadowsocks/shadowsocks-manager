@@ -6,6 +6,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
 const email = appRequire('plugins/email/index');
+const moment = require('moment');
 
 const getRandomPort = async (min, max) => {
   min = Math.ceil(min);
@@ -21,6 +22,67 @@ const getRandomPort = async (min, max) => {
   return isPortExist ? Promise.reject('Get Random Port Fail') : port;
 };
 
+const limit = async (emailAddress) => {
+  const limit = config.plugins.freeAccount.limit;
+  const time = {
+    day: moment().hour(0).minute(0).second(0).millisecond(0).toDate(),
+    week: moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate(),
+    month: moment().date(1).hour(0).minute(0).second(0).millisecond(0).toDate(),
+  };
+  if(limit.user.day) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+      email: emailAddress,
+    }).whereBetween('time', [time.day, Date.now()]))[0]['count(*)'];
+    if(count >= limit.user.day) {
+      return Promise.reject('out of limit, user.day, ' + count);
+    }
+  }
+  if(limit.user.week) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+      email: emailAddress,
+    }).whereBetween('time', [time.week, Date.now()]))[0]['count(*)'];
+    if(count >= limit.user.week) {
+      return Promise.reject('out of limit, user.week, ' + count);
+    }
+  }
+  if(limit.user.month) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+      email: emailAddress,
+    }).whereBetween('time', [time.month, Date.now()]))[0]['count(*)'];
+    if(count >= limit.user.month) {
+      return Promise.reject('out of limit, user.month, ' + count);
+    }
+  }
+  if(limit.global.day) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+    }).whereBetween('time', [time.day, Date.now()]))[0]['count(*)'];
+    if(count >= limit.global.day) {
+      return Promise.reject('out of limit, global.day, ' + count);
+    }
+  }
+  if(limit.global.week) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+    }).whereBetween('time', [time.week, Date.now()]))[0]['count(*)'];
+    if(count >= limit.global.week) {
+      return Promise.reject('out of limit, global.week, ' + count);
+    }
+  }
+  if(limit.global.month) {
+    const count = (await knex('freeAccount').count().where({
+      isDisabled: true,
+    }).whereBetween('time', [time.month, Date.now()]))[0]['count(*)'];
+    if(count >= limit.global.month) {
+      return Promise.reject('out of limit, global.month, ' + count);
+    }
+  }
+  return;
+};
+
 const createAccount = async (emailAddress) => {
   // check if this email has an account,
   // if true, return old account instead of create one.
@@ -29,7 +91,7 @@ const createAccount = async (emailAddress) => {
     return oldAccount[0].address;
   }
   // TODO: check if free account out of limit
-
+  await limit(emailAddress);
 
   // create account
   const min = config.plugins.freeAccount.shadowsocks.startPort;

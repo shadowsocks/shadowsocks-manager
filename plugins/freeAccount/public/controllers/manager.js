@@ -59,9 +59,7 @@ app
         return;
       }
       oldConfig = newConfig;
-      $http.put('/config', {
-        shadowsocks: $scope.config.shadowsocks,
-      });
+      $http.put('/config', $scope.config);
     };
     var interval = $interval(function() {
       if($scope.isLoading) {
