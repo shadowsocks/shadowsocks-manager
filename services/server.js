@@ -1,5 +1,8 @@
 'use strict';
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
+
 const crypto = require('crypto');
 const path = require('path');
 const config = appRequire('services/config').all();
@@ -33,7 +36,7 @@ const checkCode = (data, password, code) => {
 const receiveCommand = async (data) => {
   try {
     const message = JSON.parse(data.toString());
-    console.log(message);
+    logger.info(message);
     if(message.command === 'add') {
       const port = +message.port;
       const password = message.password;

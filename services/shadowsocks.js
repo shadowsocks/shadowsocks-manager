@@ -1,5 +1,8 @@
 'use strict';
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
+
 const dgram = require('dgram');
 let client = dgram.createSocket('udp4');
 
@@ -28,11 +31,11 @@ const connect = (reconnect = false) => {
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
       const realFlow = compareWithLastFlow(flow, lastFlow);
-      console.log('--------');
-      console.log(flow);
-      // console.log(lastFlow);
-      console.log(realFlow);
-      console.log('========');
+      // console.log('--------');
+      // console.log(flow);
+      // // console.log(lastFlow);
+      // console.log(realFlow);
+      // console.log('========');
       lastFlow = flow;
       const insertFlow = Object.keys(realFlow).map(m => {
         return {
@@ -70,7 +73,8 @@ const sendPing = () => {
 };
 
 const sendMessage = (message) => {
-  console.log('Send to shadowsocks: ' + message);
+  // console.log('Send to shadowsocks: ' + message);
+  logger.info('Send to shadowsocks: ' + message);
   return new Promise((res, rej) => {
     const client = dgram.createSocket('udp4');
     client.send(message, port, host, (err) => {

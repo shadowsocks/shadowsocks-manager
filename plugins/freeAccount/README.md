@@ -61,4 +61,4 @@ run `ssmgr -c free`, and you can visit the website.
 
 ## Demo
 
-[http://104.130.22.141:55000](http://104.130.22.141:55000)
+[http://free.gyteng.com](http://free.gyteng.com)
