@@ -19,6 +19,7 @@ const getRandomPort = async (min, max) => {
   let number = 0;
   while(isPortExist && number < 20) {
     port = Math.floor(Math.random() * (max - min + 1)) + min;
+    logger.info(`Get random port: ${ port }`);
     isPortExist = (await knex('freeAccount').select().where({port}))[0];
     number++;
   }
@@ -100,6 +101,7 @@ const createAccount = async (emailAddress) => {
     logger.info(`[${ emailAddress }] Use old accout: ${ oldAccount[0].address }`);
     return oldAccount[0].address;
   }
+
   // check if free account out of limit
   await limit(emailAddress);
 
@@ -129,7 +131,7 @@ const createAccount = async (emailAddress) => {
     logger.info(`[${ emailAddress }] Create accout: ${ address }`);
     return address;
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     return Promise.reject(err);
   }
 };
@@ -166,7 +168,7 @@ const checkAccount = async () => {
       }
     });
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
