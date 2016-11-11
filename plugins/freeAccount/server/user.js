@@ -67,7 +67,8 @@ const getAccount = (req, res) => {
       res.send(accountInfo);
     }
   }).catch(error => {
-    logger.error('Get account: ' + error);
+    logger.error('Get account:');
+    logger.error(error);
     res.status(403).end();
   });
 };

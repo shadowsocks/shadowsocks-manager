@@ -144,6 +144,18 @@ const checkAccount = async () => {
     const account = await knex('freeAccount').select().where({
       isDisabled: false
     });
+    list.forEach(async l => {
+      const myAccount = account.filter(f => {
+        return f.port === l.port;
+      })[0];
+      if(!myAccount) {
+        await manager.send({
+          command: 'del',
+          port: l.port,
+        });
+        logger.info(`Delete port: ${ l.port }`);
+      }
+    });
     account.forEach(async f => {
       const myFlow = (await flow.getFlow(f.time, f.expired)).filter(fil => {
         return fil.port === f.port;
@@ -165,6 +177,7 @@ const checkAccount = async () => {
           command: 'del',
           port: f.port,
         });
+        logger.info(`Delete account: ${ f.address }`);
       }
     });
   } catch(err) {
