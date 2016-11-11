@@ -14,7 +14,7 @@ app
       }
     };
   }).filter('relativeTime', function() {
-    return function(input) {
+    function relativeTime(input) {
       var ret = '';
       var retTail = '';
 
@@ -41,6 +41,8 @@ app
 
       return ret + retTail;
     };
+    relativeTime.$stateful = true;
+    return relativeTime;
   });
 app
   .controller('MainController', function($scope, $http, $state) {
@@ -95,7 +97,6 @@ app
     };
   })
   .controller('AccountController', function($scope, $http, $state, $stateParams, $interval) {
-    console.log($stateParams.id);
     $scope.qrcode = '';
     var b64EncodeUnicode = function(str) {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
@@ -106,7 +107,6 @@ app
       $http.post('/account', {
         address: $stateParams.id
       }).then(function(success) {
-        console.log(success.data);
         $scope.accountInfo = success.data;
         $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
       }, function(error) {
