@@ -1,3 +1,8 @@
+'use strict';
+
+const log4js = require('log4js');
+const logger = log4js.getLogger('email');
+
 const nodemailer = require('nodemailer');
 const config = appRequire('services/config').all();
 const knex = appRequire('init/knex').knex;
@@ -54,14 +59,16 @@ const sendCode = async (to, subject = 'subject', text) => {
       remark: code,
       time: Date.now(),
     });
+    logger.info(`[${ to }] Send code: ${ code }`);
     return code;
   } catch (err) {
-    console.log(err);
+    logger.error(`Send code fail: ${ err }`);
     return Promise.reject(err);
   }
 };
 
 const checkCode = async (email, code) => {
+  logger.info(`[${ email }] Check code: ${ code }`);
   const sendEmailTime = 10;
   try {
     const findEmail = await knex('email').select(['remark']).where({
@@ -70,10 +77,10 @@ const checkCode = async (email, code) => {
       type: 'code',
     }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
     if(findEmail.length === 0) {
-      return Promise.reject();
+      throw new Error('Email or code not found');
     }
   } catch(err) {
-    console.log(err);
+    logger.error(`Check code fail: ${ err }`);
     return Promise.reject(err);
   }
 };

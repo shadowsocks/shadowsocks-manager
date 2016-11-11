@@ -37,6 +37,7 @@ const limit = async (emailAddress) => {
       isDisabled: true,
       email: emailAddress,
     }).whereBetween('time', [time.day, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, user.day, ${ limit.user.day }, ${ count }`);
     if(count >= limit.user.day) {
       return Promise.reject('out of limit, user.day, ' + count);
     }
@@ -46,6 +47,7 @@ const limit = async (emailAddress) => {
       isDisabled: true,
       email: emailAddress,
     }).whereBetween('time', [time.week, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, user.week, ${ limit.user.week }, ${ count }`);
     if(count >= limit.user.week) {
       return Promise.reject('out of limit, user.week, ' + count);
     }
@@ -55,6 +57,7 @@ const limit = async (emailAddress) => {
       isDisabled: true,
       email: emailAddress,
     }).whereBetween('time', [time.month, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, user.month, ${ limit.user.month }, ${ count }`);
     if(count >= limit.user.month) {
       return Promise.reject('out of limit, user.month, ' + count);
     }
@@ -63,6 +66,7 @@ const limit = async (emailAddress) => {
     const count = (await knex('freeAccount').count().where({
       isDisabled: true,
     }).whereBetween('time', [time.day, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, global.day, ${ limit.global.day }, ${ count }`);
     if(count >= limit.global.day) {
       return Promise.reject('out of limit, global.day, ' + count);
     }
@@ -71,6 +75,7 @@ const limit = async (emailAddress) => {
     const count = (await knex('freeAccount').count().where({
       isDisabled: true,
     }).whereBetween('time', [time.week, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, global.week, ${ limit.global.week }, ${ count }`);
     if(count >= limit.global.week) {
       return Promise.reject('out of limit, global.week, ' + count);
     }
@@ -79,6 +84,7 @@ const limit = async (emailAddress) => {
     const count = (await knex('freeAccount').count().where({
       isDisabled: true,
     }).whereBetween('time', [time.month, Date.now()]))[0]['count(*)'];
+    logger.info(`[${ emailAddress }] Check limit, global.month, ${ limit.global.month }, ${ count }`);
     if(count >= limit.global.month) {
       return Promise.reject('out of limit, global.month, ' + count);
     }
@@ -91,7 +97,7 @@ const createAccount = async (emailAddress) => {
   // if true, return old account instead of create one.
   const oldAccount = await knex('freeAccount').select().where({email: emailAddress, isDisabled: false});
   if(oldAccount.length > 0) {
-    logger.info(`Use old accout: ${ oldAccount[0].address }`);
+    logger.info(`[${ emailAddress }] Use old accout: ${ oldAccount[0].address }`);
     return oldAccount[0].address;
   }
   // check if free account out of limit
@@ -120,6 +126,7 @@ const createAccount = async (emailAddress) => {
       isDisabled: false,
     });
     await email.sendMail(emailAddress, 'Free Shadowsocks 账号', 'Shadowsocks 账号创建成功，请访问下列地址查看\nhttp://' + config.plugins.freeAccount.host + ':' + config.plugins.freeAccount.port + '/' + address);
+    logger.info(`[${ emailAddress }] Create accout: ${ address }`);
     return address;
   } catch(err) {
     console.log(err);

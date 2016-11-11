@@ -1,12 +1,6 @@
 'use strict';
 
 const log4js = require('log4js');
-log4js.configure({
-  appenders: [{
-      type: 'console',
-      category: 'telegram',
-  }]
-});
 const logger = log4js.getLogger('telegram');
 
 const rp = require('request-promise');
