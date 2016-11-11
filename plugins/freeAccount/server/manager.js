@@ -36,9 +36,10 @@ const getConfig = (req, res) => {
 
 const setConfig = (req, res) => {
   const shadowsocks = req.body.shadowsocks;
-  // console.log(shadowsocks);
+  const limit = req.body.limit;
   config.plugins.freeAccount.shadowsocks.time = shadowsocks.time;
   config.plugins.freeAccount.shadowsocks.flow = shadowsocks.flow;
+  config.plugins.freeAccount.limit = limit;
   res.send('success');
 };
 

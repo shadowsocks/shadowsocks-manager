@@ -14,8 +14,13 @@ const smtpConfig = {
 
 var transporter = nodemailer.createTransport(smtpConfig);
 
-const sendMail = async (options) => {
-  transporter.sendMail(options, (error, info) => {
+const sendMail = async (to, subject, text) => {
+  transporter.sendMail({
+    from: config.plugins.email.username,
+    to,
+    subject,
+    text,
+  }, (error, info) => {
     if(error) {
       return Promise.reject(error);
     }
@@ -49,7 +54,6 @@ const sendCode = async (to, subject = 'subject', text) => {
       remark: code,
       time: Date.now(),
     });
-    console.log(code);
     return code;
   } catch (err) {
     console.log(err);
@@ -76,6 +80,7 @@ const checkCode = async (email, code) => {
 
 exports.checkCode = checkCode;
 exports.sendCode = sendCode;
+exports.sendMail = sendMail;
 // checkCode('igyteng@gmail.com', '505740').then();
 // sendCode('igyteng@gmail.com').then(console.log);
 // sendMail({

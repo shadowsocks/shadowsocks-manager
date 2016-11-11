@@ -159,7 +159,4 @@ app
     }, 60 * 1000);
   })
   .controller('AboutController', function($scope, $http, $state) {
-    $scope.back = function () {
-      $state.go('index');
-    };
   });

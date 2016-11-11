@@ -28,7 +28,11 @@ app
       shadowsocks: {
         flow: 300,
         time: 120,
-      }
+      },
+      limit: {
+        user: { day: 0, week: 0, month: 0 },
+        global: { day: 0, week: 0, month: 0 },
+      },
     };
     $scope.getConfig = function () {
       $scope.loading(true);

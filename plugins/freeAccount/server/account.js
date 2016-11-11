@@ -5,6 +5,7 @@ const manager = appRequire('services/manager');
 const flow = appRequire('plugins/flowSaver/flow');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
+const email = appRequire('plugins/email/index');
 
 const getRandomPort = async (min, max) => {
   min = Math.ceil(min);
@@ -20,10 +21,10 @@ const getRandomPort = async (min, max) => {
   return isPortExist ? Promise.reject('Get Random Port Fail') : port;
 };
 
-const createAccount = async (email) => {
+const createAccount = async (emailAddress) => {
   // check if this email has an account,
   // if true, return old account instead of create one.
-  const oldAccount = await knex('freeAccount').select().where({email, isDisabled: false});
+  const oldAccount = await knex('freeAccount').select().where({email: emailAddress, isDisabled: false});
   if(oldAccount.length > 0) {
     return oldAccount[0].address;
   }
@@ -44,7 +45,7 @@ const createAccount = async (email) => {
     const address = crypto.randomBytes(16).toString('hex');
     await knex('freeAccount').insert({
       address,
-      email,
+      email: emailAddress,
       port,
       flow: config.plugins.freeAccount.shadowsocks.flow * 1000 * 1000,
       currentFlow: 0,
@@ -52,6 +53,7 @@ const createAccount = async (email) => {
       expired: Date.now() + config.plugins.freeAccount.shadowsocks.time * 60 * 1000,
       isDisabled: false,
     });
+    await email.sendMail(emailAddress, 'Free Shadowsocks 账号', 'Shadowsocks 账号创建成功，请访问下列地址查看\nhttp://' + config.plugins.freeAccount.host + ':' + config.plugins.freeAccount.port + '/' + address);
     return address;
   } catch(err) {
     console.log(err);
