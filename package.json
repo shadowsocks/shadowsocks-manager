@@ -1,13 +1,13 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.1.85",
+  "version": "0.1.86",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node server.js"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
-  "license": "MIT",
+  "license": "GPL",
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-eslint": "^6.1.2",
