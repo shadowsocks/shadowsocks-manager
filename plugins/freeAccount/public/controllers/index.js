@@ -173,7 +173,7 @@ app
       }));
     };
     $scope.getAccount = function() {
-      $scope.qrcode && $scope.loading(true);
+      $scope.qrcode || $scope.loading(true);
       $http.post('/account', {
         address: $stateParams.id
       }).then(function(success) {
