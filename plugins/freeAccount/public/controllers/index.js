@@ -45,7 +45,18 @@ app
     return relativeTime;
   });
 app
-  .controller('MainController', function($scope, $http, $state) {
+  .controller('MainController', function($scope, $http, $state, $mdDialog) {
+    $scope.showAlert = function(title, text) {
+      $mdDialog.show(
+        $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(true)
+        .title(title)
+        .textContent(text)
+        .ariaLabel('alert')
+        .ok('确定')
+      );
+    };
     $scope.isLoading = false;
     $scope.loading = function (isLoading) {
       $scope.isLoading = isLoading;
@@ -72,7 +83,7 @@ app
       $scope.menus = [];
     });
   })
-  .controller('IndexController', function($scope, $http, $state, $mdDialog) {
+  .controller('IndexController', function($scope, $http, $state) {
     $scope.setTitle('Free Shadowsocks');
     $scope.setMenu([{
       icon: 'settings',
@@ -91,17 +102,6 @@ app
         $state.go('about');
       }
     }]);
-    $scope.showAlert = function(title, text) {
-      $mdDialog.show(
-        $mdDialog.alert()
-        .parent(angular.element(document.querySelector('#popupContainer')))
-        .clickOutsideToClose(true)
-        .title(title)
-        .textContent(text)
-        .ariaLabel('alert')
-        .ok('确定')
-      );
-    };
     $scope.user = {};
     $scope.sendCode = function() {
       $scope.loading(true);

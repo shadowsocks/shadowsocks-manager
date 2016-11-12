@@ -49,7 +49,7 @@ plugins:
 db: 'free.sqlite'
 ```
 
-run `ssmgr -c free`, and you can visit the website.
+run `ssmgr -c free.yml`, and you can visit the website.
 
 ## Screenshot
 

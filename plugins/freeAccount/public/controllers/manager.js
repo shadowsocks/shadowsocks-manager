@@ -3,11 +3,20 @@ app
     $scope.setMenu([]);
     $scope.user = {};
     $scope.checkPassword = function () {
+      $scope.loading(true);
       $http.post('/password', {
         password: $scope.user.password
       }).then(function() {
         $state.go('manager');
+      }).catch(function() {
+        $scope.loading(false);
+        $scope.showAlert('错误', '管理员密码验证失败。');
       });
+    };
+    $scope.passwordKeypress = function(e) {
+      if(e.keyCode === 13 && $scope.user.password) {
+        $scope.checkPassword();
+      }
     };
   })
   .controller('ManagerController', function($scope, $http, $state, $interval) {
