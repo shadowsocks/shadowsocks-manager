@@ -1,3 +1,5 @@
+const app = require('../index').app;
+
 app
   .filter('flow1024', function() {
     return function(input) {

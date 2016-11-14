@@ -6,11 +6,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="/libs/angular-material.min.css">
+
     <title>Free Shadowsocks</title>
+    
     <base href="/">
 </head>
 
 <body ng-app="app" ng-cloak>
+
     <script src="/libs/angular.min.js"></script>
     <script src="/libs/angular-animate.min.js"></script>
     <script src="/libs/angular-aria.min.js"></script>
@@ -20,20 +23,14 @@
     <script src="/libs/qrcode.min.js"></script>
     <script src="/libs/angular-qr.min.js"></script>
 
-    <% routes.forEach(function(route) { %>
-        <script src="<%= route %>"></script>
-    <% }); %>
-
-    <% controllers.forEach(function(controller) { %>
-        <script src="<%= controller %>"></script>
-    <% }); %>
+    <script src="/public/bundle.js"></script>
 
     <div ng-controller="MainController" layout="column" layout-fill>
         <div layout="column">
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <md-button class="md-icon-button" aria-label="back" ng-hide="title">
-                        <md-icon class="material-icons" ng-click="back()">navigate_before</md-icon>
+                        <md-icon class="material-icons" ng-click="back()">chevron_left</md-icon>
                     </md-button>
                     <span ng-show="title">{{title}}</span>
                     <span flex></span>

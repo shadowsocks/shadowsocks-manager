@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr']);
+const app = require('../index').app;
 
 app.config(
   ['$stateProvider', '$urlRouterProvider', '$locationProvider',

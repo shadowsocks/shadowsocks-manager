@@ -1,3 +1,5 @@
+const app = require('../index').app;
+
 app
   .controller('PasswordController', function($scope, $http, $state) {
     $scope.setMenu([]);
