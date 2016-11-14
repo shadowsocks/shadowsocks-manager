@@ -51,6 +51,7 @@
 	__webpack_require__(2);
 	__webpack_require__(3);
 	__webpack_require__(4);
+	__webpack_require__(5);
 
 /***/ },
 /* 1 */
@@ -68,9 +69,12 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $locationProvider) {
+	app.config(function ($urlRouterProvider, $locationProvider) {
 	  $locationProvider.html5Mode(true);
 	  $urlRouterProvider.when('', '/').otherwise('/');
+	});
+
+	app.config(function ($stateProvider) {
 	  $stateProvider.state('index', {
 	    url: '/',
 	    controller: 'IndexController',
@@ -79,7 +83,23 @@
 	    url: '/{id:[0-9a-f]{32}}',
 	    controller: 'AccountController',
 	    templateUrl: '/public/views/account.html'
-	  }).state('password', {
+	  }).state('about', {
+	    url: '/about',
+	    controller: 'AboutController',
+	    templateUrl: '/public/views/about.html'
+	  });
+	});
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(function ($stateProvider) {
+	  $stateProvider.state('password', {
 	    url: '/password',
 	    controller: 'PasswordController',
 	    templateUrl: '/public/views/password.html'
@@ -87,19 +107,15 @@
 	    url: '/manager',
 	    controller: 'ManagerController',
 	    templateUrl: '/public/views/manager.html'
-	  }).state('about', {
-	    url: '/about',
-	    controller: 'AboutController',
-	    templateUrl: '/public/views/about.html'
 	  }).state('user', {
 	    url: '/user',
 	    controller: 'UserController',
 	    templateUrl: '/public/views/user.html'
 	  });
-	}]);
+	});
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -314,7 +330,7 @@
 	}).controller('AboutController', function ($scope, $http, $state) {});
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
