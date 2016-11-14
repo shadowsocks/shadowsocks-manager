@@ -1,10 +1,10 @@
 const app = require('../index').app;
 
 app
-  .controller('PasswordController', function($scope, $http, $state) {
+  .controller('PasswordController', ($scope, $http, $state) => {
     $scope.setMenu([]);
     $scope.user = {};
-    $scope.checkPassword = function () {
+    $scope.checkPassword = () => {
       $scope.loading(true);
       $http.post('/password', {
         password: $scope.user.password
@@ -21,8 +21,8 @@ app
       }
     };
   })
-  .controller('ManagerController', function($scope, $http, $state, $interval, $timeout) {
-    var menu = function() {
+  .controller('ManagerController', ($scope, $http, $state, $interval, $timeout) => {
+    const menu = function() {
       $scope.setMenu([{
         icon: 'person',
         text: '用户',
@@ -42,8 +42,8 @@ app
       }]);
     };
     $timeout(function() { menu(); }, 250);
-    var oldConfig = '';
-    var newConfig = '';
+    let oldConfig = '';
+    let newConfig = '';
     $scope.config = {
       shadowsocks: {
         flow: 300,
@@ -81,7 +81,7 @@ app
       oldConfig = newConfig;
       $http.put('/config', $scope.config);
     };
-    var interval = $interval(function() {
+    const interval = $interval(function() {
       if($scope.isLoading) {
         return;
       }
@@ -90,8 +90,8 @@ app
     }, 1000);
     $scope.setInterval(interval);
   })
-  .controller('UserController', function($scope, $http, $state, $timeout) {
-    var menu = () => {
+  .controller('UserController', ($scope, $http, $state, $timeout) => {
+    const menu = () => {
       $scope.setMenu([{
         icon: 'build',
         text: '配置',
