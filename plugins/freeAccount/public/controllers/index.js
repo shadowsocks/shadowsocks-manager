@@ -94,7 +94,7 @@ app
   })
   .controller('IndexController', function($scope, $http, $state, $timeout) {
     $scope.setTitle('Free Shadowsocks');
-    var menu = function () {
+    var menu = () => {
       $scope.setMenu([{
         icon: 'settings',
         text: '管理',
@@ -113,9 +113,9 @@ app
         }
       }]);
     };
-    $timeout(function() { menu(); }, 250);
+    $timeout(() => { menu(); }, 250);
     $scope.user = {};
-    $scope.sendCode = function() {
+    $scope.sendCode = () => {
       $scope.loading(true);
       $http.post('/email', {
         email: $scope.user.email

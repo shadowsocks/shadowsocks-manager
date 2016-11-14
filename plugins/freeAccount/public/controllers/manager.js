@@ -91,7 +91,7 @@ app
     $scope.setInterval(interval);
   })
   .controller('UserController', function($scope, $http, $state, $timeout) {
-    var menu = function() {
+    var menu = () => {
       $scope.setMenu([{
         icon: 'build',
         text: '配置',
@@ -108,7 +108,7 @@ app
         }
       }]);
     };
-    $timeout(function() { menu(); }, 250);
+    $timeout(() => { menu(); }, 250);
     $scope.getUser = function () {
       $scope.loading(true);
       $http.post('/user').then(function(success) {
