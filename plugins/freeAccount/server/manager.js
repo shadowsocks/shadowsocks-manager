@@ -1,6 +1,7 @@
 'use strict';
 
 const config = appRequire('services/config').all();
+const knex = appRequire('init/knex').knex;
 
 const isManager = (req, res, next) => {
   if(req.session.isManager) {
@@ -43,8 +44,19 @@ const setConfig = (req, res) => {
   res.send('success');
 };
 
+const account = (req, res) => {
+  knex('freeAccount').select().where({
+    isDisabled: false,
+  }).then(success => {
+    res.send(success);
+  }).catch(error => {
+    res.status(403).end();
+  });
+};
+
 exports.checkPassword = checkPassword;
 exports.logout = logout;
 exports.isManager = isManager;
 exports.getConfig = getConfig;
 exports.setConfig = setConfig;
+exports.account = account;
