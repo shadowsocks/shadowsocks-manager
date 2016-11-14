@@ -45,7 +45,11 @@ app
     return relativeTime;
   });
 app
-  .controller('MainController', function($scope, $http, $state, $mdDialog) {
+  .controller('MainController', function($scope, $http, $state, $mdDialog, $interval) {
+    $scope.interval = null;
+    $scope.setInterval = function(interval) {
+      $scope.interval = interval;
+    };
     $scope.showAlert = function(title, text) {
       $mdDialog.show(
         $mdDialog.alert()
@@ -76,6 +80,9 @@ app
       $scope.menus = menus;
     };
     $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      if($scope.interval) {
+        $interval.cancel($scope.interval);
+      }
       $scope.title = '';
       $scope.back = function () {
         $state.go('index');
@@ -182,7 +189,7 @@ app
         $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
       }, function(error) {
         $scope.loading(false);
-        interval && $interval.cancel(interval);
+        // interval && $interval.cancel(interval);
         $state.go('index');
       });
     };
@@ -190,6 +197,7 @@ app
     var interval = $interval(function() {
       $scope.getAccount();
     }, 60 * 1000);
+    $scope.setInterval(interval);
   })
   .controller('AboutController', function($scope, $http, $state) {
   });

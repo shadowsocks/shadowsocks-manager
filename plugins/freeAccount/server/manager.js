@@ -44,7 +44,7 @@ const setConfig = (req, res) => {
   res.send('success');
 };
 
-const account = (req, res) => {
+const user = (req, res) => {
   knex('freeAccount').select().where({
     isDisabled: false,
   }).then(success => {
@@ -59,4 +59,4 @@ exports.logout = logout;
 exports.isManager = isManager;
 exports.getConfig = getConfig;
 exports.setConfig = setConfig;
-exports.account = account;
+exports.user = user;

@@ -12,6 +12,6 @@ app.post('/password', manager.checkPassword);
 app.post('/logout', manager.logout);
 app.post('/config', manager.isManager, manager.getConfig);
 app.put('/config',  manager.isManager, manager.setConfig);
-app.post('/account/list', manager.isManager, manager.account);
+app.post('/user', manager.isManager, manager.user);
 
 app.get('*', user.render);

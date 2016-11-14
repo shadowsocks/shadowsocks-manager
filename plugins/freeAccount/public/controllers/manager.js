@@ -22,10 +22,16 @@ app
   .controller('ManagerController', function($scope, $http, $state, $interval) {
     $scope.setMenu([{
       icon: 'exit_to_app',
+      text: '用户',
+      click: function () {
+        $state.go('user');
+      },
+    },{
+      icon: 'exit_to_app',
       text: '退出',
       click: function() {
         $http.post('/logout').then(function() {
-          interval && $interval.cancel(interval);
+          // interval && $interval.cancel(interval);
           $scope.setConfig();
           $state.go('index');
         });
@@ -77,5 +83,9 @@ app
       newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);
+    $scope.setInterval(interval);
+  })
+  .controller('UserController', function($scope, $http, $state) {
+    
   })
 ;

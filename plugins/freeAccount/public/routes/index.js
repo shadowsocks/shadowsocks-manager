@@ -33,6 +33,11 @@ app.config(
           controller: 'AboutController',
           templateUrl: '/public/views/about.html'
         })
+        .state('user', {
+          url: '/user',
+          controller: 'UserController',
+          templateUrl: '/public/views/user.html'
+        })
       ;
     }
   ]
