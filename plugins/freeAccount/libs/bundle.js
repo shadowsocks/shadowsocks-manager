@@ -125,15 +125,19 @@
 	var app = __webpack_require__(1).app;
 
 	app.filter('flow1024', function () {
+	  var kb = 1000;
+	  var mb = 1000 * kb;
+	  var gb = 1000 * mb;
+	  var tb = 1000 * gb;
 	  return function (input) {
-	    if (input < 1000) {
+	    if (input < kb) {
 	      return input + ' B';
-	    } else if (input < 1000000) {
-	      return (input / 1000).toFixed(1) + ' KB';
-	    } else if (input < 1000000000) {
-	      return (input / 1000000).toFixed(1) + ' MB';
-	    } else if (input < 1000000000000) {
-	      return (input / 1000000000).toFixed(2) + ' GB';
+	    } else if (input < mb) {
+	      return (input / kb).toFixed(1) + ' KB';
+	    } else if (input < gb) {
+	      return (input / mb).toFixed(1) + ' MB';
+	    } else if (input < tb) {
+	      return (input / gb).toFixed(2) + ' GB';
 	    } else {
 	      return input;
 	    }
