@@ -90,25 +90,28 @@ app
       $scope.menus = [];
     });
   })
-  .controller('IndexController', function($scope, $http, $state) {
+  .controller('IndexController', function($scope, $http, $state, $timeout) {
     $scope.setTitle('Free Shadowsocks');
-    $scope.setMenu([{
-      icon: 'settings',
-      text: '管理',
-      click: function() {
-        $http.post('/config').then(function() {
-          $state.go('manager');
-        }).catch(function() {
-          $state.go('password');
-        });
-      }
-    }, {
-      icon: 'info_outline',
-      text: '关于',
-      click: function() {
-        $state.go('about');
-      }
-    }]);
+    var menu = function () {
+      $scope.setMenu([{
+        icon: 'settings',
+        text: '管理',
+        click: function() {
+          $http.post('/config').then(function() {
+            $state.go('manager');
+          }).catch(function() {
+            $state.go('password');
+          });
+        }
+      }, {
+        icon: 'info_outline',
+        text: '关于',
+        click: function() {
+          $state.go('about');
+        }
+      }]);
+    };
+    $timeout(function() { menu(); }, 250);
     $scope.user = {};
     $scope.sendCode = function() {
       $scope.loading(true);

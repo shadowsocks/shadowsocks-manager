@@ -19,24 +19,27 @@ app
       }
     };
   })
-  .controller('ManagerController', function($scope, $http, $state, $interval) {
-    $scope.setMenu([{
-      icon: 'person',
-      text: '用户',
-      click: function () {
-        $state.go('user');
-      },
-    },{
-      icon: 'exit_to_app',
-      text: '退出',
-      click: function() {
-        $http.post('/logout').then(function() {
-          // interval && $interval.cancel(interval);
-          $scope.setConfig();
-          $state.go('index');
-        });
-      }
-    }]);
+  .controller('ManagerController', function($scope, $http, $state, $interval, $timeout) {
+    var menu = function() {
+      $scope.setMenu([{
+        icon: 'person',
+        text: '用户',
+        click: function () {
+          $state.go('user');
+        },
+      },{
+        icon: 'exit_to_app',
+        text: '退出',
+        click: function() {
+          $http.post('/logout').then(function() {
+            // interval && $interval.cancel(interval);
+            $scope.setConfig();
+            $state.go('index');
+          });
+        }
+      }]);
+    };
+    $timeout(function() { menu(); }, 250);
     var oldConfig = '';
     var newConfig = '';
     $scope.config = {
@@ -103,11 +106,11 @@ app
         }
       }]);
     };
+    $timeout(function() { menu(); }, 250);
     $scope.getUser = function () {
       $scope.loading(true);
       $http.post('/user').then(function(success) {
         $scope.loading(false);
-        menu();
         $scope.users = success.data;
       }).catch(function(error) {
         $scope.loading(false);
