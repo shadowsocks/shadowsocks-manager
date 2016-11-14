@@ -6,11 +6,18 @@
                 <h3>当前用户</h3>
                 <md-list>
                     <md-divider></md-divider>
-                    <md-list-item class="md-3-line" ng-repeat="user in users">
-                        <div class="md-list-item-text">
-                            <h4>{{user.address}}<h4>
+                    <md-list-item class="md-3-line" ng-repeat="user in users" ng-click="toAccount(user.address)">
+                        <div class="md-list-item-text" flex="70">
                             <h4>{{user.email}}<h4>
+                            <h4>{{user.expired | relativeTime }}</h4>
                             <h4>{{user.currentFlow | flow1024}} / {{user.flow | flow1024}}<h4>
+                        </div>
+                        <div class="md-list-item-text" flex="30">
+                            <div layout="row" layout-align="end center" ng-click="toAccount(user.address)">
+                                <md-button class="md-icon-button" aria-label="edit">
+                                    <i class="material-icons">chevron_right</i>
+                                </md-button>
+                            </div>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
