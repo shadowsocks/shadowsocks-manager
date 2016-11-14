@@ -2,15 +2,19 @@ const app = require('../index').app;
 
 app
   .filter('flow1024', () => {
+    const kb = 1000;
+    const mb = 1000 * kb;
+    const gb = 1000 * mb;
+    const tb = 1000 * gb;
     return (input) => {
-      if (input < 1000) {
+      if (input < kb) {
         return input + ' B';
-      } else if (input < 1000000) {
-        return (input / 1000).toFixed(1) + ' KB';
-      } else if (input < 1000000000) {
-        return (input / 1000000).toFixed(1) + ' MB';
-      } else if (input < 1000000000000) {
-        return (input / 1000000000).toFixed(2) + ' GB';
+      } else if (input < mb) {
+        return (input / kb).toFixed(1) + ' KB';
+      } else if (input < gb) {
+        return (input / mb).toFixed(1) + ' MB';
+      } else if (input < tb) {
+        return (input / gb).toFixed(2) + ' GB';
       } else {
         return input;
       }
