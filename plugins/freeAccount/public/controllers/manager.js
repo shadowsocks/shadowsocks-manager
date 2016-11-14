@@ -21,7 +21,7 @@ app
   })
   .controller('ManagerController', function($scope, $http, $state, $interval) {
     $scope.setMenu([{
-      icon: 'exit_to_app',
+      icon: 'person',
       text: '用户',
       click: function () {
         $state.go('user');
@@ -85,7 +85,34 @@ app
     }, 1000);
     $scope.setInterval(interval);
   })
-  .controller('UserController', function($scope, $http, $state) {
-    
+  .controller('UserController', function($scope, $http, $state, $timeout) {
+    $scope.setMenu([{
+      icon: 'build',
+      text: '配置',
+      click: function () {
+        $state.go('manager');
+      },
+    },{
+      icon: 'exit_to_app',
+      text: '退出',
+      click: function() {
+        $http.post('/logout').then(function() {
+          $state.go('index');
+        });
+      }
+    }]);
+    $scope.getUser = function () {
+      $scope.loading(true);
+      $http.post('/user').then(function(success) {
+        $scope.loading(false);
+        $scope.users = success.data;
+      }).catch(function(error) {
+        $scope.loading(false);
+        if(error.status === 401) {
+          $state.go('password');
+        }
+      });
+    };
+    $scope.getUser();
   })
 ;

@@ -16,7 +16,7 @@
                     <md-divider></md-divider>
                     <md-list-item class="md-3-line">
                         <div class="md-list-item-text">
-                            <h4>流量：{{accountInfo.currentFlow | flow1024}}/{{accountInfo.flow | flow1024}}</h4>
+                            <h4>流量：{{accountInfo.currentFlow | flow1024}} / {{accountInfo.flow | flow1024}}</h4>
                             <h4></h4>
                             <md-progress-linear md-mode="determinate" value="{{accountInfo.currentFlow / accountInfo.flow * 100}}"></md-progress-linear>
                         </div>

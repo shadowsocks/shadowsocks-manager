@@ -1,0 +1,22 @@
+<div layout="col" layout-align="center none">
+    <div flex="0" flex-gt-md="10"></div>
+    <div flex>
+        <md-card>
+            <md-card-content>
+                <h3>当前用户</h3>
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item class="md-3-line" ng-repeat="user in users">
+                        <div class="md-list-item-text">
+                            <h4>{{user.address}}<h4>
+                            <h4>{{user.email}}<h4>
+                            <h4>{{user.currentFlow | flow1024}} / {{user.flow | flow1024}}<h4>
+                        </div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="0" flex-gt-md="10"></div>
+</div>
