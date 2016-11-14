@@ -50,8 +50,10 @@
 
 	__webpack_require__(2);
 	__webpack_require__(3);
+
 	__webpack_require__(4);
 	__webpack_require__(5);
+	__webpack_require__(6);
 
 /***/ },
 /* 1 */
@@ -144,7 +146,9 @@
 	    var time = +new Date() - new Date(input);
 	    if (time < 0) {
 	      time = -time;
-	    } else retTail = '前';
+	    } else {
+	      retTail = '前';
+	    }
 
 	    var day = Math.trunc(time / (24 * 3600 * 1000));
 	    var hour = Math.trunc(time % (24 * 3600 * 1000) / (3600 * 1000));
@@ -167,6 +171,15 @@
 	  relativeTime.$stateful = true;
 	  return relativeTime;
 	});
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
 	app.controller('MainController', function ($scope, $http, $state, $mdDialog, $interval) {
 	  $scope.interval = null;
 	  $scope.setInterval = function (interval) {
@@ -330,7 +343,7 @@
 	}).controller('AboutController', function ($scope, $http, $state) {});
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
