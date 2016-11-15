@@ -4,7 +4,13 @@ This plugin creates a website to share shadowsocks, everyone can verify their em
 
 ## Usage
 
-Create config file `~/.ssmgr/free.yml`:
+### Quick start with docker
+
+### Normal way
+
+1. Start `ssmgr` with type s, you can read the guide [here](https://github.com/shadowsocks/shadowsocks-manager).
+
+2. Create config file `~/.ssmgr/free.yml`:
 
 ```
 type: m
@@ -49,7 +55,7 @@ plugins:
 db: 'free.sqlite'
 ```
 
-run `ssmgr -c free.yml`, and you can visit the website.
+3. run `ssmgr -c free.yml`, and you can visit the website.
 
 ## Screenshot
 
