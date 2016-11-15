@@ -4,7 +4,7 @@ app
   .controller('MainController', ['$scope', '$http', '$state', '$mdDialog', '$interval',
     function($scope, $http, $state, $mdDialog, $interval) {
       $scope.interval = null;
-      $scope.setInterval = function(interval) {
+      $scope.setInterval = interval => {
         $scope.interval = interval;
       };
       $scope.showAlert = function(title, text) {
@@ -19,7 +19,7 @@ app
         );
       };
       $scope.isLoading = false;
-      $scope.loading = function(isLoading) {
+      $scope.loading = isLoading => {
         $scope.isLoading = isLoading;
       };
       $scope.back = function() {

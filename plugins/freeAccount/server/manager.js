@@ -47,7 +47,8 @@ const setConfig = (req, res) => {
 const user = (req, res) => {
   knex('freeAccount').select().where({
     isDisabled: false,
-  }).then(success => {
+  }).orderBy('time', 'desc')
+  .then(success => {
     res.send(success);
   }).catch(error => {
     res.status(403).end();

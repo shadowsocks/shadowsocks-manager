@@ -9,7 +9,7 @@ app.config(['$urlRouterProvider', '$locationProvider',
   }
 ]);
 
-app.config(['$stateProvider', ($stateProvider) => {
+app.config(['$stateProvider', $stateProvider => {
   $stateProvider
     .state('index', {
       url: '/',
