@@ -6,19 +6,17 @@
                 <h3>当前用户 <span ng-show="users.length">({{users.length}})</span></h3>
                 <md-list>
                     <md-divider></md-divider>
-                    <md-list-item class="md-3-line">
+                    <md-list-item>
                         <div class="md-list-item-text">
-                            <h4><h4>
-                            <h4>总流量：{{flow | flow1024}}</h4>
-                            <h4><h4>
+                            <!-- <h4><h4> -->
+                            总流量：{{flow | flow1024}}
+                            <!-- <h4><h4> -->
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
-                    <md-list-item class="md-3-line" ng-hide="users.length">
+                    <md-list-item ng-hide="users.length">
                         <div class="md-list-item-text">
-                            <h4><h4>
-                            <h4>当前没有活跃用户</h4>
-                            <h4><h4>
+                            当前没有活跃用户
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
