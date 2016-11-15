@@ -110,7 +110,7 @@ app
     };
     $timeout(() => { menu(); }, 250);
     $scope.getUser = () => {
-      $scope.loading(true);
+      $scope.users || $scope.loading(true);
       $http.post('/user')
       .then(success => {
         $scope.users = success.data;

@@ -465,7 +465,7 @@
 	    menu();
 	  }, 250);
 	  $scope.getUser = function () {
-	    $scope.loading(true);
+	    $scope.users || $scope.loading(true);
 	    $http.post('/user').then(function (success) {
 	      $scope.users = success.data;
 	      return $http.post('/flow');
