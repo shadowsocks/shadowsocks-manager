@@ -1,15 +1,15 @@
 const app = require('../index').app;
 
-app.config(
+app.config(['$urlRouterProvider', '$locationProvider',
   ($urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
     $urlRouterProvider
       .when('', '/')
       .otherwise('/');
   }
-);
+]);
 
-app.config(($stateProvider) => {
+app.config(['$stateProvider', ($stateProvider) => {
   $stateProvider
     .state('index', {
       url: '/',
@@ -26,4 +26,4 @@ app.config(($stateProvider) => {
       controller: 'AboutController',
       templateUrl: '/public/views/about.html',
     });
-});
+}]);

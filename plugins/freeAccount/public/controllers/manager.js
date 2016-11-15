@@ -1,27 +1,27 @@
 const app = require('../index').app;
 
 app
-  .controller('PasswordController', ($scope, $http, $state) => {
+  .controller('PasswordController', ['$scope', '$http', '$state', ($scope, $http, $state) => {
     $scope.setMenu([]);
     $scope.user = {};
     $scope.checkPassword = () => {
       $scope.loading(true);
       $http.post('/password', {
         password: $scope.user.password
-      }).then(function() {
+      }).then(() => {
         $state.go('manager');
-      }).catch(function() {
+      }).catch(() => {
         $scope.loading(false);
         $scope.showAlert('错误', '管理员密码验证失败。');
       });
     };
-    $scope.passwordKeypress = function(e) {
+    $scope.passwordKeypress = e => {
       if(e.keyCode === 13 && $scope.user.password) {
         $scope.checkPassword();
       }
     };
-  })
-  .controller('ManagerController', ($scope, $http, $state, $interval, $timeout) => {
+  }])
+  .controller('ManagerController', ['$scope', '$http', '$state', '$interval', '$timeout', ($scope, $http, $state, $interval, $timeout) => {
     const menu = function() {
       $scope.setMenu([{
         icon: 'person',
@@ -41,7 +41,7 @@ app
         }
       }]);
     };
-    $timeout(function() { menu(); }, 250);
+    $timeout(() => { menu(); }, 250);
     let oldConfig = '';
     let newConfig = '';
     $scope.config = {
@@ -54,7 +54,7 @@ app
         global: { day: 0, week: 0, month: 0 },
       },
     };
-    $scope.getConfig = function () {
+    $scope.getConfig = () => {
       $scope.loading(true);
       $http.post('/config').then(function(success) {
         $scope.loading(false);
@@ -69,28 +69,24 @@ app
       });
     };
     $scope.getConfig();
-    $scope.setBackButton(function () {
+    $scope.setBackButton(() => {
       interval && $interval.cancel(interval);
       $scope.setConfig();
       $state.go('index');
     });
-    $scope.setConfig = function () {
-      if(newConfig === oldConfig) {
-        return;
-      }
+    $scope.setConfig = () => {
+      if(newConfig === oldConfig) { return; }
       oldConfig = newConfig;
       $http.put('/config', $scope.config);
     };
-    const interval = $interval(function() {
-      if($scope.isLoading) {
-        return;
-      }
+    const interval = $interval(() => {
+      if($scope.isLoading) { return; }
       newConfig = JSON.stringify($scope.config);
       $scope.setConfig();
     }, 1000);
     $scope.setInterval(interval);
-  })
-  .controller('UserController', ($scope, $http, $state, $interval, $timeout) => {
+  }])
+  .controller('UserController', ['$scope', '$http', '$state', '$interval', '$timeout', ($scope, $http, $state, $interval, $timeout) => {
     const menu = () => {
       $scope.setMenu([{
         icon: 'build',
@@ -130,10 +126,10 @@ app
       $scope.getUser();
     }, 60 * 1000);
     $scope.setInterval(interval);
-    $scope.toAccount = function (address) {
+    $scope.toAccount = (address) => {
       $state.go('account', {
         id: address,
       });
     };
-  })
+  }])
 ;

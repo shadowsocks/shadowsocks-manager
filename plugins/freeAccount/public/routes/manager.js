@@ -1,6 +1,6 @@
 const app = require('../index').app;
 
-app.config(($stateProvider) => {
+app.config(['$stateProvider', ($stateProvider) => {
   $stateProvider
     .state('password', {
       url: '/password',
@@ -17,4 +17,4 @@ app.config(($stateProvider) => {
       controller: 'UserController',
       templateUrl: '/public/views/user.html',
     });
-});
+}]);
