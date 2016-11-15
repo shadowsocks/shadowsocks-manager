@@ -443,7 +443,7 @@
 	    $scope.setConfig();
 	  }, 1000);
 	  $scope.setInterval(interval);
-	}).controller('UserController', function ($scope, $http, $state, $timeout) {
+	}).controller('UserController', function ($scope, $http, $state, $interval, $timeout) {
 	  var menu = function menu() {
 	    $scope.setMenu([{
 	      icon: 'build',
@@ -480,6 +480,10 @@
 	    });
 	  };
 	  $scope.getUser();
+	  var interval = $interval(function () {
+	    $scope.getUser();
+	  }, 60 * 1000);
+	  $scope.setInterval(interval);
 	  $scope.toAccount = function (address) {
 	    $state.go('account', {
 	      id: address

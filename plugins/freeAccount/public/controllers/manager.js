@@ -90,7 +90,7 @@ app
     }, 1000);
     $scope.setInterval(interval);
   })
-  .controller('UserController', ($scope, $http, $state, $timeout) => {
+  .controller('UserController', ($scope, $http, $state, $interval, $timeout) => {
     const menu = () => {
       $scope.setMenu([{
         icon: 'build',
@@ -109,16 +109,16 @@ app
       }]);
     };
     $timeout(() => { menu(); }, 250);
-    $scope.getUser = function () {
+    $scope.getUser = () => {
       $scope.loading(true);
       $http.post('/user')
-      .then(function(success) {
+      .then(success => {
         $scope.users = success.data;
         return $http.post('/flow');
       }).then(success => {
         $scope.flow = success.data.flow;
         $scope.loading(false);
-      }).catch(function(error) {
+      }).catch(error => {
         $scope.loading(false);
         if(error.status === 401) {
           $state.go('password');
@@ -126,6 +126,10 @@ app
       });
     };
     $scope.getUser();
+    const interval = $interval(() => {
+      $scope.getUser();
+    }, 60 * 1000);
+    $scope.setInterval(interval);
     $scope.toAccount = function (address) {
       $state.go('account', {
         id: address,
