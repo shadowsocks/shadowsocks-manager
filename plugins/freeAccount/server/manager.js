@@ -54,9 +54,18 @@ const user = (req, res) => {
   });
 };
 
+const flow = (req, res) => {
+  knex('freeAccount').sum('currentFlow as flow').then(success => {
+    res.send(success[0]);
+  }).catch(error => {
+    res.status(403).end();
+  });
+};
+
 exports.checkPassword = checkPassword;
 exports.logout = logout;
 exports.isManager = isManager;
 exports.getConfig = getConfig;
 exports.setConfig = setConfig;
 exports.user = user;
+exports.flow = flow;

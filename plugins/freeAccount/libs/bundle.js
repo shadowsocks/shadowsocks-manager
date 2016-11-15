@@ -467,8 +467,11 @@
 	  $scope.getUser = function () {
 	    $scope.loading(true);
 	    $http.post('/user').then(function (success) {
-	      $scope.loading(false);
 	      $scope.users = success.data;
+	      return $http.post('/flow');
+	    }).then(function (success) {
+	      $scope.flow = success.data.flow;
+	      $scope.loading(false);
 	    }).catch(function (error) {
 	      $scope.loading(false);
 	      if (error.status === 401) {
