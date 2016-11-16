@@ -22,26 +22,26 @@ app
       $scope.loading = isLoading => {
         $scope.isLoading = isLoading;
       };
-      $scope.back = function() {
+      $scope.back = () => {
         $state.go('index');
       };
       $scope.title = '';
-      $scope.setTitle = function(title) {
+      $scope.setTitle = title => {
         $scope.title = title;
       };
-      $scope.setBackButton = function(fn) {
+      $scope.setBackButton = fn => {
         $scope.back = fn;
       };
       $scope.menus = [];
-      $scope.setMenu = function(menus) {
+      $scope.setMenu = menus => {
         $scope.menus = menus;
       };
-      $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      $scope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
         if ($scope.interval) {
           $interval.cancel($scope.interval);
         }
         $scope.title = '';
-        $scope.back = function() {
+        $scope.back = () => {
           $state.go('index');
         };
         $scope.menus = [];
@@ -92,7 +92,6 @@ app
           email: $scope.user.email,
           code: ('000000' + $scope.user.code).substr(-6),
         }).then(function(success) {
-          // $scope.loading(false);
           $state.go('account', {
             id: success.data
           });
@@ -144,7 +143,7 @@ app
           $state.go('password');
         });
       };
-      $scope.about = function() {
+      $scope.about = () => {
         $state.go('about');
       };
     }
@@ -152,22 +151,21 @@ app
   .controller('AccountController', ['$scope', '$http', '$state', '$stateParams', '$interval',
     ($scope, $http, $state, $stateParams, $interval) => {
       $scope.qrcode = '';
-      var b64EncodeUnicode = function(str) {
-        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+      const b64EncodeUnicode = str => {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
           return String.fromCharCode('0x' + p1);
         }));
       };
-      $scope.getAccount = function() {
+      $scope.getAccount = () => {
         $scope.qrcode || $scope.loading(true);
         $http.post('/account', {
           address: $stateParams.id
-        }).then(function(success) {
+        }).then(success => {
           $scope.loading(false);
           $scope.accountInfo = success.data;
           $scope.qrcode = 'ss://' + b64EncodeUnicode($scope.accountInfo.method + ':' + $scope.accountInfo.password + '@' + $scope.accountInfo.host + ':' + $scope.accountInfo.port);
-        }, function(error) {
+        }, error => {
           $scope.loading(false);
-          // interval && $interval.cancel(interval);
           $state.go('index');
         });
       };

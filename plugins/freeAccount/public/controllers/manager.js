@@ -126,7 +126,7 @@ app
       $scope.getUser();
     }, 60 * 1000);
     $scope.setInterval(interval);
-    $scope.toAccount = (address) => {
+    $scope.toAccount = address => {
       $state.go('account', {
         id: address,
       });
