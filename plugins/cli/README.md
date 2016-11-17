@@ -66,3 +66,9 @@ If you have more than one shadowsocks server or you have to count the flows, you
             |-- 1 hour
             \-- 24 hours
     ```
+
+## Screenshot
+
+![cli01](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/screenshot/cli01.png)
+
+![cli02](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/screenshot/cli02.png)
