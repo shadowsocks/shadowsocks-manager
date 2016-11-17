@@ -88,11 +88,3 @@ const checkCode = async (email, code) => {
 exports.checkCode = checkCode;
 exports.sendCode = sendCode;
 exports.sendMail = sendMail;
-// checkCode('igyteng@gmail.com', '505740').then();
-// sendCode('igyteng@gmail.com').then(console.log);
-// sendMail({
-//   from: config.plugins.email.username,
-//   to: 'gyttyg2@qq.com',
-//   subject: 'Hello',
-//   text: '<b>Hello world</b>'
-// }).then(console.log);

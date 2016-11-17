@@ -2,12 +2,12 @@ const app = require('../index').app;
 
 app
   .controller('MainController', ['$scope', '$http', '$state', '$mdDialog', '$interval',
-    function($scope, $http, $state, $mdDialog, $interval) {
+    ($scope, $http, $state, $mdDialog, $interval) => {
       $scope.interval = null;
       $scope.setInterval = interval => {
         $scope.interval = interval;
       };
-      $scope.showAlert = function(title, text) {
+      $scope.showAlert = (title, text) => {
         $mdDialog.show(
           $mdDialog.alert()
           .parent(angular.element(document.querySelector('#popupContainer')))
@@ -51,7 +51,7 @@ app
   .controller('IndexController', ['$scope', '$http', '$state', '$timeout',
     ($scope, $http, $state, $timeout) => {
       $scope.setTitle('Free Shadowsocks');
-      var menu = () => {
+      const menu = () => {
         $scope.setMenu([{
           icon: 'settings',
           text: '管理',
@@ -78,28 +78,28 @@ app
         $scope.loading(true);
         $http.post('/email', {
           email: $scope.user.email
-        }).then(function(success) {
+        }).then(success => {
           $scope.loading(false);
           $scope.showAlert('提示', '验证码发送成功。');
-        }).catch(function(error) {
+        }).catch(error => {
           $scope.loading(false);
           $scope.showAlert('错误', '验证码发送失败。');
         });
       };
-      $scope.checkCode = function() {
+      $scope.checkCode = () => {
         $scope.loading(true);
         $http.post('/code', {
           email: $scope.user.email,
           code: ('000000' + $scope.user.code).substr(-6),
-        }).then(function(success) {
+        }).then(success => {
           $state.go('account', {
             id: success.data
           });
-        }).catch(function(error) {
+        }).catch(error => {
           $scope.loading(false);
           if (error.data.startsWith('out of limit, ')) {
-            var type = error.data.split(',')[1].split('.')[0].trim();
-            var time = error.data.split(',')[1].split('.')[1].trim();
+            const type = error.data.split(',')[1].split('.')[0].trim();
+            const time = error.data.split(',')[1].split('.')[1].trim();
             if (type === 'user') {
               if (time === 'day') {
                 return $scope.showAlert('错误', '该邮箱本日申请次数超过限额。');
@@ -170,7 +170,7 @@ app
         });
       };
       $scope.getAccount();
-      var interval = $interval(function() {
+      const interval = $interval(function() {
         $scope.getAccount();
       }, 60 * 1000);
       $scope.setInterval(interval);
