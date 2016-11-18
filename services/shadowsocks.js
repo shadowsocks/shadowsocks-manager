@@ -72,23 +72,23 @@ const sendMessage = (message) => {
   const randomTraceNumber = Math.random().toString().substr(2,6);
   logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
   return new Promise((resolve, reject) => {
-    const client = dgram.createSocket('udp4');
-    client.send(message, port, host, (err) => {
+    const myClient = dgram.createSocket('udp4');
+    myClient.send(message, port, host, (err) => {
       if(err) {
         logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
         return reject('error');
       }
     });
-    client.on('message', (msg) => {
+    myClient.on('message', (msg) => {
       logger.info(`[${ randomTraceNumber }] Receive from shadowsocks: ${ msg.toString() }`);
-      client.close();
+      myClient.close();
       resolve('ok');
     });
-    client.on('close', () => {
+    myClient.on('close', () => {
       logger.info(`[${ randomTraceNumber }] Shadowsocks close`);
       return reject('close');
     });
-    client.on('error', (err) => {
+    myClient.on('error', (err) => {
       logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
     });
   });
@@ -117,6 +117,10 @@ const compareWithLastFlow = (flow, lastFlow) => {
       realFlow[f] = flow[f];
     }
   }
+  if(Object.keys(realFlow).map(m => realFlow[m]).sort((a, b) => a > b)[0] < 0) {
+    console.log(realFlow);
+    return flow;
+  }
   return realFlow;
 };
 
@@ -124,10 +128,8 @@ const compareWithLastFlow = (flow, lastFlow) => {
 connect();
 startUp();
 setInterval(() => {
-  startUp();
-}, 3 * 60 * 1000);
-setInterval(() => {
   sendPing();
+  // startUp();
 }, 60 * 1000);
 
 const addAccount = async (port, password) => {
