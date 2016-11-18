@@ -31,11 +31,6 @@ const connect = (reconnect = false) => {
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
       const realFlow = compareWithLastFlow(flow, lastFlow);
-      // console.log('--------');
-      // console.log(flow);
-      // // console.log(lastFlow);
-      // console.log(realFlow);
-      // console.log('========');
       logger.info(`Receive flow from shadowsocks: (${ shadowsocksType })\n${JSON.stringify(realFlow, null, 2)}`);
       lastFlow = flow;
       const insertFlow = Object.keys(realFlow).map(m => {
@@ -111,10 +106,6 @@ const compareWithLastFlow = (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
   }
-  // console.log('----');
-  // console.log(flow);
-  // console.log(lastFlow);
-  // console.log('----');
   const realFlow = {};
   if(!lastFlow) {
     return flow;
@@ -132,13 +123,12 @@ const compareWithLastFlow = (flow, lastFlow) => {
 
 connect();
 startUp();
-// sendPing();
+setInterval(() => {
+  startUp();
+}, 3 * 60 * 1000);
 setInterval(() => {
   sendPing();
 }, 60 * 1000);
-// setInterval(() => {
-//   connect(true);
-// }, 90 * 1000);
 
 const addAccount = async (port, password) => {
   try {
@@ -220,9 +210,6 @@ const getFlow = async (options) => {
     if(options.clear) {
       await knex('flow').whereBetween('time', [ startTime, endTime ]).delete();
     }
-    // console.log('accounts');
-    // console.log(accounts);
-    // console.log();
     return accounts;
   } catch(err) {
     console.log(err);
