@@ -36,6 +36,7 @@ const connect = (reconnect = false) => {
       // // console.log(lastFlow);
       // console.log(realFlow);
       // console.log('========');
+      logger.info(`Receive flow from shadowsocks: (${ shadowsocksType })\n${JSON.stringify(realFlow, null, 2)}`);
       lastFlow = flow;
       const insertFlow = Object.keys(realFlow).map(m => {
         return {
@@ -73,24 +74,27 @@ const sendPing = () => {
 };
 
 const sendMessage = (message) => {
-  // console.log('Send to shadowsocks: ' + message);
-  logger.info('Send to shadowsocks: ' + message);
-  return new Promise((res, rej) => {
+  const randomTraceNumber = Math.random().toString().substr(2,6);
+  logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
+  return new Promise((resolve, reject) => {
     const client = dgram.createSocket('udp4');
     client.send(message, port, host, (err) => {
       if(err) {
-        return rej('error');
+        logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
+        return reject('error');
       }
     });
     client.on('message', (msg) => {
+      logger.info(`[${ randomTraceNumber }] Receive from shadowsocks: ${ msg.toString() }`);
       client.close();
-      res('ok');
+      resolve('ok');
     });
     client.on('close', () => {
-      return rej('close');
+      logger.info(`[${ randomTraceNumber }] Shadowsocks close`);
+      return reject('close');
     });
     client.on('error', (err) => {
-      console.log(`client error:\n${err.stack}`);
+      logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
     });
   });
 };
