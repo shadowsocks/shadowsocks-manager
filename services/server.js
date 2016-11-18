@@ -119,5 +119,5 @@ server.listen(socketPath || {
   port,
   host,
 }, () => {
-  console.log(`server listen on ${ host }:${ port }`);
+  logger.info(`server listen on ${ host }:${ port }`);
 });

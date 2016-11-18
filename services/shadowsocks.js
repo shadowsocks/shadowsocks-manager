@@ -4,7 +4,8 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
 const dgram = require('dgram');
-let client = dgram.createSocket('udp4');
+// let client = dgram.createSocket('udp4');
+let client;
 
 const config = appRequire('services/config').all();
 const host = config.shadowsocks.address.split(':')[0];
@@ -17,12 +18,11 @@ const moment = require('moment');
 let shadowsocksType = 'libev';
 let lastFlow;
 
-const connect = (reconnect = false) => {
-  if(reconnect) {
-    client.close();
-    console.log('reconnect');
-    lastFlow = null;
-  }
+const sendPing = () => {
+  client.send(new Buffer('ping'), port, host);
+};
+
+const connect = () => {
   client = dgram.createSocket('udp4');
   client.on('message', async (msg, rinfo) => {
     const msgStr = new String(msg);
@@ -51,9 +51,7 @@ const connect = (reconnect = false) => {
           sendMessage(`remove: {"server_port": ${ fe.port }}`);
         }
       });
-      // console.log(insertFlow);
       if(insertFlow.length > 0) {
-        // console.log(insertFlow);
         knex('flow').insert(insertFlow).then();
       }
     };
@@ -62,33 +60,32 @@ const connect = (reconnect = false) => {
   client.on('error', (err) => {
     console.log(`client error:\n${err.stack}`);
   });
-};
-
-const sendPing = () => {
-  client.send(new Buffer('ping'), port, host);
+  client.on('close', () => {
+    console.log(`client close`);
+  });
 };
 
 const sendMessage = (message) => {
   const randomTraceNumber = Math.random().toString().substr(2,6);
   logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
   return new Promise((resolve, reject) => {
-    const myClient = dgram.createSocket('udp4');
-    myClient.send(message, port, host, (err) => {
+    const client = dgram.createSocket('udp4');
+    client.send(message, port, host, (err) => {
       if(err) {
         logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
         return reject('error');
       }
     });
-    myClient.on('message', (msg) => {
+    client.on('message', (msg) => {
       logger.info(`[${ randomTraceNumber }] Receive from shadowsocks: ${ msg.toString() }`);
-      myClient.close();
+      client.close();
       resolve('ok');
     });
-    myClient.on('close', () => {
+    client.on('close', () => {
       logger.info(`[${ randomTraceNumber }] Shadowsocks close`);
       return reject('close');
     });
-    myClient.on('error', (err) => {
+    client.on('error', (err) => {
       logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
     });
   });
@@ -118,19 +115,17 @@ const compareWithLastFlow = (flow, lastFlow) => {
     }
   }
   if(Object.keys(realFlow).map(m => realFlow[m]).sort((a, b) => a > b)[0] < 0) {
-    console.log(realFlow);
+    // console.log(realFlow);
     return flow;
   }
   return realFlow;
 };
 
-
 connect();
 startUp();
 setInterval(() => {
   sendPing();
-  // startUp();
-}, 60 * 1000);
+}, 30 * 1000);
 
 const addAccount = async (port, password) => {
   try {
