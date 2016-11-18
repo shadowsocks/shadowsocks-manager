@@ -15,7 +15,7 @@ app.filter('flow1024', function() {
 });
 app.filter('relativeTime', function() {
     return function(input) {
-        
+
         var ret = '';
         var retTail = '';
 
@@ -97,6 +97,15 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 server.account.forEach(function(a) {
                     if(a.month) {$scope.serverSum += a.month;}
                 });
+            });
+            $scope.expire = $scope.publicInfo.servers.map(function(server) {
+              return server.account.filter(function(f) {
+                return (new Date(f.expireTime) >= Date.now() && f.users.length > 0);
+              }).sort(function(a, b) {
+                return (new Date(a.expireTime) <= new Date(b.expireTime)) ? -1 : 1;
+              })[0];
+            }).reduce(function(a, b) {
+              return (new Date(a.expireTime) <= new Date(b.expireTime)) ? a : b;
             });
         };
         $scope.init();
@@ -315,7 +324,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.flowChart[$stateParams.serverName][$scope.chartType].page -= 1;
             $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
         };
-        
+
         $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
         $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
         $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
@@ -429,7 +438,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
                 if(e.month) {return r + e.month;}
                 return r;
             }, 0);
-            
+
         };
         $scope.init();
         $scope.$on('initPublicInfo', function(event, data) {
@@ -528,7 +537,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
             $scope.flowChart[$stateParams.serverName][$scope.chartType].page -= 1;
             $scope.getChart($scope.flowChart[$stateParams.serverName][$scope.chartType], $scope.chartType);
         };
-        
+
         $scope.getChart($scope.flowChart[$stateParams.serverName].hour, 'hour');
         $scope.getChart($scope.flowChart[$stateParams.serverName].day, 'day');
         $scope.getChart($scope.flowChart[$stateParams.serverName].week, 'week');
@@ -573,7 +582,7 @@ app.controller('AdminIndexController', function($scope, $http, $state) {
         });
         $scope.pageSize = Math.floor(($window.innerHeight - 165)/49);
         if($scope.pageSize < 6) {$scope.pageSize = 6;}
-        
+
         $scope.page = 1;
         $scope.prev = function() {
             if($scope.page === 1) {return;}

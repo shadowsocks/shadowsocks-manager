@@ -25,6 +25,21 @@
                 </md-list>
             </md-card-content>
         </md-card>
+        <md-card ng-if="expire">
+            <md-card-content>
+                <h3>即将到期</h3>
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item class="md-2-line">
+                        <div class="md-list-item-text" ng-click="toUser(expire.users[0])">
+                            <h4>用户：{{expire.users[0]}}</h4>
+                            <h4>到期：{{expire.expireTime | relativeTime}}</h4>
+                        </div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </md-card-content>
+        </md-card>
         <md-card>
             <md-card-content>
                 <h3>服务器</h3>

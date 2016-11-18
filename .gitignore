@@ -4,5 +4,6 @@ npm-debug.log
 node_modules/
 bower_components/
 sftp-config.json
+.remote-sync.json
 logs
 !logs/logfiles
