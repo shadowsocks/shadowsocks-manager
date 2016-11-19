@@ -9,9 +9,7 @@ const express = require('express');
 const session = require('express-session');
 const knex = appRequire('init/knex').knex;
 const KnexSessionStore = require('connect-session-knex')(session);
-const store = new KnexSessionStore({
-  knex,
-});
+const store = new KnexSessionStore({ knex });
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
@@ -26,7 +24,7 @@ app.use(session({
   secret: '6d4CEb870aF',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true },
+  cookie: { secure: false, httpOnly: true, maxAge: 5 * 60 * 1000 },
   store,
 }));
 
