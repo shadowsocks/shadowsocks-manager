@@ -47,7 +47,7 @@ This plugin creates a website to share shadowsocks, everyone can verify their em
         shadowsocks:
           method: aes-256-cfb
           startPort: 55000
-          endPort: 65000
+          endPort: 56000
           flow: 500
           time: 180
         limit:

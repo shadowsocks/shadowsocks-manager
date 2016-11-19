@@ -37,7 +37,7 @@ app
         $scope.menus = menus;
       };
       $scope.$on('$stateChangeStart', (event, toState, toParams, fromState, fromParams) => {
-        if ($scope.interval) {
+        if($scope.interval) {
           $interval.cancel($scope.interval);
         }
         $scope.title = '';

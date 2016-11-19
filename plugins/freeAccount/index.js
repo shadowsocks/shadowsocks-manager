@@ -24,7 +24,7 @@ app.use(session({
   secret: '6d4CEb870aF',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: 5 * 60 * 1000 },
+  cookie: { secure: false, httpOnly: true, maxAge: 5 * 24 * 60 * 60 * 1000 },
   store,
 }));
 
@@ -35,7 +35,7 @@ app.set('views', path.resolve('./plugins/freeAccount/views'));
 app.use('/libs', express.static(path.resolve('./plugins/freeAccount/libs')));
 app.use('/public', express.static(path.resolve('./plugins/freeAccount/public')));
 
-const httpserver = app.listen(config.plugins.freeAccount.port, '0.0.0.0', function () {});
+app.listen(config.plugins.freeAccount.port, '0.0.0.0', function () {});
 
 exports.app = app;
 
