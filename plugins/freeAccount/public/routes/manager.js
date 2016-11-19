@@ -1,6 +1,6 @@
 const app = require('../index').app;
 
-app.config(['$stateProvider', ($stateProvider) => {
+app.config(['$stateProvider', $stateProvider => {
   $stateProvider
     .state('password', {
       url: '/password',
