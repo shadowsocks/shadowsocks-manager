@@ -19,7 +19,7 @@ program
   .option('-s, --shadowsocks [address]', 'ss-manager address, default: 127.0.0.1:6001')
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
-  .option('-r, --run', 'run shadowsocks from child_process')
+  .option('-r, --run [type]', 'run shadowsocks from child_process, the type is libev or python')
   .option('--debug', 'show debug message')
   .parse(process.argv);
 
@@ -41,7 +41,8 @@ if(program.db) {
 }
 
 if(program.run) {
-  appRequire('init/runShadowsocks');
+  console.log(program.run);
+  appRequire('init/runShadowsocks').run(program.run);
 }
 
 logger.info('Config:\n', JSON.stringify(config.all(), null, 2));
