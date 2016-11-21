@@ -12,7 +12,6 @@ const add = (name, host, port, password) => {
 };
 
 const del = (name) => {
-  // return knex('server').where({name}).delete();
   return knex.transaction(trx => {
     return knex('server').transacting(trx).where({name}).delete()
     .then(() => {

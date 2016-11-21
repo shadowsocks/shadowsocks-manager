@@ -41,7 +41,6 @@ if(program.db) {
 }
 
 if(program.run) {
-  console.log(program.run);
   appRequire('init/runShadowsocks').run(program.run);
 }
 

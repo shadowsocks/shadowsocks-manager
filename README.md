@@ -67,6 +67,10 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[0%------------------]` [account]()  
 `[1%------------------]` [webgui]()  
 
+### Parameter
+
+`ssmgr --help` will show startup parameters info.
+
 ### Donate
 If you find this project helpful, please consider making a donation:  
 

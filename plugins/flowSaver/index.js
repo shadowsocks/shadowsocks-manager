@@ -1,8 +1,6 @@
 'use strict';
 
 const path = require('path');
-// appRequire('plugins/flowSaver/db/server');
-// appRequire('plugins/flowSaver/db/saveFlow');
 appRequire('plugins/flowSaver/server');
 appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
