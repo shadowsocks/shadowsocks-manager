@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,11 @@
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "GPL",
+  "keywords": [
+    "shadowsocks",
+    "manager",
+    "gfw"
+  ],
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.18.2",

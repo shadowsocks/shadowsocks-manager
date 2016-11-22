@@ -27,8 +27,6 @@ if(program.config) {global.configFile = program.config;}
 
 const config = appRequire('services/config');
 
-
-
 if(program.type) {config.set('type', program.type);}
 if(program.empty) {config.set('empty', program.empty);}
 if(program.shadowsocks) {config.set('shadowsocks.address', program.shadowsocks);}
@@ -42,7 +40,6 @@ if(program.db) {
 
 if(program.run) {
   config.set('runShadowsocks', program.run);
-  // appRequire('init/runShadowsocks').run(program.run);
 }
 
 logger.info('Config:\n', JSON.stringify(config.all(), null, 2));

@@ -71,6 +71,24 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 
 `ssmgr --help` will show startup parameters info.
 
+```
+Usage: ssmgr [options]
+
+  Options:
+
+    -h, --help                   output usage information
+    -V, --version                output the version number
+    -c, --config [file]          config file, default: ~/.ssmgr/default.yml
+    -d, --db [file]              sqlite3 file, default: ~/.ssmgr/db.sqlite
+    -e, --empty                  clean database
+    -t, --type [type]            manager type, s for server side, m for manager side, default: s
+    -s, --shadowsocks [address]  ss-manager address, default: 127.0.0.1:6001
+    -m, --manager [address]      manager address, default: 127.0.0.1:6002
+    -p, --password [password]    manager password, both server side and manager side must be equals
+    -r, --run [type]             run shadowsocks from child_process, the type is libev or python
+    --debug                      show debug message
+```
+
 ### Donate
 If you find this project helpful, please consider making a donation:  
 
