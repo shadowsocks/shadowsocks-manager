@@ -23,6 +23,8 @@ require('./init/knex');
 const initDb = require('./init/loadModels').init;
 
 initDb().then(() => {
+  return require('./init/runShadowsocks').run();
+}).then(() => {
   require('./init/loadServices');
   require('./init/loadPlugins');
 }).catch(err => {

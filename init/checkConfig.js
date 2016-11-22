@@ -41,7 +41,8 @@ if(program.db) {
 }
 
 if(program.run) {
-  appRequire('init/runShadowsocks').run(program.run);
+  config.set('runShadowsocks', program.run);
+  // appRequire('init/runShadowsocks').run(program.run);
 }
 
 logger.info('Config:\n', JSON.stringify(config.all(), null, 2));

@@ -93,6 +93,9 @@ const sendMessage = (message) => {
 
 const startUp = async () => {
   client.send(new Buffer('ping'), port, host);
+  if(config.runShadowsocks === 'python') {
+    sendMessage(`remove: {"server_port": 65535}`);
+  }
   const accounts = await knex('account').select([ 'port', 'password' ]);
   accounts.forEach(f => {
     sendMessage(`add: {"server_port": ${ f.port }, "password": "${ f.password }"}`);
