@@ -1,5 +1,8 @@
 'use strict';
 
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
+
 const net = require('net');
 const path = require('path');
 const crypto = require('crypto');
@@ -39,6 +42,7 @@ const sendMessage = (data, options) => {
     });
     client.on('data', data => {
       const message = JSON.parse(data.toString());
+      logger.info(message);
       if(message.code === 0) {
         res(message.data);
       } else {
@@ -47,7 +51,7 @@ const sendMessage = (data, options) => {
       client.end();
     });
     client.on('error', err => {
-      console.log(err);
+      logger.error(err);
     });
   });
 };
