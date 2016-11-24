@@ -130,8 +130,28 @@ setInterval(() => {
   sendPing();
 }, 30 * 1000);
 
+const checkPortRange = (port) => {
+  if(!config.shadowsocks.portRange) { return true; }
+  const portRange = config.shadowsocks.portRange.split(',');
+  let isInRange = false;
+  portRange.forEach(f => {
+    if(f.indexOf('-') >= 0) {
+      const range = f.trim().split('-');
+      if(port >= +range[0] && port <= +range[1]) {
+        isInRange = true;
+      }
+    } else if (port === +f) {
+      isInRange = true;
+    }
+  });
+  return isInRange;
+};
+
 const addAccount = async (port, password) => {
   try {
+    if(!checkPortRange(port)) {
+      return Promise.reject('error');
+    }
     const insertAccount = await knex('account').insert({
       port,
       password,

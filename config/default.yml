@@ -3,6 +3,7 @@ empty: false
 
 shadowsocks:
   address: 127.0.0.1:6001
+  portRange: 50000-51000,55000,55002
 
 manager:
   address: 127.0.0.1:6002
