@@ -1,6 +1,9 @@
 'use strict';
 
-require('babel-core/register');
+if(process.env.NODE_ENV !== 'production') {
+  console.log('use babel-core/register');
+  require('babel-core/register');
+}
 
 require('./init/log');
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
+process.env.NODE_ENV = 'production';
 const path = require('path');
 const fs = require('fs');
-const lib = path.join(path.dirname(fs.realpathSync(__filename)), '../');
+const lib = path.join(path.dirname(fs.realpathSync(__filename)), '../lib/');
 console.log(lib);
 process.chdir(lib);
 require(lib + '/server');
