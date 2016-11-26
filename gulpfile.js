@@ -1,8 +1,14 @@
 const gulp = require('gulp');
 const path = require('path');
+const clean = require('gulp-clean');
 const babel = require('gulp-babel');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
+
+gulp.task('clean', () => {
+  gulp.src('lib', { read: false })
+  .pipe(clean({force: true}));
+});
 
 gulp.task('babel', () =>
   gulp.src([
@@ -58,4 +64,6 @@ gulp.task('freeAccount', ['freeAccountBuild'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('default', ['babel', 'freeAccount'], () => {});
+gulp.task('default', ['babel', 'freeAccount'], () => {
+
+});
