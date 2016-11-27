@@ -9,12 +9,11 @@ gulp.task('clean', () => {
   return del([
     'lib',
     'plugins/freeAccount/libs/bundle.js',
-
   ]);
 });
 
 gulp.task('freeAccountBuild', () => {
-  gulp.src([
+  return gulp.src([
     'plugins/freeAccount/public/**',
   ])
   .pipe(webpackStream({
@@ -42,7 +41,7 @@ gulp.task('freeAccountBuild', () => {
 });
 
 gulp.task('freeAccount', ['freeAccountBuild'], () => {
-  gulp
+  return gulp
     .src([
       'package.json',
       'plugins/freeAccount/libs/**',
@@ -53,8 +52,8 @@ gulp.task('freeAccount', ['freeAccountBuild'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babel', ['freeAccount'], () =>
-  gulp.src([
+gulp.task('babel', ['freeAccount'], () => {
+  return gulp.src([
     '**/*.js',
     '!node_modules/**',
     '!lib/**',
@@ -64,9 +63,9 @@ gulp.task('babel', ['freeAccount'], () =>
   .pipe(babel({
     presets: ['stage-3'],
   }))
-  .pipe(gulp.dest('lib'))
-);
+  .pipe(gulp.dest('lib'));
+});
 
-gulp.task('default', ['babel'], () => {
+gulp.task('default', ['clean', 'babel'], () => {
 
 });
