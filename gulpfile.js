@@ -1,22 +1,17 @@
+const del = require('del');
 const gulp = require('gulp');
 const path = require('path');
 const babel = require('gulp-babel');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 
-gulp.task('babel', () =>
-  gulp.src([
-    '**/*.js',
-    '!node_modules/**',
-    '!lib/**',
-    '!plugins/freeAccount/libs/**',
-    '!plugins/freeAccount/public/**',
-  ])
-  .pipe(babel({
-    presets: ['stage-3'],
-  }))
-  .pipe(gulp.dest('lib'))
-);
+gulp.task('clean', () => {
+  return del([
+    'lib',
+    'plugins/freeAccount/libs/bundle.js',
+
+  ]);
+});
 
 gulp.task('freeAccountBuild', () => {
   gulp.src([
@@ -58,6 +53,20 @@ gulp.task('freeAccount', ['freeAccountBuild'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('default', ['babel', 'freeAccount'], () => {
+gulp.task('babel', ['freeAccount'], () =>
+  gulp.src([
+    '**/*.js',
+    '!node_modules/**',
+    '!lib/**',
+    '!plugins/freeAccount/libs/**',
+    '!plugins/freeAccount/public/**',
+  ])
+  .pipe(babel({
+    presets: ['stage-3'],
+  }))
+  .pipe(gulp.dest('lib'))
+);
+
+gulp.task('default', ['babel'], () => {
 
 });
