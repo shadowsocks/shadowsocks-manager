@@ -1,0 +1,46 @@
+type: s
+empty: false
+
+shadowsocks:
+  address: 127.0.0.1:6001
+  portRange: 50000-51000,55000,55002
+
+manager:
+  address: 127.0.0.1:6002
+  password: '123456'
+
+plugins:
+  telegram:
+    use: false
+    token: ''
+  cli:
+    use: false
+  flowSaver:
+    use: false
+  email:
+    use: false
+    username: 'username'
+    password: 'password'
+    host: 'smtp.your-email.com'
+  freeAccount:
+    use: false
+    host: 'yourhost'
+    port: 80
+    managerPassword: '01020304'
+    shadowsocks:
+      method: aes-256-cfb
+      startPort: 55000
+      endPort: 65000
+      flow: 100
+      time: 60
+    limit:
+      user:
+        day: 0
+        week: 0
+        month: 0
+      global:
+        day: 0
+        week: 0
+        month: 0
+
+db: 'db.sqlite'

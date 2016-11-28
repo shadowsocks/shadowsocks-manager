@@ -43,6 +43,7 @@ gulp.task('freeAccountBuild', () => {
 gulp.task('freeAccount', ['freeAccountBuild'], () => {
   return gulp
     .src([
+      'config/default.yml',
       'package.json',
       'plugins/freeAccount/libs/**',
       'plugins/freeAccount/public/**',
