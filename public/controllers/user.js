@@ -125,21 +125,22 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         };
     })
     .controller('UserChangeShadowsocksPasswordController', function($scope, $http, $state, $window) {
-        $scope.setTitle('修改密码');
-
+        $scope.setTitle('Shadowsocks密码');
+        $scope.setMenuButton('user.account');
         $scope.password = {};
         $scope.changePassword = function() {
+            if(!$scope.password.password) { return; }
             $scope.loading(true);
             $http.put('/api/user/sspassword', $scope.password)
             .then(function(success) {
-                $scope.initPublicInfo({loading: false});
-                $scope.loadingMessage({
-                    message: '修改密码成功',
-                    right: function() {
+                $scope.initPublicInfo({loading: true});
+                // $scope.loadingMessage({
+                //     message: '修改密码成功',
+                //     right: function() {
                         $scope.loading(false);
                         $state.go('user.account');
-                    }
-                });
+                //     }
+                // });
             }, function(error) {
                 $scope.loadingMessage({
                     message: '修改密码失败(' + error.status + ')',

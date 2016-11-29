@@ -125,10 +125,11 @@ exports.changeShadowsocksPassword = function(req, res) {
               }, 1000);
             });
         });
+        res.send('success');
     }).catch(function(err) {
-
+      return res.status(403).end();
     });
-    res.send('GG');
+
 };
 
 exports.useCode = function(req, res) {
