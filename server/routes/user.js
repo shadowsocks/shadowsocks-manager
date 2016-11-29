@@ -8,6 +8,8 @@ app.get('/api/user/userInfo', auth.isUser, user.getUserInfo);
 
 app.put('/api/user/password', auth.isUser, user.changePassword);
 
+app.put('/api/user/sspassword', auth.isUser, user.changeShadowsocksPassword);
+
 app.post('/api/user/code', auth.isUser, user.useCode);
 
 app.post('/api/user/oneSecond', auth.isUser, user.oneSecond);

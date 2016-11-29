@@ -13,6 +13,7 @@ var log4js = require('log4js');
 var logger = log4js.getLogger('admin');
 
 var freeAccount = require('./freeAccount');
+var shadowsocks = require('./shadowsocks');
 
 var crypto = require('crypto');
 var md5 = function(text) {
@@ -92,6 +93,44 @@ exports.changePassword = function(req, res) {
     });
 };
 
+exports.changeShadowsocksPassword = function(req, res) {
+    var newPassword = req.body.password;
+    if(!newPassword) {
+      return res.status(403).end();
+    };
+    User.findOne({email: req.session.user}).then(function(success) {
+        success.account.forEach(function(account) {
+            Server.findOneAndUpdate({
+              name: account.server,
+              'account.port': account.port
+            }, {
+              $set: {
+                'account.$.password': newPassword
+              }
+            }).exec(function(err, server) {
+              shadowsocks.del({
+                ip: server.ip,
+                port: server.port
+              }, {
+                port: account.port
+              });
+              setTimeout(function() {
+                shadowsocks.add({
+                  ip: server.ip,
+                  port: server.port
+                }, {
+                  port: account.port,
+                  password: newPassword
+                });
+              }, 1000);
+            });
+        });
+    }).catch(function(err) {
+
+    });
+    res.send('GG');
+};
+
 exports.useCode = function(req, res) {
     var code = req.body.code;
     var user = req.session.user;
@@ -155,7 +194,7 @@ exports.useCode = function(req, res) {
                         'account.port': a.port
                     }, {
                         $set: {
-                            'account.$.flow': accountInfo.flow + flow, 
+                            'account.$.flow': accountInfo.flow + flow,
                             'account.$.expireTime': accountInfo.expireTime + time
                         }
                     }).exec((err, data) => {
@@ -193,7 +232,7 @@ exports.useCode = function(req, res) {
     //     }).exec(function(err, codeResult) {
     //         if(err || !codeResult) {return res.status(500).end('数据库错误');}
     //         res.send(codeResult);
-            
+
     //         var findAccount = {};
     //         var updateAccount = {};
     //         findAccount.findUser = function(cb) {
@@ -228,7 +267,7 @@ exports.useCode = function(req, res) {
     //                         cb(null, data);
     //                     });
     //                 }];
-                    
+
     //             });
     //             return cb(null, 'Server');
     //         }];
@@ -291,7 +330,7 @@ var oneSecondAccount = function(userName) {
             if(err) {return cb(err);}
             if(!user) {return cb('user not found');}
             if(!user.account.length) {
-                Server.aggregate([{$sample: 
+                Server.aggregate([{$sample:
                     { size: 1 }
                 }]).exec(function(err, server) {
                     if(err) {return cb(err);}

@@ -23,6 +23,12 @@
                         <md-button class="md-secondary md-primary" ng-click="accountPage(account)">详情</md-button>
                         <md-divider></md-divider>
                     </md-list-item>
+                    <md-list-item layout="row" layout-align="center center" ng-show="publicInfo.user.account.length !== 0">
+                        <md-button class="md-primary" ng-click="toChangeShadowsocksPassword()">
+                            修改Shadowsocks密码
+                        </md-button>
+                        <md-divider></md-divider>
+                    </md-list-item>
                 </md-list>
             </md-card-content>
         </md-card>

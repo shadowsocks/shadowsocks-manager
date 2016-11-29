@@ -31,6 +31,9 @@ app.controller('UserIndexController', function($scope, $http, $state) {
                 accountPort: account.port
             });
         };
+        $scope.toChangeShadowsocksPassword = function() {
+          $state.go('user.changeShadowsocksPassword');
+        };
     })
     .controller('UserAccountPageController', function($scope, $http, $state, $stateParams, $filter) {
         $scope.setTitle('帐户详情');
@@ -121,6 +124,32 @@ app.controller('UserIndexController', function($scope, $http, $state) {
             });
         };
     })
+    .controller('UserChangeShadowsocksPasswordController', function($scope, $http, $state, $window) {
+        $scope.setTitle('修改密码');
+
+        $scope.password = {};
+        $scope.changePassword = function() {
+            $scope.loading(true);
+            $http.put('/api/user/sspassword', $scope.password)
+            .then(function(success) {
+                $scope.initPublicInfo({loading: false});
+                $scope.loadingMessage({
+                    message: '修改密码成功',
+                    right: function() {
+                        $scope.loading(false);
+                        $state.go('user.account');
+                    }
+                });
+            }, function(error) {
+                $scope.loadingMessage({
+                    message: '修改密码失败(' + error.status + ')',
+                    right: function() {
+                        $scope.loading(false);
+                    }
+                });
+            });
+        };
+    })
     .controller('UserRenewController', function($scope, $http, $state) {
         $scope.setTitle('续费');
         $scope.setMenuButton('default');
@@ -168,7 +197,7 @@ app.controller('UserIndexController', function($scope, $http, $state) {
         $scope.chartType = 'hour';
         $scope.page = 0;
         $scope.account = {};
-        
+
 
         $scope.accountSum = {};
         $scope.refresh = function() {
