@@ -40,11 +40,9 @@ gulp.task('freeAccountBuild', () => {
   .pipe(gulp.dest('plugins/freeAccount/libs'));
 });
 
-gulp.task('freeAccount', ['freeAccountBuild'], () => {
+gulp.task('freeAccountCopy', ['freeAccountBuild'], () => {
   return gulp
     .src([
-      'config/default.yml',
-      'package.json',
       'plugins/freeAccount/libs/**',
       'plugins/freeAccount/public/**',
     ], {
@@ -53,7 +51,18 @@ gulp.task('freeAccount', ['freeAccountBuild'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babel', ['freeAccount'], () => {
+gulp.task('babelCopy', ['clean'], () => {
+  return gulp
+    .src([
+      'config/default.yml',
+      'package.json',
+    ], {
+      base: './'
+    })
+    .pipe(gulp.dest('lib'));
+});
+
+gulp.task('babel', ['freeAccountCopy', 'babelCopy'], () => {
   return gulp.src([
     '**/*.js',
     '!node_modules/**',
