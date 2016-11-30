@@ -29,8 +29,10 @@ const receiveData = (receive, data) => {
 };
 
 const checkCode = (data, password, code) => {
-  const md5 = crypto.createHash('md5').update(data + password).digest('hex');
-  return md5.substr(0, 4) === code.toString('hex');
+  const time = Number.parseInt(data.slice(0, 6).toString('hex'), 16);
+  const command = data.slice(6).toString();
+  const md5 = crypto.createHash('md5').update(time + command + password).digest('hex');
+  return md5.substr(0, 8) === code.toString('hex');
 };
 
 const receiveCommand = async (data) => {
@@ -76,15 +78,15 @@ const checkData = (receive) => {
   }
   length = buffer[0] * 256 + buffer[1];
   if (buffer.length >= length + 2) {
-    data = buffer.slice(2, length);
-    code = buffer.slice(length, length + 2);
-    receive.data = buffer.slice(length + 2, buffer.length);
+    data = buffer.slice(2, length - 2);
+    code = buffer.slice(length - 2);
+    // receive.data = buffer.slice(length + 2, buffer.length);
     if(!checkCode(data, password, code)) {
       receive.socket.end();
-      receive.socket.close();
+      // receive.socket.close();
       return;
     }
-    receiveCommand(data).then(s => {
+    receiveCommand(data.slice(6)).then(s => {
       receive.socket.end(JSON.stringify({code: 0, data: s}));
       // receive.socket.close();
     }, e => {
