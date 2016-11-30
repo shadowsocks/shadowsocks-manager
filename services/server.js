@@ -111,7 +111,7 @@ const checkData = (receive) => {
 
 const server = net.createServer(socket => {
   const receive = {
-    data: new Buffer(0),
+    data: Buffer.from(''),
     socket: socket,
   };
   socket.on('data', data => {
