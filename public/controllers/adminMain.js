@@ -20,7 +20,6 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             {name: '用户管理', icon: 'face', click: 'admin.user'},
             {name: '续费码', icon: 'shop', click: 'admin.renew'},
             {name: '流量统计', icon: 'timeline', click: 'admin.flow.server'},
-            {name: '历史记录', icon: 'watch_later', click: 'admin.unfinish'},
             {name: '系统设置', icon: 'settings', click: 'admin.options'}
         ];
 
@@ -77,8 +76,8 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
         });
         $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
         });
-        
-        
+
+
         var dialog = $mdDialog.prompt({
             templateUrl: '/public/views/admin/loading.html',
             escapeToClose : false,
@@ -147,12 +146,12 @@ app.controller('AdminMainController', function($scope, $http, $state, $mdSidenav
             }
             $scope.loading(options.loading);
             var promises = [];
-            
+
             promises[0] = $http.get('/api/admin/server');
             promises[1] = $http.get('/api/admin/user');
             promises[2] = $http.get('/api/admin/flow');
             promises[3] = $http.get('/api/admin/code');
-            
+
             $q.all(promises).then(function(success) {
                 $scope.publicInfo.lastUpdate = new Date();
                 if(success[0]) {
