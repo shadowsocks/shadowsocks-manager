@@ -3,6 +3,7 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
+const knex = appRequire('init/knex').knex;
 const crypto = require('crypto');
 const path = require('path');
 const config = appRequire('services/config').all();
@@ -30,14 +31,23 @@ const receiveData = (receive, data) => {
 
 const checkCode = (data, password, code) => {
   const time = Number.parseInt(data.slice(0, 6).toString('hex'), 16);
+  if(Math.abs(Date.now() - time) > 10 * 60 * 1000) {
+    return false;
+  }
   const command = data.slice(6).toString();
   const md5 = crypto.createHash('md5').update(time + command + password).digest('hex');
   return md5.substr(0, 8) === code.toString('hex');
 };
 
-const receiveCommand = async (data) => {
+const receiveCommand = async (data, code) => {
   try {
-    const message = JSON.parse(data.toString());
+    const time = Number.parseInt(data.slice(0, 6).toString('hex'), 16);
+    await knex('command').whereBetween('time', [0, Date.now() - 10 * 60 * 1000]).del();
+    await knex('command').insert({
+      code: code.toString('hex'),
+      time,
+    });
+    const message = JSON.parse(data.slice(6).toString());
     logger.info(message);
     if(message.command === 'add') {
       const port = +message.port;
@@ -86,7 +96,7 @@ const checkData = (receive) => {
       // receive.socket.close();
       return;
     }
-    receiveCommand(data.slice(6)).then(s => {
+    receiveCommand(data, code).then(s => {
       receive.socket.end(JSON.stringify({code: 0, data: s}));
       // receive.socket.close();
     }, e => {
