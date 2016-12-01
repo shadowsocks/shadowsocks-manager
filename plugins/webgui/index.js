@@ -32,7 +32,7 @@ app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views', path.resolve('./plugins/webgui/views'));
 
-// app.use('/libs', express.static(path.resolve('./plugins/freeAccount/libs')));
+app.use('/libs', express.static(path.resolve('./plugins/webgui/libs')));
 // app.use('/public', express.static(path.resolve('./plugins/freeAccount/public')));
 
 app.listen(80 || config.plugins.webgui.port, '0.0.0.0', function () {});
