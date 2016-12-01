@@ -7,19 +7,9 @@ const net = require('net');
 const path = require('path');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
-let host;
-let port;
-let socketPath;
-if(config.manager.address.indexOf(':') < 0) {
-  socketPath = config.manager.address;
-  if(process.platform === 'win32') {
-    socketPath = path.join('\\\\?\\pipe', process.cwd(), config.manager.address);
-  }
-} else {
-  host = config.manager.address.split(':')[0];
-  port = +config.manager.address.split(':')[1];
-}
-let password = config.manager.password;
+const host = config.manager.address.split(':')[0];
+const port = +config.manager.address.split(':')[1];
+const password = config.manager.password;
 
 const pack = (data, password) => {
   const message = JSON.stringify(data);
@@ -36,7 +26,7 @@ const pack = (data, password) => {
 
 const sendMessage = (data, options) => {
   return new Promise((res, rej) => {
-    const client = net.connect(options || socketPath || {
+    const client = net.connect(options || {
       host,
       port,
     }, () => {
