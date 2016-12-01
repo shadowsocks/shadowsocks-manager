@@ -79,3 +79,31 @@ gulp.task('babel', ['freeAccountCopy', 'babelCopy'], () => {
 gulp.task('default', ['clean', 'babel'], () => {
 
 });
+
+gulp.task('webgui', () => {
+  return gulp.src([
+    'plugins/webgui/public/**',
+  ])
+  .pipe(webpackStream({
+    entry: './plugins/webgui/public/app.js',
+    output: {
+      path: path.resolve(__dirname, 'libs'),
+      filename: 'bundle.js'
+    },
+    module: {
+      loaders: [{
+        test: /\.js$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015']
+        }
+      }]
+    },
+    // plugins: [new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   }
+    // })]
+  }))
+  .pipe(gulp.dest('plugins/webgui/libs'));
+});
