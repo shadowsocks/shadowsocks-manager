@@ -52,6 +52,8 @@
 	__webpack_require__(3);
 	__webpack_require__(4);
 
+	__webpack_require__(5);
+
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
@@ -62,9 +64,16 @@
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
+	  $locationProvider.html5Mode(true);
+	  $urlRouterProvider.when('', '/').otherwise('/');
+	}]);
 
 /***/ },
 /* 3 */
@@ -77,6 +86,16 @@
 /***/ function(module, exports) {
 
 	"use strict";
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('MainController', ['$scope', function ($scope) {}]);
 
 /***/ }
 /******/ ]);
