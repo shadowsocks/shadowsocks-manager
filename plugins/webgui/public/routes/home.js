@@ -4,8 +4,8 @@ app.config(['$urlRouterProvider', '$locationProvider',
   ($urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
     $urlRouterProvider
-      .when('/', '/home/login')
-      .otherwise('/home/login');
+      .when('/', '/home/index')
+      .otherwise('/home/index');
   }
 ]);
 
@@ -13,14 +13,18 @@ app.config(['$stateProvider', $stateProvider => {
   $stateProvider
     .state('home', {
       url: '/home',
-      // controller: 'HomeController',
       abstract: true,
-      templateUrl: '/public/views/home.html',
+      templateUrl: '/public/views/home/home.html',
+    })
+    .state('home.index', {
+      url: '/index',
+      controller: 'IndexController',
+      templateUrl: '/public/views/home/index.html',
     })
     .state('home.login', {
       url: '/login',
       controller: 'LoginController',
-      templateUrl: '/public/views/login.html',
+      templateUrl: '/public/views/home/login.html',
     });
   }
 ]);

@@ -73,6 +73,8 @@
 
 	app.controller('HomeController', ['$scope', function ($scope) {
 	  console.log('Home');
+	}]).controller('IndexController', ['$scope', function ($scope) {
+	  console.log('Index');
 	}]).controller('LoginController', ['$scope', function ($scope) {
 	  console.log('Login');
 	}]);
@@ -86,7 +88,22 @@
 	var app = __webpack_require__(1).app;
 
 	app.controller('MainController', ['$scope', function ($scope) {
-	  console.log('Main');
+	    console.log('Main');
+	    $scope.innerSideNav = true;
+	    $scope.menuButton = function () {
+	        if (!$scope.publicInfo.menuButtonState) {
+	            if ($mdMedia('gt-sm')) {
+	                $scope.innerSideNav = !$scope.innerSideNav;
+	            } else {
+	                $mdSidenav('left').toggle();
+	            }
+	        } else if (!$scope.publicInfo.menuButtonHistoryBackState) {
+	            $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
+	        } else {
+	            $state.go($scope.publicInfo.menuButtonHistoryBackState, $scope.publicInfo.menuButtonHistoryBackStateParams);
+	        }
+	    };
+	    $scope.menus = [{ name: '首页', icon: 'home', click: 'admin.index' }, { name: '服务器管理', icon: 'cloud', click: 'admin.server' }, { name: '用户管理', icon: 'face', click: 'admin.user' }, { name: '续费码', icon: 'shop', click: 'admin.renew' }, { name: '流量统计', icon: 'timeline', click: 'admin.flow.server' }, { name: '系统设置', icon: 'settings', click: 'admin.options' }];
 	}]);
 
 /***/ },
@@ -99,19 +116,22 @@
 
 	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
 	  $locationProvider.html5Mode(true);
-	  $urlRouterProvider.when('', '/login').otherwise('/login');
+	  $urlRouterProvider.when('/', '/home/index').otherwise('/home/index');
 	}]);
 
 	app.config(['$stateProvider', function ($stateProvider) {
 	  $stateProvider.state('home', {
-	    url: '/',
-	    // controller: 'HomeController',
+	    url: '/home',
 	    abstract: true,
-	    templateUrl: '/public/views/home.html'
+	    templateUrl: '/public/views/home/home.html'
+	  }).state('home.index', {
+	    url: '/index',
+	    controller: 'IndexController',
+	    templateUrl: '/public/views/home/index.html'
 	  }).state('home.login', {
 	    url: '/login',
 	    controller: 'LoginController',
-	    templateUrl: '/public/views/login.html'
+	    templateUrl: '/public/views/home/login.html'
 	  });
 	}]);
 
