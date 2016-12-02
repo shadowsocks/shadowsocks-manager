@@ -50,9 +50,10 @@
 
 	__webpack_require__(2);
 	__webpack_require__(3);
-	__webpack_require__(4);
 
+	__webpack_require__(4);
 	__webpack_require__(5);
+	__webpack_require__(6);
 
 /***/ },
 /* 1 */
@@ -70,32 +71,61 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
-	  $locationProvider.html5Mode(true);
-	  $urlRouterProvider.when('', '/').otherwise('/');
+	app.controller('HomeController', ['$scope', function ($scope) {
+	  console.log('Home');
+	}]).controller('LoginController', ['$scope', function ($scope) {
+	  console.log('Login');
 	}]);
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-/***/ },
-/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('MainController', ['$scope', function ($scope) {}]);
+	app.controller('MainController', ['$scope', function ($scope) {
+	  console.log('Main');
+	}]);
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
+	  $locationProvider.html5Mode(true);
+	  $urlRouterProvider.when('/', '/home/login').otherwise('/home/login');
+	}]);
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('home', {
+	    url: '/home',
+	    // controller: 'HomeController',
+	    abstract: true,
+	    templateUrl: '/public/views/home.html'
+	  }).state('home.login', {
+	    url: '/login',
+	    controller: 'LoginController',
+	    templateUrl: '/public/views/login.html'
+	  });
+	}]);
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	"use strict";
 
 /***/ }
 /******/ ]);
