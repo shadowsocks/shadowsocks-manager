@@ -69,6 +69,8 @@ gulp.task('babel', ['freeAccountCopy', 'babelCopy'], () => {
     '!lib/**',
     '!plugins/freeAccount/libs/**',
     '!plugins/freeAccount/public/**',
+    '!plugins/webgui/libs/**',
+    '!plugins/webgui/public/**',
   ])
   .pipe(babel({
     presets: ['stage-3'],
