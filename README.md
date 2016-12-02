@@ -1,3 +1,8 @@
+[![NPM version][npm-image]][npm-url]
+
+[npm-image]: https://img.shields.io/npm/v/shadowsocks-manager.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/shadowsocks-manager
+
 # shadowsocks-manager
 
 A shadowsocks manager tool for multi user and traffic control.  
