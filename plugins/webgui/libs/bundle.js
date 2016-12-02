@@ -71,8 +71,17 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('HomeController', ['$scope', function ($scope) {
+	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', function ($scope, $mdMedia, $mdSidenav) {
 	  console.log('Home');
+	  $scope.innerSideNav = true;
+	  $scope.menuButton = function () {
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menus = [{ name: '首页', icon: 'home', click: 'admin.index' }, { name: '服务器管理', icon: 'cloud', click: 'admin.server' }, { name: '用户管理', icon: 'face', click: 'admin.user' }, { name: '续费码', icon: 'shop', click: 'admin.renew' }, { name: '流量统计', icon: 'timeline', click: 'admin.flow.server' }, { name: '系统设置', icon: 'settings', click: 'admin.options' }];
 	}]).controller('IndexController', ['$scope', function ($scope) {
 	  console.log('Index');
 	}]).controller('LoginController', ['$scope', function ($scope) {
@@ -88,22 +97,7 @@
 	var app = __webpack_require__(1).app;
 
 	app.controller('MainController', ['$scope', function ($scope) {
-	    console.log('Main');
-	    $scope.innerSideNav = true;
-	    $scope.menuButton = function () {
-	        if (!$scope.publicInfo.menuButtonState) {
-	            if ($mdMedia('gt-sm')) {
-	                $scope.innerSideNav = !$scope.innerSideNav;
-	            } else {
-	                $mdSidenav('left').toggle();
-	            }
-	        } else if (!$scope.publicInfo.menuButtonHistoryBackState) {
-	            $state.go($scope.publicInfo.menuButtonState, $scope.publicInfo.menuButtonStateParams);
-	        } else {
-	            $state.go($scope.publicInfo.menuButtonHistoryBackState, $scope.publicInfo.menuButtonHistoryBackStateParams);
-	        }
-	    };
-	    $scope.menus = [{ name: '首页', icon: 'home', click: 'admin.index' }, { name: '服务器管理', icon: 'cloud', click: 'admin.server' }, { name: '用户管理', icon: 'face', click: 'admin.user' }, { name: '续费码', icon: 'shop', click: 'admin.renew' }, { name: '流量统计', icon: 'timeline', click: 'admin.flow.server' }, { name: '系统设置', icon: 'settings', click: 'admin.options' }];
+	  console.log('Main');
 	}]);
 
 /***/ },
