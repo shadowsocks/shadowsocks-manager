@@ -99,12 +99,12 @@
 
 	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
 	  $locationProvider.html5Mode(true);
-	  $urlRouterProvider.when('/', '/home/login').otherwise('/home/login');
+	  $urlRouterProvider.when('', '/login').otherwise('/login');
 	}]);
 
 	app.config(['$stateProvider', function ($stateProvider) {
 	  $stateProvider.state('home', {
-	    url: '/home',
+	    url: '/',
 	    // controller: 'HomeController',
 	    abstract: true,
 	    templateUrl: '/public/views/home.html'
