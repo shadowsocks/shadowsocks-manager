@@ -45,6 +45,7 @@ gulp.task('freeAccountCopy', ['freeAccountBuild'], () => {
     .src([
       'plugins/freeAccount/libs/**',
       'plugins/freeAccount/public/**',
+      'plugins/freeAccount/views/**',
     ], {
       base: './'
     })
