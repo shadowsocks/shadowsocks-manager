@@ -10,7 +10,7 @@ const createTable = async() => {
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
-    table.string('username');
+    table.string('username').unique();
     table.string('email');
     table.string('telegram');
     table.string('password');

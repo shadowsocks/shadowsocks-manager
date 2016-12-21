@@ -53,7 +53,7 @@ const addUser = async (options) => {
 
 const checkPassword = async (username, password) => {
   try {
-    const user = knex('user').select(['username', 'password']).where({
+    const user = await knex('user').select(['username', 'password']).where({
       username,
     });
     if(user.length === 0) {
@@ -83,3 +83,4 @@ const editUser = async (userInfo, edit) => {
 
 exports.add = addUser;
 exports.edit = editUser;
+exports.checkPassword = checkPassword;
