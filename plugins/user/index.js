@@ -53,14 +53,14 @@ const addUser = async (options) => {
 
 const checkPassword = async (username, password) => {
   try {
-    const user = await knex('user').select(['username', 'password']).where({
+    const user = await knex('user').select(['id', 'type', 'username', 'password']).where({
       username,
     });
     if(user.length === 0) {
       return Promise.reject();
     }
     if(createPassword(password, username) === user[0].password) {
-      return;
+      return user[0];
     } else {
       return Promise.reject();
     }
