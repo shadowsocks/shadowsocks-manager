@@ -46,6 +46,7 @@ const addUser = async (options) => {
     }
     return knex('user').insert(insert);
   } catch(err) {
+    console.log(err);
     return Promise.reject(err);
   }
 };
