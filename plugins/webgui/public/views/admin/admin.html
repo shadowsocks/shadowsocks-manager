@@ -1,0 +1,71 @@
+<div ng-controller="AdminController" layout="column" ng-cloak layout-fill>
+    <section layout="row" flex>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false" layout="column" layout-align="space-between stretch">
+        <md-content>
+            <div layout="column">
+                <md-toolbar class="md-tall">
+                    <span flex></span>
+                    <div layout="column" class="md-toolbar-tools-bottom inset">
+                        <user-avatar></user-avatar>
+                        <span></span>
+                        <div>Admin</div>
+                    </div>
+                </md-toolbar>
+                <md-list>
+                    <md-list-item ng-repeat="menu in menus">
+                        <a ng-click="menuClick($index)">
+                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                <div class="inset">
+                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                </div>
+                                <div class="inset">
+                                    {{menu.name}}
+                                </div>
+                            </md-item-content>
+                        </a>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </md-content>
+    </md-sidenav>
+    <div flex layout="column">
+        <div>
+            <md-toolbar>
+                <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                        <i class="material-icons">menu</i>
+                    </md-button>
+                    <div>{{publicInfo.title}}</div>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+        </div>
+
+        <div flex layout="row">
+            <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;" layout="column" layout-align="space-between stretch">
+                <md-content>
+                    <div layout="column" layout-align="center start">
+                        <md-list>
+                            <md-list-item ng-repeat="menu in menus" style="padding-left: 8px;">
+                                <a ng-click="menuClick($index)">
+                                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                        <div class="inset">
+                                            <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                        </div>
+                                        <div class="inset">
+                                            {{menu.name}}
+                                        </div>
+                                    </md-item-content>
+                                </a>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </md-content>
+            </md-sidenav>
+            <md-content flex layout="row">
+                <div ui-view flex></div>
+            </md-content>
+        </div>
+    </div>
+    </section>
+</div>

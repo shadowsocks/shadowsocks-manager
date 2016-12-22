@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
-  ($scope, $mdMedia, $mdSidenav, $state) => {
+app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+  ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     console.log('Home');
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
@@ -14,31 +14,22 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.menus = [{
       name: '首页',
       icon: 'home',
-      click: 'home.index'
+      click: 'admin.index'
     }, {
-      name: '登录',
-      icon: 'cloud',
-      click: 'home.login'
-    }, {
-      name: '注册帐号',
-      icon: 'face',
-      click: 'home.signup'
-    }, {
-      name: '续费码',
-      icon: 'shop',
-      click: 'admin.renew'
-    }, {
-      name: '流量统计',
-      icon: 'timeline',
-      click: 'admin.flow.server'
-    }, {
-      name: '系统设置',
+      name: '退出',
       icon: 'settings',
-      click: 'admin.options'
+      click: function() {
+        $http.post('/api/logout');
+        $state.go('home.index');
+      },
     }];
     $scope.menuClick = (index) => {
       $mdSidenav('left').close();
-      $state.go($scope.menus[index].click);
+      if(typeof $scope.menus[index].click === 'function') {
+        $scope.menus[index].click();
+      } else {
+        $state.go($scope.menus[index].click);
+      }
     };
   }
 ]).controller('AdminIndexController', ['$scope',

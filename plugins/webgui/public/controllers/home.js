@@ -1,8 +1,15 @@
 const app = require('../index').app;
 
-app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
-  ($scope, $mdMedia, $mdSidenav, $state) => {
+app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+  ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     console.log('Home');
+    $http.get('/api/login').then(success => {
+      if(success.data.status === 'normal') {
+        $state.go('user.index');
+      } else if (success.data.status === 'admin') {
+        $state.go('admin.index');
+      }
+    });
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {
@@ -50,14 +57,14 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     console.log('Login');
     $scope.user = {};
     $scope.login = () => {
-      $http.post('/api/user/login', {
+      $http.post('/api/login', {
         email: $scope.user.email,
         password: $scope.user.password,
       }).then(success => {
         if(success.data.type === 'normal') {
           $state.go('user.index');
         } else if(success.data.type === 'admin') {
-
+          $state.go('admin.index');
         } else {
 
         }

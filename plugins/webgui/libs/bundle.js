@@ -85,8 +85,15 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', function ($scope, $mdMedia, $mdSidenav, $state) {
+	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  console.log('Home');
+	  $http.get('/api/login').then(function (success) {
+	    if (success.data.status === 'normal') {
+	      $state.go('user.index');
+	    } else if (success.data.status === 'admin') {
+	      $state.go('admin.index');
+	    }
+	  });
 	  $scope.innerSideNav = true;
 	  $scope.menuButton = function () {
 	    if ($mdMedia('gt-sm')) {
@@ -130,13 +137,15 @@
 	  console.log('Login');
 	  $scope.user = {};
 	  $scope.login = function () {
-	    $http.post('/api/user/login', {
+	    $http.post('/api/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
 	    }).then(function (success) {
 	      if (success.data.type === 'normal') {
 	        $state.go('user.index');
-	      } else if (success.data.type === 'admin') {} else {}
+	      } else if (success.data.type === 'admin') {
+	        $state.go('admin.index');
+	      } else {}
 	    }).catch(console.log);
 	  };
 	}]);
@@ -149,7 +158,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', function ($scope, $mdMedia, $mdSidenav, $state) {
+	app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  console.log('Home');
 	  $scope.innerSideNav = true;
 	  $scope.menuButton = function () {
@@ -162,31 +171,22 @@
 	  $scope.menus = [{
 	    name: '首页',
 	    icon: 'home',
-	    click: 'home.index'
+	    click: 'user.index'
 	  }, {
-	    name: '登录',
-	    icon: 'cloud',
-	    click: 'home.login'
-	  }, {
-	    name: '注册帐号',
-	    icon: 'face',
-	    click: 'home.signup'
-	  }, {
-	    name: '续费码',
-	    icon: 'shop',
-	    click: 'admin.renew'
-	  }, {
-	    name: '流量统计',
-	    icon: 'timeline',
-	    click: 'admin.flow.server'
-	  }, {
-	    name: '系统设置',
+	    name: '退出',
 	    icon: 'settings',
-	    click: 'admin.options'
+	    click: function click() {
+	      $http.post('/api/logout');
+	      $state.go('home.index');
+	    }
 	  }];
 	  $scope.menuClick = function (index) {
 	    $mdSidenav('left').close();
-	    $state.go($scope.menus[index].click);
+	    if (typeof $scope.menus[index].click === 'function') {
+	      $scope.menus[index].click();
+	    } else {
+	      $state.go($scope.menus[index].click);
+	    }
 	  };
 	}]).controller('UserIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
@@ -200,7 +200,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', function ($scope, $mdMedia, $mdSidenav, $state) {
+	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  console.log('Home');
 	  $scope.innerSideNav = true;
 	  $scope.menuButton = function () {
@@ -213,31 +213,22 @@
 	  $scope.menus = [{
 	    name: '首页',
 	    icon: 'home',
-	    click: 'home.index'
+	    click: 'admin.index'
 	  }, {
-	    name: '登录',
-	    icon: 'cloud',
-	    click: 'home.login'
-	  }, {
-	    name: '注册帐号',
-	    icon: 'face',
-	    click: 'home.signup'
-	  }, {
-	    name: '续费码',
-	    icon: 'shop',
-	    click: 'admin.renew'
-	  }, {
-	    name: '流量统计',
-	    icon: 'timeline',
-	    click: 'admin.flow.server'
-	  }, {
-	    name: '系统设置',
+	    name: '退出',
 	    icon: 'settings',
-	    click: 'admin.options'
+	    click: function click() {
+	      $http.post('/api/logout');
+	      $state.go('home.index');
+	    }
 	  }];
 	  $scope.menuClick = function (index) {
 	    $mdSidenav('left').close();
-	    $state.go($scope.menus[index].click);
+	    if (typeof $scope.menus[index].click === 'function') {
+	      $scope.menus[index].click();
+	    } else {
+	      $state.go($scope.menus[index].click);
+	    }
 	  };
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
