@@ -1,0 +1,68 @@
+<html lang="zh-cn">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/libs/style.css">
+    <link rel="stylesheet" href="/libs/angular-material.min.css">
+    <link rel="shortcut icon" href="/libs/favicon.png">
+    <title>Test</title>
+    <!-- <base href="/"> -->
+</head>
+
+<body ng-app="app">
+
+    <script src="/libs/angular.min.js"></script>
+    <script src="/libs/angular-animate.min.js"></script>
+    <script src="/libs/angular-aria.min.js"></script>
+    <script src="/libs/angular-messages.min.js"></script>
+    <script src="/libs/angular-material.min.js"></script>
+    <script src="/libs/angular-ui-router.min.js"></script>
+    <script src="/libs/qrcode.min.js"></script>
+    <script src="/libs/angular-qr.min.js"></script>
+
+    <!-- <script src="/libs/bundle.js"></script> -->
+    <script>
+      angular.module('app', [
+        'ngMaterial',
+        'ui.router',
+        'ngMessages',
+        'ja.qr',
+      ]);
+    </script>
+    <div layout="column" layout-fill>
+    <md-toolbar class="md-primary md-whiteframe-z1" md-scroll-shrink>
+      <div layout="row" layout-align="start center" class="md-toolbar-tools">
+        <md-button flex layout-fill>home</md-button>
+        <md-button flex layout-fill>users</md-button>
+        <md-button flex layout-fill>try</md-button>
+      </div>
+    </md-toolbar>
+    <md-content layout="row">
+      <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus interdum iaculis sapien, et lobortis odio ornare quis. Vivamus fermentum purus id dolor tincidunt, ac lacinia purus facilisis. Nullam eleifend, dui ac accumsan luctus, ex ligula mattis enim, a rutrum turpis ante id lacus. Sed eu enim ullamcorper, luctus sapien non, ullamcorper nibh. Sed imperdiet accumsan est. Suspendisse ut purus gravida, suscipit dui at, porta velit. Maecenas blandit elit at enim pulvinar euismod. Vivamus non metus vel lorem bibendum viverra a eget dolor. Maecenas magna enim, placerat et erat eu, mollis dictum erat. Fusce eu semper enim, vitae faucibus justo. Sed non leo vitae risus malesuada sagittis vitae ut mauris. Nam sed euismod urna. Vivamus pretium suscipit sapien, id dictum justo vestibulum ac. Nullam a felis euismod, laoreet arcu in, convallis nibh. Fusce sodales porttitor sem et interdum.
+
+Proin ac orci non nisl interdum aliquet eu nec sapien. Maecenas maximus mi sit amet volutpat ultrices. Vivamus commodo quam nec congue semper. Etiam diam est, placerat eu augue in, hendrerit porttitor massa. Fusce tristique suscipit nunc, quis feugiat purus fermentum eget. Nulla sollicitudin turpis ut varius tempus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas posuere orci ullamcorper augue vestibulum, a porttitor mauris sodales. Sed eget aliquet libero. Cras porta dui eget dui ultrices, et mattis augue mattis. Suspendisse fringilla id dolor euismod tincidunt. Quisque mollis arcu in purus eleifend, et commodo sem porta.
+
+Cras interdum ornare mi quis tincidunt. Mauris a arcu dictum, fermentum neque eget, consectetur lacus. Sed imperdiet sollicitudin sagittis. Morbi sit amet nibh sit amet ante ultrices consequat. Donec ut quam ac arcu sagittis bibendum. Duis pellentesque auctor mollis. Etiam lacus dolor, finibus in fringilla in, auctor vel turpis. Donec vitae aliquam felis, ut commodo neque. Phasellus laoreet, turpis eu facilisis imperdiet, nibh dui rhoncus purus, gravida euismod risus enim vel elit. Nulla eget euismod ligula.
+
+Cras sodales venenatis ipsum et euismod. Curabitur commodo molestie velit. Maecenas vulputate, velit eget venenatis suscipit, leo sem pulvinar dui, in auctor risus dui id ante. Suspendisse vel ante at metus imperdiet convallis. Integer augue tellus, facilisis id massa non, bibendum faucibus leo. Aenean vel felis vel turpis eleifend elementum. Aliquam malesuada sapien sit amet nunc euismod mattis. Duis vel quam accumsan, ultrices nunc in, congue nunc. Donec at finibus enim. Suspendisse dignissim diam sem, eu pharetra lacus semper consectetur.
+
+Integer porta finibus turpis id facilisis. Mauris a orci non purus venenatis pretium. Sed pretium hendrerit tortor, vitae pulvinar nulla semper consectetur. Sed feugiat facilisis enim egestas laoreet. Nunc eu ultricies metus. Cras accumsan felis volutpat, vulputate erat ut, fringilla eros. Maecenas gravida, felis nec pulvinar luctus, eros risus suscipit nibh, vitae congue urna ipsum nec massa. Praesent accumsan fermentum elit, eget mattis risus fermentum sit amet. Fusce eget maximus nibh. Quisque a ultrices felis. Sed nec mauris sagittis, placerat odio at, sollicitudin dui.
+
+Morbi tincidunt, tellus nec pharetra facilisis, elit metus pulvinar diam, vitae tincidunt odio eros a justo. Aenean porta dictum aliquet. Pellentesque eget diam justo. Praesent convallis a dolor et tristique. Nunc pellentesque dolor nunc, eget mollis turpis rhoncus facilisis. Fusce eleifend dapibus enim tristique condimentum. Aenean sit amet mauris ultrices, porta velit ullamcorper, tristique augue. Nulla fringilla pretium finibus. Donec felis odio, suscipit ac hendrerit at, feugiat id augue.
+
+Curabitur ultrices, erat at efficitur sodales, nunc arcu condimentum felis, et mollis dolor est in felis. Sed elementum magna velit, a accumsan eros suscipit sed. Suspendisse ornare urna a massa facilisis, ut sagittis ante hendrerit. In commodo lectus quam, non tincidunt odio convallis at. Quisque iaculis ultrices dictum. Nullam euismod dapibus aliquet. In hac habitasse platea dictumst. Mauris accumsan maximus felis ac euismod. Fusce ac ipsum sapien. Etiam leo diam, maximus in ex at, convallis accumsan nisi. Proin rhoncus egestas ex. Etiam ornare dolor ut leo euismod facilisis. Nullam vel nisi ut metus volutpat facilisis. Donec elementum cursus sollicitudin.
+
+Proin eu faucibus purus. Morbi posuere aliquet rhoncus. Nam ac justo elementum, accumsan erat et, dictum ex. Praesent dictum semper ante, at varius felis laoreet id. Pellentesque vel aliquet tellus. Fusce tristique et nibh sed laoreet. Curabitur sollicitudin libero sit amet erat sodales aliquam. Sed sodales, mi et pretium sodales, magna justo dictum velit, sit amet mollis leo augue maximus metus. Aliquam id cursus sapien. Duis accumsan viverra ex eget dictum. Phasellus sed ultricies turpis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent condimentum fermentum mi in rhoncus. Vivamus sagittis ipsum id eleifend fringilla. Curabitur eget massa libero.
+
+Vestibulum quis accumsan felis, euismod dictum velit. Nulla sit amet augue est. Duis rutrum, mauris sed auctor condimentum, nulla leo volutpat ex, nec tristique tellus velit sit amet nisi. Duis vel felis vel velit eleifend faucibus. Aliquam at maximus purus. Nullam cursus commodo lectus eu gravida. Ut finibus fringilla porttitor. Cras aliquet mi feugiat, finibus purus convallis, mollis sem. Quisque sed magna sed eros volutpat imperdiet.
+
+Morbi tempor gravida rutrum. Duis molestie sapien et massa interdum congue. Mauris sit amet convallis lacus. Cras eget eleifend lectus. Donec et dolor eget erat pellentesque porta. Aenean vitae interdum mi, id suscipit nulla. In et ex eleifend, cursus sapien sit amet, aliquet sapien. Maecenas sit amet aliquet nunc, a dapibus metus. Sed lobortis gravida dolor sit amet elementum. Vivamus imperdiet mi dui, vel congue quam suscipit sed. Praesent pellentesque elit et mollis maximus. Nulla non mauris sit amet lorem tempus viverra.
+      </p>
+    </md-content>
+    <div>
+</body>
+
+</html>
