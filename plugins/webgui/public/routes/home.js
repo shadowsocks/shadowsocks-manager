@@ -25,6 +25,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/login',
       controller: 'LoginController',
       templateUrl: '/public/views/home/login.html',
+    })
+    .state('home.signup', {
+      url: '/signup',
+      controller: 'SignupController',
+      templateUrl: '/public/views/home/signup.html',
     });
   }
 ]);

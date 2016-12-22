@@ -22,7 +22,7 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, {
       name: '注册帐号',
       icon: 'face',
-      click: 'admin.user'
+      click: 'home.signup'
     }, {
       name: '续费码',
       icon: 'shop',

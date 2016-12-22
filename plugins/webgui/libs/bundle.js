@@ -92,7 +92,7 @@
 	  }, {
 	    name: '注册帐号',
 	    icon: 'face',
-	    click: 'admin.user'
+	    click: 'home.signup'
 	  }, {
 	    name: '续费码',
 	    icon: 'shop',
@@ -154,6 +154,10 @@
 	    url: '/login',
 	    controller: 'LoginController',
 	    templateUrl: '/public/views/home/login.html'
+	  }).state('home.signup', {
+	    url: '/signup',
+	    controller: 'SignupController',
+	    templateUrl: '/public/views/home/signup.html'
 	  });
 	}]);
 
