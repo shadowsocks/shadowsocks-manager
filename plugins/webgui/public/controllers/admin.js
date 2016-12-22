@@ -15,6 +15,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '首页',
       icon: 'home',
       click: 'admin.index'
+    },{
+      name: '服务器管理',
+      icon: 'home',
+      click: 'admin.server'
     }, {
       name: '退出',
       icon: 'settings',
@@ -35,5 +39,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ]).controller('AdminIndexController', ['$scope',
   ($scope) => {
     console.log('Index');
+  }
+]).controller('AdminServerController', ['$scope',
+  ($scope) => {
   }
 ]);

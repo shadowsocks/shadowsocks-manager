@@ -215,6 +215,10 @@
 	    icon: 'home',
 	    click: 'admin.index'
 	  }, {
+	    name: '服务器管理',
+	    icon: 'home',
+	    click: 'admin.server'
+	  }, {
 	    name: '退出',
 	    icon: 'settings',
 	    click: function click() {
@@ -232,7 +236,7 @@
 	  };
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
-	}]);
+	}]).controller('AdminServerController', ['$scope', function ($scope) {}]);
 
 /***/ },
 /* 6 */
@@ -304,6 +308,10 @@
 	    url: '/index',
 	    controller: 'AdminIndexController',
 	    templateUrl: '/public/views/admin/index.html'
+	  }).state('admin.server', {
+	    url: '/server',
+	    controller: 'AdminServerController',
+	    templateUrl: '/public/views/admin/server.html'
 	  });
 	}]);
 
