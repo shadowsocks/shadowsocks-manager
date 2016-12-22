@@ -1,0 +1,28 @@
+<div flex flex-gt-sm="25" flex-xs="100" flex-sm="50" layout="column">
+    <md-card ng-repeat="server in servers">
+        <md-card-header>
+            <md-card-avatar>
+                <img class="md-user-avatar" src="http://placehold.it/50x50" />
+            </md-card-avatar>
+            <md-card-header-text>
+                <span class="md-title">{{server.name}}</span>
+                <span class="md-subhead">{{server.host}}:{{server.port}}</span>
+            </md-card-header-text>
+        </md-card-header>
+        <img src="http://placehold.it/350x100" class="md-card-image" alt="Washed Out">
+        <md-card-actions layout="row" layout-align="start center">
+            <md-button>Action 1</md-button>
+            <md-button>Action 2</md-button>
+            <md-card-icon-actions>
+                <md-button class="md-icon-button" aria-label="toggle">
+                    <md-icon md-svg-icon="md-toggle-arrow"></md-icon>
+                </md-button>
+            </md-card-icon-actions>
+        </md-card-actions>
+        <md-card-content>
+            <p>
+                The titles of Washed
+            </p>
+        </md-card-content>
+    </md-card>
+</div>

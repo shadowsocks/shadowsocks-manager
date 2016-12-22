@@ -40,7 +40,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope) => {
     console.log('Index');
   }
-]).controller('AdminServerController', ['$scope',
-  ($scope) => {
+]).controller('AdminServerController', ['$scope', '$http',
+  ($scope, $http) => {
+    $http.get('/api/admin/server').then(success => {
+      $scope.servers = success.data;
+    });
   }
 ]);

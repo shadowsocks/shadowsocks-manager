@@ -236,7 +236,11 @@
 	  };
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
-	}]).controller('AdminServerController', ['$scope', function ($scope) {}]);
+	}]).controller('AdminServerController', ['$scope', '$http', function ($scope, $http) {
+	  $http.get('/api/admin/server').then(function (success) {
+	    $scope.servers = success.data;
+	  });
+	}]);
 
 /***/ },
 /* 6 */
