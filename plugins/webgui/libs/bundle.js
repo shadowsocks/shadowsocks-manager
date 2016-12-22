@@ -50,10 +50,12 @@
 
 	__webpack_require__(2);
 	__webpack_require__(3);
-
 	__webpack_require__(4);
 	__webpack_require__(5);
+
 	__webpack_require__(6);
+	__webpack_require__(7);
+	__webpack_require__(8);
 
 /***/ },
 /* 1 */
@@ -65,6 +67,18 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('MainController', ['$scope', function ($scope) {
+	  console.log('Main');
+	}]);
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -112,24 +126,125 @@
 	  };
 	}]).controller('IndexController', ['$scope', function ($scope) {
 	  console.log('Index');
-	}]).controller('LoginController', ['$scope', function ($scope) {
+	}]).controller('LoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  console.log('Login');
+	  $scope.user = {};
+	  $scope.login = function () {
+	    $http.post('/api/user/login', {
+	      email: $scope.user.email,
+	      password: $scope.user.password
+	    }).then(function (success) {
+	      if (success.data.type === 'normal') {
+	        $state.go('user.index');
+	      } else if (success.data.type === 'admin') {} else {}
+	    }).catch(console.log);
+	  };
 	}]);
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('MainController', ['$scope', function ($scope) {
-	  console.log('Main');
+	app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', function ($scope, $mdMedia, $mdSidenav, $state) {
+	  console.log('Home');
+	  $scope.innerSideNav = true;
+	  $scope.menuButton = function () {
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menus = [{
+	    name: '首页',
+	    icon: 'home',
+	    click: 'home.index'
+	  }, {
+	    name: '登录',
+	    icon: 'cloud',
+	    click: 'home.login'
+	  }, {
+	    name: '注册帐号',
+	    icon: 'face',
+	    click: 'home.signup'
+	  }, {
+	    name: '续费码',
+	    icon: 'shop',
+	    click: 'admin.renew'
+	  }, {
+	    name: '流量统计',
+	    icon: 'timeline',
+	    click: 'admin.flow.server'
+	  }, {
+	    name: '系统设置',
+	    icon: 'settings',
+	    click: 'admin.options'
+	  }];
+	  $scope.menuClick = function (index) {
+	    $mdSidenav('left').close();
+	    $state.go($scope.menus[index].click);
+	  };
+	}]).controller('UserIndexController', ['$scope', function ($scope) {
+	  console.log('Index');
 	}]);
 
 /***/ },
-/* 4 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', function ($scope, $mdMedia, $mdSidenav, $state) {
+	  console.log('Home');
+	  $scope.innerSideNav = true;
+	  $scope.menuButton = function () {
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menus = [{
+	    name: '首页',
+	    icon: 'home',
+	    click: 'home.index'
+	  }, {
+	    name: '登录',
+	    icon: 'cloud',
+	    click: 'home.login'
+	  }, {
+	    name: '注册帐号',
+	    icon: 'face',
+	    click: 'home.signup'
+	  }, {
+	    name: '续费码',
+	    icon: 'shop',
+	    click: 'admin.renew'
+	  }, {
+	    name: '流量统计',
+	    icon: 'timeline',
+	    click: 'admin.flow.server'
+	  }, {
+	    name: '系统设置',
+	    icon: 'settings',
+	    click: 'admin.options'
+	  }];
+	  $scope.menuClick = function (index) {
+	    $mdSidenav('left').close();
+	    $state.go($scope.menus[index].click);
+	  };
+	}]).controller('AdminIndexController', ['$scope', function ($scope) {
+	  console.log('Index');
+	}]);
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -162,16 +277,44 @@
 	}]);
 
 /***/ },
-/* 5 */
-/***/ function(module, exports) {
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('user', {
+	    url: '/user',
+	    abstract: true,
+	    templateUrl: '/public/views/user/user.html'
+	  }).state('user.index', {
+	    url: '/index',
+	    controller: 'UserIndexController',
+	    templateUrl: '/public/views/user/index.html'
+	  });
+	}]);
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('admin', {
+	    url: '/admin',
+	    abstract: true,
+	    templateUrl: '/public/views/admin/admin.html'
+	  }).state('admin.index', {
+	    url: '/index',
+	    controller: 'AdminIndexController',
+	    templateUrl: '/public/views/admin/index.html'
+	  });
+	}]);
 
 /***/ }
 /******/ ]);

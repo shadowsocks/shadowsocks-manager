@@ -1,6 +1,6 @@
 const app = require('../index').app;
 
-app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
+app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, $mdMedia, $mdSidenav, $state) => {
     console.log('Home');
     $scope.innerSideNav = true;
@@ -41,27 +41,8 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $state.go($scope.menus[index].click);
     };
   }
-]).controller('IndexController', ['$scope',
+]).controller('UserIndexController', ['$scope',
   ($scope) => {
     console.log('Index');
-  }
-]).controller('LoginController', ['$scope', '$http', '$state',
-  ($scope, $http, $state) => {
-    console.log('Login');
-    $scope.user = {};
-    $scope.login = () => {
-      $http.post('/api/user/login', {
-        email: $scope.user.email,
-        password: $scope.user.password,
-      }).then(success => {
-        if(success.data.type === 'normal') {
-          $state.go('user.index');
-        } else if(success.data.type === 'admin') {
-
-        } else {
-
-        }
-      }).catch(console.log);
-    };
   }
 ]);

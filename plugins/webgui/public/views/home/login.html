@@ -1,1 +1,35 @@
-<div>5678</div>
+<div layout="column">
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <form name="userForm">
+                <md-input-container class="md-block">
+                    <label>邮箱</label>
+                    <input type="email" required name="email" ng-model="user.email" ng-keypress="emailKeypress($event)" autofocus>
+                    <div ng-messages="userForm.email.$error">
+                        <div ng-message="required">邮箱不能为空</div>
+                        <div ng-message="email">必须填写一个有效邮箱地址</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>密码</label>
+                    <input type="password" required name="password" ng-model="user.password" ng-keypress="passwordKeypress($event)">
+                    <div ng-messages="userForm.password.$error">
+                        <div ng-message="required">密码不能为空</div>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-primary" ng-click="findPassword()">找回密码</md-button>
+            <!-- <md-button class="md-raised" ng-click="signup()">注册</md-button> -->
+            <md-button class="md-raised md-primary" ng-click="login()">登录</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>
