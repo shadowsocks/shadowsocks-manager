@@ -236,9 +236,18 @@
 	  };
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
-	}]).controller('AdminServerController', ['$scope', '$http', function ($scope, $http) {
+	}]).controller('AdminServerController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
+	    $scope.servers[1] = $scope.servers[0];
+	    $scope.servers[2] = $scope.servers[0];
+	  });
+	  $scope.toServerPage = function (serverName) {
+	    $state.go('admin.serverPage', { serverName: serverName });
+	  };
+	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $http.get('/api/admin/server/' + $stateParams.serverName).then(function (success) {
+	    $scope.server = success.data;
 	  });
 	}]);
 
@@ -316,6 +325,10 @@
 	    url: '/server',
 	    controller: 'AdminServerController',
 	    templateUrl: '/public/views/admin/server.html'
+	  }).state('admin.serverPage', {
+	    url: '/server/:serverName',
+	    controller: 'AdminServerPageController',
+	    templateUrl: '/public/views/admin/serverPage.html'
 	  });
 	}]);
 

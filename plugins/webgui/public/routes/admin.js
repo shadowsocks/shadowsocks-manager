@@ -15,6 +15,10 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/server',
       controller: 'AdminServerController',
       templateUrl: '/public/views/admin/server.html',
+    }).state('admin.serverPage', {
+      url: '/server/:serverName',
+      controller: 'AdminServerPageController',
+      templateUrl: '/public/views/admin/serverPage.html',
     });
   }])
 ;
