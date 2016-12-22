@@ -22,10 +22,10 @@ app.post('/api/logout', user.logout);
 app.get('/api/admin/server', isAdmin, admin.getServers);
 app.get('/api/admin/server/:serverName', isAdmin, admin.getOneServer);
 
-app.get('/test', (req, res) => {
-  return res.render('index0');
-});
-
-// app.get('*', (req, res) => {
-//   return res.render('index');
+// app.get('/test', (req, res) => {
+//   return res.render('index0');
 // });
+
+app.get('*', (req, res) => {
+  return res.render('index');
+});
