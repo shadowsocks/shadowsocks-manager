@@ -62,10 +62,13 @@
                     </div>
                 </md-content>
             </md-sidenav>
-            <md-content flex layout="row">
+            <md-content flex layout="row" style="background-color: #FFF;">
                 <div ui-view flex></div>
             </md-content>
         </div>
     </div>
     </section>
+    <md-button ng-show="fabButton" class="md-fab md-fab-bottom-right">
+        <md-icon class="material-icons" ng-click="fabButtonClick()">add</md-icon>
+    </md-button>
 </div>

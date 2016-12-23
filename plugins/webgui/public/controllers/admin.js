@@ -2,7 +2,6 @@ const app = require('../index').app;
 
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
-    console.log('Home');
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {
@@ -35,6 +34,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $state.go($scope.menus[index].click);
       }
     };
+    $scope.fabButton = false;
+    $scope.fabButtonClick = () => {};
+    $scope.setFabButton = (fn) => {
+      $scope.fabButton = true;
+      $scope.fabButtonClick = fn;
+    };
+    $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
+      $scope.fabButton = false;
+    });
   }
 ]).controller('AdminIndexController', ['$scope',
   ($scope) => {
@@ -44,17 +52,35 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, $http, $state) => {
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
-      $scope.servers[1] = $scope.servers[0];
-      $scope.servers[2] = $scope.servers[0];
     });
     $scope.toServerPage = (serverName) => {
       $state.go('admin.serverPage', { serverName });
     };
+    $scope.setFabButton(() => {
+      $state.go('admin.addServer');
+    });
   }
 ]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     $http.get('/api/admin/server/' + $stateParams.serverName).then(success => {
       $scope.server = success.data;
     });
+  }
+]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    $scope.server = {};
+    $scope.confirm = () => {
+      $http.post('/api/admin/server', {
+        name: $scope.server.name,
+        address: $scope.server.address,
+        port: +$scope.server.port,
+        password: $scope.server.password,
+      }).then(success => {
+        $state.go('admin.server');
+      });
+    };
+    $scope.cancel = () => {
+      $state.go('admin.server');
+    };
   }
 ]);

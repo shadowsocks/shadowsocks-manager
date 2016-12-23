@@ -73,9 +73,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('MainController', ['$scope', function ($scope) {
-	  console.log('Main');
-	}]);
+	app.controller('MainController', ['$scope', function ($scope) {}]);
 
 /***/ },
 /* 3 */
@@ -201,7 +199,6 @@
 	var app = __webpack_require__(1).app;
 
 	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
-	  console.log('Home');
 	  $scope.innerSideNav = true;
 	  $scope.menuButton = function () {
 	    if ($mdMedia('gt-sm')) {
@@ -234,21 +231,46 @@
 	      $state.go($scope.menus[index].click);
 	    }
 	  };
+	  $scope.fabButton = false;
+	  $scope.fabButtonClick = function () {};
+	  $scope.setFabButton = function (fn) {
+	    $scope.fabButton = true;
+	    $scope.fabButtonClick = fn;
+	  };
+	  $scope.$on('$stateChangeStart', function (event, toUrl, fromUrl) {
+	    $scope.fabButton = false;
+	  });
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
 	}]).controller('AdminServerController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
-	    $scope.servers[1] = $scope.servers[0];
-	    $scope.servers[2] = $scope.servers[0];
 	  });
 	  $scope.toServerPage = function (serverName) {
 	    $state.go('admin.serverPage', { serverName: serverName });
 	  };
+	  $scope.setFabButton(function () {
+	    $state.go('admin.addServer');
+	  });
 	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  $http.get('/api/admin/server/' + $stateParams.serverName).then(function (success) {
 	    $scope.server = success.data;
 	  });
+	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.server = {};
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/server', {
+	      name: $scope.server.name,
+	      address: $scope.server.address,
+	      port: +$scope.server.port,
+	      password: $scope.server.password
+	    }).then(function (success) {
+	      $state.go('admin.server');
+	    });
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.server');
+	  };
 	}]);
 
 /***/ },
@@ -329,6 +351,10 @@
 	    url: '/server/:serverName',
 	    controller: 'AdminServerPageController',
 	    templateUrl: '/public/views/admin/serverPage.html'
+	  }).state('admin.addServer', {
+	    url: '/addServer',
+	    controller: 'AdminAddServerController',
+	    templateUrl: '/public/views/admin/addServer.html'
 	  });
 	}]);
 

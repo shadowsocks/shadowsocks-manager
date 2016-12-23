@@ -17,6 +17,10 @@ process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
+process.on('uncaughtException', (err) => {
+  logger.error(`Caught exception: ${err}`);
+});
+
 require('./init/utils');
 
 require('./init/moveConfigFile');
