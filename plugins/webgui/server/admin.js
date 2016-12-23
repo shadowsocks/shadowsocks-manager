@@ -8,15 +8,16 @@ exports.getServers = (req, res) => {
   knex('server').select().then(success => {
     res.send(success);
   }).catch(err => {
+    console.log(err);
     res.status(500).end();
   });
 };
 
 exports.getOneServer = (req, res) => {
-  const serverName = req.params.serverName;
+  const serverId = req.params.serverId;
   let result = null;
   knex('server').select().where({
-    name: serverName,
+    id: +serverId,
   }).then(success => {
     if(success.length) {
       result = success[0];
@@ -33,6 +34,7 @@ exports.getOneServer = (req, res) => {
     result.ports = success;
     res.send(result);
   }).catch(err => {
+    console.log(err);
     res.status(500).end();
   });
 };

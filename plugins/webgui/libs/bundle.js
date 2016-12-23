@@ -246,14 +246,14 @@
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
 	  });
-	  $scope.toServerPage = function (serverName) {
-	    $state.go('admin.serverPage', { serverName: serverName });
+	  $scope.toServerPage = function (serverId) {
+	    $state.go('admin.serverPage', { serverId: serverId });
 	  };
 	  $scope.setFabButton(function () {
 	    $state.go('admin.addServer');
 	  });
 	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  $http.get('/api/admin/server/' + $stateParams.serverName).then(function (success) {
+	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = success.data;
 	  });
 	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
@@ -348,7 +348,7 @@
 	    controller: 'AdminServerController',
 	    templateUrl: '/public/views/admin/server.html'
 	  }).state('admin.serverPage', {
-	    url: '/server/:serverName',
+	    url: '/server/:serverId',
 	    controller: 'AdminServerPageController',
 	    templateUrl: '/public/views/admin/serverPage.html'
 	  }).state('admin.addServer', {

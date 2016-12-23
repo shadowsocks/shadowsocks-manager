@@ -53,8 +53,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
     });
-    $scope.toServerPage = (serverName) => {
-      $state.go('admin.serverPage', { serverName });
+    $scope.toServerPage = (serverId) => {
+      $state.go('admin.serverPage', { serverId });
     };
     $scope.setFabButton(() => {
       $state.go('admin.addServer');
@@ -62,7 +62,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   }
 ]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
-    $http.get('/api/admin/server/' + $stateParams.serverName).then(success => {
+    $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
     });
   }
