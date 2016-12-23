@@ -46,14 +46,26 @@ exports.addServer = (req, res) => {
   req.checkBody('password', 'Invalid password').notEmpty();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
-      const name = req.body.name;
       const address = req.body.address;
       const port = +req.body.port;
       const password = req.body.password;
-      return serverManager.add(name, address, port, password);
+      return manager.send({
+        command: 'flow',
+        options: { clear: false, },
+      }, {
+        host: address,
+        port,
+        password,
+      });
     }
-    console.log(result.array());
     result.throw();
+  }).then(success => {
+    console.log(success);
+    const name = req.body.name;
+    const address = req.body.address;
+    const port = +req.body.port;
+    const password = req.body.password;
+    return serverManager.add(name, address, port, password);
   }).then(success => {
     res.send(success);
   }).catch(err => {

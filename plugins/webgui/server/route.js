@@ -21,7 +21,7 @@ app.post('/api/logout', user.logout);
 
 app.get('/api/admin/server', isAdmin, admin.getServers);
 app.get('/api/admin/server/:serverId', isAdmin, admin.getOneServer);
-app.post('/api/admin/server', isAdmin, admin.addServer)
+app.post('/api/admin/server', isAdmin, admin.addServer);
 
 // app.get('/test', (req, res) => {
 //   return res.render('index0');

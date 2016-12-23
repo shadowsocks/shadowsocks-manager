@@ -42,6 +42,10 @@ const sendMessage = (data, options) => {
       }
       client.end();
     });
+    client.on('close', () => {
+      logger.error('socket close');
+      rej('failure');
+    });
     client.on('error', err => {
       logger.error(err);
     });
