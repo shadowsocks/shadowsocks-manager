@@ -14,10 +14,10 @@ const time = minute * 60 * 1000;
 
 const saveFlow = async () => {
   try {
-    const servers = await knex('server').select(['name', 'host', 'port', 'password']);
+    const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password']);
     servers.forEach(async server => {
       const lastestFlow = await knex('saveFlow').select(['time']).where({
-        name: server.name,
+        id: server.id,
       }).orderBy('time', 'desc').limit(1);
       if(lastestFlow.length === 0 || Date.now() - lastestFlow[0].time >= time) {
         const options = {
@@ -33,7 +33,7 @@ const saveFlow = async () => {
         });
         flow = flow.map(f => {
           return {
-            name: server.name,
+            id: server.id,
             port: f.port,
             flow: f.sumFlow,
             time: Date.now(),

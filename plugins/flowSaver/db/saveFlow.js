@@ -9,7 +9,7 @@ const createTable = async() => {
     await knex.schema.dropTableIfExists(tableName);
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
-    table.string('name');
+    table.integer('id');
     table.integer('port');
     table.integer('flow');
     table.dateTime('time');

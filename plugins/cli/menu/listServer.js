@@ -73,8 +73,9 @@ const list = async () => {
     const listServer = await flowSaverServer.list();
     menu[0].choices = [];
     listServer.forEach(f => {
-      const name = f.name + ' ' + f.host + ':' + f.port;
+      const name =  '[' + f.id + '] ' + f.name + ' ' + f.host + ':' + f.port;
       const value = {
+        id: f.id,
         name: f.name,
         host: f.host,
         port: f.port,
@@ -92,7 +93,7 @@ const list = async () => {
       editServer[2].default = selectServer.server.port;
       editServer[3].default = selectServer.server.password;
       const edit = await inquirer.prompt(editServer);
-      await flowSaverServer.edit(selectServer.server.name, edit.name, edit.host, edit.port, edit.password);
+      await flowSaverServer.edit(selectServer.server.id, edit.name, edit.host, edit.port, edit.password);
       return;
     } else if (selectServer.act === 'Delete server') {
       await flowSaverServer.del(selectServer.server);
