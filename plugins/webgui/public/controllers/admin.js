@@ -14,8 +14,20 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '首页',
       icon: 'home',
       click: 'admin.index'
-    },{
-      name: '服务器管理',
+    }, {
+      name: '服务器',
+      icon: 'home',
+      click: 'admin.server'
+    }, , {
+      name: '用户',
+      icon: 'home',
+      click: 'admin.server'
+    }, {
+      name: '账号',
+      icon: 'home',
+      click: 'admin.server'
+    }, {
+      name: '邀请码',
       icon: 'home',
       click: 'admin.server'
     }, {
