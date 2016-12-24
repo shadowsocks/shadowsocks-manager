@@ -213,19 +213,19 @@
 	    click: 'admin.index'
 	  }, {
 	    name: '服务器',
-	    icon: 'home',
+	    icon: 'cloud',
 	    click: 'admin.server'
-	  },, {
+	  }, {
 	    name: '用户',
-	    icon: 'home',
-	    click: 'admin.server'
+	    icon: 'people',
+	    click: 'admin.user'
 	  }, {
 	    name: '账号',
-	    icon: 'home',
+	    icon: 'account_circle',
 	    click: 'admin.server'
 	  }, {
-	    name: '邀请码',
-	    icon: 'home',
+	    name: '续费码',
+	    icon: 'attach_money',
 	    click: 'admin.server'
 	  }, {
 	    name: '退出',
@@ -283,6 +283,10 @@
 	  $scope.cancel = function () {
 	    $state.go('admin.server');
 	  };
+	}]).controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+	  //   $scope.server = success.data;
+	  // });
 	}]);
 
 /***/ },
@@ -367,6 +371,10 @@
 	    url: '/addServer',
 	    controller: 'AdminAddServerController',
 	    templateUrl: '/public/views/admin/addServer.html'
+	  }).state('admin.user', {
+	    url: '/user',
+	    controller: 'AdminUserController',
+	    templateUrl: '/public/views/admin/user.html'
 	  });
 	}]);
 

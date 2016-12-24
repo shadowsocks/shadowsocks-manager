@@ -16,19 +16,19 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       click: 'admin.index'
     }, {
       name: '服务器',
-      icon: 'home',
+      icon: 'cloud',
       click: 'admin.server'
-    }, , {
+    }, {
       name: '用户',
-      icon: 'home',
-      click: 'admin.server'
+      icon: 'people',
+      click: 'admin.user'
     }, {
       name: '账号',
-      icon: 'home',
+      icon: 'account_circle',
       click: 'admin.server'
     }, {
-      name: '邀请码',
-      icon: 'home',
+      name: '续费码',
+      icon: 'attach_money',
       click: 'admin.server'
     }, {
       name: '退出',
@@ -94,5 +94,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.cancel = () => {
       $state.go('admin.server');
     };
+  }
+]).controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+    //   $scope.server = success.data;
+    // });
   }
 ]);
