@@ -27,21 +27,9 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       icon: 'cloud',
       click: 'home.login'
     }, {
-      name: '注册帐号',
+      name: '注册',
       icon: 'face',
       click: 'home.signup'
-    }, {
-      name: '续费码',
-      icon: 'shop',
-      click: 'admin.renew'
-    }, {
-      name: '流量统计',
-      icon: 'timeline',
-      click: 'admin.flow.server'
-    }, {
-      name: '系统设置',
-      icon: 'settings',
-      click: 'admin.options'
     }];
     $scope.menuClick = (index) => {
       $mdSidenav('left').close();

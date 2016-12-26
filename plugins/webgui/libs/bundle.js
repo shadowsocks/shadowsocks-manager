@@ -112,18 +112,6 @@
 	    name: '注册帐号',
 	    icon: 'face',
 	    click: 'home.signup'
-	  }, {
-	    name: '续费码',
-	    icon: 'shop',
-	    click: 'admin.renew'
-	  }, {
-	    name: '流量统计',
-	    icon: 'timeline',
-	    click: 'admin.flow.server'
-	  }, {
-	    name: '系统设置',
-	    icon: 'settings',
-	    click: 'admin.options'
 	  }];
 	  $scope.menuClick = function (index) {
 	    $mdSidenav('left').close();
