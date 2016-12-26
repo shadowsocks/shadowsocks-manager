@@ -292,6 +292,9 @@
 	  //   $scope.server = success.data;
 	  // });
 	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $http.get('/api/admin/account').then(function (success) {
+	    $scope.account = success.data;
+	  });
 	  $scope.setFabButton(function () {
 	    $state.go('admin.addAccount');
 	  });

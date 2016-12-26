@@ -107,6 +107,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   }
 ]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
+    $http.get('/api/admin/account').then(success => {
+      $scope.account = success.data;
+    });
     $scope.setFabButton(() => {
       $state.go('admin.addAccount');
     });

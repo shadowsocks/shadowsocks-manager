@@ -75,6 +75,15 @@ exports.addServer = (req, res) => {
   });
 };
 
+exports.getAccount = (req, res) => {
+  account.getAccount().then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.addAccount = (req, res) => {
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();
