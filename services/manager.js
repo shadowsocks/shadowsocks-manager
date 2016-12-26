@@ -25,7 +25,7 @@ const pack = (data, password) => {
 };
 
 const sendMessage = (data, options) => {
-  return new Promise((res, rej) => {
+  const promise = new Promise((res, rej) => {
     const client = net.connect(options || {
       host,
       port,
@@ -43,13 +43,14 @@ const sendMessage = (data, options) => {
       client.end();
     });
     client.on('close', () => {
-      logger.error('socket close');
+      // logger.error('socket close');
       rej('failure');
     });
     client.on('error', err => {
       logger.error(err);
     });
   });
+  return promise;
 };
 
 /*
