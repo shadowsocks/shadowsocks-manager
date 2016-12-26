@@ -16,6 +16,19 @@ const addAccount = async (type, options) => {
     });
     await checkAccount.checkServer();
     return;
+  } else if (type === 2) {
+    await knex('account_plugin').insert({
+      type,
+      userId: options.user,
+      port: options.port,
+      password: options.password,
+      data: JSON.stringify({
+        create: Date.now(),
+        flow: 1 * 1000 * 1000 * 1000 || options.flow,
+        limit: 1,
+      }),
+      status: 0,
+    });
   }
 };
 
