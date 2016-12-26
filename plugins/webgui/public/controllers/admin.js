@@ -13,26 +13,30 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.menus = [{
       name: '首页',
       icon: 'home',
-      click: 'admin.index'
+      click: 'admin.index',
     }, {
       name: '服务器',
       icon: 'cloud',
-      click: 'admin.server'
+      click: 'admin.server',
     }, {
       name: '用户',
       icon: 'people',
-      click: 'admin.user'
+      click: 'admin.user',
     }, {
       name: '账号',
       icon: 'account_circle',
-      click: 'admin.server'
+      click: 'admin.account',
     }, {
       name: '续费码',
       icon: 'attach_money',
-      click: 'admin.server'
+      click: 'admin.server',
+    }, {
+      name: '设置',
+      icon: 'settings',
+      click: 'admin.server',
     }, {
       name: '退出',
-      icon: 'settings',
+      icon: 'exit_to_app',
       click: function() {
         $http.post('/api/logout');
         $state.go('home.index');
@@ -100,5 +104,23 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
     //   $scope.server = success.data;
     // });
+  }
+]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    $scope.setFabButton(() => {
+      $state.go('admin.addAccount');
+    });
+  }
+]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    $scope.account = {};
+    $scope.confirm = () => {
+      $http.post('/api/admin/account', {
+        port: +$scope.account.port,
+        password: $scope.account.password,
+      }).then(success => {
+        $state.go('admin.account');
+      });
+    };
   }
 ]);

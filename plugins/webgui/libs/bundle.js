@@ -222,14 +222,18 @@
 	  }, {
 	    name: '账号',
 	    icon: 'account_circle',
-	    click: 'admin.server'
+	    click: 'admin.account'
 	  }, {
 	    name: '续费码',
 	    icon: 'attach_money',
 	    click: 'admin.server'
 	  }, {
-	    name: '退出',
+	    name: '设置',
 	    icon: 'settings',
+	    click: 'admin.server'
+	  }, {
+	    name: '退出',
+	    icon: 'exit_to_app',
 	    click: function click() {
 	      $http.post('/api/logout');
 	      $state.go('home.index');
@@ -287,6 +291,20 @@
 	  // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
 	  //   $scope.server = success.data;
 	  // });
+	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setFabButton(function () {
+	    $state.go('admin.addAccount');
+	  });
+	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.account = {};
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/account', {
+	      port: +$scope.account.port,
+	      password: $scope.account.password
+	    }).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
 	}]);
 
 /***/ },
@@ -375,6 +393,14 @@
 	    url: '/user',
 	    controller: 'AdminUserController',
 	    templateUrl: '/public/views/admin/user.html'
+	  }).state('admin.account', {
+	    url: '/account',
+	    controller: 'AdminAccountController',
+	    templateUrl: '/public/views/admin/account.html'
+	  }).state('admin.addAccount', {
+	    url: '/addAccount',
+	    controller: 'AdminAddAccountController',
+	    templateUrl: '/public/views/admin/addAccount.html'
 	  });
 	}]);
 

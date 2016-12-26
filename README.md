@@ -74,7 +74,7 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[================100%]` [email]()  
 `[==10%---------------]` [user]()  
 `[================100%]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
-`[0%------------------]` [account]()  
+`[1%------------------]` [account]()  
 `[1%------------------]` [webgui]()  
 
 ### Parameter
