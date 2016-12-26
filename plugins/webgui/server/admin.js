@@ -89,10 +89,13 @@ exports.addAccount = (req, res) => {
   req.checkBody('password', 'Invalid password').notEmpty();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
+      const type = +req.body.type;
       const port = +req.body.port;
       const password = req.body.password;
-      return account.addAccount(1, {
-        port, password,
+      const limit = +req.body.limit;
+      const flow = +req.body.flow;
+      return account.addAccount(type, {
+        port, password, limit, flow,
       });
     }
     result.throw();

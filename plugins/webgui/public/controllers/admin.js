@@ -116,11 +116,21 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   }
 ]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
+    $scope.typeList = [
+      {key: '不限量', value: 1},
+      {key: '周', value: 2},
+    ];
     $scope.account = {};
+    $scope.cancel = () => {
+      $state.go('admin.account');
+    };
     $scope.confirm = () => {
       $http.post('/api/admin/account', {
+        type: +$scope.account.type,
         port: +$scope.account.port,
         password: $scope.account.password,
+        limit: +$scope.account.limit,
+        flow: +$scope.account.flow * 1000 * 1000,
       }).then(success => {
         $state.go('admin.account');
       });

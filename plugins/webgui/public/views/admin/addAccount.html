@@ -5,8 +5,14 @@
         <div flex layout="column" layout-align="space-around stretch">
             <form name="accountForm">
                 <md-input-container class="md-block">
+                    <label>类型</label>
+                    <md-select ng-model="account.type">
+                        <md-option ng-repeat="type in typeList" value="{{type.value}}">{{type.key}}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block">
                     <label>端口</label>
-                    <input type="text" required name="port" ng-model="account.port">
+                    <input type="number" required name="port" ng-model="account.port">
                     <div ng-messages="accountForm.port.$error">
                         <div ng-message="required">端口不能为空</div>
                     </div>
@@ -16,6 +22,20 @@
                     <input type="text" required name="password" ng-model="account.password">
                     <div ng-messages="accountForm.password.$error">
                         <div ng-message="required">密码不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="+account.type === 2">
+                    <label>时长</label>
+                    <input type="number" required name="limit" ng-model="account.limit">
+                    <div ng-messages="accountForm.limit.$error">
+                        <div ng-message="required">时长不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="+account.type === 2">
+                    <label>流量</label>
+                    <input type="number" required name="flow" ng-model="account.flow">
+                    <div ng-messages="accountForm.flow.$error">
+                        <div ng-message="required">流量不能为空</div>
                     </div>
                 </md-input-container>
             </form>

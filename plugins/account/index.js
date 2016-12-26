@@ -24,8 +24,8 @@ const addAccount = async (type, options) => {
       password: options.password,
       data: JSON.stringify({
         create: Date.now(),
-        flow: 1 * 1000 * 1000 * 1000 || options.flow,
-        limit: 1,
+        flow: options.flow || 1 * 1000 * 1000 * 1000,
+        limit: options.limit || 1,
       }),
       status: 0,
     });

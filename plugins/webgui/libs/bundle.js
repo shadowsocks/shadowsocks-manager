@@ -299,11 +299,18 @@
 	    $state.go('admin.addAccount');
 	  });
 	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '周', value: 2 }];
 	  $scope.account = {};
+	  $scope.cancel = function () {
+	    $state.go('admin.account');
+	  };
 	  $scope.confirm = function () {
 	    $http.post('/api/admin/account', {
+	      type: +$scope.account.type,
 	      port: +$scope.account.port,
-	      password: $scope.account.password
+	      password: $scope.account.password,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
 	    }).then(function (success) {
 	      $state.go('admin.account');
 	    });
