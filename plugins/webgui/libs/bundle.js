@@ -109,7 +109,7 @@
 	    icon: 'cloud',
 	    click: 'home.login'
 	  }, {
-	    name: '注册帐号',
+	    name: '注册',
 	    icon: 'face',
 	    click: 'home.signup'
 	  }];
