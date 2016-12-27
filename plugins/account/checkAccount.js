@@ -66,18 +66,23 @@ const checkServer = async () => {
       return !!port.filter(f => f.port === number)[0];
     };
     account.forEach(async a => {
-      if(a.type === 2) {
+      if(a.type >= 2 && a.type <= 5) {
+        let timePeriod = 0;
+        if(a.type === 2) { timePeriod = 7 * 86400 * 1000; }
+        if(a.type === 3) { timePeriod = 30 * 86400 * 1000; }
+        if(a.type === 4) { timePeriod = 1 * 86400 * 1000; }
+        if(a.type === 5) { timePeriod = 3600 * 1000; }
         const data = JSON.parse(a.data);
         let startTime = data.create;
-        while(startTime + 7 * 86400 * 1000 <= Date.now()) {
-          startTime += 7 * 86400 * 1000;
+        while(startTime + timePeriod <= Date.now()) {
+          startTime += timePeriod;
         }
         const flow = await checkFlow(s.id, a.port, startTime, Date.now());
         // console.log(s.host + ':' + a.port + ' ' + data.flow + ', ' + flow + (flow >= data.flow ? ' *' : ''));
         if(flow >= data.flow) {
           port.exist(a.port) && delPort(a, s);
           return;
-        } else if(data.create + data.limit * 7 * 86400 * 1000 <= Date.now()) {
+        } else if(data.create + data.limit * timePeriod <= Date.now()) {
           port.exist(a.port) && delPort(a, s);
           return;
         } else if(!port.exist(a.port)) {

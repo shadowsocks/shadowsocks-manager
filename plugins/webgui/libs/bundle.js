@@ -295,7 +295,7 @@
 	    });
 	  };
 	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '周', value: 2 }];
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
 	  $scope.account = {
 	    limit: 1,
 	    flow: 100

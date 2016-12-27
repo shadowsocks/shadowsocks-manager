@@ -16,7 +16,7 @@ const addAccount = async (type, options) => {
     });
     await checkAccount.checkServer();
     return;
-  } else if (type === 2) {
+  } else if (type >= 2 && type <= 5) {
     await knex('account_plugin').insert({
       type,
       userId: options.user,
