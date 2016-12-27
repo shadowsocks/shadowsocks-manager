@@ -17,6 +17,29 @@ setInterval(() => {
   messages = [];
 }, 10 * 1000);
 
+const addPort = (data, server) => {
+  messages.push([{
+    command: 'add',
+    port: data.port,
+    password: data.password,
+  }, {
+    host: server.host,
+    port: server.port,
+    password: server.password,
+  }]);
+};
+
+const delPort = (data, server) => {
+  messages.push([{
+    command: 'del',
+    port: data.port,
+  }, {
+    host: server.host,
+    port: server.port,
+    password: server.password,
+  }]);
+};
+
 const checkFlow = async (server, port, startTime, endTime) => {
   const flow = await knex('saveFlow')
   .sum('flow as sumFlow')
@@ -34,48 +57,40 @@ const checkServer = async () => {
     return !!account.filter(f => f.port === number)[0];
   };
   server.forEach(async s => {
-    const port = await manager.send({
-      command: 'list',
-    }, {
+    const port = await manager.send({ command: 'list' }, {
       host: s.host,
       port: s.port,
       password: s.password,
     });
-    // console.log(port);
-    // console.log(account);
-    // console.log();
     port.exist = number => {
       return !!port.filter(f => f.port === number)[0];
     };
     account.forEach(async a => {
       if(a.type === 2) {
-        // console.log(JSON.parse(a.data));
+        const data = JSON.parse(a.data);
         const flow = await checkFlow(s.id, a.port, Date.now() - 86400000, Date.now());
-      }
-      if(port.exist(a.port)) {
+        if(flow >= data.flow) {
+          port.exist(a.port) && delPort(a, s);
+          return;
+        } else if(data.create + data.limit * 7 * 86400 * 1000 <= Date.now()) {
+          port.exist(a.port) && delPort(a, s);
+          return;
+        } else if(!port.exist(a.port)) {
+          addPort(a, s);
+          return;
+        }
+      } else if (a.type === 1) {
+        if(port.exist(a.port)) {
+          return;
+        }
+        addPort(a, s);
         return;
       }
-      messages.push([{
-        command: 'add',
-        port: a.port,
-        password: a.password,
-      }, {
-        host: s.host,
-        port: s.port,
-        password: s.password,
-      }]);
     });
     port.forEach(async p => {
       if(!account.exist(p.port)) {
-        messages.push([{
-          command: 'del',
-          port: p.port,
-          password: p.password,
-        }, {
-          host: s.host,
-          port: s.port,
-          password: s.password,
-        }]);
+        delPort(p, s);
+        return;
       }
     });
   });
@@ -86,4 +101,4 @@ exports.checkServer = checkServer;
 checkServer();
 setInterval(() => {
   checkServer();
-}, 120 * 1000);
+}, 60 * 1000);
