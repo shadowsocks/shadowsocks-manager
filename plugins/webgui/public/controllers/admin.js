@@ -107,12 +107,20 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   }
 ]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
-    $http.get('/api/admin/account').then(success => {
-      $scope.account = success.data;
-    });
+    const getAccount = () => {
+      $http.get('/api/admin/account').then(success => {
+        $scope.account = success.data;
+      });
+    };
+    getAccount();
     $scope.setFabButton(() => {
       $state.go('admin.addAccount');
     });
+    $scope.deleteAccount = (id) => {
+      $http.delete('/api/admin/account/' + id).then(success => {
+        getAccount();
+      });
+    };
   }
 ]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
@@ -120,7 +128,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       {key: '不限量', value: 1},
       {key: '周', value: 2},
     ];
-    $scope.account = {};
+    $scope.account = {
+      limit: 1,
+      flow: 100,
+    };
     $scope.cancel = () => {
       $state.go('admin.account');
     };

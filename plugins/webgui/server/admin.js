@@ -106,3 +106,14 @@ exports.addAccount = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.deleteAccount = (req, res) => {
+  const accountId = req.params.accountId;
+  account.delAccount(accountId).then(success => {
+    console.log(success);
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

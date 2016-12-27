@@ -39,5 +39,15 @@ const getAccount = async () => {
   return account;
 };
 
+const delAccount = async (id) => {
+  const result = await knex('account_plugin').delete().where({ id });
+  if(!result) {
+    return Promise.reject('Account id[' + id + '] not found');
+  }
+  await checkAccount.checkServer();
+  return result;
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
+exports.delAccount = delAccount;

@@ -280,15 +280,26 @@
 	  //   $scope.server = success.data;
 	  // });
 	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  $http.get('/api/admin/account').then(function (success) {
-	    $scope.account = success.data;
-	  });
+	  var getAccount = function getAccount() {
+	    $http.get('/api/admin/account').then(function (success) {
+	      $scope.account = success.data;
+	    });
+	  };
+	  getAccount();
 	  $scope.setFabButton(function () {
 	    $state.go('admin.addAccount');
 	  });
+	  $scope.deleteAccount = function (id) {
+	    $http.delete('/api/admin/account/' + id).then(function (success) {
+	      getAccount();
+	    });
+	  };
 	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '周', value: 2 }];
-	  $scope.account = {};
+	  $scope.account = {
+	    limit: 1,
+	    flow: 100
+	  };
 	  $scope.cancel = function () {
 	    $state.go('admin.account');
 	  };
