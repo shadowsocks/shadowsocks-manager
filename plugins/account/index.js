@@ -29,6 +29,8 @@ const addAccount = async (type, options) => {
       }),
       status: 0,
     });
+    await checkAccount.checkServer();
+    return;
   }
 };
 
