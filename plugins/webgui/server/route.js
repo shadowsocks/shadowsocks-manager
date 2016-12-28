@@ -32,6 +32,9 @@ app.delete('/api/admin/account/:accountId', isAdmin, admin.deleteAccount);
 //   return res.render('index0');
 // });
 
+// const flow = appRequire('plugins/flowSaver/flow');
+// flow.getServerFlow(2, [Date.now() - 900 * 1000, Date.now() - 600 * 1000, Date.now() - 300 * 1000, Date.now()]).then(console.log).catch(console.log);
+
 app.get('*', (req, res) => {
   return res.render('index');
 });

@@ -36,7 +36,7 @@ const addAccount = async (type, options) => {
 
 const changePort = async (id, port) => {
   const result = await knex('account_plugin').update({ port }).where({ id });
-  console.log(result);
+  // console.log(result);
   await checkAccount.checkServer();
 };
 

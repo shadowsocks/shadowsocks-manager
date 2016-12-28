@@ -51,4 +51,49 @@ const getFlow = function () {
   }
 };
 
+const getServerFlow = async (serverId, timeArray) => {
+  const result = [];
+  timeArray.forEach((time, index) => {
+    if(index === timeArray.length - 1) {
+      return;
+    }
+    const startTime = time;
+    const endTime = timeArray[index + 1];
+    const getFlow = knex('saveFlow')
+    .sum('flow as sumFlow')
+    .groupBy('port')
+    .select(['port'])
+    .where({ id: serverId })
+    .whereBetween('time', [startTime, endTime]).then(success => {
+      if(success[0]) { return success[0].sumFlow; }
+      return 0;
+    });
+    result.push(getFlow);
+  });
+  return Promise.all(result);
+};
+
+const getServerPortFlow = async (serverId, port, timeArray) => {
+  const result = [];
+  timeArray.forEach((time, index) => {
+    if(index === timeArray.length - 1) {
+      return;
+    }
+    const startTime = time;
+    const endTime = timeArray[index + 1];
+    const getFlow = knex('saveFlow')
+    .sum('flow as sumFlow')
+    .groupBy('port')
+    .select(['port'])
+    .where({ id: serverId, port })
+    .whereBetween('time', [startTime, endTime]).then(success => {
+      if(success[0]) { return success[0].sumFlow; }
+      return 0;
+    });
+    result.push(getFlow);
+  });
+  return Promise.all(result);
+};
+
 exports.getFlow = getFlow;
+exports.getServerFlow = getServerFlow;
