@@ -110,7 +110,17 @@ exports.addAccount = (req, res) => {
 exports.deleteAccount = (req, res) => {
   const accountId = req.params.accountId;
   account.delAccount(accountId).then(success => {
-    console.log(success);
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.changeAccountPort = (req, res) => {
+  const accountId = req.params.accountId;
+  const port = +req.body.port;
+  account.changePort(accountId, port).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);

@@ -6,7 +6,7 @@ const moment = require('moment');
 
 let messages = [];
 
-setInterval(() => {
+const sendMessage = () => {
   if(!messages.length) {
     return;
   }
@@ -15,6 +15,10 @@ setInterval(() => {
     manager.send(message[0], message[1]).then().catch();
   });
   messages = [];
+};
+
+setInterval(() => {
+  sendMessage();
 }, 10 * 1000);
 
 const addPort = (data, server) => {
@@ -78,7 +82,6 @@ const checkServer = async () => {
           startTime += timePeriod;
         }
         const flow = await checkFlow(s.id, a.port, startTime, Date.now());
-        // console.log(s.host + ':' + a.port + ' ' + data.flow + ', ' + flow + (flow >= data.flow ? ' *' : ''));
         if(flow >= data.flow) {
           port.exist(a.port) && delPort(a, s);
           return;
@@ -107,6 +110,9 @@ const checkServer = async () => {
 };
 
 exports.checkServer = checkServer;
+exports.sendMessage = sendMessage;
+exports.addPort = addPort;
+exports.delPort = delPort;
 
 checkServer();
 setInterval(() => {
