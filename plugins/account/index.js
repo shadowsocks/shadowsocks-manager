@@ -54,7 +54,13 @@ const delAccount = async (id) => {
 };
 
 const editAccount = async (id, options) => {
-
+  const account = await knex('account_plugin').select().where({ id }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  });
+  console.log(account);
 };
 
 exports.addAccount = addAccount;

@@ -26,6 +26,7 @@ app.post('/api/admin/server', isAdmin, admin.addServer);
 app.get('/api/admin/account', isAdmin, admin.getAccount);
 app.post('/api/admin/account', isAdmin, admin.addAccount);
 app.put('/api/admin/account/:accountId/port', isAdmin, admin.changeAccountPort);
+app.put('/api/admin/account/:accountId/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId', isAdmin, admin.deleteAccount);
 
 // app.get('/test', (req, res) => {

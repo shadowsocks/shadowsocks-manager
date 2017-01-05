@@ -133,3 +133,13 @@ exports.changeAccountPort = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.changeAccountData = (req, res) => {
+  const accountId = req.params.accountId;
+  account.editAccount(accountId).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

@@ -116,10 +116,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.setFabButton(() => {
       $state.go('admin.addAccount');
     });
-    $scope.deleteAccount = (id) => {
-      $http.delete('/api/admin/account/' + id).then(success => {
-        getAccount();
-      });
+    // $scope.deleteAccount = (id) => {
+    //   $http.delete('/api/admin/account/' + id).then(success => {
+    //     getAccount();
+    //   });
+    // };
+    $scope.editAccount = id => {
+      $state.go('admin.editAccount', { accountId: id });
     };
   }
 ]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http',
@@ -149,5 +152,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $state.go('admin.account');
       });
     };
+  }
+]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+
   }
 ]);
