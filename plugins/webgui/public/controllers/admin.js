@@ -125,8 +125,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $state.go('admin.editAccount', { accountId: id });
     };
   }
-]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -135,6 +135,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       {key: '小时', value: 5},
     ];
     $scope.account = {
+      time: Date.now(),
       limit: 1,
       flow: 100,
     };
@@ -150,6 +151,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         flow: +$scope.account.flow * 1000 * 1000,
       }).then(success => {
         $state.go('admin.account');
+      });
+    };
+    $scope.pickTime = () => {
+      $mdBottomSheet.show({
+        templateUrl: '/public/views/admin/picktime.html',
+        preserveScope: true,
+        scope: $scope,
+        controller: function($scope) {}
+        // controller: 'ListBottomSheetCtrl'
       });
     };
   }

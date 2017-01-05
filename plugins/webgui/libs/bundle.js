@@ -63,7 +63,7 @@
 
 	'use strict';
 
-	exports.app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'nvd3']);
+	exports.app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'nvd3', 'mdPickers']);
 
 /***/ },
 /* 2 */
@@ -297,9 +297,10 @@
 	  $scope.editAccount = function (id) {
 	    $state.go('admin.editAccount', { accountId: id });
 	  };
-	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
 	  $scope.account = {
+	    time: Date.now(),
 	    limit: 1,
 	    flow: 100
 	  };
@@ -315,6 +316,15 @@
 	      flow: +$scope.account.flow * 1000 * 1000
 	    }).then(function (success) {
 	      $state.go('admin.account');
+	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/picktime.html',
+	      preserveScope: true,
+	      scope: $scope,
+	      controller: function controller($scope) {}
+	      // controller: 'ListBottomSheetCtrl'
 	    });
 	  };
 	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {

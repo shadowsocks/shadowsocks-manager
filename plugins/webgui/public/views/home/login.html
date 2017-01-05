@@ -6,7 +6,7 @@
             <form name="userForm">
                 <md-input-container class="md-block">
                     <label>邮箱</label>
-                    <input type="email" required name="email" ng-model="user.email" ng-keypress="emailKeypress($event)" autofocus>
+                    <input type="email" required name="email" ng-model="user.email" ng-keypress="emailKeypress($event)" md-autofocus>
                     <div ng-messages="userForm.email.$error">
                         <div ng-message="required">邮箱不能为空</div>
                         <div ng-message="email">必须填写一个有效邮箱地址</div>
