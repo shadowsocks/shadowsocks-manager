@@ -322,7 +322,6 @@
 	  $scope.account = {};
 	  var accountId = $stateParams.accountId;
 	  $http.get('/api/admin/account/' + accountId).then(function (success) {
-	    console.log(success.data);
 	    $scope.account.type = success.data.type;
 	    $scope.account.port = success.data.port;
 	    $scope.account.password = success.data.password;
@@ -331,6 +330,20 @@
 	      $scope.account.flow = success.data.data.flow / 1000000;
 	    }
 	  });
+	  $scope.cancel = function () {
+	    $state.go('admin.account');
+	  };
+	  $scope.confirm = function () {
+	    $http.put('/api/admin/account/' + accountId + '/data', {
+	      type: +$scope.account.type,
+	      port: +$scope.account.port,
+	      password: $scope.account.password,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
+	    }).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
 	}]);
 
 /***/ },

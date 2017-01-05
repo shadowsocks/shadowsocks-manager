@@ -165,7 +165,6 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.account = {};
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
-      console.log(success.data);
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
@@ -174,5 +173,19 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $scope.account.flow = success.data.data.flow / 1000000;
       }
     });
+    $scope.cancel = () => {
+      $state.go('admin.account');
+    };
+    $scope.confirm = () => {
+      $http.put('/api/admin/account/' + accountId + '/data', {
+        type: +$scope.account.type,
+        port: +$scope.account.port,
+        password: $scope.account.password,
+        limit: +$scope.account.limit,
+        flow: +$scope.account.flow * 1000 * 1000,
+      }).then(success => {
+        $state.go('admin.account');
+      });
+    };
   }
 ]);

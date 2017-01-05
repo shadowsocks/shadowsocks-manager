@@ -4,4 +4,5 @@ exports.app = angular.module('app', [
   'ngMessages',
   'ja.qr',
   'nvd3',
+  'mdPickers',
 ]);
