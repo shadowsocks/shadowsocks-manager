@@ -322,10 +322,11 @@
 	    $mdBottomSheet.show({
 	      templateUrl: '/public/views/admin/picktime.html',
 	      preserveScope: true,
-	      scope: $scope,
-	      controller: function controller($scope) {}
-	      // controller: 'ListBottomSheetCtrl'
+	      scope: $scope
 	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
 	  };
 	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];

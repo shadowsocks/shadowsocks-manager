@@ -158,9 +158,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         templateUrl: '/public/views/admin/picktime.html',
         preserveScope: true,
         scope: $scope,
-        controller: function($scope) {}
-        // controller: 'ListBottomSheetCtrl'
+        // controller: function($scope) {}
       });
+    };
+    $scope.setStartTime = (number) => {
+      $scope.account.time += number;
     };
   }
 ]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http',
