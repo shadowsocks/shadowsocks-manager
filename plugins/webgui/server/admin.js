@@ -84,6 +84,23 @@ exports.getAccount = (req, res) => {
   });
 };
 
+exports.getOneAccount = (req, res) => {
+  const accountId = req.params.accountId;
+  account.getAccount().then(success => {
+    const accountInfo = success.filter(f => {
+      return f.id === +accountId;
+    })[0];
+    if(accountInfo) {
+      accountInfo.data = JSON.parse(accountInfo.data);
+      return res.send(accountInfo);
+    }
+    Promise.reject('account not found');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.addAccount = (req, res) => {
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();

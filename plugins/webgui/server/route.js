@@ -24,6 +24,7 @@ app.get('/api/admin/server/:serverId', isAdmin, admin.getOneServer);
 app.post('/api/admin/server', isAdmin, admin.addServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
+app.get('/api/admin/account/:accountId', isAdmin, admin.getOneAccount);
 app.post('/api/admin/account', isAdmin, admin.addAccount);
 app.put('/api/admin/account/:accountId/port', isAdmin, admin.changeAccountPort);
 app.put('/api/admin/account/:accountId/data', isAdmin, admin.changeAccountData);

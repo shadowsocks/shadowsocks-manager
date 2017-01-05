@@ -317,7 +317,21 @@
 	      $state.go('admin.account');
 	    });
 	  };
-	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {}]);
+	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.account = {};
+	  var accountId = $stateParams.accountId;
+	  $http.get('/api/admin/account/' + accountId).then(function (success) {
+	    console.log(success.data);
+	    $scope.account.type = success.data.type;
+	    $scope.account.port = success.data.port;
+	    $scope.account.password = success.data.password;
+	    if (success.data.type >= 2 && success.data.type <= 5) {
+	      $scope.account.limit = success.data.data.limit;
+	      $scope.account.flow = success.data.data.flow / 1000000;
+	    }
+	  });
+	}]);
 
 /***/ },
 /* 6 */
@@ -414,7 +428,7 @@
 	    controller: 'AdminAddAccountController',
 	    templateUrl: '/public/views/admin/addAccount.html'
 	  }).state('admin.editAccount', {
-	    url: '/editAccount/:accountId',
+	    url: '/account/:accountId',
 	    controller: 'AdminEditAccountController',
 	    templateUrl: '/public/views/admin/editAccount.html'
 	  });

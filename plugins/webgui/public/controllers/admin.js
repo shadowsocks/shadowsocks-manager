@@ -155,6 +155,24 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   }
 ]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
-
+    $scope.typeList = [
+      {key: '不限量', value: 1},
+      {key: '按周', value: 2},
+      {key: '按月', value: 3},
+      {key: '按天', value: 4},
+      {key: '小时', value: 5},
+    ];
+    $scope.account = {};
+    const accountId = $stateParams.accountId;
+    $http.get('/api/admin/account/' + accountId).then(success => {
+      console.log(success.data);
+      $scope.account.type = success.data.type;
+      $scope.account.port = success.data.port;
+      $scope.account.password = success.data.password;
+      if(success.data.type >= 2 && success.data.type <= 5) {
+        $scope.account.limit = success.data.data.limit;
+        $scope.account.flow = success.data.data.flow / 1000000;
+      }
+    });
   }
 ]);
