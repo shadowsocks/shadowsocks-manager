@@ -36,7 +36,6 @@ const addAccount = async (type, options) => {
 
 const changePort = async (id, port) => {
   const result = await knex('account_plugin').update({ port }).where({ id });
-  // console.log(result);
   await checkAccount.checkServer();
 };
 
@@ -54,7 +53,13 @@ const delAccount = async (id) => {
   return result;
 };
 
+const editAccount = async (id, options) => {
+
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
+exports.editAccount = editAccount;
+
 exports.changePort = changePort;

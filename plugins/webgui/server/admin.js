@@ -118,9 +118,15 @@ exports.deleteAccount = (req, res) => {
 };
 
 exports.changeAccountPort = (req, res) => {
-  const accountId = req.params.accountId;
-  const port = +req.body.port;
-  account.changePort(accountId, port).then(success => {
+  req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
+  req.getValidationResult().then(result => {
+    if(result.isEmpty()) {
+      const accountId = req.params.accountId;
+      const port = +req.body.port;
+      return account.changePort(accountId, port);
+    }
+    result.throw();
+  }).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);
