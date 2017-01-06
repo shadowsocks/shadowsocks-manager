@@ -104,15 +104,17 @@ exports.getOneAccount = (req, res) => {
 exports.addAccount = (req, res) => {
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();
+  req.checkBody('time', 'Invalid time').notEmpty();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
       const type = +req.body.type;
       const port = +req.body.port;
       const password = req.body.password;
+      const time = req.body.time;
       const limit = +req.body.limit;
       const flow = +req.body.flow;
       return account.addAccount(type, {
-        port, password, limit, flow,
+        port, password, time, limit, flow,
       });
     }
     result.throw();
@@ -153,7 +155,14 @@ exports.changeAccountPort = (req, res) => {
 
 exports.changeAccountData = (req, res) => {
   const accountId = req.params.accountId;
-  account.editAccount(accountId).then(success => {
+  account.editAccount(accountId, {
+    type: req.body.type,
+    port: +req.body.port,
+    password: req.body.password,
+    time: req.body.time,
+    limit: +req.body.limit,
+    flow: +req.body.flow,
+  }).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);

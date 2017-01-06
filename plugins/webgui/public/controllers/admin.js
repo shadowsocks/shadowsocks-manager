@@ -134,6 +134,12 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       {key: '按天', value: 4},
       {key: '小时', value: 5},
     ];
+    $scope.timeLimit = {
+      '2': 7 * 24 * 3600000,
+      '3': 30 * 24 * 3600000,
+      '4': 24 * 3600000,
+      '5': 3600000,
+    };
     $scope.account = {
       time: Date.now(),
       limit: 1,
@@ -147,6 +153,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         type: +$scope.account.type,
         port: +$scope.account.port,
         password: $scope.account.password,
+        time: $scope.account.time,
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
       }).then(success => {
@@ -165,13 +172,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.setLimit = (number) => {
       $scope.account.limit += number;
-      if($scope.account.limit < 0) {
-        $scope.account.limit = 0;
+      if($scope.account.limit < 1) {
+        $scope.account.limit = 1;
       }
     };
   }
-]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -179,13 +186,22 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       {key: '按天', value: 4},
       {key: '小时', value: 5},
     ];
-    $scope.account = {};
+    $scope.timeLimit = {
+      '2': 7 * 24 * 3600000,
+      '3': 30 * 24 * 3600000,
+      '4': 24 * 3600000,
+      '5': 3600000,
+    };
+    $scope.account = {
+      time: Date.now(),
+    };
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
       if(success.data.type >= 2 && success.data.type <= 5) {
+        $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;
         $scope.account.flow = success.data.data.flow / 1000000;
       }
@@ -198,11 +214,28 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         type: +$scope.account.type,
         port: +$scope.account.port,
         password: $scope.account.password,
+        time: $scope.account.time,
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
       }).then(success => {
         $state.go('admin.account');
       });
+    };
+    $scope.pickTime = () => {
+      $mdBottomSheet.show({
+        templateUrl: '/public/views/admin/picktime.html',
+        preserveScope: true,
+        scope: $scope,
+      });
+    };
+    $scope.setStartTime = (number) => {
+      $scope.account.time += number;
+    };
+    $scope.setLimit = (number) => {
+      $scope.account.limit += number;
+      if($scope.account.limit < 1) {
+        $scope.account.limit = 1;
+      }
     };
   }
 ]);

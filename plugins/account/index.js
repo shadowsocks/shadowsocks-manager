@@ -23,7 +23,7 @@ const addAccount = async (type, options) => {
       port: options.port,
       password: options.password,
       data: JSON.stringify({
-        create: Date.now(),
+        create: options.time || Date.now(),
         flow: options.flow || 1 * 1000 * 1000 * 1000,
         limit: options.limit || 1,
       }),
@@ -60,7 +60,23 @@ const editAccount = async (id, options) => {
     }
     return Promise.reject('account not found');
   });
-  console.log(account);
+  const update = {};
+  update.type = options.type;
+  if(options.type === 1) {
+    update.data = null;
+    update.port = +options.port;
+    update.password = options.password;
+  } else if(options.type >= 2 && options.type <= 5) {
+    update.data = JSON.stringify({
+      create: options.time || Date.now(),
+      flow: options.flow || 1 * 1000 * 1000 * 1000,
+      limit: options.limit || 1,
+    });
+    update.port = +options.port;
+    update.password = options.password;
+  }
+  await knex('account_plugin').update(update).where({ id });
+  return;
 };
 
 exports.addAccount = addAccount;

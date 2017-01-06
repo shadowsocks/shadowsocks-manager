@@ -6,9 +6,16 @@
             <form name="accountForm">
                 <md-input-container class="md-block">
                     <label>类型</label>
-                    <md-select ng-model="account.type">
-                        <md-option ng-repeat="type in typeList" value="{{type.value}}">{{type.key}}</md-option>
-                    </md-select>
+                    <div layout="row">
+                        <md-select ng-model="account.type" flex="75">
+                            <md-option ng-repeat="type in typeList" value="{{type.value}}">{{type.key}}</md-option>
+                        </md-select>
+                        <div ng-if="+account.type >= 2 && +account.type <= 5" layout="row" layout-align="end center">
+                            <md-button ng-click="pickTime()">
+                                <md-icon class="material-icons">access_time</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>端口</label>
@@ -24,13 +31,13 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
+                <!-- <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
                     <label>时长</label>
                     <input type="number" required name="limit" ng-model="account.limit">
                     <div ng-messages="accountForm.limit.$error">
                         <div ng-message="required">时长不能为空</div>
                     </div>
-                </md-input-container>
+                </md-input-container> -->
                 <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
                     <label>流量(MB)</label>
                     <input type="number" required name="flow" ng-model="account.flow">

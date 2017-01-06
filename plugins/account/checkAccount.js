@@ -85,7 +85,7 @@ const checkServer = async () => {
         if(flow >= data.flow) {
           port.exist(a.port) && delPort(a, s);
           return;
-        } else if(data.create + data.limit * timePeriod <= Date.now()) {
+        } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
           port.exist(a.port) && delPort(a, s);
           return;
         } else if(!port.exist(a.port)) {

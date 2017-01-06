@@ -299,6 +299,12 @@
 	  };
 	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
 	  $scope.account = {
 	    time: Date.now(),
 	    limit: 1,
@@ -312,6 +318,7 @@
 	      type: +$scope.account.type,
 	      port: +$scope.account.port,
 	      password: $scope.account.password,
+	      time: $scope.account.time,
 	      limit: +$scope.account.limit,
 	      flow: +$scope.account.flow * 1000 * 1000
 	    }).then(function (success) {
@@ -330,19 +337,28 @@
 	  };
 	  $scope.setLimit = function (number) {
 	    $scope.account.limit += number;
-	    if ($scope.account.limit < 0) {
-	      $scope.account.limit = 0;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
 	    }
 	  };
-	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
-	  $scope.account = {};
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
+	  $scope.account = {
+	    time: Date.now()
+	  };
 	  var accountId = $stateParams.accountId;
 	  $http.get('/api/admin/account/' + accountId).then(function (success) {
 	    $scope.account.type = success.data.type;
 	    $scope.account.port = success.data.port;
 	    $scope.account.password = success.data.password;
 	    if (success.data.type >= 2 && success.data.type <= 5) {
+	      $scope.account.time = success.data.data.create;
 	      $scope.account.limit = success.data.data.limit;
 	      $scope.account.flow = success.data.data.flow / 1000000;
 	    }
@@ -355,11 +371,28 @@
 	      type: +$scope.account.type,
 	      port: +$scope.account.port,
 	      password: $scope.account.password,
+	      time: $scope.account.time,
 	      limit: +$scope.account.limit,
 	      flow: +$scope.account.flow * 1000 * 1000
 	    }).then(function (success) {
 	      $state.go('admin.account');
 	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/picktime.html',
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
+	  };
+	  $scope.setLimit = function (number) {
+	    $scope.account.limit += number;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
+	    }
 	  };
 	}]);
 
