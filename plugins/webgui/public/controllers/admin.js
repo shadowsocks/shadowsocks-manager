@@ -60,11 +60,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.fabButton = false;
     });
   }
-]).controller('AdminIndexController', ['$scope',
+])
+.controller('AdminIndexController', ['$scope',
   ($scope) => {
     console.log('Index');
   }
-]).controller('AdminServerController', ['$scope', '$http', '$state',
+])
+.controller('AdminServerController', ['$scope', '$http', '$state',
   ($scope, $http, $state) => {
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
@@ -76,13 +78,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $state.go('admin.addServer');
     });
   }
-]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
+])
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
     });
   }
-]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
+])
+.controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     $scope.server = {};
     $scope.confirm = () => {
@@ -99,13 +103,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $state.go('admin.server');
     };
   }
-]).controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http',
+])
+.controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
     //   $scope.server = success.data;
     // });
   }
-]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
+])
+.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     const getAccount = () => {
       $http.get('/api/admin/account').then(success => {
@@ -125,7 +131,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $state.go('admin.editAccount', { accountId: id });
     };
   }
-]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
+])
+.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
   ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
     $scope.typeList = [
       {key: '不限量', value: 1},
@@ -177,7 +184,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       }
     };
   }
-]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
+])
+.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
   ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
     $scope.typeList = [
       {key: '不限量', value: 1},

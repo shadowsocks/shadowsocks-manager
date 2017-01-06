@@ -498,7 +498,7 @@
 	    controller: 'AdminAddAccountController',
 	    templateUrl: '/public/views/admin/addAccount.html'
 	  }).state('admin.editAccount', {
-	    url: '/account/:accountId',
+	    url: '/account/:accountId/edit',
 	    controller: 'AdminEditAccountController',
 	    templateUrl: '/public/views/admin/editAccount.html'
 	  });
