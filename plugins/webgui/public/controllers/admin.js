@@ -70,6 +70,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, $http, $state) => {
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
+      $scope.servers.forEach(server => {
+        $http.get('/api/admin/flow/' + server.id, {
+          params: {
+            type: 'day',
+          }
+        }).then(success => {
+          console.log(success.data);
+        });
+      });
     });
     $scope.toServerPage = (serverId) => {
       $state.go('admin.serverPage', { serverId });
