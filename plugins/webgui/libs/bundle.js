@@ -57,13 +57,15 @@
 	__webpack_require__(7);
 	__webpack_require__(8);
 
+	__webpack_require__(9);
+
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	exports.app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js']);
+	exports.app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js', 'angularMoment']);
 
 /***/ },
 /* 2 */
@@ -246,10 +248,32 @@
 	  });
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  console.log('Index');
-	}]).controller('AdminServerController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
+	}]).controller('AdminServerController', ['$scope', '$http', '$state', 'moment', function ($scope, $http, $state, moment) {
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
 	    $scope.servers.forEach(function (server) {
+	      server.flow = {};
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.today = success.data[0];
+	      });
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.week = success.data[0];
+	      });
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().date(1).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.month = success.data[0];
+	      });
 	      $http.get('/api/admin/flow/' + server.id, {
 	        params: {
 	          type: 'hour'
@@ -553,6 +577,30 @@
 	    templateUrl: '/public/views/admin/editAccount.html'
 	  });
 	}]);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.filter('flow', function () {
+	  return function (input) {
+	    if (input < 1000) {
+	      return input + ' B';
+	    } else if (input < 1000000) {
+	      return (input / 1000).toFixed(1) + ' KB';
+	    } else if (input < 1000000000) {
+	      return (input / 1000000).toFixed(1) + ' MB';
+	    } else if (input < 1000000000000) {
+	      return (input / 1000000000).toFixed(2) + ' GB';
+	    } else {
+	      return input;
+	    }
+	  };
+	});
 
 /***/ }
 /******/ ]);

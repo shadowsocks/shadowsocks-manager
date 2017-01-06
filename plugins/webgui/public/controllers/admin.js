@@ -66,11 +66,42 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     console.log('Index');
   }
 ])
-.controller('AdminServerController', ['$scope', '$http', '$state',
-  ($scope, $http, $state) => {
+.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
+  ($scope, $http, $state, moment) => {
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
       $scope.servers.forEach(server => {
+        server.flow = {};
+        $http.get('/api/admin/flow/' + server.id, {
+          params: {
+            time: [
+              moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+              moment().toDate().valueOf(),
+            ],
+          }
+        }).then(success => {
+          server.flow.today = success.data[0];
+        });
+        $http.get('/api/admin/flow/' + server.id, {
+          params: {
+            time: [
+              moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+              moment().toDate().valueOf(),
+            ],
+          }
+        }).then(success => {
+          server.flow.week = success.data[0];
+        });
+        $http.get('/api/admin/flow/' + server.id, {
+          params: {
+            time: [
+              moment().date(1).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+              moment().toDate().valueOf(),
+            ],
+          }
+        }).then(success => {
+          server.flow.month = success.data[0];
+        });
         $http.get('/api/admin/flow/' + server.id, {
           params: {
             type: 'hour',

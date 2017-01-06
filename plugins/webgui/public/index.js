@@ -4,4 +4,5 @@ exports.app = angular.module('app', [
   'ngMessages',
   'ja.qr',
   'chart.js',
+  'angularMoment',
 ]);
