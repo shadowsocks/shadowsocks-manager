@@ -255,38 +255,44 @@
 	          type: 'hour'
 	        }
 	      }).then(function (success) {
-	        // console.log(success.data);
-	        var scaleLabel = function scaleLabel(chart) {
-	          var input = chart.value;
-	          if (input < 1000) {
-	            return input + ' B';
-	          } else if (input < 1000000) {
-	            return (input / 1000).toFixed(0) + ' KB';
-	          } else if (input < 1000000000) {
-	            return (input / 1000000).toFixed(0) + ' MB';
-	          } else if (input < 1000000000000) {
-	            return (input / 1000000000).toFixed(1) + ' GB';
+	        var scaleLabel = function scaleLabel(number) {
+	          if (number < 1) {
+	            return number.toFixed(1) + ' B';
+	          } else if (number < 1000) {
+	            return number.toFixed(0) + ' B';
+	          } else if (number < 1000000) {
+	            return (number / 1000).toFixed(0) + ' KB';
+	          } else if (number < 1000000000) {
+	            return (number / 1000000).toFixed(0) + ' MB';
+	          } else if (number < 1000000000000) {
+	            return (number / 1000000000).toFixed(1) + ' GB';
 	          } else {
-	            return input;
+	            return number;
 	          }
 	        };
 	        server.chart = {
 	          data: [success.data],
-	          labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+	          labels: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+	          // labels: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', '', ],
 	          series: 'day',
-	          datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
+	          datasetOverride: [{ yAxisID: 'y-axis-1' }],
 	          options: {
+	            tooltips: {
+	              callbacks: {
+	                label: function label(tooltipItem) {
+	                  return scaleLabel(tooltipItem.yLabel);
+	                }
+	              }
+	            },
 	            scales: {
 	              yAxes: [{
 	                id: 'y-axis-1',
 	                type: 'linear',
 	                display: true,
-	                position: 'left'
-	              }, {
-	                id: 'y-axis-2',
-	                type: 'linear',
-	                display: true,
-	                position: 'right'
+	                position: 'left',
+	                ticks: {
+	                  callback: scaleLabel
+	                }
 	              }]
 	            }
 	          }
