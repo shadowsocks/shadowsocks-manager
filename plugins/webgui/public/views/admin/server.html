@@ -10,7 +10,15 @@
                     <span class="md-subhead">{{server.host}}:{{server.port}}</span>
                 </md-card-header-text>
             </md-card-header>
-            <img src="http://placehold.it/350x100" class="md-card-image" alt="Washed Out">
+            <div layout="row" layout-align="center center">
+                <div style="width: 100%; max-width: 500px;">
+                    <canvas class="chart chart-line" chart-data="server.chart.data"
+                    chart-labels="server.chart.labels" chart-series="server.chart.series"
+                    chart-options="server.chart.options" chart-dataset-override="server.chart.datasetOverride">
+                    </canvas>
+                </div>
+            </div>
+            <!-- <img src="http://placehold.it/350x100" class="md-card-image" alt="Washed Out"> -->
             <md-card-actions layout="row" layout-align="start center">
                 <md-button ng-click="toServerPage(server.id)">详情</md-button>
                 <!-- <md-card-icon-actions>

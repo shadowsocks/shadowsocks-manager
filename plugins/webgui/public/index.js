@@ -3,6 +3,5 @@ exports.app = angular.module('app', [
   'ui.router',
   'ngMessages',
   'ja.qr',
-  'nvd3',
-  'mdPickers',
+  'chart.js',
 ]);

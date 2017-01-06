@@ -73,10 +73,48 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.servers.forEach(server => {
         $http.get('/api/admin/flow/' + server.id, {
           params: {
-            type: 'day',
+            type: 'hour',
           }
         }).then(success => {
-          console.log(success.data);
+          // console.log(success.data);
+          const scaleLabel = (chart) => {
+            const input = chart.value;
+            if (input < 1000) {
+                return input +' B';
+            } else if (input < 1000000) {
+                return (input/1000).toFixed(0) +' KB';
+            } else if (input < 1000000000) {
+                return (input/1000000).toFixed(0) +' MB';
+            } else if (input < 1000000000000) {
+                return (input/1000000000).toFixed(1) +' GB';
+            } else {
+                return input;
+            }
+        };
+          server.chart = {
+            data: [success.data],
+            labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+            series: 'day',
+            datasetOverride: [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }],
+            options: {
+              scales: {
+                yAxes: [
+                  {
+                    id: 'y-axis-1',
+                    type: 'linear',
+                    display: true,
+                    position: 'left'
+                  },
+                  {
+                    id: 'y-axis-2',
+                    type: 'linear',
+                    display: true,
+                    position: 'right'
+                  }
+                ]
+              }
+            },
+          };
         });
       });
     });
