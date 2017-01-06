@@ -350,7 +350,9 @@
 	    '5': 3600000
 	  };
 	  $scope.account = {
-	    time: Date.now()
+	    time: Date.now(),
+	    limit: 1,
+	    flow: 100
 	  };
 	  var accountId = $stateParams.accountId;
 	  $http.get('/api/admin/account/' + accountId).then(function (success) {
@@ -393,6 +395,11 @@
 	    if ($scope.account.limit < 1) {
 	      $scope.account.limit = 1;
 	    }
+	  };
+	  $scope.deleteAccount = function () {
+	    $http.delete('/api/admin/account/' + accountId).then(function (success) {
+	      $state.go('admin.account');
+	    });
 	  };
 	}]);
 

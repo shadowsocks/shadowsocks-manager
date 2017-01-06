@@ -65,7 +65,7 @@ const editAccount = async (id, options) => {
   if(options.type === 1) {
     update.data = null;
     update.port = +options.port;
-    update.password = options.password;
+    // update.password = options.password;
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
@@ -73,7 +73,7 @@ const editAccount = async (id, options) => {
       limit: options.limit || 1,
     });
     update.port = +options.port;
-    update.password = options.password;
+    // update.password = options.password;
   }
   await knex('account_plugin').update(update).where({ id });
   return;

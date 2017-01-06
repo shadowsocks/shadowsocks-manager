@@ -26,7 +26,7 @@
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>密码</label>
-                    <input type="text" required name="password" ng-model="account.password">
+                    <input type="text" required name="password" ng-model="account.password" disabled>
                     <div ng-messages="accountForm.password.$error">
                         <div ng-message="required">密码不能为空</div>
                     </div>
@@ -53,6 +53,7 @@
         <div flex="10" flex-gt-sm="30"></div>
         <div layout="row" flex layout-align="space-around center">
             <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+            <md-button class="md-raised md-warn" ng-click="deleteAccount()">删除</md-button>
             <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
         </div>
         <div flex="10" flex-gt-sm="30"></div>

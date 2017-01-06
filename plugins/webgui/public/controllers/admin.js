@@ -194,6 +194,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.account = {
       time: Date.now(),
+      limit: 1,
+      flow: 100,
     };
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
@@ -236,6 +238,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       if($scope.account.limit < 1) {
         $scope.account.limit = 1;
       }
+    };
+    $scope.deleteAccount = () => {
+      $http.delete('/api/admin/account/' + accountId).then(success => {
+        $state.go('admin.account');
+      });
     };
   }
 ]);
