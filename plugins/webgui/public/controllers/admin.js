@@ -189,9 +189,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
-    // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
-    //   $scope.server = success.data;
-    // });
+    $http.get('/api/admin/user').then(success => {
+      $scope.users = success.data;
+    });
   }
 ])
 .controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',

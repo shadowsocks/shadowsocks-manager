@@ -350,9 +350,9 @@
 	    $state.go('admin.server');
 	  };
 	}]).controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  // $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
-	  //   $scope.server = success.data;
-	  // });
+	  $http.get('/api/admin/user').then(function (success) {
+	    $scope.users = success.data;
+	  });
 	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  var getAccount = function getAccount() {
 	    $http.get('/api/admin/account').then(function (success) {
