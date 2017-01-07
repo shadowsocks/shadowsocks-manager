@@ -32,6 +32,8 @@ app.delete('/api/admin/account/:accountId', isAdmin, admin.deleteAccount);
 
 app.get('/api/admin/flow/:serverId', isAdmin, admin.getServerFlow);
 
+app.get('/api/admin/user', isAdmin, admin.getUsers);
+
 // app.get('/test', (req, res) => {
 //   return res.render('index0');
 // });

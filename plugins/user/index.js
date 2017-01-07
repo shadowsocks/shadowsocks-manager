@@ -81,6 +81,14 @@ const editUser = async (userInfo, edit) => {
   }
 };
 
+const getUsers = async () => {
+  const users = await knex('user').select().where({
+    type: 'normal',
+  });
+  return users;
+};
+
 exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
+exports.get = getUsers;

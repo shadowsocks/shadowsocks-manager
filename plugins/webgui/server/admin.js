@@ -4,6 +4,7 @@ const manager = appRequire('services/manager');
 const serverManager = appRequire('plugins/flowSaver/server');
 const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
+const user = appRequire('plugins/user/index');
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 
@@ -200,6 +201,15 @@ exports.getServerFlow = (req, res) => {
   }
   flow.getServerFlow(serverId, timeArray).then(success => {
     res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getUsers = (req, res) => {
+  user.get().then(success => {
+    return res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();
