@@ -1,13 +1,13 @@
 <div layout="row" layout-wrap>
-    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in account track by $index">
-        <md-card ng-click="toAccount(a.id)">
+    <div flex>
+        <md-card ng-click="editAccount(account.id)">
             <md-card-header>
                 <md-card-avatar>
                     <img class="md-user-avatar" src="http://placehold.it/50x50" />
                 </md-card-avatar>
                 <md-card-header-text>
-                  <span class="md-title">{{a.port}}</span>
-                  <span class="md-subhead">{{a.password}}</span>
+                  <span class="md-title">{{account.port}}</span>
+                  <span class="md-subhead">{{account.password}}</span>
                 </md-card-header-text>
             </md-card-header>
         </md-card>

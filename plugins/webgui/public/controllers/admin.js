@@ -213,6 +213,19 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     //     getAccount();
     //   });
     // };
+    $scope.toAccount = id => {
+      $state.go('admin.accountPage', { accountId: id });
+    };
+    $scope.editAccount = id => {
+      $state.go('admin.editAccount', { accountId: id });
+    };
+  }
+])
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    $http.get('/api/admin/account/' + $stateParams.accountId).then(success => {
+      $scope.account = success.data;
+    });
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
     };

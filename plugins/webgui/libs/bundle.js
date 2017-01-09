@@ -371,6 +371,16 @@
 	  //     getAccount();
 	  //   });
 	  // };
+	  $scope.toAccount = function (id) {
+	    $state.go('admin.accountPage', { accountId: id });
+	  };
+	  $scope.editAccount = function (id) {
+	    $state.go('admin.editAccount', { accountId: id });
+	  };
+	}]).controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $http.get('/api/admin/account/' + $stateParams.accountId).then(function (success) {
+	    $scope.account = success.data;
+	  });
 	  $scope.editAccount = function (id) {
 	    $state.go('admin.editAccount', { accountId: id });
 	  };
@@ -611,6 +621,10 @@
 	    url: '/account',
 	    controller: 'AdminAccountController',
 	    templateUrl: '/public/views/admin/account.html'
+	  }).state('admin.accountPage', {
+	    url: '/account/:accountId',
+	    controller: 'AdminAccountPageController',
+	    templateUrl: '/public/views/admin/accountPage.html'
 	  }).state('admin.addAccount', {
 	    url: '/addAccount',
 	    controller: 'AdminAddAccountController',
