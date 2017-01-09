@@ -167,11 +167,40 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
     });
+    $scope.editServer = id => {
+      $state.go('admin.editServer', { serverId: id });
+    };
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     $scope.server = {};
+    $scope.confirm = () => {
+      $http.post('/api/admin/server', {
+        name: $scope.server.name,
+        address: $scope.server.address,
+        port: +$scope.server.port,
+        password: $scope.server.password,
+      }).then(success => {
+        $state.go('admin.server');
+      });
+    };
+    $scope.cancel = () => {
+      $state.go('admin.server');
+    };
+  }
+])
+.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+      $scope.server = {
+        name: success.data.name,
+        address: success.data.host,
+        port: +success.data.port,
+        password: success.data.password,
+        method: success.data.password,
+      };
+    });
     $scope.confirm = () => {
       $http.post('/api/admin/server', {
         name: $scope.server.name,
