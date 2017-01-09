@@ -11,6 +11,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/index',
       controller: 'UserIndexController',
       templateUrl: '/public/views/user/index.html',
+    })
+    .state('user.account', {
+      url: '/account',
+      controller: 'UserAccountController',
+      templateUrl: '/public/views/user/account.html',
     });
   }])
 ;

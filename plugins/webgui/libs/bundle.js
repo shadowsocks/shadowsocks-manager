@@ -147,7 +147,6 @@
 	var app = __webpack_require__(1).app;
 
 	app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
-	  console.log('Home');
 	  $scope.innerSideNav = true;
 	  $scope.menuButton = function () {
 	    if ($mdMedia('gt-sm')) {
@@ -160,6 +159,10 @@
 	    name: '首页',
 	    icon: 'home',
 	    click: 'user.index'
+	  }, {
+	    name: '我的账号',
+	    icon: 'account_circle',
+	    click: 'user.account'
 	  }, {
 	    name: '退出',
 	    icon: 'settings',
@@ -176,8 +179,13 @@
 	      $state.go($scope.menus[index].click);
 	    }
 	  };
-	}]).controller('UserIndexController', ['$scope', function ($scope) {
-	  console.log('Index');
+	}]).controller('UserIndexController', ['$scope', function ($scope) {}]).controller('UserAccountController', ['$scope', '$http', function ($scope, $http) {
+	  $http.get('/api/user/account').then(function (success) {
+	    $scope.account = success.data;
+	  });
+	  $http.get('/api/user/server').then(function (success) {
+	    $scope.servers = success.data;
+	  });
 	}]);
 
 /***/ },
@@ -581,6 +589,10 @@
 	    url: '/index',
 	    controller: 'UserIndexController',
 	    templateUrl: '/public/views/user/index.html'
+	  }).state('user.account', {
+	    url: '/account',
+	    controller: 'UserAccountController',
+	    templateUrl: '/public/views/user/account.html'
 	  });
 	}]);
 

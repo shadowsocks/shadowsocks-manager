@@ -4,7 +4,13 @@ const app = appRequire('plugins/webgui/index').app;
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
 
-const isUser = () => {};
+const isUser = (req, res, next) => {
+  if(req.session.type === 'normal') {
+    return next();
+  } else {
+    return res.status(401).end();
+  }
+};
 const isAdmin = (req, res, next) => {
   if(req.session.type === 'admin') {
     return next();
@@ -38,13 +44,8 @@ app.get('/api/admin/user/:userId', isAdmin, admin.getOneUser);
 app.put('/api/admin/user/:userId/:accountId', isAdmin, admin.setUserAccount);
 app.delete('/api/admin/user/:userId/:accountId', isAdmin, admin.deleteUserAccount);
 
-
-// app.get('/test', (req, res) => {
-//   return res.render('index0');
-// });
-
-// const flow = appRequire('plugins/flowSaver/flow');
-// flow.getServerFlow(2, [Date.now() - 900 * 1000, Date.now() - 600 * 1000, Date.now() - 300 * 1000, Date.now()]).then(console.log).catch(console.log);
+app.get('/api/user/account', isUser, user.getAccount);
+app.get('/api/user/server', isUser, user.getServers);
 
 app.get('*', (req, res) => {
   return res.render('index');

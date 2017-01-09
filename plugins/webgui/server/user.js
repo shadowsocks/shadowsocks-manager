@@ -1,6 +1,7 @@
 'use strict';
 
 const user = appRequire('plugins/user/index');
+const account = appRequire('plugins/account/index');
 const knex = appRequire('init/knex').knex;
 
 exports.signup = (req, res) => {
@@ -64,4 +65,26 @@ exports.logout = (req, res) => {
 
 exports.status = (req, res) => {
   res.send({status: req.session.type });
+};
+
+exports.getAccount = (req, res) => {
+  const userId = req.session.user;
+  account.getAccount().then(success => {
+    success = success.filter(f => {
+      return f.userId === userId;
+    });
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).end();
+  });;
+};
+
+exports.getServers = (req, res) => {
+  knex('server').select(['id', 'host', 'name']).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(500).end();
+  });
 };

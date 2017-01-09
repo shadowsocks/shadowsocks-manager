@@ -2,7 +2,6 @@ const app = require('../index').app;
 
 app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
-    console.log('Home');
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {
@@ -15,6 +14,10 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       name: '首页',
       icon: 'home',
       click: 'user.index'
+    }, {
+      name: '我的账号',
+      icon: 'account_circle',
+      click: 'user.account'
     }, {
       name: '退出',
       icon: 'settings',
@@ -32,8 +35,18 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       }
     };
   }
-]).controller('UserIndexController', ['$scope',
+])
+.controller('UserIndexController', ['$scope',
   ($scope) => {
-    console.log('Index');
+  }
+])
+.controller('UserAccountController', ['$scope', '$http',
+  ($scope, $http) => {
+    $http.get('/api/user/account').then(success => {
+      $scope.account = success.data;
+    });
+    $http.get('/api/user/server').then(success => {
+      $scope.servers = success.data;
+    });
   }
 ]);
