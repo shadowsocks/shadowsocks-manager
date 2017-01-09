@@ -46,6 +46,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/account/:accountId/edit',
       controller: 'AdminEditAccountController',
       templateUrl: '/public/views/admin/editAccount.html',
+    })
+    .state('admin.userPage', {
+      url: '/user/:userId',
+      controller: 'AdminUserPageController',
+      templateUrl: '/public/views/admin/userPage.html',
     });
   }])
 ;

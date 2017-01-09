@@ -353,6 +353,9 @@
 	  $http.get('/api/admin/user').then(function (success) {
 	    $scope.users = success.data;
 	  });
+	  $scope.toUser = function (id) {
+	    $state.go('admin.userPage', { userId: id });
+	  };
 	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  var getAccount = function getAccount() {
 	    $http.get('/api/admin/account').then(function (success) {
@@ -475,6 +478,10 @@
 	      $state.go('admin.account');
 	    });
 	  };
+	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  // $http.get('/api/admin/user').then(success => {
+	  //   $scope.users = success.data;
+	  // });
 	}]);
 
 /***/ },
@@ -575,6 +582,10 @@
 	    url: '/account/:accountId/edit',
 	    controller: 'AdminEditAccountController',
 	    templateUrl: '/public/views/admin/editAccount.html'
+	  }).state('admin.userPage', {
+	    url: '/user/:userId',
+	    controller: 'AdminUserPageController',
+	    templateUrl: '/public/views/admin/userPage.html'
 	  });
 	}]);
 

@@ -192,6 +192,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $http.get('/api/admin/user').then(success => {
       $scope.users = success.data;
     });
+    $scope.toUser = (id) => {
+      $state.go('admin.userPage', { userId: id });
+    };
   }
 ])
 .controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
@@ -336,4 +339,12 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       });
     };
   }
-]);
+])
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http',
+  ($scope, $state, $stateParams, $http) => {
+    // $http.get('/api/admin/user').then(success => {
+    //   $scope.users = success.data;
+    // });
+  }
+])
+;
