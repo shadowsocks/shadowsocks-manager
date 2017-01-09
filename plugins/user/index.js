@@ -88,7 +88,19 @@ const getUsers = async () => {
   return users;
 };
 
+const getOneUser = async (id) => {
+  const user = await knex('user').select().where({
+    type: 'normal',
+    id,
+  });
+  if(!user.length) {
+    return Promise.reject('User not found');
+  }
+  return user[0];
+};
+
 exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
 exports.get = getUsers;
+exports.getOne = getOneUser;

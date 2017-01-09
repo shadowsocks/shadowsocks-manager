@@ -478,10 +478,30 @@
 	      $state.go('admin.account');
 	    });
 	  };
-	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  // $http.get('/api/admin/user').then(success => {
-	  //   $scope.users = success.data;
-	  // });
+	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', function ($scope, $state, $stateParams, $http, $mdDialog) {
+	  $http.get('/api/admin/user/' + $stateParams.userId).then(function (success) {
+	    $scope.user = success.data;
+	  });
+	  $http.get('/api/admin/user/account').then(function (success) {
+	    console.log(success.data);
+	    $scope.account = success.data;
+	  });
+	  var openDialog = function openDialog() {
+	    $scope.dialog = $mdDialog.show({
+	      templateUrl: '/public/views/admin/pickaccount.html',
+	      parent: angular.element(document.body),
+	      clickOutsideToClose: true,
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setFabButton(function () {
+	    openDialog();
+	  });
+	  $scope.confirmAccount = function () {
+	    console.log($scope.account);
+	    $mdDialog.hide($scope.dialog);
+	  };
 	}]);
 
 /***/ },

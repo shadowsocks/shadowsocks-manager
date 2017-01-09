@@ -215,3 +215,22 @@ exports.getUsers = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getOneUser = (req, res) => {
+  const userId = req.params.userId;
+  user.getOne(userId).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.userGetAccount = (req, res) => {
+  account.getAccount().then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

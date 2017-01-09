@@ -340,11 +340,31 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
-    // $http.get('/api/admin/user').then(success => {
-    //   $scope.users = success.data;
-    // });
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog',
+  ($scope, $state, $stateParams, $http, $mdDialog) => {
+    $http.get('/api/admin/user/' + $stateParams.userId).then(success => {
+      $scope.user = success.data;
+    });
+    $http.get('/api/admin/user/account').then(success => {
+      console.log(success.data);
+      $scope.account = success.data;
+    });
+    const openDialog = () => {
+      $scope.dialog = $mdDialog.show({
+        templateUrl: '/public/views/admin/pickaccount.html',
+        parent: angular.element(document.body),
+        clickOutsideToClose:true,
+        preserveScope: true,
+        scope: $scope,
+      });
+    };
+    $scope.setFabButton(() => {
+      openDialog();
+    });
+    $scope.confirmAccount = () => {
+      console.log($scope.account);
+      $mdDialog.hide($scope.dialog);
+    };
   }
 ])
 ;
