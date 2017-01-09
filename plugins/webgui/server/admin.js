@@ -218,16 +218,48 @@ exports.getUsers = (req, res) => {
 
 exports.getOneUser = (req, res) => {
   const userId = req.params.userId;
+  let userInfo = null;
   user.getOne(userId).then(success => {
-    return res.send(success);
+    userInfo = success;
+    return account.getAccount();
+  }).then(success => {
+    userInfo.account = success.filter(f => {
+      return f.userId === +userId;
+    });
+    return res.send(userInfo);
   }).catch(err => {
     console.log(err);
     res.status(403).end();
   });
 };
 
-exports.userGetAccount = (req, res) => {
+exports.getUserAccount = (req, res) => {
   account.getAccount().then(success => {
+    success = success.filter(f => {
+      return !f.userId;
+    });
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.setUserAccount = (req, res) => {
+  const userId = req.params.userId;
+  const accountId = req.params.accountId;
+  account.editAccount(accountId, { userId }).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.deleteUserAccount = (req, res) => {
+  const userId = req.params.userId;
+  const accountId = req.params.accountId;
+  account.editAccount(accountId, { userId: null }).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);

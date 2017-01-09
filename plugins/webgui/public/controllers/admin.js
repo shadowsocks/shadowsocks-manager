@@ -342,13 +342,21 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog',
   ($scope, $state, $stateParams, $http, $mdDialog) => {
-    $http.get('/api/admin/user/' + $stateParams.userId).then(success => {
-      $scope.user = success.data;
-    });
-    $http.get('/api/admin/user/account').then(success => {
-      console.log(success.data);
-      $scope.account = success.data;
-    });
+    const userId = $stateParams.userId;
+    const getUserData = () => {
+      $http.get('/api/admin/user/' + $stateParams.userId).then(success => {
+        $scope.user = success.data;
+      });
+      $http.get('/api/admin/user/account').then(success => {
+        $scope.account = success.data;
+      });
+    };
+    getUserData();
+    $scope.deleteUserAccount = (accountId) => {
+      $http.delete(`/api/admin/user/${ userId }/${ accountId }`).then(success => {
+        getUserData();
+      });
+    };
     const openDialog = () => {
       $scope.dialog = $mdDialog.show({
         templateUrl: '/public/views/admin/pickaccount.html',
@@ -364,6 +372,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.confirmAccount = () => {
       console.log($scope.account);
       $mdDialog.hide($scope.dialog);
+      const promise = [];
+      $scope.account.forEach(f => {
+        if(f.isChecked) {
+          promise.push($http.put(`/api/admin/user/${ userId }/${ f.id }`));
+        }
+      });
+      Promise.all(promise).then(success => {
+        getUserData();
+      });
     };
   }
 ])

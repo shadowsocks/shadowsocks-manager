@@ -33,8 +33,10 @@ app.delete('/api/admin/account/:accountId', isAdmin, admin.deleteAccount);
 app.get('/api/admin/flow/:serverId', isAdmin, admin.getServerFlow);
 
 app.get('/api/admin/user', isAdmin, admin.getUsers);
-app.get('/api/admin/user/account', isAdmin, admin.userGetAccount);
+app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
 app.get('/api/admin/user/:userId', isAdmin, admin.getOneUser);
+app.put('/api/admin/user/:userId/:accountId', isAdmin, admin.setUserAccount);
+app.delete('/api/admin/user/:userId/:accountId', isAdmin, admin.deleteUserAccount);
 
 
 // app.get('/test', (req, res) => {

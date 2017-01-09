@@ -479,13 +479,21 @@
 	    });
 	  };
 	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', function ($scope, $state, $stateParams, $http, $mdDialog) {
-	  $http.get('/api/admin/user/' + $stateParams.userId).then(function (success) {
-	    $scope.user = success.data;
-	  });
-	  $http.get('/api/admin/user/account').then(function (success) {
-	    console.log(success.data);
-	    $scope.account = success.data;
-	  });
+	  var userId = $stateParams.userId;
+	  var getUserData = function getUserData() {
+	    $http.get('/api/admin/user/' + $stateParams.userId).then(function (success) {
+	      $scope.user = success.data;
+	    });
+	    $http.get('/api/admin/user/account').then(function (success) {
+	      $scope.account = success.data;
+	    });
+	  };
+	  getUserData();
+	  $scope.deleteUserAccount = function (accountId) {
+	    $http.delete('/api/admin/user/' + userId + '/' + accountId).then(function (success) {
+	      getUserData();
+	    });
+	  };
 	  var openDialog = function openDialog() {
 	    $scope.dialog = $mdDialog.show({
 	      templateUrl: '/public/views/admin/pickaccount.html',
@@ -501,6 +509,15 @@
 	  $scope.confirmAccount = function () {
 	    console.log($scope.account);
 	    $mdDialog.hide($scope.dialog);
+	    var promise = [];
+	    $scope.account.forEach(function (f) {
+	      if (f.isChecked) {
+	        promise.push($http.put('/api/admin/user/' + userId + '/' + f.id));
+	      }
+	    });
+	    Promise.all(promise).then(function (success) {
+	      getUserData();
+	    });
 	  };
 	}]);
 

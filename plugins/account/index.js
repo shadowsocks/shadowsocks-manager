@@ -62,6 +62,7 @@ const editAccount = async (id, options) => {
   });
   const update = {};
   update.type = options.type;
+  update.userId = options.userId;
   if(options.type === 1) {
     update.data = null;
     update.port = +options.port;
