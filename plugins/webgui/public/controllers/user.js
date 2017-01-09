@@ -48,5 +48,6 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     $http.get('/api/user/server').then(success => {
       $scope.servers = success.data;
     });
+    $scope.qrCode = '123414123124123123124513232';
   }
 ]);

@@ -14,8 +14,17 @@
                 <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
                     <md-tab ng-repeat="server in servers"
                            label="{{server.name}}">
-                        <div>
-                            
+                        <div layout="row" layout-align="center center">
+                            <div flex>
+                                <div>地址：{{server.host}}</div>
+                                <div>端口：{{a.port}}</div>
+                                <div>密码：{{a.password}}</div>
+                            </div>
+                            <div flex>
+                                <qr layout-margin text="qrCode" image="true" size="100"></qr>
+                            </div>
+                            <div>
+                            </div>
                         </div>
                     </md-tab>
                 </md-tabs>
