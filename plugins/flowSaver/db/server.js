@@ -14,6 +14,7 @@ const createTable = async() => {
     table.string('host');
     table.integer('port');
     table.string('password');
+    table.string('method');
   });
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
   if(list.length === 0) {

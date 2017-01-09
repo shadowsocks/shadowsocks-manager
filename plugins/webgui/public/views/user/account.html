@@ -1,5 +1,5 @@
 <div layout="row" layout-wrap>
-    <div flex ng-repeat="a in account track by $index">
+    <div flex="100" ng-repeat="a in account track by $index">
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
                 <md-card-avatar>
@@ -11,7 +11,7 @@
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
-                <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect>
+                <md-tabs md-selected="0" md-border-bottom md-autoselect>
                     <md-tab ng-repeat="server in servers"
                            label="{{server.name}}">
                         <div layout="row" layout-align="center center">
@@ -19,6 +19,7 @@
                                 <div>地址：{{server.host}}</div>
                                 <div>端口：{{a.port}}</div>
                                 <div>密码：{{a.password}}</div>
+                                <div>加密方式：{{a.method}}</div>
                             </div>
                             <div flex>
                                 <qr layout-margin text="qrCode" image="true" size="100"></qr>

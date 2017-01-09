@@ -27,6 +27,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminAddServerController',
       templateUrl: '/public/views/admin/addServer.html',
     })
+    .state('admin.editServer', {
+      url: '/server/:serverId/edit',
+      controller: 'AdminEditServerController',
+      templateUrl: '/public/views/admin/editServer.html',
+    })
     .state('admin.user', {
       url: '/user',
       controller: 'AdminUserController',

@@ -343,8 +343,34 @@
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = success.data;
 	  });
+	  $scope.editServer = function (id) {
+	    $state.go('admin.editServer', { serverId: id });
+	  };
 	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  $scope.server = {};
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/server', {
+	      name: $scope.server.name,
+	      address: $scope.server.address,
+	      port: +$scope.server.port,
+	      password: $scope.server.password
+	    }).then(function (success) {
+	      $state.go('admin.server');
+	    });
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.server');
+	  };
+	}]).controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
+	    $scope.server = {
+	      name: success.data.name,
+	      address: success.data.host,
+	      port: +success.data.port,
+	      password: success.data.password,
+	      method: success.data.password
+	    };
+	  });
 	  $scope.confirm = function () {
 	    $http.post('/api/admin/server', {
 	      name: $scope.server.name,
@@ -626,6 +652,10 @@
 	    url: '/addServer',
 	    controller: 'AdminAddServerController',
 	    templateUrl: '/public/views/admin/addServer.html'
+	  }).state('admin.editServer', {
+	    url: '/server/:serverId/edit',
+	    controller: 'AdminEditServerController',
+	    templateUrl: '/public/views/admin/editServer.html'
 	  }).state('admin.user', {
 	    url: '/user',
 	    controller: 'AdminUserController',
