@@ -33,3 +33,16 @@ app.config(['$stateProvider', $stateProvider => {
     });
   }
 ]);
+
+app.service('authInterceptor', ['$q', function($q) {
+  const service = this;
+  service.responseError = function(response) {
+    if (response.status == 401) {
+      window.location = '/';
+    }
+    return $q.reject(response);
+  };
+}])
+.config(['$httpProvider', $httpProvider => {
+  $httpProvider.interceptors.push('authInterceptor');
+}]);

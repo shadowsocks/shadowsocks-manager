@@ -27,14 +27,13 @@
                                 <div flex="50">端口：</div>    <div flex="50">{{account.port}}</div>
                                 <div flex="50">密码：</div>    <div flex="50">{{account.password}}</div>
                                 <div flex="50">加密方式：</div><div flex="50">{{server.method}}</div>
-                                <div flex="50">流量：</div>    <div flex="50">{{serverPortFlow | flow}}/{{account.data.flow | flow}}</div>
+                                <div flex="50">流量：</div>    <div flex="50">{{serverPortFlow | flow}}&nbsp;/&nbsp;<span ng-if="!account.data">无限量</span>{{account.data.flow | flow}}</div>
+                                <div flex="50">最近连接：</div><div flex="50"></div>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>
                                 <qr size="150" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
                             </div>
-                            <!-- <div>
-                            </div> -->
                         </div>
                     </md-tab>
                 </md-tabs>

@@ -52,12 +52,15 @@
 	__webpack_require__(3);
 	__webpack_require__(4);
 	__webpack_require__(5);
-
 	__webpack_require__(6);
 	__webpack_require__(7);
 	__webpack_require__(8);
 
 	__webpack_require__(9);
+	__webpack_require__(10);
+	__webpack_require__(11);
+
+	__webpack_require__(12);
 
 /***/ },
 /* 1 */
@@ -287,7 +290,181 @@
 	  });
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
 	  $scope.setTitle('首页');
-	}]).controller('AdminServerController', ['$scope', '$http', '$state', 'moment', function ($scope, $http, $state, moment) {
+	}]);
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('账号');
+	  var getAccount = function getAccount() {
+	    $http.get('/api/admin/account').then(function (success) {
+	      $scope.account = success.data;
+	    });
+	  };
+	  getAccount();
+	  $scope.setFabButton(function () {
+	    $state.go('admin.addAccount');
+	  });
+	  // $scope.deleteAccount = (id) => {
+	  //   $http.delete('/api/admin/account/' + id).then(success => {
+	  //     getAccount();
+	  //   });
+	  // };
+	  $scope.toAccount = function (id) {
+	    $state.go('admin.accountPage', { accountId: id });
+	  };
+	  $scope.editAccount = function (id) {
+	    $state.go('admin.editAccount', { accountId: id });
+	  };
+	}]).controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.account');
+	  });
+	  $http.get('/api/admin/account/' + $stateParams.accountId).then(function (success) {
+	    $scope.account = success.data;
+	    $scope.setTitle('账号 > ' + $scope.account.port);
+	  });
+	  $http.get('/api/admin/server').then(function (success) {
+	    $scope.servers = success.data;
+	  });
+	  $scope.getServerPortFlow = function (serverId, port) {
+	    $http.get('/api/admin/flow/' + serverId + '/' + port).then(function (success) {
+	      $scope.serverPortFlow = success.data[0];
+	    });
+	  };
+	  var base64Encode = function base64Encode(str) {
+	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	      return String.fromCharCode('0x' + p1);
+	    }));
+	  };
+	  $scope.createQrCode = function (method, password, host, port) {
+	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
+	  $scope.editAccount = function (id) {
+	    $state.go('admin.editAccount', { accountId: id });
+	  };
+	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
+	  $scope.account = {
+	    time: Date.now(),
+	    limit: 1,
+	    flow: 100
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.account');
+	  };
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/account', {
+	      type: +$scope.account.type,
+	      port: +$scope.account.port,
+	      password: $scope.account.password,
+	      time: $scope.account.time,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
+	    }).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/picktime.html',
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
+	  };
+	  $scope.setLimit = function (number) {
+	    $scope.account.limit += number;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
+	    }
+	  };
+	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
+	  $scope.account = {
+	    time: Date.now(),
+	    limit: 1,
+	    flow: 100
+	  };
+	  var accountId = $stateParams.accountId;
+	  $http.get('/api/admin/account/' + accountId).then(function (success) {
+	    $scope.account.type = success.data.type;
+	    $scope.account.port = success.data.port;
+	    $scope.account.password = success.data.password;
+	    if (success.data.type >= 2 && success.data.type <= 5) {
+	      $scope.account.time = success.data.data.create;
+	      $scope.account.limit = success.data.data.limit;
+	      $scope.account.flow = success.data.data.flow / 1000000;
+	    }
+	  });
+	  $scope.cancel = function () {
+	    $state.go('admin.account');
+	  };
+	  $scope.confirm = function () {
+	    $http.put('/api/admin/account/' + accountId + '/data', {
+	      type: +$scope.account.type,
+	      port: +$scope.account.port,
+	      password: $scope.account.password,
+	      time: $scope.account.time,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
+	    }).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/picktime.html',
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
+	  };
+	  $scope.setLimit = function (number) {
+	    $scope.account.limit += number;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
+	    }
+	  };
+	  $scope.deleteAccount = function () {
+	    $http.delete('/api/admin/account/' + accountId).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
+	}]);
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', function ($scope, $http, $state, moment) {
 	  $scope.setTitle('服务器');
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
@@ -427,168 +604,35 @@
 	      password: $scope.server.password,
 	      method: $scope.server.method
 	    }).then(function (success) {
-	      $state.go('admin.server');
+	      $state.go('admin.serverPage', { serverId: $stateParams.serverId });
 	    });
 	  };
 	  $scope.cancel = function () {
-	    $state.go('admin.server');
+	    $state.go('admin.serverPage', { serverId: $stateParams.serverId });
 	  };
-	}]).controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	}]);
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('用户');
 	  $http.get('/api/admin/user').then(function (success) {
 	    $scope.users = success.data;
 	  });
 	  $scope.toUser = function (id) {
 	    $state.go('admin.userPage', { userId: id });
 	  };
-	}]).controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  var getAccount = function getAccount() {
-	    $http.get('/api/admin/account').then(function (success) {
-	      $scope.account = success.data;
-	    });
-	  };
-	  getAccount();
-	  $scope.setFabButton(function () {
-	    $state.go('admin.addAccount');
-	  });
-	  // $scope.deleteAccount = (id) => {
-	  //   $http.delete('/api/admin/account/' + id).then(success => {
-	  //     getAccount();
-	  //   });
-	  // };
-	  $scope.toAccount = function (id) {
-	    $state.go('admin.accountPage', { accountId: id });
-	  };
-	  $scope.editAccount = function (id) {
-	    $state.go('admin.editAccount', { accountId: id });
-	  };
-	}]).controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
-	  $http.get('/api/admin/account/' + $stateParams.accountId).then(function (success) {
-	    $scope.account = success.data;
-	  });
-	  $http.get('/api/admin/server').then(function (success) {
-	    $scope.servers = success.data;
-	  });
-	  $scope.getServerPortFlow = function (serverId, port) {
-	    $http.get('/api/admin/flow/' + serverId + '/' + port).then(function (success) {
-	      $scope.serverPortFlow = success.data[0];
-	    });
-	  };
-	  var base64Encode = function base64Encode(str) {
-	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
-	      return String.fromCharCode('0x' + p1);
-	    }));
-	  };
-	  $scope.createQrCode = function (method, password, host, port) {
-	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
-	  };
-	  $scope.editAccount = function (id) {
-	    $state.go('admin.editAccount', { accountId: id });
-	  };
-	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
-	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
-	  $scope.timeLimit = {
-	    '2': 7 * 24 * 3600000,
-	    '3': 30 * 24 * 3600000,
-	    '4': 24 * 3600000,
-	    '5': 3600000
-	  };
-	  $scope.account = {
-	    time: Date.now(),
-	    limit: 1,
-	    flow: 100
-	  };
-	  $scope.cancel = function () {
-	    $state.go('admin.account');
-	  };
-	  $scope.confirm = function () {
-	    $http.post('/api/admin/account', {
-	      type: +$scope.account.type,
-	      port: +$scope.account.port,
-	      password: $scope.account.password,
-	      time: $scope.account.time,
-	      limit: +$scope.account.limit,
-	      flow: +$scope.account.flow * 1000 * 1000
-	    }).then(function (success) {
-	      $state.go('admin.account');
-	    });
-	  };
-	  $scope.pickTime = function () {
-	    $mdBottomSheet.show({
-	      templateUrl: '/public/views/admin/picktime.html',
-	      preserveScope: true,
-	      scope: $scope
-	    });
-	  };
-	  $scope.setStartTime = function (number) {
-	    $scope.account.time += number;
-	  };
-	  $scope.setLimit = function (number) {
-	    $scope.account.limit += number;
-	    if ($scope.account.limit < 1) {
-	      $scope.account.limit = 1;
-	    }
-	  };
-	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
-	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
-	  $scope.timeLimit = {
-	    '2': 7 * 24 * 3600000,
-	    '3': 30 * 24 * 3600000,
-	    '4': 24 * 3600000,
-	    '5': 3600000
-	  };
-	  $scope.account = {
-	    time: Date.now(),
-	    limit: 1,
-	    flow: 100
-	  };
-	  var accountId = $stateParams.accountId;
-	  $http.get('/api/admin/account/' + accountId).then(function (success) {
-	    $scope.account.type = success.data.type;
-	    $scope.account.port = success.data.port;
-	    $scope.account.password = success.data.password;
-	    if (success.data.type >= 2 && success.data.type <= 5) {
-	      $scope.account.time = success.data.data.create;
-	      $scope.account.limit = success.data.data.limit;
-	      $scope.account.flow = success.data.data.flow / 1000000;
-	    }
-	  });
-	  $scope.cancel = function () {
-	    $state.go('admin.account');
-	  };
-	  $scope.confirm = function () {
-	    $http.put('/api/admin/account/' + accountId + '/data', {
-	      type: +$scope.account.type,
-	      port: +$scope.account.port,
-	      password: $scope.account.password,
-	      time: $scope.account.time,
-	      limit: +$scope.account.limit,
-	      flow: +$scope.account.flow * 1000 * 1000
-	    }).then(function (success) {
-	      $state.go('admin.account');
-	    });
-	  };
-	  $scope.pickTime = function () {
-	    $mdBottomSheet.show({
-	      templateUrl: '/public/views/admin/picktime.html',
-	      preserveScope: true,
-	      scope: $scope
-	    });
-	  };
-	  $scope.setStartTime = function (number) {
-	    $scope.account.time += number;
-	  };
-	  $scope.setLimit = function (number) {
-	    $scope.account.limit += number;
-	    if ($scope.account.limit < 1) {
-	      $scope.account.limit = 1;
-	    }
-	  };
-	  $scope.deleteAccount = function () {
-	    $http.delete('/api/admin/account/' + accountId).then(function (success) {
-	      $state.go('admin.account');
-	    });
-	  };
 	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', function ($scope, $state, $stateParams, $http, $mdDialog) {
+	  $scope.setTitle('用户信息');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.user');
+	  });
 	  var userId = $stateParams.userId;
 	  var getUserData = function getUserData() {
 	    $http.get('/api/admin/user/' + $stateParams.userId).then(function (success) {
@@ -632,7 +676,7 @@
 	}]);
 
 /***/ },
-/* 6 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -664,8 +708,20 @@
 	  });
 	}]);
 
+	app.service('authInterceptor', ['$q', function ($q) {
+	  var service = this;
+	  service.responseError = function (response) {
+	    if (response.status == 401) {
+	      window.location = '/';
+	    }
+	    return $q.reject(response);
+	  };
+	}]).config(['$httpProvider', function ($httpProvider) {
+	  $httpProvider.interceptors.push('authInterceptor');
+	}]);
+
 /***/ },
-/* 7 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -689,7 +745,7 @@
 	}]);
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -749,7 +805,7 @@
 	}]);
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
