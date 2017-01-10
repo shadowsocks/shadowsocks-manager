@@ -182,6 +182,9 @@
 	}]).controller('UserIndexController', ['$scope', function ($scope) {}]).controller('UserAccountController', ['$scope', '$http', function ($scope, $http) {
 	  $http.get('/api/user/account').then(function (success) {
 	    $scope.account = success.data;
+	    $scope.account.forEach(function (f) {
+	      f.data = JSON.parse(f.data);
+	    });
 	  });
 	  $http.get('/api/user/server').then(function (success) {
 	    $scope.servers = success.data;
@@ -193,6 +196,11 @@
 	  };
 	  $scope.createQrCode = function (method, password, host, port) {
 	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
+	  $scope.getServerPortFlow = function (account, serverId, port) {
+	    $http.get('/api/user/flow/' + serverId + '/' + port).then(function (success) {
+	      account.serverPortFlow = success.data[0];
+	    });
 	  };
 	}]);
 
@@ -206,13 +214,6 @@
 
 	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  $scope.innerSideNav = true;
-	  $scope.menuButton = function () {
-	    if ($mdMedia('gt-sm')) {
-	      $scope.innerSideNav = !$scope.innerSideNav;
-	    } else {
-	      $mdSidenav('left').toggle();
-	    }
-	  };
 	  $scope.menus = [{
 	    name: '首页',
 	    icon: 'home',
@@ -245,6 +246,16 @@
 	      $state.go('home.index');
 	    }
 	  }];
+	  $scope.menuButton = function () {
+	    if ($scope.menuButtonIcon) {
+	      return $scope.menuButtonClick();
+	    }
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
 	  $scope.menuClick = function (index) {
 	    $mdSidenav('left').close();
 	    if (typeof $scope.menus[index].click === 'function') {
@@ -253,18 +264,31 @@
 	      $state.go($scope.menus[index].click);
 	    }
 	  };
+	  $scope.title = '';
+	  $scope.setTitle = function (str) {
+	    $scope.title = str;
+	  };
 	  $scope.fabButton = false;
 	  $scope.fabButtonClick = function () {};
 	  $scope.setFabButton = function (fn) {
 	    $scope.fabButton = true;
 	    $scope.fabButtonClick = fn;
 	  };
+	  $scope.menuButtonIcon = '';
+	  $scope.menuButtonClick = function () {};
+	  $scope.setMenuButton = function (icon, fn) {
+	    $scope.menuButtonIcon = icon;
+	    $scope.menuButtonClick = fn;
+	  };
 	  $scope.$on('$stateChangeStart', function (event, toUrl, fromUrl) {
 	    $scope.fabButton = false;
+	    $scope.title = '';
+	    $scope.menuButtonIcon = '';
 	  });
 	}]).controller('AdminIndexController', ['$scope', function ($scope) {
-	  console.log('Index');
+	  $scope.setTitle('首页');
 	}]).controller('AdminServerController', ['$scope', '$http', '$state', 'moment', function ($scope, $http, $state, moment) {
+	  $scope.setTitle('服务器');
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
 	    $scope.servers.forEach(function (server) {
@@ -347,13 +371,22 @@
 	    $state.go('admin.addServer');
 	  });
 	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.server');
+	  });
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = success.data;
+	    $scope.setTitle('\u670D\u52A1\u5668 > ' + $scope.server.name);
 	  });
 	  $scope.editServer = function (id) {
 	    $state.go('admin.editServer', { serverId: id });
 	  };
 	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('新增服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.server');
+	  });
 	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
 	  $scope.server = {};
 	  $scope.confirm = function () {
@@ -371,8 +404,13 @@
 	    $state.go('admin.server');
 	  };
 	}]).controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('编辑服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+	  });
 	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
+	    $scope.setTitle('编辑服务器 > ' + success.data.name);
 	    $scope.server = {
 	      name: success.data.name,
 	      address: success.data.host,
@@ -568,7 +606,7 @@
 	  };
 	  var openDialog = function openDialog() {
 	    $scope.dialog = $mdDialog.show({
-	      templateUrl: '/public/views/admin/pickaccount.html',
+	      templateUrl: '/public/views/admin/pickAccount.html',
 	      parent: angular.element(document.body),
 	      clickOutsideToClose: true,
 	      preserveScope: true,

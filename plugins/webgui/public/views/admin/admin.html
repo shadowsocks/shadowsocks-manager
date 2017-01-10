@@ -33,9 +33,9 @@
             <md-toolbar>
                 <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
                     <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
-                        <i class="material-icons">menu</i>
+                        <i class="material-icons">{{menuButtonIcon || 'menu'}}</i>
                     </md-button>
-                    <div>{{publicInfo.title}}</div>
+                    <div>{{title}}</div>
                     <span flex></span>
                 </div>
             </md-toolbar>

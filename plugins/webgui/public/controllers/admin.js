@@ -3,13 +3,6 @@ const app = require('../index').app;
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     $scope.innerSideNav = true;
-    $scope.menuButton = function() {
-      if ($mdMedia('gt-sm')) {
-        $scope.innerSideNav = !$scope.innerSideNav;
-      } else {
-        $mdSidenav('left').toggle();
-      }
-    };
     $scope.menus = [{
       name: '首页',
       icon: 'home',
@@ -42,6 +35,16 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $state.go('home.index');
       },
     }];
+    $scope.menuButton = function() {
+      if($scope.menuButtonIcon) {
+        return $scope.menuButtonClick();
+      }
+      if ($mdMedia('gt-sm')) {
+        $scope.innerSideNav = !$scope.innerSideNav;
+      } else {
+        $mdSidenav('left').toggle();
+      }
+    };
     $scope.menuClick = (index) => {
       $mdSidenav('left').close();
       if(typeof $scope.menus[index].click === 'function') {
@@ -50,24 +53,35 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $state.go($scope.menus[index].click);
       }
     };
+    $scope.title = '';
+    $scope.setTitle = str => { $scope.title = str; };
     $scope.fabButton = false;
     $scope.fabButtonClick = () => {};
     $scope.setFabButton = (fn) => {
       $scope.fabButton = true;
       $scope.fabButtonClick = fn;
     };
+    $scope.menuButtonIcon = '';
+    $scope.menuButtonClick = () => {};
+    $scope.setMenuButton = (icon, fn) => {
+      $scope.menuButtonIcon = icon;
+      $scope.menuButtonClick = fn;
+    };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.fabButton = false;
+      $scope.title = '';
+      $scope.menuButtonIcon = '';
     });
   }
 ])
 .controller('AdminIndexController', ['$scope',
   ($scope) => {
-    console.log('Index');
+    $scope.setTitle('首页');
   }
 ])
 .controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
   ($scope, $http, $state, moment) => {
+    $scope.setTitle('服务器');
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
       $scope.servers.forEach(server => {
@@ -164,8 +178,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
+    $scope.setTitle('服务器');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.server');
+    });
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
+      $scope.setTitle(`服务器 > ${ $scope.server.name }`);
     });
     $scope.editServer = id => {
       $state.go('admin.editServer', { serverId: id });
@@ -174,6 +193,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
+    $scope.setTitle('新增服务器');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.server');
+    });
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $scope.server = {};
     $scope.confirm = () => {
@@ -194,8 +217,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
+    $scope.setTitle('编辑服务器');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+    });
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+      $scope.setTitle('编辑服务器 > ' + success.data.name);
       $scope.server = {
         name: success.data.name,
         address: success.data.host,
@@ -421,7 +449,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     const openDialog = () => {
       $scope.dialog = $mdDialog.show({
-        templateUrl: '/public/views/admin/pickaccount.html',
+        templateUrl: '/public/views/admin/pickAccount.html',
         parent: angular.element(document.body),
         clickOutsideToClose:true,
         preserveScope: true,

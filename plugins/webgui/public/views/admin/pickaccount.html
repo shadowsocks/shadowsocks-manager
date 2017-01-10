@@ -1,18 +1,11 @@
 <md-dialog aria-label="pick account">
   <form ng-cloak>
-    <!-- <md-toolbar>
-      <div class="md-toolbar-tools">
-        <h2>Mango (Fruit)</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="cancel()">
-          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
-        </md-button>
-      </div>
-    </md-toolbar> -->
-
     <md-dialog-content>
       <div class="md-dialog-content">
-        <div layout="row" layout-wrap flex>
+        <div layout="row" layout-wrap flex ng-if="account.length === 0">
+          暂无可分配的账号
+        </div>
+        <div layout="row" layout-wrap flex ng-if="account.length">
           <div flex="50" ng-repeat="a in account">
             <md-checkbox ng-model="a.isChecked">
               {{ a.port }}
