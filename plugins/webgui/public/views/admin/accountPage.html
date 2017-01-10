@@ -13,3 +13,31 @@
         </md-card>
     </div>
 </div>
+<div layout="row">
+    <div flex="100">
+        <md-card>
+            <md-card-content>
+                <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
+                    <md-tab ng-repeat="server in servers"
+                            label="{{server.name}}"
+                            md-on-select="getServerPortFlow(server.id, account.port)">
+                        <div layout="row" layout-align="center center" layout-wrap>
+                            <div flex flex-xs="100" layout="row" layout-align="space-between center" layout-wrap>
+                                <div flex="50">地址：</div>    <div flex="50">{{server.host}}</div>
+                                <div flex="50">端口：</div>    <div flex="50">{{account.port}}</div>
+                                <div flex="50">密码：</div>    <div flex="50">{{account.password}}</div>
+                                <div flex="50">加密方式：</div><div flex="50">{{server.method}}</div>
+                                <div flex="50">流量：</div>    <div flex="50">{{serverPortFlow | flow}}/{{account.data.flow | flow}}</div>
+                            </div>
+                            <div flex flex-xs="100" layout="row" layout-align="center center">
+                                <qr size="150" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
+                            </div>
+                            <!-- <div>
+                            </div> -->
+                        </div>
+                    </md-tab>
+                </md-tabs>
+            <md-card-content>
+        </md-card>
+    </div>
+</div>

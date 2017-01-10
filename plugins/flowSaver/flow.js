@@ -97,3 +97,4 @@ const getServerPortFlow = async (serverId, port, timeArray) => {
 
 exports.getFlow = getFlow;
 exports.getServerFlow = getServerFlow;
+exports.getServerPortFlow = getServerPortFlow;

@@ -427,6 +427,22 @@
 	  $http.get('/api/admin/account/' + $stateParams.accountId).then(function (success) {
 	    $scope.account = success.data;
 	  });
+	  $http.get('/api/admin/server').then(function (success) {
+	    $scope.servers = success.data;
+	  });
+	  $scope.getServerPortFlow = function (serverId, port) {
+	    $http.get('/api/admin/flow/' + serverId + '/' + port).then(function (success) {
+	      $scope.serverPortFlow = success.data[0];
+	    });
+	  };
+	  var base64Encode = function base64Encode(str) {
+	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	      return String.fromCharCode('0x' + p1);
+	    }));
+	  };
+	  $scope.createQrCode = function (method, password, host, port) {
+	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
 	  $scope.editAccount = function (id) {
 	    $state.go('admin.editAccount', { accountId: id });
 	  };

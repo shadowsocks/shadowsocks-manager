@@ -259,6 +259,22 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $http.get('/api/admin/account/' + $stateParams.accountId).then(success => {
       $scope.account = success.data;
     });
+    $http.get('/api/admin/server').then(success => {
+      $scope.servers = success.data;
+    });
+    $scope.getServerPortFlow = (serverId, port) => {
+      $http.get(`/api/admin/flow/${ serverId }/${ port }`).then(success => {
+        $scope.serverPortFlow = success.data[0];
+      });
+    };
+    const base64Encode = str => {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    };
+    $scope.createQrCode = (method, password, host, port) => {
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+    };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
     };
