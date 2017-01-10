@@ -32,6 +32,14 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
+                <md-input-container class="md-block">
+                    <label>加密方式</label>
+                    <md-select ng-model="server.method" style="width: 100%;">
+                        <md-option ng-repeat="method in methods" ng-value="method">
+                            {{method}}
+                        </md-option>
+                    </md-select>
+              </md-input-container>
             </form>
         </div>
         <div flex="10" flex-gt-sm="30"></div>

@@ -28,6 +28,7 @@ app.post('/api/logout', user.logout);
 app.get('/api/admin/server', isAdmin, admin.getServers);
 app.get('/api/admin/server/:serverId', isAdmin, admin.getOneServer);
 app.post('/api/admin/server', isAdmin, admin.addServer);
+app.put('/api/admin/server/:serverId', isAdmin, admin.editServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
 app.get('/api/admin/account/:accountId', isAdmin, admin.getOneAccount);

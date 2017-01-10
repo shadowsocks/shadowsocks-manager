@@ -347,13 +347,15 @@
 	    $state.go('admin.editServer', { serverId: id });
 	  };
 	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
 	  $scope.server = {};
 	  $scope.confirm = function () {
 	    $http.post('/api/admin/server', {
 	      name: $scope.server.name,
 	      address: $scope.server.address,
 	      port: +$scope.server.port,
-	      password: $scope.server.password
+	      password: $scope.server.password,
+	      method: success.data.method || 'aes-256-cfb'
 	    }).then(function (success) {
 	      $state.go('admin.server');
 	    });
@@ -362,21 +364,23 @@
 	    $state.go('admin.server');
 	  };
 	}]).controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = {
 	      name: success.data.name,
 	      address: success.data.host,
 	      port: +success.data.port,
 	      password: success.data.password,
-	      method: success.data.password
+	      method: success.data.method || 'aes-256-cfb'
 	    };
 	  });
 	  $scope.confirm = function () {
-	    $http.post('/api/admin/server', {
+	    $http.put('/api/admin/server/' + $stateParams.serverId, {
 	      name: $scope.server.name,
 	      address: $scope.server.address,
 	      port: +$scope.server.port,
-	      password: $scope.server.password
+	      password: $scope.server.password,
+	      method: $scope.server.method
 	    }).then(function (success) {
 	      $state.go('admin.server');
 	    });

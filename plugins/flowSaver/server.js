@@ -24,7 +24,7 @@ const del = (id) => {
 };
 
 const edit = (id, name, host, port, password, method) => {
-  return knex('server').where({id}).update({
+  return knex('server').where({ id }).update({
     name,
     host,
     port,
