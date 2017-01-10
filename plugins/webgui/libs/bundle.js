@@ -186,7 +186,14 @@
 	  $http.get('/api/user/server').then(function (success) {
 	    $scope.servers = success.data;
 	  });
-	  $scope.qrCode = '123414123124123123124513232';
+	  var base64Encode = function base64Encode(str) {
+	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	      return String.fromCharCode('0x' + p1);
+	    }));
+	  };
+	  $scope.createQrCode = function (method, password, host, port) {
+	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
 	}]);
 
 /***/ },

@@ -22,7 +22,7 @@
                                 <div>加密方式：{{a.method}}</div>
                             </div>
                             <div flex>
-                                <qr layout-margin text="qrCode" image="true" size="100"></qr>
+                                <qr layout-margin text="createQrCode(a.method, a.password , server.host, a.port)" image="true" size="100"></qr>
                             </div>
                             <div>
                             </div>

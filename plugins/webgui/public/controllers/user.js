@@ -48,6 +48,13 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     $http.get('/api/user/server').then(success => {
       $scope.servers = success.data;
     });
-    $scope.qrCode = '123414123124123123124513232';
+    const base64Encode = (str) => {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      }));
+    };
+    $scope.createQrCode = (method, password, host, port) => {
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+    };
   }
 ]);
