@@ -61,6 +61,10 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/user/:userId',
       controller: 'AdminUserPageController',
       templateUrl: '/public/views/admin/userPage.html',
+    })
+    .state('admin.unfinished', {
+      url: '/unfinished',
+      templateUrl: '/public/views/admin/unfinished.html',
     });
   }])
 ;

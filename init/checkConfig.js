@@ -19,7 +19,7 @@ program
   .option('-s, --shadowsocks [address]', 'ss-manager address, default: 127.0.0.1:6001')
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
-  .option('-r, --run [type]', 'run shadowsocks from child_process, the type is libev or python')
+  .option('-r, --run [type]', 'run shadowsocks from child_process, the type is libev or python, if you want to set encrypt method, fill it like libev:aes-256-cfb')
   .option('--debug', 'show debug message')
   .parse(process.argv);
 
@@ -39,6 +39,8 @@ if(program.db) {
 }
 
 if(program.run) {
+  console.log('AAA');
+  console.log(program.run);
   config.set('runShadowsocks', program.run);
 }
 

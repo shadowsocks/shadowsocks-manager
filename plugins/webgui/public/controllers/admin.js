@@ -22,11 +22,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, {
       name: '续费码',
       icon: 'attach_money',
-      click: 'admin.server',
+      click: 'admin.unfinished',
     }, {
       name: '设置',
       icon: 'settings',
-      click: 'admin.server',
+      click: 'admin.unfinished',
     }, {
       name: '退出',
       icon: 'exit_to_app',
