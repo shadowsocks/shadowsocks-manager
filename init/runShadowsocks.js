@@ -8,7 +8,10 @@ const config = appRequire('services/config').all();
 const spawn = require('child_process').spawn;
 
 const run = async () => {
-  const type = config.runShadowsocks;
+  let type = config.runShadowsocks;
+  if(typeof type === 'boolean' && type) {
+    type = 'libev';
+  }
   let method = 'aes-256-cfb';
   if(!type) {
     return;

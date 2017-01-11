@@ -120,7 +120,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     const flowLabel = {
       hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
       day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', '', ],
-      week: ['', '', '', '', '', '', ''],
+      week: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
     };
     const scaleLabel = (number) => {
       if(number < 1) {
@@ -176,8 +176,26 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       }).then(success => {
         setChart(success.data);
       });
+      if($scope.flowType === 'hour') {
+        $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD HH:00');
+      }
+      if($scope.flowType === 'day') {
+        $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD');
+      }
+      if($scope.flowType === 'week') {
+        $scope.time = moment(flowTime[$scope.flowType]).day(0).format('YYYY-MM-DD') + ' ~ ' + moment(flowTime[$scope.flowType]).day(6).format('YYYY-MM-DD');
+      }
     };
     $scope.getChartData();
+    $scope.changeFlowTime = (number) => {
+      const time = {
+        hour: 3600 * 1000,
+        day: 24 * 3600 * 1000,
+        week: 7 * 24 * 3600 * 1000,
+      };
+      flowTime[$scope.flowType] += number * time[$scope.flowType];
+      $scope.getChartData();
+    };
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',

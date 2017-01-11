@@ -578,7 +578,7 @@
 	  var flowLabel = {
 	    hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
 	    day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', ''],
-	    week: ['', '', '', '', '', '', '']
+	    week: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 	  };
 	  var scaleLabel = function scaleLabel(number) {
 	    if (number < 1) {
@@ -632,8 +632,26 @@
 	    }).then(function (success) {
 	      setChart(success.data);
 	    });
+	    if ($scope.flowType === 'hour') {
+	      $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD HH:00');
+	    }
+	    if ($scope.flowType === 'day') {
+	      $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD');
+	    }
+	    if ($scope.flowType === 'week') {
+	      $scope.time = moment(flowTime[$scope.flowType]).day(0).format('YYYY-MM-DD') + ' ~ ' + moment(flowTime[$scope.flowType]).day(6).format('YYYY-MM-DD');
+	    }
 	  };
 	  $scope.getChartData();
+	  $scope.changeFlowTime = function (number) {
+	    var time = {
+	      hour: 3600 * 1000,
+	      day: 24 * 3600 * 1000,
+	      week: 7 * 24 * 3600 * 1000
+	    };
+	    flowTime[$scope.flowType] += number * time[$scope.flowType];
+	    $scope.getChartData();
+	  };
 	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
 	  $scope.setTitle('新增服务器');
 	  $scope.setMenuButton('arrow_back', function () {

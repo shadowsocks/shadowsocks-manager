@@ -12,15 +12,17 @@
             </md-card-header>
             <md-card-content>
                 <div layout="column" layout-align="center center">
-                    <div>
+                    <div layout="row" layout-align="center center">
+                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
                         <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
-                            <md-radio-button value="hour">小时</md-radio-button>
-                            <md-radio-button value="day">天</md-radio-button>
+                            <md-radio-button value="hour">时</md-radio-button>
+                            <md-radio-button value="day" >天</md-radio-button>
                             <md-radio-button value="week">周</md-radio-button>
                         </md-radio-group>
+                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
                     </div>
                     <div>
-                        
+                        {{time}}
                     </div>
                     <div></div>
                 </div>

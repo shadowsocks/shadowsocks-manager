@@ -39,8 +39,6 @@ if(program.db) {
 }
 
 if(program.run) {
-  console.log('AAA');
-  console.log(program.run);
   config.set('runShadowsocks', program.run);
 }
 
