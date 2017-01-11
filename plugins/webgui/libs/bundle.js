@@ -351,6 +351,10 @@
 	    $state.go('admin.editAccount', { accountId: id });
 	  };
 	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.setTitle('添加账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.account');
+	  });
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
 	  $scope.timeLimit = {
 	    '2': 7 * 24 * 3600000,
@@ -395,6 +399,10 @@
 	    }
 	  };
 	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.setTitle('编辑账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+	  });
 	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
 	  $scope.timeLimit = {
 	    '2': 7 * 24 * 3600000,
@@ -409,6 +417,7 @@
 	  };
 	  var accountId = $stateParams.accountId;
 	  $http.get('/api/admin/account/' + accountId).then(function (success) {
+	    $scope.setTitle('编辑账号 > ' + success.data.port);
 	    $scope.account.type = success.data.type;
 	    $scope.account.port = success.data.port;
 	    $scope.account.password = success.data.password;

@@ -58,6 +58,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 ])
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
   ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
+    $scope.setTitle('添加账号');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.account');
+    });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -111,6 +115,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 ])
 .controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
   ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
+    $scope.setTitle('编辑账号');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+    });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -131,6 +139,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
+      $scope.setTitle('编辑账号 > ' + success.data.port);
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
