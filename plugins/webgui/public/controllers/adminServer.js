@@ -97,8 +97,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     });
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment',
+  ($scope, $state, $stateParams, $http, moment) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.server');
@@ -110,6 +110,74 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     $scope.editServer = id => {
       $state.go('admin.editServer', { serverId: id });
     };
+
+    $scope.flowType = 'day';
+    const flowTime = {
+      hour: Date.now(),
+      day: Date.now(),
+      week: Date.now(),
+    };
+    const flowLabel = {
+      hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+      day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', '', ],
+      week: ['', '', '', '', '', '', ''],
+    };
+    const scaleLabel = (number) => {
+      if(number < 1) {
+        return number.toFixed(1) +' B';
+      } else if (number < 1000) {
+        return number.toFixed(0) +' B';
+      } else if (number < 1000000) {
+        return (number/1000).toFixed(0) +' KB';
+      } else if (number < 1000000000) {
+        return (number/1000000).toFixed(0) +' MB';
+      } else if (number < 1000000000000) {
+        return (number/1000000000).toFixed(1) +' GB';
+      } else {
+        return number;
+      }
+    };
+    const setChart = (data) => {
+      $scope.chart = {
+        data: [data],
+        labels: flowLabel[$scope.flowType],
+        series: 'day',
+        datasetOverride: [{ yAxisID: 'y-axis-1' }],
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return scaleLabel(tooltipItem.yLabel);
+              }
+            }
+          },
+          scales: {
+            yAxes: [
+              {
+                id: 'y-axis-1',
+                type: 'linear',
+                display: true,
+                position: 'left',
+                ticks: {
+                  callback: scaleLabel,
+                },
+              }
+            ]
+          }
+        },
+      };
+    };
+    $scope.getChartData = () => {
+      $http.get('/api/admin/flow/' + $stateParams.serverId, {
+        params: {
+          type: $scope.flowType,
+          time: new Date(flowTime[$scope.flowType]),
+        }
+      }).then(success => {
+        setChart(success.data);
+      });
+    };
+    $scope.getChartData();
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',

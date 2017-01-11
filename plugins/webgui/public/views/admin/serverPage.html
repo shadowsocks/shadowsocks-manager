@@ -1,6 +1,6 @@
 <div layout="row">
     <div flex>
-        <md-card ng-click="editServer(server.id)">
+        <md-card>
             <md-card-header>
                 <!-- <md-card-avatar>
                     <img class="md-user-avatar" src="http://placehold.it/50x50" />
@@ -11,7 +11,20 @@
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
-                <!-- <div layout="row" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <div>
+                        <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
+                            <md-radio-button value="hour">小时</md-radio-button>
+                            <md-radio-button value="day">天</md-radio-button>
+                            <md-radio-button value="week">周</md-radio-button>
+                        </md-radio-group>
+                    </div>
+                    <div>
+                        
+                    </div>
+                    <div></div>
+                </div>
+                <div layout="row" layout-align="center center">
                     <div style="width: 95%; max-width: 500px;">
                         <canvas class="chart chart-line"
                             chart-data="chart.data"
@@ -21,7 +34,7 @@
                             chart-dataset-override="chart.datasetOverride">
                         </canvas>
                     </div>
-                </div> -->
+                </div>
             </md-card-content>
         </md-card>
     </div>

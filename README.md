@@ -75,7 +75,7 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[==10%---------------]` [user]()  
 `[================100%]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
 `[1%------------------]` [account]()  
-`[1%------------------]` [webgui]()  
+`[1%------------------]` [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
 
 ### Parameter
 
@@ -95,7 +95,7 @@ Usage: ssmgr [options]
     -s, --shadowsocks [address]  ss-manager address, default: 127.0.0.1:6001
     -m, --manager [address]      manager address, default: 127.0.0.1:6002
     -p, --password [password]    manager password, both server side and manager side must be equals
-    -r, --run [type]             run shadowsocks from child_process, the type is libev or python
+    -r, --run [type]             run shadowsocks from child_process, the type is libev or python, if you want to set encrypt method, fill it like libev:aes-256-cfb
     --debug                      show debug message
 ```
 
