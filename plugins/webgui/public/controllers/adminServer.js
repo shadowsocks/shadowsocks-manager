@@ -183,7 +183,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
         $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD');
       }
       if($scope.flowType === 'week') {
-        $scope.time = moment(flowTime[$scope.flowType]).day(0).format('YYYY-MM-DD') + ' ~ ' + moment(flowTime[$scope.flowType]).day(6).format('YYYY-MM-DD');
+        $scope.time = moment(flowTime[$scope.flowType]).day(0).format('YYYY-MM-DD') + ' / ' + moment(flowTime[$scope.flowType]).day(6).format('YYYY-MM-DD');
       }
     };
     $scope.getChartData();
