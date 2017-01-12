@@ -191,6 +191,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
           time: new Date(flowTime[$scope.flowType]),
         }
       }).then(success => {
+        $scope.sumFlow = success.data.reduce((a, b) => {
+          return a + b;
+        }, 0);
         setChart(success.data);
       });
       if($scope.flowType === 'hour') {

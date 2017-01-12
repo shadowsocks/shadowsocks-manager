@@ -21,7 +21,7 @@
                     <md-tab ng-repeat="server in servers"
                             label="{{server.name}}"
                             md-on-select="getServerPortData(server.id, account.port)">
-                        <div layout="row" layout-align="center center" layout-wrap>
+                        <div layout="row" layout-align="center start" layout-wrap>
                             <div flex flex-xs="100" flex-sm="55" flex-md="55" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
                                 <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
                                 <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{account.port}}</div>
