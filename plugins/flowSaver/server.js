@@ -14,9 +14,9 @@ const add = (name, host, port, password, method) => {
 
 const del = (id) => {
   return knex.transaction(trx => {
-    return knex('server').transacting(trx).where({id}).delete()
+    return knex('server').transacting(trx).where({ id }).delete()
     .then(() => {
-      return knex('saveFlow').transacting(trx).where({id}).delete();
+      return knex('saveFlow').transacting(trx).where({ id }).delete();
     })
     .then(trx.commit)
     .catch(trx.rollback);

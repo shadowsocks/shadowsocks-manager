@@ -120,7 +120,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
         .ok('确认')
         .cancel('取消');
       $mdDialog.show(confirm).then(() => {
-        
+        return $http.delete('/api/admin/server/' + $stateParams.serverId);
+      }).then(() => {
+        $state.go('admin.server');
       }).catch(() => {
 
       });
@@ -220,14 +222,17 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       $state.go('admin.server');
     });
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
-    $scope.server = {};
+    $scope.server = {
+      method: 'aes-256-cfb',
+    };
     $scope.confirm = () => {
+      console.log('GG');
       $http.post('/api/admin/server', {
         name: $scope.server.name,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
-        method: success.data.method || 'aes-256-cfb',
+        method: $scope.server.method || 'aes-256-cfb',
       }).then(success => {
         $state.go('admin.server');
       });

@@ -588,7 +588,11 @@
 	  };
 	  $scope.deleteServer = function (id) {
 	    var confirm = $mdDialog.confirm().title('').textContent('删除服务器？').ariaLabel('deleteServer').ok('确认').cancel('取消');
-	    $mdDialog.show(confirm).then(function () {}).catch(function () {});
+	    $mdDialog.show(confirm).then(function () {
+	      return $http.delete('/api/admin/server/' + $stateParams.serverId);
+	    }).then(function () {
+	      $state.go('admin.server');
+	    }).catch(function () {});
 	  };
 
 	  $scope.flowType = 'day';
@@ -680,14 +684,17 @@
 	    $state.go('admin.server');
 	  });
 	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
-	  $scope.server = {};
+	  $scope.server = {
+	    method: 'aes-256-cfb'
+	  };
 	  $scope.confirm = function () {
+	    console.log('GG');
 	    $http.post('/api/admin/server', {
 	      name: $scope.server.name,
 	      address: $scope.server.address,
 	      port: +$scope.server.port,
 	      password: $scope.server.password,
-	      method: success.data.method || 'aes-256-cfb'
+	      method: $scope.server.method || 'aes-256-cfb'
 	    }).then(function (success) {
 	      $state.go('admin.server');
 	    });
