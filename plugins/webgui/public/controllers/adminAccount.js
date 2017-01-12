@@ -25,8 +25,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia',
+  ($scope, $state, $stateParams, $http, $mdMedia) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.account');
@@ -45,6 +45,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`).then(success => {
         $scope.lastConnect = success.data.lastConnect;
       });
+      $scope.getChartData(serverId);
     };
     const base64Encode = str => {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
@@ -56,6 +57,100 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
+    };
+
+    $scope.getQrCodeSize = () => {
+      if($mdMedia('xs')) {
+        return 220;
+      }
+      return 150;
+    };
+
+    $scope.flowType = {
+      value: 'day',
+    };
+    const flowTime = {
+      hour: Date.now(),
+      day: Date.now(),
+      week: Date.now(),
+    };
+    const flowLabel = {
+      hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+      day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', '', ],
+      week: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+    };
+    const scaleLabel = (number) => {
+      if(number < 1) {
+        return number.toFixed(1) +' B';
+      } else if (number < 1000) {
+        return number.toFixed(0) +' B';
+      } else if (number < 1000000) {
+        return (number/1000).toFixed(0) +' KB';
+      } else if (number < 1000000000) {
+        return (number/1000000).toFixed(0) +' MB';
+      } else if (number < 1000000000000) {
+        return (number/1000000000).toFixed(1) +' GB';
+      } else {
+        return number;
+      }
+    };
+    const setChart = (data) => {
+      $scope.chart = {
+        data: [data],
+        labels: flowLabel[$scope.flowType.value],
+        series: 'day',
+        datasetOverride: [{ yAxisID: 'y-axis-1' }],
+        options: {
+          tooltips: {
+            callbacks: {
+              label: function(tooltipItem) {
+                return scaleLabel(tooltipItem.yLabel);
+              }
+            }
+          },
+          scales: {
+            yAxes: [
+              {
+                id: 'y-axis-1',
+                type: 'linear',
+                display: true,
+                position: 'left',
+                ticks: {
+                  callback: scaleLabel,
+                },
+              }
+            ]
+          }
+        },
+      };
+    };
+    $scope.getChartData = (serverId) => {
+      $http.get('/api/admin/flow/' + serverId, {
+        params: {
+          type: $scope.flowType.value,
+          time: new Date(flowTime[$scope.flowType.value]),
+        }
+      }).then(success => {
+        setChart(success.data);
+      });
+      if($scope.flowType.value === 'hour') {
+        $scope.time = moment(flowTime[$scope.flowType.value]).format('YYYY-MM-DD HH:00');
+      }
+      if($scope.flowType.value === 'day') {
+        $scope.time = moment(flowTime[$scope.flowType.value]).format('YYYY-MM-DD');
+      }
+      if($scope.flowType.value === 'week') {
+        $scope.time = moment(flowTime[$scope.flowType.value]).day(0).format('YYYY-MM-DD') + ' / ' + moment(flowTime[$scope.flowType.value]).day(6).format('YYYY-MM-DD');
+      }
+    };
+    $scope.changeFlowTime = (serverId, number) => {
+      const time = {
+        hour: 3600 * 1000,
+        day: 24 * 3600 * 1000,
+        week: 7 * 24 * 3600 * 1000,
+      };
+      flowTime[$scope.flowType.value] += number * time[$scope.flowType.value];
+      $scope.getChartData(serverId);
     };
   }
 ])

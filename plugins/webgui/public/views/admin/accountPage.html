@@ -22,17 +22,46 @@
                             label="{{server.name}}"
                             md-on-select="getServerPortData(server.id, account.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
-                            <div flex flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
-                                <div flex="50">地址：</div>    <div flex="50">{{server.host}}</div>
-                                <div flex="50">端口：</div>    <div flex="50">{{account.port}}</div>
-                                <div flex="50">密码：</div>    <div flex="50">{{account.password}}</div>
-                                <div flex="50">加密方式：</div><div flex="50">{{server.method}}</div>
-                                <div flex="50">流量：</div>    <div flex="50">{{serverPortFlow | flow}}&nbsp;/&nbsp;<span ng-if="!account.data">无限量</span>{{account.data.flow | flow}}</div>
-                                <div flex="50">最近连接：</div><div flex="50"><span ng-if="lastConnect">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
+                            <div flex flex-xs="100" flex-sm="55" flex-md="55" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
+                                <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
+                                <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{account.port}}</div>
+                                <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{account.password}}</div>
+                                <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                <div flex="40">流量：</div>    <div flex="60" style="text-align:right">{{serverPortFlow | flow}}&nbsp;/&nbsp;<span ng-if="!account.data">无限量</span>{{account.data.flow | flow}}</div>
+                                <div flex="40">最近连接：</div><div flex="60" style="text-align:right"><span ng-if="lastConnect">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
                             </div>
-                            <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
+                            <div flex flex-xs="100" flex-sm="40" flex-md="40" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>
-                                <qr size="150" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
+                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
+                            </div>
+                            <div flex flex-xs="100" flex-sm="100" flex-md="100">
+                                <div layout="column" layout-align="center center">
+                                    <div layout="row" layout-align="center center">
+                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
+                                        <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
+                                            <md-radio-button value="hour">时</md-radio-button>
+                                            <md-radio-button value="day" >天</md-radio-button>
+                                            <md-radio-button value="week">周</md-radio-button>
+                                        </md-radio-group>
+                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, 1)">next</md-button>
+                                    </div>
+                                    <div>
+                                        {{time}}
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <div layout="row" layout-align="center center">
+                                    <div style="width: 95%; max-width: 500px;">
+                                        <canvas
+                                            class="chart chart-line"
+                                            chart-data="chart.data"
+                                            chart-labels="chart.labels"
+                                            chart-series="chart.series"
+                                            chart-options="chart.options"
+                                            chart-dataset-override="chart.datasetOverride">
+                                        </canvas>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </md-tab>
