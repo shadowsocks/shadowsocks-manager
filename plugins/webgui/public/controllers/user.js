@@ -34,14 +34,21 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
         $state.go($scope.menus[index].click);
       }
     };
+    $scope.title = '';
+    $scope.setTitle = str => { $scope.title = str; };
+    $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
+      $scope.title = '';
+    });
   }
 ])
 .controller('UserIndexController', ['$scope',
   ($scope) => {
+    $scope.setTitle('首页');
   }
 ])
 .controller('UserAccountController', ['$scope', '$http',
   ($scope, $http) => {
+    $scope.setTitle('我的账号');
     $http.get('/api/user/account').then(success => {
       $scope.account = success.data;
       $scope.account.forEach(f => {

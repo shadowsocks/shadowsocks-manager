@@ -38,9 +38,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
     });
-    $scope.getServerPortFlow = (serverId, port) => {
+    $scope.getServerPortData = (serverId, port) => {
       $http.get(`/api/admin/flow/${ serverId }/${ port }`).then(success => {
         $scope.serverPortFlow = success.data[0];
+      });
+      $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`).then(success => {
+        $scope.lastConnect = success.data.lastConnect;
       });
     };
     const base64Encode = str => {

@@ -2,12 +2,12 @@
     <div flex="100" ng-repeat="a in account track by $index">
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
-                <md-card-avatar>
+                <!-- <md-card-avatar>
                     <img class="md-user-avatar" src="http://placehold.it/50x50" />
-                </md-card-avatar>
+                </md-card-avatar> -->
                 <md-card-header-text>
                     <span class="md-title">{{a.port}}</span>
-                    <span class="md-subhead">{{a.password}}</span>
+                    <!-- <span class="md-subhead">{{a.password}}</span> -->
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
@@ -22,7 +22,7 @@
                                 <div flex="50">密码：</div>    <div flex="50">{{a.password}}</div>
                                 <div flex="50">加密方式：</div><div flex="50">{{server.method}}</div>
                                 <div flex="50">流量：</div>    <div flex="50">{{a.serverPortFlow | flow}}/{{a.data.flow | flow}}</div>
-                                <div flex="50">最近连接：</div><div flex="50">{{a.lastConnect}}</div>
+                                <div flex="50">最近连接：</div><div flex="50"><span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>

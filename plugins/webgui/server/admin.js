@@ -344,3 +344,15 @@ exports.deleteUserAccount = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getServerPortLastConnect = (req, res) => {
+  const serverId = +req.params.serverId;
+  const port = +req.params.port;
+  flow.getlastConnectTime(serverId, port)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

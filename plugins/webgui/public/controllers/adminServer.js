@@ -97,8 +97,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     });
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment',
-  ($scope, $state, $stateParams, $http, moment) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.server');
@@ -106,9 +106,24 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
       $scope.setTitle(`服务器 > ${ $scope.server.name }`);
+    }).catch(() => {
+      $state.go('admin.server');
     });
     $scope.editServer = id => {
       $state.go('admin.editServer', { serverId: id });
+    };
+    $scope.deleteServer = id => {
+      const confirm = $mdDialog.confirm()
+        .title('')
+        .textContent('删除服务器？')
+        .ariaLabel('deleteServer')
+        .ok('确认')
+        .cancel('取消');
+      $mdDialog.show(confirm).then(() => {
+        
+      }).catch(() => {
+
+      });
     };
 
     $scope.flowType = 'day';

@@ -182,7 +182,17 @@
 	      $state.go($scope.menus[index].click);
 	    }
 	  };
-	}]).controller('UserIndexController', ['$scope', function ($scope) {}]).controller('UserAccountController', ['$scope', '$http', function ($scope, $http) {
+	  $scope.title = '';
+	  $scope.setTitle = function (str) {
+	    $scope.title = str;
+	  };
+	  $scope.$on('$stateChangeStart', function (event, toUrl, fromUrl) {
+	    $scope.title = '';
+	  });
+	}]).controller('UserIndexController', ['$scope', function ($scope) {
+	  $scope.setTitle('首页');
+	}]).controller('UserAccountController', ['$scope', '$http', function ($scope, $http) {
+	  $scope.setTitle('我的账号');
 	  $http.get('/api/user/account').then(function (success) {
 	    $scope.account = success.data;
 	    $scope.account.forEach(function (f) {
@@ -337,9 +347,12 @@
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
 	  });
-	  $scope.getServerPortFlow = function (serverId, port) {
+	  $scope.getServerPortData = function (serverId, port) {
 	    $http.get('/api/admin/flow/' + serverId + '/' + port).then(function (success) {
 	      $scope.serverPortFlow = success.data[0];
+	    });
+	    $http.get('/api/admin/flow/' + serverId + '/' + port + '/lastConnect').then(function (success) {
+	      $scope.lastConnect = success.data.lastConnect;
 	    });
 	  };
 	  var base64Encode = function base64Encode(str) {
@@ -559,7 +572,7 @@
 	  $scope.setFabButton(function () {
 	    $state.go('admin.addServer');
 	  });
-	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', function ($scope, $state, $stateParams, $http, moment) {
+	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', function ($scope, $state, $stateParams, $http, moment, $mdDialog) {
 	  $scope.setTitle('服务器');
 	  $scope.setMenuButton('arrow_back', function () {
 	    $state.go('admin.server');
@@ -567,9 +580,15 @@
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = success.data;
 	    $scope.setTitle('\u670D\u52A1\u5668 > ' + $scope.server.name);
+	  }).catch(function () {
+	    $state.go('admin.server');
 	  });
 	  $scope.editServer = function (id) {
 	    $state.go('admin.editServer', { serverId: id });
+	  };
+	  $scope.deleteServer = function (id) {
+	    var confirm = $mdDialog.confirm().title('').textContent('删除服务器？').ariaLabel('deleteServer').ok('确认').cancel('取消');
+	    $mdDialog.show(confirm).then(function () {}).catch(function () {});
 	  };
 
 	  $scope.flowType = 'day';
