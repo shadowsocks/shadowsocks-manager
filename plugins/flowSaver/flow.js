@@ -57,12 +57,12 @@ const getServerFlow = async (serverId, timeArray) => {
     if(index === timeArray.length - 1) {
       return;
     }
-    const startTime = time;
-    const endTime = timeArray[index + 1];
+    const startTime = +time;
+    const endTime = +timeArray[index + 1];
     const getFlow = knex('saveFlow')
     .sum('flow as sumFlow')
-    .groupBy('port')
-    .select(['port'])
+    .groupBy('id')
+    .select(['id'])
     .where({ id: serverId })
     .whereBetween('time', [startTime, endTime]).then(success => {
       if(success[0]) { return success[0].sumFlow; }
