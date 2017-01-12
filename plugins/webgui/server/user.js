@@ -82,7 +82,7 @@ exports.getAccount = (req, res) => {
 };
 
 exports.getServers = (req, res) => {
-  knex('server').select(['id', 'host', 'name']).then(success => {
+  knex('server').select(['id', 'host', 'name', 'method']).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
@@ -123,6 +123,18 @@ exports.getServerPortFlow = (req, res) => {
       return [0];
     }
   }).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getServerPortLastConnect = (req, res) => {
+  const serverId = +req.params.serverId;
+  const port = +req.params.port;
+  flow.getlastConnectTime(serverId, port)
+  .then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);

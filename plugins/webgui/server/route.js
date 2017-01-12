@@ -49,6 +49,7 @@ app.delete('/api/admin/user/:userId/:accountId', isAdmin, admin.deleteUserAccoun
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId/:port', isUser, user.getServerPortFlow);
+app.get('/api/user/flow/:serverId/:port/lastConnect', isUser, user.getServerPortLastConnect);
 
 app.get('*', (req, res) => {
   return res.render('index');

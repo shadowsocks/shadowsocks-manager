@@ -95,6 +95,19 @@ const getServerPortFlow = async (serverId, port, timeArray) => {
   return Promise.all(result);
 };
 
+const getlastConnectTime = (serverId, port) => {
+  return knex('saveFlow')
+  .select(['time'])
+  .where({ id: serverId, port })
+  .orderBy('time', 'desc').limit(1).then(success => {
+    if(success[0]) {
+      return { lastConnect: success[0].time };
+    }
+    return { lastConnect: 0 };
+  });
+};
+
 exports.getFlow = getFlow;
 exports.getServerFlow = getServerFlow;
 exports.getServerPortFlow = getServerPortFlow;
+exports.getlastConnectTime = getlastConnectTime;

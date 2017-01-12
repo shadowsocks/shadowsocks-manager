@@ -200,9 +200,12 @@
 	  $scope.createQrCode = function (method, password, host, port) {
 	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
 	  };
-	  $scope.getServerPortFlow = function (account, serverId, port) {
+	  $scope.getServerPortData = function (account, serverId, port) {
 	    $http.get('/api/user/flow/' + serverId + '/' + port).then(function (success) {
 	      account.serverPortFlow = success.data[0];
+	    });
+	    $http.get('/api/user/flow/' + serverId + '/' + port + '/lastConnect').then(function (success) {
+	      account.lastConnect = success.data.lastConnect;
 	    });
 	  };
 	}]);
@@ -428,7 +431,7 @@
 	    }
 	  });
 	  $scope.cancel = function () {
-	    $state.go('admin.account');
+	    $state.go('admin.accountPage', { accountId: $stateParams.accountId });
 	  };
 	  $scope.confirm = function () {
 	    $http.put('/api/admin/account/' + accountId + '/data', {
@@ -439,7 +442,7 @@
 	      limit: +$scope.account.limit,
 	      flow: +$scope.account.flow * 1000 * 1000
 	    }).then(function (success) {
-	      $state.go('admin.account');
+	      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
 	    });
 	  };
 	  $scope.pickTime = function () {

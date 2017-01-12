@@ -59,9 +59,12 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     $scope.createQrCode = (method, password, host, port) => {
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
-    $scope.getServerPortFlow = (account, serverId, port) => {
+    $scope.getServerPortData = (account, serverId, port) => {
       $http.get(`/api/user/flow/${ serverId }/${ port }`).then(success => {
         account.serverPortFlow = success.data[0];
+      });
+      $http.get(`/api/user/flow/${ serverId }/${ port }/lastConnect`).then(success => {
+        account.lastConnect = success.data.lastConnect;
       });
     };
   }

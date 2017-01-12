@@ -150,7 +150,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }
     });
     $scope.cancel = () => {
-      $state.go('admin.account');
+      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     };
     $scope.confirm = () => {
       $http.put('/api/admin/account/' + accountId + '/data', {
@@ -161,7 +161,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
       }).then(success => {
-        $state.go('admin.account');
+        $state.go('admin.accountPage', { accountId: $stateParams.accountId });
       });
     };
     $scope.pickTime = () => {
