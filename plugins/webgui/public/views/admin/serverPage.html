@@ -30,7 +30,7 @@
                         <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
                     </div>
                     <div>
-                        {{time}}
+                        {{time}}，{{sumFlow | flow}}
                     </div>
                     <div></div>
                 </div>
@@ -44,9 +44,6 @@
                             chart-dataset-override="chart.datasetOverride">
                         </canvas>
                     </div>
-                </div>
-                <div layout="row" layout-align="center center">
-                    <div>总计：{{sumFlow | flow}}</div>
                 </div>
             </md-card-content>
         </md-card>

@@ -438,6 +438,9 @@
 	        time: new Date(flowTime[$scope.flowType.value])
 	      }
 	    }).then(function (success) {
+	      $scope.sumFlow = success.data.reduce(function (a, b) {
+	        return a + b;
+	      }, 0);
 	      setChart(success.data);
 	    });
 	    if ($scope.flowType.value === 'hour') {

@@ -131,6 +131,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
           time: new Date(flowTime[$scope.flowType.value]),
         }
       }).then(success => {
+        $scope.sumFlow = success.data.reduce((a, b) => {
+          return a + b;
+        }, 0);
         setChart(success.data);
       });
       if($scope.flowType.value === 'hour') {
