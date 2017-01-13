@@ -138,11 +138,22 @@
 	      } else {}
 	    }).catch(console.log);
 	  };
-	}]).controller('SignupController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
+	}]).controller('SignupController', ['$scope', '$http', '$state', '$interval', function ($scope, $http, $state, $interval) {
 	  $scope.user = {};
+	  $scope.sendCodeTime = 0;
 	  $scope.sendCode = function () {
 	    $http.post('/api/home/code', {
 	      email: $scope.user.email
+	    }).then(function (success) {
+	      $scope.sendCodeTime = 120;
+	      var interval = $interval(function () {
+	        if ($scope.sendCodeTime > 0) {
+	          $scope.sendCodeTime--;
+	        } else {
+	          $interval.cancel(interval);
+	          $scope.sendCodeTime = 0;
+	        }
+	      }, 1000);
 	    }).catch(function (err) {
 	      console.log(err);
 	    });

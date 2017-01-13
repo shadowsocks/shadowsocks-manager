@@ -61,12 +61,23 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     };
   }
 ])
-.controller('SignupController', ['$scope', '$http', '$state',
-  ($scope, $http, $state) => {
+.controller('SignupController', ['$scope', '$http', '$state', '$interval',
+  ($scope, $http, $state, $interval) => {
     $scope.user = {};
+    $scope.sendCodeTime = 0;
     $scope.sendCode = () => {
       $http.post('/api/home/code', {
         email: $scope.user.email,
+      }).then(success => {
+        $scope.sendCodeTime = 120;
+        const interval = $interval(() => {
+          if($scope.sendCodeTime > 0) {
+            $scope.sendCodeTime--;
+          } else {
+            $interval.cancel(interval);
+            $scope.sendCodeTime = 0;
+          }
+        }, 1000);
       }).catch(err => {
         console.log(err);
       });

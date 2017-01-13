@@ -22,7 +22,7 @@
                     </md-input-container>
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="5"></div>
-                        <md-button class="md-primary" ng-click="sendCode()">发送验证码</md-button>
+                        <md-button class="md-primary" ng-disabled="sendCodeTime" ng-click="sendCode()"><span ng-if="sendCodeTime === 0">发送验证码</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
                     </div>
                 </div>
                 <md-input-container class="md-block">
