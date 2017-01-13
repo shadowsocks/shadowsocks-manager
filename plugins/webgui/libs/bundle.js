@@ -219,7 +219,7 @@
 	  $scope.setTitle('首页');
 	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', function ($scope, $http, $mdMedia) {
 	  $scope.setTitle('我的账号');
-
+	  $scope.flexGtSm = 100;
 	  $http.get('/api/user/account').then(function (success) {
 	    $scope.account = success.data;
 	    // if($mdMedia('gt-sm')) {

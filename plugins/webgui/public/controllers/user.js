@@ -49,7 +49,7 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
 .controller('UserAccountController', ['$scope', '$http', '$mdMedia',
   ($scope, $http, $mdMedia) => {
     $scope.setTitle('我的账号');
-
+    $scope.flexGtSm = 100;
     $http.get('/api/user/account').then(success => {
       $scope.account = success.data;
       // if($mdMedia('gt-sm')) {

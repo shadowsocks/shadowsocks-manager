@@ -1,10 +1,8 @@
 [![NPM version][npm-image]][npm-url]
-[![npm download][download-image]][download-url]
 [![npm license][license-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/shadowsocks-manager.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/shadowsocks-manager
-[download-image]: https://img.shields.io/npm/dm/shadowsocks-manager.svg?style=flat-square
 [download-url]: https://npmjs.org/package/shadowsocks-manager
 [license-image]: https://img.shields.io/npm/l/shadowsocks-manager.svg
 
