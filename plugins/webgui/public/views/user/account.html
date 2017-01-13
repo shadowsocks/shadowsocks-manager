@@ -1,5 +1,5 @@
 <div layout="row" layout-wrap>
-    <div flex="100" ng-repeat="a in account track by $index">
+    <div flex-xs="100" flex-sm="100" flex-md="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by $index">
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
                 <!-- <md-card-avatar>
@@ -17,16 +17,17 @@
                            md-on-select="getServerPortData(a, server.id, a.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
                             <div flex flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
-                                <div flex="50">地址：</div>    <div flex="50">{{server.host}}</div>
-                                <div flex="50">端口：</div>    <div flex="50">{{a.port}}</div>
-                                <div flex="50">密码：</div>    <div flex="50">{{a.password}}</div>
-                                <div flex="50">加密方式：</div><div flex="50">{{server.method}}</div>
-                                <div flex="50">流量：</div>    <div flex="50">{{a.serverPortFlow | flow}}/{{a.data.flow | flow}}</div>
-                                <div flex="50">最近连接：</div><div flex="50"><span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
+                                <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
+                                <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{a.port}}</div>
+                                <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{a.password}}</div>
+                                <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                <div flex="40">流量：</div>    <div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限量</span><span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}}/{{a.data.flow | flow}}</span></div>
+                                <div flex="40">到期时间：</div><div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限时</span><span ng-if="a.type >=2 && a.type <= 5">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span></div>
+                                <div flex="40">最近连接：</div><div flex="60" style="text-align:right"><span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>
-                                <qr size="150" layout-margin text="createQrCode(a.method, a.password , server.host, a.port)" image="true"></qr>
+                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.method, a.password , server.host, a.port)" image="true"></qr>
                             </div>
                         </div>
                     </md-tab>

@@ -39,8 +39,8 @@ const changePort = async (id, port) => {
   await checkAccount.checkServer();
 };
 
-const getAccount = async () => {
-  const account = await knex('account_plugin').select();
+const getAccount = async (where) => {
+  const account = await knex('account_plugin').select().where(where || {});
   return account;
 };
 

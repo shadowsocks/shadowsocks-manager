@@ -8,9 +8,20 @@ const emailPlugin = appRequire('plugins/email/index');
 
 exports.getAccount = (req, res) => {
   const userId = req.session.user;
-  account.getAccount().then(success => {
-    success = success.filter(f => {
-      return f.userId === userId;
+  account.getAccount({
+    userId,
+  }).then(success => {
+    success.forEach(f => {
+      f.data = JSON.parse(f.data);
+      if(f.type >= 2 && f.type <= 5) {
+        const time = {
+          '2': 7 * 24 * 3600000,
+          '3': 30 * 24 * 3600000,
+          '4': 24 * 3600000,
+          '5': 3600000,
+        };
+        f.data.expire = f.data.create + f.data.limit * time[f.type];
+      }
     });
     res.send(success);
   }).catch(err => {

@@ -46,14 +46,18 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     $scope.setTitle('首页');
   }
 ])
-.controller('UserAccountController', ['$scope', '$http',
-  ($scope, $http) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia',
+  ($scope, $http, $mdMedia) => {
     $scope.setTitle('我的账号');
+
     $http.get('/api/user/account').then(success => {
       $scope.account = success.data;
-      $scope.account.forEach(f => {
-        f.data = JSON.parse(f.data);
-      });
+      // if($mdMedia('gt-sm')) {
+      //   return 220;
+      // }
+      if($scope.account.length >= 2) {
+        $scope.flexGtSm = 50;
+      }
     });
     $http.get('/api/user/server').then(success => {
       $scope.servers = success.data;
@@ -67,12 +71,20 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
     $scope.getServerPortData = (account, serverId, port) => {
-      $http.get(`/api/user/flow/${ serverId }/${ port }`).then(success => {
-        account.serverPortFlow = success.data[0];
-      });
+      if(account.type >= 2 && account.type <= 5) {
+        $http.get(`/api/user/flow/${ serverId }/${ port }`).then(success => {
+          account.serverPortFlow = success.data[0];
+        });
+      }
       $http.get(`/api/user/flow/${ serverId }/${ port }/lastConnect`).then(success => {
         account.lastConnect = success.data.lastConnect;
       });
+    };
+    $scope.getQrCodeSize = () => {
+      if($mdMedia('xs')) {
+        return 220;
+      }
+      return 150;
     };
   }
 ]);

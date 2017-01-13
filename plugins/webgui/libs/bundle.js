@@ -217,13 +217,17 @@
 	  });
 	}]).controller('UserIndexController', ['$scope', function ($scope) {
 	  $scope.setTitle('首页');
-	}]).controller('UserAccountController', ['$scope', '$http', function ($scope, $http) {
+	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', function ($scope, $http, $mdMedia) {
 	  $scope.setTitle('我的账号');
+
 	  $http.get('/api/user/account').then(function (success) {
 	    $scope.account = success.data;
-	    $scope.account.forEach(function (f) {
-	      f.data = JSON.parse(f.data);
-	    });
+	    // if($mdMedia('gt-sm')) {
+	    //   return 220;
+	    // }
+	    if ($scope.account.length >= 2) {
+	      $scope.flexGtSm = 50;
+	    }
 	  });
 	  $http.get('/api/user/server').then(function (success) {
 	    $scope.servers = success.data;
@@ -237,12 +241,20 @@
 	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
 	  };
 	  $scope.getServerPortData = function (account, serverId, port) {
-	    $http.get('/api/user/flow/' + serverId + '/' + port).then(function (success) {
-	      account.serverPortFlow = success.data[0];
-	    });
+	    if (account.type >= 2 && account.type <= 5) {
+	      $http.get('/api/user/flow/' + serverId + '/' + port).then(function (success) {
+	        account.serverPortFlow = success.data[0];
+	      });
+	    }
 	    $http.get('/api/user/flow/' + serverId + '/' + port + '/lastConnect').then(function (success) {
 	      account.lastConnect = success.data.lastConnect;
 	    });
+	  };
+	  $scope.getQrCodeSize = function () {
+	    if ($mdMedia('xs')) {
+	      return 220;
+	    }
+	    return 150;
 	  };
 	}]);
 
