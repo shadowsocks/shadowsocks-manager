@@ -3,7 +3,7 @@ const app = require('../index').app;
 app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     console.log('Home');
-    $http.get('/api/login').then(success => {
+    $http.get('/api/home/login').then(success => {
       if(success.data.status === 'normal') {
         $state.go('user.index');
       } else if (success.data.status === 'admin') {
@@ -36,16 +36,17 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       $state.go($scope.menus[index].click);
     };
   }
-]).controller('IndexController', ['$scope',
+])
+.controller('IndexController', ['$scope',
   ($scope) => {
     console.log('Index');
   }
-]).controller('LoginController', ['$scope', '$http', '$state',
+])
+.controller('LoginController', ['$scope', '$http', '$state',
   ($scope, $http, $state) => {
-    console.log('Login');
     $scope.user = {};
     $scope.login = () => {
-      $http.post('/api/login', {
+      $http.post('/api/home/login', {
         email: $scope.user.email,
         password: $scope.user.password,
       }).then(success => {
@@ -56,6 +57,27 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
         } else {
 
         }
+      }).catch(console.log);
+    };
+  }
+])
+.controller('SignupController', ['$scope', '$http', '$state',
+  ($scope, $http, $state) => {
+    $scope.user = {};
+    $scope.sendCode = () => {
+      $http.post('/api/home/code', {
+        email: $scope.user.email,
+      }).catch(err => {
+        console.log(err);
+      });
+    };
+    $scope.signup = () => {
+      $http.post('/api/home/signup', {
+        email: $scope.user.email,
+        code: $scope.user.code,
+        password: $scope.user.password,
+      }).then(success => {
+        $state.go('home.login');
       }).catch(console.log);
     };
   }

@@ -90,7 +90,7 @@
 
 	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  console.log('Home');
-	  $http.get('/api/login').then(function (success) {
+	  $http.get('/api/home/login').then(function (success) {
 	    if (success.data.status === 'normal') {
 	      $state.go('user.index');
 	    } else if (success.data.status === 'admin') {
@@ -125,10 +125,9 @@
 	}]).controller('IndexController', ['$scope', function ($scope) {
 	  console.log('Index');
 	}]).controller('LoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
-	  console.log('Login');
 	  $scope.user = {};
 	  $scope.login = function () {
-	    $http.post('/api/login', {
+	    $http.post('/api/home/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
 	    }).then(function (success) {
@@ -137,6 +136,24 @@
 	      } else if (success.data.type === 'admin') {
 	        $state.go('admin.index');
 	      } else {}
+	    }).catch(console.log);
+	  };
+	}]).controller('SignupController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
+	  $scope.user = {};
+	  $scope.sendCode = function () {
+	    $http.post('/api/home/code', {
+	      email: $scope.user.email
+	    }).catch(function (err) {
+	      console.log(err);
+	    });
+	  };
+	  $scope.signup = function () {
+	    $http.post('/api/home/signup', {
+	      email: $scope.user.email,
+	      code: $scope.user.code,
+	      password: $scope.user.password
+	    }).then(function (success) {
+	      $state.go('home.login');
 	    }).catch(console.log);
 	  };
 	}]);
@@ -170,7 +187,7 @@
 	    name: '退出',
 	    icon: 'settings',
 	    click: function click() {
-	      $http.post('/api/logout');
+	      $http.post('/api/home/logout');
 	      $state.go('home.index');
 	    }
 	  }];
@@ -258,7 +275,7 @@
 	    name: '退出',
 	    icon: 'exit_to_app',
 	    click: function click() {
-	      $http.post('/api/logout');
+	      $http.post('/api/home/logout');
 	      $state.go('home.index');
 	    }
 	  }];
@@ -556,7 +573,7 @@
 	  };
 	  $scope.pickTime = function () {
 	    $mdBottomSheet.show({
-	      templateUrl: '/public/views/admin/picktime.html',
+	      templateUrl: '/public/views/admin/pickTime.html',
 	      preserveScope: true,
 	      scope: $scope
 	    });

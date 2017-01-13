@@ -22,7 +22,7 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       name: '退出',
       icon: 'settings',
       click: function() {
-        $http.post('/api/logout');
+        $http.post('/api/home/logout');
         $state.go('home.index');
       },
     }];
