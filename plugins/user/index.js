@@ -60,7 +60,13 @@ const checkPassword = async (username, password) => {
       return Promise.reject();
     }
     if(createPassword(password, username) === user[0].password) {
-      return user[0];
+      return knex('user').update({
+        lastLogin: Date.now(),
+      }).where({
+        username,
+      }).then(success => {
+        return user[0];
+      });
     } else {
       return Promise.reject();
     }

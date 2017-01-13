@@ -105,7 +105,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     });
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
-      $scope.setTitle(`服务器 > ${ $scope.server.name }`);
     }).catch(() => {
       $state.go('admin.server');
     });
@@ -253,7 +252,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     });
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
-      $scope.setTitle('编辑服务器 > ' + success.data.name);
       $scope.server = {
         name: success.data.name,
         address: success.data.host,

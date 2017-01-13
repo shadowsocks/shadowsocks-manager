@@ -37,12 +37,12 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     };
   }
 ])
-.controller('IndexController', ['$scope',
+.controller('HomeIndexController', ['$scope',
   ($scope) => {
-    console.log('Index');
+
   }
 ])
-.controller('LoginController', ['$scope', '$http', '$state',
+.controller('HomeLoginController', ['$scope', '$http', '$state',
   ($scope, $http, $state) => {
     $scope.user = {};
     $scope.login = () => {
@@ -61,7 +61,7 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     };
   }
 ])
-.controller('SignupController', ['$scope', '$http', '$state', '$interval',
+.controller('HomeSignupController', ['$scope', '$http', '$state', '$interval',
   ($scope, $http, $state, $interval) => {
     $scope.user = {};
     $scope.sendCodeTime = 0;

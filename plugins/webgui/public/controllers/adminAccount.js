@@ -33,7 +33,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
     $http.get('/api/admin/account/' + $stateParams.accountId).then(success => {
       $scope.account = success.data;
-      $scope.setTitle('账号 > ' + $scope.account.port);
     });
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
@@ -240,7 +239,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
-      $scope.setTitle('编辑账号 > ' + success.data.port);
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;

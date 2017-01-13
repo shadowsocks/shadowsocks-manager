@@ -18,17 +18,17 @@ app.config(['$stateProvider', $stateProvider => {
     })
     .state('home.index', {
       url: '/index',
-      controller: 'IndexController',
+      controller: 'HomeIndexController',
       templateUrl: '/public/views/home/index.html',
     })
     .state('home.login', {
       url: '/login',
-      controller: 'LoginController',
+      controller: 'HomeLoginController',
       templateUrl: '/public/views/home/login.html',
     })
     .state('home.signup', {
       url: '/signup',
-      controller: 'SignupController',
+      controller: 'HomeSignupController',
       templateUrl: '/public/views/home/signup.html',
     });
   }

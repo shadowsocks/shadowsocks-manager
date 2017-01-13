@@ -122,9 +122,7 @@
 	    $mdSidenav('left').close();
 	    $state.go($scope.menus[index].click);
 	  };
-	}]).controller('IndexController', ['$scope', function ($scope) {
-	  console.log('Index');
-	}]).controller('LoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
+	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $scope.user = {};
 	  $scope.login = function () {
 	    $http.post('/api/home/login', {
@@ -138,7 +136,7 @@
 	      } else {}
 	    }).catch(console.log);
 	  };
-	}]).controller('SignupController', ['$scope', '$http', '$state', '$interval', function ($scope, $http, $state, $interval) {
+	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', function ($scope, $http, $state, $interval) {
 	  $scope.user = {};
 	  $scope.sendCodeTime = 0;
 	  $scope.sendCode = function () {
@@ -370,7 +368,6 @@
 	  });
 	  $http.get('/api/admin/account/' + $stateParams.accountId).then(function (success) {
 	    $scope.account = success.data;
-	    $scope.setTitle('账号 > ' + $scope.account.port);
 	  });
 	  $http.get('/api/admin/server').then(function (success) {
 	    $scope.servers = success.data;
@@ -557,7 +554,6 @@
 	  };
 	  var accountId = $stateParams.accountId;
 	  $http.get('/api/admin/account/' + accountId).then(function (success) {
-	    $scope.setTitle('编辑账号 > ' + success.data.port);
 	    $scope.account.type = success.data.type;
 	    $scope.account.port = success.data.port;
 	    $scope.account.password = success.data.password;
@@ -703,7 +699,6 @@
 	  });
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
 	    $scope.server = success.data;
-	    $scope.setTitle('\u670D\u52A1\u5668 > ' + $scope.server.name);
 	  }).catch(function () {
 	    $state.go('admin.server');
 	  });
@@ -836,7 +831,6 @@
 	  });
 	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
 	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
-	    $scope.setTitle('编辑服务器 > ' + success.data.name);
 	    $scope.server = {
 	      name: success.data.name,
 	      address: success.data.host,
@@ -944,15 +938,15 @@
 	    templateUrl: '/public/views/home/home.html'
 	  }).state('home.index', {
 	    url: '/index',
-	    controller: 'IndexController',
+	    controller: 'HomeIndexController',
 	    templateUrl: '/public/views/home/index.html'
 	  }).state('home.login', {
 	    url: '/login',
-	    controller: 'LoginController',
+	    controller: 'HomeLoginController',
 	    templateUrl: '/public/views/home/login.html'
 	  }).state('home.signup', {
 	    url: '/signup',
-	    controller: 'SignupController',
+	    controller: 'HomeSignupController',
 	    templateUrl: '/public/views/home/signup.html'
 	  });
 	}]);
