@@ -32,17 +32,20 @@
         <div>
             <md-toolbar>
                 <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
-                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                    <md-button hide-gt-sm class="md-icon-button" aria-label="menu" ng-click="menuButton()">
                         <i class="material-icons">menu</i>
                     </md-button>
-                    <div>{{publicInfo.title}}</div>
+                    <div>Shadowsocks-Manager</div>
                     <span flex></span>
+                    <md-button hide-sm hide-xs ng-repeat="menu in menus" aria-label="menu.icon" ng-click="menuClick($index)">
+                        {{menu.name}}
+                    </md-button>
                 </div>
             </md-toolbar>
         </div>
 
         <div flex layout="row">
-            <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;" layout="column" layout-align="space-between stretch">
+            <!-- <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;" layout="column" layout-align="space-between stretch">
                 <md-content>
                     <div layout="column" layout-align="center start">
                         <md-list>
@@ -61,7 +64,7 @@
                         </md-list>
                     </div>
                 </md-content>
-            </md-sidenav>
+            </md-sidenav> -->
             <md-content flex layout="row" style="background-color: #FFF;">
                 <div ui-view flex></div>
             </md-content>
