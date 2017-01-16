@@ -61,15 +61,12 @@ exports.login = (req, res) => {
     req.session.type = success.type;
     res.send({ type: success.type });
   }).catch(err => {
-    console.log(err);
-    if(err === 'invalid body') {
-      return res.status(403).end('invalid body');
-    } if(err === 'user not exists') {
-      return res.status(403).end('user not exists');
-    } else if(err === 'invalid password') {
-      return res.status(403).end('invalid password');
-    } else {
+    logger.error(`User[${ req.body.email }] login fail: ${ err }`);
+    const errorData = ['invalid body', 'user not exists', 'invalid password'];
+    if(errorData.indexOf(err) < 0) {
       return res.status(500).end();
+    } else {
+      return res.status(403).end(err);
     }
   });
 };

@@ -59,6 +59,9 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
   ($scope, $http, $state) => {
     $scope.user = {};
     $scope.login = () => {
+      if(!$scope.user.email || !$scope.user.password) {
+        return;
+      }
       $http.post('/api/home/login', {
         email: $scope.user.email,
         password: $scope.user.password,

@@ -60,13 +60,12 @@ const checkPassword = async (username, password) => {
       return Promise.reject('user not exists');
     }
     if(createPassword(password, username) === user[0].password) {
-      return knex('user').update({
+      await knex('user').update({
         lastLogin: Date.now(),
       }).where({
         username,
-      }).then(success => {
-        return user[0];
       });
+      return user[0];
     } else {
       return Promise.reject('invalid password');
     }

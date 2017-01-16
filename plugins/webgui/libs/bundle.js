@@ -131,6 +131,9 @@
 	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $scope.user = {};
 	  $scope.login = function () {
+	    if (!$scope.user.email || !$scope.user.password) {
+	      return;
+	    }
 	    $http.post('/api/home/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
