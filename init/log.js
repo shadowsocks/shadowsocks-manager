@@ -19,5 +19,9 @@ log4js.configure({
       type: 'console',
       category: 'freeAccount',
     },
+    {
+      type: 'console',
+      category: 'webgui',
+    }
   ]
 });

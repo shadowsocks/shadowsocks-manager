@@ -1,3 +1,6 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('webgui');
+
 const user = appRequire('plugins/user/index');
 const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
@@ -53,6 +56,7 @@ exports.login = (req, res) => {
     }
     result.throw();
   }).then(success => {
+    logger.info(`用户[${ req.body.email }]登录成功`);
     req.session.user = success.id;
     req.session.type = success.type;
     res.send({ type: success.type });
