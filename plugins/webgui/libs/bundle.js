@@ -136,6 +136,13 @@
 	      } else {}
 	    }).catch(console.log);
 	  };
+	  $scope.findPassword = function () {
+	    $http.post('/api/home/password/sendEmail', {
+	      email: $scope.user.email
+	    }).then(function (success) {
+	      console.log(success.data);
+	    }).catch(console.log);
+	  };
 	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', function ($scope, $http, $state, $interval) {
 	  $scope.user = {};
 	  $scope.sendCodeTime = 0;
@@ -164,6 +171,20 @@
 	    }).then(function (success) {
 	      $state.go('home.login');
 	    }).catch(console.log);
+	  };
+	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', function ($scope, $http, $state, $stateParams) {
+	  $scope.user = {};
+	  var token = $stateParams.token;
+	  $http.get('/api/home/password/reset', {
+	    params: { token: token }
+	  }).then(console.log).catch(function (err) {
+	    $state.go('home.index');
+	  });
+	  $scope.resetPassword = function () {
+	    $http.post('/api/home/password/reset', {
+	      token: token,
+	      password: $scope.user.password
+	    }).then(console.log).catch(console.log);
 	  };
 	}]);
 
@@ -960,6 +981,10 @@
 	    url: '/signup',
 	    controller: 'HomeSignupController',
 	    templateUrl: '/public/views/home/signup.html'
+	  }).state('home.resetPassword', {
+	    url: '/password/reset/:token',
+	    controller: 'HomeResetPasswordController',
+	    templateUrl: '/public/views/home/resetPassword.html'
 	  });
 	}]);
 

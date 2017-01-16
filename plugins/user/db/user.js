@@ -21,6 +21,8 @@ const createTable = async() => {
     table.string('type');
     table.dateTime('createTime');
     table.dateTime('lastLogin');
+    table.string('resetPasswordId');
+    table.dateTime('resetPasswordTime');
   });
 };
 

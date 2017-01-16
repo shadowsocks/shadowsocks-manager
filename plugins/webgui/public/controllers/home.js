@@ -59,6 +59,13 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
         }
       }).catch(console.log);
     };
+    $scope.findPassword = () => {
+      $http.post('/api/home/password/sendEmail', {
+        email: $scope.user.email,
+      }).then(success => {
+        console.log(success.data);
+      }).catch(console.log);
+    };
   }
 ])
 .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval',
@@ -92,4 +99,22 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       }).catch(console.log);
     };
   }
-]);
+])
+.controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams',
+  ($scope, $http, $state, $stateParams) => {
+    $scope.user = {};
+    const token = $stateParams.token;
+    $http.get('/api/home/password/reset', {
+      params: { token },
+    }).then(console.log).catch(err => {
+      $state.go('home.index');
+    });
+    $scope.resetPassword = () => {
+      $http.post('/api/home/password/reset', {
+        token,
+        password: $scope.user.password,
+      }).then(console.log).catch(console.log);
+    };
+  }
+])
+;

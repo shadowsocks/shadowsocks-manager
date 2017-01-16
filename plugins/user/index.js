@@ -77,10 +77,14 @@ const checkPassword = async (username, password) => {
 
 const editUser = async (userInfo, edit) => {
   try {
-    if(edit.password) {
-      edit.password = createPassword(edit.password, userInfo.username);
+    const username = (await knex('user').select().where(userInfo))[0].username;
+    if(!username) {
+      throw new Error('user not found');
     }
-    const user = knex('user').update(edit).where(userInfo);
+    if(edit.password) {
+      edit.password = createPassword(edit.password, username);
+    }
+    const user = await knex('user').update(edit).where(userInfo);
     return;
   } catch(err) {
     return Promise.reject(err);

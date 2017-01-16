@@ -30,6 +30,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/signup',
       controller: 'HomeSignupController',
       templateUrl: '/public/views/home/signup.html',
+    })
+    .state('home.resetPassword', {
+      url: '/password/reset/:token',
+      controller: 'HomeResetPasswordController',
+      templateUrl: '/public/views/home/resetPassword.html',
     });
   }
 ]);
