@@ -56,7 +56,7 @@ exports.login = (req, res) => {
     }
     result.throw();
   }).then(success => {
-    logger.info(`用户[${ req.body.email }]登录成功`);
+    logger.info(`[${ req.body.email }] login success`);
     req.session.user = success.id;
     req.session.type = success.type;
     res.send({ type: success.type });
@@ -102,7 +102,7 @@ exports.sendResetPasswordEmail = (req, res) => {
       return Promise.reject();
     }
     token = crypto.randomBytes(16).toString('hex');
-    return emailPlugin.sendMail(email, '测试', '测试' + token);
+    return emailPlugin.sendMail(email, 'Shadowsocks-Manager密码重置', 'http://127.0.0.1:8080/home/password/reset/' + token);
   }).then(success => {
     return user.edit({
       username: email,
