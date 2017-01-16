@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
-  ($scope, $mdMedia, $mdSidenav, $state, $http) => {
+app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$mdDialog',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $mdDialog) => {
     console.log('Home');
     $http.get('/api/home/login').then(success => {
       if(success.data.status === 'normal') {
@@ -35,6 +35,19 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       $mdSidenav('left').close();
       $state.go($scope.menus[index].click);
     };
+
+
+    $scope.showDialog = (title, content, button) => {
+      $mdDialog.show(
+        $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title(title)
+          .textContent(content)
+          .ariaLabel('Alert Dialog')
+          .ok(button)
+          // .targetEvent(ev)
+      );
+    };
   }
 ])
 .controller('HomeIndexController', ['$scope',
@@ -54,10 +67,14 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
           $state.go('user.index');
         } else if(success.data.type === 'admin') {
           $state.go('admin.index');
-        } else {
-
         }
-      }).catch(console.log);
+      }).catch(err => {
+        // if(err.status === 403) {
+        //   $scope.showDialog('a', 'b', 'c');
+        // } else {
+        //
+        // }
+      });
     };
     $scope.findPassword = () => {
       $http.post('/api/home/password/sendEmail', {

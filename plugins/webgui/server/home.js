@@ -54,7 +54,7 @@ exports.login = (req, res) => {
       const password = req.body.password;
       return user.checkPassword(email, password);
     }
-    result.throw();
+    return Promise.reject('invalid body');
   }).then(success => {
     logger.info(`[${ req.body.email }] login success`);
     req.session.user = success.id;
@@ -62,7 +62,15 @@ exports.login = (req, res) => {
     res.send({ type: success.type });
   }).catch(err => {
     console.log(err);
-    res.status(401).end();
+    if(err === 'invalid body') {
+      return res.status(403).end('invalid body');
+    } if(err === 'user not exists') {
+      return res.status(403).end('user not exists');
+    } else if(err === 'invalid password') {
+      return res.status(403).end('invalid password');
+    } else {
+      return res.status(500).end();
+    }
   });
 };
 

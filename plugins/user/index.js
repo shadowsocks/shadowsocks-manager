@@ -57,7 +57,7 @@ const checkPassword = async (username, password) => {
       username,
     });
     if(user.length === 0) {
-      return Promise.reject();
+      return Promise.reject('user not exists');
     }
     if(createPassword(password, username) === user[0].password) {
       return knex('user').update({
@@ -68,7 +68,7 @@ const checkPassword = async (username, password) => {
         return user[0];
       });
     } else {
-      return Promise.reject();
+      return Promise.reject('invalid password');
     }
   } catch(err) {
     return Promise.reject(err);
