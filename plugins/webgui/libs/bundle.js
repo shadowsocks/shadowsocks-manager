@@ -89,7 +89,6 @@
 	var app = __webpack_require__(1).app;
 
 	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$mdDialog', function ($scope, $mdMedia, $mdSidenav, $state, $http, $mdDialog) {
-	  console.log('Home');
 	  $http.get('/api/home/login').then(function (success) {
 	    if (success.data.status === 'normal') {
 	      $state.go('user.index');
@@ -123,10 +122,35 @@
 	    $state.go($scope.menus[index].click);
 	  };
 
-	  $scope.showDialog = function (title, content, button) {
-	    $mdDialog.show($mdDialog.alert().clickOutsideToClose(true).title(title).textContent(content).ariaLabel('Alert Dialog').ok(button)
-	    // .targetEvent(ev)
-	    );
+	  $scope.alertDialogInfo = {
+	    isLoading: false,
+	    title: '',
+	    content: '',
+	    button: ''
+	  };
+	  var alertDialog = null;
+	  $scope.openAlertDialog = function (isLoading, content, button) {
+	    $scope.alertDialogInfo.isLoading = isLoading;
+	    $scope.alertDialogInfo.content = content;
+	    $scope.alertDialogInfo.button = button;
+	    if (alertDialog) {
+	      return;
+	    }
+	    alertDialog = $mdDialog.show({
+	      templateUrl: '/public/views/home/alertDialog.html',
+	      parent: angular.element(document.body),
+	      clickOutsideToClose: true,
+	      // preserveScope: true,
+	      scope: { data: $scope.alertDialogInfo }
+	    });
+	  };
+	  $scope.closeAlertDialog = function () {
+	    if (!alertDialog) {
+	      return;
+	    }
+	    $mdDialog.cancel(alertDialog).then(function () {
+	      $scope.alertDialog = null;
+	    });
 	  };
 	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $scope.user = {};
@@ -134,6 +158,7 @@
 	    if (!$scope.user.email || !$scope.user.password) {
 	      return;
 	    }
+	    $scope.openAlertDialog(true, 'b', 'c');
 	    $http.post('/api/home/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
@@ -144,11 +169,9 @@
 	        $state.go('admin.index');
 	      }
 	    }).catch(function (err) {
-	      // if(err.status === 403) {
-	      //   $scope.showDialog('a', 'b', 'c');
-	      // } else {
-	      //
-	      // }
+	      if (err.status === 403) {
+	        $scope.openAlertDialog(false, 'b', 'c');
+	      } else {}
 	    });
 	  };
 	  $scope.findPassword = function () {
@@ -952,7 +975,6 @@
 	    openDialog();
 	  });
 	  $scope.confirmAccount = function () {
-	    console.log($scope.account);
 	    $mdDialog.hide($scope.dialog);
 	    var promise = [];
 	    $scope.account.forEach(function (f) {

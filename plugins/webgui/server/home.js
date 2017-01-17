@@ -45,6 +45,7 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
+  setTimeout(() => {
   delete req.session.user;
   delete req.session.type;
   req.checkBody('email', 'Invalid email').isEmail();
@@ -70,6 +71,7 @@ exports.login = (req, res) => {
       return res.status(403).end(err);
     }
   });
+}, 1000);
 };
 
 exports.logout = (req, res) => {

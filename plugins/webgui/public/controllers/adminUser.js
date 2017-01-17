@@ -45,7 +45,6 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', '$htt
       openDialog();
     });
     $scope.confirmAccount = () => {
-      console.log($scope.account);
       $mdDialog.hide($scope.dialog);
       const promise = [];
       $scope.account.forEach(f => {
