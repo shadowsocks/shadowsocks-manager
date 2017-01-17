@@ -121,44 +121,12 @@
 	    $mdSidenav('left').close();
 	    $state.go($scope.menus[index].click);
 	  };
-
-	  $scope.alertDialogInfo = {
-	    isLoading: false,
-	    title: '',
-	    content: '',
-	    button: ''
-	  };
-	  var alertDialog = null;
-	  $scope.openAlertDialog = function (isLoading, content, button) {
-	    $scope.alertDialogInfo.isLoading = isLoading;
-	    $scope.alertDialogInfo.content = content;
-	    $scope.alertDialogInfo.button = button;
-	    if (alertDialog) {
-	      return;
-	    }
-	    alertDialog = $mdDialog.show({
-	      templateUrl: '/public/views/home/alertDialog.html',
-	      parent: angular.element(document.body),
-	      clickOutsideToClose: true,
-	      // preserveScope: true,
-	      scope: { data: $scope.alertDialogInfo }
-	    });
-	  };
-	  $scope.closeAlertDialog = function () {
-	    if (!alertDialog) {
-	      return;
-	    }
-	    $mdDialog.cancel(alertDialog).then(function () {
-	      $scope.alertDialog = null;
-	    });
-	  };
 	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $scope.user = {};
 	  $scope.login = function () {
 	    if (!$scope.user.email || !$scope.user.password) {
 	      return;
 	    }
-	    $scope.openAlertDialog(true, 'b', 'c');
 	    $http.post('/api/home/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
@@ -169,9 +137,10 @@
 	        $state.go('admin.index');
 	      }
 	    }).catch(function (err) {
-	      if (err.status === 403) {
-	        $scope.openAlertDialog(false, 'b', 'c');
-	      } else {}
+	      // if(err.status === 403) {
+	      //
+	      // } else {
+	      // }
 	    });
 	  };
 	  $scope.findPassword = function () {
