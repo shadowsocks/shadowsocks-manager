@@ -36,6 +36,7 @@ exports.signup = (req, res) => {
       type,
     });
   }).then(success => {
+    logger.info(`[${ req.body.email }] signup success`);
     res.send('success');
   }).catch(err => {
     console.log(err);
