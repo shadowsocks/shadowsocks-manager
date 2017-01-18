@@ -230,12 +230,17 @@
 	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', function ($scope, $http, $state, $stateParams) {
 	  $scope.user = {};
 	  var token = $stateParams.token;
+	  $scope.alertDialog(true);
 	  $http.get('/api/home/password/reset', {
 	    params: {
 	      token: token
 	    }
-	  }).then(console.log).catch(function (err) {
-	    $state.go('home.index');
+	  }).then(function (success) {
+	    $scope.closeAlertDialog();
+	  }).catch(function (err) {
+	    $scope.alertDialog(false, '该链接已经失效', '确定').then(function () {
+	      $state.go('home.index');
+	    });
 	  });
 	  $scope.resetPassword = function () {
 	    $http.post('/api/home/password/reset', {

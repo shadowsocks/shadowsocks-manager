@@ -157,18 +157,30 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     ($scope, $http, $state, $stateParams) => {
       $scope.user = {};
       const token = $stateParams.token;
+      $scope.alertDialog(true);
       $http.get('/api/home/password/reset', {
         params: {
           token
         },
-      }).then(console.log).catch(err => {
-        $state.go('home.index');
+      }).then(success => {
+        $scope.closeAlertDialog();
+      }).catch(err => {
+        $scope.alertDialog(false, '该链接已经失效', '确定').then(() => {
+          $state.go('home.index');
+        });
       });
       $scope.resetPassword = () => {
+        $scope.alertDialog(true);
         $http.post('/api/home/password/reset', {
           token,
           password: $scope.user.password,
-        }).then(console.log).catch(console.log);
+        }).then(() => {
+          $scope.alertDialog(false, '修改密码成功', '确定').then(() => {
+            $state.go('home.login');
+          });
+        }).catch(() => {
+          $scope.alertDialog(false, '修改密码失败', '确定');
+        });
       };
     }
   ]);

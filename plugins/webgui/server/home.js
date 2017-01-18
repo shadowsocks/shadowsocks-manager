@@ -8,7 +8,6 @@ const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 
 exports.signup = (req, res) => {
-  setTimeout(() => {
   req.checkBody('email', 'Invalid email').isEmail();
   req.checkBody('code', 'Invalid code').notEmpty();
   req.checkBody('password', 'Invalid password').notEmpty();
@@ -19,8 +18,9 @@ exports.signup = (req, res) => {
       const code = req.body.code;
       return emailPlugin.checkCode(email, code);
     }
-    result.throw();
+    return Promise.reject('invalid body');
   }).then(success => {
+    // The first user will be admin
     return knex('user').count('id AS count').then(success => {
       if(!success[0].count) {
         type = 'admin';
@@ -40,10 +40,9 @@ exports.signup = (req, res) => {
     logger.info(`[${ req.body.email }] signup success`);
     res.send('success');
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
     res.status(403).end();
   });
-  }, 1500);
 };
 
 exports.login = (req, res) => {
