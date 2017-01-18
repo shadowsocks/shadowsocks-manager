@@ -39,27 +39,29 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       $scope.alertDialogContent = '';
       $scope.alertDialogButton = '';
       let alertDialogPromise = null;
-      const alertDialog = $mdDialog.prompt({
-        templateUrl: '/public/views/home/alertDialog.html',
-        escapeToClose: false,
-        scope: $scope,
-        preserveScope: true,
-        clickOutsideToClose: false,
-        // controller: function($scope) {
-        //   console.log($scope);
-        // }
-      });
       $scope.alertDialog = (isLoading, content, button) => {
         $scope.isAlertDialogLoading = isLoading;
         $scope.alertDialogContent = content;
         $scope.alertDialogButton = button;
         if(alertDialogPromise && !alertDialogPromise.$$state.status) {
-          return;
+          return alertDialogPromise;
         }
-        alertDialogPromise = $mdDialog.show(alertDialog);
+        const dialog = {
+          templateUrl: '/public/views/home/alertDialog.html',
+          escapeToClose: false,
+          scope: $scope,
+          preserveScope: true,
+          clickOutsideToClose: false,
+        };
+        alertDialogPromise = $mdDialog.show(dialog);
+        return alertDialogPromise;
       };
       $scope.closeAlertDialog = () => {
-        $mdDialog.hide(alertDialogPromise);
+        $mdDialog.hide().then(() => {
+          alertDialogPromise = null;
+        }).catch(() => {
+          alertDialogPromise = null;
+        });
       };
     }
   ])
@@ -94,22 +96,34 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
         });
       };
       $scope.findPassword = () => {
+        $scope.alertDialog(true);
         $http.post('/api/home/password/sendEmail', {
           email: $scope.user.email,
         }).then(success => {
-          console.log(success.data);
-        }).catch(console.log);
+          $scope.alertDialog(false, '重置密码链接已发至您的邮箱，\n请注意查收', '确定');
+        }).catch(err => {
+          let errData = null;
+          if(err.status === 403 && err.data === 'already send') {
+            errData = '重置密码链接已经发送，\n请勿重复发送';
+          }
+          if(err.status === 403 && err.data === 'user not exists') {
+            errData = '请输入正确的邮箱地址';
+          }
+          $scope.alertDialog(false, errData || '重置密码链接发送错误', '确定');
+        });
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval',
-    ($scope, $http, $state, $interval) => {
+  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout',
+    ($scope, $http, $state, $interval, $timeout) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
+        $scope.alertDialog(true);
         $http.post('/api/home/code', {
           email: $scope.user.email,
         }).then(success => {
+          $scope.alertDialog(false, '验证码已发至邮箱', '确定');
           $scope.sendCodeTime = 120;
           const interval = $interval(() => {
             if ($scope.sendCodeTime > 0) {
@@ -120,17 +134,22 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
             }
           }, 1000);
         }).catch(err => {
-          console.log(err);
+          $scope.alertDialog(false, '验证码发送错误', '确定');
         });
       };
       $scope.signup = () => {
+        $scope.alertDialog(true);
         $http.post('/api/home/signup', {
           email: $scope.user.email,
           code: $scope.user.code,
           password: $scope.user.password,
         }).then(success => {
+          return $scope.alertDialog(false, '用户注册成功', '确定');
+        }).then(() => {
           $state.go('home.login');
-        }).catch(console.log);
+        }).catch(err => {
+          $scope.alertDialog(false, '用户注册失败', '确定');
+        });
       };
     }
   ])

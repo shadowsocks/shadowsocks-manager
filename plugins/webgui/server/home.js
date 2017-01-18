@@ -8,6 +8,7 @@ const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 
 exports.signup = (req, res) => {
+  setTimeout(() => {
   req.checkBody('email', 'Invalid email').isEmail();
   req.checkBody('code', 'Invalid code').notEmpty();
   req.checkBody('password', 'Invalid password').notEmpty();
@@ -42,10 +43,10 @@ exports.signup = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+  }, 1500);
 };
 
 exports.login = (req, res) => {
-  // setTimeout(() => {
   delete req.session.user;
   delete req.session.type;
   req.checkBody('email', 'Invalid email').isEmail();
@@ -71,7 +72,6 @@ exports.login = (req, res) => {
       return res.status(403).end();
     }
   });
-// }, 1000);
 };
 
 exports.logout = (req, res) => {
@@ -107,10 +107,10 @@ exports.sendResetPasswordEmail = (req, res) => {
     return users[0];
   }).then(user => {
     if(user.resetPasswordTime + 600 * 1000 >= Date.now()) {
-      return Promise.reject();
+      return Promise.reject('already send');
     }
     token = crypto.randomBytes(16).toString('hex');
-    return emailPlugin.sendMail(email, 'Shadowsocks-Manager密码重置', 'http://127.0.0.1:8080/home/password/reset/' + token);
+    return emailPlugin.sendMail(email, 'Shadowsocks密码重置', 'http://127.0.0.1:8080/home/password/reset/' + token);
   }).then(success => {
     return user.edit({
       username: email,
@@ -121,8 +121,13 @@ exports.sendResetPasswordEmail = (req, res) => {
   }).then(success => {
     res.send('success');
   }).catch(err => {
-    console.log(err);
-    res.status(403).end();
+    logger.error(err);
+    const errorData = ['already send', 'user not exists'];
+    if(errorData.indexOf(err) < 0) {
+      return res.status(403).end();
+    } else {
+      return res.status(403).end(err);
+    }
   });
 };
 

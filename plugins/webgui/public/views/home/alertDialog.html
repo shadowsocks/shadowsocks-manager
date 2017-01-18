@@ -1,12 +1,12 @@
 <md-dialog aria-label="alert dialog">
-    <div ng-show="isAlertDialogLoading" layout="row" layout-align="center center" layout-margin>
+    <div ng-show="isAlertDialogLoading" layout="row" layout-align="center center" layout-margin layout-padding>
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
     <md-dialog-content ng-hide="isAlertDialogLoading">
         <div class="md-dialog-content">
-        <div layout="row" layout-align="center center">
-            {{alertDialogContent}}
-        </div>
+            <div layout="row" layout-align="center center">
+                <div style="white-space: pre-wrap;">{{alertDialogContent}}</div>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" ng-hide="isAlertDialogLoading">
