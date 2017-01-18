@@ -89,7 +89,7 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
           if(err.status === 403) {
             $scope.alertDialog(false, '用户名或密码错误', '确定');
           } else {
-            $scope.alertDialog(false, '网络异常', '确定');
+            $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
           }
         });
       };

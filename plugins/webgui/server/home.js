@@ -45,7 +45,7 @@ exports.signup = (req, res) => {
 };
 
 exports.login = (req, res) => {
-  setTimeout(() => {
+  // setTimeout(() => {
   delete req.session.user;
   delete req.session.type;
   req.checkBody('email', 'Invalid email').isEmail();
@@ -68,10 +68,10 @@ exports.login = (req, res) => {
     if(errorData.indexOf(err) < 0) {
       return res.status(500).end();
     } else {
-      return res.status(403).end(err);
+      return res.status(403).end();
     }
   });
-}, 1000);
+// }, 1000);
 };
 
 exports.logout = (req, res) => {
