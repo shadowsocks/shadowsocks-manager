@@ -121,12 +121,37 @@
 	    $mdSidenav('left').close();
 	    $state.go($scope.menus[index].click);
 	  };
+
+	  $scope.isAlertDialogLoading = false;
+	  $scope.alertDialogContent = '';
+	  $scope.alertDialogButton = '';
+	  var alertDialogPromise = null;
+	  var alertDialog = $mdDialog.prompt({
+	    templateUrl: '/public/views/home/alertDialog.html',
+	    escapeToClose: false,
+	    scope: $scope,
+	    preserveScope: true,
+	    clickOutsideToClose: false
+	  });
+	  $scope.alertDialog = function (isLoading, content, button) {
+	    $scope.isAlertDialogLoading = isLoading;
+	    $scope.alertDialogContent = content;
+	    $scope.alertDialogButton = button;
+	    if (alertDialogPromise && !alertDialogPromise.$$state.status) {
+	      return;
+	    }
+	    alertDialogPromise = $mdDialog.show(alertDialog);
+	  };
+	  $scope.closeAlertDialog = function () {
+	    $mdDialog.hide(alertDialogPromise);
+	  };
 	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
 	  $scope.user = {};
 	  $scope.login = function () {
 	    if (!$scope.user.email || !$scope.user.password) {
 	      return;
 	    }
+	    $scope.alertDialog(true);
 	    $http.post('/api/home/login', {
 	      email: $scope.user.email,
 	      password: $scope.user.password
@@ -137,10 +162,11 @@
 	        $state.go('admin.index');
 	      }
 	    }).catch(function (err) {
-	      // if(err.status === 403) {
-	      //
-	      // } else {
-	      // }
+	      if (err.status === 403) {
+	        $scope.alertDialog(false, '用户名或密码错误', '确定');
+	      } else {
+	        $scope.alertDialog(false, '网络异常', '确定');
+	      }
 	    });
 	  };
 	  $scope.findPassword = function () {
@@ -183,7 +209,9 @@
 	  $scope.user = {};
 	  var token = $stateParams.token;
 	  $http.get('/api/home/password/reset', {
-	    params: { token: token }
+	    params: {
+	      token: token
+	    }
 	  }).then(console.log).catch(function (err) {
 	    $state.go('home.index');
 	  });
