@@ -82,6 +82,7 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
           email: $scope.user.email,
           password: $scope.user.password,
         }).then(success => {
+          $scope.closeAlertDialog();
           if (success.data.type === 'normal') {
             $state.go('user.index');
           } else if (success.data.type === 'admin') {

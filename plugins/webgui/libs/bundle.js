@@ -161,6 +161,7 @@
 	      email: $scope.user.email,
 	      password: $scope.user.password
 	    }).then(function (success) {
+	      $scope.closeAlertDialog();
 	      if (success.data.type === 'normal') {
 	        $state.go('user.index');
 	      } else if (success.data.type === 'admin') {
@@ -243,10 +244,17 @@
 	    });
 	  });
 	  $scope.resetPassword = function () {
+	    $scope.alertDialog(true);
 	    $http.post('/api/home/password/reset', {
 	      token: token,
 	      password: $scope.user.password
-	    }).then(console.log).catch(console.log);
+	    }).then(function () {
+	      $scope.alertDialog(false, '修改密码成功', '确定').then(function () {
+	        $state.go('home.login');
+	      });
+	    }).catch(function () {
+	      $scope.alertDialog(false, '修改密码失败', '确定');
+	    });
 	  };
 	}]);
 
