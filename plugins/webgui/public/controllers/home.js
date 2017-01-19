@@ -70,30 +70,42 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
 
     }
   ])
-  .controller('HomeLoginController', ['$scope', '$http', '$state',
-    ($scope, $http, $state) => {
+  .controller('HomeLoginController', ['$scope', '$http', '$state', 'HomeApi',
+    ($scope, $http, $state, HomeApi) => {
       $scope.user = {};
       $scope.login = () => {
-        if (!$scope.user.email || !$scope.user.password) {
-          return;
-        }
+        // if (!$scope.user.email || !$scope.user.password) {
+        //   return;
+        // }
+        // $scope.alertDialog(true);
+        // $http.post('/api/home/login', {
+        //   email: $scope.user.email,
+        //   password: $scope.user.password,
+        // }).then(success => {
+        //   $scope.closeAlertDialog();
+        //   if (success.data.type === 'normal') {
+        //     $state.go('user.index');
+        //   } else if (success.data.type === 'admin') {
+        //     $state.go('admin.index');
+        //   }
+        // }).catch(err => {
+        //   if(err.status === 403) {
+        //     $scope.alertDialog(false, '用户名或密码错误', '确定');
+        //   } else {
+        //     $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
+        //   }
+        // });
         $scope.alertDialog(true);
-        $http.post('/api/home/login', {
-          email: $scope.user.email,
-          password: $scope.user.password,
-        }).then(success => {
+        HomeApi.userLogin($scope.user.email, $scope.user.password)
+        .then(success => {
           $scope.closeAlertDialog();
-          if (success.data.type === 'normal') {
+          if (success === 'normal') {
             $state.go('user.index');
-          } else if (success.data.type === 'admin') {
+          } else if (success === 'admin') {
             $state.go('admin.index');
           }
         }).catch(err => {
-          if(err.status === 403) {
-            $scope.alertDialog(false, '用户名或密码错误', '确定');
-          } else {
-            $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
-          }
+          $scope.alertDialog(false, err, '确定');
         });
       };
       $scope.findPassword = () => {

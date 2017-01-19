@@ -61,6 +61,7 @@
 	__webpack_require__(11);
 
 	__webpack_require__(12);
+	__webpack_require__(13);
 
 /***/ },
 /* 1 */
@@ -150,29 +151,40 @@
 	      alertDialogPromise = null;
 	    });
 	  };
-	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', function ($scope, $http, $state) {
+	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'HomeApi', function ($scope, $http, $state, HomeApi) {
 	  $scope.user = {};
 	  $scope.login = function () {
-	    if (!$scope.user.email || !$scope.user.password) {
-	      return;
-	    }
+	    // if (!$scope.user.email || !$scope.user.password) {
+	    //   return;
+	    // }
+	    // $scope.alertDialog(true);
+	    // $http.post('/api/home/login', {
+	    //   email: $scope.user.email,
+	    //   password: $scope.user.password,
+	    // }).then(success => {
+	    //   $scope.closeAlertDialog();
+	    //   if (success.data.type === 'normal') {
+	    //     $state.go('user.index');
+	    //   } else if (success.data.type === 'admin') {
+	    //     $state.go('admin.index');
+	    //   }
+	    // }).catch(err => {
+	    //   if(err.status === 403) {
+	    //     $scope.alertDialog(false, '用户名或密码错误', '确定');
+	    //   } else {
+	    //     $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
+	    //   }
+	    // });
 	    $scope.alertDialog(true);
-	    $http.post('/api/home/login', {
-	      email: $scope.user.email,
-	      password: $scope.user.password
-	    }).then(function (success) {
+	    HomeApi.userLogin($scope.user.email, $scope.user.password).then(function (success) {
 	      $scope.closeAlertDialog();
-	      if (success.data.type === 'normal') {
+	      if (success === 'normal') {
 	        $state.go('user.index');
-	      } else if (success.data.type === 'admin') {
+	      } else if (success === 'admin') {
 	        $state.go('admin.index');
 	      }
 	    }).catch(function (err) {
-	      if (err.status === 403) {
-	        $scope.alertDialog(false, '用户名或密码错误', '确定');
-	      } else {
-	        $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
-	      }
+	      $scope.alertDialog(false, err, '确定');
 	    });
 	  };
 	  $scope.findPassword = function () {
@@ -1179,6 +1191,34 @@
 	    }
 	  };
 	});
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('HomeApi', ['$http', function ($http) {
+	  var userLogin = function userLogin(email, password) {
+	    return $http.post('/api/home/login', {
+	      email: email,
+	      password: password
+	    }).then(function (success) {
+	      return success.data.type;
+	    }).catch(function (err) {
+	      if (err.status === 403) {
+	        return Promise.reject('用户名或密码错误');
+	      } else {
+	        return Promise.reject('网络异常，请稍后再试');
+	      }
+	    });
+	  };
+	  return {
+	    userLogin: userLogin
+	  };
+	}]);
 
 /***/ }
 /******/ ]);

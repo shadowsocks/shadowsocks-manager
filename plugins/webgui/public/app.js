@@ -13,3 +13,4 @@ require('./routes/user');
 require('./routes/admin');
 
 require('./filters/flow');
+require('./services/homeService.js');
