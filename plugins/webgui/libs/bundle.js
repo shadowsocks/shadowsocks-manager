@@ -64,6 +64,7 @@
 	__webpack_require__(13);
 	__webpack_require__(14);
 	__webpack_require__(15);
+	__webpack_require__(16);
 
 /***/ },
 /* 1 */
@@ -238,6 +239,8 @@
 	    name: '我的账号',
 	    icon: 'account_circle',
 	    click: 'user.account'
+	  }, {
+	    name: 'divider'
 	  }, {
 	    name: '退出',
 	    icon: 'settings',
@@ -1138,6 +1141,47 @@
 
 	var app = __webpack_require__(1).app;
 
+	app.filter('timeago', function () {
+	  return function (input) {
+
+	    var ret = '';
+	    var retTail = '';
+
+	    var time = Date.now() - new Date(input);
+	    if (time < 0) {
+	      time = -time;
+	    } else {
+	      retTail = '前';
+	    }
+
+	    var day = Math.trunc(time / (24 * 3600 * 1000));
+	    var hour = Math.trunc(time % (24 * 3600 * 1000) / (3600 * 1000));
+	    var minute = Math.trunc(time % (24 * 3600 * 1000) % (3600 * 1000) / (60 * 1000));
+	    if (day) {
+	      ret += day + '天';
+	    }
+	    if (day || hour) {
+	      ret += hour + '小时';
+	    }
+	    if (!day && (hour || minute)) {
+	      ret += minute + '分钟';
+	    }
+	    if (time < 60 * 1000) {
+	      ret = '几秒';
+	    }
+
+	    return ret + retTail;
+	  };
+	});
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
 	app.factory('homeApi', ['$http', function ($http) {
 	  var userLogin = function userLogin(email, password) {
 	    return $http.post('/api/home/login', {
@@ -1176,7 +1220,7 @@
 	}]);
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1203,7 +1247,7 @@
 	}]);
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

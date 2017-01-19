@@ -84,11 +84,17 @@ exports.status = (req, res) => {
 };
 
 exports.sendCode = (req, res) => {
-  const email = req.body.email;
-  emailPlugin.sendCode(email, '验证码', '您的验证码是：').then(success => {
+  req.checkBody('email', 'Invalid email').isEmail();
+  req.getValidationResult().then(result => {
+    if(result.isEmpty) { return; }
+    return Promise.reject('invalid email');
+  }).then(() => {
+    const email = req.body.email;
+    return emailPlugin.sendCode(email, '验证码', '您的验证码是：');
+  }).then(success => {
     res.send('success');
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
     res.status(403).end();
   });
 };

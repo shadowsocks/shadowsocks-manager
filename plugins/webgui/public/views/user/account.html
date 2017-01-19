@@ -25,8 +25,12 @@
                                 <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{a.password}}</div>
                                 <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
                                 <div flex="40">流量：</div>    <div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限量</span><span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}}/{{a.data.flow | flow}}</span></div>
-                                <div flex="40">到期时间：</div><div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限时</span><span ng-if="a.type >=2 && a.type <= 5">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span></div>
-                                <div flex="40">最近连接：</div><div flex="60" style="text-align:right"><span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
+                                <div flex="40">到期时间：</div><div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限时</span>
+                                    <span ng-if="a.type >=2 && a.type <= 5">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                </div>
+                                <div flex="40">最近连接：</div><div flex="60" style="text-align:right">
+                                    <span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span>
+                                </div>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>

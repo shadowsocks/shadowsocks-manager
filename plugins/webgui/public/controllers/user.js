@@ -19,6 +19,8 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       icon: 'account_circle',
       click: 'user.account'
     }, {
+      name: 'divider',
+    }, {
       name: '退出',
       icon: 'settings',
       click: function() {

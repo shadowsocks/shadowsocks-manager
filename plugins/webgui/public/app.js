@@ -13,6 +13,7 @@ require('./routes/user');
 require('./routes/admin');
 
 require('./filters/flow');
+require('./filters/time');
 require('./services/homeService.js');
 require('./services/userService.js');
 require('./services/dialogService.js');
