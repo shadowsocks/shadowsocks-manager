@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$mdDialog',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $mdDialog) => {
+app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+    ($scope, $mdMedia, $mdSidenav, $state, $http) => {
       $http.get('/api/home/login').then(success => {
         if (success.data.status === 'normal') {
           $state.go('user.index');
@@ -107,8 +107,8 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       };
     }
   ])
-  .controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams',
-    ($scope, $http, $state, $stateParams) => {
+  .controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', 'alertDialog',
+    ($scope, $http, $state, $stateParams, alertDialog) => {
       $scope.user = {};
       const token = $stateParams.token;
       alertDialog.loading();

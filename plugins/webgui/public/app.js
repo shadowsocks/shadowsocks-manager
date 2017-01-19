@@ -14,4 +14,5 @@ require('./routes/admin');
 
 require('./filters/flow');
 require('./services/homeService.js');
+require('./services/userService.js');
 require('./services/dialogService.js');

@@ -1,13 +1,16 @@
 <div layout="row" layout-wrap>
+    <div flex ng-if="account && !account.length">
+        <md-card>
+            <md-card-content>
+                <div style="margin-top: 30px; margin-bottom: 30px;">目前该用户没有分配账号，请联系管理员处理</div>
+            </md-card-content>
+        </md-card>
+    </div>
     <div flex-xs="100" flex-sm="100" flex-md="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by $index">
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
-                <!-- <md-card-avatar>
-                    <img class="md-user-avatar" src="http://placehold.it/50x50" />
-                </md-card-avatar> -->
                 <md-card-header-text>
                     <span class="md-title">{{a.port}}</span>
-                    <!-- <span class="md-subhead">{{a.password}}</span> -->
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
@@ -16,7 +19,7 @@
                            label="{{server.name}}"
                            md-on-select="getServerPortData(a, server.id, a.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
-                            <div flex flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
+                            <div flex="60" flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
                                 <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
                                 <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{a.port}}</div>
                                 <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{a.password}}</div>

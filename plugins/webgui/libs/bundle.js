@@ -63,6 +63,7 @@
 	__webpack_require__(12);
 	__webpack_require__(13);
 	__webpack_require__(14);
+	__webpack_require__(15);
 
 /***/ },
 /* 1 */
@@ -90,7 +91,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$mdDialog', function ($scope, $mdMedia, $mdSidenav, $state, $http, $mdDialog) {
+	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
 	  $http.get('/api/home/login').then(function (success) {
 	    if (success.data.status === 'normal') {
 	      $state.go('user.index');
@@ -182,7 +183,7 @@
 	      alertDialog.show('用户注册失败', '确定');
 	    });
 	  };
-	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', function ($scope, $http, $state, $stateParams) {
+	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', 'alertDialog', function ($scope, $http, $state, $stateParams, alertDialog) {
 	  $scope.user = {};
 	  var token = $stateParams.token;
 	  alertDialog.loading();
@@ -262,20 +263,15 @@
 	  });
 	}]).controller('UserIndexController', ['$scope', function ($scope) {
 	  $scope.setTitle('首页');
-	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', function ($scope, $http, $mdMedia) {
+	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', function ($scope, $http, $mdMedia, userApi) {
 	  $scope.setTitle('我的账号');
 	  $scope.flexGtSm = 100;
-	  $http.get('/api/user/account').then(function (success) {
-	    $scope.account = success.data;
-	    // if($mdMedia('gt-sm')) {
-	    //   return 220;
-	    // }
+	  userApi.getUserAccount().then(function (success) {
+	    $scope.account = success.account;
+	    $scope.servers = success.servers;
 	    if ($scope.account.length >= 2) {
 	      $scope.flexGtSm = 50;
 	    }
-	  });
-	  $http.get('/api/user/server').then(function (success) {
-	    $scope.servers = success.data;
 	  });
 	  var base64Encode = function base64Encode(str) {
 	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
@@ -1187,6 +1183,33 @@
 
 	var app = __webpack_require__(1).app;
 
+	app.factory('userApi', ['$http', function ($http) {
+	  var getUserAccount = function getUserAccount() {
+	    var account = null;
+	    var servers = null;
+	    return $http.get('/api/user/account').then(function (success) {
+	      account = success.data;
+	      return $http.get('/api/user/server');
+	    }).then(function (success) {
+	      servers = success.data;
+	      return {
+	        account: account, servers: servers
+	      };
+	    });
+	  };
+	  return {
+	    getUserAccount: getUserAccount
+	  };
+	}]);
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
 	app.factory('alertDialog', ['$mdDialog', function ($mdDialog) {
 	  var publicInfo = {};
 	  publicInfo.isLoading = false;
@@ -1208,7 +1231,7 @@
 	    return false;
 	  };
 	  var dialog = {
-	    templateUrl: '/public/views/home/alertDialog0.html',
+	    templateUrl: '/public/views/home/alertDialog.html',
 	    escapeToClose: false,
 	    locals: { bind: publicInfo },
 	    bindToController: true,
@@ -1230,7 +1253,7 @@
 	  var loading = function loading() {
 	    publicInfo.isLoading = true;
 	    if (!isDialogShow()) {
-	      show().then(console.log).catch(console.log);
+	      show();
 	    }
 	  };
 	  return {

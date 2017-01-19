@@ -46,21 +46,16 @@ app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     $scope.setTitle('首页');
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia',
-  ($scope, $http, $mdMedia) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi',
+  ($scope, $http, $mdMedia, userApi) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
-    $http.get('/api/user/account').then(success => {
-      $scope.account = success.data;
-      // if($mdMedia('gt-sm')) {
-      //   return 220;
-      // }
+    userApi.getUserAccount().then(success => {
+      $scope.account = success.account;
+      $scope.servers = success.servers;
       if($scope.account.length >= 2) {
         $scope.flexGtSm = 50;
       }
-    });
-    $http.get('/api/user/server').then(success => {
-      $scope.servers = success.data;
     });
     const base64Encode = (str) => {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
