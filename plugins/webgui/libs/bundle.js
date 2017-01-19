@@ -62,6 +62,7 @@
 
 	__webpack_require__(12);
 	__webpack_require__(13);
+	__webpack_require__(14);
 
 /***/ },
 /* 1 */
@@ -122,97 +123,38 @@
 	    $mdSidenav('left').close();
 	    $state.go($scope.menus[index].click);
 	  };
-
-	  $scope.isAlertDialogLoading = false;
-	  $scope.alertDialogContent = '';
-	  $scope.alertDialogButton = '';
-	  var alertDialogPromise = null;
-	  $scope.alertDialog = function (isLoading, content, button) {
-	    $scope.isAlertDialogLoading = isLoading;
-	    $scope.alertDialogContent = content;
-	    $scope.alertDialogButton = button;
-	    if (alertDialogPromise && !alertDialogPromise.$$state.status) {
-	      return alertDialogPromise;
-	    }
-	    var dialog = {
-	      templateUrl: '/public/views/home/alertDialog.html',
-	      escapeToClose: false,
-	      scope: $scope,
-	      preserveScope: true,
-	      clickOutsideToClose: false
-	    };
-	    alertDialogPromise = $mdDialog.show(dialog);
-	    return alertDialogPromise;
-	  };
-	  $scope.closeAlertDialog = function () {
-	    $mdDialog.hide().then(function () {
-	      alertDialogPromise = null;
-	    }).catch(function () {
-	      alertDialogPromise = null;
-	    });
-	  };
-	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'HomeApi', function ($scope, $http, $state, HomeApi) {
+	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog', function ($scope, $http, $state, homeApi, alertDialog) {
 	  $scope.user = {};
 	  $scope.login = function () {
-	    // if (!$scope.user.email || !$scope.user.password) {
-	    //   return;
-	    // }
-	    // $scope.alertDialog(true);
-	    // $http.post('/api/home/login', {
-	    //   email: $scope.user.email,
-	    //   password: $scope.user.password,
-	    // }).then(success => {
-	    //   $scope.closeAlertDialog();
-	    //   if (success.data.type === 'normal') {
-	    //     $state.go('user.index');
-	    //   } else if (success.data.type === 'admin') {
-	    //     $state.go('admin.index');
-	    //   }
-	    // }).catch(err => {
-	    //   if(err.status === 403) {
-	    //     $scope.alertDialog(false, '用户名或密码错误', '确定');
-	    //   } else {
-	    //     $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
-	    //   }
-	    // });
-	    $scope.alertDialog(true);
-	    HomeApi.userLogin($scope.user.email, $scope.user.password).then(function (success) {
-	      $scope.closeAlertDialog();
+	    alertDialog.loading();
+	    homeApi.userLogin($scope.user.email, $scope.user.password).then(function (success) {
+	      alertDialog.close();
 	      if (success === 'normal') {
 	        $state.go('user.index');
 	      } else if (success === 'admin') {
 	        $state.go('admin.index');
 	      }
 	    }).catch(function (err) {
-	      $scope.alertDialog(false, err, '确定');
+	      alertDialog.show(err, '确定');
 	    });
 	  };
 	  $scope.findPassword = function () {
-	    $scope.alertDialog(true);
-	    $http.post('/api/home/password/sendEmail', {
-	      email: $scope.user.email
-	    }).then(function (success) {
-	      $scope.alertDialog(false, '重置密码链接已发至您的邮箱，\n请注意查收', '确定');
+	    alertDialog.loading();
+	    homeApi.findPassword($scope.user.email).then(function (success) {
+	      alertDialog.show(success, '确定');
 	    }).catch(function (err) {
-	      var errData = null;
-	      if (err.status === 403 && err.data === 'already send') {
-	        errData = '重置密码链接已经发送，\n请勿重复发送';
-	      }
-	      if (err.status === 403 && err.data === 'user not exists') {
-	        errData = '请输入正确的邮箱地址';
-	      }
-	      $scope.alertDialog(false, errData || '重置密码链接发送错误', '确定');
+	      alertDialog.show(err, '确定');
 	    });
 	  };
-	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', function ($scope, $http, $state, $interval, $timeout) {
+	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'alertDialog', function ($scope, $http, $state, $interval, $timeout, alertDialog) {
 	  $scope.user = {};
 	  $scope.sendCodeTime = 0;
 	  $scope.sendCode = function () {
-	    $scope.alertDialog(true);
+	    alertDialog.loading();
 	    $http.post('/api/home/code', {
 	      email: $scope.user.email
 	    }).then(function (success) {
-	      $scope.alertDialog(false, '验证码已发至邮箱', '确定');
+	      alertDialog.show('验证码已发至邮箱', '确定');
 	      $scope.sendCodeTime = 120;
 	      var interval = $interval(function () {
 	        if ($scope.sendCodeTime > 0) {
@@ -223,49 +165,49 @@
 	        }
 	      }, 1000);
 	    }).catch(function (err) {
-	      $scope.alertDialog(false, '验证码发送错误', '确定');
+	      alertDialog.show('验证码发送错误', '确定');
 	    });
 	  };
 	  $scope.signup = function () {
-	    $scope.alertDialog(true);
+	    alertDialog.loading();
 	    $http.post('/api/home/signup', {
 	      email: $scope.user.email,
 	      code: $scope.user.code,
 	      password: $scope.user.password
 	    }).then(function (success) {
-	      return $scope.alertDialog(false, '用户注册成功', '确定');
+	      return alertDialog.show('用户注册成功', '确定');
 	    }).then(function () {
 	      $state.go('home.login');
 	    }).catch(function (err) {
-	      $scope.alertDialog(false, '用户注册失败', '确定');
+	      alertDialog.show('用户注册失败', '确定');
 	    });
 	  };
 	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', function ($scope, $http, $state, $stateParams) {
 	  $scope.user = {};
 	  var token = $stateParams.token;
-	  $scope.alertDialog(true);
+	  alertDialog.loading();
 	  $http.get('/api/home/password/reset', {
 	    params: {
 	      token: token
 	    }
 	  }).then(function (success) {
-	    $scope.closeAlertDialog();
+	    alertDialog.close();
 	  }).catch(function (err) {
-	    $scope.alertDialog(false, '该链接已经失效', '确定').then(function () {
+	    alertDialog.show('该链接已经失效', '确定').then(function () {
 	      $state.go('home.index');
 	    });
 	  });
 	  $scope.resetPassword = function () {
-	    $scope.alertDialog(true);
+	    alertDialog.loading();
 	    $http.post('/api/home/password/reset', {
 	      token: token,
 	      password: $scope.user.password
 	    }).then(function () {
-	      $scope.alertDialog(false, '修改密码成功', '确定').then(function () {
+	      alertDialog.show('修改密码成功', '确定').then(function () {
 	        $state.go('home.login');
 	      });
 	    }).catch(function () {
-	      $scope.alertDialog(false, '修改密码失败', '确定');
+	      alertDialog.show('修改密码失败', '确定');
 	    });
 	  };
 	}]);
@@ -1200,7 +1142,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.factory('HomeApi', ['$http', function ($http) {
+	app.factory('homeApi', ['$http', function ($http) {
 	  var userLogin = function userLogin(email, password) {
 	    return $http.post('/api/home/login', {
 	      email: email,
@@ -1215,8 +1157,86 @@
 	      }
 	    });
 	  };
+	  var findPassword = function findPassword(email) {
+	    return $http.post('/api/home/password/sendEmail', {
+	      email: email
+	    }).then(function (success) {
+	      return '重置密码链接已发至您的邮箱，\n请注意查收';
+	    }).catch(function (err) {
+	      var errData = null;
+	      if (err.status === 403 && err.data === 'already send') {
+	        errData = '重置密码链接已经发送，\n请勿重复发送';
+	      } else if (err.status === 403 && err.data === 'user not exists') {
+	        errData = '请输入正确的邮箱地址';
+	      } else {
+	        errData = '网络异常，请稍后再试';
+	      }
+	      return Promise.reject(errData);
+	    });
+	  };
 	  return {
-	    userLogin: userLogin
+	    userLogin: userLogin, findPassword: findPassword
+	  };
+	}]);
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('alertDialog', ['$mdDialog', function ($mdDialog) {
+	  var publicInfo = {};
+	  publicInfo.isLoading = false;
+	  publicInfo.content = '';
+	  publicInfo.button = '';
+	  var close = function close() {
+	    $mdDialog.hide().then(function () {
+	      alertDialogPromise = null;
+	    }).catch(function () {
+	      alertDialogPromise = null;
+	    });
+	  };
+	  publicInfo.close = close;
+	  var alertDialogPromise = null;
+	  var isDialogShow = function isDialogShow() {
+	    if (alertDialogPromise && !alertDialogPromise.$$state.status) {
+	      return true;
+	    }
+	    return false;
+	  };
+	  var dialog = {
+	    templateUrl: '/public/views/home/alertDialog0.html',
+	    escapeToClose: false,
+	    locals: { bind: publicInfo },
+	    bindToController: true,
+	    controller: function controller($scope, $mdDialog, bind) {
+	      $scope.publicInfo = bind;
+	    },
+	    clickOutsideToClose: false
+	  };
+	  var show = function show(content, button) {
+	    publicInfo.content = content;
+	    publicInfo.button = button;
+	    if (isDialogShow()) {
+	      publicInfo.isLoading = false;
+	      return alertDialogPromise;
+	    }
+	    alertDialogPromise = $mdDialog.show(dialog);
+	    return alertDialogPromise;
+	  };
+	  var loading = function loading() {
+	    publicInfo.isLoading = true;
+	    if (!isDialogShow()) {
+	      show().then(console.log).catch(console.log);
+	    }
+	  };
+	  return {
+	    show: show,
+	    loading: loading,
+	    close: close
 	  };
 	}]);
 

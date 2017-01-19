@@ -34,35 +34,6 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
         $mdSidenav('left').close();
         $state.go($scope.menus[index].click);
       };
-
-      $scope.isAlertDialogLoading = false;
-      $scope.alertDialogContent = '';
-      $scope.alertDialogButton = '';
-      let alertDialogPromise = null;
-      $scope.alertDialog = (isLoading, content, button) => {
-        $scope.isAlertDialogLoading = isLoading;
-        $scope.alertDialogContent = content;
-        $scope.alertDialogButton = button;
-        if(alertDialogPromise && !alertDialogPromise.$$state.status) {
-          return alertDialogPromise;
-        }
-        const dialog = {
-          templateUrl: '/public/views/home/alertDialog.html',
-          escapeToClose: false,
-          scope: $scope,
-          preserveScope: true,
-          clickOutsideToClose: false,
-        };
-        alertDialogPromise = $mdDialog.show(dialog);
-        return alertDialogPromise;
-      };
-      $scope.closeAlertDialog = () => {
-        $mdDialog.hide().then(() => {
-          alertDialogPromise = null;
-        }).catch(() => {
-          alertDialogPromise = null;
-        });
-      };
     }
   ])
   .controller('HomeIndexController', ['$scope',
@@ -70,73 +41,43 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
 
     }
   ])
-  .controller('HomeLoginController', ['$scope', '$http', '$state', 'HomeApi',
-    ($scope, $http, $state, HomeApi) => {
+  .controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog',
+    ($scope, $http, $state, homeApi, alertDialog) => {
       $scope.user = {};
       $scope.login = () => {
-        // if (!$scope.user.email || !$scope.user.password) {
-        //   return;
-        // }
-        // $scope.alertDialog(true);
-        // $http.post('/api/home/login', {
-        //   email: $scope.user.email,
-        //   password: $scope.user.password,
-        // }).then(success => {
-        //   $scope.closeAlertDialog();
-        //   if (success.data.type === 'normal') {
-        //     $state.go('user.index');
-        //   } else if (success.data.type === 'admin') {
-        //     $state.go('admin.index');
-        //   }
-        // }).catch(err => {
-        //   if(err.status === 403) {
-        //     $scope.alertDialog(false, '用户名或密码错误', '确定');
-        //   } else {
-        //     $scope.alertDialog(false, '网络异常，请稍后再试', '确定');
-        //   }
-        // });
-        $scope.alertDialog(true);
-        HomeApi.userLogin($scope.user.email, $scope.user.password)
+        alertDialog.loading();
+        homeApi.userLogin($scope.user.email, $scope.user.password)
         .then(success => {
-          $scope.closeAlertDialog();
+          alertDialog.close();
           if (success === 'normal') {
             $state.go('user.index');
           } else if (success === 'admin') {
             $state.go('admin.index');
           }
         }).catch(err => {
-          $scope.alertDialog(false, err, '确定');
+          alertDialog.show(err, '确定');
         });
       };
       $scope.findPassword = () => {
-        $scope.alertDialog(true);
-        $http.post('/api/home/password/sendEmail', {
-          email: $scope.user.email,
-        }).then(success => {
-          $scope.alertDialog(false, '重置密码链接已发至您的邮箱，\n请注意查收', '确定');
+        alertDialog.loading();
+        homeApi.findPassword($scope.user.email).then(success => {
+          alertDialog.show(success, '确定');
         }).catch(err => {
-          let errData = null;
-          if(err.status === 403 && err.data === 'already send') {
-            errData = '重置密码链接已经发送，\n请勿重复发送';
-          }
-          if(err.status === 403 && err.data === 'user not exists') {
-            errData = '请输入正确的邮箱地址';
-          }
-          $scope.alertDialog(false, errData || '重置密码链接发送错误', '确定');
+          alertDialog.show(err, '确定');
         });
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout',
-    ($scope, $http, $state, $interval, $timeout) => {
+  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'alertDialog',
+    ($scope, $http, $state, $interval, $timeout, alertDialog) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
-        $scope.alertDialog(true);
+        alertDialog.loading();
         $http.post('/api/home/code', {
           email: $scope.user.email,
         }).then(success => {
-          $scope.alertDialog(false, '验证码已发至邮箱', '确定');
+          alertDialog.show('验证码已发至邮箱', '确定');
           $scope.sendCodeTime = 120;
           const interval = $interval(() => {
             if ($scope.sendCodeTime > 0) {
@@ -147,21 +88,21 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
             }
           }, 1000);
         }).catch(err => {
-          $scope.alertDialog(false, '验证码发送错误', '确定');
+          alertDialog.show('验证码发送错误', '确定');
         });
       };
       $scope.signup = () => {
-        $scope.alertDialog(true);
+        alertDialog.loading();
         $http.post('/api/home/signup', {
           email: $scope.user.email,
           code: $scope.user.code,
           password: $scope.user.password,
         }).then(success => {
-          return $scope.alertDialog(false, '用户注册成功', '确定');
+          return alertDialog.show('用户注册成功', '确定');
         }).then(() => {
           $state.go('home.login');
         }).catch(err => {
-          $scope.alertDialog(false, '用户注册失败', '确定');
+          alertDialog.show('用户注册失败', '确定');
         });
       };
     }
@@ -170,29 +111,29 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
     ($scope, $http, $state, $stateParams) => {
       $scope.user = {};
       const token = $stateParams.token;
-      $scope.alertDialog(true);
+      alertDialog.loading();
       $http.get('/api/home/password/reset', {
         params: {
           token
         },
       }).then(success => {
-        $scope.closeAlertDialog();
+        alertDialog.close();
       }).catch(err => {
-        $scope.alertDialog(false, '该链接已经失效', '确定').then(() => {
+        alertDialog.show('该链接已经失效', '确定').then(() => {
           $state.go('home.index');
         });
       });
       $scope.resetPassword = () => {
-        $scope.alertDialog(true);
+        alertDialog.loading();
         $http.post('/api/home/password/reset', {
           token,
           password: $scope.user.password,
         }).then(() => {
-          $scope.alertDialog(false, '修改密码成功', '确定').then(() => {
+          alertDialog.show('修改密码成功', '确定').then(() => {
             $state.go('home.login');
           });
         }).catch(() => {
-          $scope.alertDialog(false, '修改密码失败', '确定');
+          alertDialog.show('修改密码失败', '确定');
         });
       };
     }
