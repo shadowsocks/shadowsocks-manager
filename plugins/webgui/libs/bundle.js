@@ -1220,7 +1220,17 @@
 	      return success.data.type;
 	    }).catch(function (err) {
 	      if (err.status === 403) {
-	        return Promise.reject('用户名或密码错误');
+	        var errData = '用户名或密码错误';
+	        if (err.data === 'user not exists') {
+	          errData = '该用户尚未注册的';
+	        }
+	        if (err.data === 'invalid body') {
+	          errData = '请输入正确的用户名格式';
+	        }
+	        if (err.data === 'password retry out of limit') {
+	          errData = '密码重试次数已达上限\n请稍后再试';
+	        }
+	        return Promise.reject(errData);
 	      } else {
 	        return Promise.reject('网络异常，请稍后再试');
 	      }

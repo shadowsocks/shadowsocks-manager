@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 const checkPasswordLimit = {
   number: 5,
-  time: 15000,
+  time: 30 * 1000,
 };
 const checkPasswordFail = {};
 

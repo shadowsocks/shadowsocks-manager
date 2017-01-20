@@ -64,11 +64,11 @@ exports.login = (req, res) => {
     res.send({ type: success.type });
   }).catch(err => {
     logger.error(`User[${ req.body.email }] login fail: ${ err }`);
-    const errorData = ['invalid body', 'user not exists', 'invalid password'];
+    const errorData = ['invalid body', 'user not exists', 'invalid password', 'password retry out of limit'];
     if(errorData.indexOf(err) < 0) {
       return res.status(500).end();
     } else {
-      return res.status(403).end();
+      return res.status(403).end(err);
     }
   });
 };
