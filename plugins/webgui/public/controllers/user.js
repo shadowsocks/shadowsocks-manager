@@ -1,6 +1,7 @@
 const app = require('../index').app;
 
-app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+app
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     $scope.innerSideNav = true;
     $scope.menuButton = function() {

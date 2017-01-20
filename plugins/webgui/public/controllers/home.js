@@ -1,6 +1,7 @@
 const app = require('../index').app;
 
-app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+app
+  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
     ($scope, $mdMedia, $mdSidenav, $state, $http) => {
       $http.get('/api/home/login').then(success => {
         if (success.data.status === 'normal') {

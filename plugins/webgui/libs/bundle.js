@@ -1257,17 +1257,14 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.factory('userApi', ['$http', function ($http) {
+	app.factory('userApi', ['$q', '$http', function ($q, $http) {
 	  var getUserAccount = function getUserAccount() {
 	    var account = null;
 	    var servers = null;
-	    return $http.get('/api/user/account').then(function (success) {
-	      account = success.data;
-	      return $http.get('/api/user/server');
-	    }).then(function (success) {
-	      servers = success.data;
+	    return $q.all([$http.get('/api/user/account'), $http.get('/api/user/server')]).then(function (success) {
 	      return {
-	        account: account, servers: servers
+	        account: success[0].data,
+	        servers: success[1].data
 	      };
 	    });
 	  };

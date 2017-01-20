@@ -3,6 +3,12 @@
 const knex = appRequire('init/knex').knex;
 const crypto = require('crypto');
 
+const checkPasswordLimit = {
+  number: 5,
+  time: 15000,
+};
+const checkPasswordFail = {};
+
 const checkExist = async (obj) => {
   const user = await knex('user').select().where(obj);
   if(user.length === 0) {
@@ -59,6 +65,17 @@ const checkPassword = async (username, password) => {
     if(user.length === 0) {
       return Promise.reject('user not exists');
     }
+    for(const cpf in checkPasswordFail) {
+      if(Date.now() - checkPasswordFail[cpf].time >= checkPasswordLimit.time) {
+        delete checkPasswordFail[cpf];
+      }
+    };
+    if(checkPasswordFail[username] &&
+      checkPasswordFail[username].number > checkPasswordLimit.number &&
+      Date.now() - checkPasswordFail[username].time < checkPasswordLimit.time
+    ) {
+      return Promise.reject('password retry out of limit');
+    }
     if(createPassword(password, username) === user[0].password) {
       await knex('user').update({
         lastLogin: Date.now(),
@@ -67,6 +84,12 @@ const checkPassword = async (username, password) => {
       });
       return user[0];
     } else {
+      if(!checkPasswordFail[username] || Date.now() - checkPasswordFail[username].time >= checkPasswordLimit.time) {
+        checkPasswordFail[username] = { number: 1, time: Date.now() };
+      } else if(checkPasswordFail[username].number <= checkPasswordLimit.number) {
+        checkPasswordFail[username].number += 1;
+        checkPasswordFail[username].time = Date.now();
+      }
       return Promise.reject('invalid password');
     }
   } catch(err) {
