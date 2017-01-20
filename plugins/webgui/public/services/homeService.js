@@ -33,6 +33,9 @@ app.factory('homeApi', ['$http', $http => {
     });
   };
   const findPassword = email => {
+    if(!email) {
+      return Promise.reject('请输入邮箱地址再点击“找回密码”');
+    };
     return $http.post('/api/home/password/sendEmail', {
       email,
     }).then(success => {

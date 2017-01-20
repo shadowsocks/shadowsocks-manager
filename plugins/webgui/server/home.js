@@ -80,7 +80,7 @@ exports.logout = (req, res) => {
 };
 
 exports.status = (req, res) => {
-  res.send({status: req.session.type });
+  res.send({ status: req.session.type });
 };
 
 exports.sendCode = (req, res) => {
@@ -155,18 +155,26 @@ exports.checkResetPasswordToken = (req, res) => {
 };
 
 exports.resetPassword = (req, res) => {
-  const token = req.body.token;
-  const password = req.body.password;
-  user.edit({
-    resetPasswordId: token,
-  }, {
-    password,
-    resetPasswordId: null,
-    resetPasswordTime: null,
+  req.checkBody('token', 'Invalid token').notEmpty();
+  req.checkBody('password', 'Invalid password').notEmpty();
+  req.getValidationResult().then(result => {
+    if(result.isEmpty) { return; }
+    return Promise.reject('invalid body');
+  }).then(() => {
+    const token = req.body.token;
+    const password = req.body.password;
+    return user.edit({
+      resetPasswordId: token,
+    }, {
+      password,
+      resetPasswordId: null,
+      resetPasswordTime: null,
+    });
   }).then(success => {
+    
     res.send('success');
   }).catch(err => {
-    console.log(err);
+    logger.error(err);
     res.status(403).end();
   });
 };
