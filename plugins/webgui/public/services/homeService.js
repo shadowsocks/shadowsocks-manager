@@ -1,6 +1,19 @@
 const app = require('../index').app;
 
 app.factory('homeApi', ['$http', $http => {
+  const userSignup = (email, code, password) => {
+    return $http.post('/api/home/signup', {
+      email,
+      code,
+      password,
+    }).catch(err => {
+      if(err.status === 403) {
+        return Promise.reject('用户注册失败');
+      } else {
+        return Promise.reject('网络异常，请稍后再试');
+      }
+    });
+  };
   const userLogin = (email, password) => {
     return $http.post('/api/home/login', {
       email,
@@ -32,7 +45,8 @@ app.factory('homeApi', ['$http', $http => {
       return Promise.reject(errData);
     });
   };
+
   return {
-    userLogin, findPassword,
+    userSignup, userLogin, findPassword,
   };
 }]);

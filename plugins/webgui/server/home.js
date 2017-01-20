@@ -40,7 +40,7 @@ exports.signup = (req, res) => {
     logger.info(`[${ req.body.email }] signup success`);
     res.send('success');
   }).catch(err => {
-    logger.error(err);
+    logger.error(`[${ req.body.email }] signup fail: ${ err }`);
     res.status(403).end();
   });
 };

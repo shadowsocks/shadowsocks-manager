@@ -68,8 +68,8 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'alertDialog',
-    ($scope, $http, $state, $interval, $timeout, alertDialog) => {
+  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'userApi', 'alertDialog',
+    ($scope, $http, $state, $interval, $timeout, userApi, alertDialog) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
@@ -93,16 +93,23 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       };
       $scope.signup = () => {
         alertDialog.loading();
-        $http.post('/api/home/signup', {
-          email: $scope.user.email,
-          code: $scope.user.code,
-          password: $scope.user.password,
-        }).then(success => {
+        // $http.post('/api/home/signup', {
+        //   email: $scope.user.email,
+        //   code: $scope.user.code,
+        //   password: $scope.user.password,
+        // }).then(success => {
+        //   return alertDialog.show('用户注册成功', '确定');
+        // }).then(() => {
+        //   $state.go('home.login');
+        // }).catch(err => {
+        //   alertDialog.show('用户注册失败', '确定');
+        // });
+        userApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password).then(success => {
           return alertDialog.show('用户注册成功', '确定');
-        }).then(() => {
+        }).then(success => {
           $state.go('home.login');
-        }).catch(err => {
-          alertDialog.show('用户注册失败', '确定');
+        }).cathc(err => {
+          alertDialog.show(err, '确定');
         });
       };
     }
