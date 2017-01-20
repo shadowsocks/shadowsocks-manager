@@ -36,20 +36,20 @@ app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', 
       };
     }
   ])
-  .controller('HomeIndexController', ['$scope',
-    ($scope) => {
+  .controller('HomeIndexController', ['$scope', '$state',
+    ($scope, $state) => {
       $scope.icons = [{
         icon: 'flash_on',
         title: '快速搭建',
-        content: '仅依赖 Node.js，无需安装数据库',
+        content: '仅依赖Node.js，无需安装数据库（可选MySQL）',
       }, {
         icon: 'build',
         title: '易于配置',
-        content: '带有插件系统，仅需修改配置文件即可',
+        content: '带有插件系统，仅需修改配置文件即可运行',
       }, {
         icon: 'vpn_key',
         title: '官方标准',
-        content: '支持 shadowsocks-libev 和 shadowsocks-python 的标准 manager API',
+        content: '支持libev和python版本的标准manager API',
       }];
       $scope.login = () => { $state.go('home.login'); };
       $scope.signup = () => { $state.go('home.signup'); };
