@@ -125,7 +125,27 @@
 	    $mdSidenav('left').close();
 	    $state.go($scope.menus[index].click);
 	  };
-	}]).controller('HomeIndexController', ['$scope', function ($scope) {}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog', function ($scope, $http, $state, homeApi, alertDialog) {
+	}]).controller('HomeIndexController', ['$scope', function ($scope) {
+	  $scope.icons = [{
+	    icon: 'flash_on',
+	    title: '快速搭建',
+	    content: '仅依赖 Node.js，无需安装数据库'
+	  }, {
+	    icon: 'build',
+	    title: '易于配置',
+	    content: '带有插件系统，仅需修改配置文件即可'
+	  }, {
+	    icon: 'vpn_key',
+	    title: '官方标准',
+	    content: '支持 shadowsocks-libev 和 shadowsocks-python 的标准 manager API'
+	  }];
+	  $scope.login = function () {
+	    $state.go('home.login');
+	  };
+	  $scope.signup = function () {
+	    $state.go('home.signup');
+	  };
+	}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog', function ($scope, $http, $state, homeApi, alertDialog) {
 	  $scope.user = {};
 	  $scope.login = function () {
 	    alertDialog.loading();
@@ -172,17 +192,6 @@
 	  };
 	  $scope.signup = function () {
 	    alertDialog.loading();
-	    // $http.post('/api/home/signup', {
-	    //   email: $scope.user.email,
-	    //   code: $scope.user.code,
-	    //   password: $scope.user.password,
-	    // }).then(success => {
-	    //   return alertDialog.show('用户注册成功', '确定');
-	    // }).then(() => {
-	    //   $state.go('home.login');
-	    // }).catch(err => {
-	    //   alertDialog.show('用户注册失败', '确定');
-	    // });
 	    homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password).then(function (success) {
 	      alertDialog.show('用户注册成功', '确定').then(function (success) {
 	        $state.go('home.login');

@@ -3,25 +3,20 @@
     <img src="/libs/home.png" style="margin: 5vw; width: 300px;"></img>
   </div>
   <div layout="row" layout-align="space-around center" style="background-color: #E0E0E0; width: 100%;">
-    <md-button hide-gt-xs>
+    <md-button hide-gt-xs ng-click="login()">
         登录
     </md-button>
-    <md-button hide-gt-xs>
+    <md-button hide-gt-xs ng-click="signup()">
         注册
     </md-button>
   </div>
-  <div layout="row" layout-align="space-around center" style="width: 100%;">
-    <div flex layout="column" layout-align="center center" style="text-align: center;">
-      <md-icon class="material-icons" style="font-size: 144px;">close</md-icon>
-    </div>
-    <div flex layout="column" layout-align="center center">
-      <md-icon class="material-icons">close</md-icon>
-    </div>
-    <div flex layout="column" layout-align="center center">
-      <md-icon class="material-icons">close</md-icon>
+  <div layout="row" layout-xs="column" style="width: 100%;">
+    <div layout="column" layout-align="center center" style="width: 100%; margin-left: 15px; margin-right: 15px;" ng-repeat="icon in icons">
+      <div flex="5"></div>
+      <md-icon class="material-icons" style="font-size: 84px; height: 108px; position: relative; left: -32px;">{{icon.icon}}</md-icon>
+      <h2>{{icon.title}}</h2>
+      <h5>{{icon.content}}</h5>
+      <div flex="5"></div>
     </div>
   </div>
-  <!-- <div layout="column" layout-align="center center" style="background-color: #7986CB; width: 100%;">
-    123
-  </div> -->
 </div>
