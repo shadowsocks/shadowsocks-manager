@@ -148,7 +148,7 @@
 	      alertDialog.show(err, '确定');
 	    });
 	  };
-	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'alertDialog', function ($scope, $http, $state, $interval, $timeout, alertDialog) {
+	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', function ($scope, $http, $state, $interval, $timeout, homeApi, alertDialog) {
 	  $scope.user = {};
 	  $scope.sendCodeTime = 0;
 	  $scope.sendCode = function () {
@@ -172,16 +172,23 @@
 	  };
 	  $scope.signup = function () {
 	    alertDialog.loading();
-	    $http.post('/api/home/signup', {
-	      email: $scope.user.email,
-	      code: $scope.user.code,
-	      password: $scope.user.password
-	    }).then(function (success) {
-	      return alertDialog.show('用户注册成功', '确定');
-	    }).then(function () {
-	      $state.go('home.login');
+	    // $http.post('/api/home/signup', {
+	    //   email: $scope.user.email,
+	    //   code: $scope.user.code,
+	    //   password: $scope.user.password,
+	    // }).then(success => {
+	    //   return alertDialog.show('用户注册成功', '确定');
+	    // }).then(() => {
+	    //   $state.go('home.login');
+	    // }).catch(err => {
+	    //   alertDialog.show('用户注册失败', '确定');
+	    // });
+	    homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password).then(function (success) {
+	      alertDialog.show('用户注册成功', '确定').then(function (success) {
+	        $state.go('home.login');
+	      });
 	    }).catch(function (err) {
-	      alertDialog.show('用户注册失败', '确定');
+	      alertDialog.show(err, '确定');
 	    });
 	  };
 	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', 'alertDialog', function ($scope, $http, $state, $stateParams, alertDialog) {
@@ -1183,6 +1190,19 @@
 	var app = __webpack_require__(1).app;
 
 	app.factory('homeApi', ['$http', function ($http) {
+	  var userSignup = function userSignup(email, code, password) {
+	    return $http.post('/api/home/signup', {
+	      email: email,
+	      code: code,
+	      password: password
+	    }).catch(function (err) {
+	      if (err.status === 403) {
+	        return Promise.reject('用户注册失败');
+	      } else {
+	        return Promise.reject('网络异常，请稍后再试');
+	      }
+	    });
+	  };
 	  var userLogin = function userLogin(email, password) {
 	    return $http.post('/api/home/login', {
 	      email: email,
@@ -1214,8 +1234,9 @@
 	      return Promise.reject(errData);
 	    });
 	  };
+
 	  return {
-	    userLogin: userLogin, findPassword: findPassword
+	    userSignup: userSignup, userLogin: userLogin, findPassword: findPassword
 	  };
 	}]);
 
