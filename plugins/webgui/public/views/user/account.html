@@ -19,7 +19,7 @@
                            label="{{server.name}}"
                            md-on-select="getServerPortData(a, server.id, a.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
-                            <div flex="60" flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
+                            <!-- <div flex="60" flex-xs="100" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
                                 <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
                                 <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{a.port}}</div>
                                 <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{a.password}}</div>
@@ -31,9 +31,53 @@
                                 <div flex="40">最近连接：</div><div flex="60" style="text-align:right">
                                     <span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span>
                                 </div>
+                            </div> -->
+                            <div flex="60" flex-xs="100">
+                                <md-list>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">地址：</div><div flex="60" style="text-align:right">{{server.host}}:{{a.port}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">密码：</div><div flex="60" style="text-align:right">{{a.password}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">流量：</div>    <div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限量</span><span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow | flow}}</span></div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">到期时间：</div><div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限时</span>
+                                              <span ng-if="a.type >=2 && a.type <= 5">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span ng-if="a.type >=2 && a.type <= 5">({{ a.data.expire | timeago }})</span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">最近连接：</div><div flex="60" style="text-align:right">
+                                              <span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect">({{ a.lastConnect | timeago }})</span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                </md-list>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
-                                <div layout-hide-xs></div>
+                                <div hide-xs></div>
                                 <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.method, a.password , server.host, a.port)" image="true"></qr>
                             </div>
                         </div>
@@ -42,4 +86,5 @@
             <md-card-content>
         </md-card>
     </div>
+    <!-- <div flex="5" hide-gt-sm ng-repeat-end style="height: 100px;"></div> -->
 </div>

@@ -17,7 +17,7 @@ const smtpConfig = {
   }
 };
 
-var transporter = nodemailer.createTransport(smtpConfig);
+const transporter = nodemailer.createTransport(smtpConfig);
 
 const sendMail = async (to, subject, text) => {
   transporter.sendMail({
@@ -45,8 +45,8 @@ const sendCode = async (to, subject = 'subject', text) => {
     }
     const code = Math.random().toString().substr(2, 6);
     text += '\n' + code;
-    await transporter.sendMail({
-      from: config.plugins.email.username,
+    await sendMail({
+      // from: config.plugins.email.username,
         to,
         subject,
         text,

@@ -171,7 +171,6 @@ exports.resetPassword = (req, res) => {
       resetPasswordTime: null,
     });
   }).then(success => {
-    
     res.send('success');
   }).catch(err => {
     logger.error(err);

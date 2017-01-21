@@ -80,9 +80,9 @@ app
     };
     $scope.getQrCodeSize = () => {
       if($mdMedia('xs')) {
-        return 220;
+        return 230;
       }
-      return 150;
+      return 180;
     };
   }
 ]);

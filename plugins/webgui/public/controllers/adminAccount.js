@@ -197,7 +197,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.pickTime = () => {
       $mdBottomSheet.show({
-        templateUrl: '/public/views/admin/picktime.html',
+        templateUrl: '/public/views/admin/pickTime.html',
         preserveScope: true,
         scope: $scope,
       });
