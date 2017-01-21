@@ -12,7 +12,7 @@
                     </div>
                 </md-toolbar>
                 <md-list>
-                    <md-list-item ng-repeat="menu in menus">
+                    <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'">
                         <a ng-click="menuClick($index)">
                             <md-item-content md-ink-ripple layout="row" layout-align="start center">
                                 <div class="inset">
@@ -24,6 +24,7 @@
                             </md-item-content>
                         </a>
                     </md-list-item>
+                    <md-divider ng-repeat-end ng-if="menu.name === 'divider'"></md-divider>
                 </md-list>
             </div>
         </md-content>
@@ -46,7 +47,7 @@
                 <md-content>
                     <div layout="column" layout-align="center start">
                         <md-list>
-                            <md-list-item ng-repeat="menu in menus" style="padding-left: 8px;">
+                            <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 8px;">
                                 <a ng-click="menuClick($index)">
                                     <md-item-content md-ink-ripple layout="row" layout-align="start center">
                                         <div class="inset">
@@ -58,6 +59,7 @@
                                     </md-item-content>
                                 </a>
                             </md-list-item>
+                            <md-divider ng-repeat-end ng-if="menu.name === 'divider'"></md-divider>
                         </md-list>
                     </div>
                 </md-content>

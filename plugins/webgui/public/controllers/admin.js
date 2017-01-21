@@ -28,6 +28,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       icon: 'settings',
       click: 'admin.unfinished',
     }, {
+      name: 'divider',
+    }, {
       name: '退出',
       icon: 'exit_to_app',
       click: function() {
