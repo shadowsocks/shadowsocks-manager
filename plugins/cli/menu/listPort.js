@@ -15,9 +15,9 @@ const menu = [
     type: 'list',
     name: 'act',
     message: 'What do you want?',
-    choices: ['Delete port', 'Change password', 'Exit'],
+    choices: ['Delete port', 'Change password', 'Back'],
     when: function (answers) {
-      if(answers.port === 'Exit') {
+      if(answers.port === 'Back') {
         return Promise.resolve();
       } else {
         return answers;
@@ -54,7 +54,7 @@ const listPort = async () => {
       });
     });
     menu[0].choices.push({
-      name: 'Exit', value: 'Exit'
+      name: 'Back', value: 'Back'
     });
     return;
   } catch(err) {
@@ -81,7 +81,7 @@ const list = async () => {
         password: newPassword.password,
       }, index.getManagerAddress());
       return;
-    } else if (selectPort.act === 'Exit') {
+    } else if (selectPort.act === 'Back') {
       return;
     }
   } catch(err) {

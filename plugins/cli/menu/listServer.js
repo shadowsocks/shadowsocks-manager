@@ -14,7 +14,14 @@ const menu = [
     type: 'list',
     name: 'act',
     message: 'What do you want?',
-    choices: ['Switch to it', 'Delete server', 'Edit server'],
+    choices: ['Switch to it', 'Delete server', 'Edit server', 'Back'],
+    when: function (answers) {
+      if(answers.server === 'Back') {
+        return Promise.resolve();
+      } else {
+        return answers;
+      }
+    }
   }
 ];
 
@@ -83,6 +90,7 @@ const list = async () => {
       };
       menu[0].choices.push({name, value});
     });
+    menu[0].choices.push({name: 'Back', value: 'Back'});
     const selectServer = await inquirer.prompt(menu);
     if(selectServer.act === 'Switch to it') {
       index.setManagerAddress(selectServer.server.host, selectServer.server.port, selectServer.server.password);
@@ -97,6 +105,8 @@ const list = async () => {
       return;
     } else if (selectServer.act === 'Delete server') {
       await flowSaverServer.del(selectServer.server);
+      return;
+    } else if (selectServer.act === 'Back') {
       return;
     }
   } catch(err) {
