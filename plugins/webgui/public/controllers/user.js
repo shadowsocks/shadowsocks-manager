@@ -90,7 +90,7 @@ app
         escapeToClose: false,
         locals: { bind: password },
         bindToController: true,
-        controller: function($scope, $http, $mdDialog, bind) {
+        controller: ['$scope', '$http', '$mdDialog', 'bind', function($scope, $http, $mdDialog, bind) {
           $scope.account = {
             password: bind,
           };
@@ -100,7 +100,7 @@ app
               password: $scope.account.password,
             });
           };
-        },
+        }],
         clickOutsideToClose: true,
       };
       $mdDialog.show(dialog);
