@@ -49,8 +49,8 @@ app
     $scope.setTitle('首页');
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi',
-  ($scope, $http, $mdMedia, userApi) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog',
+  ($scope, $http, $mdMedia, userApi, $mdDialog) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
     userApi.getUserAccount().then(success => {
@@ -83,6 +83,27 @@ app
         return 230;
       }
       return 180;
+    };
+    $scope.showChangePasswordDialog = (accountId, password) => {
+      const dialog = {
+        templateUrl: '/public/views/user/changePassword.html',
+        escapeToClose: false,
+        locals: { bind: password },
+        bindToController: true,
+        controller: function($scope, $http, $mdDialog, bind) {
+          $scope.account = {
+            password: bind,
+          };
+          $scope.changePassword = () => {
+            $mdDialog.cancel();
+            $http.put(`/api/user/${ accountId }/password`, {
+              password: $scope.account.password,
+            });
+          };
+        },
+        clickOutsideToClose: true,
+      };
+      $mdDialog.show(dialog);
     };
   }
 ]);

@@ -29,7 +29,6 @@ exports.getAccount = (req, res) => {
         }
       }
     });
-    console.log(success);
     res.send(success);
   }).catch(err => {
     console.log(err);
@@ -96,4 +95,11 @@ exports.getServerPortLastConnect = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+};
+
+exports.changePassword = (req, res) => {
+  const accountId = +req.params.accountId;
+  const password = req.body.password;
+  console.log(accountId, password);
+  res.send('success');
 };

@@ -92,7 +92,7 @@
 
 	var app = __webpack_require__(1).app;
 
-	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
+	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', function ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout) {
 	  $http.get('/api/home/login').then(function (success) {
 	    if (success.data.status === 'normal') {
 	      $state.go('user.index');
@@ -282,7 +282,7 @@
 	  });
 	}]).controller('UserIndexController', ['$scope', function ($scope) {
 	  $scope.setTitle('首页');
-	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', function ($scope, $http, $mdMedia, userApi) {
+	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', function ($scope, $http, $mdMedia, userApi, $mdDialog) {
 	  $scope.setTitle('我的账号');
 	  $scope.flexGtSm = 100;
 	  userApi.getUserAccount().then(function (success) {
@@ -312,9 +312,31 @@
 	  };
 	  $scope.getQrCodeSize = function () {
 	    if ($mdMedia('xs')) {
-	      return 220;
+	      return 230;
 	    }
-	    return 150;
+	    return 180;
+	  };
+	  $scope.showChangePasswordDialog = function (accountId, password) {
+	    console.log(accountId, password);
+	    var dialog = {
+	      templateUrl: '/public/views/user/changePassword.html',
+	      escapeToClose: false,
+	      locals: { bind: password },
+	      bindToController: true,
+	      controller: function controller($scope, $http, $mdDialog, bind) {
+	        $scope.account = {
+	          password: bind
+	        };
+	        $scope.changePassword = function () {
+	          $mdDialog.cancel();
+	          $http.put('/api/user/' + accountId + '/password', {
+	            password: $scope.account.password
+	          });
+	        };
+	      },
+	      clickOutsideToClose: true
+	    };
+	    $mdDialog.show(dialog);
 	  };
 	}]);
 
@@ -352,6 +374,8 @@
 	    name: '设置',
 	    icon: 'settings',
 	    click: 'admin.unfinished'
+	  }, {
+	    name: 'divider'
 	  }, {
 	    name: '退出',
 	    icon: 'exit_to_app',
@@ -593,7 +617,7 @@
 	  };
 	  $scope.pickTime = function () {
 	    $mdBottomSheet.show({
-	      templateUrl: '/public/views/admin/picktime.html',
+	      templateUrl: '/public/views/admin/pickTime.html',
 	      preserveScope: true,
 	      scope: $scope
 	    });
