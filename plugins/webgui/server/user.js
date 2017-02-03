@@ -100,6 +100,20 @@ exports.getServerPortLastConnect = (req, res) => {
 exports.changePassword = (req, res) => {
   const accountId = +req.params.accountId;
   const password = req.body.password;
-  console.log(accountId, password);
-  res.send('success');
+  const isUserHasTheAccount = (accountId) => {
+    return account.getAccount({userId: req.session.user, id: accountId}).then(success => {
+      if(success.length) {
+        return;
+      }
+      return Promise.reject();
+    });
+  };
+  isUserHasTheAccount(accountId).then(() => {
+    return account.changePassword(accountId, password);
+  }).then(() => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
 };

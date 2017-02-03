@@ -44,6 +44,25 @@ const delPort = (data, server) => {
   }]);
 };
 
+const changePassword = async (id, password) => {
+  const server = await serverManager.list();
+  const account = await knex('account_plugin').select();
+  const port = account.filter(f => f.id === id)[0].port;
+  if(!port) { return Promise.reject('account id not exists'); }
+  server.forEach(s => {
+    messages.push([{
+      command: 'pwd',
+      port,
+      password,
+    }, {
+      host: s.host,
+      port: s.port,
+      password: s.password,
+    }]);
+  });
+  return;
+};
+
 const checkFlow = async (server, port, startTime, endTime) => {
   const flow = await knex('saveFlow')
   .sum('flow as sumFlow')
@@ -113,6 +132,7 @@ exports.checkServer = checkServer;
 exports.sendMessage = sendMessage;
 exports.addPort = addPort;
 exports.delPort = delPort;
+exports.changePassword = changePassword;
 
 checkServer();
 setInterval(() => {

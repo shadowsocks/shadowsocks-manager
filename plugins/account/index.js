@@ -66,7 +66,6 @@ const editAccount = async (id, options) => {
   if(options.type === 1) {
     update.data = null;
     update.port = +options.port;
-    // update.password = options.password;
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
@@ -74,9 +73,22 @@ const editAccount = async (id, options) => {
       limit: options.limit || 1,
     });
     update.port = +options.port;
-    // update.password = options.password;
   }
   await knex('account_plugin').update(update).where({ id });
+  return;
+};
+
+const changePassword = async (id, password) => {
+  const account = await knex('account_plugin').select().where({ id }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  });
+  await knex('account_plugin').update({
+    password,
+  }).where({ id });
+  await checkAccount.changePassword(id, password);
   return;
 };
 
@@ -85,4 +97,5 @@ exports.getAccount = getAccount;
 exports.delAccount = delAccount;
 exports.editAccount = editAccount;
 
+exports.changePassword = changePassword;
 exports.changePort = changePort;

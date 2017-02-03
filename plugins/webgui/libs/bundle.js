@@ -317,7 +317,6 @@
 	    return 180;
 	  };
 	  $scope.showChangePasswordDialog = function (accountId, password) {
-	    console.log(accountId, password);
 	    var dialog = {
 	      templateUrl: '/public/views/user/changePassword.html',
 	      escapeToClose: false,
