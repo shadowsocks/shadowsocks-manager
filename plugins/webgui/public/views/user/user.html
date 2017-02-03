@@ -44,7 +44,7 @@
 
         <div flex layout="row">
             <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px;" layout="column" layout-align="space-between stretch">
-                <md-content>
+                <md-content style="background-color: #FAFAFA;">
                     <div layout="column" layout-align="center start">
                         <md-list>
                             <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 8px;">
@@ -64,7 +64,7 @@
                     </div>
                 </md-content>
             </md-sidenav>
-            <md-content flex layout="row" style="background-color: #FFF;">
+            <md-content flex layout="row">
                 <div ui-view flex></div>
             </md-content>
         </div>
