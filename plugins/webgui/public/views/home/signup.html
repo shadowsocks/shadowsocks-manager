@@ -78,28 +78,38 @@
                                   </md-input-container>
                                   <div flex layout="row" layout-align="space-between center">
                                       <div flex="5"></div>
-                                      <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">发送验证码</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
+                                      <div style="margin-bottom: 20px;">
+                                          <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">发送验证码</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
+                                      </div>
                                   </div>
                               </div>
-                              <md-input-container class="md-block">
-                                  <label>密码</label>
-                                  <input type="password" required name="password" ng-model="user.password">
-                                  <div ng-messages="userForm.password.$error">
-                                      <div ng-message="required">密码不能为空</div>
+                              <div layout="row">
+                                  <md-input-container class="md-block" flex="65">
+                                      <label>密码</label>
+                                      <input type="password" required name="password" ng-model="user.password">
+                                      <div ng-messages="userForm.password.$error">
+                                          <div ng-message="required">密码不能为空</div>
+                                      </div>
+                                  </md-input-container>
+                                  <div flex layout="row" layout-align="space-between center">
+                                      <div flex="5"></div>
+                                      <div style="margin-bottom: 20px;">
+                                          <md-button class="md-raised md-primary" ng-click="signup()">注册</md-button>
+                                      </div>
                                   </div>
-                              </md-input-container>
+                              </div>
                           </form>
                         </div>
                         <div flex="10"></div>
                     </div>
-                    <div flex layout="row" layout-align="center start">
+                    <!-- <div flex layout="row" layout-align="center start">
                         <div flex="10"></div>
                         <div layout="row" flex layout-align="space-between center">
                             <div></div>
                             <md-button class="md-raised md-primary" ng-click="signup()">注册</md-button>
                         </div>
                         <div flex="10"></div>
-                    </div>
+                    </div> -->
                 </div>
             </md-card-content>
             <div flex="5"></div>

@@ -40,7 +40,7 @@ This plugin can control shadowsocks through a telegram bot.
 ### Server
 
 * `listserver`
-* `switchserver {name}`
+* `switchserver {id}`
 * `delserver {name}`
 * `addserver {name} {host} {port} {password}`
 * `editserver {name} {newName} {host} {port} {password}`

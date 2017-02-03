@@ -1323,9 +1323,11 @@
 	  publicInfo.content = '';
 	  publicInfo.button = '';
 	  var close = function close() {
-	    $mdDialog.hide().then(function () {
+	    $mdDialog.hide().then(function (success) {
+	      console.log(success);
 	      alertDialogPromise = null;
-	    }).catch(function () {
+	    }).catch(function (err) {
+	      console.log(err);
 	      alertDialogPromise = null;
 	    });
 	  };

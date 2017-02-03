@@ -6,9 +6,9 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   publicInfo.content = '';
   publicInfo.button = '';
   const close = () => {
-    $mdDialog.hide().then(() => {
+    $mdDialog.hide().then(success => {
       alertDialogPromise = null;
-    }).catch(() => {
+    }).catch(err => {
       alertDialogPromise = null;
     });
   };
