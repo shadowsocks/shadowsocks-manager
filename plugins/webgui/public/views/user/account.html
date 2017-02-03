@@ -41,14 +41,34 @@
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">流量：</div>    <div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限量</span><span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow | flow}}</span></div>
+                                            <div flex="40">流量：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.type === 1">不限量</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow | flow}}</span>
+                                            </div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                          <div flex="40">到期时间：</div><div flex="60" style="text-align:right"><span ng-if="a.type === 1">不限时</span>
-                                              <span ng-if="a.type >=2 && a.type <= 5">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span ng-if="a.type >=2 && a.type <= 5">({{ a.data.expire | timeago }})</span>
+                                            <div flex="40">周期：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.type === 1">无</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">
+                                                    <span>{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">到期时间：</div>
+                                          <div flex="60" style="text-align:right">
+                                              <span ng-if="a.type === 1">不限时</span>
+                                              <span ng-if="a.type >=2 && a.type <= 5">
+                                                  <span>{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>({{ a.data.expire | timeago }})</span>
+                                              </span>
                                           </div>
                                         </div>
                                     </md-list-item>

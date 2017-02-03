@@ -21,8 +21,15 @@ exports.getAccount = (req, res) => {
           '5': 3600000,
         };
         f.data.expire = f.data.create + f.data.limit * time[f.type];
+        f.data.from = f.data.create;
+        f.data.to = f.data.create + time[f.type];
+        while(f.data.to <= Date.now()) {
+          f.data.from = f.data.to;
+          f.data.to = f.data.from + time[f.type];
+        }
       }
     });
+    console.log(success);
     res.send(success);
   }).catch(err => {
     console.log(err);
