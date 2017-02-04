@@ -6,7 +6,7 @@
             <form name="userForm">
                 <md-input-container class="md-block">
                     <label>邮箱</label>
-                    <input type="email" required name="email" ng-model="user.email" ng-keypress="emailKeypress($event)" md-autofocus>
+                    <input type="email" required name="email" ng-model="user.email" md-autofocus>
                     <div ng-messages="userForm.email.$error">
                         <div ng-message="required">邮箱不能为空</div>
                         <div ng-message="email">必须填写一个有效邮箱地址</div>
@@ -14,7 +14,7 @@
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>密码</label>
-                    <input type="password" required name="password" ng-model="user.password" ng-keypress="passwordKeypress($event)">
+                    <input type="password" required name="password" ng-model="user.password" ng-keypress="enterKey($event)">
                     <!-- <div ng-messages="userForm.password.$error">
                         <div ng-message="required">密码不能为空</div>
                     </div> -->
@@ -49,7 +49,7 @@
                             <form name="userForm">
                                 <md-input-container class="md-block">
                                     <label>邮箱</label>
-                                    <input type="email" required name="email" ng-model="user.email" ng-keypress="emailKeypress($event)" md-autofocus>
+                                    <input type="email" required name="email" ng-model="user.email" md-autofocus>
                                     <div ng-messages="userForm.email.$error">
                                         <div ng-message="required">邮箱不能为空</div>
                                         <div ng-message="email">必须填写一个有效邮箱地址</div>
@@ -57,7 +57,7 @@
                                 </md-input-container>
                                 <md-input-container class="md-block">
                                     <label>密码</label>
-                                    <input type="password" required name="password" ng-model="user.password" ng-keypress="passwordKeypress($event)">
+                                    <input type="password" required name="password" ng-model="user.password" ng-keypress="enterKey($event)">
                                     <!-- <div ng-messages="userForm.password.$error">
                                         <div ng-message="required">密码不能为空</div>
                                     </div> -->

@@ -19,21 +19,41 @@ const smtpConfig = {
 
 const transporter = nodemailer.createTransport(smtpConfig);
 
-const sendMail = async (to, subject, text) => {
-  transporter.sendMail({
-    from: config.plugins.email.username,
+const sendMail = async (to, subject, text, options = {}) => {
+  const send = (to, subject, text) => {
+    return new Promise((resolve, reject) => {
+      transporter.sendMail({
+        from: config.plugins.email.username,
+        to,
+        subject,
+        text,
+      }, (error, info) => {
+        if(error) {
+          return reject(error);
+        }
+        return resolve(info);
+      });
+    });
+  };
+  // TODO
+  const checkLimit = () => {
+
+  };
+  await send(to, subject, text);
+  await knex('email').insert({
     to,
     subject,
     text,
-  }, (error, info) => {
-    if(error) {
-      return Promise.reject(error);
-    }
-    return info;
+    type: options.type,
+    remark: options.remark,
+    ip: options.ip,
+    session: options.session,
+    time: Date.now(),
   });
+  return;
 };
 
-const sendCode = async (to, subject = 'subject', text) => {
+const sendCode = async (to, subject = 'subject', text, options = {}) => {
   const sendEmailTime = 10;
   try {
     const findEmail = await knex('email').select(['remark']).where({
@@ -45,14 +65,11 @@ const sendCode = async (to, subject = 'subject', text) => {
     }
     const code = Math.random().toString().substr(2, 6);
     text += '\n' + code;
-    await sendMail(to, subject, text);
-    await knex('email').insert({
-      to,
-      subject,
-      text,
+    await sendMail(to, subject, text, {
       type: 'code',
       remark: code,
-      time: Date.now(),
+      ip: options.ip,
+      session: options.session,
     });
     logger.info(`[${ to }] Send code: ${ code }`);
     return code;

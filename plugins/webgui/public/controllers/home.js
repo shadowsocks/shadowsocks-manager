@@ -81,6 +81,11 @@ app
           alertDialog.show(err, '确定');
         });
       };
+      $scope.enterKey = key => {
+        if(key.keyCode === 13) {
+          $scope.login();
+        }
+      };
     }
   ])
   .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',

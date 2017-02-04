@@ -14,6 +14,8 @@ const createTable = async() => {
     table.string('text');
     table.string('type');
     table.string('remark');
+    table.string('ip');
+    table.string('session');
     table.dateTime('time');
   });
 };
