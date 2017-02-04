@@ -102,11 +102,11 @@ gulp.task('webgui', () => {
         }
       }]
     },
-    // plugins: [new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false
-    //   }
-    // })]
+    plugins: [new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })]
   }))
   .pipe(gulp.dest('plugins/webgui/libs'));
 });

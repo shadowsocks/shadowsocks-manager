@@ -45,12 +45,7 @@ const sendCode = async (to, subject = 'subject', text) => {
     }
     const code = Math.random().toString().substr(2, 6);
     text += '\n' + code;
-    await sendMail({
-      // from: config.plugins.email.username,
-        to,
-        subject,
-        text,
-    });
+    await sendMail(to, subject, text);
     await knex('email').insert({
       to,
       subject,
