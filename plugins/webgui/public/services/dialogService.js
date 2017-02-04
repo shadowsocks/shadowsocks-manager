@@ -6,10 +6,14 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   publicInfo.content = '';
   publicInfo.button = '';
   const close = () => {
-    $mdDialog.hide().then(success => {
+    return $mdDialog.hide().then(success => {
+      publicInfo.isLoading = false;
       alertDialogPromise = null;
+      return;
     }).catch(err => {
+      publicInfo.isLoading = false;
       alertDialogPromise = null;
+      return;
     });
   };
   publicInfo.close = close;
