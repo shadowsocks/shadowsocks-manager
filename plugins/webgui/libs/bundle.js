@@ -322,17 +322,18 @@
 	      escapeToClose: false,
 	      locals: { bind: password },
 	      bindToController: true,
-	      controller: function controller($scope, $http, $mdDialog, bind) {
+	      controller: ['$scope', 'userApi', '$mdDialog', 'bind', function ($scope, userApi, $mdDialog, bind) {
 	        $scope.account = {
 	          password: bind
 	        };
 	        $scope.changePassword = function () {
 	          $mdDialog.cancel();
-	          $http.put('/api/user/' + accountId + '/password', {
-	            password: $scope.account.password
-	          });
+	          // $http.put(`/api/user/${ accountId }/password`, {
+	          //   password: $scope.account.password,
+	          // });
+	          userApi.changePassword(accountId, $scope.account.password);
 	        };
-	      },
+	      }],
 	      clickOutsideToClose: true
 	    };
 	    $mdDialog.show(dialog);
@@ -1304,8 +1305,14 @@
 	      };
 	    });
 	  };
+	  var changePassword = function changePassword(accountId, password) {
+	    return $http.put('/api/user/' + accountId + '/password', {
+	      password: password
+	    });
+	  };
 	  return {
-	    getUserAccount: getUserAccount
+	    getUserAccount: getUserAccount,
+	    changePassword: changePassword
 	  };
 	}]);
 
@@ -1324,10 +1331,8 @@
 	  publicInfo.button = '';
 	  var close = function close() {
 	    $mdDialog.hide().then(function (success) {
-	      console.log(success);
 	      alertDialogPromise = null;
 	    }).catch(function (err) {
-	      console.log(err);
 	      alertDialogPromise = null;
 	    });
 	  };

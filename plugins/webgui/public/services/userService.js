@@ -14,7 +14,13 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       };
     });
   };
+  const changePassword = (accountId, password) => {
+    return $http.put(`/api/user/${ accountId }/password`, {
+      password,
+    });
+  };
   return {
     getUserAccount,
+    changePassword,
   };
 }]);

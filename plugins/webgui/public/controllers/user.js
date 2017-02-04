@@ -90,15 +90,16 @@ app
         escapeToClose: false,
         locals: { bind: password },
         bindToController: true,
-        controller: ['$scope', '$http', '$mdDialog', 'bind', function($scope, $http, $mdDialog, bind) {
+        controller: ['$scope', 'userApi', '$mdDialog', 'bind', function($scope, userApi, $mdDialog, bind) {
           $scope.account = {
             password: bind,
           };
           $scope.changePassword = () => {
             $mdDialog.cancel();
-            $http.put(`/api/user/${ accountId }/password`, {
-              password: $scope.account.password,
-            });
+            // $http.put(`/api/user/${ accountId }/password`, {
+            //   password: $scope.account.password,
+            // });
+            userApi.changePassword(accountId, $scope.account.password);
           };
         }],
         clickOutsideToClose: true,
