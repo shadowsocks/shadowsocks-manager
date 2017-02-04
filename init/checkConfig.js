@@ -23,7 +23,7 @@ program
   .option('--debug', 'show debug message')
   .parse(process.argv);
 
-if(program.config) {global.configFile = program.config;}
+if(program.config) { global.configFile = program.config; }
 
 const config = appRequire('services/config');
 

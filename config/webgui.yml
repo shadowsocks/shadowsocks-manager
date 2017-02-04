@@ -8,8 +8,6 @@ manager:
 plugins:
   flowSaver:
     use: true
-  webgui:
-    use: true
   user:
     use: true
   account:
