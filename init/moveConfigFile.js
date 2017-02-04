@@ -5,7 +5,12 @@ const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
-const configFile = path.resolve(os.homedir() + '/.ssmgr/default.yml');
+
+const configFiles = [
+  'default.yml',
+  'webgui.yml',
+];
+// const configFile = path.resolve(os.homedir() + '/.ssmgr/default.yml');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
@@ -16,9 +21,11 @@ try {
   logger.info('~/.ssmgr/ not found, make dir for it.');
   fs.mkdirSync(ssmgrPath);
 }
-try {
-  fs.statSync(configFile);
-} catch(err) {
-  logger.info('~/.ssmgr/default.yml not found, make file for it.');
-  fse.copySync(path.resolve('./config/default.yml'), configFile);
-}
+configFiles.forEach(configFile => {
+  try {
+    fs.statSync(path.resolve(ssmgrPath, configFile));
+  } catch(err) {
+    logger.info(`~/.ssmgr/${ configFile } not found, make file for it.`);
+    fse.copySync(path.resolve(`./config/${ configFile }`), path.resolve(ssmgrPath, configFile));
+  }
+});
