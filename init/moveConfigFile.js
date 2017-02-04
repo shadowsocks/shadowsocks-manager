@@ -8,9 +8,11 @@ const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
 
 const configFiles = [
   'default.yml',
+  'cli.yml',
+  'telegram.yml',
+  'freeAccount.yml',
   'webgui.yml',
 ];
-// const configFile = path.resolve(os.homedir() + '/.ssmgr/default.yml');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
