@@ -226,6 +226,7 @@ exports.changeAccountData = (req, res) => {
 
 exports.getServerFlow = (req, res) => {
   const serverId = req.params.serverId;
+  const port = req.query.port;
   const type = req.query.type;
   const time = req.query.time || Date.now();
   let timeArray = [];
@@ -250,7 +251,13 @@ exports.getServerFlow = (req, res) => {
       i++;
     }
   }
-  flow.getServerFlow(serverId, timeArray).then(success => {
+  let getFlow;
+  if(port) {
+    getFlow = flow.getServerPortFlow(serverId, +port, timeArray);
+  } else {
+    getFlow = flow.getServerFlow(serverId, timeArray);
+  }
+  getFlow.then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
