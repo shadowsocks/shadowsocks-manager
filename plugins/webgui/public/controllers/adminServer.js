@@ -228,7 +228,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       method: 'aes-256-cfb',
     };
     $scope.confirm = () => {
-      console.log('GG');
       $http.post('/api/admin/server', {
         name: $scope.server.name,
         address: $scope.server.address,
