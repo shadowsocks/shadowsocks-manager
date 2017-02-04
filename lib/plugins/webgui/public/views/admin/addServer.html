@@ -1,0 +1,55 @@
+<div layout="column">
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <form name="serverForm">
+                <md-input-container class="md-block">
+                    <label>名称</label>
+                    <input type="text" required name="name" ng-model="server.name">
+                    <div ng-messages="serverForm.name.$error">
+                        <div ng-message="required">名称不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>地址</label>
+                    <input type="text" required name="address" ng-model="server.address">
+                    <div ng-messages="serverForm.address.$error">
+                        <div ng-message="required">地址不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>端口</label>
+                    <input type="text" required name="port" ng-model="server.port">
+                    <div ng-messages="serverForm.port.$error">
+                        <div ng-message="required">端口不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>密码</label>
+                    <input type="text" required name="password" ng-model="server.password">
+                    <div ng-messages="serverForm.password.$error">
+                        <div ng-message="required">密码不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>加密方式</label>
+                    <md-select ng-model="server.method" style="width: 100%;">
+                        <md-option ng-repeat="method in methods" ng-value="method">
+                            {{method}}
+                        </md-option>
+                    </md-select>
+              </md-input-container>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>

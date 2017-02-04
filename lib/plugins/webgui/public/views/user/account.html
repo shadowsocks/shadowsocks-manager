@@ -1,0 +1,99 @@
+<div layout="row" layout-xs="column" layout-wrap>
+    <div flex ng-if="account && !account.length">
+        <md-card>
+            <md-card-content>
+                <div style="margin-top: 30px; margin-bottom: 30px;">目前该用户没有分配账号，请联系管理员处理</div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by $index">
+        <md-card ng-click="toAccount(a.id)">
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">{{a.port}}</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+                <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
+                    <md-tab ng-repeat="server in servers"
+                           label="{{server.name}}"
+                           md-on-select="getServerPortData(a, server.id, a.port)">
+                        <div layout="row" layout-align="center center" layout-wrap>
+                            <div flex="60" flex-xs="100">
+                                <md-list>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">地址：</div><div flex="60" style="text-align:right">{{server.host}}:{{a.port}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">密码：</div><div flex="60" style="text-align:right">{{a.password}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">流量：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.type === 1">不限量</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow | flow}}</span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">周期：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.type === 1">无</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">
+                                                    <span>{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">到期时间：</div>
+                                          <div flex="60" style="text-align:right">
+                                              <span ng-if="a.type === 1">不限时</span>
+                                              <span ng-if="a.type >=2 && a.type <= 5">
+                                                  <span>{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>({{ a.data.expire | timeago }})</span>
+                                              </span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">最近连接：</div><div flex="60" style="text-align:right">
+                                              <span ng-if="a.lastConnect">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect">({{ a.lastConnect | timeago }})</span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                </md-list>
+                            </div>
+                            <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
+                                <div hide-xs></div>
+                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.method, a.password , server.host, a.port)" image="true"></qr>
+                            </div>
+                        </div>
+                    </md-tab>
+                </md-tabs>
+                <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">修改密码</md-button>
+                <md-button class="md-primary" ng-click="unfinish()">流量统计</md-button>
+                <md-button class="md-primary" ng-click="unfinish()">续费</md-button>
+            <md-card-content>
+        </md-card>
+    </div>
+</div>

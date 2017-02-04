@@ -1,4 +1,4 @@
-<div ng-controller="AdminController" layout="column" ng-cloak layout-fill>
+<div ng-controller="UserController" layout="column" ng-cloak layout-fill>
     <section layout="row" flex>
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="false" layout="column" layout-align="space-between stretch">
         <md-content>
@@ -8,7 +8,7 @@
                     <div layout="column" class="md-toolbar-tools-bottom inset">
                         <user-avatar></user-avatar>
                         <span></span>
-                        <div>Admin</div>
+                        <div>User</div>
                     </div>
                 </md-toolbar>
                 <md-list>
@@ -34,14 +34,13 @@
             <md-toolbar>
                 <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
                     <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
-                        <i class="material-icons">{{menuButtonIcon || 'menu'}}</i>
+                        <i class="material-icons">menu</i>
                     </md-button>
                     <div>{{title}}</div>
                     <span flex></span>
                 </div>
             </md-toolbar>
         </div>
-
         <div flex layout="row">
             <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm') && innerSideNav" style="padding: 0px; min-width: 180px; width: 180px; background-color: #FAFAFA;" layout="column" layout-align="space-between stretch">
                 <md-content style="background-color: #FAFAFA;">
@@ -70,7 +69,4 @@
         </div>
     </div>
     </section>
-    <md-button ng-show="fabButton" class="md-fab md-fab-bottom-right">
-        <md-icon class="material-icons" ng-click="fabButtonClick()">add</md-icon>
-    </md-button>
 </div>

@@ -9,6 +9,7 @@ gulp.task('clean', () => {
   return del([
     'lib',
     'plugins/freeAccount/libs/bundle.js',
+    'plugins/webgui/libs/bundle.js',
   ]);
 });
 
@@ -52,38 +53,7 @@ gulp.task('freeAccountCopy', ['freeAccountBuild'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babelCopy', ['clean'], () => {
-  return gulp
-    .src([
-      'config/default.yml',
-      'package.json',
-    ], {
-      base: './'
-    })
-    .pipe(gulp.dest('lib'));
-});
-
-gulp.task('babel', ['freeAccountCopy', 'babelCopy'], () => {
-  return gulp.src([
-    '**/*.js',
-    '!node_modules/**',
-    '!lib/**',
-    '!plugins/freeAccount/libs/**',
-    '!plugins/freeAccount/public/**',
-    '!plugins/webgui/libs/**',
-    '!plugins/webgui/public/**',
-  ])
-  .pipe(babel({
-    presets: ['stage-3'],
-  }))
-  .pipe(gulp.dest('lib'));
-});
-
-gulp.task('default', ['clean', 'babel'], () => {
-
-});
-
-gulp.task('webgui', () => {
+gulp.task('webguiBuild', () => {
   return gulp.src([
     'plugins/webgui/public/**',
   ])
@@ -109,4 +79,47 @@ gulp.task('webgui', () => {
     })]
   }))
   .pipe(gulp.dest('plugins/webgui/libs'));
+});
+
+gulp.task('webguiCopy', ['webguiBuild'], () => {
+  return gulp
+    .src([
+      'plugins/webgui/libs/**',
+      'plugins/webgui/public/**',
+      'plugins/webgui/views/**',
+    ], {
+      base: './'
+    })
+    .pipe(gulp.dest('lib'));
+});
+
+gulp.task('babelCopy', ['clean'], () => {
+  return gulp
+    .src([
+      'config/default.yml',
+      'package.json',
+    ], {
+      base: './'
+    })
+    .pipe(gulp.dest('lib'));
+});
+
+gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
+  return gulp.src([
+    '**/*.js',
+    '!node_modules/**',
+    '!lib/**',
+    '!plugins/freeAccount/libs/**',
+    '!plugins/freeAccount/public/**',
+    '!plugins/webgui/libs/**',
+    '!plugins/webgui/public/**',
+  ])
+  .pipe(babel({
+    presets: ['stage-3'],
+  }))
+  .pipe(gulp.dest('lib'));
+});
+
+gulp.task('default', ['clean', 'babel'], () => {
+
 });

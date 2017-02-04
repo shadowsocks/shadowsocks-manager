@@ -1,0 +1,66 @@
+<div layout="row">
+    <div flex>
+        <md-card>
+            <md-card-header>
+                <!-- <md-card-avatar>
+                    <img class="md-user-avatar" src="http://placehold.it/50x50" />
+                </md-card-avatar> -->
+                <md-card-header-text>
+                    <span class="md-title">{{server.name}}</span>
+                    <span class="md-subhead">{{server.host}}:{{server.port}}</span>
+                </md-card-header-text>
+                <div>
+                  <md-button class="md-fab md-mini md-primary" aria-label="edit" ng-click="editServer(server.id)">
+                      <i class="material-icons">create</i>
+                  </md-button>
+                  <md-button class="md-fab md-mini md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
+                      <i class="material-icons">close</i>
+                  </md-button>
+                </div>
+            </md-card-header>
+            <md-card-content>
+                <div layout="column" layout-align="center center">
+                    <div layout="row" layout-align="center center">
+                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
+                        <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
+                            <md-radio-button value="hour">时</md-radio-button>
+                            <md-radio-button value="day" >天</md-radio-button>
+                            <md-radio-button value="week">周</md-radio-button>
+                        </md-radio-group>
+                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
+                    </div>
+                    <div>
+                        {{time}}，{{sumFlow | flow}}
+                    </div>
+                    <div></div>
+                </div>
+                <div layout="row" layout-align="center center">
+                    <div style="width: 95%; max-width: 500px;">
+                        <canvas class="chart chart-line"
+                            chart-data="chart.data"
+                            chart-labels="chart.labels"
+                            chart-series="chart.series"
+                            chart-options="chart.options"
+                            chart-dataset-override="chart.datasetOverride">
+                        </canvas>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
+        <md-card>
+            <md-card-header>
+                <md-card-avatar>
+                    <img class="md-user-avatar" src="http://placehold.it/50x50" />
+                </md-card-avatar>
+                <md-card-header-text>
+                  <span class="md-title">{{port.port}}</span>
+                  <span class="md-subhead">{{port.password}}</span>
+                </md-card-header-text>
+            </md-card-header>
+        </md-card>
+    </div>
+</div>
