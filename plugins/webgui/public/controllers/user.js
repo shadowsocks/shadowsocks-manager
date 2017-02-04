@@ -49,8 +49,8 @@ app
     $scope.setTitle('首页');
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog',
-  ($scope, $http, $mdMedia, userApi, $mdDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog',
+  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
     userApi.getUserAccount().then(success => {
@@ -104,6 +104,9 @@ app
         clickOutsideToClose: true,
       };
       $mdDialog.show(dialog);
+    };
+    $scope.unfinish = () => {
+      alertDialog.show('该功能尚未完成', '确定');
     };
   }
 ]);

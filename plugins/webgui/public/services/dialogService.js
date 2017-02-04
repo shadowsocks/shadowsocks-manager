@@ -25,9 +25,9 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
       $scope.publicInfo = bind;
-    },
+    }],
     clickOutsideToClose: false,
   };
   const show = (content, button) => {
