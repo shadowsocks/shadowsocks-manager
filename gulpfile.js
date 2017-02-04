@@ -96,7 +96,7 @@ gulp.task('webguiCopy', ['webguiBuild'], () => {
 gulp.task('babelCopy', ['clean'], () => {
   return gulp
     .src([
-      'config/default.yml',
+      'config/*.yml',
       'package.json',
     ], {
       base: './'

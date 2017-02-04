@@ -1,0 +1,15 @@
+type: m
+empty: false
+
+manager:
+  address: 127.0.0.1:6002
+  password: '123456'
+
+plugins:
+  telegram:
+    token: '12345678:********************'
+    use: true
+  flowSaver:
+    use: true
+
+db: 'telegram.sqlite'

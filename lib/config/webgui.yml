@@ -1,0 +1,26 @@
+type: m
+empty: false
+
+manager:
+  address: 127.0.0.1:6002
+  password: '123456'
+
+plugins:
+  flowSaver:
+    use: true
+  user:
+    use: true
+  account:
+    use: true
+  email:
+    use: true
+    username: 'username'
+    password: 'password'
+    host: 'smtp.your-email.com'
+  webgui:
+    use: true
+    host: '0.0.0.0'
+    port: '8080'
+    site: 'http://yourwebsite.com'
+
+db: 'webgui.sqlite'

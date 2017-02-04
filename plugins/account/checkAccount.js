@@ -110,11 +110,14 @@ const checkServer = async () => {
         } else if(!port.exist(a.port)) {
           addPort(a, s);
           return;
-        }
-      } else if (a.type === 1) {
-        if(port.exist(a.port)) {
+        } else {
+          addPort(a, s);
           return;
         }
+      } else if (a.type === 1) {
+        // if(port.exist(a.port)) {
+        //   return;
+        // }
         addPort(a, s);
         return;
       }
