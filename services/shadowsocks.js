@@ -102,6 +102,13 @@ const startUp = async () => {
   });
 };
 
+const resend = async () => {
+  const accounts = await knex('account').select([ 'port', 'password' ]);
+  accounts.forEach(f => {
+    sendMessage(`add: {"server_port": ${ f.port }, "password": "${ f.password }"}`);
+  });
+};
+
 const compareWithLastFlow = (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
@@ -127,6 +134,7 @@ const compareWithLastFlow = (flow, lastFlow) => {
 connect();
 startUp();
 setInterval(() => {
+  resend();
   sendPing();
 }, 60 * 1000);
 
