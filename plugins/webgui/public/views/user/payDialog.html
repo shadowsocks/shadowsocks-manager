@@ -1,0 +1,17 @@
+<md-dialog aria-label="pay dialog">
+    <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-dialog-content ng-hide="publicInfo.isLoading">
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="center center">
+                <qr layout-margin text="qrCode()" image="true"></qr>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
+        <md-button class="md-primary" ng-click="publicInfo.close()">
+            关闭
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
