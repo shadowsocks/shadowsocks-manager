@@ -6,6 +6,8 @@ const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 
+const alipay = appRequire('plugins/alipay/index');
+
 exports.getAccount = (req, res) => {
   const userId = req.session.user;
   account.getAccount({
@@ -112,6 +114,17 @@ exports.changePassword = (req, res) => {
     return account.changePassword(accountId, password);
   }).then(() => {
     res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.createOrder = (req, res) => {
+  const userId = req.session.user;
+  const accountId = req.body.accountId;
+  alipay.createOrder(userId, accountId, 10).then(success => {
+    return res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();

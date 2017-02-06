@@ -2,56 +2,48 @@ const alipayf2f = require('alipay-ftof');
 const alipay_f2f = new alipayf2f(require('./config.js'));
 const knex = appRequire('init/knex').knex;
 
-// alipay_f2f.createQRPay({
-//   tradeNo: "123",
-//   subject: "z",
-//   totalAmount: 0.5,
-//   body: "t",
-//   timeExpress: 5,
-// }).then(result => {
-//   console.log(result);
-// }).catch(error => console.error(error));
-//
-// setInterval(() => {
-//   alipay_f2f.checkInvoiceStatus("123").then(result => {
-//     console.log(result);
-//   }).catch(error => { });
-// }, 10 * 1000);
-
-const createOrder = async () => {
+const createOrder = async (user, account, amount) => {
   const orderId = Math.random().toString().substr(2);
+  const time = 5;
   const qrCode = await alipay_f2f.createQRPay({
     tradeNo: orderId,
-    subject: "z",
-    totalAmount: 0.5,
-    body: "t",
-    timeExpress: 5,
+    subject: 'ss',
+    totalAmount: +amount,
+    body: 'ss',
+    timeExpress: 10,
   });
-  console.log(qrCode);
   await knex('alipay').insert({
     orderId,
+    qrcode: qrCode.qr_code,
+    amount: amount + '',
+    user,
+    account,
+    status: 'create',
     createTime: Date.now(),
+    expireTime: Date.now() + time * 60 * 1000,
   });
+  return {
+    orderId,
+    qrCode: qrCode.qr_code,
+  };
 };
 
 setInterval(async () => {
-  const orders = await knex('alipay').select();
+  const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
   orders.forEach(order => {
-    if(order.status === 'TRADE_SUCCESS') {
-      return;
+    if(order.status !== 'TRADE_SUCCESS') {
+      alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
+        if(success.code === '10000') {
+          knex('alipay').update({
+            status: success.trade_status
+          }).where({
+            orderId: order.orderId,
+          }).then();
+        }
+      });
     };
-    alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
-      console.log(success);
-      if(success.code === '10000') {
-        knex('alipay').update({
-          status: success.trade_status
-        }).where({
-          orderId: order.orderId,
-        }).then();
-      }
-    });
   });
-}, 20 * 1000);
+}, 30 * 1000);
 
 const checkOrder = () => {
 
@@ -60,4 +52,4 @@ const checkOrder = () => {
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
 
-createOrder();
+// createOrder('o', 10);

@@ -16,8 +16,12 @@ const createTable = async() => {
     table.increments('id').primary();
     table.string('orderId').unique();
     table.string('amount');
+    table.integer('user');
+    table.integer('account');
+    table.string('qrcode');
     table.string('status');
     table.dateTime('createTime');
+    table.dateTime('expireTime');
   });
 };
 
