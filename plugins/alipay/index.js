@@ -45,8 +45,20 @@ setInterval(async () => {
   });
 }, 30 * 1000);
 
-const checkOrder = () => {
-
+const checkOrder = async (orderId) => {
+  const order = await knex('alipay').select().where({
+    orderId,
+  }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject();
+  });
+  if(order.status === 'TRADE_SUCCESS') {
+    return;
+  } else {
+    return Promise.reject();
+  }
 };
 
 exports.createOrder = createOrder;

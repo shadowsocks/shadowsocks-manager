@@ -49,8 +49,8 @@ app
     $scope.setTitle('首页');
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog',
-  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval',
+  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog, $interval) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
     userApi.getUserAccount().then(success => {
@@ -113,8 +113,15 @@ app
       }).then(success => {
         console.log(success.data);
         payDialog.setUrl(success.data.qrCode);
+        const int = $interval(() => {
+          $http.post('/api/user/order/status', {
+            orderId: success.data.orderId,
+          }).then(() => {
+            $interval.cancel(int);
+            payDialog.close();
+          });
+        }, 10 * 1000);
       }).catch(console.log);
-
     };
     $scope.unfinish = () => {
       alertDialog.show('该功能尚未完成', '确定');
