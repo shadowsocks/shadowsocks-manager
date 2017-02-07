@@ -22,5 +22,12 @@ plugins:
     host: '0.0.0.0'
     port: '8080'
     site: 'http://yourwebsite.com'
+  alipay:
+    use: true
+    appid: 2015012104922471
+    notifyUrl: ''
+    merchantPrivateKey: 'xxxxxxxxxxxx'
+    alipayPublicKey: 'xxxxxxxxxxx'
+    gatewayUrl: 'https://openapi.alipay.com/gateway.do'
 
 db: 'webgui.sqlite'

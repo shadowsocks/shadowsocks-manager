@@ -1,5 +1,12 @@
+const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
-const alipay_f2f = new alipayf2f(require('./config.js'));
+const alipay_f2f = new alipayf2f({
+  appid: config.plugins.alipay.appid,
+  notifyUrl: config.plugins.alipay.notifyUrl,
+  merchantPrivateKey: '-----BEGIN RSA PRIVATE KEY-----\n' + config.plugins.alipay.merchantPrivateKey + '\n-----END RSA PRIVATE KEY-----',
+  alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
+  gatewayUrl: config.plugins.alipay.gatewayUrl,
+});
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 
