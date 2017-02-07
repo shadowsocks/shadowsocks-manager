@@ -1,6 +1,7 @@
 const alipayf2f = require('alipay-ftof');
 const alipay_f2f = new alipayf2f(require('./config.js'));
 const knex = appRequire('init/knex').knex;
+const account = appRequire('plugins/account/index');
 
 const createOrder = async (user, account, amount) => {
   const orderId = Math.random().toString().substr(2);
@@ -29,10 +30,8 @@ const createOrder = async (user, account, amount) => {
 };
 
 setInterval(async () => {
-  const orders = await knex('alipay').select();
-  // .whereNotBetween('expireTime', [0, Date.now()])
+  const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
   orders.forEach(order => {
-
     if(order.status !== 'TRADE_SUCCESS' && order.status !== 'FINISH') {
       alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
         if(success.code === '10000') {
@@ -45,18 +44,7 @@ setInterval(async () => {
       });
     } else if(order.status === 'TRADE_SUCCESS') {
       const accountId = order.account;
-      knex('account_plugin').select().where({id: accountId}).then(success => {
-        if(success.length) {
-          const accountData = JSON.parse(success[0].data);
-          accountData.limit += 1;
-          return accountData;
-        }
-        return Promise.reject();
-      }).then(success => {
-        return knex('account_plugin').update({
-          data: JSON.stringify(success),
-        }).where({id: accountId});
-      }).then(() => {
+      account.addAccountLimit(accountId).then(() => {
         return knex('alipay').update({
           status: 'FINISH',
         }).where({
@@ -65,7 +53,7 @@ setInterval(async () => {
       }).then().catch(console.log);
     };
   });
-}, 10 * 1000);
+}, 30 * 1000);
 
 const checkOrder = async (orderId) => {
   const order = await knex('alipay').select().where({

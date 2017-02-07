@@ -92,6 +92,33 @@ const changePassword = async (id, password) => {
   return;
 };
 
+const addAccountLimit = async (id, number = 1) => {
+  const account = await knex('account_plugin').select().where({ id }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  });
+  if(account.type < 2 || account.type > 5) { return; }
+  const accountData = JSON.parse(account.data);
+  const timePeriod = {
+    '2': 7 * 86400 * 1000,
+    '3': 30 * 86400 * 1000,
+    '4': 1 * 86400 * 1000,
+    '5': 3600 * 1000,
+  };
+  if(accountData.create + accountData.limit * timePeriod[account.type] >= Date.now()) {
+    accountData.create = Date.now();
+    accountData.limit = 1;
+  } else {
+    accountData.limit += number;
+  }
+  await knex('account_plugin').update({
+    data: JSON.stringify(accountData),
+  }).where({ id });
+  return;
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -99,3 +126,5 @@ exports.editAccount = editAccount;
 
 exports.changePassword = changePassword;
 exports.changePort = changePort;
+
+exports.addAccountLimit = addAccountLimit;
