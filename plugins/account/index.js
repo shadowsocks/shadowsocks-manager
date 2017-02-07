@@ -107,7 +107,7 @@ const addAccountLimit = async (id, number = 1) => {
     '4': 1 * 86400 * 1000,
     '5': 3600 * 1000,
   };
-  if(accountData.create + accountData.limit * timePeriod[account.type] >= Date.now()) {
+  if(accountData.create + accountData.limit * timePeriod[account.type] <= Date.now()) {
     accountData.create = Date.now();
     accountData.limit = 1;
   } else {
