@@ -57,11 +57,13 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   };
 }]);
 
-app.factory('payDialog' , [ '$mdDialog', ($mdDialog) => {
+app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $interval, $http) => {
   const publicInfo = {};
   publicInfo.isLoading = false;
   publicInfo.qrCode = '';
+  let interval = null;
   const close = () => {
+    interval && $interval.cancel(interval);
     return $mdDialog.hide().then(success => {
       publicInfo.isLoading = false;
       payDialogPromise = null;
@@ -88,16 +90,31 @@ app.factory('payDialog' , [ '$mdDialog', ($mdDialog) => {
     controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function($scope, $mdDialog, $mdMedia, bind) {
       $scope.getQrCodeSize = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
-          return 180;
+          return 200;
         }
-        return 220;
+        return 250;
       };
       $scope.publicInfo = bind;
       $scope.qrCode = () => { return $scope.publicInfo.qrCode || 'AAA'; };
+      $scope.pay = () => {
+        window.location.href = $scope.publicInfo.qrCode;
+      };
     }],
     clickOutsideToClose: false,
   };
-  const setUrl = (url) => {
+  const setUrl = (orderId, url) => {
+    if(orderId && url) {
+      interval = $interval(() => {
+        $http.post('/api/user/order/status', {
+          orderId,
+        }).then(success => {
+          const orderStatus = success.data.status;
+          if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
+            close();
+          }
+        });
+      }, 10 * 1000);
+    }
     publicInfo.qrCode = url;
     if(isDialogShow()) {
       publicInfo.isLoading = false;

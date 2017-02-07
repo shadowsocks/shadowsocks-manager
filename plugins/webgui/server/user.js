@@ -133,8 +133,8 @@ exports.createOrder = (req, res) => {
 
 exports.checkOrder = (req, res) => {
   const orderId = req.body.orderId;
-  alipay.checkOrder(orderId).then(() => {
-    return res.send('success');
+  alipay.checkOrder(orderId).then(success => {
+    return res.send({status: success});
   }).catch(() => {
     res.status(403).end();
   });

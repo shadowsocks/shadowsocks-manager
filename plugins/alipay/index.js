@@ -19,7 +19,7 @@ const createOrder = async (user, account, amount) => {
     amount: amount + '',
     user,
     account,
-    status: 'create',
+    status: 'CREATE',
     createTime: Date.now(),
     expireTime: Date.now() + time * 60 * 1000,
   });
@@ -62,16 +62,10 @@ const checkOrder = async (orderId) => {
     if(success.length) {
       return success[0];
     }
-    return Promise.reject();
+    return Promise.reject('order not found');
   });
-  if(order.status === 'TRADE_SUCCESS') {
-    return;
-  } else {
-    return Promise.reject();
-  }
+  return order.status;
 };
 
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
-
-// createOrder('o', 10);
