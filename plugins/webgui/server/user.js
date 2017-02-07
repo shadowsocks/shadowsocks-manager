@@ -123,7 +123,7 @@ exports.changePassword = (req, res) => {
 exports.createOrder = (req, res) => {
   const userId = req.session.user;
   const accountId = req.body.accountId;
-  alipay.createOrder(userId, accountId, 10).then(success => {
+  alipay.createOrder(userId, accountId, 0.01).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
@@ -138,4 +138,12 @@ exports.checkOrder = (req, res) => {
   }).catch(() => {
     res.status(403).end();
   });
+};
+
+exports.alipayCallback = (req, res) => {
+  const signStatus = alipay.verifyCallback(req.body);
+  if(signStatus === false) {
+    return res.send('error');
+  }
+  return res.send('success');
 };

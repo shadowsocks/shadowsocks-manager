@@ -61,6 +61,8 @@ app.put('/api/user/:accountId/password', isUser, user.changePassword);
 app.post('/api/user/order/qrcode', isUser, user.createOrder);
 app.post('/api/user/order/status', isUser, user.checkOrder);
 
+app.post('/api/user/alipay/callback', user.alipayCallback);
+
 app.get('*', (req, res) => {
   return res.render('index');
 });

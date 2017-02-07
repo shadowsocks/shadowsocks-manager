@@ -7,6 +7,7 @@ const alipay_f2f = new alipayf2f({
   alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
   gatewayUrl: config.plugins.alipay.gatewayUrl,
 });
+// const alipay_f2f = new alipayf2f(require("./config.js"));
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 
@@ -60,7 +61,7 @@ setInterval(async () => {
       }).then().catch(console.log);
     };
   });
-}, 30 * 1000);
+}, 60 * 1000);
 
 const checkOrder = async (orderId) => {
   const order = await knex('alipay').select().where({
@@ -74,5 +75,18 @@ const checkOrder = async (orderId) => {
   return order.status;
 };
 
+const verifyCallback = (data) => {
+  const signStatus = alipay_f2f.verifyCallback(data);
+  if(signStatus) {
+    knex('alipay').update({
+      status: data.trade_status,
+    }).where({
+      orderId: +data.out_trade_no,
+    }).then(console.log);
+  }
+  return signStatus;
+};
+
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
+exports.verifyCallback = verifyCallback;

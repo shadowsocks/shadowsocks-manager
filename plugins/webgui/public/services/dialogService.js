@@ -113,7 +113,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
             close();
           }
         });
-      }, 10 * 1000);
+      }, 5 * 1000);
     }
     publicInfo.qrCode = url;
     if(isDialogShow()) {
