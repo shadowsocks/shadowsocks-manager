@@ -4,8 +4,9 @@
     </div>
     <md-dialog-content ng-hide="publicInfo.isLoading">
         <div class="md-dialog-content">
-            <div layout="row" layout-align="center center">
-                <qr layout-margin text="qrCode()" image="true"></qr>
+            <div layout="column" layout-align="center center">
+                <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true"></qr>
+                <div>支付宝扫码支付</div>
             </div>
         </div>
     </md-dialog-content>

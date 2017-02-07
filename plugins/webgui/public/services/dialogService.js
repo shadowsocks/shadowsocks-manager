@@ -85,7 +85,13 @@ app.factory('payDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function($scope, $mdDialog, $mdMedia, bind) {
+      $scope.getQrCodeSize = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return 180;
+        }
+        return 220;
+      };
       $scope.publicInfo = bind;
       $scope.qrCode = () => { return $scope.publicInfo.qrCode || 'AAA'; };
     }],
