@@ -5,4 +5,5 @@ exports.app = angular.module('app', [
   'ja.qr',
   'chart.js',
   'angularMoment',
+  'ngWebSocket',
 ]);

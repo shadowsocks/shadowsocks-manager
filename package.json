@@ -51,7 +51,8 @@
     "nodemailer": "^2.6.4",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
-    "sqlite3": "^3.1.4"
+    "sqlite3": "^3.1.4",
+    "ws": "^2.0.2"
   },
   "repository": {
     "type": "git",

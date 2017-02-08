@@ -20,7 +20,6 @@ const createOrder = async (user, account, amount) => {
     return success[0];
   });
   if(oldOrder) {
-    console.log(oldOrder);
     return {
       orderId: oldOrder.orderId,
       qrCode: oldOrder.qrcode,

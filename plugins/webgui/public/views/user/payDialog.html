@@ -5,9 +5,9 @@
     <md-dialog-content ng-hide="publicInfo.isLoading">
         <div class="md-dialog-content">
             <div layout="column" layout-align="center center">
-                <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true"></qr>
+                <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
                 <div>支付宝扫码支付</div>
-                <div ng-click="pay()">手机请点击这里付款</div>
+                <div>手机请点击二维码付款</div>
             </div>
         </div>
     </md-dialog-content>
