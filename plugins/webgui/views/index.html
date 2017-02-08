@@ -34,7 +34,13 @@
 
     <script src="/libs/bundle.js"></script>
     <div ng-controller="MainController" layout-fill>
-        <div ui-view layout-fill></div>
+        <div layout-fill layout="row" layout-align="center center" ng-show="mainLoading">
+            <div layout="column" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                <!-- <div style="margin: 15px;">网络异常，正在重连</div> -->
+            </div>
+        </div>
+        <div ng-hide="mainLoading" ui-view layout-fill></div>
     </div>
 </body>
 

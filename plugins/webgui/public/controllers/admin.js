@@ -2,6 +2,7 @@ const app = require('../index').app;
 
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
+    $scope.setMainLoading(false);
     $scope.innerSideNav = true;
     $scope.menus = [{
       name: '首页',

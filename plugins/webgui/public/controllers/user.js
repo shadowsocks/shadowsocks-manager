@@ -3,6 +3,7 @@ const app = require('../index').app;
 app
 .controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
   ($scope, $mdMedia, $mdSidenav, $state, $http) => {
+    $scope.setMainLoading(false);
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {

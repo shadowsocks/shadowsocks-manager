@@ -8,6 +8,8 @@ app
           $state.go('user.index');
         } else if (success.data.status === 'admin') {
           $state.go('admin.index');
+        } else {
+          $scope.setMainLoading(false);
         }
       });
       $scope.innerSideNav = true;
