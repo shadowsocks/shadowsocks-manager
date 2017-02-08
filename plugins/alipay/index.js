@@ -1,13 +1,16 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('alipay');
+
 const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
-const alipay_f2f = new alipayf2f({
-  appid: config.plugins.alipay.appid,
-  notifyUrl: config.plugins.alipay.notifyUrl,
-  merchantPrivateKey: '-----BEGIN RSA PRIVATE KEY-----\n' + config.plugins.alipay.merchantPrivateKey + '\n-----END RSA PRIVATE KEY-----',
-  alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
-  gatewayUrl: config.plugins.alipay.gatewayUrl,
-});
-// const alipay_f2f = new alipayf2f(require("./config.js"));
+// const alipay_f2f = new alipayf2f({
+//   appid: config.plugins.alipay.appid,
+//   notifyUrl: config.plugins.alipay.notifyUrl,
+//   merchantPrivateKey: '-----BEGIN RSA PRIVATE KEY-----\n' + config.plugins.alipay.merchantPrivateKey + '\n-----END RSA PRIVATE KEY-----',
+//   alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
+//   gatewayUrl: config.plugins.alipay.gatewayUrl,
+// });
+const alipay_f2f = new alipayf2f(require("./config.js"));
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 
@@ -16,7 +19,9 @@ const createOrder = async (user, account, amount) => {
     user,
     account,
     amount: amount + '',
-  }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).then(success => {
+  }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
+    status: 'CREATE',
+  }).then(success => {
     return success[0];
   });
   if(oldOrder) {
@@ -44,6 +49,7 @@ const createOrder = async (user, account, amount) => {
     createTime: Date.now(),
     expireTime: Date.now() + time * 60 * 1000,
   });
+  logger.info(`create order: [${ orderId }][${ amount }][account: ${ account }]`);
   return {
     orderId,
     qrCode: qrCode.qr_code,
@@ -93,9 +99,12 @@ const verifyCallback = (data) => {
   if(signStatus) {
     knex('alipay').update({
       status: data.trade_status,
+      alipayData: JSON.stringify(data),
     }).where({
-      orderId: +data.out_trade_no,
-    }).then(console.log);
+      orderId: data.out_trade_no,
+    }).andWhereNot({
+      status: 'FINISH',
+    }).then();
   }
   return signStatus;
 };

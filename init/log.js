@@ -22,6 +22,10 @@ log4js.configure({
     {
       type: 'console',
       category: 'webgui',
-    }
+    },
+    {
+      type: 'console',
+      category: 'alipay',
+    },
   ]
 });
