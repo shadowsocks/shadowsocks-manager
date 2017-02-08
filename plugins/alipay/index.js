@@ -12,6 +12,20 @@ const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 
 const createOrder = async (user, account, amount) => {
+  const oldOrder = await knex('alipay').select().where({
+    user,
+    account,
+    amount: amount + '',
+  }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).then(success => {
+    return success[0];
+  });
+  if(oldOrder) {
+    console.log(oldOrder);
+    return {
+      orderId: oldOrder.orderId,
+      qrCode: oldOrder.qrcode,
+    };
+  }
   const orderId = Math.random().toString().substr(2);
   const time = 30;
   const qrCode = await alipay_f2f.createQRPay({
