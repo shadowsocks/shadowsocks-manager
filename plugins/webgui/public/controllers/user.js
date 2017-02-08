@@ -44,9 +44,11 @@ app
     });
   }
 ])
-.controller('UserIndexController', ['$scope',
-  ($scope) => {
+.controller('UserIndexController', ['$scope', 'MyData', '$interval',
+  ($scope, MyData, $interval) => {
     $scope.setTitle('首页');
+    // $scope.a = MyData;
+    // $interval(() => { console.log($scope.a); }, 1000);
   }
 ])
 .controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval',
