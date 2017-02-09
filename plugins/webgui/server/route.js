@@ -70,11 +70,8 @@ app.get('*', (req, res) => {
 });
 
 wss.on('connection', function connection(ws) {
-  sessionParser(ws.upgradeReq, {}, () => {
-    console.log(ws.upgradeReq.session);
-    ws.on('message', function incoming(message) {
-      console.log('received: %s', message);
-    });
-    ws.send('something');
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
   });
+  ws.send('something');
 });

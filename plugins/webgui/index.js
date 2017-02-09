@@ -42,7 +42,14 @@ const server = app.listen(port, host, () => {
   logger.info(`server start at ${ host }:${ port }`);
 });
 
-const wss = new WebSocketServer({ server });
+const wss = new WebSocketServer({
+  server,
+  verifyClient: function (info, done){
+    sessionParser(info.req, {}, function (){
+      done(info.req.session.user);
+    });
+  }
+});
 
 exports.app = app;
 exports.wss = wss;
