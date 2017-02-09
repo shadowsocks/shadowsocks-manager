@@ -3,7 +3,13 @@ const app = require('../index').app;
 app
 .controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', 'ws',
   ($scope, $mdMedia, $mdSidenav, $state, $http, ws) => {
-    $scope.setMainLoading(false);
+    $http.get('/api/home/login').then(success => {
+      if(success.data.status !== 'normal') {
+        $state.go('home.index');
+      } else {
+        $scope.setMainLoading(false);
+      }
+    });
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {
@@ -46,9 +52,12 @@ app
     $scope.ws = ws;
   }
 ])
-.controller('UserIndexController', ['$scope',
-  ($scope) => {
+.controller('UserIndexController', ['$scope', '$state',
+  ($scope, $state) => {
     $scope.setTitle('首页');
+    $scope.toMyAccount = () => {
+      $state.go('user.account');
+    };
   }
 ])
 .controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval',

@@ -44,9 +44,15 @@ const server = app.listen(port, host, () => {
 
 const wss = new WebSocketServer({
   server,
+  path: '/user',
   verifyClient: function (info, done){
     sessionParser(info.req, {}, function (){
-      done(info.req.session.user);
+      console.log(info.req.session);
+      if(info.req.session.user && info.req.session.type === 'normal') {
+        done(true);
+      } else {
+        done(false);
+      }
     });
   }
 });

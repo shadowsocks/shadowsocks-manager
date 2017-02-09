@@ -1,7 +1,7 @@
 const app = require('../index').app;
 app.factory('ws', ['$websocket', '$location', '$timeout', ($websocket, $location, $timeout) => {
   const protocol = $location.protocol() === 'http' ? 'ws://' : 'wss://';
-  const url = protocol + $location.host() + ':' + $location.port();
+  const url = protocol + $location.host() + ':' + $location.port() + '/user';
   let connection = null;
   const messages = [];
   const connect = () => {
