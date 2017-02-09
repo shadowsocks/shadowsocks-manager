@@ -1,8 +1,8 @@
 const app = require('../index').app;
 
 app
-.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
-  ($scope, $mdMedia, $mdSidenav, $state, $http) => {
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', 'ws',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, ws) => {
     $scope.setMainLoading(false);
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
@@ -43,13 +43,12 @@ app
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.title = '';
     });
+    $scope.ws = ws;
   }
 ])
-.controller('UserIndexController', ['$scope', 'MyData', '$interval',
-  ($scope, MyData, $interval) => {
+.controller('UserIndexController', ['$scope',
+  ($scope) => {
     $scope.setTitle('首页');
-    // $scope.a = MyData;
-    // $interval(() => { console.log($scope.a); }, 1000);
   }
 ])
 .controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval',

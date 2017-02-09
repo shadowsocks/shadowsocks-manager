@@ -1,18 +1,27 @@
 const app = require('../index').app;
-app.factory('MyData', ['$websocket', '$location', ($websocket, $location) => {
-  const dataStream = $websocket('ws://' + $location.host() + ':' + $location.port());
-  const collection = [];
-  dataStream.onMessage(function(message) {
-    console.log(message);
-    collection.push(message.data);
-  });
+app.factory('ws', ['$websocket', '$location', '$timeout', ($websocket, $location, $timeout) => {
+  const protocol = $location.protocol() === 'http' ? 'ws://' : 'wss://';
+  const url = protocol + $location.host() + ':' + $location.port();
+  let connection = null;
+  const messages = [];
+  const connect = () => {
+    connection = $websocket(url);
+    connection.onMessage(function(message) {
+      console.log(message.data);
+      messages.push(message.data);
+    });
+    connection.onClose(() => {
+      $timeout(() => {
+        connect();
+      }, 3000);
+    });
+  };
+  connect();
   const methods = {
-    collection: collection,
-    get: function() {
-      dataStream.send(JSON.stringify({
-        action: 'get'
-      }));
-    }
+    messages,
+    send: function (msg) {
+      connection.send(msg);
+    },
   };
   return methods;
 }]);

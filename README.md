@@ -74,6 +74,7 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[================100%]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
 `[==10%---------------]` [account]()  
 `[==10%---------------]` [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
+`[===============90%--]` [alipay]()  
 
 ### Parameter
 
@@ -103,5 +104,5 @@ If you find this project helpful, please consider making a donation:
 * Alipay  
 <img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/alipay.jpg" width="160">
 
-* Wechat  
+* WeChat Pay  
 <img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/wechat.png" width="160">
