@@ -11,6 +11,13 @@ const session = require('express-session');
 const knex = appRequire('init/knex').knex;
 const KnexSessionStore = require('connect-session-knex')(session);
 const store = new KnexSessionStore({ knex });
+const sessionParser = session({
+  secret: '5E14cd8749A',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false, httpOnly: true, maxAge: 5 * 24 * 60 * 60 * 1000 },
+  store,
+});
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
@@ -20,14 +27,7 @@ app.use(bodyParser.json());
 app.use(expressValidator());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(session({
-  secret: '5E14cd8749A',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: 5 * 24 * 60 * 60 * 1000 },
-  store,
-}));
+app.use(sessionParser);
 
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
@@ -46,5 +46,6 @@ const wss = new WebSocketServer({ server });
 
 exports.app = app;
 exports.wss = wss;
+exports.sessionParser = sessionParser;
 
 appRequire('plugins/webgui/server/route');

@@ -2,6 +2,7 @@
 
 const app = appRequire('plugins/webgui/index').app;
 const wss = appRequire('plugins/webgui/index').wss;
+const sessionParser = appRequire('plugins/webgui/index').sessionParser;
 const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
@@ -69,9 +70,11 @@ app.get('*', (req, res) => {
 });
 
 wss.on('connection', function connection(ws) {
-  console.log(ws);
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
+  sessionParser(ws.upgradeReq, {}, () => {
+    console.log(ws.upgradeReq.session);
+    ws.on('message', function incoming(message) {
+      console.log('received: %s', message);
+    });
+    ws.send('something');
   });
-  ws.send('something');
 });
