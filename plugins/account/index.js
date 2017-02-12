@@ -40,7 +40,19 @@ const changePort = async (id, port) => {
 };
 
 const getAccount = async (where) => {
-  const account = await knex('account_plugin').select().where(where || {});
+  const account = await knex('account_plugin').select([
+    'account_plugin.id',
+    'account_plugin.type',
+    'account_plugin.userId',
+    'account_plugin.server',
+    'account_plugin.port',
+    'account_plugin.password',
+    'account_plugin.data',
+    'account_plugin.status',
+    'user.email as user',
+  ])
+  .leftJoin('user', 'user.id', 'account_plugin.userId')
+  .where(where || {});
   return account;
 };
 

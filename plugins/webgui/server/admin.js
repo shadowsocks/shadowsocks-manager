@@ -167,6 +167,21 @@ exports.getOneAccount = (req, res) => {
     })[0];
     if(accountInfo) {
       accountInfo.data = JSON.parse(accountInfo.data);
+      if(accountInfo.type >= 2 && accountInfo.type <= 5) {
+        const time = {
+          '2': 7 * 24 * 3600000,
+          '3': 30 * 24 * 3600000,
+          '4': 24 * 3600000,
+          '5': 3600000,
+        };
+        accountInfo.data.expire = accountInfo.data.create + accountInfo.data.limit * time[accountInfo.type];
+        accountInfo.data.from = accountInfo.data.create;
+        accountInfo.data.to = accountInfo.data.create + time[accountInfo.type];
+        while(accountInfo.data.to <= Date.now()) {
+          accountInfo.data.from = accountInfo.data.to;
+          accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
+        }
+      }
       return res.send(accountInfo);
     }
     Promise.reject('account not found');
