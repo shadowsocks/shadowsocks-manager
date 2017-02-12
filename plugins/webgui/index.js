@@ -36,8 +36,8 @@ app.set('views', path.resolve('./plugins/webgui/views'));
 app.use('/libs', express.static(path.resolve('./plugins/webgui/libs')));
 app.use('/public', express.static(path.resolve('./plugins/webgui/public')));
 
-const port = 8080 || config.plugins.webgui.port;
-const host = '0.0.0.0' || config.plugins.webgui.host;
+const port = config.plugins.webgui.port || 8080;
+const host = config.plugins.webgui.host || '0.0.0.0';
 const server = app.listen(port, host, () => {
   logger.info(`server start at ${ host }:${ port }`);
 });
@@ -47,7 +47,7 @@ const wss = new WebSocketServer({
   path: '/user',
   verifyClient: function (info, done){
     sessionParser(info.req, {}, function (){
-      console.log(info.req.session);
+      // console.log(info.req.session);
       if(info.req.session.user && info.req.session.type === 'normal') {
         done(true);
       } else {
