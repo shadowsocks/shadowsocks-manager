@@ -149,6 +149,9 @@ exports.getAccount = (req, res) => {
         }
       }
     });
+    success.sort((a, b) => {
+      return a.port >= b.port ? 1 : -1;
+    });
     res.send(success);
   }).catch(err => {
     console.log(err);

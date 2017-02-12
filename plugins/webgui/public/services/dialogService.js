@@ -157,31 +157,40 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/accountSortDialog.html',
+    templateUrl: '/public/views/admin/accountSortAndFilterDialog.html',
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
     controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
       $scope.publicInfo = bind;
-      $scope.sort = () => {
-        $scope.publicInfo.account = $scope.publicInfo.originalAccount.sort((a, b) => {
+      $scope.sortAndFilter = () => {
+        $scope.publicInfo.accountInfo.account = $scope.publicInfo.accountInfo.originalAccount.sort((a, b) => {
           if($scope.publicInfo.accountMethod.sort === 'port') {
             return a.port >= b.port ? 1 : -1;
           } else if ($scope.publicInfo.accountMethod.sort === 'expire') {
             return a.data.expire >= b.data.expire ? 1 : -1;
           }
         });
+        $scope.publicInfo.accountInfo.account = $scope.publicInfo.accountInfo.account.filter(f => {
+          let show = true;
+          if(!$scope.publicInfo.accountMethod.filter.expired && f.data && f.data.expire >= Date.now()) {
+            show = false;
+          }
+          if(!$scope.publicInfo.accountMethod.filter.unexpired && f.data && f.data.expire <= Date.now()) {
+            show = false;
+          }
+          return show;
+        });
       };
     }],
     clickOutsideToClose: true,
   };
-  const show = (accountMethod, originalAccount, account) => {
+  const show = (accountMethod, accountInfo) => {
     if(isDialogShow()) {
       return dialogPromise;
     }
     publicInfo.accountMethod = accountMethod;
-    publicInfo.originalAccount = originalAccount;
-    publicInfo.account = account;
+    publicInfo.accountInfo = accountInfo;
     dialogPromise = $mdDialog.show(dialog);
     return dialogPromise;
   };
