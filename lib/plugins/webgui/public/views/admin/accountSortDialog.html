@@ -1,0 +1,18 @@
+<md-dialog aria-label="sort dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div style="margin-bottom: 20px;">选择排序方式：</div>
+            <div layout="row" layout-align="center center">
+                <md-radio-group ng-model="publicInfo.accountMethod.sort" ng-change="sort()">
+                    <md-radio-button value="port">端口号</md-radio-button>
+                    <md-radio-button value="expire">过期时间</md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button class="md-primary" ng-click="publicInfo.hide()">
+            确定
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
