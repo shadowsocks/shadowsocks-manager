@@ -1,28 +1,33 @@
 const app = require('../index').app;
 
-app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog', '$interval',
+  ($scope, $state, $stateParams, $http, accountSortDialog, $interval) => {
     $scope.setTitle('账号');
     const getAccount = () => {
       $http.get('/api/admin/account').then(success => {
-        $scope.account = success.data;
+        $scope.originalAccount = success.data;
+        $scope.account = $scope.originalAccount.sort((a, b) => {
+          return a.port >= b.port ? 1 : -1;
+        });
       });
     };
     getAccount();
+    $scope.accountMethod = {
+      sort: 'port',
+      filter: '',
+    };
     $scope.setFabButton(() => {
       $state.go('admin.addAccount');
     });
-    // $scope.deleteAccount = (id) => {
-    //   $http.delete('/api/admin/account/' + id).then(success => {
-    //     getAccount();
-    //   });
-    // };
     $scope.toAccount = id => {
       $state.go('admin.accountPage', { accountId: id });
     };
-    $scope.editAccount = id => {
-      $state.go('admin.editAccount', { accountId: id });
+    $scope.sort = () => {
+      accountSortDialog.show($scope.accountMethod, $scope.originalAccount, $scope.account);
     };
+    // $interval(() => {
+    //   console.log($scope.accountMethod);
+    // }, 1000);
   }
 ])
 .controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia',
