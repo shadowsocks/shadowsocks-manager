@@ -34,7 +34,7 @@ const edit = (id, name, host, port, password, method) => {
 };
 
 const list = () => {
-  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method']);
+  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method']).orderBy('name');
 };
 
 exports.add = add;

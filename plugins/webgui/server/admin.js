@@ -9,7 +9,7 @@ const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 
 exports.getServers = (req, res) => {
-  knex('server').select().then(success => {
+  serverManager.list().then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
