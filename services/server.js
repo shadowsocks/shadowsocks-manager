@@ -74,6 +74,8 @@ const pack = (data) => {
   const dataBuffer = Buffer.from(message);
   const length = dataBuffer.length;
   const lengthBuffer = Buffer.from(('0000' + length.toString(16)).substr(-4), 'hex');
+  console.log(length);
+  console.log(lengthBuffer);
   const pack = Buffer.concat([lengthBuffer, dataBuffer]);
   return pack;
 };
