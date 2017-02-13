@@ -21,14 +21,70 @@
                     <md-tab ng-repeat="server in servers"
                             label="{{server.name}}"
                             md-on-select="getServerPortData(server.id, account.port)">
-                        <div layout="row" layout-align="center start" layout-wrap>
-                            <div flex flex-xs="100" flex-sm="55" flex-md="55" layout="row" layout-align="space-between center" layout-wrap style="margin: 15px;">
-                                <div flex="40">地址：</div>    <div flex="60" style="text-align:right">{{server.host}}</div>
-                                <div flex="40">端口：</div>    <div flex="60" style="text-align:right">{{account.port}}</div>
-                                <div flex="40">密码：</div>    <div flex="60" style="text-align:right">{{account.password}}</div>
-                                <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
-                                <div flex="40">流量：</div>    <div flex="60" style="text-align:right">{{serverPortFlow | flow}}&nbsp;/&nbsp;<span ng-if="!account.data">无限量</span>{{account.data.flow | flow}}</div>
-                                <div flex="40">最近连接：</div><div flex="60" style="text-align:right"><span ng-if="lastConnect">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span></div>
+                        <div layout="row" layout-align="center center" layout-wrap>
+                            <div flex="60" flex-xs="100">
+                                <md-list>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">地址：</div><div flex="60" style="text-align:right">{{server.host}}:{{account.port}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">密码：</div><div flex="60" style="text-align:right">{{account.password}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">流量：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="account.type === 1">不限量</span>
+                                                <span ng-if="account.type >=2 && account.type <= 5">{{serverPortFlow | flow}} / {{account.data.flow | flow}}</span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">周期：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="account.type === 1">无</span>
+                                                <span ng-if="account.type >=2 && account.type <= 5">
+                                                    <span>{{account.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>{{account.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">到期时间：</div>
+                                          <div flex="60" style="text-align:right">
+                                              <span ng-if="account.type === 1">不限时</span>
+                                              <span ng-if="account.type >=2 && account.type <= 5">
+                                                  <span>{{account.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span>{{ account.data.expire | timeago }}</span>
+                                              </span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                          <div flex="40">最近连接：</div><div flex="60" style="text-align:right">
+                                              <span ng-if="lastConnect">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="lastConnect">{{ lastConnect | timeago }}</span>
+                                          </div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
+                                </md-list>
                             </div>
                             <div flex flex-xs="100" flex-sm="40" flex-md="40" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div layout-hide-xs></div>
