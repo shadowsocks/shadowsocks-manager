@@ -69,6 +69,15 @@ const receiveCommand = async (data, code) => {
   }
 };
 
+const pack = (data) => {
+  const message = JSON.stringify(data);
+  const dataBuffer = Buffer.from(message);
+  const length = dataBuffer.length;
+  const lengthBuffer = Buffer.from(('0000' + length.toString(16)).substr(-4), 'hex');
+  const pack = Buffer.concat([lengthBuffer, dataBuffer]);
+  return pack;
+};
+
 const checkData = (receive) => {
   const buffer = receive.data;
   let length = 0;
@@ -88,10 +97,10 @@ const checkData = (receive) => {
       return;
     }
     receiveCommand(data, code).then(s => {
-      receive.socket.end(JSON.stringify({code: 0, data: s}));
+      receive.socket.end(pack({code: 0, data: s}));
       // receive.socket.close();
     }, e => {
-      receive.socket.end(JSON.stringify({code: 1}));
+      receive.socket.end(pack({code: 1}));
       // receive.socket.close();
     });
     if(buffer.length > length + 2) {

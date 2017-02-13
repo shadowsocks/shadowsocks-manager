@@ -24,6 +24,28 @@ const pack = (data, password) => {
   return pack;
 };
 
+const receiveData = async (receive, data) => {
+  receive.data = Buffer.concat([receive.data, data]);
+  return checkData(receive);
+};
+
+const checkData = async (receive) => {
+  const buffer = receive.data;
+  let length = 0;
+  let data;
+  if (buffer.length < 2) {
+    return;
+  }
+  length = buffer[0] * 256 + buffer[1];
+  if (buffer.length >= length + 2) {
+    data = buffer.slice(2, length + 2);
+    return JSON.parse(data.toString());
+    if(buffer.length > length + 2) {
+      return checkData(receive);
+    }
+  }
+};
+
 const sendMessage = (data, options) => {
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {
@@ -32,15 +54,29 @@ const sendMessage = (data, options) => {
     }, () => {
       client.write(pack(data, (options? options.password: null) || password));
     });
+    const receive = {
+      data: Buffer.from(''),
+      socket: client,
+    };
     client.on('data', data => {
-      const message = JSON.parse(data.toString());
-      // logger.info(message);
-      if(message.code === 0) {
-        resolve(message.data);
-      } else {
-        reject('failure');
-      }
-      client.end();
+      receiveData(receive, data).then(message => {
+        if(message.code === 0) {
+          resolve(message.data);
+        } else {
+          reject('failure');
+        }
+        client.end();
+      }).catch(() => {
+        client.end();
+      });
+      // const message = JSON.parse(data.toString());
+      // // logger.info(message);
+      // if(message.code === 0) {
+      //   resolve(message.data);
+      // } else {
+      //   reject('failure');
+      // }
+      // client.end();
     });
     client.on('close', () => {
       // logger.error('socket close');
