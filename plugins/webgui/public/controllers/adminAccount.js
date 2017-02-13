@@ -45,13 +45,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account = success[0].data;
       $scope.servers = success[1].data;
     });
-    // $http.get('/api/admin/account/' + $stateParams.accountId).then(success => {
-    //   $scope.account = success.data;
-    // });
-    // $http.get('/api/admin/server').then(success => {
-    //   $scope.servers = success.data;
-    // });
     $scope.getServerPortData = (serverId, port) => {
+      $scope.serverPortFlow = 0;
+      $scope.lastConnect = 0;
       $http.get(`/api/admin/flow/${ serverId }/${ port }`).then(success => {
         $scope.serverPortFlow = success.data[0];
       });
@@ -74,9 +70,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 
     $scope.getQrCodeSize = () => {
       if($mdMedia('xs')) {
-        return 220;
+        return 230;
+      } else if ($mdMedia('lg')) {
+        return 240;
       }
-      return 150;
+      return 180;
     };
 
     $scope.flowType = {

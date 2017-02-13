@@ -1,21 +1,19 @@
 <div layout="row">
-    <div flex>
-        <md-card>
+    <div flex layout="row">
+        <div flex-md="5" flex-lg="15"></div>
+        <md-card flex>
             <md-card-header>
-                <!-- <md-card-avatar>
-                    <img class="md-user-avatar" src="http://placehold.it/50x50" />
-                </md-card-avatar> -->
                 <md-card-header-text>
                     <span class="md-title">{{server.name}}</span>
                     <span class="md-subhead">{{server.host}}:{{server.port}}</span>
                 </md-card-header-text>
                 <div>
-                  <md-button class="md-fab md-mini md-primary" aria-label="edit" ng-click="editServer(server.id)">
-                      <i class="material-icons">create</i>
-                  </md-button>
-                  <md-button class="md-fab md-mini md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
-                      <i class="material-icons">close</i>
-                  </md-button>
+                    <md-button class="md-primary" aria-label="edit" ng-click="editServer(server.id)">
+                        修改
+                    </md-button>
+                    <md-button class="md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
+                        删除
+                    </md-button>
                 </div>
             </md-card-header>
             <md-card-content>
@@ -47,6 +45,7 @@
                 </div>
             </md-card-content>
         </md-card>
+        <div flex-md="5" flex-lg="15"></div>
     </div>
 </div>
 <div layout="row" layout-wrap>

@@ -31,10 +31,10 @@ const createOrder = async (user, account, amount) => {
     };
   }
   const orderId = Math.random().toString().substr(2);
-  const time = 30;
+  const time = 60;
   const qrCode = await alipay_f2f.createQRPay({
     tradeNo: orderId,
-    subject: 'ss',
+    subject: 'ss续费',
     totalAmount: +amount,
     body: 'ss',
     timeExpress: 10,
@@ -109,6 +109,27 @@ const verifyCallback = (data) => {
   return signStatus;
 };
 
+const orderList = async () => {
+  const orders = await knex('alipay').select([
+    'alipay.orderId',
+    'user.username',
+    'account_plugin.port',
+    'alipay.amount',
+    'alipay.status',
+    'alipay.alipayData',
+    'alipay.createTime',
+    'alipay.expireTime',
+  ])
+  .leftJoin('user', 'user.id', 'alipay.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account')
+  .orderBy('alipay.createTime', 'DESC');
+  orders.forEach(f => {
+    f.alipayData = JSON.parse(f.alipayData);
+  });
+  return orders;
+};
+
+exports.orderList = orderList;
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
 exports.verifyCallback = verifyCallback;

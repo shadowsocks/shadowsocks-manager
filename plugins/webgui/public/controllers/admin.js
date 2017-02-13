@@ -27,7 +27,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       icon: 'account_circle',
       click: 'admin.account',
     }, {
-      name: '续费码',
+      name: '续费',
       icon: 'attach_money',
       click: 'admin.unfinished',
     }, {

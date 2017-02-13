@@ -18,11 +18,12 @@
         <md-card>
             <md-card-content>
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
-                    <md-tab ng-repeat="server in servers"
+                    <md-tab ng-repeat="server in servers track by server.id"
                             label="{{server.name}}"
                             md-on-select="getServerPortData(server.id, account.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
-                            <div flex="60" flex-xs="100">
+                            <div flex-lg="10"></div>
+                            <div flex="60" flex-lg="50" flex-xs="100">
                                 <md-list>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
@@ -90,7 +91,8 @@
                                 <div layout-hide-xs></div>
                                 <qr size="getQrCodeSize()" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
                             </div>
-                            <div flex flex-xs="100" flex-sm="100" flex-md="100">
+                            <div flex-lg="10"></div>
+                            <div flex="100">
                                 <div layout="column" layout-align="center center">
                                     <div layout="row" layout-align="center center">
                                         <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>

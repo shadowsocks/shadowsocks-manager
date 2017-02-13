@@ -1,8 +1,8 @@
 const app = require('../index').app;
 
 app
-.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', 'ws',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, ws) => {
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http',
+  ($scope, $mdMedia, $mdSidenav, $state, $http) => {
     $http.get('/api/home/login').then(success => {
       if(success.data.status !== 'normal') {
         $state.go('home.index');
@@ -49,7 +49,7 @@ app
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.title = '';
     });
-    $scope.ws = ws;
+    // $scope.ws = ws;
   }
 ])
 .controller('UserIndexController', ['$scope', '$state',

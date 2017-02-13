@@ -7,6 +7,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const user = appRequire('plugins/user/index');
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
+const alipay = appRequire('plugins/alipay/index');
 
 exports.getServers = (req, res) => {
   serverManager.list().then(success => {
@@ -405,6 +406,16 @@ exports.getServerPortLastConnect = (req, res) => {
   const serverId = +req.params.serverId;
   const port = +req.params.port;
   flow.getlastConnectTime(serverId, port)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getOrders = (req, res) => {
+  alipay.orderList()
   .then(success => {
     res.send(success);
   }).catch(err => {
