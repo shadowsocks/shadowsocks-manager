@@ -39,6 +39,25 @@ exports.signup = (req, res) => {
       type,
     });
   }).then(success => {
+    if(success[0] > 1) {
+      const userId = success[0];
+      let port = 50000;
+      return knex('account_plugin').select().orderBy('port', 'DESC').limit(1).then(success => {
+        if(success.length) {
+          port = success[0].port + 1;
+        }
+        return account.addAccount(3, {
+          user: userId,
+          port,
+          password: Math.random().toString().substr(2,10),
+          time: Date.now() - 29 * 24 * 3600 * 1000 - 18 * 3600 * 1000,
+          flow: 200 * 1000 * 1000 * 1000,
+        });
+      });
+    } else {
+      return;
+    }
+  }).then(success => {
     logger.info(`[${ req.body.email }] signup success`);
     res.send('success');
   }).catch(err => {
@@ -94,7 +113,7 @@ exports.sendCode = (req, res) => {
     const email = req.body.email;
     const ip = req.connection.remoteAddress;
     const session = req.sessionID;
-    return emailPlugin.sendCode(email, '验证码', '您的验证码是：', {
+    return emailPlugin.sendCode(email, 'Shadowsocks验证码', '您的验证码是：', {
       ip,
       session,
     });
