@@ -14,6 +14,7 @@ require('./routes/admin');
 
 require('./filters/flow');
 require('./filters/time');
+require('./services/adminService.js');
 require('./services/homeService.js');
 require('./services/userService.js');
 require('./services/dialogService.js');
