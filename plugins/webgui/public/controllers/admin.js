@@ -29,7 +29,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, {
       name: '续费',
       icon: 'attach_money',
-      click: 'admin.unfinished',
+      click: 'admin.pay',
     }, {
       name: '设置',
       icon: 'settings',
@@ -86,6 +86,14 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 .controller('AdminIndexController', ['$scope',
   ($scope) => {
     $scope.setTitle('首页');
+  }
+])
+.controller('AdminPayController', ['$scope', '$http',
+  ($scope, $http) => {
+    $scope.setTitle('续费');
+    $http.get('/api/admin/order').then(success => {
+      $scope.orders = success.data;
+    });
   }
 ])
 ;

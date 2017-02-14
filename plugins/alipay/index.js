@@ -13,6 +13,7 @@ const alipay_f2f = new alipayf2f({
 // const alipay_f2f = new alipayf2f(require("./config.js"));
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
+const moment = require('moment');
 
 const createOrder = async (user, account, amount) => {
   const oldOrder = await knex('alipay').select().where({
@@ -30,7 +31,8 @@ const createOrder = async (user, account, amount) => {
       qrCode: oldOrder.qrcode,
     };
   }
-  const orderId = Math.random().toString().substr(2);
+  // const orderId = Math.random().toString().substr(2);
+  const orderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
   const time = 60;
   const qrCode = await alipay_f2f.createQRPay({
     tradeNo: orderId,

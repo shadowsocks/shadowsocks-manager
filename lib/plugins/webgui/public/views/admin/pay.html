@@ -1,0 +1,14 @@
+<div>
+    <md-card>
+        <md-list>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="order in orders track by order.orderId">
+                <div>
+                    <span>{{order.orderId}}</span>
+                    <span style="text-align: right;">{{order.status}}</span>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-card>
+</div>
