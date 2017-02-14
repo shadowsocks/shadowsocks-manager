@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/libs/style.css">
     <link rel="stylesheet" href="/libs/angular-material.min.css">
     <link rel="shortcut icon" href="/libs/favicon.png">
+    <link rel="manifest" href="/public/manifest.json">
     <title>Shadowsocks-Manager</title>
     <base href="/">
 </head>
@@ -37,11 +38,24 @@
         <div layout-fill layout="row" layout-align="center center" ng-show="mainLoading">
             <div layout="column" layout-align="center center">
                 <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
-                <!-- <div style="margin: 15px;">网络异常，正在重连</div> -->
             </div>
         </div>
         <div ng-hide="mainLoading" ui-view layout-fill></div>
     </div>
+    <script>
+    function isWechatBrowser(){
+      return /micromessenger/.test(navigator.userAgent.toLowerCase());
+    }
+    if(!isWechatBrowser()) {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/serviceworker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }).catch(function(err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      }
+    }
+    </script>
 </body>
 
 </html>
