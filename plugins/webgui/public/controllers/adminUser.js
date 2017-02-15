@@ -1,10 +1,13 @@
 const app = require('../index').app;
 
-app.controller('AdminUserController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'adminApi',
+  ($scope, $state, $stateParams, adminApi) => {
     $scope.setTitle('用户');
-    $http.get('/api/admin/user').then(success => {
-      $scope.users = success.data;
+    // $http.get('/api/admin/user').then(success => {
+    //   $scope.users = success.data;
+    // });
+    adminApi.getUser().then(success => {
+      $scope.users = success;
     });
     $scope.toUser = (id) => {
       $state.go('admin.userPage', { userId: id });
