@@ -46,6 +46,7 @@ app.put('/api/admin/account/:accountId/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId', isAdmin, admin.deleteAccount);
 
 app.get('/api/admin/flow/:serverId', isAdmin, admin.getServerFlow);
+app.get('/api/admin/flow/:serverId/user', isAdmin, admin.getServerUserFlow);
 app.get('/api/admin/flow/:serverId/:port', isAdmin, admin.getServerPortFlow);
 app.get('/api/admin/flow/:serverId/:port/lastConnect', isAdmin, admin.getServerPortLastConnect);
 

@@ -154,6 +154,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       }
     };
     const setChart = (data) => {
+      $scope.pieChart = {
+        data: [300, 500, 100],
+        labels: ['a', 'b', 'c'],
+      };
       $scope.chart = {
         data: [data],
         labels: flowLabel[$scope.flowType],

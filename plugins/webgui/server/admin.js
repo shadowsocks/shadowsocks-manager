@@ -302,6 +302,31 @@ exports.getServerFlow = (req, res) => {
   });
 };
 
+exports.getServerUserFlow = (req, res) => {
+  const serverId = +req.params.serverId;
+  const type = req.query.type;
+  const time = req.query.time || Date.now();
+  let timeArray = [];
+  if(Array.isArray(time)) {
+    timeArray = time;
+  } else if(type === 'day') {
+    timeArray.push(moment(time).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf());
+    timeArray.push(moment(time).hour(24).minute(0).second(0).millisecond(0).toDate().valueOf());
+  } else if (type === 'hour') {
+    timeArray.push(moment(time).minute(0).second(0).millisecond(0).toDate().valueOf());
+    timeArray.push(moment(time).minute(60).second(0).millisecond(0).toDate().valueOf());
+  } else if (type === 'week') {
+    timeArray.push(moment(time).day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf());
+    timeArray.push(moment(time).day(7).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf());
+  }
+  flow.getServerUserFlow(serverId, timeArray).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getServerPortFlow = (req, res) => {
   const serverId = +req.params.serverId;
   const port = +req.params.port;

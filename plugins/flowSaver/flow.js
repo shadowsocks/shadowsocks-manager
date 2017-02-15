@@ -107,7 +107,14 @@ const getlastConnectTime = (serverId, port) => {
   });
 };
 
+const getServerUserFlow = (serverId, timeArray) => {
+  return knex('saveFlow').sum('flow as flow').groupBy('port').select(['port']).where({
+    id: +serverId,
+  }).whereBetween('time', timeArray);
+};
+
 exports.getFlow = getFlow;
 exports.getServerFlow = getServerFlow;
 exports.getServerPortFlow = getServerPortFlow;
+exports.getServerUserFlow = getServerUserFlow;
 exports.getlastConnectTime = getlastConnectTime;
