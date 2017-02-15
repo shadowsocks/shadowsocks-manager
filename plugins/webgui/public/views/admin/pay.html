@@ -5,7 +5,7 @@
             <md-list-item ng-repeat="order in orders track by order.orderId">
                 <div flex layout="row" layout-align="space-between center">
                     <div flex="50">{{order.orderId}}</div>
-                    <div flex="50" style="text-align: right;">{{order.status}}</div>
+                    <div flex="50" style="text-align: right;">{{order.status | order}}</div>
                 </div>
                 <md-divider></md-divider>
             </md-list-item>
