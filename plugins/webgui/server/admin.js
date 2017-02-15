@@ -160,6 +160,21 @@ exports.getAccount = (req, res) => {
   });
 };
 
+exports.getAccountByPort = (req, res) => {
+  const port = +req.params.port;
+  account.getAccount({ port }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  }).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getOneAccount = (req, res) => {
   const accountId = req.params.accountId;
   account.getAccount().then(success => {

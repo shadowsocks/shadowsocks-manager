@@ -7,8 +7,12 @@ app.factory('adminApi', ['$http', $http => {
   const getOrder = () => {
     return $http.get('/api/admin/order').then(success => success.data);
   };
+  const getAccountId = port => {
+    return $http.get('/api/admin/account/port/' + port).then(success => success.id);
+  };
   return {
     getUser,
     getOrder,
+    getAccountId,
   };
 }]);

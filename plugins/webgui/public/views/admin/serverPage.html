@@ -36,20 +36,22 @@
                     <div layout="row" layout-align="center center">
                         <div style="width: 95%; max-width: 500px;">
                             <canvas class="chart chart-line"
-                                chart-data="chart.data"
-                                chart-labels="chart.labels"
-                                chart-series="chart.series"
-                                chart-options="chart.options"
-                                chart-dataset-override="chart.datasetOverride">
+                                chart-data="lineChart.data"
+                                chart-labels="lineChart.labels"
+                                chart-series="lineChart.series"
+                                chart-options="lineChart.options"
+                                chart-dataset-override="lineChart.datasetOverride">
                             </canvas>
                         </div>
                     </div>
                 </div>
                 <div flex>
                     <div layout="row" layout-align="center center">
-                        <div style="max-height: 300px;">
+                        <div style="max-width: 90%; max-height: 300px;">
                             <canvas id="pie" class="chart chart-pie"
-                                chart-data="pieChart.data" chart-labels="pieChart.labels" chart-options="pieChart.options">
+                                chart-data="pieChart.data"
+                                chart-labels="pieChart.labels"
+                                chart-options="pieChart.options">
                             </canvas>
                         </div>
                     </div>
@@ -61,7 +63,7 @@
 </div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
-        <md-card>
+        <md-card ng-click="toAccountPage(port.port)">
             <md-card-header>
                 <md-card-avatar>
                     <img class="md-user-avatar" src="https://placehold.it/50x50" />

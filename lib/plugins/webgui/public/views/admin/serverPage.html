@@ -1,6 +1,6 @@
 <div layout="row">
     <div flex layout="row">
-        <div flex-md="5" flex-lg="15"></div>
+        <!-- <div flex-md="5" flex-lg="15"></div> -->
         <md-card flex>
             <md-card-header>
                 <md-card-header-text>
@@ -16,41 +16,54 @@
                     </md-button>
                 </div>
             </md-card-header>
-            <md-card-content>
-                <div layout="column" layout-align="center center">
+            <md-card-content layout="row" layout-xs="column" layout-warp layout-align="center center">
+                <div flex>
+                    <div layout="column" layout-align="center center">
+                        <div layout="row" layout-align="center center">
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
+                            <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
+                                <md-radio-button value="hour">时</md-radio-button>
+                                <md-radio-button value="day" >天</md-radio-button>
+                                <md-radio-button value="week">周</md-radio-button>
+                            </md-radio-group>
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
+                        </div>
+                        <div>
+                            {{time}}，{{sumFlow | flow}}
+                        </div>
+                        <div></div>
+                    </div>
                     <div layout="row" layout-align="center center">
-                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
-                        <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
-                            <md-radio-button value="hour">时</md-radio-button>
-                            <md-radio-button value="day" >天</md-radio-button>
-                            <md-radio-button value="week">周</md-radio-button>
-                        </md-radio-group>
-                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
+                        <div style="width: 95%; max-width: 500px;">
+                            <canvas class="chart chart-line"
+                                chart-data="lineChart.data"
+                                chart-labels="lineChart.labels"
+                                chart-series="lineChart.series"
+                                chart-options="lineChart.options"
+                                chart-dataset-override="lineChart.datasetOverride">
+                            </canvas>
+                        </div>
                     </div>
-                    <div>
-                        {{time}}，{{sumFlow | flow}}
-                    </div>
-                    <div></div>
                 </div>
-                <div layout="row" layout-align="center center">
-                    <div style="width: 95%; max-width: 500px;">
-                        <canvas class="chart chart-line"
-                            chart-data="chart.data"
-                            chart-labels="chart.labels"
-                            chart-series="chart.series"
-                            chart-options="chart.options"
-                            chart-dataset-override="chart.datasetOverride">
-                        </canvas>
+                <div flex>
+                    <div layout="row" layout-align="center center">
+                        <div style="max-width: 90%; max-height: 300px;">
+                            <canvas id="pie" class="chart chart-pie"
+                                chart-data="pieChart.data"
+                                chart-labels="pieChart.labels"
+                                chart-options="pieChart.options">
+                            </canvas>
+                        </div>
                     </div>
                 </div>
             </md-card-content>
         </md-card>
-        <div flex-md="5" flex-lg="15"></div>
+        <!-- <div flex-md="5" flex-lg="15"></div> -->
     </div>
 </div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
-        <md-card>
+        <md-card ng-click="toAccountPage(port.port)">
             <md-card-header>
                 <md-card-avatar>
                     <img class="md-user-avatar" src="https://placehold.it/50x50" />
