@@ -11,7 +11,7 @@
               <md-list-item ng-repeat="user in signupUsers">
                   <div flex layout="row" layout-align="space-between center">
                       <div flex="30" flex-xs="60">{{user.username}}</div>
-                      <div flex="30" flex-xs="40" style="text-align: right;">{{user.createTime | timeago}}</div>
+                      <div flex="30" flex-xs="40" style="text-align: right;">{{user.createTime | timeagoshort}}</div>
                   </div>
                   <md-divider></md-divider>
               </md-list-item>
@@ -30,7 +30,7 @@
               <md-list-item ng-repeat="user in loginUsers">
                   <div flex layout="row" layout-align="space-between center">
                       <div flex="30" flex-xs="60">{{user.username}}</div>
-                      <div flex="30" flex-xs="40" style="text-align: right;">{{user.lastLogin | timeago}}</div>
+                      <div flex="30" flex-xs="40" style="text-align: right;">{{user.lastLogin | timeagoshort}}</div>
                   </div>
                   <md-divider></md-divider>
               </md-list-item>

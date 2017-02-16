@@ -161,14 +161,15 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdDialog', '$sessionStorage', 'bind', function($scope, $mdDialog, $sessionStorage, bind) {
       $scope.publicInfo = bind;
       $scope.sortAndFilter = () => {
+        $sessionStorage.settings.accountFilter = $scope.publicInfo.accountMethod;
         $scope.publicInfo.accountInfo.account = $scope.publicInfo.accountInfo.originalAccount.sort((a, b) => {
           if($scope.publicInfo.accountMethod.sort === 'port') {
             return a.port >= b.port ? 1 : -1;
           } else if ($scope.publicInfo.accountMethod.sort === 'expire') {
-            if(!a.data) { return 1; }
+            if(!a.data || !b.data) { return 1; }
             return a.data.expire >= b.data.expire ? 1 : -1;
           }
         });

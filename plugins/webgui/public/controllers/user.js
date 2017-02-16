@@ -77,7 +77,6 @@ app
       }));
     };
     $scope.createQrCode = (method, password, host, port) => {
-      console.log(method + ':' + password + '@' + host + ':' + port);
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
     $scope.getServerPortData = (account, serverId, port) => {

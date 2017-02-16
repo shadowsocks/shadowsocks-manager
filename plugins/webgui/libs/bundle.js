@@ -1,1 +1,1840 @@
-!function(t){function e(o){if(n[o])return n[o].exports;var a=n[o]={exports:{},id:o,loaded:!1};return t[o].call(a.exports,a,a.exports,e),a.loaded=!0,a.exports}var n={};return e.m=t,e.c=n,e.p="",e(0)}([function(t,e,n){"use strict";n(1),n(2),n(3),n(4),n(5),n(6),n(7),n(8),n(9),n(10),n(11),n(12),n(13),n(14),n(15),n(16),n(17),n(18),n(19)},function(t,e){"use strict";e.app=angular.module("app",["ngMaterial","ui.router","ngMessages","ja.qr","chart.js","angularMoment","ngWebSocket"])},function(t,e,n){"use strict";var o=n(1).app;o.controller("MainController",["$scope",function(t){t.mainLoading=!0,t.setMainLoading=function(e){t.mainLoading=e}}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("HomeController",["$scope","$mdMedia","$mdSidenav","$state","$http","$timeout",function(t,e,n,o,a,i){a.get("/api/home/login").then(function(e){"normal"===e.data.status?o.go("user.index"):"admin"===e.data.status?o.go("admin.index"):t.setMainLoading(!1)}),t.innerSideNav=!0,t.menuButton=function(){e("gt-sm")?t.innerSideNav=!t.innerSideNav:n("left").toggle()},t.menus=[{name:"首页",icon:"home",click:"home.index"},{name:"登录",icon:"cloud",click:"home.login"},{name:"注册",icon:"face",click:"home.signup"}],t.menuClick=function(e){n("left").close(),o.go(t.menus[e].click)}}]).controller("HomeIndexController",["$scope","$state",function(t,e){t.icons=[{icon:"flash_on",title:"快速搭建",content:"仅依赖Node.js，无需安装数据库（可选MySQL）"},{icon:"build",title:"易于配置",content:"带有插件系统，仅需修改配置文件即可运行"},{icon:"vpn_key",title:"官方标准",content:"支持libev和python版本的标准manager API"}],t.login=function(){e.go("home.login")},t.signup=function(){e.go("home.signup")}}]).controller("HomeLoginController",["$scope","$http","$state","homeApi","alertDialog",function(t,e,n,o,a){t.user={},t.login=function(){a.loading(),o.userLogin(t.user.email,t.user.password).then(function(t){return a.close().then(function(){return t})}).then(function(t){"normal"===t?n.go("user.index"):"admin"===t&&n.go("admin.index")}).catch(function(t){a.show(t,"确定")})},t.findPassword=function(){a.loading(),o.findPassword(t.user.email).then(function(t){a.show(t,"确定")}).catch(function(t){a.show(t,"确定")})},t.enterKey=function(e){13===e.keyCode&&t.login()}}]).controller("HomeSignupController",["$scope","$http","$state","$interval","$timeout","homeApi","alertDialog",function(t,e,n,o,a,i,r){t.user={},t.sendCodeTime=0,t.sendCode=function(){r.loading(),e.post("/api/home/code",{email:t.user.email}).then(function(e){r.show("验证码已发至邮箱","确定"),t.sendCodeTime=120;var n=o(function(){t.sendCodeTime>0?t.sendCodeTime--:(o.cancel(n),t.sendCodeTime=0)},1e3)}).catch(function(t){r.show("验证码发送错误","确定")})},t.signup=function(){r.loading(),i.userSignup(t.user.email,t.user.code,t.user.password).then(function(t){r.show("用户注册成功","确定").then(function(t){n.go("home.login")})}).catch(function(t){r.show(t,"确定")})}}]).controller("HomeResetPasswordController",["$scope","$http","$state","$stateParams","alertDialog",function(t,e,n,o,a){t.user={};var i=o.token;a.loading(),e.get("/api/home/password/reset",{params:{token:i}}).then(function(t){a.close()}).catch(function(t){a.show("该链接已经失效","确定").then(function(){n.go("home.index")})}),t.resetPassword=function(){a.loading(),e.post("/api/home/password/reset",{token:i,password:t.user.password}).then(function(){a.show("修改密码成功","确定").then(function(){n.go("home.login")})}).catch(function(){a.show("修改密码失败","确定")})}}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("UserController",["$scope","$mdMedia","$mdSidenav","$state","$http",function(t,e,n,o,a){a.get("/api/home/login").then(function(e){"normal"!==e.data.status?o.go("home.index"):t.setMainLoading(!1)}),t.innerSideNav=!0,t.menuButton=function(){e("gt-sm")?t.innerSideNav=!t.innerSideNav:n("left").toggle()},t.menus=[{name:"首页",icon:"home",click:"user.index"},{name:"我的账号",icon:"account_circle",click:"user.account"},{name:"divider"},{name:"退出",icon:"settings",click:function(){a.post("/api/home/logout"),o.go("home.index")}}],t.menuClick=function(e){n("left").close(),"function"==typeof t.menus[e].click?t.menus[e].click():o.go(t.menus[e].click)},t.title="",t.setTitle=function(e){t.title=e},t.$on("$stateChangeStart",function(e,n,o){t.title=""})}]).controller("UserIndexController",["$scope","$state",function(t,e){t.setTitle("首页"),t.toMyAccount=function(){e.go("user.account")}}]).controller("UserAccountController",["$scope","$http","$mdMedia","userApi","$mdDialog","alertDialog","payDialog","$interval",function(t,e,n,o,a,i,r,c){t.setTitle("我的账号"),t.flexGtSm=100,o.getUserAccount().then(function(e){t.account=e.account,t.servers=e.servers,t.account.length>=2&&(t.flexGtSm=50)});var u=function(t){return btoa(encodeURIComponent(t).replace(/%([0-9A-F]{2})/g,function(t,e){return String.fromCharCode("0x"+e)}))};t.createQrCode=function(t,e,n,o){return console.log(t+":"+e+"@"+n+":"+o),"ss://"+u(t+":"+e+"@"+n+":"+o)},t.getServerPortData=function(t,n,o){t.type>=2&&t.type<=5&&e.get("/api/user/flow/"+n+"/"+o).then(function(e){t.serverPortFlow=e.data[0]}),e.get("/api/user/flow/"+n+"/"+o+"/lastConnect").then(function(e){t.lastConnect=e.data.lastConnect})},t.getQrCodeSize=function(){return n("xs")?230:180},t.showChangePasswordDialog=function(t,e){var n={templateUrl:"/public/views/user/changePassword.html",escapeToClose:!1,locals:{bind:e},bindToController:!0,controller:["$scope","userApi","$mdDialog","bind",function(e,n,o,a){e.account={password:a},e.changePassword=function(){o.cancel(),n.changePassword(t,e.account.password)}}],clickOutsideToClose:!0};a.show(n)},t.createOrder=function(t){r.loading(),e.post("/api/user/order/qrcode",{accountId:t}).then(function(t){r.setUrl(t.data.orderId,t.data.qrCode)}).catch(console.log)},t.unfinish=function(){i.show("该功能尚未完成","确定")}}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("AdminController",["$scope","$mdMedia","$mdSidenav","$state","$http",function(t,e,n,o,a){a.get("/api/home/login").then(function(e){"admin"!==e.data.status?o.go("home.index"):t.setMainLoading(!1)}),t.innerSideNav=!0,t.menus=[{name:"首页",icon:"home",click:"admin.index"},{name:"服务器",icon:"cloud",click:"admin.server"},{name:"用户",icon:"people",click:"admin.user"},{name:"账号",icon:"account_circle",click:"admin.account"},{name:"续费",icon:"attach_money",click:"admin.pay"},{name:"设置",icon:"settings",click:"admin.unfinished"},{name:"divider"},{name:"退出",icon:"exit_to_app",click:function(){a.post("/api/home/logout"),o.go("home.index")}}],t.menuButton=function(){return t.menuButtonIcon?t.menuButtonClick():void(e("gt-sm")?t.innerSideNav=!t.innerSideNav:n("left").toggle())},t.menuClick=function(e){n("left").close(),"function"==typeof t.menus[e].click?t.menus[e].click():o.go(t.menus[e].click)},t.title="",t.setTitle=function(e){t.title=e},t.fabButton=!1,t.fabButtonClick=function(){},t.setFabButton=function(e){t.fabButton=!0,t.fabButtonClick=e},t.menuButtonIcon="",t.menuButtonClick=function(){},t.setMenuButton=function(e,n){t.menuButtonIcon=e,t.menuButtonClick=n},t.menuRightButtonIcon="",t.menuRightButtonClick=function(){t.$broadcast("RightButtonClick","click")},t.setMenuRightButton=function(e){t.menuRightButtonIcon=e},t.$on("$stateChangeStart",function(e,n,o){t.fabButton=!1,t.title="",t.menuButtonIcon="",t.menuRightButtonIcon=""})}]).controller("AdminIndexController",["$scope","adminApi",function(t,e){t.setTitle("首页"),e.getIndexInfo().then(function(e){t.signupUsers=e.signup,t.loginUsers=e.login})}]).controller("AdminPayController",["$scope","adminApi",function(t,e){t.setTitle("续费"),e.getOrder().then(function(e){return t.orders=e})}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("AdminAccountController",["$scope","$state","$stateParams","$http","accountSortDialog","$interval",function(t,e,n,o,a,i){t.setTitle("账号"),t.setMenuRightButton("sort_by_alpha"),t.accountInfo={};var r=function(){o.get("/api/admin/account").then(function(e){t.accountInfo.originalAccount=e.data,t.accountInfo.account=angular.copy(t.accountInfo.originalAccount)})};r(),t.accountMethod={sort:"port",filter:{expired:!0,unexpired:!0}},t.setFabButton(function(){e.go("admin.addAccount")}),t.toAccount=function(t){e.go("admin.accountPage",{accountId:t})},t.sortAndFilter=function(){a.show(t.accountMethod,t.accountInfo)},t.$on("RightButtonClick",function(){t.sortAndFilter()})}]).controller("AdminAccountPageController",["$scope","$state","$stateParams","$http","$mdMedia","$q",function(t,e,n,o,a,i){t.setTitle("账号"),t.setMenuButton("arrow_back",function(){e.go("admin.account")}),i.all([o.get("/api/admin/account/"+n.accountId),o.get("/api/admin/server")]).then(function(e){t.account=e[0].data,t.servers=e[1].data}),t.getServerPortData=function(e,n){t.serverPortFlow=0,t.lastConnect=0,o.get("/api/admin/flow/"+e+"/"+n).then(function(e){t.serverPortFlow=e.data[0]}),o.get("/api/admin/flow/"+e+"/"+n+"/lastConnect").then(function(e){t.lastConnect=e.data.lastConnect}),t.getChartData(e)};var r=function(t){return btoa(encodeURIComponent(t).replace(/%([0-9A-F]{2})/g,function(t,e){return String.fromCharCode("0x"+e)}))};t.createQrCode=function(t,e,n,o){return"ss://"+r(t+":"+e+"@"+n+":"+o)},t.editAccount=function(t){e.go("admin.editAccount",{accountId:t})},t.getQrCodeSize=function(){return a("xs")?230:a("lg")?240:180},t.flowType={value:"day"};var c={hour:Date.now(),day:Date.now(),week:Date.now()},u={hour:["0","","","15","","","30","","","45","",""],day:["0","","","","","","6","","","","","","12","","","","","","18","","","","",""],week:["S","M","T","W","T","F","S"]},l=function(t){return t<1?t.toFixed(1)+" B":t<1e3?t.toFixed(0)+" B":t<1e6?(t/1e3).toFixed(0)+" KB":t<1e9?(t/1e6).toFixed(0)+" MB":t<1e12?(t/1e9).toFixed(1)+" GB":t},s=function(e,n){t.pieChart={data:n.map(function(t){return t.flow}),labels:n.map(function(t){return t.name}),options:{responsive:!1,tooltips:{enabled:!0,mode:"single",callbacks:{label:function t(e,n){var t=n.labels[e.index],o=n.datasets[e.datasetIndex].data[e.index];return t+": "+l(o)}}}}},t.lineChart={data:[e],labels:u[t.flowType.value],series:"day",datasetOverride:[{yAxisID:"y-axis-1"}],options:{tooltips:{callbacks:{label:function(t){return l(t.yLabel)}}},scales:{yAxes:[{id:"y-axis-1",type:"linear",display:!0,position:"left",ticks:{callback:l}}]}}}};t.getChartData=function(e){i.all([o.get("/api/admin/flow/"+e,{params:{port:t.account.port,type:t.flowType.value,time:new Date(c[t.flowType.value])}}),o.get("/api/admin/flow/account/"+n.accountId,{params:{port:t.account.port,type:t.flowType.value,time:new Date(c[t.flowType.value])}})]).then(function(e){t.sumFlow=e[0].data.reduce(function(t,e){return t+e},0),s(e[0].data,e[1].data)}),"hour"===t.flowType.value&&(t.time=moment(c[t.flowType.value]).format("YYYY-MM-DD HH:00")),"day"===t.flowType.value&&(t.time=moment(c[t.flowType.value]).format("YYYY-MM-DD")),"week"===t.flowType.value&&(t.time=moment(c[t.flowType.value]).day(0).format("YYYY-MM-DD")+" / "+moment(c[t.flowType.value]).day(6).format("YYYY-MM-DD"))},t.changeFlowTime=function(e,n){var o={hour:36e5,day:864e5,week:6048e5};c[t.flowType.value]+=n*o[t.flowType.value],t.getChartData(e)}}]).controller("AdminAddAccountController",["$scope","$state","$stateParams","$http","$mdBottomSheet",function(t,e,n,o,a){t.setTitle("添加账号"),t.setMenuButton("arrow_back",function(){e.go("admin.account")}),t.typeList=[{key:"不限量",value:1},{key:"按周",value:2},{key:"按月",value:3},{key:"按天",value:4},{key:"小时",value:5}],t.timeLimit={2:6048e5,3:2592e6,4:864e5,5:36e5},t.account={time:Date.now(),limit:1,flow:100},t.cancel=function(){e.go("admin.account")},t.confirm=function(){o.post("/api/admin/account",{type:+t.account.type,port:+t.account.port,password:t.account.password,time:t.account.time,limit:+t.account.limit,flow:1e3*+t.account.flow*1e3}).then(function(t){e.go("admin.account")})},t.pickTime=function(){a.show({templateUrl:"/public/views/admin/pickTime.html",preserveScope:!0,scope:t})},t.setStartTime=function(e){t.account.time+=e},t.setLimit=function(e){t.account.limit+=e,t.account.limit<1&&(t.account.limit=1)}}]).controller("AdminEditAccountController",["$scope","$state","$stateParams","$http","$mdBottomSheet",function(t,e,n,o,a){t.setTitle("编辑账号"),t.setMenuButton("arrow_back",function(){e.go("admin.accountPage",{accountId:n.accountId})}),t.typeList=[{key:"不限量",value:1},{key:"按周",value:2},{key:"按月",value:3},{key:"按天",value:4},{key:"小时",value:5}],t.timeLimit={2:6048e5,3:2592e6,4:864e5,5:36e5},t.account={time:Date.now(),limit:1,flow:100};var i=n.accountId;o.get("/api/admin/account/"+i).then(function(e){t.account.type=e.data.type,t.account.port=e.data.port,t.account.password=e.data.password,e.data.type>=2&&e.data.type<=5&&(t.account.time=e.data.data.create,t.account.limit=e.data.data.limit,t.account.flow=e.data.data.flow/1e6)}),t.cancel=function(){e.go("admin.accountPage",{accountId:n.accountId})},t.confirm=function(){o.put("/api/admin/account/"+i+"/data",{type:+t.account.type,port:+t.account.port,password:t.account.password,time:t.account.time,limit:+t.account.limit,flow:1e3*+t.account.flow*1e3}).then(function(t){e.go("admin.accountPage",{accountId:n.accountId})})},t.pickTime=function(){a.show({templateUrl:"/public/views/admin/pickTime.html",preserveScope:!0,scope:t})},t.setStartTime=function(e){t.account.time+=e},t.setLimit=function(e){t.account.limit+=e,t.account.limit<1&&(t.account.limit=1)},t.deleteAccount=function(){o.delete("/api/admin/account/"+i).then(function(t){e.go("admin.account")})}}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("AdminServerController",["$scope","$http","$state","moment",function(t,e,n,o){t.setTitle("服务器"),e.get("/api/admin/server").then(function(n){t.servers=n.data,t.servers.forEach(function(t){t.flow={},e.get("/api/admin/flow/"+t.id,{params:{time:[o().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),o().toDate().valueOf()]}}).then(function(e){t.flow.today=e.data[0]}),e.get("/api/admin/flow/"+t.id,{params:{time:[o().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),o().toDate().valueOf()]}}).then(function(e){t.flow.week=e.data[0]}),e.get("/api/admin/flow/"+t.id,{params:{time:[o().date(1).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),o().toDate().valueOf()]}}).then(function(e){t.flow.month=e.data[0]}),e.get("/api/admin/flow/"+t.id,{params:{type:"hour"}}).then(function(e){var n=function(t){return t<1?t.toFixed(1)+" B":t<1e3?t.toFixed(0)+" B":t<1e6?(t/1e3).toFixed(0)+" KB":t<1e9?(t/1e6).toFixed(0)+" MB":t<1e12?(t/1e9).toFixed(1)+" GB":t};t.chart={data:[e.data],labels:["0","","","15","","","30","","","45","",""],series:"day",datasetOverride:[{yAxisID:"y-axis-1"}],options:{tooltips:{callbacks:{label:function(t){return n(t.yLabel)}}},scales:{yAxes:[{id:"y-axis-1",type:"linear",display:!0,position:"left",ticks:{callback:n}}]}}}})})}),t.toServerPage=function(t){n.go("admin.serverPage",{serverId:t})},t.setFabButton(function(){n.go("admin.addServer")})}]).controller("AdminServerPageController",["$scope","$state","$stateParams","$http","moment","$mdDialog","adminApi","$q",function(t,e,n,o,a,i,r,c){t.setTitle("服务器"),t.setMenuButton("arrow_back",function(){e.go("admin.server")}),o.get("/api/admin/server/"+n.serverId).then(function(e){t.server=e.data}).catch(function(){e.go("admin.server")}),t.toAccountPage=function(t){r.getAccountId(t).then(function(t){e.go("admin.accountPage",{accountId:t})})},t.editServer=function(t){e.go("admin.editServer",{serverId:t})},t.deleteServer=function(t){var a=i.confirm().title("").textContent("删除服务器？").ariaLabel("deleteServer").ok("确认").cancel("取消");i.show(a).then(function(){return o.delete("/api/admin/server/"+n.serverId)}).then(function(){e.go("admin.server")}).catch(function(){})},t.flowType="day";var u={hour:Date.now(),day:Date.now(),week:Date.now()},l={hour:["0","","","15","","","30","","","45","",""],day:["0","","","","","","6","","","","","","12","","","","","","18","","","","",""],week:["S","M","T","W","T","F","S"]},s=function(t){return t<1?t.toFixed(1)+" B":t<1e3?t.toFixed(0)+" B":t<1e6?(t/1e3).toFixed(0)+" KB":t<1e9?(t/1e6).toFixed(0)+" MB":t<1e12?(t/1e9).toFixed(1)+" GB":t},d=function(e,n){t.pieChart={data:n.map(function(t){return t.flow}),labels:n.map(function(t){return t.port+(t.username?" ["+t.username+"]":"")}),options:{tooltips:{enabled:!0,mode:"single",callbacks:{label:function t(e,n){var t=n.labels[e.index],o=n.datasets[e.datasetIndex].data[e.index];return t+": "+s(o)}}}}},t.lineChart={data:[e],labels:l[t.flowType],series:"day",datasetOverride:[{yAxisID:"y-axis-1"}],options:{tooltips:{callbacks:{label:function(t){return s(t.yLabel)}}},scales:{yAxes:[{id:"y-axis-1",type:"linear",display:!0,position:"left",ticks:{callback:s}}]}}}};t.getChartData=function(){c.all([o.get("/api/admin/flow/"+n.serverId,{params:{type:t.flowType,time:new Date(u[t.flowType])}}),o.get("/api/admin/flow/"+n.serverId+"/user",{params:{type:t.flowType,time:new Date(u[t.flowType])}})]).then(function(e){t.sumFlow=e[0].data.reduce(function(t,e){return t+e},0),d(e[0].data,e[1].data)}),"hour"===t.flowType&&(t.time=a(u[t.flowType]).format("YYYY-MM-DD HH:00")),"day"===t.flowType&&(t.time=a(u[t.flowType]).format("YYYY-MM-DD")),"week"===t.flowType&&(t.time=a(u[t.flowType]).day(0).format("YYYY-MM-DD")+" / "+a(u[t.flowType]).day(6).format("YYYY-MM-DD"))},t.getChartData(),t.changeFlowTime=function(e){var n={hour:36e5,day:864e5,week:6048e5};u[t.flowType]+=e*n[t.flowType],t.getChartData()}}]).controller("AdminAddServerController",["$scope","$state","$stateParams","$http",function(t,e,n,o){t.setTitle("新增服务器"),t.setMenuButton("arrow_back",function(){e.go("admin.server")}),t.methods=["aes-256-cfb","aes-192-cfb"],t.server={method:"aes-256-cfb"},t.confirm=function(){o.post("/api/admin/server",{name:t.server.name,address:t.server.address,port:+t.server.port,password:t.server.password,method:t.server.method||"aes-256-cfb"}).then(function(t){e.go("admin.server")})},t.cancel=function(){e.go("admin.server")}}]).controller("AdminEditServerController",["$scope","$state","$stateParams","$http",function(t,e,n,o){t.setTitle("编辑服务器"),t.setMenuButton("arrow_back",function(){e.go("admin.serverPage",{serverId:n.serverId})}),t.methods=["aes-256-cfb","aes-192-cfb"],o.get("/api/admin/server/"+n.serverId).then(function(e){t.server={name:e.data.name,address:e.data.host,port:+e.data.port,password:e.data.password,method:e.data.method||"aes-256-cfb"}}),t.confirm=function(){o.put("/api/admin/server/"+n.serverId,{name:t.server.name,address:t.server.address,port:+t.server.port,password:t.server.password,method:t.server.method}).then(function(t){e.go("admin.serverPage",{serverId:n.serverId})})},t.cancel=function(){e.go("admin.serverPage",{serverId:n.serverId})}}])},function(t,e,n){"use strict";var o=n(1).app;o.controller("AdminUserController",["$scope","$state","$stateParams","adminApi",function(t,e,n,o){t.setTitle("用户"),o.getUser().then(function(e){t.users=e}),t.toUser=function(t){e.go("admin.userPage",{userId:t})}}]).controller("AdminUserPageController",["$scope","$state","$stateParams","$http","$mdDialog",function(t,e,n,o,a){t.setTitle("用户信息"),t.setMenuButton("arrow_back",function(){e.go("admin.user")});var i=n.userId,r=function(){o.get("/api/admin/user/"+n.userId).then(function(e){t.user=e.data}),o.get("/api/admin/user/account").then(function(e){t.account=e.data})};r(),t.deleteUserAccount=function(t){o.delete("/api/admin/user/"+i+"/"+t).then(function(t){r()})};var c=function(){t.dialog=a.show({templateUrl:"/public/views/admin/pickAccount.html",parent:angular.element(document.body),clickOutsideToClose:!0,preserveScope:!0,scope:t})};t.setFabButton(function(){c()}),t.confirmAccount=function(){a.hide(t.dialog);var e=[];t.account.forEach(function(t){t.isChecked&&e.push(o.put("/api/admin/user/"+i+"/"+t.id))}),Promise.all(e).then(function(t){r()})}}])},function(t,e,n){"use strict";var o=n(1).app;o.config(["$urlRouterProvider","$locationProvider",function(t,e){e.html5Mode(!0),t.when("/","/home/index").otherwise("/home/index")}]),o.config(["$stateProvider",function(t){t.state("home",{url:"/home",abstract:!0,templateUrl:"/public/views/home/home.html"}).state("home.index",{url:"/index",controller:"HomeIndexController",templateUrl:"/public/views/home/index.html"}).state("home.login",{url:"/login",controller:"HomeLoginController",templateUrl:"/public/views/home/login.html"}).state("home.signup",{url:"/signup",controller:"HomeSignupController",templateUrl:"/public/views/home/signup.html"}).state("home.resetPassword",{url:"/password/reset/:token",controller:"HomeResetPasswordController",templateUrl:"/public/views/home/resetPassword.html"})}])},function(t,e,n){"use strict";var o=n(1).app;o.config(["$stateProvider",function(t){t.state("user",{url:"/user",abstract:!0,templateUrl:"/public/views/user/user.html"}).state("user.index",{url:"/index",controller:"UserIndexController",templateUrl:"/public/views/user/index.html"}).state("user.account",{url:"/account",controller:"UserAccountController",templateUrl:"/public/views/user/account.html"})}])},function(t,e,n){"use strict";var o=n(1).app;o.config(["$stateProvider",function(t){t.state("admin",{url:"/admin",abstract:!0,templateUrl:"/public/views/admin/admin.html"}).state("admin.index",{url:"/index",controller:"AdminIndexController",templateUrl:"/public/views/admin/index.html"}).state("admin.server",{url:"/server",controller:"AdminServerController",templateUrl:"/public/views/admin/server.html"}).state("admin.serverPage",{url:"/server/:serverId",controller:"AdminServerPageController",templateUrl:"/public/views/admin/serverPage.html"}).state("admin.addServer",{url:"/addServer",controller:"AdminAddServerController",templateUrl:"/public/views/admin/addServer.html"}).state("admin.editServer",{url:"/server/:serverId/edit",controller:"AdminEditServerController",templateUrl:"/public/views/admin/editServer.html"}).state("admin.user",{url:"/user",controller:"AdminUserController",templateUrl:"/public/views/admin/user.html"}).state("admin.account",{url:"/account",controller:"AdminAccountController",templateUrl:"/public/views/admin/account.html"}).state("admin.accountPage",{url:"/account/:accountId",controller:"AdminAccountPageController",templateUrl:"/public/views/admin/accountPage.html"}).state("admin.addAccount",{url:"/addAccount",controller:"AdminAddAccountController",templateUrl:"/public/views/admin/addAccount.html"}).state("admin.editAccount",{url:"/account/:accountId/edit",controller:"AdminEditAccountController",templateUrl:"/public/views/admin/editAccount.html"}).state("admin.userPage",{url:"/user/:userId",controller:"AdminUserPageController",templateUrl:"/public/views/admin/userPage.html"}).state("admin.pay",{url:"/pay",controller:"AdminPayController",templateUrl:"/public/views/admin/pay.html"}).state("admin.unfinished",{url:"/unfinished",templateUrl:"/public/views/admin/unfinished.html"})}])},function(t,e,n){"use strict";var o=n(1).app;o.filter("flow",function(){return function(t){return t<1e3?t+" B":t<1e6?(t/1e3).toFixed(1)+" KB":t<1e9?(t/1e6).toFixed(1)+" MB":t<1e12?(t/1e9).toFixed(2)+" GB":t}})},function(t,e,n){"use strict";var o=n(1).app;o.filter("timeago",function(){return function(t){var e="",n="",o=Date.now()-new Date(t);o<0?o=-o:n="前";var a=Math.trunc(o/864e5),i=Math.trunc(o%864e5/36e5),r=Math.trunc(o%864e5%36e5/6e4);return a&&(e+=a+"天"),(a||i)&&(e+=i+"小时"),a||!i&&!r||(e+=r+"分钟"),o<6e4&&(e="几秒"),e+n}})},function(t,e,n){"use strict";var o=n(1).app;o.filter("order",function(){return function(t){var e={CREATE:"创建",WAIT_BUYER_PAY:"等待",TRADE_SUCCESS:"付款",FINISH:"完成",TRADE_CLOSED:"关闭"};return e[t]||"其它"}})},function(t,e,n){"use strict";var o=n(1).app;o.factory("adminApi",["$http","$q",function(t,e){var n=function(){return t.get("/api/admin/user").then(function(t){return t.data})},o=function(){return t.get("/api/admin/order").then(function(t){return t.data})},a=function(e){return t.get("/api/admin/account/port/"+e).then(function(t){return t.data.id})},i=function(){return e.all([t.get("/api/admin/user/recentSignUp").then(function(t){return t.data}),t.get("/api/admin/user/recentLogin").then(function(t){return t.data})]).then(function(t){return{signup:t[0],login:t[1]}})};return{getUser:n,getOrder:o,getAccountId:a,getIndexInfo:i}}])},function(t,e,n){"use strict";var o=n(1).app;o.factory("homeApi",["$http",function(t){var e=function(e,n,o){return t.post("/api/home/signup",{email:e,code:n,password:o}).catch(function(t){return 403===t.status?Promise.reject("用户注册失败"):Promise.reject("网络异常，请稍后再试")})},n=function(e,n){return t.post("/api/home/login",{email:e,password:n}).then(function(t){return t.data.type}).catch(function(t){if(403===t.status){var e="用户名或密码错误";return"user not exists"===t.data&&(e="该用户尚未注册的"),"invalid body"===t.data&&(e="请输入正确的用户名格式"),"password retry out of limit"===t.data&&(e="密码重试次数已达上限\n请稍后再试"),Promise.reject(e)}return Promise.reject("网络异常，请稍后再试")})},o=function(e){return e?t.post("/api/home/password/sendEmail",{email:e}).then(function(t){return"重置密码链接已发至您的邮箱，\n请注意查收"}).catch(function(t){var e=null;return e=403===t.status&&"already send"===t.data?"重置密码链接已经发送，\n请勿重复发送":403===t.status&&"user not exists"===t.data?"请输入正确的邮箱地址":"网络异常，请稍后再试",Promise.reject(e)}):Promise.reject("请输入邮箱地址再点击“找回密码”")};return{userSignup:e,userLogin:n,findPassword:o}}])},function(t,e,n){"use strict";var o=n(1).app;o.factory("userApi",["$q","$http",function(t,e){var n=function(){return t.all([e.get("/api/user/account"),e.get("/api/user/server")]).then(function(t){return{account:t[0].data,servers:t[1].data}})},o=function(t,n){return e.put("/api/user/"+t+"/password",{password:n})};return{getUserAccount:n,changePassword:o}}])},function(t,e,n){"use strict";var o=n(1).app;o.factory("alertDialog",["$mdDialog",function(t){var e={};e.isLoading=!1,e.content="",e.button="";var n=function(){return t.hide().then(function(t){e.isLoading=!1,o=null}).catch(function(t){e.isLoading=!1,o=null})};e.close=n;var o=null,a=function(){return!(!o||o.$$state.status)},i={templateUrl:"/public/views/home/alertDialog.html",escapeToClose:!1,locals:{bind:e},bindToController:!0,controller:["$scope","$mdDialog","bind",function(t,e,n){t.publicInfo=n}],clickOutsideToClose:!1},r=function(n,r){return e.content=n,e.button=r,a()?(e.isLoading=!1,o):o=t.show(i)},c=function(){e.isLoading=!0,a()||r()};return{show:r,loading:c,close:n}}]),o.factory("payDialog",["$mdDialog","$interval","$http",function(t,e,n){var o={};o.isLoading=!1,o.qrCode="";var a=null,i=function(){return a&&e.cancel(a),t.hide().then(function(t){o.isLoading=!1,r=null}).catch(function(t){o.isLoading=!1,r=null})};o.close=i;var r=null,c=function(){return!(!r||r.$$state.status)},u={templateUrl:"/public/views/user/payDialog.html",escapeToClose:!1,locals:{bind:o},bindToController:!0,controller:["$scope","$mdDialog","$mdMedia","bind",function(t,e,n,o){t.getQrCodeSize=function(){return n("xs")||n("sm")?200:250},t.publicInfo=o,t.qrCode=function(){return t.publicInfo.qrCode||"AAA"},t.pay=function(){window.location.href=t.publicInfo.qrCode}}],clickOutsideToClose:!1},l=function(l,s){return l&&s&&(a=e(function(){n.post("/api/user/order/status",{orderId:l}).then(function(t){var e=t.data.status;"TRADE_SUCCESS"!==e&&"FINISH"!==e||i()})},5e3)),o.qrCode=s,c()?(o.isLoading=!1,r):r=t.show(u)},s=function(){o.isLoading=!0,c()||l()};return{setUrl:l,loading:s,close:i}}]),o.factory("accountSortDialog",["$mdDialog",function(t){var e={},n=function(){return t.hide().then(function(t){o=null}).catch(function(t){o=null})};e.hide=n;var o=null,a=function(){return!(!o||o.$$state.status)},i={templateUrl:"/public/views/admin/accountSortAndFilterDialog.html",escapeToClose:!1,locals:{bind:e},bindToController:!0,controller:["$scope","$mdDialog","bind",function(t,e,n){t.publicInfo=n,t.sortAndFilter=function(){t.publicInfo.accountInfo.account=t.publicInfo.accountInfo.originalAccount.sort(function(e,n){return"port"===t.publicInfo.accountMethod.sort?e.port>=n.port?1:-1:"expire"===t.publicInfo.accountMethod.sort?e.data?e.data.expire>=n.data.expire?1:-1:1:void 0}),t.publicInfo.accountInfo.account=t.publicInfo.accountInfo.account.filter(function(e){var n=!0;return!t.publicInfo.accountMethod.filter.expired&&e.data&&e.data.expire>=Date.now()&&(n=!1),!t.publicInfo.accountMethod.filter.unexpired&&e.data&&e.data.expire<=Date.now()&&(n=!1),n})}}],clickOutsideToClose:!0},r=function(n,r){return a()?o:(e.accountMethod=n,e.accountInfo=r,o=t.show(i))};return{show:r,hide:n}}])},function(t,e,n){"use strict";var o=n(1).app;o.factory("ws",["$websocket","$location","$timeout",function(t,e,n){var o="http"===e.protocol()?"ws://":"wss://",a=o+e.host()+":"+e.port()+"/user",i=null,r=[],c=function e(){i=t(a),i.onMessage(function(t){console.log(t.data),r.push(t.data)}),i.onClose(function(){n(function(){e()},3e3)})};c();var u={messages:r,send:function(t){i.send(t)}};return u}])}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	__webpack_require__(1);
+
+	__webpack_require__(2);
+	__webpack_require__(3);
+	__webpack_require__(4);
+	__webpack_require__(5);
+	__webpack_require__(6);
+	__webpack_require__(7);
+	__webpack_require__(8);
+
+	__webpack_require__(9);
+	__webpack_require__(10);
+	__webpack_require__(11);
+
+	__webpack_require__(12);
+	__webpack_require__(13);
+	__webpack_require__(14);
+	__webpack_require__(15);
+	__webpack_require__(16);
+	__webpack_require__(17);
+	__webpack_require__(18);
+	__webpack_require__(19);
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.app = angular.module('app', ['ngMaterial', 'ui.router', 'ngMessages', 'ja.qr', 'chart.js', 'angularMoment', 'ngWebSocket', 'ngStorage']);
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('MainController', ['$scope', function ($scope) {
+	  $scope.mainLoading = true;
+	  $scope.setMainLoading = function (status) {
+	    $scope.mainLoading = status;
+	  };
+	}]);
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', function ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout) {
+	  $http.get('/api/home/login').then(function (success) {
+	    if (success.data.status === 'normal') {
+	      $state.go('user.index');
+	    } else if (success.data.status === 'admin') {
+	      $state.go('admin.index');
+	    } else {
+	      $scope.setMainLoading(false);
+	    }
+	  });
+	  $scope.innerSideNav = true;
+	  $scope.menuButton = function () {
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menus = [{
+	    name: '首页',
+	    icon: 'home',
+	    click: 'home.index'
+	  }, {
+	    name: '登录',
+	    icon: 'cloud',
+	    click: 'home.login'
+	  }, {
+	    name: '注册',
+	    icon: 'face',
+	    click: 'home.signup'
+	  }];
+	  $scope.menuClick = function (index) {
+	    $mdSidenav('left').close();
+	    $state.go($scope.menus[index].click);
+	  };
+	}]).controller('HomeIndexController', ['$scope', '$state', function ($scope, $state) {
+	  $scope.icons = [{
+	    icon: 'flash_on',
+	    title: '快速搭建',
+	    content: '仅依赖Node.js，无需安装数据库（可选MySQL）'
+	  }, {
+	    icon: 'build',
+	    title: '易于配置',
+	    content: '带有插件系统，仅需修改配置文件即可运行'
+	  }, {
+	    icon: 'vpn_key',
+	    title: '官方标准',
+	    content: '支持libev和python版本的标准manager API'
+	  }];
+	  $scope.login = function () {
+	    $state.go('home.login');
+	  };
+	  $scope.signup = function () {
+	    $state.go('home.signup');
+	  };
+	}]).controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog', function ($scope, $http, $state, homeApi, alertDialog) {
+	  $scope.user = {};
+	  $scope.login = function () {
+	    alertDialog.loading();
+	    homeApi.userLogin($scope.user.email, $scope.user.password).then(function (success) {
+	      return alertDialog.close().then(function () {
+	        return success;
+	      });
+	    }).then(function (success) {
+	      if (success === 'normal') {
+	        $state.go('user.index');
+	      } else if (success === 'admin') {
+	        $state.go('admin.index');
+	      }
+	    }).catch(function (err) {
+	      alertDialog.show(err, '确定');
+	    });
+	  };
+	  $scope.findPassword = function () {
+	    alertDialog.loading();
+	    homeApi.findPassword($scope.user.email).then(function (success) {
+	      alertDialog.show(success, '确定');
+	    }).catch(function (err) {
+	      alertDialog.show(err, '确定');
+	    });
+	  };
+	  $scope.enterKey = function (key) {
+	    if (key.keyCode === 13) {
+	      $scope.login();
+	    }
+	  };
+	}]).controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', function ($scope, $http, $state, $interval, $timeout, homeApi, alertDialog) {
+	  $scope.user = {};
+	  $scope.sendCodeTime = 0;
+	  $scope.sendCode = function () {
+	    alertDialog.loading();
+	    $http.post('/api/home/code', {
+	      email: $scope.user.email
+	    }).then(function (success) {
+	      alertDialog.show('验证码已发至邮箱', '确定');
+	      $scope.sendCodeTime = 120;
+	      var interval = $interval(function () {
+	        if ($scope.sendCodeTime > 0) {
+	          $scope.sendCodeTime--;
+	        } else {
+	          $interval.cancel(interval);
+	          $scope.sendCodeTime = 0;
+	        }
+	      }, 1000);
+	    }).catch(function (err) {
+	      alertDialog.show('验证码发送错误', '确定');
+	    });
+	  };
+	  $scope.signup = function () {
+	    alertDialog.loading();
+	    homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password).then(function (success) {
+	      alertDialog.show('用户注册成功', '确定').then(function (success) {
+	        $state.go('home.login');
+	      });
+	    }).catch(function (err) {
+	      alertDialog.show(err, '确定');
+	    });
+	  };
+	}]).controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', 'alertDialog', function ($scope, $http, $state, $stateParams, alertDialog) {
+	  $scope.user = {};
+	  var token = $stateParams.token;
+	  alertDialog.loading();
+	  $http.get('/api/home/password/reset', {
+	    params: {
+	      token: token
+	    }
+	  }).then(function (success) {
+	    alertDialog.close();
+	  }).catch(function (err) {
+	    alertDialog.show('该链接已经失效', '确定').then(function () {
+	      $state.go('home.index');
+	    });
+	  });
+	  $scope.resetPassword = function () {
+	    alertDialog.loading();
+	    $http.post('/api/home/password/reset', {
+	      token: token,
+	      password: $scope.user.password
+	    }).then(function () {
+	      alertDialog.show('修改密码成功', '确定').then(function () {
+	        $state.go('home.login');
+	      });
+	    }).catch(function () {
+	      alertDialog.show('修改密码失败', '确定');
+	    });
+	  };
+	}]);
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', function ($scope, $mdMedia, $mdSidenav, $state, $http) {
+	  $http.get('/api/home/login').then(function (success) {
+	    if (success.data.status !== 'normal') {
+	      $state.go('home.index');
+	    } else {
+	      $scope.setMainLoading(false);
+	    }
+	  });
+	  $scope.innerSideNav = true;
+	  $scope.menuButton = function () {
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menus = [{
+	    name: '首页',
+	    icon: 'home',
+	    click: 'user.index'
+	  }, {
+	    name: '我的账号',
+	    icon: 'account_circle',
+	    click: 'user.account'
+	  }, {
+	    name: 'divider'
+	  }, {
+	    name: '退出',
+	    icon: 'settings',
+	    click: function click() {
+	      $http.post('/api/home/logout');
+	      $state.go('home.index');
+	    }
+	  }];
+	  $scope.menuClick = function (index) {
+	    $mdSidenav('left').close();
+	    if (typeof $scope.menus[index].click === 'function') {
+	      $scope.menus[index].click();
+	    } else {
+	      $state.go($scope.menus[index].click);
+	    }
+	  };
+	  $scope.title = '';
+	  $scope.setTitle = function (str) {
+	    $scope.title = str;
+	  };
+	  $scope.$on('$stateChangeStart', function (event, toUrl, fromUrl) {
+	    $scope.title = '';
+	  });
+	  // $scope.ws = ws;
+	}]).controller('UserIndexController', ['$scope', '$state', function ($scope, $state) {
+	  $scope.setTitle('首页');
+	  $scope.toMyAccount = function () {
+	    $state.go('user.account');
+	  };
+	}]).controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval', function ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog, $interval) {
+	  $scope.setTitle('我的账号');
+	  $scope.flexGtSm = 100;
+	  userApi.getUserAccount().then(function (success) {
+	    $scope.account = success.account;
+	    $scope.servers = success.servers;
+	    if ($scope.account.length >= 2) {
+	      $scope.flexGtSm = 50;
+	    }
+	  });
+	  var base64Encode = function base64Encode(str) {
+	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	      return String.fromCharCode('0x' + p1);
+	    }));
+	  };
+	  $scope.createQrCode = function (method, password, host, port) {
+	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
+	  $scope.getServerPortData = function (account, serverId, port) {
+	    if (account.type >= 2 && account.type <= 5) {
+	      $http.get('/api/user/flow/' + serverId + '/' + port).then(function (success) {
+	        account.serverPortFlow = success.data[0];
+	      });
+	    }
+	    $http.get('/api/user/flow/' + serverId + '/' + port + '/lastConnect').then(function (success) {
+	      account.lastConnect = success.data.lastConnect;
+	    });
+	  };
+	  $scope.getQrCodeSize = function () {
+	    if ($mdMedia('xs')) {
+	      return 230;
+	    }
+	    return 180;
+	  };
+	  $scope.showChangePasswordDialog = function (accountId, password) {
+	    var dialog = {
+	      templateUrl: '/public/views/user/changePassword.html',
+	      escapeToClose: false,
+	      locals: { bind: password },
+	      bindToController: true,
+	      controller: ['$scope', 'userApi', '$mdDialog', 'bind', function ($scope, userApi, $mdDialog, bind) {
+	        $scope.account = {
+	          password: bind
+	        };
+	        $scope.changePassword = function () {
+	          $mdDialog.cancel();
+	          // $http.put(`/api/user/${ accountId }/password`, {
+	          //   password: $scope.account.password,
+	          // });
+	          userApi.changePassword(accountId, $scope.account.password);
+	        };
+	      }],
+	      clickOutsideToClose: true
+	    };
+	    $mdDialog.show(dialog);
+	  };
+	  $scope.createOrder = function (accountId) {
+	    payDialog.loading();
+	    $http.post('/api/user/order/qrcode', {
+	      accountId: accountId
+	    }).then(function (success) {
+	      payDialog.setUrl(success.data.orderId, success.data.qrCode);
+	      // const int = $interval(() => {
+	      //   $http.post('/api/user/order/status', {
+	      //     orderId: success.data.orderId,
+	      //   }).then(success => {
+	      //     const orderStatus = success.data.status;
+	      //     if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
+	      //       $interval.cancel(int);
+	      //       payDialog.close();
+	      //     }
+	      //   });
+	      // }, 10 * 1000);
+	    }).catch(console.log);
+	  };
+	  $scope.unfinish = function () {
+	    alertDialog.show('该功能尚未完成', '确定');
+	  };
+	}]);
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$sessionStorage', function ($scope, $mdMedia, $mdSidenav, $state, $http, $sessionStorage) {
+	  $sessionStorage.$default({
+	    settings: {}
+	  });
+	  $http.get('/api/home/login').then(function (success) {
+	    if (success.data.status !== 'admin') {
+	      $state.go('home.index');
+	    } else {
+	      $scope.setMainLoading(false);
+	    }
+	  });
+	  $scope.innerSideNav = true;
+	  $scope.menus = [{
+	    name: '首页',
+	    icon: 'home',
+	    click: 'admin.index'
+	  }, {
+	    name: '服务器',
+	    icon: 'cloud',
+	    click: 'admin.server'
+	  }, {
+	    name: '用户',
+	    icon: 'people',
+	    click: 'admin.user'
+	  }, {
+	    name: '账号',
+	    icon: 'account_circle',
+	    click: 'admin.account'
+	  }, {
+	    name: '续费',
+	    icon: 'attach_money',
+	    click: 'admin.pay'
+	  }, {
+	    name: '设置',
+	    icon: 'settings',
+	    click: 'admin.unfinished'
+	  }, {
+	    name: 'divider'
+	  }, {
+	    name: '退出',
+	    icon: 'exit_to_app',
+	    click: function click() {
+	      $http.post('/api/home/logout');
+	      $state.go('home.index');
+	    }
+	  }];
+	  $scope.menuButton = function () {
+	    if ($scope.menuButtonIcon) {
+	      return $scope.menuButtonClick();
+	    }
+	    if ($mdMedia('gt-sm')) {
+	      $scope.innerSideNav = !$scope.innerSideNav;
+	    } else {
+	      $mdSidenav('left').toggle();
+	    }
+	  };
+	  $scope.menuClick = function (index) {
+	    $mdSidenav('left').close();
+	    if (typeof $scope.menus[index].click === 'function') {
+	      $scope.menus[index].click();
+	    } else {
+	      $state.go($scope.menus[index].click);
+	    }
+	  };
+	  $scope.title = '';
+	  $scope.setTitle = function (str) {
+	    $scope.title = str;
+	  };
+	  $scope.fabButton = false;
+	  $scope.fabButtonClick = function () {};
+	  $scope.setFabButton = function (fn) {
+	    $scope.fabButton = true;
+	    $scope.fabButtonClick = fn;
+	  };
+	  $scope.menuButtonIcon = '';
+	  $scope.menuButtonClick = function () {};
+	  $scope.setMenuButton = function (icon, fn) {
+	    $scope.menuButtonIcon = icon;
+	    $scope.menuButtonClick = fn;
+	  };
+	  $scope.menuRightButtonIcon = '';
+	  $scope.menuRightButtonClick = function () {
+	    $scope.$broadcast('RightButtonClick', 'click');
+	  };
+	  $scope.setMenuRightButton = function (icon) {
+	    $scope.menuRightButtonIcon = icon;
+	  };
+	  $scope.$on('$stateChangeStart', function (event, toUrl, fromUrl) {
+	    $scope.fabButton = false;
+	    $scope.title = '';
+	    $scope.menuButtonIcon = '';
+	    $scope.menuRightButtonIcon = '';
+	  });
+	}]).controller('AdminIndexController', ['$scope', 'adminApi', function ($scope, adminApi) {
+	  $scope.setTitle('首页');
+	  adminApi.getIndexInfo().then(function (success) {
+	    $scope.signupUsers = success.signup;
+	    $scope.loginUsers = success.login;
+	  });
+	}]).controller('AdminPayController', ['$scope', 'adminApi', function ($scope, adminApi) {
+	  $scope.setTitle('续费');
+	  adminApi.getOrder().then(function (orders) {
+	    return $scope.orders = orders;
+	  });
+	}]);
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog', '$interval', '$sessionStorage', function ($scope, $state, $stateParams, $http, accountSortDialog, $interval, $sessionStorage) {
+	  $scope.setTitle('账号');
+	  $scope.setMenuRightButton('sort_by_alpha');
+	  $scope.accountInfo = {};
+	  $scope.sortAndFilter = function () {
+	    $scope.accountInfo.account = $scope.accountInfo.originalAccount.sort(function (a, b) {
+	      if ($scope.accountMethod.sort === 'port') {
+	        return a.port >= b.port ? 1 : -1;
+	      } else if ($scope.accountMethod.sort === 'expire') {
+	        if (!a.data || !b.data) {
+	          return 1;
+	        }
+	        return a.data.expire >= b.data.expire ? 1 : -1;
+	      }
+	    });
+	    $scope.accountInfo.account = $scope.accountInfo.account.filter(function (f) {
+	      var show = true;
+	      if (!$scope.accountMethod.filter.expired && f.data && f.data.expire >= Date.now()) {
+	        show = false;
+	      }
+	      if (!$scope.accountMethod.filter.unexpired && f.data && f.data.expire <= Date.now()) {
+	        show = false;
+	      }
+	      return show;
+	    });
+	  };
+	  var getAccount = function getAccount() {
+	    $http.get('/api/admin/account').then(function (success) {
+	      $scope.accountInfo.originalAccount = success.data;
+	      $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
+	      $scope.sortAndFilter();
+	    });
+	  };
+	  getAccount();
+	  $scope.accountMethod = $sessionStorage.settings.accountFilter ? $sessionStorage.settings.accountFilter : {
+	    sort: 'port',
+	    filter: {
+	      expired: true,
+	      unexpired: true
+	    }
+	  };
+	  $scope.setFabButton(function () {
+	    $state.go('admin.addAccount');
+	  });
+	  $scope.toAccount = function (id) {
+	    $state.go('admin.accountPage', { accountId: id });
+	  };
+	  $scope.sortAndFilterDialog = function () {
+	    accountSortDialog.show($scope.accountMethod, $scope.accountInfo);
+	  };
+	  $scope.$on('RightButtonClick', function () {
+	    $scope.sortAndFilterDialog();
+	  });
+	}]).controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', function ($scope, $state, $stateParams, $http, $mdMedia, $q) {
+	  $scope.setTitle('账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.account');
+	  });
+	  $q.all([$http.get('/api/admin/account/' + $stateParams.accountId), $http.get('/api/admin/server')]).then(function (success) {
+	    $scope.account = success[0].data;
+	    $scope.servers = success[1].data;
+	  });
+	  $scope.getServerPortData = function (serverId, port) {
+	    $scope.serverPortFlow = 0;
+	    $scope.lastConnect = 0;
+	    $http.get('/api/admin/flow/' + serverId + '/' + port).then(function (success) {
+	      $scope.serverPortFlow = success.data[0];
+	    });
+	    $http.get('/api/admin/flow/' + serverId + '/' + port + '/lastConnect').then(function (success) {
+	      $scope.lastConnect = success.data.lastConnect;
+	    });
+	    $scope.getChartData(serverId);
+	  };
+	  var base64Encode = function base64Encode(str) {
+	    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
+	      return String.fromCharCode('0x' + p1);
+	    }));
+	  };
+	  $scope.createQrCode = function (method, password, host, port) {
+	    return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+	  };
+	  $scope.editAccount = function (id) {
+	    $state.go('admin.editAccount', { accountId: id });
+	  };
+
+	  $scope.getQrCodeSize = function () {
+	    if ($mdMedia('xs')) {
+	      return 230;
+	    } else if ($mdMedia('lg')) {
+	      return 240;
+	    }
+	    return 180;
+	  };
+
+	  $scope.flowType = {
+	    value: 'day'
+	  };
+	  var flowTime = {
+	    hour: Date.now(),
+	    day: Date.now(),
+	    week: Date.now()
+	  };
+	  var flowLabel = {
+	    hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+	    day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', ''],
+	    week: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+	  };
+	  var scaleLabel = function scaleLabel(number) {
+	    if (number < 1) {
+	      return number.toFixed(1) + ' B';
+	    } else if (number < 1000) {
+	      return number.toFixed(0) + ' B';
+	    } else if (number < 1000000) {
+	      return (number / 1000).toFixed(0) + ' KB';
+	    } else if (number < 1000000000) {
+	      return (number / 1000000).toFixed(0) + ' MB';
+	    } else if (number < 1000000000000) {
+	      return (number / 1000000000).toFixed(1) + ' GB';
+	    } else {
+	      return number;
+	    }
+	  };
+	  var setChart = function setChart(lineData, pieData) {
+	    $scope.pieChart = {
+	      data: pieData.map(function (m) {
+	        return m.flow;
+	      }),
+	      labels: pieData.map(function (m) {
+	        return m.name;
+	      }),
+	      options: {
+	        responsive: false,
+	        tooltips: {
+	          enabled: true,
+	          mode: 'single',
+	          callbacks: {
+	            label: function label(tooltipItem, data) {
+	              var label = data.labels[tooltipItem.index];
+	              var datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+	              return label + ': ' + scaleLabel(datasetLabel);
+	            }
+	          }
+	        }
+	      }
+	    };
+	    $scope.lineChart = {
+	      data: [lineData],
+	      labels: flowLabel[$scope.flowType.value],
+	      series: 'day',
+	      datasetOverride: [{ yAxisID: 'y-axis-1' }],
+	      options: {
+	        tooltips: {
+	          callbacks: {
+	            label: function label(tooltipItem) {
+	              return scaleLabel(tooltipItem.yLabel);
+	            }
+	          }
+	        },
+	        scales: {
+	          yAxes: [{
+	            id: 'y-axis-1',
+	            type: 'linear',
+	            display: true,
+	            position: 'left',
+	            ticks: {
+	              callback: scaleLabel
+	            }
+	          }]
+	        }
+	      }
+	    };
+	  };
+	  $scope.getChartData = function (serverId) {
+	    $q.all([$http.get('/api/admin/flow/' + serverId, {
+	      params: {
+	        port: $scope.account.port,
+	        type: $scope.flowType.value,
+	        time: new Date(flowTime[$scope.flowType.value])
+	      }
+	    }), $http.get('/api/admin/flow/account/' + $stateParams.accountId, {
+	      params: {
+	        port: $scope.account.port,
+	        type: $scope.flowType.value,
+	        time: new Date(flowTime[$scope.flowType.value])
+	      }
+	    })]).then(function (success) {
+	      $scope.sumFlow = success[0].data.reduce(function (a, b) {
+	        return a + b;
+	      }, 0);
+	      setChart(success[0].data, success[1].data);
+	    });
+	    if ($scope.flowType.value === 'hour') {
+	      $scope.time = moment(flowTime[$scope.flowType.value]).format('YYYY-MM-DD HH:00');
+	    }
+	    if ($scope.flowType.value === 'day') {
+	      $scope.time = moment(flowTime[$scope.flowType.value]).format('YYYY-MM-DD');
+	    }
+	    if ($scope.flowType.value === 'week') {
+	      $scope.time = moment(flowTime[$scope.flowType.value]).day(0).format('YYYY-MM-DD') + ' / ' + moment(flowTime[$scope.flowType.value]).day(6).format('YYYY-MM-DD');
+	    }
+	  };
+	  $scope.changeFlowTime = function (serverId, number) {
+	    var time = {
+	      hour: 3600 * 1000,
+	      day: 24 * 3600 * 1000,
+	      week: 7 * 24 * 3600 * 1000
+	    };
+	    flowTime[$scope.flowType.value] += number * time[$scope.flowType.value];
+	    $scope.getChartData(serverId);
+	  };
+	}]).controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.setTitle('添加账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.account');
+	  });
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
+	  $scope.account = {
+	    time: Date.now(),
+	    limit: 1,
+	    flow: 100
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.account');
+	  };
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/account', {
+	      type: +$scope.account.type,
+	      port: +$scope.account.port,
+	      password: $scope.account.password,
+	      time: $scope.account.time,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
+	    }).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/pickTime.html',
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
+	  };
+	  $scope.setLimit = function (number) {
+	    $scope.account.limit += number;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
+	    }
+	  };
+	}]).controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', function ($scope, $state, $stateParams, $http, $mdBottomSheet) {
+	  $scope.setTitle('编辑账号');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+	  });
+	  $scope.typeList = [{ key: '不限量', value: 1 }, { key: '按周', value: 2 }, { key: '按月', value: 3 }, { key: '按天', value: 4 }, { key: '小时', value: 5 }];
+	  $scope.timeLimit = {
+	    '2': 7 * 24 * 3600000,
+	    '3': 30 * 24 * 3600000,
+	    '4': 24 * 3600000,
+	    '5': 3600000
+	  };
+	  $scope.account = {
+	    time: Date.now(),
+	    limit: 1,
+	    flow: 100
+	  };
+	  var accountId = $stateParams.accountId;
+	  $http.get('/api/admin/account/' + accountId).then(function (success) {
+	    $scope.account.type = success.data.type;
+	    $scope.account.port = success.data.port;
+	    $scope.account.password = success.data.password;
+	    if (success.data.type >= 2 && success.data.type <= 5) {
+	      $scope.account.time = success.data.data.create;
+	      $scope.account.limit = success.data.data.limit;
+	      $scope.account.flow = success.data.data.flow / 1000000;
+	    }
+	  });
+	  $scope.cancel = function () {
+	    $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+	  };
+	  $scope.confirm = function () {
+	    $http.put('/api/admin/account/' + accountId + '/data', {
+	      type: +$scope.account.type,
+	      port: +$scope.account.port,
+	      password: $scope.account.password,
+	      time: $scope.account.time,
+	      limit: +$scope.account.limit,
+	      flow: +$scope.account.flow * 1000 * 1000
+	    }).then(function (success) {
+	      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+	    });
+	  };
+	  $scope.pickTime = function () {
+	    $mdBottomSheet.show({
+	      templateUrl: '/public/views/admin/pickTime.html',
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setStartTime = function (number) {
+	    $scope.account.time += number;
+	  };
+	  $scope.setLimit = function (number) {
+	    $scope.account.limit += number;
+	    if ($scope.account.limit < 1) {
+	      $scope.account.limit = 1;
+	    }
+	  };
+	  $scope.deleteAccount = function () {
+	    $http.delete('/api/admin/account/' + accountId).then(function (success) {
+	      $state.go('admin.account');
+	    });
+	  };
+	}]);
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', function ($scope, $http, $state, moment) {
+	  $scope.setTitle('服务器');
+	  $http.get('/api/admin/server').then(function (success) {
+	    $scope.servers = success.data;
+	    $scope.servers.forEach(function (server) {
+	      server.flow = {};
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.today = success.data[0];
+	      });
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.week = success.data[0];
+	      });
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          time: [moment().date(1).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(), moment().toDate().valueOf()]
+	        }
+	      }).then(function (success) {
+	        server.flow.month = success.data[0];
+	      });
+	      $http.get('/api/admin/flow/' + server.id, {
+	        params: {
+	          type: 'hour'
+	        }
+	      }).then(function (success) {
+	        var scaleLabel = function scaleLabel(number) {
+	          if (number < 1) {
+	            return number.toFixed(1) + ' B';
+	          } else if (number < 1000) {
+	            return number.toFixed(0) + ' B';
+	          } else if (number < 1000000) {
+	            return (number / 1000).toFixed(0) + ' KB';
+	          } else if (number < 1000000000) {
+	            return (number / 1000000).toFixed(0) + ' MB';
+	          } else if (number < 1000000000000) {
+	            return (number / 1000000000).toFixed(1) + ' GB';
+	          } else {
+	            return number;
+	          }
+	        };
+	        server.chart = {
+	          data: [success.data],
+	          labels: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+	          // labels: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', '', ],
+	          series: 'day',
+	          datasetOverride: [{ yAxisID: 'y-axis-1' }],
+	          options: {
+	            tooltips: {
+	              callbacks: {
+	                label: function label(tooltipItem) {
+	                  return scaleLabel(tooltipItem.yLabel);
+	                }
+	              }
+	            },
+	            scales: {
+	              yAxes: [{
+	                id: 'y-axis-1',
+	                type: 'linear',
+	                display: true,
+	                position: 'left',
+	                ticks: {
+	                  callback: scaleLabel
+	                }
+	              }]
+	            }
+	          }
+	        };
+	      });
+	    });
+	  });
+	  $scope.toServerPage = function (serverId) {
+	    $state.go('admin.serverPage', { serverId: serverId });
+	  };
+	  $scope.setFabButton(function () {
+	    $state.go('admin.addServer');
+	  });
+	}]).controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', function ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q) {
+	  $scope.setTitle('服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.server');
+	  });
+	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
+	    $scope.server = success.data;
+	  }).catch(function () {
+	    $state.go('admin.server');
+	  });
+	  $scope.toAccountPage = function (port) {
+	    adminApi.getAccountId(port).then(function (id) {
+	      $state.go('admin.accountPage', { accountId: id });
+	    });
+	  };
+	  $scope.editServer = function (id) {
+	    $state.go('admin.editServer', { serverId: id });
+	  };
+	  $scope.deleteServer = function (id) {
+	    var confirm = $mdDialog.confirm().title('').textContent('删除服务器？').ariaLabel('deleteServer').ok('确认').cancel('取消');
+	    $mdDialog.show(confirm).then(function () {
+	      return $http.delete('/api/admin/server/' + $stateParams.serverId);
+	    }).then(function () {
+	      $state.go('admin.server');
+	    }).catch(function () {});
+	  };
+
+	  $scope.flowType = 'day';
+	  var flowTime = {
+	    hour: Date.now(),
+	    day: Date.now(),
+	    week: Date.now()
+	  };
+	  var flowLabel = {
+	    hour: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
+	    day: ['0', '', '', '', '', '', '6', '', '', '', '', '', '12', '', '', '', '', '', '18', '', '', '', '', ''],
+	    week: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+	  };
+	  var scaleLabel = function scaleLabel(number) {
+	    if (number < 1) {
+	      return number.toFixed(1) + ' B';
+	    } else if (number < 1000) {
+	      return number.toFixed(0) + ' B';
+	    } else if (number < 1000000) {
+	      return (number / 1000).toFixed(0) + ' KB';
+	    } else if (number < 1000000000) {
+	      return (number / 1000000).toFixed(0) + ' MB';
+	    } else if (number < 1000000000000) {
+	      return (number / 1000000000).toFixed(1) + ' GB';
+	    } else {
+	      return number;
+	    }
+	  };
+	  var setChart = function setChart(lineData, pieData) {
+	    $scope.pieChart = {
+	      data: pieData.map(function (m) {
+	        return m.flow;
+	      }),
+	      labels: pieData.map(function (m) {
+	        return m.port + (m.username ? ' [' + m.username + ']' : '');
+	      }),
+	      options: {
+	        // responsive: false,
+	        tooltips: {
+	          enabled: true,
+	          mode: 'single',
+	          callbacks: {
+	            label: function label(tooltipItem, data) {
+	              var label = data.labels[tooltipItem.index];
+	              var datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+	              return label + ': ' + scaleLabel(datasetLabel);
+	            }
+	          }
+	        }
+	      }
+	    };
+	    $scope.lineChart = {
+	      data: [lineData],
+	      labels: flowLabel[$scope.flowType],
+	      series: 'day',
+	      datasetOverride: [{ yAxisID: 'y-axis-1' }],
+	      options: {
+	        tooltips: {
+	          callbacks: {
+	            label: function label(tooltipItem) {
+	              return scaleLabel(tooltipItem.yLabel);
+	            }
+	          }
+	        },
+	        scales: {
+	          yAxes: [{
+	            id: 'y-axis-1',
+	            type: 'linear',
+	            display: true,
+	            position: 'left',
+	            ticks: {
+	              callback: scaleLabel
+	            }
+	          }]
+	        }
+	      }
+	    };
+	  };
+	  $scope.getChartData = function () {
+	    $q.all([$http.get('/api/admin/flow/' + $stateParams.serverId, {
+	      params: {
+	        type: $scope.flowType,
+	        time: new Date(flowTime[$scope.flowType])
+	      }
+	    }), $http.get('/api/admin/flow/' + $stateParams.serverId + '/user', {
+	      params: {
+	        type: $scope.flowType,
+	        time: new Date(flowTime[$scope.flowType])
+	      }
+	    })]).then(function (success) {
+	      $scope.sumFlow = success[0].data.reduce(function (a, b) {
+	        return a + b;
+	      }, 0);
+	      setChart(success[0].data, success[1].data);
+	    });
+	    if ($scope.flowType === 'hour') {
+	      $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD HH:00');
+	    }
+	    if ($scope.flowType === 'day') {
+	      $scope.time = moment(flowTime[$scope.flowType]).format('YYYY-MM-DD');
+	    }
+	    if ($scope.flowType === 'week') {
+	      $scope.time = moment(flowTime[$scope.flowType]).day(0).format('YYYY-MM-DD') + ' / ' + moment(flowTime[$scope.flowType]).day(6).format('YYYY-MM-DD');
+	    }
+	  };
+	  $scope.getChartData();
+	  $scope.changeFlowTime = function (number) {
+	    var time = {
+	      hour: 3600 * 1000,
+	      day: 24 * 3600 * 1000,
+	      week: 7 * 24 * 3600 * 1000
+	    };
+	    flowTime[$scope.flowType] += number * time[$scope.flowType];
+	    $scope.getChartData();
+	  };
+	}]).controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('新增服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.server');
+	  });
+	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
+	  $scope.server = {
+	    method: 'aes-256-cfb'
+	  };
+	  $scope.confirm = function () {
+	    $http.post('/api/admin/server', {
+	      name: $scope.server.name,
+	      address: $scope.server.address,
+	      port: +$scope.server.port,
+	      password: $scope.server.password,
+	      method: $scope.server.method || 'aes-256-cfb'
+	    }).then(function (success) {
+	      $state.go('admin.server');
+	    });
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.server');
+	  };
+	}]).controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', function ($scope, $state, $stateParams, $http) {
+	  $scope.setTitle('编辑服务器');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+	  });
+	  $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
+	  $http.get('/api/admin/server/' + $stateParams.serverId).then(function (success) {
+	    $scope.server = {
+	      name: success.data.name,
+	      address: success.data.host,
+	      port: +success.data.port,
+	      password: success.data.password,
+	      method: success.data.method || 'aes-256-cfb'
+	    };
+	  });
+	  $scope.confirm = function () {
+	    $http.put('/api/admin/server/' + $stateParams.serverId, {
+	      name: $scope.server.name,
+	      address: $scope.server.address,
+	      port: +$scope.server.port,
+	      password: $scope.server.password,
+	      method: $scope.server.method
+	    }).then(function (success) {
+	      $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+	    });
+	  };
+	  $scope.cancel = function () {
+	    $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+	  };
+	}]);
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'adminApi', function ($scope, $state, $stateParams, adminApi) {
+	  $scope.setTitle('用户');
+	  // $http.get('/api/admin/user').then(success => {
+	  //   $scope.users = success.data;
+	  // });
+	  adminApi.getUser().then(function (success) {
+	    $scope.users = success;
+	  });
+	  $scope.toUser = function (id) {
+	    $state.go('admin.userPage', { userId: id });
+	  };
+	}]).controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', function ($scope, $state, $stateParams, $http, $mdDialog) {
+	  $scope.setTitle('用户信息');
+	  $scope.setMenuButton('arrow_back', function () {
+	    $state.go('admin.user');
+	  });
+	  var userId = $stateParams.userId;
+	  var getUserData = function getUserData() {
+	    $http.get('/api/admin/user/' + $stateParams.userId).then(function (success) {
+	      $scope.user = success.data;
+	    });
+	    $http.get('/api/admin/user/account').then(function (success) {
+	      $scope.account = success.data;
+	    });
+	  };
+	  getUserData();
+	  $scope.deleteUserAccount = function (accountId) {
+	    $http.delete('/api/admin/user/' + userId + '/' + accountId).then(function (success) {
+	      getUserData();
+	    });
+	  };
+	  var openDialog = function openDialog() {
+	    $scope.dialog = $mdDialog.show({
+	      templateUrl: '/public/views/admin/pickAccount.html',
+	      parent: angular.element(document.body),
+	      clickOutsideToClose: true,
+	      preserveScope: true,
+	      scope: $scope
+	    });
+	  };
+	  $scope.setFabButton(function () {
+	    openDialog();
+	  });
+	  $scope.confirmAccount = function () {
+	    $mdDialog.hide($scope.dialog);
+	    var promise = [];
+	    $scope.account.forEach(function (f) {
+	      if (f.isChecked) {
+	        promise.push($http.put('/api/admin/user/' + userId + '/' + f.id));
+	      }
+	    });
+	    Promise.all(promise).then(function (success) {
+	      getUserData();
+	    });
+	  };
+	}]);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
+	  $locationProvider.html5Mode(true);
+	  $urlRouterProvider.when('/', '/home/index').otherwise('/home/index');
+	}]);
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('home', {
+	    url: '/home',
+	    abstract: true,
+	    templateUrl: '/public/views/home/home.html'
+	  }).state('home.index', {
+	    url: '/index',
+	    controller: 'HomeIndexController',
+	    templateUrl: '/public/views/home/index.html'
+	  }).state('home.login', {
+	    url: '/login',
+	    controller: 'HomeLoginController',
+	    templateUrl: '/public/views/home/login.html'
+	  }).state('home.signup', {
+	    url: '/signup',
+	    controller: 'HomeSignupController',
+	    templateUrl: '/public/views/home/signup.html'
+	  }).state('home.resetPassword', {
+	    url: '/password/reset/:token',
+	    controller: 'HomeResetPasswordController',
+	    templateUrl: '/public/views/home/resetPassword.html'
+	  });
+	}]);
+
+	// app.service('authInterceptor', ['$q', function($q) {
+	//   const service = this;
+	//   service.responseError = function(response) {
+	//     if (response.status == 401) {
+	//       window.location = '/';
+	//     }
+	//     return $q.reject(response);
+	//   };
+	// }])
+	// .config(['$httpProvider', $httpProvider => {
+	//   $httpProvider.interceptors.push('authInterceptor');
+	// }]);
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('user', {
+	    url: '/user',
+	    abstract: true,
+	    templateUrl: '/public/views/user/user.html'
+	  }).state('user.index', {
+	    url: '/index',
+	    controller: 'UserIndexController',
+	    templateUrl: '/public/views/user/index.html'
+	  }).state('user.account', {
+	    url: '/account',
+	    controller: 'UserAccountController',
+	    templateUrl: '/public/views/user/account.html'
+	  });
+	}]);
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.config(['$stateProvider', function ($stateProvider) {
+	  $stateProvider.state('admin', {
+	    url: '/admin',
+	    abstract: true,
+	    templateUrl: '/public/views/admin/admin.html'
+	  }).state('admin.index', {
+	    url: '/index',
+	    controller: 'AdminIndexController',
+	    templateUrl: '/public/views/admin/index.html'
+	  }).state('admin.server', {
+	    url: '/server',
+	    controller: 'AdminServerController',
+	    templateUrl: '/public/views/admin/server.html'
+	  }).state('admin.serverPage', {
+	    url: '/server/:serverId',
+	    controller: 'AdminServerPageController',
+	    templateUrl: '/public/views/admin/serverPage.html'
+	  }).state('admin.addServer', {
+	    url: '/addServer',
+	    controller: 'AdminAddServerController',
+	    templateUrl: '/public/views/admin/addServer.html'
+	  }).state('admin.editServer', {
+	    url: '/server/:serverId/edit',
+	    controller: 'AdminEditServerController',
+	    templateUrl: '/public/views/admin/editServer.html'
+	  }).state('admin.user', {
+	    url: '/user',
+	    controller: 'AdminUserController',
+	    templateUrl: '/public/views/admin/user.html'
+	  }).state('admin.account', {
+	    url: '/account',
+	    controller: 'AdminAccountController',
+	    templateUrl: '/public/views/admin/account.html'
+	  }).state('admin.accountPage', {
+	    url: '/account/:accountId',
+	    controller: 'AdminAccountPageController',
+	    templateUrl: '/public/views/admin/accountPage.html'
+	  }).state('admin.addAccount', {
+	    url: '/addAccount',
+	    controller: 'AdminAddAccountController',
+	    templateUrl: '/public/views/admin/addAccount.html'
+	  }).state('admin.editAccount', {
+	    url: '/account/:accountId/edit',
+	    controller: 'AdminEditAccountController',
+	    templateUrl: '/public/views/admin/editAccount.html'
+	  }).state('admin.userPage', {
+	    url: '/user/:userId',
+	    controller: 'AdminUserPageController',
+	    templateUrl: '/public/views/admin/userPage.html'
+	  }).state('admin.pay', {
+	    url: '/pay',
+	    controller: 'AdminPayController',
+	    templateUrl: '/public/views/admin/pay.html'
+	  }).state('admin.unfinished', {
+	    url: '/unfinished',
+	    templateUrl: '/public/views/admin/unfinished.html'
+	  });
+	}]);
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.filter('flow', function () {
+	  return function (input) {
+	    if (input < 1000) {
+	      return input + ' B';
+	    } else if (input < 1000000) {
+	      return (input / 1000).toFixed(1) + ' KB';
+	    } else if (input < 1000000000) {
+	      return (input / 1000000).toFixed(1) + ' MB';
+	    } else if (input < 1000000000000) {
+	      return (input / 1000000000).toFixed(2) + ' GB';
+	    } else {
+	      return input;
+	    }
+	  };
+	});
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.filter('timeago', function () {
+	  return function (input) {
+
+	    var ret = '';
+	    var retTail = '';
+
+	    var time = Date.now() - new Date(input);
+	    if (time < 0) {
+	      time = -time;
+	    } else {
+	      retTail = '前';
+	    }
+
+	    var day = Math.trunc(time / (24 * 3600 * 1000));
+	    var hour = Math.trunc(time % (24 * 3600 * 1000) / (3600 * 1000));
+	    var minute = Math.trunc(time % (24 * 3600 * 1000) % (3600 * 1000) / (60 * 1000));
+	    if (day) {
+	      ret += day + '天';
+	    }
+	    if (day || hour) {
+	      ret += hour + '小时';
+	    }
+	    if (!day && (hour || minute)) {
+	      ret += minute + '分钟';
+	    }
+	    if (time < 60 * 1000) {
+	      ret = '几秒';
+	    }
+
+	    return ret + retTail;
+	  };
+	});
+
+	app.filter('timeagoshort', function () {
+	  return function (input) {
+
+	    var ret = '';
+	    var retTail = '';
+
+	    var time = Date.now() - new Date(input);
+	    if (time < 0) {
+	      time = -time;
+	    } else {
+	      retTail = '前';
+	    }
+
+	    var day = Math.trunc(time / (24 * 3600 * 1000));
+	    var hour = Math.trunc(time % (24 * 3600 * 1000) / (3600 * 1000));
+	    var minute = Math.trunc(time % (24 * 3600 * 1000) % (3600 * 1000) / (60 * 1000));
+	    if (day) {
+	      ret += day + '天';
+	    } else if (hour) {
+	      ret += hour + '小时';
+	    } else if (minute) {
+	      ret += minute + '分钟';
+	    } else if (time < 60 * 1000) {
+	      ret = '几秒';
+	    }
+	    return ret + retTail;
+	  };
+	});
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.filter('order', function () {
+	  return function (status) {
+	    var result = {
+	      CREATE: '创建',
+	      WAIT_BUYER_PAY: '等待',
+	      TRADE_SUCCESS: '付款',
+	      FINISH: '完成',
+	      TRADE_CLOSED: '关闭'
+	    };
+	    return result[status] || '其它';
+	  };
+	});
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('adminApi', ['$http', '$q', function ($http, $q) {
+	  var getUser = function getUser() {
+	    return $http.get('/api/admin/user').then(function (success) {
+	      return success.data;
+	    });
+	  };
+	  var getOrder = function getOrder() {
+	    return $http.get('/api/admin/order').then(function (success) {
+	      return success.data;
+	    });
+	  };
+	  var getAccountId = function getAccountId(port) {
+	    return $http.get('/api/admin/account/port/' + port).then(function (success) {
+	      return success.data.id;
+	    });
+	  };
+	  var getIndexInfo = function getIndexInfo() {
+	    return $q.all([$http.get('/api/admin/user/recentSignUp').then(function (success) {
+	      return success.data;
+	    }), $http.get('/api/admin/user/recentLogin').then(function (success) {
+	      return success.data;
+	    })]).then(function (success) {
+	      return {
+	        signup: success[0],
+	        login: success[1]
+	      };
+	    });
+	  };
+	  return {
+	    getUser: getUser,
+	    getOrder: getOrder,
+	    getAccountId: getAccountId,
+	    getIndexInfo: getIndexInfo
+	  };
+	}]);
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('homeApi', ['$http', function ($http) {
+	  var userSignup = function userSignup(email, code, password) {
+	    return $http.post('/api/home/signup', {
+	      email: email,
+	      code: code,
+	      password: password
+	    }).catch(function (err) {
+	      if (err.status === 403) {
+	        return Promise.reject('用户注册失败');
+	      } else {
+	        return Promise.reject('网络异常，请稍后再试');
+	      }
+	    });
+	  };
+	  var userLogin = function userLogin(email, password) {
+	    return $http.post('/api/home/login', {
+	      email: email,
+	      password: password
+	    }).then(function (success) {
+	      return success.data.type;
+	    }).catch(function (err) {
+	      if (err.status === 403) {
+	        var errData = '用户名或密码错误';
+	        if (err.data === 'user not exists') {
+	          errData = '该用户尚未注册的';
+	        }
+	        if (err.data === 'invalid body') {
+	          errData = '请输入正确的用户名格式';
+	        }
+	        if (err.data === 'password retry out of limit') {
+	          errData = '密码重试次数已达上限\n请稍后再试';
+	        }
+	        return Promise.reject(errData);
+	      } else {
+	        return Promise.reject('网络异常，请稍后再试');
+	      }
+	    });
+	  };
+	  var findPassword = function findPassword(email) {
+	    if (!email) {
+	      return Promise.reject('请输入邮箱地址再点击“找回密码”');
+	    };
+	    return $http.post('/api/home/password/sendEmail', {
+	      email: email
+	    }).then(function (success) {
+	      return '重置密码链接已发至您的邮箱，\n请注意查收';
+	    }).catch(function (err) {
+	      var errData = null;
+	      if (err.status === 403 && err.data === 'already send') {
+	        errData = '重置密码链接已经发送，\n请勿重复发送';
+	      } else if (err.status === 403 && err.data === 'user not exists') {
+	        errData = '请输入正确的邮箱地址';
+	      } else {
+	        errData = '网络异常，请稍后再试';
+	      }
+	      return Promise.reject(errData);
+	    });
+	  };
+
+	  return {
+	    userSignup: userSignup, userLogin: userLogin, findPassword: findPassword
+	  };
+	}]);
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('userApi', ['$q', '$http', function ($q, $http) {
+	  var getUserAccount = function getUserAccount() {
+	    var account = null;
+	    var servers = null;
+	    return $q.all([$http.get('/api/user/account'), $http.get('/api/user/server')]).then(function (success) {
+	      return {
+	        account: success[0].data,
+	        servers: success[1].data
+	      };
+	    });
+	  };
+	  var changePassword = function changePassword(accountId, password) {
+	    return $http.put('/api/user/' + accountId + '/password', {
+	      password: password
+	    });
+	  };
+	  return {
+	    getUserAccount: getUserAccount,
+	    changePassword: changePassword
+	  };
+	}]);
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+
+	app.factory('alertDialog', ['$mdDialog', function ($mdDialog) {
+	  var publicInfo = {};
+	  publicInfo.isLoading = false;
+	  publicInfo.content = '';
+	  publicInfo.button = '';
+	  var close = function close() {
+	    return $mdDialog.hide().then(function (success) {
+	      publicInfo.isLoading = false;
+	      alertDialogPromise = null;
+	      return;
+	    }).catch(function (err) {
+	      publicInfo.isLoading = false;
+	      alertDialogPromise = null;
+	      return;
+	    });
+	  };
+	  publicInfo.close = close;
+	  var alertDialogPromise = null;
+	  var isDialogShow = function isDialogShow() {
+	    if (alertDialogPromise && !alertDialogPromise.$$state.status) {
+	      return true;
+	    }
+	    return false;
+	  };
+	  var dialog = {
+	    templateUrl: '/public/views/home/alertDialog.html',
+	    escapeToClose: false,
+	    locals: { bind: publicInfo },
+	    bindToController: true,
+	    controller: ['$scope', '$mdDialog', 'bind', function ($scope, $mdDialog, bind) {
+	      $scope.publicInfo = bind;
+	    }],
+	    clickOutsideToClose: false
+	  };
+	  var show = function show(content, button) {
+	    publicInfo.content = content;
+	    publicInfo.button = button;
+	    if (isDialogShow()) {
+	      publicInfo.isLoading = false;
+	      return alertDialogPromise;
+	    }
+	    alertDialogPromise = $mdDialog.show(dialog);
+	    return alertDialogPromise;
+	  };
+	  var loading = function loading() {
+	    publicInfo.isLoading = true;
+	    if (!isDialogShow()) {
+	      show();
+	    }
+	  };
+	  return {
+	    show: show,
+	    loading: loading,
+	    close: close
+	  };
+	}]);
+
+	app.factory('payDialog', ['$mdDialog', '$interval', '$http', function ($mdDialog, $interval, $http) {
+	  var publicInfo = {};
+	  publicInfo.isLoading = false;
+	  publicInfo.qrCode = '';
+	  var interval = null;
+	  var close = function close() {
+	    interval && $interval.cancel(interval);
+	    return $mdDialog.hide().then(function (success) {
+	      publicInfo.isLoading = false;
+	      payDialogPromise = null;
+	      return;
+	    }).catch(function (err) {
+	      publicInfo.isLoading = false;
+	      payDialogPromise = null;
+	      return;
+	    });
+	  };
+	  publicInfo.close = close;
+	  var payDialogPromise = null;
+	  var isDialogShow = function isDialogShow() {
+	    if (payDialogPromise && !payDialogPromise.$$state.status) {
+	      return true;
+	    }
+	    return false;
+	  };
+	  var dialog = {
+	    templateUrl: '/public/views/user/payDialog.html',
+	    escapeToClose: false,
+	    locals: { bind: publicInfo },
+	    bindToController: true,
+	    controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function ($scope, $mdDialog, $mdMedia, bind) {
+	      $scope.getQrCodeSize = function () {
+	        if ($mdMedia('xs') || $mdMedia('sm')) {
+	          return 200;
+	        }
+	        return 250;
+	      };
+	      $scope.publicInfo = bind;
+	      $scope.qrCode = function () {
+	        return $scope.publicInfo.qrCode || 'AAA';
+	      };
+	      $scope.pay = function () {
+	        window.location.href = $scope.publicInfo.qrCode;
+	      };
+	    }],
+	    clickOutsideToClose: false
+	  };
+	  var setUrl = function setUrl(orderId, url) {
+	    if (orderId && url) {
+	      interval = $interval(function () {
+	        $http.post('/api/user/order/status', {
+	          orderId: orderId
+	        }).then(function (success) {
+	          var orderStatus = success.data.status;
+	          if (orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
+	            close();
+	          }
+	        });
+	      }, 5 * 1000);
+	    }
+	    publicInfo.qrCode = url;
+	    if (isDialogShow()) {
+	      publicInfo.isLoading = false;
+	      return payDialogPromise;
+	    }
+	    payDialogPromise = $mdDialog.show(dialog);
+	    return payDialogPromise;
+	  };
+	  var loading = function loading() {
+	    publicInfo.isLoading = true;
+	    if (!isDialogShow()) {
+	      setUrl();
+	    }
+	  };
+	  return {
+	    setUrl: setUrl,
+	    loading: loading,
+	    close: close
+	  };
+	}]);
+
+	app.factory('accountSortDialog', ['$mdDialog', function ($mdDialog) {
+	  var publicInfo = {};
+	  var hide = function hide() {
+	    return $mdDialog.hide().then(function (success) {
+	      dialogPromise = null;
+	      return;
+	    }).catch(function (err) {
+	      dialogPromise = null;
+	      return;
+	    });
+	  };
+	  publicInfo.hide = hide;
+	  var dialogPromise = null;
+	  var isDialogShow = function isDialogShow() {
+	    if (dialogPromise && !dialogPromise.$$state.status) {
+	      return true;
+	    }
+	    return false;
+	  };
+	  var dialog = {
+	    templateUrl: '/public/views/admin/accountSortAndFilterDialog.html',
+	    escapeToClose: false,
+	    locals: { bind: publicInfo },
+	    bindToController: true,
+	    controller: ['$scope', '$mdDialog', '$sessionStorage', 'bind', function ($scope, $mdDialog, $sessionStorage, bind) {
+	      $scope.publicInfo = bind;
+	      $scope.sortAndFilter = function () {
+	        $sessionStorage.settings.accountFilter = $scope.publicInfo.accountMethod;
+	        $scope.publicInfo.accountInfo.account = $scope.publicInfo.accountInfo.originalAccount.sort(function (a, b) {
+	          if ($scope.publicInfo.accountMethod.sort === 'port') {
+	            return a.port >= b.port ? 1 : -1;
+	          } else if ($scope.publicInfo.accountMethod.sort === 'expire') {
+	            if (!a.data || !b.data) {
+	              return 1;
+	            }
+	            return a.data.expire >= b.data.expire ? 1 : -1;
+	          }
+	        });
+	        $scope.publicInfo.accountInfo.account = $scope.publicInfo.accountInfo.account.filter(function (f) {
+	          var show = true;
+	          if (!$scope.publicInfo.accountMethod.filter.expired && f.data && f.data.expire >= Date.now()) {
+	            show = false;
+	          }
+	          if (!$scope.publicInfo.accountMethod.filter.unexpired && f.data && f.data.expire <= Date.now()) {
+	            show = false;
+	          }
+	          return show;
+	        });
+	      };
+	    }],
+	    clickOutsideToClose: true
+	  };
+	  var show = function show(accountMethod, accountInfo) {
+	    if (isDialogShow()) {
+	      return dialogPromise;
+	    }
+	    publicInfo.accountMethod = accountMethod;
+	    publicInfo.accountInfo = accountInfo;
+	    dialogPromise = $mdDialog.show(dialog);
+	    return dialogPromise;
+	  };
+	  return {
+	    show: show,
+	    hide: hide
+	  };
+	}]);
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var app = __webpack_require__(1).app;
+	app.factory('ws', ['$websocket', '$location', '$timeout', function ($websocket, $location, $timeout) {
+	  var protocol = $location.protocol() === 'http' ? 'ws://' : 'wss://';
+	  var url = protocol + $location.host() + ':' + $location.port() + '/user';
+	  var connection = null;
+	  var messages = [];
+	  var connect = function connect() {
+	    connection = $websocket(url);
+	    connection.onMessage(function (message) {
+	      console.log(message.data);
+	      messages.push(message.data);
+	    });
+	    connection.onClose(function () {
+	      $timeout(function () {
+	        connect();
+	      }, 3000);
+	    });
+	  };
+	  connect();
+	  var methods = {
+	    messages: messages,
+	    send: function send(msg) {
+	      connection.send(msg);
+	    }
+	  };
+	  return methods;
+	}]);
+
+/***/ }
+/******/ ]);
