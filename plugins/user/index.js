@@ -120,6 +120,13 @@ const getUsers = async () => {
   return users;
 };
 
+const getRecentUsers = async (number) => {
+  const users = await knex('user').select().where({
+    type: 'normal',
+  }).orderBy('createTime', 'desc').limit(number);
+  return users;
+};
+
 const getOneUser = async (id) => {
   const user = await knex('user').select().where({
     type: 'normal',
@@ -135,4 +142,5 @@ exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
 exports.get = getUsers;
+exports.getRecent = getRecentUsers;
 exports.getOne = getOneUser;
