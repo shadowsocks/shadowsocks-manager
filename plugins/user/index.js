@@ -120,10 +120,17 @@ const getUsers = async () => {
   return users;
 };
 
-const getRecentUsers = async (number) => {
+const getRecentSignUpUsers = async (number) => {
   const users = await knex('user').select().where({
     type: 'normal',
   }).orderBy('createTime', 'desc').limit(number);
+  return users;
+};
+
+const getRecentLoginUsers = async (number) => {
+  const users = await knex('user').select().where({
+    type: 'normal',
+  }).orderBy('lastLogin', 'desc').limit(number);
   return users;
 };
 
@@ -142,5 +149,6 @@ exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
 exports.get = getUsers;
-exports.getRecent = getRecentUsers;
+exports.getRecentSignUp = getRecentSignUpUsers;
+exports.getRecentLogin = getRecentLoginUsers;
 exports.getOne = getOneUser;

@@ -53,7 +53,8 @@ app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)', isAdmin, admin.getServerP
 app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isAdmin, admin.getServerPortLastConnect);
 
 app.get('/api/admin/user', isAdmin, admin.getUsers);
-app.get('/api/admin/user/recent', isAdmin, admin.getRecentUsers);
+app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
+app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
 app.get('/api/admin/user/:userId(\\d+)', isAdmin, admin.getOneUser);
 app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUserAccount);

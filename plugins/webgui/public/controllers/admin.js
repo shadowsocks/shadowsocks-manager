@@ -95,7 +95,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, adminApi) => {
     $scope.setTitle('首页');
     adminApi.getIndexInfo().then(success => {
-      $scope.users = success.users;
+      $scope.signupUsers = success.signup;
+      $scope.loginUsers = success.login;
     });
   }
 ])
