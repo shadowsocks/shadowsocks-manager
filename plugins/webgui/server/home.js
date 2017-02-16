@@ -46,12 +46,13 @@ exports.signup = (req, res) => {
         if(success.length) {
           port = success[0].port + 1;
         }
-        return account.addAccount(3, {
+        return account.addAccount(5, {
           user: userId,
           port,
           password: Math.random().toString().substr(2,10),
-          time: Date.now() - 29 * 24 * 3600 * 1000 - 18 * 3600 * 1000,
-          flow: 200 * 1000 * 1000 * 1000,
+          time: Date.now(),
+          limit: 8,
+          flow: 350 * 1000 * 1000,
         });
       });
     } else {

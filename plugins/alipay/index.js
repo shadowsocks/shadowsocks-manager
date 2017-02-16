@@ -73,7 +73,7 @@ setInterval(async () => {
       });
     } else if(order.status === 'TRADE_SUCCESS') {
       const accountId = order.account;
-      account.addAccountLimit(accountId).then(() => {
+      account.addAccountLimitToMonth(accountId).then(() => {
         return knex('alipay').update({
           status: 'FINISH',
         }).where({

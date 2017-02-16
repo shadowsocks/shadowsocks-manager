@@ -121,11 +121,55 @@ const addAccountLimit = async (id, number = 1) => {
   };
   if(accountData.create + accountData.limit * timePeriod[account.type] <= Date.now()) {
     accountData.create = Date.now();
-    accountData.limit = 1;
+    accountData.limit = number;
   } else {
     accountData.limit += number;
   }
   await knex('account_plugin').update({
+    data: JSON.stringify(accountData),
+  }).where({ id });
+  return;
+};
+
+const addAccountLimitToMonth = async (id, number = 1) => {
+  const account = await knex('account_plugin').select().where({ id }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  });
+  if(account.type < 2 || account.type > 5) { return; }
+  const accountData = JSON.parse(account.data);
+  accountData.flow = 200 * 1000 * 1000 * 1000;
+  if(account.type === 3) {
+    if(accountData.create + accountData.limit * 30 * 86400 * 1000 <= Date.now()) {
+      accountData.create = Date.now();
+      accountData.limit = number;
+    } else {
+      accountData.limit += number;
+    }
+  } else {
+    const timePeriod = {
+      '2': 7 * 86400 * 1000,
+      '3': 30 * 86400 * 1000,
+      '4': 1 * 86400 * 1000,
+      '5': 3600 * 1000,
+    };
+    let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
+    if(expireTime <= Date.now()) {
+      expireTime = 30 * 86400 * 1000 * number + Date.now();
+    } else {
+      expireTime += 30 * 86400 * 1000 * number;
+    }
+    accountData.create = expireTime;
+    accountData.limit = 0;
+    while(accountData.create >= Date.now()) {
+      accountData.limit += 1;
+      accountData.create -= 30 * 86400 * 1000;
+    }
+  }
+  await knex('account_plugin').update({
+    type: 3,
     data: JSON.stringify(accountData),
   }).where({ id });
   return;
@@ -140,3 +184,4 @@ exports.changePassword = changePassword;
 exports.changePort = changePort;
 
 exports.addAccountLimit = addAccountLimit;
+exports.addAccountLimitToMonth = addAccountLimitToMonth;
