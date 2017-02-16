@@ -6,4 +6,5 @@ exports.app = angular.module('app', [
   'chart.js',
   'angularMoment',
   'ngWebSocket',
+  'ngStorage',
 ]);

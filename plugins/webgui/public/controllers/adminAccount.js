@@ -3,6 +3,7 @@ const app = require('../index').app;
 app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog', '$interval',
   ($scope, $state, $stateParams, $http, accountSortDialog, $interval) => {
     $scope.setTitle('账号');
+    $scope.setMenuRightButton('sort_by_alpha');
     $scope.accountInfo = {};
     const getAccount = () => {
       $http.get('/api/admin/account').then(success => {
@@ -27,9 +28,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.sortAndFilter = () => {
       accountSortDialog.show($scope.accountMethod, $scope.accountInfo);
     };
-    // $interval(() => {
-    //   console.log($scope.account);
-    // }, 1000);
+    $scope.$on('RightButtonClick', () => {
+      $scope.sortAndFilter();
+    });
   }
 ])
 .controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q',
@@ -110,7 +111,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         data: pieData.map(m => m.flow),
         labels: pieData.map(m => m.name),
         options: {
-          responsive: false,
+          // responsive: false,
           tooltips: {
             enabled: true,
             mode: 'single',

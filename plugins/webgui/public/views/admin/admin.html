@@ -38,6 +38,9 @@
                     </md-button>
                     <div>{{title}}</div>
                     <span flex></span>
+                    <md-button class="md-icon-button" aria-label="menu right" ng-if="menuRightButtonIcon" ng-click="menuRightButtonClick()">
+                        <i class="material-icons">{{menuRightButtonIcon}}</i>
+                    </md-button>
                 </div>
             </md-toolbar>
         </div>

@@ -76,10 +76,18 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.menuButtonIcon = icon;
       $scope.menuButtonClick = fn;
     };
+    $scope.menuRightButtonIcon = '';
+    $scope.menuRightButtonClick = () => {
+      $scope.$broadcast('RightButtonClick', 'click');
+    };
+    $scope.setMenuRightButton = (icon) => {
+      $scope.menuRightButtonIcon = icon;
+    };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.fabButton = false;
       $scope.title = '';
       $scope.menuButtonIcon = '';
+      $scope.menuRightButtonIcon = '';
     });
   }
 ])

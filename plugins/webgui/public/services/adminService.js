@@ -8,7 +8,7 @@ app.factory('adminApi', ['$http', $http => {
     return $http.get('/api/admin/order').then(success => success.data);
   };
   const getAccountId = port => {
-    return $http.get('/api/admin/account/port/' + port).then(success => success.id);
+    return $http.get('/api/admin/account/port/' + port).then(success => success.data.id);
   };
   const getIndexInfo = () => {
     return $http.get('/api/admin/user/recent').then(success => {
