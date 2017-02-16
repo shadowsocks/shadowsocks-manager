@@ -120,8 +120,21 @@ const getServerUserFlow = (serverId, timeArray) => {
   }).whereBetween('saveFlow.time', timeArray);
 };
 
+const getAccountServerFlow = (accountId, timeArray) => {
+  return knex('saveFlow').sum('saveFlow.flow as flow').groupBy('saveFlow.id')
+  .select([
+    'server.name',
+  ])
+  .leftJoin('server', 'server.id', 'saveFlow.id')
+  .leftJoin('account_plugin', 'account_plugin.port', 'saveFlow.port')
+  .where({ 'account_plugin.id': accountId })
+  .whereBetween('saveFlow.time', timeArray);
+  ;
+};
+
 exports.getFlow = getFlow;
 exports.getServerFlow = getServerFlow;
 exports.getServerPortFlow = getServerPortFlow;
 exports.getServerUserFlow = getServerUserFlow;
 exports.getlastConnectTime = getlastConnectTime;
+exports.getAccountServerFlow = getAccountServerFlow;

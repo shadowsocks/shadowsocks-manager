@@ -94,32 +94,45 @@
                                 <qr size="getQrCodeSize()" layout-margin text="createQrCode(account.method, account.password, server.host, account.port)" image="true"></qr>
                             </div>
                             <div flex-lg="10"></div>
-                            <div flex="100">
-                                <div layout="column" layout-align="center center">
+                            <div flex="100" layout="row" layout-xs="column" layout-warp layout-align="center center">
+                                <div flex>
+                                    <div layout="column" layout-align="center center">
+                                        <div layout="row" layout-align="center center">
+                                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
+                                            <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
+                                                <md-radio-button value="hour">时</md-radio-button>
+                                                <md-radio-button value="day" >天</md-radio-button>
+                                                <md-radio-button value="week">周</md-radio-button>
+                                            </md-radio-group>
+                                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, 1)">next</md-button>
+                                        </div>
+                                        <div>
+                                            {{time}}，{{sumFlow | flow}}
+                                        </div>
+                                        <div></div>
+                                    </div>
                                     <div layout="row" layout-align="center center">
-                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
-                                        <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
-                                            <md-radio-button value="hour">时</md-radio-button>
-                                            <md-radio-button value="day" >天</md-radio-button>
-                                            <md-radio-button value="week">周</md-radio-button>
-                                        </md-radio-group>
-                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, 1)">next</md-button>
+                                        <div style="width: 95%; max-width: 500px;">
+                                            <canvas
+                                                class="chart chart-line"
+                                                chart-data="lineChart.data"
+                                                chart-labels="lineChart.labels"
+                                                chart-series="lineChart.series"
+                                                chart-options="lineChart.options"
+                                                chart-dataset-override="lineChart.datasetOverride">
+                                            </canvas>
+                                        </div>
                                     </div>
-                                    <div>
-                                        {{time}}，{{sumFlow | flow}}
-                                    </div>
-                                    <div></div>
                                 </div>
-                                <div layout="row" layout-align="center center">
-                                    <div style="width: 95%; max-width: 500px;">
-                                        <canvas
-                                            class="chart chart-line"
-                                            chart-data="chart.data"
-                                            chart-labels="chart.labels"
-                                            chart-series="chart.series"
-                                            chart-options="chart.options"
-                                            chart-dataset-override="chart.datasetOverride">
-                                        </canvas>
+                                <div flex>
+                                    <div layout="row" layout-align="center center">
+                                        <div style="max-width: 90%; max-height: 300px;">
+                                            <canvas id="pie" class="chart chart-pie"
+                                                chart-data="pieChart.data"
+                                                chart-labels="pieChart.labels"
+                                                chart-options="pieChart.options">
+                                            </canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -105,9 +105,27 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         return number;
       }
     };
-    const setChart = (data) => {
-      $scope.chart = {
-        data: [data],
+    const setChart = (lineData, pieData) => {
+      $scope.pieChart = {
+        data: pieData.map(m => m.flow),
+        labels: pieData.map(m => m.name),
+        options: {
+          responsive: false,
+          tooltips: {
+            enabled: true,
+            mode: 'single',
+            callbacks: {
+              label: function(tooltipItem, data) {
+                const label = data.labels[tooltipItem.index];
+                const datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                return label + ': ' + scaleLabel(datasetLabel);
+              }
+            }
+          },
+        },
+      };
+      $scope.lineChart = {
+        data: [lineData],
         labels: flowLabel[$scope.flowType.value],
         series: 'day',
         datasetOverride: [{ yAxisID: 'y-axis-1' }],
@@ -136,17 +154,26 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       };
     };
     $scope.getChartData = (serverId) => {
-      $http.get(`/api/admin/flow/${ serverId }`, {
-        params: {
-          port: $scope.account.port,
-          type: $scope.flowType.value,
-          time: new Date(flowTime[$scope.flowType.value]),
-        }
-      }).then(success => {
-        $scope.sumFlow = success.data.reduce((a, b) => {
+      $q.all([
+        $http.get(`/api/admin/flow/${ serverId }`, {
+          params: {
+            port: $scope.account.port,
+            type: $scope.flowType.value,
+            time: new Date(flowTime[$scope.flowType.value]),
+          }
+        }),
+        $http.get(`/api/admin/flow/account/${ $stateParams.accountId }`, {
+          params: {
+            port: $scope.account.port,
+            type: $scope.flowType.value,
+            time: new Date(flowTime[$scope.flowType.value]),
+          }
+        })
+      ]).then(success => {
+        $scope.sumFlow = success[0].data.reduce((a, b) => {
           return a + b;
         }, 0);
-        setChart(success.data);
+        setChart(success[0].data, success[1].data);
       });
       if($scope.flowType.value === 'hour') {
         $scope.time = moment(flowTime[$scope.flowType.value]).format('YYYY-MM-DD HH:00');
