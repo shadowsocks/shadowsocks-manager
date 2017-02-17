@@ -7,15 +7,25 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.accountInfo = {};
     $scope.sortAndFilter = () => {
       $scope.accountInfo.account = $scope.accountInfo.originalAccount.sort((a, b) => {
-        if($scope.accountMethod.sort === 'port') {
+        if($scope.accountMethod.sort === 'port_asc') {
           return a.port >= b.port ? 1 : -1;
-        } else if ($scope.accountMethod.sort === 'expire') {
-          if(!a.data || !b.data) { return 1; }
+        } else if ($scope.accountMethod.sort === 'port_desc') {
+          return a.port <= b.port ? 1 : -1;
+        } else if ($scope.accountMethod.sort === 'expire_desc') {
+          if(!a.data) { return -1; }
+          if(!b.data) { return 1; }
+          return a.data.expire <= b.data.expire ? 1 : -1;
+        } else if ($scope.accountMethod.sort === 'expire_asc') {
+          if(!a.data) { return 1; }
+          if(!b.data) { return -1; }
           return a.data.expire >= b.data.expire ? 1 : -1;
         }
       });
       $scope.accountInfo.account = $scope.accountInfo.account.filter(f => {
         let show = true;
+        if(!$scope.accountMethod.filter.unlimit && f.type === 1) {
+          show = false;
+        }
         if(!$scope.accountMethod.filter.expired && f.data && f.data.expire >= Date.now()) {
           show = false;
         }
@@ -38,6 +48,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       filter: {
         expired: true,
         unexpired: true,
+        unlimit: true,
       },
     };
     $scope.setFabButton(() => {

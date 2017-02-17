@@ -64,15 +64,12 @@
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
         <md-card ng-click="toAccountPage(port.port)">
-            <md-card-header>
-                <md-card-avatar>
-                    <img class="md-user-avatar" src="https://placehold.it/50x50" />
-                </md-card-avatar>
-                <md-card-header-text>
-                  <span class="md-title">{{port.port}}</span>
-                  <span class="md-subhead">{{port.password}}</span>
-                </md-card-header-text>
-            </md-card-header>
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="40">{{port.port}}</div>
+                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{port.password}}</div>
+                </div>
+            </md-card-content>
         </md-card>
     </div>
 </div>
