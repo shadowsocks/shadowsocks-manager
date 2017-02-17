@@ -2,14 +2,29 @@
     <div flex>
         <md-card>
             <md-card-header>
-                <md-card-avatar>
-                    <!-- <img class="md-user-avatar" src="https://placehold.it/50x50" /> -->
-                </md-card-avatar>
                 <md-card-header-text>
-                  <span class="md-title">{{user.username}}</span>
-                  <!-- <span class="md-subhead">{{user.password}}</span> -->
+                    <span class="md-headline">{{user.username}}</span>
                 </md-card-header-text>
             </md-card-header>
+            <md-card-content>
+              <md-list>
+                  <md-divider></md-divider>
+                  <md-list-item>
+                      <div flex layout="row" layout-align="space-between center">
+                          <div flex="30">注册时间</div>
+                          <div flex="70" style="text-align: right;">{{user.createTime | timeagoshort}}</div>
+                      </div>
+                  </md-list-item>
+                  <md-divider></md-divider>
+                  <md-list-item>
+                      <div flex layout="row" layout-align="space-between center">
+                          <div flex="30">上次登陆</div>
+                          <div flex="70" style="text-align: right;">{{user.lastLogin | timeagoshort}}</div>
+                      </div>
+                  </md-list-item>
+                  <md-divider></md-divider>
+              </md-list>
+            </md-card-content>
         </md-card>
     </div>
 </div>
