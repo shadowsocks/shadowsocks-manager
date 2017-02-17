@@ -30,11 +30,19 @@
 </div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in user.account track by $index">
-        <md-card>
-            <md-card-header>
-                <md-card-avatar>
-                    <!-- <img class="md-user-avatar" src="https://placehold.it/50x50" /> -->
-                </md-card-avatar>
+        <md-card ng-click="toAccountPage(a.port)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="50">{{a.port}}</div>
+                    <div flex="50" layout="row" layout-align="space-between center">
+                        <div></div>
+                        <md-button class="md-icon-button" aria-label="delete" ng-click="deleteUserAccount(a.id)">
+                            <md-icon class="material-icons">close</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+            </md-card-content>
+            <!-- <md-card-header>
                 <md-card-header-text>
                   <span class="md-title">{{a.port}}</span>
                   <span class="md-subhead">{{a.password}}</span>
@@ -47,7 +55,7 @@
                         </md-button>
                     </div>
                 </div>
-            </md-card-header>
+            </md-card-header> -->
         </md-card>
     </div>
 </div>
