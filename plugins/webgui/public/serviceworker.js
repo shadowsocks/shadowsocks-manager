@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-02-17 00:00:47';
+var ONLINE_CACHE_NAME = '2017-02-17 17:57:47';
 var onlineCacheUrl = [
   '/',
 
@@ -12,12 +12,16 @@ var onlineCacheUrl = [
   '/libs/angular-ui-router.min.js',
   '/libs/qrcode.min.js',
   '/libs/angular-qr.min.js',
+  '/libs/ngStorage.min.js',
   '/libs/Chart.min.js',
   '/libs/angular-chart.min.js',
   '/libs/moment.min.js',
   '/libs/angular-moment.min.js',
   '/libs/angular-websocket.min.js',
+
   '/libs/favicon.png',
+
+  '/libs/angular-material.min.css',
 ];
 
 this.addEventListener('activate', function(event) {
