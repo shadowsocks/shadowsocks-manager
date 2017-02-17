@@ -95,48 +95,60 @@
                                 <div layout-hide-xs></div>
                             </div>
                             <div flex-lg="10"></div>
-                            <div flex="100" layout="row" layout-xs="column" layout-warp layout-align="center center">
-                                <div flex>
-                                    <div layout="column" layout-align="center center">
-                                        <div layout="row" layout-align="center center">
-                                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
-                                            <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
-                                                <md-radio-button value="hour">时</md-radio-button>
-                                                <md-radio-button value="day" >天</md-radio-button>
-                                                <md-radio-button value="week">周</md-radio-button>
-                                            </md-radio-group>
-                                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, 1)">next</md-button>
-                                        </div>
-                                        <div>
-                                            {{time}}，{{sumFlow | flow}}
-                                        </div>
-                                        <div></div>
+                        </div>
+                        <div flex="100" layout="row" layout-xs="column" layout-warp layout-align="center center">
+                            <div flex flex="100" style="margin: 15px 0px 25px 0px;">
+                                <div layout="column" layout-align="center center">
+                                    <div layout="row" layout-align="center center" style="margin-bottom: 15px;">
+                                        <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
+                                            <md-radio-button value="hour">时</md-radio-button>
+                                            <md-radio-button value="day" >天</md-radio-button>
+                                            <md-radio-button value="week">周</md-radio-button>
+                                        </md-radio-group>
                                     </div>
-                                    <div layout="row" layout-align="center center">
-                                        <div style="width: 95%; max-width: 500px;">
-                                            <canvas
-                                                class="chart chart-line"
-                                                chart-data="lineChart.data"
-                                                chart-labels="lineChart.labels"
-                                                chart-series="lineChart.series"
-                                                chart-options="lineChart.options"
-                                                chart-dataset-override="lineChart.datasetOverride">
-                                            </canvas>
-                                        </div>
+                                    <div>
+                                        {{time}}，{{sumFlow | flow}}
                                     </div>
-                                </div>
-                                <div flex>
-                                    <div layout="row" layout-align="center center">
-                                        <div style="max-width: 90%; max-height: 300px;">
-                                            <canvas id="pie" class="chart chart-pie"
-                                                chart-data="pieChart.data"
-                                                chart-labels="pieChart.labels"
-                                                chart-options="pieChart.options">
-                                            </canvas>
-                                        </div>
+                                    <div>
+                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
+                                        <md-button md-no-ink class="md-primary" ng-click="resetFlowTime(server.id)">reset</md-button>
+                                        <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, 1)">next</md-button>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div layout="row" layout-xs="column" layout-sm="column" layout-warp layout-align="center center">
+                            <div flex-md="5" flex-gt-md="15"></div>
+                            <div flex>
+                                <div layout="row" layout-align="center center">
+                                    <div>
+                                        <canvas
+                                            width="{{getChartSize().line[0]}}"
+                                            height="{{getChartSize().line[1]}}"
+                                            class="chart chart-line"
+                                            chart-data="lineChart.data"
+                                            chart-labels="lineChart.labels"
+                                            chart-series="lineChart.series"
+                                            chart-options="lineChart.options"
+                                            chart-dataset-override="lineChart.datasetOverride">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div flex>
+                                <div layout="row" layout-align="center center">
+                                    <div>
+                                        <canvas class="chart chart-pie"
+                                            width="{{getChartSize().pie[0]}}"
+                                            height="{{getChartSize().pie[1]}}"
+                                            chart-data="pieChart.data"
+                                            chart-labels="pieChart.labels"
+                                            chart-options="pieChart.options">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div flex-md="5" flex-gt-md="15"></div>
                         </div>
                     </md-tab>
                 </md-tabs>

@@ -11,27 +11,29 @@
                     <md-button class="md-primary" aria-label="edit" ng-click="editServer(server.id)">
                         修改
                     </md-button>
-                    <md-button class="md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
+                    <!-- <md-button class="md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
                         删除
-                    </md-button>
+                    </md-button> -->
                 </div>
             </md-card-header>
             <md-card-content>
                 <div flex="100" style="margin: 15px 0px 25px 0px;">
                     <div layout="column" layout-align="center center">
-                        <div layout="row" layout-align="center center">
-                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
+                        <div layout="row" layout-align="center center" style="margin-bottom: 15px;">
                             <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
                                 <md-radio-button value="hour">时</md-radio-button>
                                 <md-radio-button value="day" >天</md-radio-button>
                                 <md-radio-button value="week">周</md-radio-button>
                             </md-radio-group>
-                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
                         </div>
                         <div>
                             {{time}}，{{sumFlow | flow}}
                         </div>
-                        <div></div>
+                        <div layout="row" layout-align="center center">
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
+                            <md-button md-no-ink class="md-primary" ng-click="resetFlowTime()">reset</md-button>
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
+                        </div>
                     </div>
                 </div>
                 <div layout="row" layout-xs="column" layout-sm="column" layout-warp layout-align="center center">

@@ -248,6 +248,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       flowTime[$scope.flowType] += number * time[$scope.flowType];
       $scope.getChartData();
     };
+    $scope.resetFlowTime = () => {
+      flowTime[$scope.flowType] = Date.now();
+      $scope.getChartData();
+    };
     $scope.getChartSize = () => {
       if($mdMedia('xs')) {
         return {

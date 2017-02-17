@@ -160,6 +160,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         series: 'day',
         datasetOverride: [{ yAxisID: 'y-axis-1' }],
         options: {
+          responsive: false,
           tooltips: {
             callbacks: {
               label: function(tooltipItem) {
@@ -223,6 +224,33 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       };
       flowTime[$scope.flowType.value] += number * time[$scope.flowType.value];
       $scope.getChartData(serverId);
+    };
+    $scope.resetFlowTime = serverId => {
+      flowTime[$scope.flowType.value] = Date.now();
+      $scope.getChartData(serverId);
+    };
+    $scope.getChartSize = () => {
+      if($mdMedia('xs')) {
+        return {
+          line: [ 320, 170 ],
+          pie: [ 170, 170 ],
+        };
+      } else if($mdMedia('sm')) {
+        return {
+          line: [ 360, 190 ],
+          pie: [ 190, 190 ],
+        };
+      } else if($mdMedia('md')) {
+        return {
+          line: [ 360, 180 ],
+          pie: [ 180, 180 ],
+        };
+      } else if($mdMedia('gt-md')) {
+        return {
+          line: [ 540, 240 ],
+          pie: [ 240, 240 ],
+        };
+      }
     };
   }
 ])
