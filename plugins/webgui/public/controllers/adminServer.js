@@ -97,8 +97,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
     });
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q',
-  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.server');
@@ -163,7 +163,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
         data: pieData.map(m => m.flow),
         labels: pieData.map(m => m.port + (m.username ? ` [${ m.username }]` : '')),
         options: {
-          // responsive: false,
+          responsive: false,
           tooltips: {
             enabled: true,
             mode: 'single',
@@ -183,6 +183,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
         series: 'day',
         datasetOverride: [{ yAxisID: 'y-axis-1' }],
         options: {
+          responsive: false,
           tooltips: {
             callbacks: {
               label: function(tooltipItem) {
@@ -246,6 +247,29 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment',
       };
       flowTime[$scope.flowType] += number * time[$scope.flowType];
       $scope.getChartData();
+    };
+    $scope.getChartSize = () => {
+      if($mdMedia('xs')) {
+        return {
+          line: [ 320, 170 ],
+          pie: [ 170, 170 ],
+        };
+      } else if($mdMedia('sm')) {
+        return {
+          line: [ 360, 190 ],
+          pie: [ 190, 190 ],
+        };
+      } else if($mdMedia('md')) {
+        return {
+          line: [ 360, 180 ],
+          pie: [ 180, 180 ],
+        };
+      } else if($mdMedia('gt-md')) {
+        return {
+          line: [ 540, 240 ],
+          pie: [ 240, 240 ],
+        };
+      }
     };
   }
 ])

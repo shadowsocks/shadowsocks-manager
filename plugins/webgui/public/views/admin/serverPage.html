@@ -16,8 +16,8 @@
                     </md-button>
                 </div>
             </md-card-header>
-            <md-card-content layout="row" layout-xs="column" layout-warp layout-align="center center">
-                <div flex>
+            <md-card-content>
+                <div flex="100" style="margin: 15px 0px 25px 0px;">
                     <div layout="column" layout-align="center center">
                         <div layout="row" layout-align="center center">
                             <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
@@ -33,28 +33,38 @@
                         </div>
                         <div></div>
                     </div>
-                    <div layout="row" layout-align="center center">
-                        <div style="width: 95%; max-width: 500px;">
-                            <canvas class="chart chart-line"
-                                chart-data="lineChart.data"
-                                chart-labels="lineChart.labels"
-                                chart-series="lineChart.series"
-                                chart-options="lineChart.options"
-                                chart-dataset-override="lineChart.datasetOverride">
-                            </canvas>
-                        </div>
-                    </div>
                 </div>
-                <div flex>
-                    <div layout="row" layout-align="center center">
-                        <div style="max-width: 90%; max-height: 300px;">
-                            <canvas id="pie" class="chart chart-pie" style="min-height: 100px; "
-                                chart-data="pieChart.data"
-                                chart-labels="pieChart.labels"
-                                chart-options="pieChart.options">
-                            </canvas>
+                <div layout="row" layout-xs="column" layout-sm="column" layout-warp layout-align="center center">
+                    <div flex-md="5" flex-gt-md="15"></div>
+                    <div flex>
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <canvas class="chart chart-line"
+                                    width="{{getChartSize().line[0]}}"
+                                    height="{{getChartSize().line[1]}}"
+                                    chart-data="lineChart.data"
+                                    chart-labels="lineChart.labels"
+                                    chart-series="lineChart.series"
+                                    chart-options="lineChart.options"
+                                    chart-dataset-override="lineChart.datasetOverride">
+                                </canvas>
+                            </div>
                         </div>
                     </div>
+                    <div flex>
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <canvas id="pie" class="chart chart-pie"
+                                    width="{{getChartSize().pie[0]}}"
+                                    height="{{getChartSize().pie[1]}}"
+                                    chart-data="pieChart.data"
+                                    chart-labels="pieChart.labels"
+                                    chart-options="pieChart.options">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex-md="5" flex-gt-md="15"></div>
                 </div>
             </md-card-content>
         </md-card>
