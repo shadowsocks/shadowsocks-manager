@@ -86,11 +86,28 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.setMenuRightButton = (icon) => {
       $scope.menuRightButtonIcon = icon;
     };
+    $scope.menuSearchButtonIcon = '';
+    $scope.menuSearch = {
+      input: false,
+      text: '',
+    };
+    $scope.menuSearchButtonClick = () => {
+      $scope.menuSearch.input = true;
+    };
+    $scope.setMenuSearchButton = (icon) => {
+      $scope.menuSearchButtonIcon = icon;
+    };
+    $scope.cancelSearch = () => {
+      $scope.menuSearch.input = false;
+    };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.fabButton = false;
       $scope.title = '';
       $scope.menuButtonIcon = '';
       $scope.menuRightButtonIcon = '';
+      $scope.menuSearchButtonIcon = '';
+      $scope.menuSearch.text = '';
+      $scope.menuSearch.input = false;
     });
   }
 ])

@@ -3,15 +3,29 @@ const app = require('../index').app;
 app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'adminApi',
   ($scope, $state, $stateParams, adminApi) => {
     $scope.setTitle('用户');
-    // $http.get('/api/admin/user').then(success => {
-    //   $scope.users = success.data;
-    // });
+    $scope.setMenuSearchButton('search');
     adminApi.getUser().then(success => {
-      $scope.users = success;
+      $scope.usersOriginal = success;
+      $scope.users = angular.copy($scope.usersOriginal);
     });
+    const userFilter = () => {
+      $scope.users = angular.copy($scope.usersOriginal.filter(f => {
+        return f.username.indexOf($scope.menuSearch.text) >= 0;
+      }));
+    };
     $scope.toUser = (id) => {
       $state.go('admin.userPage', { userId: id });
     };
+    $scope.$watch('menuSearch.text', () => {
+      if(!$scope.menuSearch.input) {
+        return;
+      }
+      if(!$scope.menuSearch.text) {
+        $scope.users = angular.copy($scope.usersOriginal);
+        return;
+      }
+      userFilter();
+    });
   }
 ])
 .controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog',

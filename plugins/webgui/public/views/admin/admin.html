@@ -33,11 +33,21 @@
         <div>
             <md-toolbar>
                 <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
-                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()" ng-if="!menuSearch.input">
                         <i class="material-icons">{{menuButtonIcon || 'menu'}}</i>
                     </md-button>
-                    <div>{{title}}</div>
-                    <span flex></span>
+                    <md-button class="md-icon-button" aria-label="menu back" ng-click="cancelSearch()" ng-if="menuSearch.input">
+                        <i class="material-icons">arrow_back</i>
+                    </md-button>
+                    <div ng-if="!menuSearch.input">{{title}}</div>
+                    <span flex ng-if="!menuSearch.input"></span>
+                    <md-button class="md-icon-button" aria-label="menu right search" ng-if="menuSearchButtonIcon && !menuSearch.input" ng-click="menuSearchButtonClick()">
+                        <i class="material-icons">{{menuSearchButtonIcon}}</i>
+                    </md-button>
+                    <md-input-container class="search-input" flex ng-if="menuSearch.input">
+                        <label>&nbsp;</label>
+                        <input ng-model="menuSearch.text">
+                    </md-input-container>
                     <md-button class="md-icon-button" aria-label="menu right" ng-if="menuRightButtonIcon" ng-click="menuRightButtonClick()">
                         <i class="material-icons">{{menuRightButtonIcon}}</i>
                     </md-button>
