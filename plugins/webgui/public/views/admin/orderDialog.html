@@ -1,0 +1,13 @@
+<md-dialog aria-label="order dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div>订单 {{ publicInfo.order.orderId }}</div>
+            <div>用户 {{ publicInfo.order.username }}</div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button class="md-primary" ng-click="publicInfo.hide()">
+            确定
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -18,7 +18,7 @@ const moment = require('moment');
 const createOrder = async (user, account, amount) => {
   const oldOrder = await knex('alipay').select().where({
     user,
-    account,
+    account: account ? account : null,
     amount: amount + '',
   }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
     status: 'CREATE',
@@ -31,7 +31,6 @@ const createOrder = async (user, account, amount) => {
       qrCode: oldOrder.qrcode,
     };
   }
-  // const orderId = Math.random().toString().substr(2);
   const orderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
   const time = 60;
   const qrCode = await alipay_f2f.createQRPay({
@@ -46,7 +45,7 @@ const createOrder = async (user, account, amount) => {
     qrcode: qrCode.qr_code,
     amount: amount + '',
     user,
-    account,
+    account: account ? account : null,
     status: 'CREATE',
     createTime: Date.now(),
     expireTime: Date.now() + time * 60 * 1000,
@@ -73,7 +72,8 @@ setInterval(async () => {
       });
     } else if(order.status === 'TRADE_SUCCESS') {
       const accountId = order.account;
-      account.addAccountLimitToMonth(accountId).then(() => {
+      const userId = order.user;
+      account.addAccountLimitToMonth(userId, accountId).then(() => {
         return knex('alipay').update({
           status: 'FINISH',
         }).where({

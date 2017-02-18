@@ -218,3 +218,46 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     hide,
   };
 }]);
+
+app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
+  const publicInfo = {};
+  const hide = () => {
+    return $mdDialog.hide()
+    .then(success => {
+      dialogPromise = null;
+      return;
+    }).catch(err => {
+      dialogPromise = null;
+      return;
+    });
+  };
+  publicInfo.hide = hide;
+  let dialogPromise = null;
+  const isDialogShow = () => {
+    if(dialogPromise && !dialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
+  const dialog = {
+    templateUrl: '/public/views/admin/orderDialog.html',
+    escapeToClose: false,
+    locals: { bind: publicInfo },
+    bindToController: true,
+    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+      $scope.publicInfo = bind;
+    }],
+    clickOutsideToClose: true,
+  };
+  const show = (order) => {
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    publicInfo.order = order;
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
+  return {
+    show,
+  };
+}]);

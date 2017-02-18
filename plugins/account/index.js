@@ -131,8 +131,28 @@ const addAccountLimit = async (id, number = 1) => {
   return;
 };
 
-const addAccountLimitToMonth = async (id, number = 1) => {
-  const account = await knex('account_plugin').select().where({ id }).then(success => {
+const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
+  if(!accountId) {
+    const port = await knex('account_plugin').select()
+    .orderBy('port', 'DESC').limit(1)
+    .then(success => {
+      if(success.length) {
+        return success[0].port + 1;
+      } else {
+        return 50000;
+      }
+    });
+    await addAccount(3, {
+      user: userId,
+      port,
+      password: Math.random().toString().substr(2,10),
+      time: Date.now(),
+      limit: number,
+      flow: 200 * 1000 * 1000 * 1000,
+    });
+    return;
+  }
+  const account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
     if(success.length) {
       return success[0];
     }
@@ -171,7 +191,7 @@ const addAccountLimitToMonth = async (id, number = 1) => {
   await knex('account_plugin').update({
     type: 3,
     data: JSON.stringify(accountData),
-  }).where({ id });
+  }).where({ id: accountId });
   return;
 };
 

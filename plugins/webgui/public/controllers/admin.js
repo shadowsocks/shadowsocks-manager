@@ -125,10 +125,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
   }
 ])
-.controller('AdminPayController', ['$scope', 'adminApi',
-  ($scope, adminApi) => {
+.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog',
+  ($scope, adminApi, orderDialog) => {
     $scope.setTitle('续费');
     adminApi.getOrder().then(orders => $scope.orders = orders);
+    $scope.showOrderInfo = order => {
+      orderDialog.show(order);
+    };
   }
 ])
 ;
