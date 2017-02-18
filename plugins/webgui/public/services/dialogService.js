@@ -247,6 +247,7 @@ app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
     controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
       $scope.publicInfo = bind;
     }],
+    fullscreen: true,
     clickOutsideToClose: true,
   };
   const show = (order) => {

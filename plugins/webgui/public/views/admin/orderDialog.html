@@ -1,13 +1,33 @@
-<md-dialog aria-label="order dialog">
+<md-dialog aria-label="order dialog" style="min-width: 400px;" ng-click="publicInfo.hide()">
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div>订单 {{ publicInfo.order.orderId }}</div>
-            <div>用户 {{ publicInfo.order.username }}</div>
+            <md-list>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">订单号：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderId }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">创建时间：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.createTime | date : 'yyyy-MM-dd HH:mm' }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">状态：</div><div flex="70" style="text-align:right;">{{ publicInfo.order.status | order }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+            <md-list>
         </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row">
-        <md-button class="md-primary" ng-click="publicInfo.hide()">
-            确定
-        </md-button>
-    </md-dialog-actions>
 </md-dialog>
