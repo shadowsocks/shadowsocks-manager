@@ -2,7 +2,7 @@ const app = require('../index').app;
 
 app.filter('substr', function() {
   return function(input, number = 20) {
-    if(input.toString().length >= number) {
+    if(input.toString().length > number) {
       return input.toString().substr(0, number) + '...';
     }
     return input;

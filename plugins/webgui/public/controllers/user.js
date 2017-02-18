@@ -136,6 +136,16 @@ app
         // }, 10 * 1000);
       }).catch(console.log);
     };
+    $scope.fontColor = (time) => {
+      if(time >= Date.now()) {
+        return {
+          color: '#333',
+        };
+      }
+      return {
+        color: '#a33',
+      };
+    };
     $scope.unfinish = () => {
       alertDialog.show('该功能尚未完成', '确定');
     };
