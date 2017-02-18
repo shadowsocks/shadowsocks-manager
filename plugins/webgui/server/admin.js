@@ -219,8 +219,9 @@ exports.addAccount = (req, res) => {
       const time = req.body.time;
       const limit = +req.body.limit;
       const flow = +req.body.flow;
+      const autoRemove = +req.body.autoRemove || 0;
       return account.addAccount(type, {
-        port, password, time, limit, flow,
+        port, password, time, limit, flow, autoRemove,
       });
     }
     result.throw();
@@ -268,6 +269,7 @@ exports.changeAccountData = (req, res) => {
     time: req.body.time,
     limit: +req.body.limit,
     flow: +req.body.flow,
+    autoRemove: +req.body.autoRemove,
   }).then(success => {
     res.send('success');
   }).catch(err => {

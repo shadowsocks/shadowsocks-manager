@@ -13,6 +13,7 @@ const addAccount = async (type, options) => {
       port: options.port,
       password: options.password,
       status: 0,
+      autoRemove: 0,
     });
     await checkAccount.checkServer();
     return;
@@ -28,6 +29,7 @@ const addAccount = async (type, options) => {
         limit: options.limit || 1,
       }),
       status: 0,
+      autoRemove: options.autoRemove || 0,
     });
     await checkAccount.checkServer();
     return;
@@ -49,6 +51,7 @@ const getAccount = async (where) => {
     'account_plugin.password',
     'account_plugin.data',
     'account_plugin.status',
+    'account_plugin.autoRemove',
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
@@ -75,6 +78,7 @@ const editAccount = async (id, options) => {
   const update = {};
   update.type = options.type;
   update.userId = options.userId;
+  update.autoRemove = options.autoRemove;
   if(options.type === 1) {
     update.data = null;
     update.port = +options.port;

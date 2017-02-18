@@ -53,6 +53,7 @@ exports.signup = (req, res) => {
           time: Date.now(),
           limit: 8,
           flow: 350 * 1000 * 1000,
+          autoRemove: 1,
         });
       });
     } else {

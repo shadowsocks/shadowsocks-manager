@@ -31,13 +31,6 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <!-- <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
-                    <label>时长</label>
-                    <input type="number" required name="limit" ng-model="account.limit">
-                    <div ng-messages="accountForm.limit.$error">
-                        <div ng-message="required">时长不能为空</div>
-                    </div>
-                </md-input-container> -->
                 <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
                     <label>流量(MB)</label>
                     <input type="number" required name="flow" ng-model="account.flow">
@@ -46,6 +39,13 @@
                     </div>
                 </md-input-container>
             </form>
+            <div ng-if="+account.type >= 2 && +account.type <= 5" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">到期自动删除</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

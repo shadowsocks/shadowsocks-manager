@@ -75,6 +75,25 @@ const checkFlow = async (server, port, startTime, endTime) => {
 
 const checkServer = async () => {
   const account = await knex('account_plugin').select();
+  account.forEach(a => {
+    if(a.type >= 2 && a.type <= 5) {
+      let timePeriod = 0;
+      if(a.type === 2) { timePeriod = 7 * 86400 * 1000; }
+      if(a.type === 3) { timePeriod = 30 * 86400 * 1000; }
+      if(a.type === 4) { timePeriod = 1 * 86400 * 1000; }
+      if(a.type === 5) { timePeriod = 3600 * 1000; }
+      const data = JSON.parse(a.data);
+      let startTime = data.create;
+      while(startTime + timePeriod <= Date.now()) {
+        startTime += timePeriod;
+      }
+      if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
+        if(a.autoRemove) {
+          knex('account_plugin').delete().where({ id: a.id }).then();
+        }
+      }
+    }
+  });
   const server = await serverManager.list();
   account.exist = number => {
     return !!account.filter(f => f.port === number)[0];

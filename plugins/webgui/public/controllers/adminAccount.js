@@ -287,6 +287,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       time: Date.now(),
       limit: 1,
       flow: 100,
+      autoRemove: 0,
     };
     $scope.cancel = () => {
       $state.go('admin.account');
@@ -299,6 +300,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         time: $scope.account.time,
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
+        autoRemove: $scope.account.autoRemove ? 1 : 0,
       }).then(success => {
         $state.go('admin.account');
       });
@@ -344,12 +346,14 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       time: Date.now(),
       limit: 1,
       flow: 100,
+      autoRemove: 0,
     };
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/account/' + accountId).then(success => {
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
+      $scope.account.autoRemove = success.data.autoRemove;
       if(success.data.type >= 2 && success.data.type <= 5) {
         $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;
@@ -367,6 +371,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         time: $scope.account.time,
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
+        autoRemove: $scope.account.autoRemove ? 1 : 0,
       }).then(success => {
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });
       });
