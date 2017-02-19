@@ -12,9 +12,15 @@
             </div>
             <div style="margin-bottom: 20px;">过滤条件：</div>
             <div layout="column" layout-align="center center">
-                <md-checkbox ng-model="publicInfo.accountMethod.filter.expired" ng-change="sortAndFilter()">未过期</md-checkbox>
-                <md-checkbox ng-model="publicInfo.accountMethod.filter.unexpired" ng-change="sortAndFilter()">已过期</md-checkbox>
-                <md-checkbox ng-model="publicInfo.accountMethod.filter.unlimit" ng-change="sortAndFilter()">无期限</md-checkbox>
+                <div flex>
+                    <md-checkbox ng-model="publicInfo.accountMethod.filter.expired" ng-change="sortAndFilter()">未过期</md-checkbox>
+                </div>
+                <div flex>
+                    <md-checkbox ng-model="publicInfo.accountMethod.filter.unexpired" ng-change="sortAndFilter()">已过期</md-checkbox>
+                </div>
+                <div flex>
+                    <md-checkbox ng-model="publicInfo.accountMethod.filter.unlimit" ng-change="sortAndFilter()">无期限</md-checkbox>
+                </div>
             </div>
         </div>
     </md-dialog-content>

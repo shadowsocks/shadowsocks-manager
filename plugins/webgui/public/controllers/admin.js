@@ -30,14 +30,14 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       icon: 'account_circle',
       click: 'admin.account',
     }, {
-      name: '续费',
+      name: '订单',
       icon: 'attach_money',
       click: 'admin.pay',
     }, {
-      name: '设置',
-      icon: 'settings',
-      click: 'admin.unfinished',
-    }, {
+    //   name: '设置',
+    //   icon: 'settings',
+    //   click: 'admin.unfinished',
+    // }, {
       name: 'divider',
     }, {
       name: '退出',
@@ -127,7 +127,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
 ])
 .controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog',
   ($scope, adminApi, orderDialog) => {
-    $scope.setTitle('续费');
+    $scope.setTitle('订单');
     adminApi.getOrder().then(orders => $scope.orders = orders);
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
