@@ -500,7 +500,11 @@ exports.getServerPortLastConnect = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
-  alipay.orderList()
+  const options = {};
+  if(req.query.userId) {
+    options.userId = +req.query.userId;
+  }
+  alipay.orderList(options)
   .then(success => {
     res.send(success);
   }).catch(err => {

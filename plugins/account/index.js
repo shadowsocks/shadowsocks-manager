@@ -52,6 +52,7 @@ const getAccount = async (where) => {
     'account_plugin.data',
     'account_plugin.status',
     'account_plugin.autoRemove',
+    'user.id as userId',
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
@@ -153,6 +154,7 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
       time: Date.now(),
       limit: number,
       flow: 200 * 1000 * 1000 * 1000,
+      autoRemove: 0,
     });
     return;
   }
@@ -195,6 +197,7 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
   await knex('account_plugin').update({
     type: 3,
     data: JSON.stringify(accountData),
+    autoRemove: 0,
   }).where({ id: accountId });
   return;
 };

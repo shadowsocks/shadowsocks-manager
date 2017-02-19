@@ -111,7 +111,11 @@ const verifyCallback = (data) => {
   return signStatus;
 };
 
-const orderList = async () => {
+const orderList = async (options = {}) => {
+  const where = {};
+  if(options.userId) {
+    where['user.id'] = options.userId;
+  }
   const orders = await knex('alipay').select([
     'alipay.orderId',
     'user.username',
@@ -124,6 +128,7 @@ const orderList = async () => {
   ])
   .leftJoin('user', 'user.id', 'alipay.user')
   .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account')
+  .where(where)
   .orderBy('alipay.createTime', 'DESC');
   orders.forEach(f => {
     f.alipayData = JSON.parse(f.alipayData);
