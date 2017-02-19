@@ -67,10 +67,11 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 app.get('/api/admin/order', isAdmin, admin.getOrders);
 
 app.get('/api/user/account', isUser, user.getAccount);
+app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
 app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)', isUser, user.getServerPortFlow);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
-app.put('/api/user/:accountId/password', isUser, user.changePassword);
+app.put('/api/user/:accountId(\\d+)/password', isUser, user.changePassword);
 
 app.post('/api/user/order/qrcode', isUser, user.createOrder);
 app.post('/api/user/order/status', isUser, user.checkOrder);

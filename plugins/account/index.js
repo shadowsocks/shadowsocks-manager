@@ -41,7 +41,14 @@ const changePort = async (id, port) => {
   await checkAccount.checkServer();
 };
 
-const getAccount = async (where) => {
+const getAccount = async (options = {}) => {
+  const where = {};
+  if(options.id) {
+    where['account_plugin.id'] = options.id;
+  }
+  if(options.userId) {
+    where['user.id'] = options.userId;
+  }
   const account = await knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.type',
@@ -56,7 +63,7 @@ const getAccount = async (where) => {
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
-  .where(where || {});
+  .where(where);
   return account;
 };
 
