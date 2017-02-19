@@ -40,7 +40,24 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       });
     }
   };
+  const getServerPortData = (account, serverId, port) => {
+    const Promises = [
+      $http.get(`/api/user/flow/${ serverId }/${ port }/lastConnect`),
+    ];
+    if(account.type >= 2 && account.type <= 5) {
+      Promises.push(
+        $http.get(`/api/user/flow/${ serverId }/${ port }`)
+      );
+    }
+    return $q.all(Promises).then(success => {
+      return {
+        lastConnect: success[0].data.lastConnect,
+        flow: success[1] ? success[1].data[0] : null,
+      };
+    });
+  };
   return {
+    getServerPortData,
     getUserAccount,
     changePassword,
     updateAccount,

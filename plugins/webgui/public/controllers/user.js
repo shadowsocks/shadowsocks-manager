@@ -80,6 +80,7 @@ app
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
     $scope.getServerPortData = (account, serverId, port) => {
+      account.currentServerId = serverId;
       if(account.type >= 2 && account.type <= 5) {
         $http.get(`/api/user/flow/${ serverId }/${ port }`).then(success => {
           account.serverPortFlow = success.data[0];
@@ -90,9 +91,16 @@ app
       });
     };
     $interval(() => {
-      if(!$scope.account) { return; }
-      userApi.updateAccount($scope.account);
-    }, 60 * 1000);
+      if($scope.account) { userApi.updateAccount($scope.account); }
+      $scope.account.forEach(a => {
+        const currentServerId = a.currentServerId;
+        userApi.getServerPortData(a, a.currentServerId, a.port).then(success => {
+          if(currentServerId !== a.currentServerId) { return; }
+          a.lastConnect = success.lastConnect;
+          a.serverPortFlow = success.flow;
+        });
+      });
+    }, 6 * 1000);
     $scope.getQrCodeSize = () => {
       if($mdMedia('xs')) {
         return 230;
