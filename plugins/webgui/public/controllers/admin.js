@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$sessionStorage',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, $sessionStorage) => {
+app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$sessionStorage', '$interval',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $sessionStorage, $interval) => {
     $sessionStorage.$default({
       settings: {},
     });
@@ -102,6 +102,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.menuSearch.input = false;
       $scope.$broadcast('cancelSearch', 'cancel');
     };
+    $scope.interval = null;
+    $scope.setInterval = interval => {
+      $scope.interval = interval;
+    };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.fabButton = false;
       $scope.title = '';
@@ -110,6 +114,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.menuSearchButtonIcon = '';
       $scope.menuSearch.text = '';
       $scope.menuSearch.input = false;
+      $scope.interval && $interval.cancel($scope.interval);
     });
   }
 ])
