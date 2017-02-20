@@ -70,6 +70,18 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }
       accountFilter();
     });
+    $scope.accountColor = account => {
+      if(account.type === 1) {
+        return {
+          background: 'blue-50',
+        };
+      } else if(account.data && account.data.expire <= Date.now()) {
+        return {
+          background: 'red-50',
+        };
+      }
+      return {};
+    };
   }
 ])
 .controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$interval',
