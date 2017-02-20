@@ -21,10 +21,23 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
       };
     });
   };
+  const getServerPortData = (serverId, port) => {
+    const Promises = [
+      $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`),
+      $http.get(`/api/admin/flow/${ serverId }/${ port }`),
+    ];
+    return $q.all(Promises).then(success => {
+      return {
+        lastConnect: success[0].data.lastConnect,
+        flow: success[1].data[0],
+      };
+    });
+  };
   return {
     getUser,
     getOrder,
     getAccountId,
     getIndexInfo,
+    getServerPortData,
   };
 }]);
