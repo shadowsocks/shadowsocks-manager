@@ -2,9 +2,6 @@
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="server in servers track by server.id">
         <md-card ng-click="toServerPage(server.id)">
             <md-card-header>
-                <!-- <md-card-avatar>
-                    <img class="md-user-avatar" src="http://placehold.it/50x50" />
-                </md-card-avatar> -->
                 <md-card-header-text>
                     <span class="md-title">{{server.name}}</span>
                     <span class="md-subhead">{{server.host}}:{{server.port}}</span>
@@ -14,7 +11,7 @@
                 <div style="width: 95%; max-width: 500px;">
                     <canvas class="chart chart-line"
                         chart-data="server.chart.data"
-                        chart-labels="server.chart.labels"
+                        chart-labels="chart.labels"
                         chart-series="chart.series"
                         chart-options="chart.options"
                         chart-dataset-override="chart.datasetOverride">

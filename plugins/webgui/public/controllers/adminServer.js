@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi',
-  ($scope, $http, $state, moment, $localStorage, adminApi) => {
+app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout',
+  ($scope, $http, $state, moment, $localStorage, adminApi, $timeout) => {
     $scope.setTitle('服务器');
     const scaleLabel = (number) => {
       if(number < 1) {
@@ -19,6 +19,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       }
     };
     $scope.chart = {
+      labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
       series: 'day',
       datasetOverride: [{ yAxisID: 'y-axis-1' }],
       options: {
@@ -65,20 +66,23 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             server.flow.week = flow.week;
             server.flow.month = flow.month;
           });
-          // $http.get('/api/admin/flow/' + server.id + '/lastHour', {
-          //   params: {
-          //     type: 'hour',
-          //   }
-          // }).then(success => {
+          // adminApi.getServerFlowThisHour(server.id).then(success => {
           //   server.chart = {
-          //     data: [success.data],
+          //     data: [success.flow],
           //   };
           // });
           adminApi.getServerFlowLastHour(server.id).then(success => {
-            server.chart = {
-              labels: success.time,
-              data: [success.flow],
-            };
+            if(!server.chart) {
+              server.chart = {
+                labels,
+                data: [],
+              };
+            }
+            success.flow.forEach((number, index) => {
+              $timeout(() => {
+                server.chart.data[0][index] = number;
+              }, index * 100);
+            });
           });
         });
       } else {
@@ -91,67 +95,27 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           adminApi.getServerFlow(server.id).then(flow => {
             server.flow = flow;
           });
-          $http.get('/api/admin/flow/' + server.id, {
-            params: {
-              type: 'hour',
+          // adminApi.getServerFlowThisHour(server.id).then(success => {
+          //   server.chart = {
+          //     data: [success.flow],
+          //   };
+          // });
+          adminApi.getServerFlowLastHour(server.id).then(success => {
+            if(!server.chart) {
+              server.chart = {
+                labels,
+                data: [],
+              };
             }
-          }).then(success => {
-            server.chart = {
-              data: [success.data],
-            };
+            success.flow.forEach((number, index) => {
+              $timeout(() => {
+                server.chart.data[0][index] = number;
+              }, index * 100);
+            });
           });
         });
       }
     });
-    // $http.get('/api/admin/server').then(success => {
-    //   $localStorage.admin.serverInfo = {
-    //     time: Date.now(),
-    //     data: success.data,
-    //   };
-    //   $scope.servers = success.data;
-    //   $scope.servers.forEach(server => {
-    //     server.flow = {};
-    //     $http.get('/api/admin/flow/' + server.id, {
-    //       params: {
-    //         time: [
-    //           moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
-    //           moment().toDate().valueOf(),
-    //         ],
-    //       }
-    //     }).then(success => {
-    //       server.flow.today = success.data[0];
-    //     });
-    //     $http.get('/api/admin/flow/' + server.id, {
-    //       params: {
-    //         time: [
-    //           moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
-    //           moment().toDate().valueOf(),
-    //         ],
-    //       }
-    //     }).then(success => {
-    //       server.flow.week = success.data[0];
-    //     });
-    //     $http.get('/api/admin/flow/' + server.id, {
-    //       params: {
-    //         time: [
-    //           moment().date(1).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
-    //           moment().toDate().valueOf(),
-    //         ],
-    //       }
-    //     }).then(success => {
-    //       server.flow.month = success.data[0];
-    //     });
-    //     $http.get('/api/admin/flow/' + server.id, {
-    //       params: {
-    //         type: 'hour',
-    //       }
-    //     }).then(success => {
-    //       server.chart = {
-    //         data: [success.data],
-    //       };
-    //     });
-    //   });
-    // });
     $scope.toServerPage = (serverId) => {
       $state.go('admin.serverPage', { serverId });
     };
