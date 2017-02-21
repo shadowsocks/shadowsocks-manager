@@ -319,6 +319,24 @@ exports.getServerFlow = (req, res) => {
   });
 };
 
+exports.getServerLastHourFlow = (req, res) => {
+  const serverId = req.params.serverId;
+  let timeArray = [];
+  let i = 0;
+  while(i < 13) {
+    const now = Date.now();
+    const time = moment(now).add(0 - moment(now).minute() % 5).toDate().valueOf();
+    timeArray.push(moment(time).add(i * 5 - 60, 'm').toDate().valueOf());
+    i++;
+  }
+  flow.getServerFlow(serverId, timeArray).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getServerUserFlow = (req, res) => {
   const serverId = +req.params.serverId;
   const type = req.query.type;
