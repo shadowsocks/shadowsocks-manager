@@ -44,6 +44,14 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
       };
     });
   };
+  const getServerFlowLastHour = serverId => {
+    return $http.get('/api/admin/flow/' + serverId + '/lastHour').then(success => {
+      return {
+        time: success.data.time,
+        flow: success.data.flow,
+      };
+    });
+  };
   const getAccountId = port => {
     return $http.get('/api/admin/account/port/' + port).then(success => success.data.id);
   };
@@ -75,6 +83,7 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
     getOrder,
     getServer,
     getServerFlow,
+    getServerFlowLastHour,
     getAccountId,
     getIndexInfo,
     getServerPortData,

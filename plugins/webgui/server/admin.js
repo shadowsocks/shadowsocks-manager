@@ -323,14 +323,20 @@ exports.getServerLastHourFlow = (req, res) => {
   const serverId = req.params.serverId;
   let timeArray = [];
   let i = 0;
+  const now = Date.now();
+  const time = moment(now).add(0 - (+moment(now).minute() % 5)).toDate();
   while(i < 13) {
-    const now = Date.now();
-    const time = moment(now).add(0 - moment(now).minute() % 5).toDate().valueOf();
     timeArray.push(moment(time).add(i * 5 - 60, 'm').toDate().valueOf());
     i++;
   }
+  const timeRet = timeArray.map((time, index) => {
+    return moment(time).minute();
+  }).slice(0, 12);
   flow.getServerFlow(serverId, timeArray).then(success => {
-    res.send(success);
+    res.send({
+      time: timeRet,
+      flow: success,
+    });
   }).catch(err => {
     console.log(err);
     res.status(403).end();

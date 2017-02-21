@@ -19,7 +19,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       }
     };
     $scope.chart = {
-      labels: ['0', '', '', '15', '', '', '30', '', '', '45', '', ''],
       series: 'day',
       datasetOverride: [{ yAxisID: 'y-axis-1' }],
       options: {
@@ -66,13 +65,19 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             server.flow.week = flow.week;
             server.flow.month = flow.month;
           });
-          $http.get('/api/admin/flow/' + server.id + '/lastHour', {
-            params: {
-              type: 'hour',
-            }
-          }).then(success => {
+          // $http.get('/api/admin/flow/' + server.id + '/lastHour', {
+          //   params: {
+          //     type: 'hour',
+          //   }
+          // }).then(success => {
+          //   server.chart = {
+          //     data: [success.data],
+          //   };
+          // });
+          adminApi.getServerFlowLastHour(server.id).then(success => {
             server.chart = {
-              data: [success.data],
+              labels: success.time,
+              data: [success.flow],
             };
           });
         });
