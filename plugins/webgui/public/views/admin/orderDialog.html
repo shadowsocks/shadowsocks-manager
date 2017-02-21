@@ -11,6 +11,18 @@
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">订单类型：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderType }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30">金额：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.amount }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider></md-divider>
+                <md-list-item>
+                    <div flex layout="row" layout-align="space-between center">
                         <div flex="30">用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
                     </div>
                 </md-list-item>
