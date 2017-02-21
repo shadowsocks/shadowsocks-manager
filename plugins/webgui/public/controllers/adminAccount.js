@@ -73,11 +73,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.accountColor = account => {
       if(account.type === 1) {
         return {
-          background: 'blue-50',
+          background: 'blue-50', 'border-color': 'blue-300',
         };
       } else if(account.data && account.data.expire <= Date.now()) {
         return {
-          background: 'red-50',
+          background: 'red-50', 'border-color': 'red-300',
         };
       }
       return {};
