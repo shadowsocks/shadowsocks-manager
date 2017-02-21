@@ -16,6 +16,9 @@ require('./filters/flow');
 require('./filters/time');
 require('./filters/substr');
 require('./filters/orderStatus');
+
+require('./directives/focusMe');
+
 require('./services/adminService.js');
 require('./services/homeService.js');
 require('./services/userService.js');
