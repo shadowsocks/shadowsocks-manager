@@ -132,12 +132,13 @@ app
       $mdDialog.show(dialog);
     };
     $scope.createOrder = (accountId) => {
-      payDialog.loading();
-      $http.post('/api/user/order/qrcode', {
-        accountId,
-      }).then(success => {
-        payDialog.setUrl(success.data.orderId, success.data.qrCode);
-      }).catch(console.log);
+      payDialog.chooseOrderType(accountId);
+      // payDialog.loading();
+      // $http.post('/api/user/order/qrcode', {
+      //   accountId,
+      // }).then(success => {
+      //   payDialog.setUrl(success.data.orderId, success.data.qrCode);
+      // }).catch(console.log);
     };
     $scope.fontColor = (time) => {
       if(time >= Date.now()) {

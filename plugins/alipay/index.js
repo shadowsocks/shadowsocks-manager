@@ -15,11 +15,12 @@ const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 const moment = require('moment');
 
-const createOrder = async (user, account, amount) => {
+const createOrder = async (user, account, amount, orderType = 3) => {
   const oldOrder = await knex('alipay').select().where({
     user,
     account: account ? account : null,
     amount: amount + '',
+    orderType,
   }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
     status: 'CREATE',
   }).then(success => {
@@ -42,6 +43,7 @@ const createOrder = async (user, account, amount) => {
   });
   await knex('alipay').insert({
     orderId,
+    orderType,
     qrcode: qrCode.qr_code,
     amount: amount + '',
     user,
@@ -73,7 +75,9 @@ setInterval(async () => {
     } else if(order.status === 'TRADE_SUCCESS') {
       const accountId = order.account;
       const userId = order.user;
-      account.addAccountLimitToMonth(userId, accountId).then(() => {
+      // account.addAccountLimitToMonth(userId, accountId)
+      account.setAccountLimit(userId, accountId, order.orderType)
+      .then(() => {
         return knex('alipay').update({
           status: 'FINISH',
         }).where({

@@ -212,6 +212,68 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
   return;
 };
 
+const setAccountLimit = async (userId, accountId, orderType) => {
+  const flow = {
+    '2': 50 * 1000 * 1000 * 1000,
+    '3': 200 * 1000 * 1000 * 1000,
+    '4': 7 * 1000 * 1000 * 1000,
+    '5': 500 * 1000 * 1000,
+  };
+  if(!accountId) {
+    const port = await knex('account_plugin').select()
+    .orderBy('port', 'DESC').limit(1)
+    .then(success => {
+      if(success.length) {
+        return success[0].port + 1;
+      } else {
+        return 50000;
+      }
+    });
+    await addAccount(orderType, {
+      user: userId,
+      port,
+      password: Math.random().toString().substr(2,10),
+      time: Date.now(),
+      limit: 1,
+      flow: flow[orderType],
+      autoRemove: 0,
+    });
+    return;
+  }
+  const account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('account not found');
+  });
+  const accountData = JSON.parse(account.data);
+  accountData.flow = flow[orderType];
+  const timePeriod = {
+    '2': 7 * 86400 * 1000,
+    '3': 30 * 86400 * 1000,
+    '4': 1 * 86400 * 1000,
+    '5': 3600 * 1000,
+  };
+  let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
+  if(expireTime <= Date.now()) {
+    expireTime = timePeriod[orderType] + Date.now();
+  } else {
+    expireTime += timePeriod[orderType];
+  }
+  accountData.create = expireTime - timePeriod[orderType];
+  accountData.limit = 1;
+  while(accountData.create >= Date.now()) {
+    accountData.limit += 1;
+    accountData.create -= timePeriod[orderType];
+  }
+  await knex('account_plugin').update({
+    type: orderType,
+    data: JSON.stringify(accountData),
+    autoRemove: 0,
+  }).where({ id: accountId });
+  return;
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -222,3 +284,4 @@ exports.changePort = changePort;
 
 exports.addAccountLimit = addAccountLimit;
 exports.addAccountLimitToMonth = addAccountLimitToMonth;
+exports.setAccountLimit = setAccountLimit;

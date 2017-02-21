@@ -158,7 +158,15 @@ exports.changePassword = (req, res) => {
 exports.createOrder = (req, res) => {
   const userId = req.session.user;
   const accountId = req.body.accountId;
-  alipay.createOrder(userId, accountId, 10).then(success => {
+  const orderType = req.body.orderType;
+  let type;
+  let amount;
+  if(orderType === 'week') { type = 2; amount = 3; }
+  else if(orderType === 'month') { type = 3; amount = 10; }
+  else if(orderType === 'day') { type = 4; amount = 0.5; }
+  else if(orderType === 'hour') { type = 5; amount = 0.03; }
+  else { return res.status(403).end(); }
+  alipay.createOrder(userId, accountId, amount, type).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);

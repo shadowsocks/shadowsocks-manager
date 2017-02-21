@@ -1,18 +1,36 @@
 <md-dialog aria-label="pay dialog">
-    <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+    <div ng-if="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
-    <md-dialog-content ng-hide="publicInfo.isLoading">
+    <md-dialog-content ng-if="publicInfo.status !== 'loading'">
         <div class="md-dialog-content">
-            <div layout="column" layout-align="center center">
+            <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'pay'">
                 <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
                 <div>支付宝扫码支付</div>
                 <div>手机请点击二维码付款</div>
             </div>
+            <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'choose'">
+                <div style="margin-bottom: 20px;">请选择续费周期：</div>
+                <md-radio-group ng-model="publicInfo.orderType">
+                    <md-radio-button value="hour">一小时</md-radio-button>
+                    <md-radio-button value="day">一天</md-radio-button>
+                    <md-radio-button value="week">一周</md-radio-button>
+                    <md-radio-button value="month">一个月</md-radio-button>
+                </md-radio-group>
+            </div>
+            <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'success'">
+                <div style="margin-bottom: 20px;">支付成功</div>
+            </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
-        <md-button class="md-primary" ng-click="publicInfo.close()">
+    <md-dialog-actions layout="row" layout-align="center center" ng-if="publicInfo.status !== 'loading'">
+        <md-button class="md-primary" ng-if="publicInfo.status === 'choose'" ng-click="publicInfo.close()">
+            取消
+        </md-button>
+        <md-button class="md-primary" ng-if="publicInfo.status === 'choose'" ng-click="publicInfo.createOrder()">
+            下一步
+        </md-button>
+        <md-button class="md-primary" ng-if="publicInfo.status === 'pay' || publicInfo.status === 'success'" ng-click="publicInfo.close()">
             关闭
         </md-button>
     </md-dialog-actions>

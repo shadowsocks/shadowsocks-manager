@@ -1,0 +1,36 @@
+<md-dialog aria-label="pay dialog">
+    <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-dialog-content ng-hide="publicInfo.isLoading">
+        <div class="md-dialog-content">
+            <div layout="column" layout-align="center center">
+                <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
+                <div>支付宝扫码支付</div>
+                <div>手机请点击二维码付款</div>
+            </div>
+            <div layout="column" layout-align="center center">
+                <div style="margin-bottom: 20px;">请选择续费周期：</div>
+                <div layout="column" layout-align="center center">
+                    <div flex>
+                        <md-checkbox ng-model="publicInfo.orderType" ng-change="changeOrderType()">一小时</md-checkbox>
+                    </div>
+                    <div flex>
+                        <md-checkbox ng-model="publicInfo.orderType" ng-change="changeOrderType()">一天</md-checkbox>
+                    </div>
+                    <div flex>
+                        <md-checkbox ng-model="publicInfo.orderType" ng-change="changeOrderType()">一周</md-checkbox>
+                    </div>
+                    <div flex>
+                        <md-checkbox ng-model="publicInfo.orderType" ng-change="changeOrderType()">一个月</md-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
+        <md-button class="md-primary" ng-click="publicInfo.close()">
+            关闭
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

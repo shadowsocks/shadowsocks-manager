@@ -30,6 +30,7 @@ const createTable = async() => {
     table.string('password');
     table.string('data');
     table.integer('status');
+    table.integer('autoRemove').defaultTo(0);
   });
 };
 
