@@ -41,8 +41,7 @@ if(program.db) {
 if(program.run) {
   config.set('runShadowsocks', program.run);
 }
-
-logger.info('Config:\n', JSON.stringify(config.all(), null, 2));
 if(!program.debug) {
   logger.setLevel(log4js.levels.ERROR);
 }
+logger.info('Config:\n', JSON.stringify(config.all(), null, 2));

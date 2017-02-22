@@ -4,7 +4,6 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
 const dgram = require('dgram');
-// let client = dgram.createSocket('udp4');
 let client;
 
 const config = appRequire('services/config').all();
@@ -125,7 +124,6 @@ const compareWithLastFlow = (flow, lastFlow) => {
     }
   }
   if(Object.keys(realFlow).map(m => realFlow[m]).sort((a, b) => a > b)[0] < 0) {
-    // console.log(realFlow);
     return flow;
   }
   return realFlow;

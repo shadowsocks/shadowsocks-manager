@@ -14,7 +14,7 @@ const createTable = async() => {
     table.string('host');
     table.integer('port');
     table.string('password');
-    table.string('method');
+    table.string('method').defaultTo('aes-256-cfb');
   });
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
   if(list.length === 0) {
