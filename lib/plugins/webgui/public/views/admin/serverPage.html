@@ -1,0 +1,87 @@
+<div layout="row">
+    <div flex layout="row">
+        <!-- <div flex-md="5" flex-lg="15"></div> -->
+        <md-card flex>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-title">{{server.name}}</span>
+                    <span class="md-subhead">{{server.host}}:{{server.port}}</span>
+                </md-card-header-text>
+                <div>
+                    <md-button class="md-primary" aria-label="edit" ng-click="editServer(server.id)">
+                        修改
+                    </md-button>
+                    <!-- <md-button class="md-warn" aria-label="delete" ng-click="deleteServer(server.id)">
+                        删除
+                    </md-button> -->
+                </div>
+            </md-card-header>
+            <md-card-content>
+                <div flex="100" style="margin: 15px 0px 25px 0px;">
+                    <div layout="column" layout-align="center center">
+                        <div layout="row" layout-align="center center" style="margin-bottom: 15px;">
+                            <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
+                                <md-radio-button value="hour">时</md-radio-button>
+                                <md-radio-button value="day" >天</md-radio-button>
+                                <md-radio-button value="week">周</md-radio-button>
+                            </md-radio-group>
+                        </div>
+                        <div>
+                            {{time}}，{{sumFlow | flow}}
+                        </div>
+                        <div layout="row" layout-align="center center">
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(-1)">prev</md-button>
+                            <md-button md-no-ink class="md-primary" ng-click="resetFlowTime()">now</md-button>
+                            <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(1)">next</md-button>
+                        </div>
+                    </div>
+                </div>
+                <div layout="row" layout-xs="column" layout-sm="column" layout-warp layout-align="center center">
+                    <div flex-md="5" flex-gt-md="15"></div>
+                    <div flex>
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <canvas class="chart chart-line"
+                                    width="{{getChartSize().line[0]}}"
+                                    height="{{getChartSize().line[1]}}"
+                                    chart-data="lineChart.data"
+                                    chart-labels="lineChart.labels"
+                                    chart-series="lineChart.series"
+                                    chart-options="lineChart.options"
+                                    chart-dataset-override="lineChart.datasetOverride">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex>
+                        <div layout="row" layout-align="center center">
+                            <div>
+                                <canvas id="pie" class="chart chart-pie"
+                                    width="{{getChartSize().pie[0]}}"
+                                    height="{{getChartSize().pie[1]}}"
+                                    chart-data="pieChart.data"
+                                    chart-labels="pieChart.labels"
+                                    chart-options="pieChart.options">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div flex-md="5" flex-gt-md="15"></div>
+                </div>
+            </md-card-content>
+        </md-card>
+        <!-- <div flex-md="5" flex-lg="15"></div> -->
+    </div>
+</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
+        <md-card ng-click="toAccountPage(port.port)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="40">{{port.port}}</div>
+                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{port.password}}</div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
