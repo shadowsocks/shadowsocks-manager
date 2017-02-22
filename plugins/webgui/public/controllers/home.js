@@ -1,14 +1,15 @@
 const app = require('../index').app;
 
 app
-  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout) => {
+  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage',
+    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage) => {
       $http.get('/api/home/login').then(success => {
         if (success.data.status === 'normal') {
           $state.go('user.index');
         } else if (success.data.status === 'admin') {
           $state.go('admin.index');
         } else {
+          $localStorage.$reset();
           $scope.setMainLoading(false);
         }
       });
