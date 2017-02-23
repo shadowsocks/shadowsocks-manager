@@ -17,16 +17,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       });
     };
     getAccount();
-    // if(!$localStorage.settings.accountFilter) {
-    //   $localStorage.settings.accountFilter = {
-    //     sort: 'port_asc',
-    //     filter: {
-    //       expired: true,
-    //       unexpired: true,
-    //       unlimit: true,
-    //     },
-    //   };
-    // }
     if(!$localStorage.admin.accountFilterSettings) {
       $localStorage.admin.accountFilterSettings = {
         sort: 'port_asc',
