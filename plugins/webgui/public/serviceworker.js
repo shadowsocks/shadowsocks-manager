@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-02-23 17:54:47';
+var ONLINE_CACHE_NAME = '2017-02-23 18:50:47';
 var onlineCacheUrl = [
   '/',
 
@@ -18,23 +18,24 @@ var onlineCacheUrl = [
   '/libs/moment.min.js',
   '/libs/angular-moment.min.js',
   '/libs/angular-websocket.min.js',
-  // '/libs/bundle.js',
+  '/libs/bundle.js',
 
   '/libs/favicon.png',
+  '/libs/home.png',
 
-  // '/libs/style.css',
+  '/libs/style.css',
   '/libs/angular-material.min.css',
 
   '/libs/MaterialIcons-Regular.woff2',
   '/libs/MaterialIcons-Regular.woff',
   '/libs/MaterialIcons-Regular.ttf',
 
-  // '/public/views/home/alertDialog.html',
-  // '/public/views/home/home.html',
-  // '/public/views/home/index.html',
-  // '/public/views/home/login.html',
-  // '/public/views/home/resetPassword.html',
-  // '/public/views/home/signup.html',
+  '/public/views/home/alertDialog.html',
+  '/public/views/home/home.html',
+  '/public/views/home/index.html',
+  '/public/views/home/login.html',
+  '/public/views/home/resetPassword.html',
+  '/public/views/home/signup.html',
 ];
 
 this.addEventListener('activate', function(event) {
