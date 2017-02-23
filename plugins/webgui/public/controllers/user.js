@@ -1,15 +1,20 @@
 const app = require('../index').app;
 
 app
-.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval) => {
-    $http.get('/api/home/login').then(success => {
-      if(success.data.status !== 'normal') {
-        $state.go('home.index');
-      } else {
-        $scope.setMainLoading(false);
-      }
-    });
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage) => {
+    // $http.get('/api/home/login').then(success => {
+    //   if(success.data.status !== 'normal') {
+    //     $state.go('home.index');
+    //   } else {
+    //     $scope.setMainLoading(false);
+    //   }
+    // });
+    if ($localStorage.home.status !== 'normal') {
+      $state.go('home.index');
+    } else {
+      $scope.setMainLoading(false);
+    }
     $scope.innerSideNav = true;
     $scope.menuButton = function() {
       if ($mdMedia('gt-sm')) {
@@ -32,8 +37,10 @@ app
       name: '退出',
       icon: 'settings',
       click: function() {
-        $http.post('/api/home/logout');
-        $state.go('home.index');
+        $http.post('/api/home/logout').then(() => {
+          $localStorage.home.status = null;
+          $state.go('home.index');
+        });
       },
     }];
     $scope.menuClick = (index) => {
@@ -65,11 +72,29 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval',
-  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog, $interval) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval', '$localStorage',
+  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog, $interval, $localStorage) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
+    if(!$localStorage.user.serverInfo) {
+      $localStorage.user.serverInfo = {
+        time: Date.now(),
+        data: [],
+      };
+    }
+    $scope.servers = $localStorage.user.serverInfo.data;
+    if(!$localStorage.user.accountInfo) {
+      $localStorage.user.accountInfo = {
+        time: Date.now(),
+        data: [],
+      };
+    }
+    $scope.account = $localStorage.user.accountInfo.data;
     userApi.getUserAccount().then(success => {
+      $localStorage.user.serverInfo.data = success.servers;
+      $localStorage.user.serverInfo.time = Date.now();
+      $localStorage.user.accountInfo.data = success.account;
+      $localStorage.user.accountInfo.time = Date.now();
       $scope.account = success.account;
       $scope.servers = success.servers;
       if($scope.account.length >= 2) {

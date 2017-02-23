@@ -2,16 +2,22 @@ const app = require('../index').app;
 
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$localStorage',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $localStorage) => {
-    $localStorage.$default({
-      admin: {},
-    });
-    $http.get('/api/home/login').then(success => {
-      if(success.data.status !== 'admin') {
-        $state.go('home.index');
-      } else {
-        $scope.setMainLoading(false);
-      }
-    });
+    // $localStorage.$default({
+    //   admin: {},
+    //   home: {},
+    // });
+    // $http.get('/api/home/login').then(success => {
+    //   if(success.data.status !== 'admin') {
+    //     $state.go('home.index');
+    //   } else {
+    //     $scope.setMainLoading(false);
+    //   }
+    // });
+    if ($localStorage.home.status !== 'admin') {
+      $state.go('home.index');
+    } else {
+      $scope.setMainLoading(false);
+    }
     $scope.innerSideNav = true;
     $scope.menus = [{
       name: '首页',
@@ -43,8 +49,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '退出',
       icon: 'exit_to_app',
       click: function() {
-        $http.post('/api/home/logout');
-        $state.go('home.index');
+        $http.post('/api/home/logout').then(() => {
+          $localStorage.home.status = null;
+          $state.go('home.index');
+        });
       },
     }];
     $scope.menuButton = function() {

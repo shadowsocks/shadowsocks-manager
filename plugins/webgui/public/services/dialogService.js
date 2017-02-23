@@ -186,7 +186,6 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     controller: ['$scope', '$mdDialog', '$sessionStorage', 'accountSortTool', 'bind', function($scope, $mdDialog, $sessionStorage, accountSortTool, bind) {
       $scope.publicInfo = bind;
       $scope.sortAndFilter = () => {
-        // $sessionStorage.settings.accountFilter = $scope.publicInfo.accountMethod;
         accountSortTool($scope.publicInfo.accountInfo, $scope.publicInfo.accountMethod);
       };
     }],

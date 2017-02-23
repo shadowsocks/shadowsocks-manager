@@ -5,6 +5,17 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setTitle('账号');
     $scope.setMenuRightButton('sort_by_alpha');
     $scope.setMenuSearchButton('search');
+    if(!$localStorage.admin.accountFilterSettings) {
+      $localStorage.admin.accountFilterSettings = {
+        sort: 'port_asc',
+        filter: {
+          expired: true,
+          unexpired: true,
+          unlimit: true,
+        },
+      };
+    }
+    $scope.accountMethod = $localStorage.admin.accountFilterSettings;
     $scope.accountInfo = {};
     $scope.sortAndFilter = () => {
       accountSortTool($scope.accountInfo, $scope.accountMethod);
@@ -16,6 +27,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       };
     }
     $scope.accountInfo.originalAccount = $localStorage.admin.accountInfo.data;
+    $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
+    $scope.sortAndFilter();
     const getAccountInfo = () => {
       adminApi.getAccount().then(accounts => {
         $localStorage.admin.accountInfo = {
@@ -40,17 +53,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         getAccountInfo();
       }
     }, 15 * 1000));
-    if(!$localStorage.admin.accountFilterSettings) {
-      $localStorage.admin.accountFilterSettings = {
-        sort: 'port_asc',
-        filter: {
-          expired: true,
-          unexpired: true,
-          unlimit: true,
-        },
-      };
-    }
-    $scope.accountMethod = $localStorage.admin.accountFilterSettings;
     $scope.setFabButton(() => {
       $state.go('admin.addAccount');
     });
