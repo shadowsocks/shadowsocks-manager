@@ -54,20 +54,20 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
     });
   };
 
-  let serverFlowLastHourPromise = null;
+  let serverFlowLastHourPromise = {};
   const getServerFlowLastHour = serverId => {
-    if(serverFlowLastHourPromise && !serverFlowLastHourPromise.$$state.status) {
-      return serverFlowLastHourPromise;
+    if(serverFlowLastHourPromise[serverId] && !serverFlowLastHourPromise[serverId].$$state.status) {
+      return serverFlowLastHourPromise[serverId];
     }
-    serverFlowLastHourPromise = $http.get('/api/admin/flow/' + serverId + '/lastHour').then(success => {
+    serverFlowLastHourPromise[serverId] = $http.get('/api/admin/flow/' + serverId + '/lastHour').then(success => {
       return {
         time: success.data.time,
         flow: success.data.flow,
       };
     });
-    return serverFlowLastHourPromise;
+    return serverFlowLastHourPromise[serverId];
   };
-  
+
   const getAccountId = port => {
     return $http.get('/api/admin/account/port/' + port).then(success => success.data.id);
   };
