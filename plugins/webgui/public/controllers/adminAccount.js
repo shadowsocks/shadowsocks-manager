@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog', '$interval', '$sessionStorage', '$localStorage', 'accountSortTool',
-  ($scope, $state, $stateParams, $http, accountSortDialog, $interval, $sessionStorage, $localStorage, accountSortTool) => {
+app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog', '$interval', 'adminApi', '$localStorage', 'accountSortTool',
+  ($scope, $state, $stateParams, $http, accountSortDialog, $interval, adminApi, $localStorage, accountSortTool) => {
     $scope.setTitle('账号');
     $scope.setMenuRightButton('sort_by_alpha');
     $scope.setMenuSearchButton('search');
@@ -9,14 +9,37 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.sortAndFilter = () => {
       accountSortTool($scope.accountInfo, $scope.accountMethod);
     };
-    const getAccount = () => {
-      $http.get('/api/admin/account').then(success => {
-        $scope.accountInfo.originalAccount = success.data;
+    if(!$localStorage.admin.accountInfo) {
+      $localStorage.admin.accountInfo = {
+        time: Date.now(),
+        data: [],
+      };
+    }
+    $scope.accountInfo.originalAccount = $localStorage.admin.accountInfo.data;
+    const getAccountInfo = () => {
+      adminApi.getAccount().then(accounts => {
+        $localStorage.admin.accountInfo = {
+          time: Date.now(),
+          data: accounts,
+        };
+        $scope.accountInfo.originalAccount = accounts;
         $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
         $scope.sortAndFilter();
       });
     };
-    getAccount();
+    getAccountInfo();
+    $scope.$on('visibilitychange', (event, status) => {
+      if(status === 'visible') {
+        if($localStorage.admin.accountInfo && Date.now() - $localStorage.admin.accountInfo.time >= 20 * 1000) {
+          getAccountInfo();
+        }
+      }
+    });
+    $scope.setInterval($interval(() => {
+      if($localStorage.admin.accountInfo && Date.now() - $localStorage.admin.accountInfo.time >= 90 * 1000) {
+        getAccountInfo();
+      }
+    }, 15 * 1000));
     if(!$localStorage.admin.accountFilterSettings) {
       $localStorage.admin.accountFilterSettings = {
         sort: 'port_asc',

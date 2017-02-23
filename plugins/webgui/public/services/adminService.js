@@ -10,6 +10,16 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
   const getServer = () => {
     return $http.get('/api/admin/server').then(success => success.data);
   };
+
+  let accountPromise = null;
+  const getAccount = () => {
+    if(accountPromise && !accountPromise.$$state.status) {
+      return accountPromise;
+    }
+    accountPromise = $http.get('/api/admin/account').then(success => success.data);
+    return accountPromise;
+  };
+
   const getServerFlow = serverId => {
     return $q.all([
       $http.get('/api/admin/flow/' + serverId, {
@@ -44,15 +54,15 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
       };
     });
   };
-  const getServerFlowThisHour = serverId => {
-    return $http.get('/api/admin/flow/' + serverId, {
-      params: { type: 'hour' }
-    }).then(success => {
-      return {
-        flow: success.data,
-      };
-    });
-  };
+  // const getServerFlowThisHour = serverId => {
+  //   return $http.get('/api/admin/flow/' + serverId, {
+  //     params: { type: 'hour' }
+  //   }).then(success => {
+  //     return {
+  //       flow: success.data,
+  //     };
+  //   });
+  // };
 
   let serverFlowLastHourPromise = {};
   const getServerFlowLastHour = serverId => {
@@ -105,8 +115,9 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
     getUser,
     getOrder,
     getServer,
+    getAccount,
     getServerFlow,
-    getServerFlowThisHour,
+    // getServerFlowThisHour,
     getServerFlowLastHour,
     getAccountId,
     getIndexInfo,
