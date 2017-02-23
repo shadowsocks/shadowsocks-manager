@@ -1,10 +1,15 @@
 const app = require('../index').app;
 
 app.factory('userApi', ['$q', '$http', ($q, $http) => {
+
+  let userAccountPromise = null;
   const getUserAccount = () => {
+    if(userAccountPromise && !userAccountPromise.$$state.status) {
+      return userAccountPromise;
+    }
     let account = null;
     let servers = null;
-    return $q.all([
+    userAccountPromise = $q.all([
       $http.get('/api/user/account'),
       $http.get('/api/user/server'),
     ]).then(success => {
@@ -13,7 +18,9 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
         servers: success[1].data,
       };
     });
+    return userAccountPromise;
   };
+  
   const changePassword = (accountId, password) => {
     return $http.put(`/api/user/${ accountId }/password`, {
       password,

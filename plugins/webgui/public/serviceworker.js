@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-02-23 21:47:42';
+var ONLINE_CACHE_NAME = '2017-02-23 22:39:42';
 var onlineCacheUrl = [
   '/',
 
@@ -89,13 +89,37 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request)
-    .then(function(response) {
-        if (response) {
-            return response;
-        }
-        return fetch(event.request);
-    })
-  );
+  var isMatch = function () {
+    return (
+      event.request.url.match(/^https:\/\/test.gyteng.com\/user\//) ||
+      event.request.url.match(/^https:\/\/test.gyteng.com\/home\//) ||
+      event.request.url.match(/^https:\/\/test.gyteng.com\/admin\//) ||
+      event.request.url.match(/^https:\/\/wall.gyteng.com\/user\//) ||
+      event.request.url.match(/^https:\/\/wall.gyteng.com\/home\//) ||
+      event.request.url.match(/^https:\/\/wall.gyteng.com\/admin\//)
+    );
+  };
+  if (isMatch()) {
+    event.respondWith(
+      fetch(event.request)
+      .then(function(response) {
+        return response;
+      }).catch(function(err) {
+        var request = new Request('/');
+        return caches.match(request);
+      }).then(function(response) {
+        return response;
+      })
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request)
+      .then(function(response) {
+          if (response) {
+              return response;
+          }
+          return fetch(event.request);
+      })
+    );
+  }
 });

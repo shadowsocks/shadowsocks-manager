@@ -7,7 +7,7 @@
             </md-card-content>
         </md-card>
     </div>
-    <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by $index">
+    <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by a.id">
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
                 <md-card-header-text>
@@ -16,7 +16,7 @@
             </md-card-header>
             <md-card-content>
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
-                    <md-tab ng-repeat="server in servers"
+                    <md-tab ng-repeat="server in servers track by server.id"
                            label="{{server.name}}"
                            md-on-select="getServerPortData(a, server.id, a.port)">
                         <div layout="row" layout-align="center center" layout-wrap>

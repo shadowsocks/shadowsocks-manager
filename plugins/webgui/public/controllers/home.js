@@ -23,6 +23,8 @@ app
         $state.go('admin.index');
       } else {
         // $localStorage.$reset();
+        $localStorage.admin = {};
+        $localStorage.user = {};
         $scope.setMainLoading(false);
       }
       $scope.innerSideNav = true;
