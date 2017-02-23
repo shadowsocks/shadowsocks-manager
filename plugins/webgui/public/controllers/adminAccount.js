@@ -17,8 +17,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       });
     };
     getAccount();
-    if(!$sessionStorage.settings.accountFilter) {
-      $sessionStorage.settings.accountFilter = {
+    if(!$localStorage.settings.accountFilter) {
+      $localStorage.settings.accountFilter = {
         sort: 'port_asc',
         filter: {
           expired: true,
