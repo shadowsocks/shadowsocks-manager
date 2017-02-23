@@ -64,8 +64,13 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
   const getAccountId = port => {
     return $http.get('/api/admin/account/port/' + port).then(success => success.data.id);
   };
+
+  let indexInfoPromise = null;
   const getIndexInfo = () => {
-    return $q.all([
+    if(indexInfoPromise && !indexInfoPromise.$$state.status) {
+      return indexInfoPromise;
+    }
+    indexInfoPromise = $q.all([
       $http.get('/api/admin/user/recentSignUp').then(success => success.data),
       $http.get('/api/admin/user/recentLogin').then(success => success.data),
     ]).then(success => {
@@ -74,7 +79,9 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
         login: success[1],
       };
     });
+    return indexInfoPromise;
   };
+  
   const getServerPortData = (serverId, port) => {
     const Promises = [
       $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`),
