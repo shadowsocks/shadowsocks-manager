@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout',
-  ($scope, $http, $state, moment, $localStorage, adminApi, $timeout) => {
+app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout', '$interval',
+  ($scope, $http, $state, moment, $localStorage, adminApi, $timeout, $interval) => {
     $scope.setTitle('服务器');
     const scaleLabel = (number) => {
       if(number < 1) {
