@@ -5,6 +5,13 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   publicInfo.isLoading = false;
   publicInfo.content = '';
   publicInfo.button = '';
+  let alertDialogPromise = null;
+  const isDialogShow = () => {
+    if(alertDialogPromise && !alertDialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
   const close = () => {
     return $mdDialog.hide().then(success => {
       publicInfo.isLoading = false;
@@ -17,13 +24,6 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
     });
   };
   publicInfo.close = close;
-  let alertDialogPromise = null;
-  const isDialogShow = () => {
-    if(alertDialogPromise && !alertDialogPromise.$$state.status) {
-      return true;
-    }
-    return false;
-  };
   const dialog = {
     templateUrl: '/public/views/home/alertDialog.html',
     escapeToClose: false,
