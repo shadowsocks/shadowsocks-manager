@@ -1,7 +1,7 @@
 'use strict';
 
 const app = appRequire('plugins/webgui/index').app;
-const wss = appRequire('plugins/webgui/index').wss;
+// const wss = appRequire('plugins/webgui/index').wss;
 const sessionParser = appRequire('plugins/webgui/index').sessionParser;
 const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
@@ -95,10 +95,10 @@ app.get('*', (req, res) => {
   return res.render('index');
 });
 
-wss.on('connection', function connection(ws) {
-  // console.log(ws);
-  ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-  });
-  ws.send('ws connected');
-});
+// wss.on('connection', function connection(ws) {
+//   // console.log(ws);
+//   ws.on('message', function incoming(message) {
+//     console.log('received: %s', message);
+//   });
+//   ws.send('ws connected');
+// });

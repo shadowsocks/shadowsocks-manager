@@ -20,7 +20,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     });
     return userAccountPromise;
   };
-  
+
   const changePassword = (accountId, password) => {
     return $http.put(`/api/user/${ accountId }/password`, {
       password,
@@ -47,7 +47,12 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       });
     }
   };
+
+  let serverPortDataPromise = {};
   const getServerPortData = (account, serverId, port) => {
+    if(serverPortDataPromise[`${ account.id }`] && !serverPortDataPromise[`${ account.id }`].$$state.status) {
+      return serverPortDataPromise[`${ account.id }`];
+    }
     const Promises = [
       $http.get(`/api/user/flow/${ serverId }/${ port }/lastConnect`),
     ];
@@ -56,13 +61,15 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
         $http.get(`/api/user/flow/${ serverId }/${ port }`)
       );
     }
-    return $q.all(Promises).then(success => {
+    serverPortDataPromise[`${ account.id }`] = $q.all(Promises).then(success => {
       return {
         lastConnect: success[0].data.lastConnect,
         flow: success[1] ? success[1].data[0] : null,
       };
     });
+    return serverPortDataPromise[`${ account.id }`];
   };
+
   return {
     getServerPortData,
     getUserAccount,

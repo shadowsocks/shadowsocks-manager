@@ -125,9 +125,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.menuSearch.input = false;
       $scope.interval && $interval.cancel($scope.interval);
     });
-    document.addEventListener('visibilitychange', () => {
-      $scope.$broadcast('visibilitychange', document.visibilityState);
-    });
+    
   }
 ])
 .controller('AdminIndexController', ['$scope', '$state', 'adminApi', '$localStorage', '$interval',

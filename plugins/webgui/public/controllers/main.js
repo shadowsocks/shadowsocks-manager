@@ -11,5 +11,8 @@ app.controller('MainController', ['$scope', '$localStorage',
     $scope.setMainLoading = status => {
       $scope.mainLoading = status;
     };
+    document.addEventListener('visibilitychange', () => {
+      $scope.$broadcast('visibilitychange', document.visibilityState);
+    });
   }
 ]);

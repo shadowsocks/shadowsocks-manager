@@ -62,7 +62,6 @@ app
       $scope.title = '';
       $scope.interval && $interval.cancel($scope.interval);
     });
-    // $scope.ws = ws;
 
     if(!$localStorage.user.serverInfo && !$localStorage.user.accountInfo) {
       userApi.getUserAccount().then(success => {
@@ -107,12 +106,22 @@ app
 
     const getUserAccountInfo = () => {
       userApi.getUserAccount().then(success => {
+        $scope.servers = success.servers;
+        // $scope.account = success.account;
+        if(success.account.map(m => m.id) === $scope.account.map(m => m.id)) {
+          success.account.forEach((a, index) => {
+            $scope.account[index].data = a.data;
+            $scope.account[index].password = a.password;
+            $scope.account[index].port = a.port;
+            $scope.account[index].type = a.type;
+          });
+        } else {
+          $scope.account = success.account;
+        }
         $localStorage.user.serverInfo.data = success.servers;
         $localStorage.user.serverInfo.time = Date.now();
         $localStorage.user.accountInfo.data = success.account;
         $localStorage.user.accountInfo.time = Date.now();
-        $scope.account = success.account;
-        $scope.servers = success.servers;
         if($scope.account.length >= 2) {
           $scope.flexGtSm = 50;
         }
@@ -128,17 +137,22 @@ app
     $scope.createQrCode = (method, password, host, port) => {
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
+
     $scope.getServerPortData = (account, serverId, port) => {
       account.currentServerId = serverId;
-      if(account.type >= 2 && account.type <= 5) {
-        $http.get(`/api/user/flow/${ serverId }/${ port }`).then(success => {
-          account.serverPortFlow = success.data[0];
-        });
-      }
-      $http.get(`/api/user/flow/${ serverId }/${ port }/lastConnect`).then(success => {
-        account.lastConnect = success.data.lastConnect;
+      userApi.getServerPortData(account, serverId, port).then(success => {
+        account.lastConnect = success.lastConnect;
+        account.serverPortFlow = success.flow;
       });
     };
+
+    // $scope.$on('visibilitychange', (event, status) => {
+    //   if(status === 'visible') {
+    //     if($localStorage.admin.indexInfo && Date.now() - $localStorage.admin.indexInfo.time >= 10 * 1000) {
+    //       updateIndexInfo();
+    //     }
+    //   }
+    // });
     $scope.setInterval($interval(() => {
       if($scope.account) { userApi.updateAccount($scope.account); }
       $scope.account.forEach(a => {
@@ -150,6 +164,7 @@ app
         });
       });
     }, 60 * 1000));
+
     $scope.getQrCodeSize = () => {
       if($mdMedia('xs')) {
         return 230;
@@ -177,12 +192,6 @@ app
     };
     $scope.createOrder = (accountId) => {
       payDialog.chooseOrderType(accountId);
-      // payDialog.loading();
-      // $http.post('/api/user/order/qrcode', {
-      //   accountId,
-      // }).then(success => {
-      //   payDialog.setUrl(success.data.orderId, success.data.qrCode);
-      // }).catch(console.log);
     };
     $scope.fontColor = (time) => {
       if(time >= Date.now()) {
