@@ -12,17 +12,15 @@
                     </div>
                 </md-toolbar>
                 <md-list>
-                    <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'">
-                        <a ng-click="menuClick($index)">
-                            <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                                <div class="inset">
-                                    <md-icon class="material-icons">{{menu.icon}}</md-icon>
-                                </div>
-                                <div class="inset">
-                                    {{menu.name}}
-                                </div>
-                            </md-item-content>
-                        </a>
+                    <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" ng-click="menuClick($index)">
+                        <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                            <div class="inset">
+                                <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                            </div>
+                            <div class="inset">
+                                {{menu.name}}
+                            </div>
+                        </md-item-content>
                     </md-list-item>
                     <md-divider ng-repeat-end ng-if="menu.name === 'divider'"></md-divider>
                 </md-list>
@@ -47,17 +45,15 @@
                 <md-content style="background-color: #FAFAFA;">
                     <div layout="column" layout-align="center start">
                         <md-list>
-                            <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 8px;">
-                                <a ng-click="menuClick($index)">
-                                    <md-item-content md-ink-ripple layout="row" layout-align="start center">
-                                        <div class="inset">
-                                            <md-icon class="material-icons">{{menu.icon}}</md-icon>
-                                        </div>
-                                        <div class="inset">
-                                            {{menu.name}}
-                                        </div>
-                                    </md-item-content>
-                                </a>
+                            <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 8px;" ng-click="menuClick($index)">
+                                <md-item-content md-ink-ripple layout="row" layout-align="start center">
+                                    <div class="inset">
+                                        <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                    </div>
+                                    <div class="inset">
+                                        {{menu.name}}
+                                    </div>
+                                </md-item-content>
                             </md-list-item>
                             <md-divider ng-repeat-end ng-if="menu.name === 'divider'"></md-divider>
                         </md-list>
