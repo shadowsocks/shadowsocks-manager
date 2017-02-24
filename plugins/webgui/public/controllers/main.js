@@ -2,6 +2,7 @@ const app = require('../index').app;
 
 app.controller('MainController', ['$scope', '$localStorage',
   ($scope, $localStorage) => {
+    $scope.version = window.ssmgrVersion;
     $localStorage.$default({
       admin: {},
       home: {},
