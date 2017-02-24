@@ -3,13 +3,6 @@ const app = require('../index').app;
 app
 .controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi) => {
-    // $http.get('/api/home/login').then(success => {
-    //   if(success.data.status !== 'normal') {
-    //     $state.go('home.index');
-    //   } else {
-    //     $scope.setMainLoading(false);
-    //   }
-    // });
     if ($localStorage.home.status !== 'normal') {
       $state.go('home.index');
     } else {
@@ -187,7 +180,9 @@ app
           };
           $scope.changePassword = () => {
             $mdDialog.cancel();
-            userApi.changePassword(accountId, $scope.account.password);
+            userApi.changePassword(accountId, $scope.account.password).then(() => {
+              getUserAccountInfo();
+            });
           };
         }],
         clickOutsideToClose: true,
