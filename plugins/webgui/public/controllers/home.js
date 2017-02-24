@@ -22,7 +22,6 @@ app
       } else if ($localStorage.home.status === 'admin') {
         $state.go('admin.index');
       } else {
-        // $localStorage.$reset();
         $localStorage.admin = {};
         $localStorage.user = {};
         $scope.setMainLoading(false);
@@ -80,11 +79,11 @@ app
         alertDialog.loading();
         homeApi.userLogin($scope.user.email, $scope.user.password)
         .then(success => {
+          $localStorage.home.status = success;
           return alertDialog.close().then(() => {
             return success;
           });
         }).then(success => {
-          $localStorage.home.status = success;
           if (success === 'normal') {
             $state.go('user.index');
           } else if (success === 'admin') {

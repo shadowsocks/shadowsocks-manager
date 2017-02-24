@@ -103,12 +103,14 @@ app
       };
     }
     $scope.account = $localStorage.user.accountInfo.data;
+    if($scope.account.length >= 2) {
+      $scope.flexGtSm = 50;
+    }
 
     const getUserAccountInfo = () => {
       userApi.getUserAccount().then(success => {
         $scope.servers = success.servers;
-        // $scope.account = success.account;
-        if(success.account.map(m => m.id) === $scope.account.map(m => m.id)) {
+        if(success.account.map(m => m.id).join('') === $scope.account.map(m => m.id).join('')) {
           success.account.forEach((a, index) => {
             $scope.account[index].data = a.data;
             $scope.account[index].password = a.password;
@@ -146,13 +148,15 @@ app
       });
     };
 
-    // $scope.$on('visibilitychange', (event, status) => {
-    //   if(status === 'visible') {
-    //     if($localStorage.admin.indexInfo && Date.now() - $localStorage.admin.indexInfo.time >= 10 * 1000) {
-    //       updateIndexInfo();
-    //     }
-    //   }
-    // });
+    $scope.$on('visibilitychange', (event, status) => {
+      if(status === 'visible') {
+        if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
+          $scope.account.forEach(a => {
+            $scope.getServerPortData(a, a.currentServerId, a.port);
+          });
+        }
+      }
+    });
     $scope.setInterval($interval(() => {
       if($scope.account) { userApi.updateAccount($scope.account); }
       $scope.account.forEach(a => {
