@@ -115,10 +115,18 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
     clickOutsideToClose: false,
   };
   const chooseOrderType = accountId => {
-    publicInfo.status = 'choose';
-    publicInfo.accountId = accountId;
-    dialogPromise = $mdDialog.show(dialog);
-    return dialogPromise;
+    publicInfo.status = 'loading';
+    $http.get('/api/user/order/price').then(success => {
+      publicInfo.price = success.data;
+      publicInfo.status = 'choose';
+      publicInfo.accountId = accountId;
+      dialogPromise = $mdDialog.show(dialog);
+      return dialogPromise;
+    }).catch(() => {
+      publicInfo.status = 'error';
+      dialogPromise = $mdDialog.show(dialog);
+      return dialogPromise;
+    });
   };
   return {
     chooseOrderType,
@@ -303,20 +311,10 @@ app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userAp
     bindToController: true,
     controller: ['$scope', 'bind', ($scope, bind) => {
       $scope.publicInfo = bind;
-      // $scope.changePassword = () => {
-      //   $mdDialog.cancel();
-      //   userApi.changePassword(accountId, $scope.account.password).then(() => {
-      //     getUserAccountInfo();
-      //   });
-      // };
     }],
     clickOutsideToClose: false,
   };
-  // $mdDialog.show(dialog);
   return {
     show,
-    // close,
-    // error,
-    // success,
   };
 }]);

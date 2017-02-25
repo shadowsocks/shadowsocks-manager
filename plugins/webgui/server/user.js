@@ -5,6 +5,7 @@ const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
+const config = appRequire('services/config').all();
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -162,11 +163,12 @@ exports.createOrder = (req, res) => {
   const orderType = req.body.orderType;
   let type;
   let amount;
-  if(orderType === 'week') { type = 2; amount = 3; }
-  else if(orderType === 'month') { type = 3; amount = 10; }
-  else if(orderType === 'day') { type = 4; amount = 0.5; }
-  else if(orderType === 'hour') { type = 5; amount = 0.03; }
+  if(orderType === 'week') { type = 2; }
+  else if(orderType === 'month') { type = 3; }
+  else if(orderType === 'day') { type = 4; }
+  else if(orderType === 'hour') { type = 5; }
   else { return res.status(403).end(); }
+  amount = config.plugins.account.pay[orderType].price;
   alipay.createOrder(userId, accountId, amount, type).then(success => {
     return res.send(success);
   }).catch(err => {
@@ -190,4 +192,12 @@ exports.alipayCallback = (req, res) => {
     return res.send('error');
   }
   return res.send('success');
+};
+
+exports.getPrice = (req, res) => {
+  const price = {};
+  for(const p in config.plugins.account.pay) {
+    price[p] = config.plugins.account.pay[p].price;
+  }
+  return res.send(price);
 };

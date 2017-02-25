@@ -4,6 +4,7 @@ const knex = appRequire('init/knex').knex;
 const serverManager = appRequire('plugins/flowSaver/server');
 const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
+const config = appRequire('services/config').all();
 
 const addAccount = async (type, options) => {
   if(type === 1) {
@@ -213,11 +214,19 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
 };
 
 const setAccountLimit = async (userId, accountId, orderType) => {
-  const flow = {
-    '2': 50 * 1000 * 1000 * 1000,
-    '3': 200 * 1000 * 1000 * 1000,
-    '4': 7 * 1000 * 1000 * 1000,
-    '5': 500 * 1000 * 1000,
+  // const flow = {
+  //   '2': 50 * 1000 * 1000 * 1000,
+  //   '3': 200 * 1000 * 1000 * 1000,
+  //   '4': 7 * 1000 * 1000 * 1000,
+  //   '5': 500 * 1000 * 1000,
+  // };
+  const payType = {
+    week: 2, month: 3, day: 4, hour: 5,
+  };
+  // const flow = config.plugins.account.pay
+  const flow = {};
+  for (const p in payType) {
+    flow[payType[p]] = config.plugins.account.pay[p].flow;
   };
   if(!accountId) {
     const port = await knex('account_plugin').select()
