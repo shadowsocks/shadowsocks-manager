@@ -16,7 +16,7 @@ exports.signup = (req, res) => {
   let type = 'normal';
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
-      const email = req.body.email;
+      const email = req.body.email.toString().toLowerCase();
       const code = req.body.code;
       return emailPlugin.checkCode(email, code);
     }
@@ -30,7 +30,7 @@ exports.signup = (req, res) => {
       return;
     });
   }).then(success => {
-    const email = req.body.email;
+    const email = req.body.email.toString().toLowerCase();
     const password = req.body.password;
     return user.add({
       username: email,
@@ -75,7 +75,7 @@ exports.login = (req, res) => {
   req.checkBody('password', 'Invalid password').notEmpty();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
-      const email = req.body.email;
+      const email = req.body.email.toString().toLowerCase();
       const password = req.body.password;
       return user.checkPassword(email, password);
     }
@@ -112,10 +112,10 @@ exports.sendCode = (req, res) => {
     if(result.isEmpty) { return; }
     return Promise.reject('invalid email');
   }).then(() => {
-    const email = req.body.email;
+    const email = req.body.email.toString().toLowerCase();
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     const session = req.sessionID;
-    return emailPlugin.sendCode(email, 'Shadowsocks验证码', '您的验证码是：', {
+    return emailPlugin.sendCode(email, 'Shadowsocks验证码', '欢迎新用户注册，\n您的验证码是：', {
       ip,
       session,
     });
@@ -129,7 +129,7 @@ exports.sendCode = (req, res) => {
 
 exports.sendResetPasswordEmail = (req, res) => {
   const crypto = require('crypto');
-  const email = req.body.email;
+  const email = req.body.email.toString().toLowerCase();
   let token = null;
   knex('user').select().where({
     username: email,
