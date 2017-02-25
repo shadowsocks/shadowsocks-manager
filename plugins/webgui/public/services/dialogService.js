@@ -83,6 +83,8 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
           }
         });
       }, 5 * 1000);
+    }).catch(() => {
+      publicInfo.status = 'error';
     });
   };
   let interval = null;

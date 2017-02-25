@@ -54,6 +54,10 @@
                 <div style="margin-bottom: 20px;">支付成功</div>
                 <div style="margin-bottom: 20px;">订单会在两分钟内生效，请稍候</div>
             </div>
+            <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'error'">
+                <div style="margin-bottom: 20px;">系统错误</div>
+                <div style="margin-bottom: 20px;">生成支付订单出错，请稍后再试</div>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="center center" ng-if="publicInfo.status !== 'loading'">
@@ -63,7 +67,7 @@
         <md-button class="md-primary" ng-if="publicInfo.status === 'choose'" ng-click="publicInfo.createOrder()">
             下一步
         </md-button>
-        <md-button class="md-primary" ng-if="publicInfo.status === 'pay' || publicInfo.status === 'success'" ng-click="publicInfo.close()">
+        <md-button class="md-primary" ng-if="publicInfo.status === 'pay' || publicInfo.status === 'success' || publicInfo.status === 'error'" ng-click="publicInfo.close()">
             关闭
         </md-button>
     </md-dialog-actions>

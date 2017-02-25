@@ -78,8 +78,8 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', '$mdDialog', 'alertDialog', 'payDialog', '$interval', '$localStorage', 'changePasswordDialog',
-  ($scope, $http, $mdMedia, userApi, $mdDialog, alertDialog, payDialog, $interval, $localStorage, changePasswordDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', '$interval', '$localStorage', 'changePasswordDialog',
+  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, $interval, $localStorage, changePasswordDialog) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
     if(!$localStorage.user.serverInfo) {
@@ -172,25 +172,6 @@ app
       changePasswordDialog.show(accountId, password).then(() => {
         getUserAccountInfo();
       });
-      // const dialog = {
-      //   templateUrl: '/public/views/user/changePassword.html',
-      //   escapeToClose: false,
-      //   locals: { bind: password },
-      //   bindToController: true,
-      //   controller: ['$scope', 'userApi', '$mdDialog', 'bind', ($scope, userApi, $mdDialog, bind) => {
-      //     $scope.account = {
-      //       password: bind,
-      //     };
-      //     $scope.changePassword = () => {
-      //       $mdDialog.cancel();
-      //       userApi.changePassword(accountId, $scope.account.password).then(() => {
-      //         getUserAccountInfo();
-      //       });
-      //     };
-      //   }],
-      //   clickOutsideToClose: true,
-      // };
-      // $mdDialog.show(dialog);
     };
     $scope.createOrder = (accountId) => {
       payDialog.chooseOrderType(accountId);

@@ -137,6 +137,7 @@ exports.getServerPortLastConnect = (req, res) => {
 exports.changePassword = (req, res) => {
   const accountId = +req.params.accountId;
   const password = req.body.password;
+  if(!password) { return res.status(403).end(); };
   const isUserHasTheAccount = (accountId) => {
     return account.getAccount({userId: req.session.user, id: accountId}).then(success => {
       if(success.length) {
