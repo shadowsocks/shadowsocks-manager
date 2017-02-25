@@ -36,9 +36,22 @@ const sendMail = async (to, subject, text, options = {}) => {
     });
   };
   // TODO
-  const checkLimit = () => {
-
+  const checkLimit = async (ip, session) => {
+    let ipNumber = await knex('email')
+    .where({ ip })
+    .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
+    .count('time as count').then(success => success[0].count);
+    const sessionNumber = await knex('email')
+    .where({ session })
+    .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
+    .count('time as count').then(success => success[0].count);
+    console.log(ip, ipNumber);
+    console.log(session, sessionNumber);
+    if(ip === '127.0.0.1') { ipNumber = 0; }
+    return ipNumber + sessionNumber;
   };
+  const number = await checkLimit(options.ip, options.session);
+  if(number >= 40) { return Promise.reject('ip or session send email out of limit'); }
   await send(to, subject, text);
   await knex('email').insert({
     to,
