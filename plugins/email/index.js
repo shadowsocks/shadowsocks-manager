@@ -20,6 +20,7 @@ const smtpConfig = {
 const transporter = nodemailer.createTransport(smtpConfig);
 
 const sendMail = async (to, subject, text, options = {}) => {
+  // TODO check black list
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
@@ -35,7 +36,6 @@ const sendMail = async (to, subject, text, options = {}) => {
       });
     });
   };
-  // TODO
   const checkLimit = async (ip, session) => {
     let ipNumber = await knex('email')
     .where({ ip })
