@@ -15,6 +15,10 @@ For more details, you can see [the wiki page](https://github.com/shadowsocks/sha
 
 If you want to use the old version, please switch to [this branch](https://github.com/shadowsocks/shadowsocks-manager/tree/version1).
 
+## Webgui Demo:
+
+[https://wall.gyteng.com](https://wall.gyteng.com)
+
 ## Dependencies
 
 Node.js 6.*
