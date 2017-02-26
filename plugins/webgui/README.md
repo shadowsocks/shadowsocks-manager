@@ -2,6 +2,10 @@
 
 This plugin provide a webgui to control shadowsocks.
 
+## Demo
+
+[https://wall.gyteng.com](https://wall.gyteng.com)
+
 ## Usage
 
 1. Create a config file in `~/.ssmgr/webgui.yml`:
