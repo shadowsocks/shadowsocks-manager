@@ -6,6 +6,7 @@ const logger = log4js.getLogger('email');
 const nodemailer = require('nodemailer');
 const config = appRequire('services/config').all();
 const knex = appRequire('init/knex').knex;
+const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
 
 const smtpConfig = {
   host: config.plugins.email.host,
@@ -20,7 +21,9 @@ const smtpConfig = {
 const transporter = nodemailer.createTransport(smtpConfig);
 
 const sendMail = async (to, subject, text, options = {}) => {
-  // TODO check black list
+  if(isInBlackList(to)) {
+    return Promise.reject('email in black list');
+  }
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
@@ -51,7 +54,7 @@ const sendMail = async (to, subject, text, options = {}) => {
     return ipNumber + sessionNumber;
   };
   const number = await checkLimit(options.ip, options.session);
-  if(number >= 40) { return Promise.reject('ip or session send email out of limit'); }
+  if(number >= 40) { return Promise.reject('send email out of limit'); }
   await send(to, subject, text);
   await knex('email').insert({
     to,

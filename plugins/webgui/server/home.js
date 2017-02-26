@@ -123,7 +123,12 @@ exports.sendCode = (req, res) => {
     res.send('success');
   }).catch(err => {
     logger.error(err);
-    res.status(403).end();
+    const errorData = ['email in black list', 'send email out of limit'];
+    if(errorData.indexOf(err) < 0) {
+      return res.status(403).end();
+    } else {
+      return res.status(403).end(err);
+    }
   });
 };
 

@@ -114,9 +114,8 @@ app
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
         alertDialog.loading();
-        $http.post('/api/home/code', {
-          email: $scope.user.email,
-        }).then(success => {
+        homeApi.sendCode($scope.user.email)
+        .then(success => {
           alertDialog.show('验证码已发至邮箱', '确定');
           $scope.sendCodeTime = 120;
           const interval = $interval(() => {
@@ -128,7 +127,7 @@ app
             }
           }, 1000);
         }).catch(err => {
-          alertDialog.show('验证码发送错误', '确定');
+          alertDialog.show(err, '确定');
         });
       };
       $scope.signup = () => {

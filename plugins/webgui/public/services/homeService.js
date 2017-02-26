@@ -32,6 +32,22 @@ app.factory('homeApi', ['$http', $http => {
       }
     });
   };
+  const sendCode = email => {
+    return $http.post('/api/home/code', {
+      email,
+    }).then(success => {
+      return 'success';
+    }).catch(err => {
+      if(err.status === 403) {
+        let errData = '验证码发送错误';
+        if(err.data === 'email in black list') { errData = '该后缀的邮箱在黑名单内'; }
+        if(err.data === 'send email out of limit') { errData = '请求过于频繁，请稍后再试'; }
+        return Promise.reject(errData);
+      } else {
+        return Promise.reject('网络异常，请稍后再试');
+      }
+    });
+  };
   const findPassword = email => {
     if(!email) {
       return Promise.reject('请输入邮箱地址再点击“找回密码”');
@@ -54,6 +70,9 @@ app.factory('homeApi', ['$http', $http => {
   };
 
   return {
-    userSignup, userLogin, findPassword,
+    userSignup,
+    userLogin,
+    sendCode,
+    findPassword,
   };
 }]);
