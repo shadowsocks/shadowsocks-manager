@@ -42,7 +42,7 @@ For example, you can run this command:
 `ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002`
 3. If you have several servers, you have to run step 1 and step 2 in every server.  
 The listening address in `--manager-address` of step 1 and in `-s` of step 2 must be same. For security reseon, we recommend you to use `127.0.0.1` instead of `0.0.0.0`.
-4. Now you can use the plugins to manager them. You can read the details in plugins readme page.
+4. Now you can use the plugins to manage them. You can read the details in plugins readme page.
 
 ```
 +-------------+    +-------------+       +------+
@@ -70,11 +70,11 @@ The listening address in `--manager-address` of step 1 and in `-s` of step 2 mus
 `[================100%]` [telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
 `[================100%]` [flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
 `[================100%]` [email]()  
-`[====20%-------------]` [user]()  
+`[================100%]` [user]()  
 `[================100%]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
-`[==10%---------------]` [account]()  
-`[==10%---------------]` [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
-`[===============90%--]` [alipay]()  
+`[================100%]` [account]()  
+`[===============90%--]` [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
+`[================100%]` [alipay]()  
 
 ### Parameter
 

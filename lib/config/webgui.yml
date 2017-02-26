@@ -12,6 +12,19 @@ plugins:
     use: true
   account:
     use: true
+    pay:
+      hour:
+        price: 0.03
+        flow: 500000000
+      day:
+        price: 0.5
+        flow: 7000000000
+      week:
+        price: 3
+        flow: 50000000000
+      month:
+        price: 10
+        flow: 200000000000
   email:
     use: true
     username: 'username'
