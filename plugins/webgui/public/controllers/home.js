@@ -72,8 +72,8 @@ app
       $scope.signup = () => { $state.go('home.signup'); };
     }
   ])
-  .controller('HomeLoginController', ['$scope', '$http', '$state', 'homeApi', 'alertDialog', '$localStorage',
-    ($scope, $http, $state, homeApi, alertDialog, $localStorage) => {
+  .controller('HomeLoginController', ['$scope', '$state', 'homeApi', 'alertDialog', '$localStorage',
+    ($scope, $state, homeApi, alertDialog, $localStorage) => {
       $scope.user = {};
       $scope.login = () => {
         alertDialog.loading();
@@ -108,8 +108,8 @@ app
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$http', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',
-    ($scope, $http, $state, $interval, $timeout, homeApi, alertDialog) => {
+  .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',
+    ($scope, $state, $interval, $timeout, homeApi, alertDialog) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
