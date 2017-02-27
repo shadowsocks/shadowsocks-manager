@@ -329,8 +329,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
   }
 ])
-.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog',
+  ($scope, $state, $stateParams, $http, confirmDialog) => {
     $scope.setTitle('编辑服务器');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
@@ -358,6 +358,17 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.cancel = () => {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+    };
+    $scope.deleteServer = () => {
+      confirmDialog.show({
+        text: '真的要删除服务器吗？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除服务器失败',
+        fn: function () { return $http.delete('/api/admin/server/' + $stateParams.serverId); },
+      }).then(() => {
+        $state.go('admin.server');
+      });
     };
   }
 ]);
