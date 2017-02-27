@@ -44,13 +44,14 @@ const sendMail = async (to, subject, text, options = {}) => {
     .where({ ip })
     .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
     .count('time as count').then(success => success[0].count);
-    const sessionNumber = await knex('email')
+    let sessionNumber = await knex('email')
     .where({ session })
     .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
     .count('time as count').then(success => success[0].count);
     console.log(ip, ipNumber);
     console.log(session, sessionNumber);
-    if(ip === '127.0.0.1') { ipNumber = 0; }
+    if(ip === '127.0.0.1' || !ip) { ipNumber = 0; }
+    if(!session) { sessionNumber = 0; }
     return ipNumber + sessionNumber;
   };
   const number = await checkLimit(options.ip, options.session);
