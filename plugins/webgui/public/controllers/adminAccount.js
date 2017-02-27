@@ -374,8 +374,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
+.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog) => {
     $scope.setTitle('编辑账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
@@ -444,9 +444,21 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }
     };
     $scope.deleteAccount = () => {
-      $http.delete('/api/admin/account/' + accountId).then(success => {
+      confirmDialog.show({
+        text: '真的要删除账号吗？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除账号失败',
+        fn: function () { return $http.delete('/api/admin/account/' + accountId); },
+      }).then(() => {
+        console.log('success');
         $state.go('admin.account');
+      }).catch(() => {
+        console.log('error');
       });
+      // $http.delete('/api/admin/account/' + accountId).then(success => {
+      //   $state.go('admin.account');
+      // });
     };
   }
 ]);
