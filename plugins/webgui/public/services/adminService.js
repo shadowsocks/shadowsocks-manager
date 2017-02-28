@@ -102,6 +102,21 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
       };
     });
   };
+
+  const getUserData = (userId) => {
+    return $q.all([
+      $http.get('/api/admin/user/' + userId),
+      $http.get('/api/admin/user/account'),
+      $http.get('/api/admin/order', { params: { userId } }),
+    ]).then(success => {
+      return {
+        user: success[0].data,
+        account: success[1].data,
+        orders: success[2].data,
+      };
+    });
+  };
+
   return {
     getUser,
     getOrder,
@@ -112,5 +127,6 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
     getAccountId,
     getIndexInfo,
     getServerPortData,
+    getUserData,
   };
 }]);
