@@ -19,7 +19,7 @@
     <div flex="100">
         <md-card>
             <md-card-content>
-                <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
+                <md-tabs md-selected="0" md-border-bottom md-dynamic-height>
                     <md-tab ng-repeat="server in servers track by server.id"
                             label="{{server.name}}"
                             md-on-select="getServerPortData(server.id, account.port)">
