@@ -34,6 +34,8 @@ if(program.manager) {config.set('manager.address', program.manager);}
 if(program.password) {config.set('manager.password', program.password);}
 if(program.db) {
   config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
+} else if (typeof config.get('db') === 'object') {
+  
 } else {
   config.set('db', path.resolve(ssmgrPath + '/' + config.get('db')));
 }

@@ -9,19 +9,8 @@ const createTable = async() => {
     await knex.schema.dropTableIfExists(tableName);
   }
   const exist = await knex.schema.hasTable(tableName);
-  // if(exist) {
-  //   return;
-  // }
   if(exist) {
-    return knex.schema.hasColumn('alipay', 'orderType')
-    .then(exist => {
-      if(!exist) {
-        return knex.schema.table('alipay', table => {
-          table.integer('orderType').defaultTo(3);
-        });
-      }
-      return;
-    });
+    return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
@@ -33,8 +22,8 @@ const createTable = async() => {
     table.string('qrcode');
     table.string('status');
     table.string('alipayData');
-    table.dateTime('createTime');
-    table.dateTime('expireTime');
+    table.bigInteger('createTime');
+    table.bigInteger('expireTime');
   });
 };
 

@@ -11,7 +11,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.integer('port');
     table.integer('flow');
-    table.dateTime('time');
+    table.bigInteger('time');
   });
 };
 

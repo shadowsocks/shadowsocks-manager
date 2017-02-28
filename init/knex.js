@@ -1,13 +1,31 @@
 'use strict';
 
-const config = appRequire('services/config');
+const config = appRequire('services/config').get('db');
 
-const knex = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    filename: config.get('db'),
-  },
-  useNullAsDefault: true,
-});
+let knex;
+if(typeof config === 'object') {
+  const { host, user, password, database } = config;
+  knex = require('knex')({
+    client: 'mysql',
+    connection: {
+      host,
+      user,
+      password,
+      database,
+      charset: 'utf8',
+      collate: 'utf8_unicode_ci',
+    },
+    useNullAsDefault: true,
+  });
+} else {
+  knex = require('knex')({
+    client: 'sqlite3',
+    connection: {
+      filename: config,
+    },
+    useNullAsDefault: true,
+  });
+}
+
 
 exports.knex = knex;

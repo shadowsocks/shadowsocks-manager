@@ -12,7 +12,7 @@ const createTable = async() => {
     table.integer('id');
     table.integer('port');
     table.integer('flow');
-    table.dateTime('time');
+    table.bigInteger('time');
   });
 };
 

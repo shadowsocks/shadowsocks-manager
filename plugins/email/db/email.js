@@ -16,7 +16,7 @@ const createTable = async() => {
     table.string('remark');
     table.string('ip');
     table.string('session');
-    table.dateTime('time');
+    table.bigInteger('time');
   });
 };
 

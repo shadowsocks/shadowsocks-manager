@@ -19,10 +19,10 @@ const createTable = async() => {
     table.string('telegram');
     table.string('password');
     table.string('type');
-    table.dateTime('createTime');
-    table.dateTime('lastLogin');
+    table.bigInteger('createTime');
+    table.bigInteger('lastLogin');
     table.string('resetPasswordId');
-    table.dateTime('resetPasswordTime');
+    table.bigInteger('resetPasswordTime');
   });
 };
 
