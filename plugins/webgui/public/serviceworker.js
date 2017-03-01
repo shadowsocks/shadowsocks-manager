@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-03-01 16:36:10';
+var ONLINE_CACHE_NAME = '2017-03-02 00:36:10';
 var onlineCacheUrl = [
   '/',
 
@@ -122,4 +122,15 @@ self.addEventListener('fetch', function(event) {
       })
     );
   }
+});
+
+self.addEventListener('push', function(event) {
+  console.log('Service Worker recived a push message', event.data.text());
+
+  var title = 'Click to open push message';
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      'body': event.data.text(),
+      'icon': 'images/icon.png'
+    }));
 });
