@@ -4,6 +4,7 @@ const os = require('os');
 const path = require('path');
 const program = require('commander');
 const version = appRequire('package').version;
+const log = appRequire('init/log');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
@@ -26,6 +27,7 @@ program
 if(program.config) { global.configFile = program.config; }
 
 const config = appRequire('services/config');
+let logName = 'uname';
 
 if(program.type) {config.set('type', program.type);}
 if(program.empty) {config.set('empty', program.empty);}
@@ -34,11 +36,14 @@ if(program.manager) {config.set('manager.address', program.manager);}
 if(program.password) {config.set('manager.password', program.password);}
 if(program.db) {
   config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
+  logName = program.db.split('.')[0];
 } else if (typeof config.get('db') === 'object') {
-  
+  logName = config.get('db.database');
 } else {
+  logName = config.get('db').split('.')[0];
   config.set('db', path.resolve(ssmgrPath + '/' + config.get('db')));
 }
+log.setFileAppenders(logName);
 
 if(program.run) {
   config.set('runShadowsocks', program.run);

@@ -40,12 +40,7 @@ const checkData = async (receive) => {
   if (buffer.length >= length + 2) {
     data = buffer.slice(2, length + 2);
     const message = JSON.parse(data.toString());
-    // receive.data = receive.data.slice(length + 2);
     return message;
-    // if(buffer.length > length + 2) {
-    //   console.log('GG');
-    //   return checkData(receive);
-    // }
   }
 };
 
