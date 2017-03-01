@@ -3,34 +3,36 @@ const os = require('os');
 const path = require('path');
 const logPath = path.resolve(os.homedir() + '/.ssmgr/logs');
 
+const appenders = [
+  {
+    type: 'console',
+    category: 'system',
+  },
+  {
+    type: 'console',
+    category: 'email',
+  },
+  {
+    type: 'console',
+    category: 'telegram',
+  },
+  {
+    type: 'console',
+    category: 'freeAccount',
+  },
+  {
+    type: 'console',
+    category: 'webgui',
+  },
+  {
+    type: 'console',
+    category: 'alipay',
+  },
+];
+
 const log4js = require('log4js');
 log4js.configure({
-  appenders: [
-    {
-      type: 'console',
-      category: 'system',
-    },
-    {
-      type: 'console',
-      category: 'email',
-    },
-    {
-      type: 'console',
-      category: 'telegram',
-    },
-    {
-      type: 'console',
-      category: 'freeAccount',
-    },
-    {
-      type: 'console',
-      category: 'webgui',
-    },
-    {
-      type: 'console',
-      category: 'alipay',
-    },
-  ]
+  appenders,
 });
 
 const setFileAppenders = (filename) => {
@@ -44,13 +46,14 @@ const setFileAppenders = (filename) => {
   } catch(err) {
     fs.mkdirSync(path.resolve(logPath, filename));
   }
-  const file = path.resolve(logPath, filename + '/system.log');
   log4js.loadAppender('dateFile');
-  log4js.addAppender(log4js.appenderMakers['dateFile']({
-    type: 'dateFile',
-    filename: file,
-    pattern: '-yyyy-MM-dd',
-  }), 'system');
+  appenders.forEach(appender => {
+    log4js.addAppender(log4js.appenderMakers['dateFile']({
+      type: 'dateFile',
+      filename: path.resolve(logPath, filename + '/' + appender.category + '.log'),
+      pattern: '-yyyy-MM-dd',
+    }), appender.category);
+  });
 };
 
 exports.setFileAppenders = setFileAppenders;
