@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-03-02 00:36:10';
+var ONLINE_CACHE_NAME = '2017-03-02 13:03:10';
 var onlineCacheUrl = [
   '/',
 
@@ -91,12 +91,15 @@ self.addEventListener('install', function(event) {
 self.addEventListener('fetch', function(event) {
   var isMatch = function () {
     return (
-      event.request.url.match(/^https:\/\/test.gyteng.com\/user\//) ||
-      event.request.url.match(/^https:\/\/test.gyteng.com\/home\//) ||
-      event.request.url.match(/^https:\/\/test.gyteng.com\/admin\//) ||
-      event.request.url.match(/^https:\/\/wall.gyteng.com\/user\//) ||
-      event.request.url.match(/^https:\/\/wall.gyteng.com\/home\//) ||
-      event.request.url.match(/^https:\/\/wall.gyteng.com\/admin\//)
+      event.request.url.match(self.registration.scope + 'user/') ||
+      event.request.url.match(self.registration.scope + 'home/') ||
+      event.request.url.match(self.registration.scope + 'admin/')
+      // event.request.url.match(/^https:\/\/test.gyteng.com\/user\//) ||
+      // event.request.url.match(/^https:\/\/test.gyteng.com\/home\//) ||
+      // event.request.url.match(/^https:\/\/test.gyteng.com\/admin\//) ||
+      // event.request.url.match(/^https:\/\/wall.gyteng.com\/user\//) ||
+      // event.request.url.match(/^https:\/\/wall.gyteng.com\/home\//) ||
+      // event.request.url.match(/^https:\/\/wall.gyteng.com\/admin\//)
     );
   };
   if (isMatch()) {
@@ -124,13 +127,12 @@ self.addEventListener('fetch', function(event) {
   }
 });
 
-self.addEventListener('push', function(event) {
-  console.log('Service Worker recived a push message', event.data.text());
-
+self.addEventListener('push', function (event) {
+  console.log('Service Worker recived a push message', event);
   var title = 'Click to open push message';
   event.waitUntil(
     self.registration.showNotification(title, {
-      'body': event.data.text(),
-      'icon': 'images/icon.png'
+      'body': 'Test',
+      'icon': '/libs/favicon.png',
     }));
 });

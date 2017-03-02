@@ -1,6 +1,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr');
 const logPath = path.resolve(os.homedir() + '/.ssmgr/logs');
 
 const appenders = [
@@ -36,6 +37,11 @@ log4js.configure({
 });
 
 const setFileAppenders = (filename) => {
+  try {
+    fs.statSync(ssmgrPath);
+  } catch(err) {
+    fs.mkdirSync(ssmgrPath);
+  }
   try {
     fs.statSync(logPath);
   } catch(err) {

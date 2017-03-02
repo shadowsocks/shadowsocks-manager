@@ -50,11 +50,17 @@
       return /micromessenger/.test(navigator.userAgent.toLowerCase());
     }
     if(!isWechatBrowser()) {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/serviceworker.js').then(function(registration) {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        }).catch(function(err) {
-          console.log('ServiceWorker registration failed: ', err);
+      if ('serviceWorker' in navigator) {navigator.serviceWorker.register('/serviceworker.js').then(function() {
+          return navigator.serviceWorker.ready;
+        }).then(function(reg) {
+          console.log('Service Worker is ready to go!', reg);
+          reg.pushManager.subscribe({
+            userVisibleOnly: true
+          }).then(function(sub) {
+            console.log(JSON.stringify(sub));
+          });
+        }).catch(function(error) {
+          console.log('Service Worker failed to boot', error);
         });
       }
     }
