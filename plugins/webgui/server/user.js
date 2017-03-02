@@ -167,6 +167,8 @@ exports.createOrder = (req, res) => {
   else if(orderType === 'month') { type = 3; }
   else if(orderType === 'day') { type = 4; }
   else if(orderType === 'hour') { type = 5; }
+  else if(orderType === 'season') { type = 6; }
+  else if(orderType === 'year') { type = 7; }
   else { return res.status(403).end(); }
   amount = config.plugins.account.pay[orderType].price;
   alipay.createOrder(userId, accountId, amount, type).then(success => {

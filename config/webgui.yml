@@ -25,6 +25,12 @@ plugins:
       month:
         price: 10
         flow: 200000000000
+      season:
+        price: 30
+        flow: 200000000000
+      year:
+        price: 120
+        flow: 200000000000
   email:
     use: true
     username: 'username'

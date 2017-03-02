@@ -7,8 +7,9 @@ This plugin provide a webgui to control shadowsocks.
 [https://wall.gyteng.com](https://wall.gyteng.com)
 
 ## Usage
+1. Make sure your have read the usage according the [main readme page](https://github.com/shadowsocks/shadowsocks-manager/blob/master/README.md).
 
-1. Create a config file in `~/.ssmgr/webgui.yml`:
+2. Create a config file in `~/.ssmgr/webgui.yml`:
 
     ```
     type: m
@@ -38,6 +39,12 @@ This plugin provide a webgui to control shadowsocks.
           month:
             price: 10
             flow: 200000000000
+          season:
+            price: 30
+            flow: 200000000000
+          year:
+            price: 120
+            flow: 200000000000
       email:
         use: true
         username: 'username'
@@ -59,10 +66,10 @@ This plugin provide a webgui to control shadowsocks.
     db: 'webgui.sqlite'
     ```
 
-2. Start `ssmgr` with the config file:
+3. Start `ssmgr` with the config file:
     `ssmgr -c webgui.yml`
 
-3. Open `http://yourwebsite.com`, the first register user will be the manager.
+4. Open `http://yourwebsite.com`, the first register user will be the manager.
 
 ## Screenshot
 

@@ -7,6 +7,9 @@ const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
 
 const addAccount = async (type, options) => {
+  if(type === 6 || type === 7) {
+    type = 3;
+  }
   if(type === 1) {
     await knex('account_plugin').insert({
       type,
@@ -214,16 +217,12 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
 };
 
 const setAccountLimit = async (userId, accountId, orderType) => {
-  // const flow = {
-  //   '2': 50 * 1000 * 1000 * 1000,
-  //   '3': 200 * 1000 * 1000 * 1000,
-  //   '4': 7 * 1000 * 1000 * 1000,
-  //   '5': 500 * 1000 * 1000,
-  // };
   const payType = {
-    week: 2, month: 3, day: 4, hour: 5,
+    week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
   };
-  // const flow = config.plugins.account.pay
+  let limit = 1;
+  if(orderType === 6) { limit = 3; }
+  if(orderType === 7) { limit = 12; }
   const flow = {};
   for (const p in payType) {
     flow[payType[p]] = config.plugins.account.pay[p].flow;
@@ -243,7 +242,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
       port,
       password: Math.random().toString().substr(2,10),
       time: Date.now(),
-      limit: 1,
+      limit,
       flow: flow[orderType],
       autoRemove: 0,
     });
@@ -262,6 +261,8 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     '3': 30 * 86400 * 1000,
     '4': 1 * 86400 * 1000,
     '5': 3600 * 1000,
+    '6': 3 * 30 * 86400 * 1000,
+    '7': 12 * 30 * 86400 * 1000,
   };
   let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
   if(expireTime <= Date.now()) {
@@ -269,14 +270,17 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   } else {
     expireTime += timePeriod[orderType];
   }
-  accountData.create = expireTime - timePeriod[orderType];
+  let countTime = timePeriod[orderType];
+  if(orderType === 6) { countTime = timePeriod[3]; }
+  if(orderType === 7) { countTime = timePeriod[3]; }
+  accountData.create = expireTime - countTime;
   accountData.limit = 1;
   while(accountData.create >= Date.now()) {
     accountData.limit += 1;
-    accountData.create -= timePeriod[orderType];
+    accountData.create -= countTime;
   }
   await knex('account_plugin').update({
-    type: orderType,
+    type: orderType >= 6 ? 3 : orderType,
     data: JSON.stringify(accountData),
     autoRemove: 0,
   }).where({ id: accountId });

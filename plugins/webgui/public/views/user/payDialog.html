@@ -48,6 +48,24 @@
                           <span flex="15"></span>
                       </span>
                     </md-radio-button>
+                    <md-radio-button value="season">
+                      <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
+                          <span flex="15"></span>
+                          <span flex="30">三个月</span>
+                          <span flex="5"></span>
+                          <span flex="35" style="text-align:right; color: #888">{{publicInfo.price.season}}元</span>
+                          <span flex="15"></span>
+                      </span>
+                    </md-radio-button>
+                    <md-radio-button value="year">
+                      <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
+                          <span flex="15"></span>
+                          <span flex="30">一年</span>
+                          <span flex="5"></span>
+                          <span flex="35" style="text-align:right; color: #888">{{publicInfo.price.year}}元</span>
+                          <span flex="15"></span>
+                      </span>
+                    </md-radio-button>
                 </md-radio-group>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'success'">
