@@ -1,5 +1,3 @@
-'use strict';
-
 const manager = appRequire('services/manager');
 const serverManager = appRequire('plugins/flowSaver/server');
 const account = appRequire('plugins/account/index');

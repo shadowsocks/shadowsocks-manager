@@ -8,6 +8,7 @@ const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
+const push = appRequire('plugins/webgui/server/push');
 
 exports.signup = (req, res) => {
   req.checkBody('email', 'Invalid email').isEmail();
@@ -61,6 +62,9 @@ exports.signup = (req, res) => {
     }
   }).then(success => {
     logger.info(`[${ req.body.email }] signup success`);
+    push.pushMessage('注册', {
+      body: `用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`,
+    });
     res.send('success');
   }).catch(err => {
     logger.error(`[${ req.body.email }] signup fail: ${ err }`);

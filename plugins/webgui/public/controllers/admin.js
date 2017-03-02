@@ -2,17 +2,6 @@ const app = require('../index').app;
 
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$localStorage',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $localStorage) => {
-    // $localStorage.$default({
-    //   admin: {},
-    //   home: {},
-    // });
-    // $http.get('/api/home/login').then(success => {
-    //   if(success.data.status !== 'admin') {
-    //     $state.go('home.index');
-    //   } else {
-    //     $scope.setMainLoading(false);
-    //   }
-    // });
     if ($localStorage.home.status !== 'admin') {
       $state.go('home.index');
     } else {
@@ -52,6 +41,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.admin = {};
+          $scope.sendPushSubscribe();
           $state.go('home.index');
         });
       },

@@ -13,6 +13,7 @@ const alipay_f2f = new alipayf2f({
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 const moment = require('moment');
+const push = appRequire('plugins/webgui/server/push');
 
 const createOrder = async (user, account, amount, orderType = 3) => {
   const oldOrder = await knex('alipay').select().where({
@@ -74,6 +75,9 @@ setInterval(async () => {
     } else if(order.status === 'TRADE_SUCCESS') {
       const accountId = order.account;
       const userId = order.user;
+      push.pushMessage('支付成功', {
+        body: `订单[ ${ order.orderId } ]支付成功`,
+      });
       account.setAccountLimit(userId, accountId, order.orderType)
       .then(() => {
         return knex('alipay').update({

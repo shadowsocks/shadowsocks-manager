@@ -46,24 +46,38 @@
         <div ng-hide="mainLoading" ui-view layout-fill></div>
     </div>
     <script>
-    function isWechatBrowser(){
-      return /micromessenger/.test(navigator.userAgent.toLowerCase());
-    }
-    if(!isWechatBrowser()) {
-      if ('serviceWorker' in navigator) {navigator.serviceWorker.register('/serviceworker.js').then(function() {
-          return navigator.serviceWorker.ready;
-        }).then(function(reg) {
-          console.log('Service Worker is ready to go!', reg);
-          reg.pushManager.subscribe({
-            userVisibleOnly: true
-          }).then(function(sub) {
-            console.log(JSON.stringify(sub));
-          });
-        }).catch(function(error) {
-          console.log('Service Worker failed to boot', error);
-        });
-      }
-    }
+    // function isWechatBrowser(){
+    //   return /micromessenger/.test(navigator.userAgent.toLowerCase());
+    // }
+    // var sendMessage = function(message) {
+    //   return new Promise(function(resolve, reject) {
+    //     var messageChannel = new MessageChannel();
+    //     messageChannel.port1.onmessage = function(event) {
+    //       if (event.data.error) {
+    //         reject(event.data.error);
+    //       } else {
+    //         resolve(event.data);
+    //       }
+    //     };
+    //     navigator.serviceWorker.controller.postMessage(message,
+    //       [messageChannel.port2]);
+    //   });
+    // }
+    // if(!isWechatBrowser() && 'serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('/serviceworker.js').then(function() {
+    //     return navigator.serviceWorker.ready;
+    //   }).then(function(reg) {
+    //     console.log('Service Worker is ready to go!', reg);
+    //     reg.pushManager.subscribe({
+    //       userVisibleOnly: true
+    //     }).then(function(sub) {
+    //       console.log(JSON.stringify(sub));
+    //       sendMessage(JSON.stringify(sub));
+    //     });
+    //   }).catch(function(error) {
+    //     console.log('Service Worker failed to boot', error);
+    //   });
+    // }
     </script>
 </body>
 

@@ -1,7 +1,7 @@
 const app = require('../index').app;
 
-app.controller('MainController', ['$scope', '$localStorage', '$location',
-  ($scope, $localStorage, $location) => {
+app.controller('MainController', ['$scope', '$localStorage', '$location', '$http',
+  ($scope, $localStorage, $location, $http) => {
     $scope.version = window.ssmgrVersion;
     $localStorage.$default({
       admin: {},
@@ -29,5 +29,26 @@ app.controller('MainController', ['$scope', '$localStorage', '$location',
     $scope.$on('$stateChangeSuccess', () => {
       $localStorage.home.url = $location.url();
     });
+
+    let pushSubscribe;
+    const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
+    if(!isWechatBrowser() && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/serviceworker.js').then(function() {
+        return navigator.serviceWorker.ready;
+      }).then(reg => {
+        console.log('Service Worker is ready to go!', reg);
+        reg.pushManager.subscribe({
+          userVisibleOnly: true
+        }).then(subscribe => {
+          pushSubscribe = subscribe;
+          $http.post('/api/push/test', { data: subscribe });
+        });
+      }).catch(function(error) {
+        console.log('Service Worker failed to boot', error);
+      });
+    }
+    $scope.sendPushSubscribe = () => {
+      $http.post('/api/push/test', { data: pushSubscribe });
+    };
   }
 ]);
