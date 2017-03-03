@@ -48,7 +48,7 @@ const insertPushList = async data => {
   return;
 };
 
-exports.test = (req, res) => {
+exports.client = (req, res) => {
   const data = req.body.data;
   if(!req.session.type || req.session.type === 'normal') {
     knex('push').delete().where({ endpoint: data.endpoint }).then(() => {

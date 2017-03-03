@@ -1,6 +1,9 @@
 const app = require('../index').app;
 
 app.filter('timeago', function() {
+  Math.trunc = Math.trunc || function (value) {
+    return value < 0 ? Math.ceil(value) : Math.floor(value);
+  };
   const timeago = function(input) {
     let ret = '';
     let retTail = '';
@@ -32,6 +35,9 @@ app.filter('timeago', function() {
 });
 
 app.filter('timeagoshort', function() {
+  Math.trunc = Math.trunc || function (value) {
+    return value < 0 ? Math.ceil(value) : Math.floor(value);
+  };
   return function(input) {
 
     let ret = '';

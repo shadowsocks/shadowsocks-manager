@@ -31,6 +31,10 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     });
 
     let pushSubscribe;
+    $scope.sendPushSubscribe = () => {
+      if(!pushSubscribe) { return; }
+      $http.post('/api/push/client', { data: pushSubscribe });
+    };
     const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
     if(!isWechatBrowser() && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('/serviceworker.js').then(function() {
@@ -41,14 +45,11 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
           userVisibleOnly: true
         }).then(subscribe => {
           pushSubscribe = subscribe;
-          $http.post('/api/push/test', { data: subscribe });
+          $scope.sendPushSubscribe();
         });
       }).catch(function(error) {
         console.log('Service Worker failed to boot', error);
       });
     }
-    $scope.sendPushSubscribe = () => {
-      $http.post('/api/push/test', { data: pushSubscribe });
-    };
   }
 ]);
