@@ -26,7 +26,7 @@ const app = express();
 
 app.set('trust proxy', 'loopback');
 app.use(log4js.connectLogger(expressLogger, {
-  level: log4js.levels.INFO,
+  level: 'auto',
   format: '[:req[x-real-ip]] :method :status :response-timems :url',
 }));
 

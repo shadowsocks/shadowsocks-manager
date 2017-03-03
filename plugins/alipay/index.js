@@ -52,7 +52,7 @@ const createOrder = async (user, account, amount, orderType = 3) => {
     createTime: Date.now(),
     expireTime: Date.now() + time * 60 * 1000,
   });
-  logger.info(`create order: [${ orderId }][${ amount }][account: ${ account }]`);
+  logger.info(`创建订单: [${ orderId }][${ amount }][account: ${ account }]`);
   return {
     orderId,
     qrCode: qrCode.qr_code,
@@ -85,7 +85,11 @@ setInterval(async () => {
         }).where({
           orderId: order.orderId,
         });
-      }).then().catch(console.log);
+      }).then(() => {
+        logger.info(`订单支付成功: [${ orderId }][${ amount }][account: ${ account }]`);
+      }).catch(err => {
+        logger.error(`订单支付失败: [${ orderId }]`, err);
+      });
     };
   });
 }, 60 * 1000);

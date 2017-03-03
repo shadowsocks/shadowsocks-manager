@@ -3,41 +3,25 @@ const os = require('os');
 const path = require('path');
 const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr');
 const logPath = path.resolve(os.homedir() + '/.ssmgr/logs');
+const log4js = require('log4js');
 
 const appenders = [
-  {
-    type: 'console',
-    category: 'system',
-  },
-  {
-    type: 'console',
-    category: 'email',
-  },
-  {
-    type: 'console',
-    category: 'telegram',
-  },
-  {
-    type: 'console',
-    category: 'freeAccount',
-  },
-  {
-    type: 'console',
-    category: 'webgui',
-  },
-  {
-    type: 'console',
-    category: 'alipay',
-  },
-  {
-    type: 'console',
-    category: 'express',
-  },
+  'system',
+  'email',
+  'telegram',
+  'freeAccount',
+  'webgui',
+  'alipay',
+  'express',
 ];
 
-const log4js = require('log4js');
 log4js.configure({
-  appenders,
+  appenders: appenders.map(m => {
+    return {
+      type: 'console',
+      category: m,
+    };
+  }),
 });
 
 const setFileAppenders = (filename) => {
@@ -60,9 +44,9 @@ const setFileAppenders = (filename) => {
   appenders.forEach(appender => {
     log4js.addAppender(log4js.appenderMakers['dateFile']({
       type: 'dateFile',
-      filename: path.resolve(logPath, filename + '/' + appender.category + '.log'),
+      filename: path.resolve(logPath, filename + '/' + appender + '.log'),
       pattern: '-yyyy-MM-dd',
-    }), appender.category);
+    }), appender);
   });
 };
 
