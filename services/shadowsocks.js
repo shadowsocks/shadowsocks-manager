@@ -56,11 +56,11 @@ const connect = () => {
     };
   });
 
-  client.on('error', (err) => {
-    console.log(`client error:\n${err.stack}`);
+  client.on('error', err => {
+    logger.error(`client error: `, err);
   });
   client.on('close', () => {
-    console.log(`client close`);
+    logger.error(`client close`);
   });
 };
 
@@ -238,7 +238,7 @@ const getFlow = async (options) => {
     }
     return accounts;
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     return Promise.reject('error');
   }
 };
