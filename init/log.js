@@ -29,6 +29,10 @@ const appenders = [
     type: 'console',
     category: 'alipay',
   },
+  {
+    type: 'console',
+    category: 'express',
+  },
 ];
 
 const log4js = require('log4js');

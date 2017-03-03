@@ -2,6 +2,7 @@
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
+const expressLogger = log4js.getLogger('express');
 
 const config = appRequire('services/config').all();
 const path = require('path');
@@ -24,6 +25,10 @@ const expressValidator = require('express-validator');
 const app = express();
 
 app.set('trust proxy', 'loopback');
+app.use(log4js.connectLogger(expressLogger, {
+  level: log4js.levels.INFO,
+  format: '[:req[x-real-ip]] :method :status :response-timems :url',
+}));
 
 app.use(bodyParser.json());
 app.use(expressValidator());
