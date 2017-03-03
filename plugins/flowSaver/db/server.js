@@ -3,6 +3,9 @@
 const knex = appRequire('init/knex').knex;
 const tableName = 'server';
 const config = appRequire('services/config').all();
+const manager = appRequire('services/manager');
+const log4js = require('log4js');
+const logger = log4js.getLogger('flowSaver');
 
 const createTable = async () => {
   if(config.empty) {
@@ -21,6 +24,19 @@ const createTable = async () => {
     const host = config.manager.address.split(':')[0];
     const port = +config.manager.address.split(':')[1];
     const password = config.manager.password;
+    await manager.send({
+      command: 'flow',
+      options: {
+        clear: false,
+      },
+    }, {
+      host,
+      port,
+      password,
+    }).catch(() => {
+      logger.error(`connect to server ${ password }@${ host }:${ port } fail.`);
+      process.exit(1);
+    });
     await knex('server').insert({
       name: 'default',
       host,

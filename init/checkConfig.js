@@ -21,6 +21,7 @@ program
   .option('-m, --manager [address]', 'manager address, default: 127.0.0.1:6002')
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
   .option('-r, --run [type]', 'run shadowsocks from child_process, the type is libev or python, if you want to set encrypt method, fill it like libev:aes-256-cfb')
+  .option('--debug', 'show debug message')
   .parse(process.argv);
 
 if(program.config) { global.configFile = program.config; }
@@ -47,4 +48,8 @@ log.setFileAppenders(logName);
 if(program.run) {
   config.set('runShadowsocks', program.run);
 }
+if(!program.debug) {
+  log.setConsoleLevel('ERROR');
+}
+
 // logger.info('Config:\n', JSON.stringify(config.all(), null, 2));
