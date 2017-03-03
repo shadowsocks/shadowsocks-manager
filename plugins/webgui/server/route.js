@@ -95,6 +95,11 @@ app.get('/serviceworker.js', (req, res) => {
   });
 });
 
+const manifest = appRequire('plugins/webgui/views/manifest').manifest;
+app.get('/manifest.json', (req, res) => {
+  return res.json(manifest);
+});
+
 const version = appRequire('package').version;
 app.get('*', (req, res) => {
   return res.render('index', {
