@@ -26,6 +26,10 @@ program
 
 if(program.config) { global.configFile = program.config; }
 
+if(!program.debug) {
+  log.setConsoleLevel('ERROR');
+}
+
 const config = appRequire('services/config');
 let logName = 'uname';
 
@@ -47,9 +51,6 @@ log.setFileAppenders(logName);
 
 if(program.run) {
   config.set('runShadowsocks', program.run);
-}
-if(!program.debug) {
-  log.setConsoleLevel('ERROR');
 }
 
 // logger.info('Config:\n', JSON.stringify(config.all(), null, 2));

@@ -160,5 +160,4 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       orderDialog.show(order);
     };
   }
-])
-;
+]);

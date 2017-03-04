@@ -2,6 +2,7 @@ const blackList = [
   '@mvrht.com',
   '@dispostable.com',
   '@yopmail.com',
+  '@psoxs.com',
 ];
 
 const isInBlackList = email => {
