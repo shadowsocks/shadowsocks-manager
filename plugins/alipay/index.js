@@ -86,7 +86,7 @@ setInterval(async () => {
           orderId: order.orderId,
         });
       }).then(() => {
-        logger.info(`订单支付成功: [${ orderId }][${ amount }][account: ${ account }]`);
+        logger.info(`订单支付成功: [${ order.orderId }][${ amount }][account: ${ account }]`);
       }).catch(err => {
         logger.error(`订单支付失败: [${ orderId }]`, err);
       });
