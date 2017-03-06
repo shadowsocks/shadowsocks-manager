@@ -1,0 +1,20 @@
+<md-dialog aria-label="sort dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div style="margin-bottom: 20px;">排序方式：</div>
+            <div layout="row" layout-align="center center">
+                <md-radio-group ng-model="userSort.sort">
+                    <md-radio-button value="id_asc">用户ID ↑</md-radio-button>
+                    <md-radio-button value="id_desc">用户ID ↓</md-radio-button>
+                    <md-radio-button value="lastLogin_asc">上次登录 ↑</md-radio-button>
+                    <md-radio-button value="lastLogin_desc">上次登录 ↓</md-radio-button>
+                </md-radio-group>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button class="md-primary" ng-click="publicInfo.hide()">
+            确定
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

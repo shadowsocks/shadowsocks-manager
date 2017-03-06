@@ -146,17 +146,10 @@ const getOneUser = async (id) => {
 };
 
 const getUserAndPaging = async (opt = {}) => {
-  const random = Math.random().toString().substr(3,7) + '@qq.com';
-  // knex('user').insert({
-  //   username: random,
-  //   email: random,
-  //   password: random,
-  //   type: 'normal',
-  // }).then(console.log);
 
   const search = opt.search || '';
   const filter = opt.filter || 'all';
-  const sort = opt.sort || 'id';
+  const sort = opt.sort || 'id_asc';
   const page = opt.page || 1;
   const pageSize = opt.pageSize || 20;
 
@@ -166,8 +159,9 @@ const getUserAndPaging = async (opt = {}) => {
     count = count.where('username', 'like', `%${ search }%`);
     users = users.where('username', 'like', `%${ search }%`);
   }
+
   count = await count.count('id as count').then(success => success[0].count);
-  users = await users.orderBy('id', 'asc').limit(pageSize).offset((page - 1) * pageSize);
+  users = await users.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
   const maxPage = Math.ceil(count / pageSize);
   return {
     page,

@@ -435,10 +435,12 @@ exports.getUsers = (req, res) => {
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 20;
   const search = req.query.search || '';
+  const sort = req.query.sort || 'id_asc';
   user.getUserAndPaging({
     page,
     pageSize,
     search,
+    sort,
   }).then(success => {
     return res.send(success);
   }).catch(err => {
