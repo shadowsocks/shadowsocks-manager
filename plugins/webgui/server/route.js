@@ -101,11 +101,11 @@ app.get('/manifest.json', (req, res) => {
 });
 
 const version = appRequire('package').version;
-app.get('*', (req, res) => {
-  return res.render('index', {
-    version,
-  });
-});
+const homePage = (req, res) => res.render('index', { version });
+app.get('/', homePage);
+app.get(/^\/home\//, homePage);
+app.get(/^\/admin\//, homePage);
+app.get(/^\/user\//, homePage);
 
 // wss.on('connection', function connection(ws) {
 //   // console.log(ws);
