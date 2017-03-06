@@ -4,31 +4,55 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
   ($scope, $state, $stateParams, adminApi) => {
     $scope.setTitle('用户');
     $scope.setMenuSearchButton('search');
-    adminApi.getUser().then(success => {
-      $scope.usersOriginal = success;
-      $scope.users = angular.copy($scope.usersOriginal);
-    });
+    $scope.currentPage = 1;
+    $scope.isUserLoading = false;
+    $scope.isUserPageFinish = false;
+    $scope.users = [];
+    $scope.getUsers = () => {
+      $scope.isUsersLoading = true;
+      adminApi.getUser({
+        page: $scope.currentPage,
+        search: $scope.menuSearch.text,
+      }).then(success => {
+        success.users.forEach(f => {
+          $scope.users.push(f);
+        });
+        if(success.maxPage > $scope.currentPage) {
+          $scope.currentPage++;
+        } else {
+          $scope.isUserPageFinish = true;
+        }
+        $scope.isUserLoading = false;
+      });
+    };
     const userFilter = () => {
-      $scope.users = angular.copy($scope.usersOriginal.filter(f => {
-        return f.username.indexOf($scope.menuSearch.text) >= 0;
-      }));
+      $scope.users = [];
+      $scope.currentPage = 1;
+      $scope.isUserPageFinish = false;
+      $scope.getUsers();
     };
     $scope.toUser = (id) => {
       $state.go('admin.userPage', { userId: id });
     };
     $scope.$on('cancelSearch', () => {
-      $scope.users = angular.copy($scope.usersOriginal);
+      $scope.users = [];
+      $scope.currentPage = 1;
+      $scope.isUserPageFinish = false;
+      $scope.getUsers();
     });
     $scope.$watch('menuSearch.text', () => {
       if(!$scope.menuSearch.input) {
         return;
       }
       if(!$scope.menuSearch.text) {
-        $scope.users = angular.copy($scope.usersOriginal);
         return;
       }
       userFilter();
     });
+    $scope.view = (bool) => {
+      if(!bool || $scope.isUserLoading || $scope.isUserPageFinish) { return; }
+      $scope.getUsers();
+    };
   }
 ])
 .controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog',
@@ -59,7 +83,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       }).then(() => {
         getUserData();
       }).catch(() => {
-        
+
       });
     };
     const openDialog = () => {
