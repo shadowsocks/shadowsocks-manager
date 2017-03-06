@@ -1,19 +1,29 @@
 const app = require('../index').app;
 
-app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'adminApi',
-  ($scope, $state, $stateParams, adminApi) => {
+app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'adminApi', '$mdMedia',
+  ($scope, $state, $stateParams, adminApi, $mdMedia) => {
     $scope.setTitle('用户');
     $scope.setMenuSearchButton('search');
     $scope.currentPage = 1;
     $scope.isUserLoading = false;
     $scope.isUserPageFinish = false;
     $scope.users = [];
-    $scope.getUsers = () => {
+    const getPageSize = () => {
+      if($mdMedia('xs')) { return 20; }
+      if($mdMedia('sm')) { return 20; }
+      if($mdMedia('md')) { return 60; }
+      if($mdMedia('gt-md')) { return 80; }
+    };
+    $scope.getUsers = (search) => {
       $scope.isUsersLoading = true;
       adminApi.getUser({
         page: $scope.currentPage,
-        search: $scope.menuSearch.text,
+        pageSize: getPageSize(),
+        search,
       }).then(success => {
+        if(search && search !== $scope.menuSearch.text) {
+          return;
+        }
         success.users.forEach(f => {
           $scope.users.push(f);
         });
@@ -23,13 +33,15 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
           $scope.isUserPageFinish = true;
         }
         $scope.isUserLoading = false;
+      }).catch(() => {
+        $scope.isUserLoading = false;
       });
     };
     const userFilter = () => {
       $scope.users = [];
       $scope.currentPage = 1;
       $scope.isUserPageFinish = false;
-      $scope.getUsers();
+      $scope.getUsers($scope.menuSearch.text);
     };
     $scope.toUser = (id) => {
       $state.go('admin.userPage', { userId: id });
@@ -49,8 +61,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       }
       userFilter();
     });
-    $scope.view = (bool) => {
-      if(!bool || $scope.isUserLoading || $scope.isUserPageFinish) { return; }
+    $scope.view = (inview, inviewInfo) => {
+      if(!inview || $scope.isUserLoading || $scope.isUserPageFinish) { return; }
       $scope.getUsers();
     };
   }
