@@ -147,6 +147,50 @@ const orderList = async (options = {}) => {
   return orders;
 };
 
+const orderListAndPaging = async (options = {}) => {
+  const search = options.search || '';
+  const filter = options.filter || [];
+  const sort = options.sort || 'alipay.createTime_desc';
+  const page = options.page || 1;
+  const pageSize = options.pageSize || 20;
+
+  let count = knex('alipay').select();
+  let orders = knex('alipay').select([
+    'alipay.orderId',
+    'alipay.orderType',
+    'user.username',
+    'account_plugin.port',
+    'alipay.amount',
+    'alipay.status',
+    'alipay.alipayData',
+    'alipay.createTime',
+    'alipay.expireTime',
+  ])
+  .leftJoin('user', 'user.id', 'alipay.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account');
+
+  if(filter.length) {
+    count = count.whereIn('alipay.status', filter);
+    orders = orders.whereIn('alipay.status', filter);
+  }
+
+  count = await count.count('orderId as count').then(success => success[0].count);
+  orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]);
+  orders.forEach(f => {
+    f.alipayData = JSON.parse(f.alipayData);
+  });
+  const maxPage = Math.ceil(count / pageSize);
+  return {
+    total: count,
+    page,
+    maxPage,
+    pageSize,
+    orders,
+  };
+};
+
+orderListAndPaging({ filter: ['FINISHE', 'FINISH'] }).then(console.log);
+
 exports.orderList = orderList;
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;

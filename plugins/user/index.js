@@ -164,6 +164,7 @@ const getUserAndPaging = async (opt = {}) => {
   users = await users.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
   const maxPage = Math.ceil(count / pageSize);
   return {
+    total: count,
     page,
     maxPage,
     pageSize,
