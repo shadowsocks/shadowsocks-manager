@@ -173,6 +173,10 @@ const orderListAndPaging = async (options = {}) => {
     count = count.whereIn('alipay.status', filter);
     orders = orders.whereIn('alipay.status', filter);
   }
+  if(search) {
+    count = count.where('alipay.orderId', 'like', `%${ search }%`);
+    orders = orders.where('alipay.orderId', 'like', `%${ search }%`);
+  }
 
   count = await count.count('orderId as count').then(success => success[0].count);
   orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);

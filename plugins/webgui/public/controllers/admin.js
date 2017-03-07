@@ -152,9 +152,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, 15 * 1000));
   }
 ])
-.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog',
-  ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog) => {
+.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout',
+  ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog, $timeout) => {
     $scope.setTitle('订单');
+    $scope.setMenuSearchButton('search');
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
     };
@@ -185,12 +186,12 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       adminApi.getOrder({
         page: $scope.currentPage,
         pageSize: getPageSize(),
-        // search,
+        search,
         // sort: $scope.userSort.sort,
         filter: Object.keys($scope.orderFilter.filter).filter(f => $scope.orderFilter.filter[f]),
       }).then(success => {
-        // if(!search && $scope.menuSearch.text) { return; }
-        // if(search && search !== $scope.menuSearch.text) { return; }
+        if(!search && $scope.menuSearch.text) { return; }
+        if(search && search !== $scope.menuSearch.text) { return; }
         success.orders.forEach(f => {
           $scope.orders.push(f);
         });
@@ -204,6 +205,26 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $scope.isOrderLoading = false;
       });
     };
+    $scope.$on('cancelSearch', () => {
+      $scope.currentPage = 1;
+      $scope.isOrderPageFinish = false;
+      $scope.orders = [];
+      $scope.getOrders();
+    });
+    let timeoutPromise;
+    const orderFilter = () => {
+      $scope.currentPage = 1;
+      $scope.isOrderPageFinish = false;
+      $scope.orders = [];
+      $scope.getOrders($scope.menuSearch.text);
+    };
+    $scope.$watch('menuSearch.text', () => {
+      if(!$scope.menuSearch.text) { return; }
+      timeoutPromise && $timeout.cancel(timeoutPromise);
+      timeoutPromise = $timeout(() => {
+        orderFilter();
+      }, 500);
+    });
     $scope.view = (inview) => {
       if(!inview || $scope.isOrderLoading || $scope.isOrderPageFinish) { return; }
       $scope.getOrders();
