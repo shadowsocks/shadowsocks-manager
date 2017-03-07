@@ -22,7 +22,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       if($mdMedia('gt-md')) { return 80; }
     };
     $scope.getUsers = (search) => {
-      $scope.isUsersLoading = true;
+      $scope.isUserLoading = true;
       adminApi.getUser({
         page: $scope.currentPage,
         pageSize: getPageSize(),
@@ -41,6 +41,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         }
         $scope.isUserLoading = false;
       }).catch(() => {
+        if($state.current.name !== 'admin.user') { return; }
         $timeout(() => {
           $scope.getUsers(search);
         }, 5000);
@@ -75,9 +76,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.userSortDialog = () => {
       userSortDialog.show().then(() => {
+        $scope.users = [];
         $scope.currentPage = 1;
         $scope.isUserPageFinish = false;
-        $scope.users = [];
         $scope.getUsers();
       });
     };

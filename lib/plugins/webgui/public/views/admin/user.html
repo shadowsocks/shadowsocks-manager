@@ -8,7 +8,7 @@
             </md-card-content>
         </md-card>
     </div>
-    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" in-view="view($inview)" ng-if="users.length && !isUserLoading && !isUserPageFinish">
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" in-view="view($inview)" ng-if="users.length && !isUserPageFinish">
         <md-card>
             <md-card-content>
                 <div layout="row" layout-align="center center">
@@ -18,6 +18,6 @@
         </md-card>
     </div>
 </div>
-<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!users.length && !isUserLoading && !isUserPageFinish">
+<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!users.length && !isUserPageFinish">
     <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
 </div>
