@@ -152,14 +152,24 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, 15 * 1000));
   }
 ])
-.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia',
-  ($scope, adminApi, orderDialog, $mdMedia) => {
+.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog',
+  ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog) => {
     $scope.setTitle('订单');
-    // adminApi.getOrder().then(orders => $scope.orders = orders);
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
     };
-
+    if(!$localStorage.admin.orderFilterSettings) {
+      $localStorage.admin.orderFilterSettings = {
+        filter: {
+          CREATE: true,
+          WAIT_BUYER_PAY: true,
+          TRADE_SUCCESS: true,
+          FINISH: true,
+          TRADE_CLOSED: true,
+        },
+      };
+    }
+    $scope.orderFilter = $localStorage.admin.orderFilterSettings;
     $scope.currentPage = 1;
     $scope.isOrderLoading = false;
     $scope.isOrderPageFinish = false;
@@ -167,8 +177,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     const getPageSize = () => {
       if($mdMedia('xs')) { return 30; }
       if($mdMedia('sm')) { return 30; }
-      if($mdMedia('md')) { return 60; }
-      if($mdMedia('gt-md')) { return 80; }
+      if($mdMedia('md')) { return 40; }
+      if($mdMedia('gt-md')) { return 50; }
     };
     $scope.getOrders = (search) => {
       $scope.isOrderLoading = true;
@@ -177,8 +187,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         pageSize: getPageSize(),
         // search,
         // sort: $scope.userSort.sort,
+        filter: Object.keys($scope.orderFilter.filter).filter(f => $scope.orderFilter.filter[f]),
       }).then(success => {
-        console.log(success);
         // if(!search && $scope.menuSearch.text) { return; }
         // if(search && search !== $scope.menuSearch.text) { return; }
         success.orders.forEach(f => {
@@ -198,5 +208,17 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       if(!inview || $scope.isOrderLoading || $scope.isOrderPageFinish) { return; }
       $scope.getOrders();
     };
+    $scope.setMenuRightButton('sort_by_alpha');
+    $scope.orderFilterDialog = () => {
+      orderFilterDialog.show().then(() => {
+        $scope.currentPage = 1;
+        $scope.isOrderPageFinish = false;
+        $scope.orders = [];
+        $scope.getOrders();
+      });
+    };
+    $scope.$on('RightButtonClick', () => {
+      $scope.orderFilterDialog();
+    });
   }
 ]);
