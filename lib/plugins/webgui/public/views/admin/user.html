@@ -8,5 +8,14 @@
             </md-card-content>
         </md-card>
     </div>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" in-view="view($inview)" ng-if="!isUserLoading">
+        <md-card ng-click="toUser(user.id)">
+            <md-card-content>
+                <div layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>
-<div in-view="view($inview)" ng-if="!isUserLoading"></div>
+<!-- <div in-view="view($inview)" ng-if="!isUserLoading"></div> -->
