@@ -530,12 +530,26 @@ exports.getServerPortLastConnect = (req, res) => {
   });
 };
 
+exports.getUserOrders = (req, res) => {
+  const options = {
+    userId: +req.params.userId,
+  };
+  alipay.orderList(options)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getOrders = (req, res) => {
   const options = {};
-  if(req.query.userId) {
-    options.userId = +req.query.userId;
-  }
-  alipay.orderList(options)
+  options.page = +req.query.page || 1;
+  options.pageSize = +req.query.pageSize || 20;
+  options.search = req.query.search || '';
+  // options.sort = req.query.sort || 'id_asc';
+  alipay.orderListAndPaging(options)
   .then(success => {
     res.send(success);
   }).catch(err => {

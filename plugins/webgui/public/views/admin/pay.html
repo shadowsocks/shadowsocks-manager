@@ -2,12 +2,18 @@
     <md-card>
         <md-list>
             <md-divider></md-divider>
-            <md-list-item ng-repeat="order in orders track by order.orderId" ng-click="showOrderInfo(order)">
+            <md-list-item ng-repeat="order in orders track by $index" ng-click="showOrderInfo(order)">
                 <div flex layout="row" layout-align="space-between center">
                     <div flex="30" flex-xs="60">{{order.orderId}}</div>
                     <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
                     <div hide-xs hide-sm flex="30" style="text-align: right;">{{order.createTime | date : 'yyyy-MM-dd HH:mm'}}</div>
                     <div flex="10" flex-xs="40" style="text-align: right;">{{order.status | order}}</div>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item  in-view="view($inview)" ng-if="!isOrderLoading && !isOrderPageFinish">
+                <div flex layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
                 </div>
                 <md-divider></md-divider>
             </md-list-item>

@@ -67,6 +67,7 @@ app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUser
 app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.deleteUserAccount);
 
 app.get('/api/admin/order', isAdmin, admin.getOrders);
+app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);
 
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);

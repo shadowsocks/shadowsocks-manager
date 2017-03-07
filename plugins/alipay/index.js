@@ -189,8 +189,7 @@ const orderListAndPaging = async (options = {}) => {
   };
 };
 
-orderListAndPaging({ filter: ['FINISHE', 'FINISH'] }).then(console.log);
-
+exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;

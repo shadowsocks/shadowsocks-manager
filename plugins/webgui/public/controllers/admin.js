@@ -152,12 +152,51 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, 15 * 1000));
   }
 ])
-.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog',
-  ($scope, adminApi, orderDialog) => {
+.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia',
+  ($scope, adminApi, orderDialog, $mdMedia) => {
     $scope.setTitle('订单');
-    adminApi.getOrder().then(orders => $scope.orders = orders);
+    // adminApi.getOrder().then(orders => $scope.orders = orders);
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
+    };
+
+    $scope.currentPage = 1;
+    $scope.isOrderLoading = false;
+    $scope.isOrderPageFinish = false;
+    $scope.orders = [];
+    const getPageSize = () => {
+      if($mdMedia('xs')) { return 30; }
+      if($mdMedia('sm')) { return 30; }
+      if($mdMedia('md')) { return 60; }
+      if($mdMedia('gt-md')) { return 80; }
+    };
+    $scope.getOrders = (search) => {
+      $scope.isOrderLoading = true;
+      adminApi.getOrder({
+        page: $scope.currentPage,
+        pageSize: getPageSize(),
+        // search,
+        // sort: $scope.userSort.sort,
+      }).then(success => {
+        console.log(success);
+        // if(!search && $scope.menuSearch.text) { return; }
+        // if(search && search !== $scope.menuSearch.text) { return; }
+        success.orders.forEach(f => {
+          $scope.orders.push(f);
+        });
+        if(success.maxPage > $scope.currentPage) {
+          $scope.currentPage++;
+        } else {
+          $scope.isOrderPageFinish = true;
+        }
+        $scope.isOrderLoading = false;
+      }).catch(() => {
+        $scope.isOrderLoading = false;
+      });
+    };
+    $scope.view = (inview) => {
+      if(!inview || $scope.isOrderLoading || $scope.isOrderPageFinish) { return; }
+      $scope.getOrders();
     };
   }
 ]);
