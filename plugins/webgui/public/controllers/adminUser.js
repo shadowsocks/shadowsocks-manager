@@ -41,7 +41,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         }
         $scope.isUserLoading = false;
       }).catch(() => {
-        $scope.isUserLoading = false;
+        $timeout(() => {
+          $scope.getUsers(search);
+        }, 5000);
       });
     };
     const userFilter = () => {

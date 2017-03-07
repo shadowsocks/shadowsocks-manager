@@ -11,7 +11,7 @@
                 </div>
                 <md-divider></md-divider>
             </md-list-item>
-            <md-list-item  in-view="view($inview)" ng-if="!isOrderLoading && !isOrderPageFinish">
+            <md-list-item  in-view="view($inview)" ng-if="orders.length && !isOrderLoading && !isOrderPageFinish">
                 <div flex layout="row" layout-align="center center">
                     <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
                 </div>
@@ -19,4 +19,7 @@
             </md-list-item>
         </md-list>
     </md-card>
+</div>
+<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!orders.length && !isOrderLoading && !isOrderPageFinish">
+    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
 </div>
