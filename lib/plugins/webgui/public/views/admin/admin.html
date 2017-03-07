@@ -31,11 +31,11 @@
     <div flex layout="column">
         <div>
             <md-toolbar>
-                <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
-                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()" ng-hide="menuSearch.input">
+                <div class="md-toolbar-tools" ng-if="!publicInfo.searchBar">
+                    <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()" ng-if="!menuSearch.input">
                         <i class="material-icons">{{menuButtonIcon || 'menu'}}</i>
                     </md-button>
-                    <md-button class="md-icon-button" aria-label="menu back" ng-click="cancelSearch()" ng-show="menuSearch.input">
+                    <md-button class="md-icon-button" aria-label="cancel search" ng-click="cancelSearch()" ng-if="menuSearch.input">
                         <i class="material-icons">arrow_back</i>
                     </md-button>
                     <div ng-if="!menuSearch.input">{{title}}</div>

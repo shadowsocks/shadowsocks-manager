@@ -1,18 +1,11 @@
 const app = require('../index').app;
 
-app.directive('focusMe', ['$timeout', '$parse', ($timeout, $parse) => {
+app.directive('focusMe', ['$timeout', $timeout => {
   return {
-    link: function(scope, element, attrs) {
-      const model = $parse(attrs.focusMe);
-      scope.$watch(model, function(value) {
-        if (value === true) {
-          $timeout(function() {
-            element[0].focus();
-          });
-        }
-      });
-      element.bind('blur', function() {
-        scope.$apply(model.assign(scope, false));
+    restrict: 'A',
+    link : ($scope, $element) => {
+      $timeout(() => {
+        $element[0].focus();
       });
     }
   };
