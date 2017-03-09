@@ -126,9 +126,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
 .controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia',
   ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia) => {
     $scope.setTitle('服务器');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.server');
-    });
+    $scope.setMenuButton('arrow_back', 'admin.server');
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
     }).catch(() => {
@@ -306,9 +304,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
   ($scope, $state, $stateParams, $http) => {
     $scope.setTitle('新增服务器');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.server');
-    });
+    $scope.setMenuButton('arrow_back', 'admin.server');
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $scope.server = {
       method: 'aes-256-cfb',
@@ -332,9 +328,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog',
   ($scope, $state, $stateParams, $http, confirmDialog) => {
     $scope.setTitle('编辑服务器');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.serverPage', { serverId: $stateParams.serverId });
-    });
+    $scope.setMenuButton('arrow_back', 'admin.serverPage', { serverId: $stateParams.serverId });
     $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = {
