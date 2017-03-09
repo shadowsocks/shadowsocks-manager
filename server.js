@@ -5,6 +5,9 @@ if(process.env.NODE_ENV !== 'production') {
   require('babel-core/register');
 }
 
+const Raven = require('raven');
+Raven.config('https://5fe245b3e7764d23aec3e8b02321421e:40cfaf4bafd74b0792b3fe97c2ff27b8@sentry.io/146443').install();
+
 require('./init/log');
 
 const log4js = require('log4js');
@@ -14,10 +17,12 @@ logger.info('System start.');
 
 process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  Raven.captureException(p);
 });
 
 process.on('uncaughtException', (err) => {
   logger.error(`Caught exception: ${err}`);
+  Raven.captureException(err);
 });
 
 require('./init/utils');
