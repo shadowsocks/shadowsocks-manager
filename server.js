@@ -8,6 +8,8 @@ if(process.env.NODE_ENV !== 'production') {
 const Raven = require('raven');
 Raven.config('https://5fe245b3e7764d23aec3e8b02321421e:40cfaf4bafd74b0792b3fe97c2ff27b8@sentry.io/146443').install();
 
+Raven.captureMessage('System start.');
+
 require('./init/log');
 
 const log4js = require('log4js');
@@ -17,7 +19,7 @@ logger.info('System start.');
 
 process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
-  Raven.captureException(p);
+  Raven.captureException({ p, reason });
 });
 
 process.on('uncaughtException', (err) => {
