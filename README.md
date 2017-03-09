@@ -40,6 +40,11 @@ npm i -g shadowsocks-manager
 ```
 use `ssmgr` to run this program.
 
+### From docker:
+```
+docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [ssmgr params...]
+```
+
 ### Usage
 1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it supports `shadowsocks-python` and `shadowsocks-libev`.
 For example, you can run this command:  

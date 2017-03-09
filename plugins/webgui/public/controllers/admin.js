@@ -74,9 +74,26 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.menuButtonIcon = '';
     $scope.menuButtonClick = () => {};
-    $scope.setMenuButton = (icon, fn) => {
+
+    let isHistoryBackClick = false;
+    let menuButtonHistoryBackState = '';
+    let menuButtonHistoryBackStateParams = {};
+    const menuButtonBackFn = (to, toParams = {}) => {
+      if(menuButtonHistoryBackState) {
+        return function () {
+          isHistoryBackClick = true;
+          $state.go(menuButtonHistoryBackState, menuButtonHistoryBackStateParams);
+        };
+      } else {
+        return function () {
+          isHistoryBackClick = false;
+          $state.go(to, toParams);
+        };
+      }
+    };
+    $scope.setMenuButton = (icon, to, toParams = {}) => {
       $scope.menuButtonIcon = icon;
-      $scope.menuButtonClick = fn;
+      $scope.menuButtonClick = menuButtonBackFn(to, toParams);
     };
     $scope.menuRightButtonIcon = '';
     $scope.menuRightButtonClick = () => {
@@ -114,6 +131,16 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.menuSearch.text = '';
       $scope.menuSearch.input = false;
       $scope.interval && $interval.cancel($scope.interval);
+      if(!isHistoryBackClick) {
+        const str = angular.copy($state.current.name);
+        const obj = angular.copy($state.params);
+        menuButtonHistoryBackState = str;
+        menuButtonHistoryBackStateParams = obj;
+      } else {
+        isHistoryBackClick = false;
+        menuButtonHistoryBackState = '';
+        menuButtonHistoryBackStateParams = {};
+      }
     });
   }
 ])

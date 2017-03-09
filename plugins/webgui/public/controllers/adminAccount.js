@@ -101,9 +101,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 .controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$interval',
   ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $interval) => {
     $scope.setTitle('账号');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.account');
-    });
+    $scope.setMenuButton('arrow_back', 'admin.account');
     $q.all([
       $http.get('/api/admin/account/' + $stateParams.accountId),
       $http.get('/api/admin/server'),
@@ -318,9 +316,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
   ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
     $scope.setTitle('添加账号');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.account');
-    });
+    $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -377,9 +373,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 .controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog',
   ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog) => {
     $scope.setTitle('编辑账号');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
-    });
+    $scope.setMenuButton('arrow_back', 'admin.accountPage', { accountId: $stateParams.accountId });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},

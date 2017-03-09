@@ -90,9 +90,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
 .controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog',
   ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog) => {
     $scope.setTitle('用户信息');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.user');
-    });
+    $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
     const getUserData = () => {
       adminApi.getUserData(userId).then(success => {
