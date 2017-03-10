@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('account');
 const knex = appRequire('init/knex').knex;
 const serverManager = appRequire('plugins/flowSaver/server');
 const flow = appRequire('plugins/flowSaver/flow');
@@ -98,53 +100,63 @@ const checkServer = async () => {
   account.exist = number => {
     return !!account.filter(f => f.port === number)[0];
   };
-  server.forEach(async s => {
-    const port = await manager.send({ command: 'list' }, {
-      host: s.host,
-      port: s.port,
-      password: s.password,
-    });
-    port.exist = number => {
-      return !!port.filter(f => f.port === number)[0];
+  const promises = [];
+  server.forEach(s => {
+    const checkServerAccount = async s => {
+      try {
+        const port = await manager.send({ command: 'list' }, {
+          host: s.host,
+          port: s.port,
+          password: s.password,
+        });
+        port.exist = number => {
+          return !!port.filter(f => f.port === number)[0];
+        };
+        account.forEach(async a => {
+          if(a.type >= 2 && a.type <= 5) {
+            let timePeriod = 0;
+            if(a.type === 2) { timePeriod = 7 * 86400 * 1000; }
+            if(a.type === 3) { timePeriod = 30 * 86400 * 1000; }
+            if(a.type === 4) { timePeriod = 1 * 86400 * 1000; }
+            if(a.type === 5) { timePeriod = 3600 * 1000; }
+            const data = JSON.parse(a.data);
+            let startTime = data.create;
+            while(startTime + timePeriod <= Date.now()) {
+              startTime += timePeriod;
+            }
+            const flow = await checkFlow(s.id, a.port, startTime, Date.now());
+            if(flow >= data.flow) {
+              port.exist(a.port) && delPort(a, s);
+              return;
+            } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
+              port.exist(a.port) && delPort(a, s);
+              return;
+            } else if(!port.exist(a.port)) {
+              addPort(a, s);
+              return;
+            }
+          } else if (a.type === 1) {
+            if(port.exist(a.port)) {
+              return;
+            }
+            addPort(a, s);
+            return;
+          }
+        });
+        port.forEach(async p => {
+          if(!account.exist(p.port)) {
+            delPort(p, s);
+            return;
+          }
+        });
+      } catch (err) {
+        logger.error(err);
+        return;
+      }
     };
-    account.forEach(async a => {
-      if(a.type >= 2 && a.type <= 5) {
-        let timePeriod = 0;
-        if(a.type === 2) { timePeriod = 7 * 86400 * 1000; }
-        if(a.type === 3) { timePeriod = 30 * 86400 * 1000; }
-        if(a.type === 4) { timePeriod = 1 * 86400 * 1000; }
-        if(a.type === 5) { timePeriod = 3600 * 1000; }
-        const data = JSON.parse(a.data);
-        let startTime = data.create;
-        while(startTime + timePeriod <= Date.now()) {
-          startTime += timePeriod;
-        }
-        const flow = await checkFlow(s.id, a.port, startTime, Date.now());
-        if(flow >= data.flow) {
-          port.exist(a.port) && delPort(a, s);
-          return;
-        } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
-          port.exist(a.port) && delPort(a, s);
-          return;
-        } else if(!port.exist(a.port)) {
-          addPort(a, s);
-          return;
-        }
-      } else if (a.type === 1) {
-        if(port.exist(a.port)) {
-          return;
-        }
-        addPort(a, s);
-        return;
-      }
-    });
-    port.forEach(async p => {
-      if(!account.exist(p.port)) {
-        delPort(p, s);
-        return;
-      }
-    });
+    promises.push(checkServerAccount(s));
   });
+  Promise.all(promises);
 };
 
 exports.checkServer = checkServer;

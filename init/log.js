@@ -7,6 +7,7 @@ const log4js = require('log4js');
 
 const category = [
   'system',
+  'account',
   'email',
   'telegram',
   'freeAccount',

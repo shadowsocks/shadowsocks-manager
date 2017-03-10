@@ -67,6 +67,7 @@ const sendMessage = (data, options) => {
         }
         client.end();
       }).catch(err => {
+        logger.error(err);
         client.end();
       });
       // const message = JSON.parse(data.toString());
@@ -84,6 +85,7 @@ const sendMessage = (data, options) => {
     });
     client.on('error', err => {
       logger.error(err);
+      reject(new Error(`connect to ssmgr[s] fail`));
     });
   });
   return promise;
