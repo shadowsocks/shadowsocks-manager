@@ -20,6 +20,8 @@ log4js.configure({
   appenders: [{
     type: 'console',
     category,
+  }, {
+
   }],
 });
 
