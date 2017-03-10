@@ -21,15 +21,7 @@ log4js.configure({
   appenders: [{
     type: 'console',
     category,
-  },
-  // {
-  //   type: 'loggly',
-  //   token: 'e2c8ae85-23d2-4f69-af20-2ec128ef6a49',
-  //   subdomain: 'gyteng',
-  //   tags: ['test'],
-  //   category
-  // }
-  ],
+  }],
 });
 
 const setConsoleLevel = level => {
