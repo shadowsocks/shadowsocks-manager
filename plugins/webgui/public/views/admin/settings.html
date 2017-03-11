@@ -1,0 +1,27 @@
+<div>注意：该功能尚未实现</div>
+<div ng-show="settings">
+    <md-card>
+        <md-card-content>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">新用户自动分配账号</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="settings.accountForNewUser.isEnable" aria-label="accountForNewUser"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+    <md-card>
+        <md-card-content>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">开放注册</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="settings.signUp.isEnable" aria-label="signUp"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-card-content>
+    </md-card>
+</div>
