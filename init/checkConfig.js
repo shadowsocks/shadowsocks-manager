@@ -7,7 +7,7 @@ const log = appRequire('init/log');
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
-let ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
+const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
 
 program
   .version('shadowsocks-manager ' + version)
@@ -42,8 +42,13 @@ if(program.db) {
 } else if (typeof config.get('db') === 'object') {
   logName = config.get('db.database');
 } else {
-  logName = config.get('db').split('.')[0];
-  config.set('db', path.resolve(ssmgrPath + '/' + config.get('db')));
+  const dbpath = config.get('db');
+  logName = dbpath.split('.')[0];
+  if (dbpath[0] === '/' || dbpath[0] === '.') {
+	  config.set('db', path.resolve(dbpath));
+  } else {
+	  config.set('db', path.resolve(ssmgrPath + '/' + dbpath));
+  }
 }
 log.setFileAppenders(logName);
 
