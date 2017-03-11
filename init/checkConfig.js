@@ -44,7 +44,7 @@ if(program.db) {
 } else {
   const dbpath = config.get('db');
   logName = dbpath.split('.')[0];
-  if (path[0] === '/' || path[0] === '.') {
+  if (dbpath[0] === '/' || dbpath[0] === '.') {
 	  config.set('db', path.resolve(dbpath));
   } else {
 	  config.set('db', path.resolve(ssmgrPath + '/' + dbpath));
