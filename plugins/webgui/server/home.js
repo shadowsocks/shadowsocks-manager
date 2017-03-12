@@ -171,7 +171,12 @@ exports.sendResetPasswordEmail = (req, res) => {
     token = crypto.randomBytes(16).toString('hex');
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     const session = req.sessionID;
-    const address = config.plugins.webgui.site + '/home/password/reset/' + token;
+    let address;
+    if(req.headers.host) {
+      address = 'http://' + req.headers.host + '/home/password/reset/' + token;
+    } else {
+      address = config.plugins.webgui.site + '/home/password/reset/' + token;
+    }
     return emailPlugin.sendMail(email, 'Shadowsocks密码重置', '请访问下列地址重置您的密码：\n' + address, {
       ip,
       session,
