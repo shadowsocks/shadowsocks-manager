@@ -116,6 +116,15 @@ exports.sendCode = (req, res) => {
     if(result.isEmpty) { return; }
     return Promise.reject('invalid email');
   }).then(() => {
+    return knex('webguiSetting').select().where({
+      key: 'system',
+    })
+    .then(success => JSON.parse(success[0].value))
+    .then(success => {
+      if(success.signUp.isEnable) { return; }
+      return Promise.reject('signup close');
+    });
+  }).then(() => {
     const email = req.body.email.toString().toLowerCase();
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     const session = req.sessionID;
@@ -127,7 +136,7 @@ exports.sendCode = (req, res) => {
     res.send('success');
   }).catch(err => {
     logger.error(err);
-    const errorData = ['email in black list', 'send email out of limit'];
+    const errorData = ['email in black list', 'send email out of limit', 'signup close'];
     if(errorData.indexOf(err) < 0) {
       return res.status(403).end();
     } else {

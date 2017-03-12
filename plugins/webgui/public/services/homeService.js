@@ -42,6 +42,7 @@ app.factory('homeApi', ['$http', $http => {
         let errData = '验证码发送错误';
         if(err.data === 'email in black list') { errData = '发送错误，请更换邮箱尝试'; }
         if(err.data === 'send email out of limit') { errData = '请求过于频繁，请稍后再试'; }
+        if(err.data === 'signup close') { errData = '当前时段尚未开放注册'; }
         return Promise.reject(errData);
       } else {
         return Promise.reject('网络异常，请稍后再试');
