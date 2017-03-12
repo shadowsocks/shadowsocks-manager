@@ -37,13 +37,13 @@ if(program.shadowsocks) {config.set('shadowsocks.address', program.shadowsocks);
 if(program.manager) {config.set('manager.address', program.manager);}
 if(program.password) {config.set('manager.password', program.password);}
 if(program.db) {
-  config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
   logName = program.db.split('.')[0];
+  config.set('db', path.resolve(ssmgrPath + '/db.sqlite'));
 } else if (typeof config.get('db') === 'object') {
   logName = config.get('db.database');
 } else {
   const dbpath = config.get('db');
-  logName = dbpath.split('.')[0];
+  logName = path.basename(dbpath).split('.')[0];
   if (dbpath[0] === '/' || dbpath[0] === '.') {
 	  config.set('db', path.resolve(dbpath));
   } else {
