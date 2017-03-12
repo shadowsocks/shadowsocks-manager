@@ -49,10 +49,24 @@ docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [s
 1. Start shadowsocks with [manager API](https://github.com/shadowsocks/shadowsocks/wiki/Manage-Multiple-Users), it supports `shadowsocks-python` and `shadowsocks-libev`.
 For example, you can run this command:  
 `ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001`
-2. run ssmgr with type s:  
-`ssmgr -t s -s 127.0.0.1:6001 -m 0.0.0.0:6002`
+2. run ssmgr with type s:
+
+  config file:  
+  ```
+  type: s
+  empty: false
+  shadowsocks:
+    address: 127.0.0.1:6001
+  manager:
+    address: 0.0.0.0:4001
+    password: '123456'
+  db: 'ss.sqlite'
+  ```
+  command:  
+  `ssmgr -c /your/config/file/path.yml`
+
 3. If you have several servers, you have to run step 1 and step 2 in every server.  
-The listening address in `--manager-address` of step 1 and in `-s` of step 2 must be same. For security reseon, we recommend you to use `127.0.0.1` instead of `0.0.0.0`.
+The listening address in `--manager-address` of step 1 and in `shadowsocks -> address` of step 2's config file must be same. For security reseon, we recommend you to use `127.0.0.1` instead of `0.0.0.0`.
 4. Now you can use the plugins to manage them. You can read the details in plugins readme page.
 
 ```
