@@ -373,7 +373,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
 .controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog',
   ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog) => {
     $scope.setTitle('编辑账号');
-    $scope.setMenuButton('arrow_back', 'admin.accountPage', { accountId: $stateParams.accountId });
+    // $scope.setMenuButton('arrow_back', 'admin.accountPage', { accountId: $stateParams.accountId });
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+    });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
