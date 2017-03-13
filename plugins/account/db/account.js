@@ -11,15 +11,6 @@ const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
     return;
-    // return knex.schema.hasColumn('account_plugin', 'autoRemove')
-    // .then(exist => {
-    //   if(!exist) {
-    //     return knex.schema.table('account_plugin', table => {
-    //       table.integer('autoRemove').defaultTo(0);
-    //     });
-    //   }
-    //   return;
-    // });
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');

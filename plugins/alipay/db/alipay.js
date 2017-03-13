@@ -4,7 +4,7 @@ const knex = appRequire('init/knex').knex;
 const tableName = 'alipay';
 
 const config = appRequire('services/config').all();
-const createTable = async() => {
+const createTable = async () => {
   if(config.empty) {
     await knex.schema.dropTableIfExists(tableName);
   }

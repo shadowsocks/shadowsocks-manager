@@ -1,5 +1,3 @@
-'use strict';
-
 const knex = appRequire('init/knex').knex;
 const tableName = 'server';
 const config = appRequire('services/config').all();
