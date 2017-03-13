@@ -113,15 +113,17 @@ Usage: ssmgr [options]
     -h, --help                   output usage information
     -V, --version                output the version number
     -c, --config [file]          config file, default: ~/.ssmgr/default.yml
-    -d, --db [file]              sqlite3 file, default: ~/.ssmgr/db.sqlite
+    -d, --db [file]              sqlite3 file, sample: ~/.ssmgr/db.sqlite
     -e, --empty                  clean database
-    -t, --type [type]            manager type, s for server side, m for manager side, default: s
-    -s, --shadowsocks [address]  ss-manager address, default: 127.0.0.1:6001
-    -m, --manager [address]      manager address, default: 127.0.0.1:6002
+    -t, --type [type]            type, s for server side, m for manager side
+    -s, --shadowsocks [address]  ss-manager address, sample: 127.0.0.1:6001
+    -m, --manager [address]      manager address, sample: 0.0.0.0:6002
     -p, --password [password]    manager password, both server side and manager side must be equals
-    -r, --run [type]             run shadowsocks from child_process, the type is libev or python, if you want to set encrypt method, fill it like libev:aes-256-cfb
+    -r, --run [type]             run shadowsocks from child_process, sample: libev / libev:aes-256-cfb / python / python:aes-256-cfb
     --debug                      show debug message
 ```
+
+First, ssmgr will read the config file in `--config`, and other parameters(`-detsmp`) will replace the config file values.
 
 ### Donate
 If you find this project helpful, please consider making a donation:  
