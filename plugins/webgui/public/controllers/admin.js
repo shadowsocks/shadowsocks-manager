@@ -8,6 +8,17 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.setMainLoading(false);
     }
     $scope.innerSideNav = true;
+    $scope.sideNavWidth = () => {
+      if($scope.innerSideNav) {
+        return {
+          width: '200px',
+        };
+      } else {
+        return {
+          width: '60px',
+        };
+      }
+    };
     $scope.menus = [{
       name: '首页',
       icon: 'home',
