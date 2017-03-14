@@ -62,6 +62,19 @@ For example, you can run this command:
     password: '123456'
   db: 'ss.sqlite'
   ```
+
+  If you want to use MySQL, the `db` must like this:
+
+  ```
+  db:
+    host: '1.1.1.1'
+    user: 'root'
+    password: 'abcdefg'
+    database: 'ssmgr'
+  ```
+
+  And you have to close `only_full_group_by` when the version of MySQL is greater than 5.7
+
   command:  
   `ssmgr -c /your/config/file/path.yml`
 

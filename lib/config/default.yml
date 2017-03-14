@@ -10,3 +10,9 @@ manager:
   password: '123456'
 
 db: 'db.sqlite'
+
+# db:
+#   host: '1.1.1.1'
+#   user: 'root'
+#   password: 'abcdefg'
+#   database: 'ssmgr'
