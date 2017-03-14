@@ -108,11 +108,12 @@ const getlastConnectTime = (serverId, port) => {
 };
 
 const getServerUserFlow = (serverId, timeArray) => {
-  return knex('saveFlow').sum('saveFlow.flow as flow').groupBy('saveFlow.port')
+  return knex('saveFlow').sum('saveFlow.flow as flow')
   .select([
     'saveFlow.port',
     'user.userName',
   ])
+  .groupBy('saveFlow.port')
   .leftJoin('account_plugin', 'account_plugin.port', 'saveFlow.port')
   .leftJoin('user', 'account_plugin.userId', 'user.id')
   .where({
