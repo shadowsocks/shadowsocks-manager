@@ -4,6 +4,7 @@ const blackList = [
   '@yopmail.com',
   '@psoxs.com',
   '@chacuo.net',
+  '@rcasd.com',
 ];
 
 const isInBlackList = email => {
