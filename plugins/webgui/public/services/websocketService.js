@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.factory('ws', ['$websocket', '$location', '$timeout', ($websocket, $location, $timeout) => {
   const protocol = $location.protocol() === 'http' ? 'ws://' : 'wss://';

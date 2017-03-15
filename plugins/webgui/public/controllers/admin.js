@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$timeout', '$localStorage',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage) => {

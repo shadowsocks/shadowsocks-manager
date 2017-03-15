@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog','$interval', 'adminApi', '$localStorage', 'accountSortTool',
   ($scope, $state, $stateParams, $http, accountSortDialog, $interval, adminApi, $localStorage, accountSortTool) => {

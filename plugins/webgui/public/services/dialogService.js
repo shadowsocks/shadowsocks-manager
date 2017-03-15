@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   const publicInfo = {};

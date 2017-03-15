@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.filter('timeago', function() {
   Math.trunc = Math.trunc || function (value) {
