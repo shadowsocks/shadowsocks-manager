@@ -1,4 +1,4 @@
-exports.app = angular.module('app', [
+angular.module('app', [
   'ngMaterial',
   'ui.router',
   'ngMessages',
