@@ -1,4 +1,4 @@
-const app = require('../index').app;
+const app = angular.module('app');
 
 app.filter('substr', function() {
   return function(input, number = 20) {
