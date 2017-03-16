@@ -81,12 +81,17 @@ app
     };
   }
 ])
-.controller('UserIndexController', ['$scope', '$state',
-  ($scope, $state) => {
+.controller('UserIndexController', ['$scope', '$http', '$state',
+  ($scope,$http, $state) => {
     $scope.setTitle('首页');
     $scope.toMyAccount = () => {
       $state.go('user.account');
     };
+    console.log('start get setting;');
+    $http.get('/api/admin/setting').then(success => {
+      console.log(success);
+      $scope.settings = success.data.value;
+    });
   }
 ])
 .controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', '$interval', '$localStorage', 'changePasswordDialog',

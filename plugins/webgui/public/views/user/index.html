@@ -3,7 +3,7 @@
     <md-card-title-text><span class="md-headline">公告</span></md-card-title-text>
   </md-card-title>
   <md-card-content>
-    暂无公告
+    <div ng-bind-html="settings.notice"></div>
   </md-card-content>
 </md-card>
 <md-card ng-click="toMyAccount()">
