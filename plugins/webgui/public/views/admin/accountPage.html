@@ -1,4 +1,4 @@
-<div layout="row" layout-wrap>
+<div layout="row" layout-wrap ng-show="account">
     <div flex>
         <md-card>
             <md-card-header>
@@ -15,7 +15,7 @@
         </md-card>
     </div>
 </div>
-<div layout="row">
+<div layout="row" ng-show="servers.length">
     <div flex="100">
         <md-card>
             <md-card-content>
