@@ -40,5 +40,4 @@ jspm_packages
 # config
 config/development.yml
 
-plugins/alipay/config.js
-lib/plugins/alipay/config.js
+.vscode
