@@ -81,16 +81,17 @@ app
     };
   }
 ])
-.controller('UserIndexController', ['$scope', '$http', '$state',
-  ($scope,$http, $state) => {
+.controller('UserIndexController', ['$scope', "$sce",'$http', '$state',
+  ($scope, $sce, $http, $state) => {
     $scope.setTitle('首页');
     $scope.toMyAccount = () => {
       $state.go('user.account');
-    };
-    console.log('start get setting;');
+    }; 
+    // console.log('start get setting;');
     $http.get('/api/admin/setting').then(success => {
-      console.log(success);
+     // console.log(success);
       $scope.settings = success.data.value;
+      $('div#notice_box').html($scope.settings.notice);
     });
   }
 ])

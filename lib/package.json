@@ -1,16 +1,15 @@
 {
-  "name": "shadowsocks-manager",
-  "version": "0.5.35",
-  "description": "A shadowsocks manager tool for multi user and traffic control.",
+  "name": "govip",
+  "version": "0.0.1",
+  "description": "A manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "build": "gulp"
   },
-  "author": "Gu Yuteng <igyteng@gmail.com>",
+  "author": "restry <michael.wei@foxmail.com>",
   "license": "GPL",
   "keywords": [
-    "shadowsocks",
     "manager",
     "gfw"
   ],
@@ -59,12 +58,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shadowsocks/shadowsocks-manager.git"
+    "url": "git+https://github.com/restry/shadowsocks-manager.git"
   },
   "bugs": {
-    "url": "https://github.com/shadowsocks/shadowsocks-manager/issues"
+    "url": "https://github.com/restry/shadowsocks-manager/issues"
   },
-  "homepage": "https://github.com/shadowsocks/shadowsocks-manager#readme",
+  "homepage": "https://github.com/restry/shadowsocks-manager#readme",
   "bin": {
     "ssmgr": "./bin/ssmgr"
   }
