@@ -305,17 +305,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
   ($scope, $state, $stateParams, $http) => {
     $scope.setTitle('新增服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
-    $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
-    $scope.server = {
-      method: 'aes-256-cfb',
-    };
+    $scope.server = { };
     $scope.confirm = () => {
       $http.post('/api/admin/server', {
         name: $scope.server.name,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
-        method: $scope.server.method || 'aes-256-cfb',
+        method: $scope.server.method,
       }).then(success => {
         $state.go('admin.server');
       });
@@ -329,14 +326,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
   ($scope, $state, $stateParams, $http, confirmDialog) => {
     $scope.setTitle('编辑服务器');
     $scope.setMenuButton('arrow_back', 'admin.serverPage', { serverId: $stateParams.serverId });
-    $scope.methods = ['aes-256-cfb', 'aes-192-cfb'];
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = {
         name: success.data.name,
         address: success.data.host,
         port: +success.data.port,
         password: success.data.password,
-        method: success.data.method || 'aes-256-cfb',
+        method: success.data.method,
       };
     });
     $scope.confirm = () => {
