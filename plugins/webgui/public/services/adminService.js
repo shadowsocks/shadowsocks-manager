@@ -1,6 +1,6 @@
 const app = angular.module('app');
 
-app.factory('adminApi', ['$http', '$q', ($http, $q) => {
+app.factory('adminApi', ['$http', '$q', 'moment', ($http, $q, moment) => {
   const getUser = (opt = {}) => {
     const search = opt.search || '';
     const filter = opt.filter || 'all';
@@ -126,6 +126,59 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
       };
     });
   };
+  
+  const chartDataPromise = {};
+  const getChartData = (serverId, type, time, doNotPreload) => {
+    for(const cdp in chartDataPromise) {
+      if(Date.now() - chartDataPromise[cdp].time > 60000) {
+        delete chartDataPromise[cdp];
+      }
+    };
+    let queryTime;
+    if(type === 'hour') {
+      !doNotPreload && getChartData(serverId, type, time - 3600000, true);
+      !doNotPreload && getChartData(serverId, type, time - 2 * 3600000, true);
+      queryTime = moment(time).minute(0).second(0).millisecond(0).toDate().getTime();
+    }
+    if(type === 'day') {
+      !doNotPreload && getChartData(serverId, type, time - 24 * 3600000, true);
+      !doNotPreload && getChartData(serverId, type, time - 2 * 24 * 3600000, true);
+      queryTime = moment(time).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+    }
+    if(type === 'week') {
+      !doNotPreload && getChartData(serverId, type, time - 7 * 24 * 3600000, true);
+      !doNotPreload && getChartData(serverId, type, time - 2 * 7 * 24 * 3600000, true);
+      queryTime = moment(time).day(0).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+    }
+    const id = `${ serverId }:${ type }:${ queryTime }`;
+    if(chartDataPromise[id] && !chartDataPromise[id].promise.$$state.status) {
+      return chartDataPromise[id].promise;
+    } else if (chartDataPromise[id] && chartDataPromise[id].data && Date.now() - chartDataPromise[id].time <= 60 * 1000) {
+      return $q.resolve(chartDataPromise[id].data);
+    } else {
+      chartDataPromise[id] = {
+        time: Date.now(),
+      };
+      chartDataPromise[id].promise = $q.all([
+        $http.get('/api/admin/flow/' + serverId, {
+          params: {
+            type,
+            time: new Date(queryTime),
+          }
+        }),
+        $http.get('/api/admin/flow/' + serverId + '/user', {
+          params: {
+            type,
+            time: new Date(queryTime),
+          }
+        }),
+      ]).then(success => {
+        chartDataPromise[id].data = success;
+        return success;
+      });
+      return chartDataPromise[id].promise;
+    }
+  };
 
   return {
     getUser,
@@ -138,5 +191,6 @@ app.factory('adminApi', ['$http', '$q', ($http, $q) => {
     getIndexInfo,
     getServerPortData,
     getUserData,
+    getChartData,
   };
 }]);
