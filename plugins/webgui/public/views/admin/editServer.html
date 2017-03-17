@@ -33,13 +33,22 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block">
-                    <label>加密方式（显示给用户）</label>
-                    <input type="text" required name="method" ng-model="server.method">
-                    <div ng-messages="serverForm.method.$error">
-                        <div ng-message="required">加密方式不能为空</div>
-                    </div>
-                </md-input-container>
+                <div class="md-block" layout="column" layout-align="center stretch" style="margin-bottom: 25px;">
+                    <label flex style="color: rgba(0,0,0, 0.54); font-size: 13px;">加密方式</label>
+                    <md-autocomplete flex
+                        md-selected-item="server.method"
+                        md-items="method in methods"
+                        md-item-text="method"
+                        md-min-length="0"
+                        md-search-text="methodSearch"
+                        md-search-text-change="setMethod()"
+                        md-require-match="false"
+                        placeholder="请填写加密方式">
+                        <md-item-template>
+                            <span md-highlight-text="methodSearch" md-highlight-flags="^i">{{method}}</span>
+                        </md-item-template>
+                    </md-autocomplete>
+                </div>
             </form>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
