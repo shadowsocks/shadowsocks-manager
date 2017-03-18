@@ -4,7 +4,7 @@ app.factory('preload', ['$http', '$q', 'moment', ($http, $q, moment) => {
   const pool = {};
   const clean = () => {
     for(const p in pool) {
-      if(pool[p].expire > Date.now()) {
+      if(pool[p].expire < Date.now()) {
         delete pool[p];
       }
     }
