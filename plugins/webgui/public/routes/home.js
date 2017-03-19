@@ -4,7 +4,7 @@ app.config(['$urlRouterProvider', '$locationProvider',
   ($urlRouterProvider, $locationProvider) => {
     $locationProvider.html5Mode(true);
     $urlRouterProvider
-      .when('/', '/home/index')
+      .when('/', '/home/login')
       .otherwise('/home/index');
   }
 ]);
