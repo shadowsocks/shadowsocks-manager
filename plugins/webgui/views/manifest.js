@@ -2,7 +2,7 @@ const gcmSenderId = appRequire('services/config').get('plugins.webgui.gcmSenderI
 
 const manifest = {
   short_name: 'ssmgr',
-  name: 'Shadowsocks-Manager',
+  name: 'GOVIP|我们就想自由的上个网',
   icons: [
     {
       src: '/libs/logo.png',
