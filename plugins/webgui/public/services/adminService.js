@@ -170,21 +170,21 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment,
   const getAccountChartData = (serverId, accountId, port, type, time, doNotPreload) => {
     let queryTime;
     if(type === 'hour') {
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 2 * 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 3 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 2 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 3 * 3600000, true);
       queryTime = moment(time).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     if(type === 'day') {
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 2 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 3 * 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 2 * 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 3 * 24 * 3600000, true);
       queryTime = moment(time).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     if(type === 'week') {
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 7 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 2 * 7 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, accountId, port, type, time - 3 * 7 * 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 7 * 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 2 * 7 * 24 * 3600000, true);
+      !doNotPreload && getAccountChartData(serverId, accountId, port, type, time - 3 * 7 * 24 * 3600000, true);
       queryTime = moment(time).day(0).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     const id = `getAccountChartData:${ serverId }:${ accountId }:${ port }:${ type }:${ queryTime }`;
