@@ -5,22 +5,22 @@ const manifest = {
   name: 'Shadowsocks-Manager',
   icons: [
     {
-      src: '/libs/favicon.png',
+      src: '/libs/logo.png',
       type: 'image/png',
       sizes: '48x48'
     },
     {
-      src: '/libs/favicon.png',
+      src: '/libs/logo.png',
       type: 'image/png',
       sizes: '128x128'
     },
     {
-      src: '/libs/favicon.png',
+      src: '/libs/logo.png',
       type: 'image/png',
       sizes: '144x144'
     },
     {
-      src: '/libs/favicon.png',
+      src: '/libs/logo.png',
       type: 'image/png',
       sizes: '256x256'
     }
