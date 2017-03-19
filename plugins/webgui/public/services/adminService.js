@@ -197,7 +197,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment,
             time: new Date(time),
           }
         }),
-        $http.get(`/api/admin/flow/account/${ $stateParams.accountId }`, {
+        $http.get(`/api/admin/flow/account/${ accountId }`, {
           params: {
             port,
             type,
