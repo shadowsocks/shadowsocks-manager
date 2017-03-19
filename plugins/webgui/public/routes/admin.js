@@ -77,6 +77,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminNoticeController',
       templateUrl: '/public/views/admin/notice.html',
     })
+    .state('admin.editNotice', {
+      url: '/notice/:noticeId',
+      controller: 'AdminEditNoticeController',
+      templateUrl: '/public/views/admin/editNotice.html',
+    })
     .state('admin.unfinished', {
       url: '/unfinished',
       templateUrl: '/public/views/admin/unfinished.html',

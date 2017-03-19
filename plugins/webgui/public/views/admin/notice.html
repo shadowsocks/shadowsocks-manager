@@ -3,7 +3,7 @@
         <md-list>
             <md-divider></md-divider>
             <md-list-item ng-repeat="notice in notices track by $index">
-                <div>
+                <div ng-click="editNotice(notice.id)">
                     {{ notice.title }}
                 </div>
                 <md-divider></md-divider>
