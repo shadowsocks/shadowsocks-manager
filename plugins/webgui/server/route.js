@@ -7,6 +7,7 @@ const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
+const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const push = appRequire('plugins/webgui/server/push');
 const path = require('path');
 const knex = appRequire('init/knex').knex;
@@ -69,6 +70,12 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 
 app.get('/api/admin/order', isAdmin, admin.getOrders);
 app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);
+
+app.get('/api/admin/notice', isAdmin, adminNotice.getNotice);
+app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.getOneNotice);
+app.post('/api/admin/notice', isAdmin, adminNotice.addNotice);
+app.put('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.editNotice);
+app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotice);
 
 app.get('/api/admin/setting', isAdmin, adminSetting.getSetting);
 app.put('/api/admin/setting', isAdmin, adminSetting.modifySetting);

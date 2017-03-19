@@ -10,6 +10,9 @@ Please answer these questions before submitting your issue. Thanks!
 ### What operating system are you using?
 
 
+### What version of Node.js are you using?
+
+
 ### What did you do?
 
 

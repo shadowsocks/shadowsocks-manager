@@ -289,8 +289,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     });
   }
 ])
-.controller('AdminSettingsController', ['$scope', '$http', '$timeout',
-  ($scope, $http, $timeout) => {
+.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$state',
+  ($scope, $http, $timeout, $state) => {
     $scope.setTitle('设置');
     let lastSave = 0;
     let lastSavePromise = null;
@@ -314,5 +314,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $scope.saveSetting();
       }, true);
     });
+    $scope.toNotice = () => {
+      $state.go('admin.notice');
+    };
   }
 ]);

@@ -1,0 +1,13 @@
+<md-card>
+    <md-card-content>
+        <md-list>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="notice in notices track by $index">
+                <div>
+                    {{ notice.title }}
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>

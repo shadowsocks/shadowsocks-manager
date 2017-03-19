@@ -7,6 +7,7 @@ require('./controllers/admin');
 require('./controllers/adminAccount');
 require('./controllers/adminServer');
 require('./controllers/adminUser');
+require('./controllers/adminNotice');
 
 require('./routes/home');
 require('./routes/user');
