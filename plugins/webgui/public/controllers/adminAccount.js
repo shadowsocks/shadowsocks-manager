@@ -230,22 +230,24 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       };
     };
     $scope.getChartData = (serverId) => {
-      $q.all([
-        $http.get(`/api/admin/flow/${ serverId }`, {
-          params: {
-            port: $scope.account.port,
-            type: $scope.flowType.value,
-            time: new Date(flowTime[$scope.flowType.value]),
-          }
-        }),
-        $http.get(`/api/admin/flow/account/${ $stateParams.accountId }`, {
-          params: {
-            port: $scope.account.port,
-            type: $scope.flowType.value,
-            time: new Date(flowTime[$scope.flowType.value]),
-          }
-        })
-      ]).then(success => {
+      adminApi.getAccountChartData(serverId, $stateParams.accountId, $scope.account.port, $scope.flowType.value, flowTime[$scope.flowType.value])
+      // $q.all([
+      //   $http.get(`/api/admin/flow/${ serverId }`, {
+      //     params: {
+      //       port: $scope.account.port,
+      //       type: $scope.flowType.value,
+      //       time: new Date(flowTime[$scope.flowType.value]),
+      //     }
+      //   }),
+      //   $http.get(`/api/admin/flow/account/${ $stateParams.accountId }`, {
+      //     params: {
+      //       port: $scope.account.port,
+      //       type: $scope.flowType.value,
+      //       time: new Date(flowTime[$scope.flowType.value]),
+      //     }
+      //   })
+      // ])
+      .then(success => {
         $scope.sumFlow = success[0].data.reduce((a, b) => {
           return a + b;
         }, 0);
