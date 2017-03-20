@@ -19,6 +19,14 @@ const sendPing = () => {
   client.send(new Buffer('ping'), port, host);
 };
 
+let existPort = [];
+const setExistPort = flow => {
+  existPort = [];
+  for(const f in flow) {
+    existPort.push(+f);
+  }
+};
+
 const connect = () => {
   client = dgram.createSocket('udp4');
   client.on('message', async (msg, rinfo) => {
@@ -27,6 +35,7 @@ const connect = () => {
       shadowsocksType = 'python';
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
+      setExistPort(flow);
       const realFlow = compareWithLastFlow(flow, lastFlow);
       logger.info(`Receive flow from shadowsocks: (${ shadowsocksType })\n${JSON.stringify(realFlow, null, 2)}`);
       lastFlow = flow;
@@ -102,7 +111,9 @@ const startUp = async () => {
 const resend = async () => {
   const accounts = await knex('account').select([ 'port', 'password' ]);
   accounts.forEach(f => {
-    sendMessage(`add: {"server_port": ${ f.port }, "password": "${ f.password }"}`);
+    if(existPort.indexOf(f.port) < 0) {
+      sendMessage(`add: {"server_port": ${ f.port }, "password": "${ f.password }"}`);
+    }
   });
 };
 
