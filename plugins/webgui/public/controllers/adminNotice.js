@@ -13,7 +13,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     $state.go('admin.editNotice', { noticeId: id });
   };
 }])
-.controller('AdminEditNoticeController', ['$scope', '$http', '$state', '$stateParams', ($scope, $http, $state, $stateParams) => {
+.controller('AdminEditNoticeController', ['$scope', '$http', '$state', '$stateParams', 'markdownDialog', ($scope, $http, $state, $stateParams, markdownDialog) => {
   $scope.setTitle('编辑公告');
   $scope.setMenuButton('arrow_back', 'admin.notice');
   $http.get('/api/admin/notice/' + $stateParams.noticeId).then(success => {
@@ -33,10 +33,10 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     });
   };
   $scope.preview = () => {
-
+    markdownDialog.show($scope.notice.content);
   };
 }])
-.controller('AdminNewNoticeController', ['$scope', '$http', '$state', ($scope, $http, $state) => {
+.controller('AdminNewNoticeController', ['$scope', '$http', '$state', 'markdownDialog', ($scope, $http, $state, markdownDialog) => {
   $scope.setTitle('新增公告');
   $scope.setMenuButton('arrow_back', 'admin.notice');
   $scope.cancel = () => {
@@ -51,7 +51,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     });
   };
   $scope.preview = () => {
-
+    markdownDialog.show($scope.notice.content);
   };
 }])
 ;

@@ -414,6 +414,50 @@ app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
   };
 }]);
 
+app.factory('markdownDialog', [ '$mdDialog', ($mdDialog) => {
+  const publicInfo = {};
+  const hide = () => {
+    return $mdDialog.hide()
+    .then(success => {
+      dialogPromise = null;
+      return;
+    }).catch(err => {
+      dialogPromise = null;
+      return;
+    });
+  };
+  publicInfo.hide = hide;
+  let dialogPromise = null;
+  const isDialogShow = () => {
+    if(dialogPromise && !dialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
+  const dialog = {
+    templateUrl: '/public/views/admin/previewNotice.html',
+    escapeToClose: false,
+    locals: { bind: publicInfo },
+    bindToController: true,
+    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+      $scope.publicInfo = bind;
+    }],
+    fullscreen: true,
+    clickOutsideToClose: true,
+  };
+  const show = (markdown) => {
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    publicInfo.markdown = markdown;
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
+  return {
+    show,
+  };
+}]);
+
 app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userApi) => {
   const publicInfo = {
     status: 'show',
