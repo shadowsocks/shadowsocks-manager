@@ -70,10 +70,15 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     return serverPortDataPromise[`${ account.id }`];
   };
 
+  const getNotice = () => {
+    return $http.get('/api/user/notice').then(success => success.data);
+  };
+
   return {
     getServerPortData,
     getUserAccount,
     changePassword,
     updateAccount,
+    getNotice,
   };
 }]);

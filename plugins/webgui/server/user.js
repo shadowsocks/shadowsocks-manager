@@ -203,3 +203,12 @@ exports.getPrice = (req, res) => {
   }
   return res.send(price);
 };
+
+exports.getNotice = (req, res) => {
+  knex('notice').select().orderBy('time', 'desc').then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

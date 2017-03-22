@@ -80,6 +80,7 @@ app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotic
 app.get('/api/admin/setting', isAdmin, adminSetting.getSetting);
 app.put('/api/admin/setting', isAdmin, adminSetting.modifySetting);
 
+app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
 app.get('/api/user/server', isUser, user.getServers);
