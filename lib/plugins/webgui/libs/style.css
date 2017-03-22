@@ -2,13 +2,13 @@
     font-family: 'Material Icons';
     font-style: normal;
     font-weight: 400;
-    src: url(https://ssmgr-3fbe2.firebaseapp.com/libs/MaterialIcons-Regular.eot);
+    src: url(/libs/MaterialIcons-Regular.eot);
     /* For IE6-8 */
     src: local('Material Icons'),
          local('MaterialIcons-Regular'),
-         url(https://ssmgr-3fbe2.firebaseapp.com/libs/MaterialIcons-Regular.woff2) format('woff2'),
-         url(https://ssmgr-3fbe2.firebaseapp.com/libs/MaterialIcons-Regular.woff) format('woff'),
-         url(https://ssmgr-3fbe2.firebaseapp.com/libs/MaterialIcons-Regular.ttf) format('truetype');
+         url(/libs/MaterialIcons-Regular.woff2) format('woff2'),
+         url(/libs/MaterialIcons-Regular.woff) format('woff'),
+         url(/libs/MaterialIcons-Regular.ttf) format('truetype');
 }
 
 .material-icons {
