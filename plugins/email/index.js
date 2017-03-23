@@ -27,7 +27,7 @@ const sendMail = async (to, subject, text, options = {}) => {
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
-        from: config.plugins.email.username,
+        from: config.plugins.email.from,
         to,
         subject,
         text,
