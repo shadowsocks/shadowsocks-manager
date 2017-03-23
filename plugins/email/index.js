@@ -10,8 +10,8 @@ const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
 
 const smtpConfig = {
   host: config.plugins.email.host,
-  port: 465,
-  secure: true,
+  port: config.plugins.email.port,
+  secure: config.plugins.email.secure,
   auth: {
     user: config.plugins.email.username,
     pass: config.plugins.email.password,
