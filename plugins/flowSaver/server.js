@@ -2,9 +2,10 @@
 
 const knex = appRequire('init/knex').knex;
 
-const add = (name, host, port, password, method) => {
+const add = (name, hostname, host, port, password, method) => {
   return knex('server').insert({
     name,
+    hostname,
     host,
     port,
     password,
@@ -23,9 +24,10 @@ const del = (id) => {
   });
 };
 
-const edit = (id, name, host, port, password, method) => {
+const edit = (id, name, hostname, host, port, password, method) => {
   return knex('server').where({ id }).update({
     name,
+    hostname,
     host,
     port,
     password,
@@ -34,7 +36,7 @@ const edit = (id, name, host, port, password, method) => {
 };
 
 const list = () => {
-  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method']).orderBy('name');
+  return knex('server').select(['id', 'name', 'hostname', 'host', 'port', 'password', 'method']).orderBy('name');
 };
 
 exports.add = add;

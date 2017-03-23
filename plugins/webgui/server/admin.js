@@ -27,6 +27,7 @@ exports.getOneServer = (req, res) => {
       return manager.send({
         command: 'list',
       }, {
+        hostname: success[0].hostname,
         host: success[0].host,
         port: success[0].port,
         password: success[0].password,
@@ -44,6 +45,7 @@ exports.getOneServer = (req, res) => {
 
 exports.addServer = (req, res) => {
   req.checkBody('name', 'Invalid name').notEmpty();
+  req.checkBody('hostname', 'Invalid hostname').notEmpty();
   req.checkBody('address', 'Invalid address').notEmpty();
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();
@@ -66,11 +68,12 @@ exports.addServer = (req, res) => {
   }).then(success => {
     // console.log(success);
     const name = req.body.name;
+    const hostname = req.body.hostname;
     const address = req.body.address;
     const port = +req.body.port;
     const password = req.body.password;
     const method = req.body.method;
-    return serverManager.add(name, address, port, password, method);
+    return serverManager.add(name, hostname, address, port, password, method);
   }).then(success => {
     res.send('success');
   }).catch(err => {
@@ -81,6 +84,7 @@ exports.addServer = (req, res) => {
 
 exports.editServer = (req, res) => {
   req.checkBody('name', 'Invalid name').notEmpty();
+  req.checkBody('hostname', 'Invalid hostname').notEmpty();
   req.checkBody('address', 'Invalid address').notEmpty();
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();
@@ -104,11 +108,12 @@ exports.editServer = (req, res) => {
     console.log(success);
     const serverId = req.params.serverId;
     const name = req.body.name;
+    const hostname = req.body.hostname;
     const address = req.body.address;
     const port = +req.body.port;
     const password = req.body.password;
     const method = req.body.method;
-    return serverManager.edit(serverId, name, address, port, password, method);
+    return serverManager.edit(serverId, name, hostname, address, port, password, method);
   }).then(success => {
     res.send('success');
   }).catch(err => {

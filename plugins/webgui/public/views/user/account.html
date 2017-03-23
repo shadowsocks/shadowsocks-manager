@@ -24,7 +24,7 @@
                                 <md-list>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">地址：</div><div flex="60" style="text-align:right">{{server.host}}:{{a.port}}</div>
+                                            <div flex="40">地址：</div><div flex="60" style="text-align:right">{{server.hostname}}:{{a.port}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
@@ -86,8 +86,8 @@
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div hide-xs></div>
-                                <a ng-href="{{createQrCode(server.method, a.password , server.host, a.port)}}">
-                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port)" image="true"></qr>
+                                <a ng-href="{{createQrCode(server.method, a.password , server.hostname, a.port)}}">
+                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.hostname, a.port)" image="true"></qr>
                                 </a>
                                 <div hide-xs></div>
                             </div>
