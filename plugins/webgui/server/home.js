@@ -49,6 +49,9 @@ exports.signup = (req, res) => {
       .then(success => JSON.parse(success[0].value))
       .then(success => {
         const newUserAccount = success.accountForNewUser;
+        if(!success.accountForNewUser.isEnable) {
+          return;
+        }
         return knex('account_plugin').select().orderBy('port', 'DESC').limit(1)
         .then(success => {
           if(success.length) {
