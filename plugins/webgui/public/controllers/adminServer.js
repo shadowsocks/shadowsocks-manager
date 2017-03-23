@@ -56,6 +56,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       adminApi.getServer().then(servers => {
         if(servers.map(s => s.id).join('') === $scope.servers.map(s => s.id).join('')) {
           $scope.servers.forEach((server, index) => {
+            server.hostname = servers[index].hostname;
             server.host = servers[index].host;
             server.name = servers[index].name;
             server.port = servers[index].port;
@@ -315,6 +316,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.confirm = () => {
       $http.post('/api/admin/server', {
         name: $scope.server.name,
+        hostname: $scope.server.hostname,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
@@ -356,6 +358,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = {
         name: success.data.name,
+        hostname: success.data.hostname,
         address: success.data.host,
         port: +success.data.port,
         password: success.data.password,
@@ -365,6 +368,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.confirm = () => {
       $http.put('/api/admin/server/' + $stateParams.serverId, {
         name: $scope.server.name,
+        hostname: $scopr.server.hostname,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,

@@ -12,6 +12,7 @@ const createTable = async () => {
   await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');
     table.string('name');
+    table.string('hostname');
     table.string('host');
     table.integer('port');
     table.string('password');
@@ -22,6 +23,7 @@ const createTable = async () => {
     const host = config.manager.address.split(':')[0];
     const port = +config.manager.address.split(':')[1];
     const password = config.manager.password;
+    const hostname = host;
     await manager.send({
       command: 'flow',
       options: {
@@ -37,6 +39,7 @@ const createTable = async () => {
     });
     await knex('server').insert({
       name: 'default',
+      hostname,
       host,
       port,
       password,
