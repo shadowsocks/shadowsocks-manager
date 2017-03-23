@@ -13,10 +13,17 @@
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>地址</label>
+                    <label>访问地址</label>
+                    <input type="text" required name="address" ng-model="server.address">
+                    <div ng-messages="serverForm.hostname.$error">
+                        <div ng-message="required">访问地址不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>管理地址</label>
                     <input type="text" required name="address" ng-model="server.address">
                     <div ng-messages="serverForm.address.$error">
-                        <div ng-message="required">地址不能为空</div>
+                        <div ng-message="required">管理地址不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
