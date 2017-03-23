@@ -1,5 +1,3 @@
-'use strict';
-
 const log4js = require('log4js');
 const logger = log4js.getLogger('email');
 
@@ -10,7 +8,7 @@ const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
 
 const smtpConfig = {
   host: config.plugins.email.host,
-  port: 465,
+  port: config.plugins.email.port || 465,
   secure: true,
   auth: {
     user: config.plugins.email.username,
@@ -22,12 +20,13 @@ const transporter = nodemailer.createTransport(smtpConfig);
 
 const sendMail = async (to, subject, text, options = {}) => {
   if(isInBlackList(to)) {
+    logger.error('Email in black list: ' + to);
     return Promise.reject('email in black list');
   }
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
-        from: config.plugins.email.username,
+        from: `"${ config.plugins.email.name || '' }" <${ config.plugins.email.email || config.plugins.email.username }>`,
         to,
         subject,
         text,
