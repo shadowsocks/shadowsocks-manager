@@ -130,15 +130,15 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
       $scope.server = success.data;
     }).catch(() => {
-      $state.go('admin.server');
+      // $state.go('admin.server');
     });
     $scope.toAccountPage = port => {
       adminApi.getAccountId(port).then(id => {
         $state.go('admin.accountPage', { accountId: id });
       });
     };
-    $scope.editServer = id => {
-      $state.go('admin.editServer', { serverId: id });
+    $scope.editServer = () => {
+      $state.go('admin.editServer', { serverId: $stateParams.serverId });
     };
     $scope.deleteServer = id => {
       const confirm = $mdDialog.confirm()
