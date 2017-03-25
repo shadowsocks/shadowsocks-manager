@@ -11,7 +11,7 @@ const run = async () => {
   let runParams = config.runShadowsocks;
   let type = 'libev';
   let method = 'aes-256-cfb';
-  if(typeof runParams === 'boolean' && !runParams) {
+  if(!runParams) {
     return;
   }
   if(typeof runParams === 'boolean' && runParams) {
