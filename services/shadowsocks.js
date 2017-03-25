@@ -2,7 +2,7 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
 const dgram = require('dgram');
-let client;
+const client = dgram.createSocket('udp4');
 
 const config = appRequire('services/config').all();
 const host = config.shadowsocks.address.split(':')[0];
@@ -28,9 +28,10 @@ const setExistPort = flow => {
 };
 
 const connect = () => {
-  client = dgram.createSocket('udp4');
+  // client = dgram.createSocket('udp4');
   client.on('message', async (msg, rinfo) => {
     const msgStr = new String(msg);
+    // console.log(msgStr);
     if(msgStr.substr(0, 4) === 'pong') {
       shadowsocksType = 'python';
     } else if(msgStr.substr(0, 5) === 'stat:') {
@@ -74,27 +75,30 @@ const connect = () => {
 const sendMessage = (message) => {
   const randomTraceNumber = Math.random().toString().substr(2,6);
   logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
-  return new Promise((resolve, reject) => {
-    const client = dgram.createSocket('udp4');
-    client.send(message, port, host, (err) => {
-      if(err) {
-        logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
-        return reject('error');
-      }
-    });
-    client.on('message', (msg) => {
-      logger.info(`[${ randomTraceNumber }] Receive from shadowsocks: ${ msg.toString() }`);
-      client.close();
-      resolve('ok');
-    });
-    client.on('close', () => {
-      logger.info(`[${ randomTraceNumber }] Shadowsocks close`);
-      return reject('close');
-    });
-    client.on('error', (err) => {
-      logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
-    });
-  });
+  // const client = dgram.createSocket('udp4');
+  client.send(message, port, host);
+  return Promise.resolve('ok');
+  // return new Promise((resolve, reject) => {
+  //   const client = dgram.createSocket('udp4');
+  //   client.send(message, port, host, (err) => {
+  //     if(err) {
+  //       logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
+  //       return reject('error');
+  //     }
+  //   });
+  //   client.on('message', (msg) => {
+  //     logger.info(`[${ randomTraceNumber }] Receive from shadowsocks: ${ msg.toString() }`);
+  //     client.close();
+  //     resolve('ok');
+  //   });
+  //   client.on('close', () => {
+  //     logger.info(`[${ randomTraceNumber }] Shadowsocks close`);
+  //     return reject('close');
+  //   });
+  //   client.on('error', (err) => {
+  //     logger.error(`[${ randomTraceNumber }] Shadowsocks error:\n${err.stack}`);
+  //   });
+  // });
 };
 
 const startUp = async () => {
