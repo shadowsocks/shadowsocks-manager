@@ -2,7 +2,28 @@
 process.env.NODE_ENV = 'production';
 const path = require('path');
 const fs = require('fs');
-const lib = path.join(path.dirname(fs.realpathSync(__filename)), '../lib/');
-console.log(lib);
-process.chdir(lib);
-require(lib + '/server');
+const ssmgrPath = path.join(path.dirname(fs.realpathSync(__filename)), '../');
+try {
+  fs.statSync(path.join(ssmgrPath, 'lib'));
+} catch(err) {
+  fs.mkdirSync(path.join(ssmgrPath, 'lib'));
+}
+const libPath = path.join(path.dirname(fs.realpathSync(__filename)), '../lib/');
+let buildLibFolder;
+try {
+  const libVersion = require(path.join(libPath, 'package')).version;
+  const ssmgrVersion = require(path.join(ssmgrPath, 'package')).version;
+  if(libVersion !== ssmgrVersion) {
+    throw new Error('rebuild');
+  }
+  buildLibFolder = Promise.resolve();
+} catch(err) {
+  process.chdir(ssmgrPath);
+  buildLibFolder = require(path.join(ssmgrPath, 'gulpfile')).run();
+}
+buildLibFolder
+.then(() => {
+  process.chdir(libPath);
+  console.log(libPath);
+  require(path.join(libPath, 'server'));
+});

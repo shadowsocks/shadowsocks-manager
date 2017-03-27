@@ -124,6 +124,14 @@ gulp.task('webguiWatch', function () {
   gulp.watch('plugins/webgui/public/**', ['webguiBuild']);
 });
 
-gulp.task('default', ['clean', 'babel'], () => {
-
+gulp.task('default', ['clean', 'babel'], cb => {
+  return cb();
 });
+
+exports.run = () => {
+  return new Promise((resolve, reject) => {
+    gulp.start('default', () => {
+      return resolve();
+    });
+  });
+};
