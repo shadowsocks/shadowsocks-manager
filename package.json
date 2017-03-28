@@ -1,12 +1,12 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.5.64",
+  "version": "0.5.66",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "build": "gulp",
-    "postinstall": "gulp"
+    "prepublish": "gulp"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "GPL",

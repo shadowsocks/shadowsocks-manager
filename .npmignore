@@ -41,4 +41,3 @@ jspm_packages
 config/development.yml
 
 .vscode
-lib
