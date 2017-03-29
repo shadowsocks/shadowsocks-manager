@@ -88,6 +88,8 @@ app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)', isUser, user.getServerPort
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
 app.put('/api/user/:accountId(\\d+)/password', isUser, user.changePassword);
 
+app.get('/api/user/status/alipay', isUser, user.getAlipayStatus);
+
 app.get('/api/user/order/price', isUser, user.getPrice);
 app.post('/api/user/order/qrcode', isUser, user.createOrder);
 app.post('/api/user/order/status', isUser, user.checkOrder);

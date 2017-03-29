@@ -212,3 +212,9 @@ exports.getNotice = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getAlipayStatus = (req, res) => {
+  return res.send({
+    status: config.plugins.alipay.use,
+  });
+};

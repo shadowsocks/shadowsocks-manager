@@ -1,7 +1,6 @@
 const app = angular.module('app');
 
 app.factory('userApi', ['$q', '$http', ($q, $http) => {
-
   let userAccountPromise = null;
   const getUserAccount = () => {
     if(userAccountPromise && !userAccountPromise.$$state.status) {
@@ -74,11 +73,16 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     return $http.get('/api/user/notice').then(success => success.data);
   };
 
+  const getAlipayStatus = () => {
+    return $http.get('/api/user/status/alipay').then(success => success.data);
+  };
+
   return {
     getServerPortData,
     getUserAccount,
     changePassword,
     updateAccount,
     getNotice,
+    getAlipayStatus,
   };
 }]);
