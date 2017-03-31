@@ -13,6 +13,9 @@ const smtpConfig = {
   auth: {
     user: config.plugins.email.username,
     pass: config.plugins.email.password,
+  },
+  tls: {
+      rejectUnauthorized: !config.plugins.email.allowUnauthorizedTls
   }
 };
 
