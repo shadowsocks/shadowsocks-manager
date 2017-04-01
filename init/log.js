@@ -59,6 +59,7 @@ const setFileAppenders = (filename) => {
       type: 'dateFile',
       filename: path.resolve(logPath, filename + '/' + ctg + '.log'),
       pattern: '-yyyy-MM-dd',
+      compress: true,
     }), ctg);
   });
 };
