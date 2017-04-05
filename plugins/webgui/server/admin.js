@@ -280,7 +280,7 @@ exports.getServerFlow = (req, res) => {
   const serverId = req.params.serverId;
   const port = req.query.port;
   const type = req.query.type;
-  const time = req.query.time || Date.now();
+  const time = +req.query.time || Date.now();
   let timeArray = [];
   if(Array.isArray(time)) {
     timeArray = time;
@@ -344,7 +344,7 @@ exports.getServerLastHourFlow = (req, res) => {
 exports.getServerUserFlow = (req, res) => {
   const serverId = +req.params.serverId;
   const type = req.query.type;
-  const time = req.query.time || Date.now();
+  const time = +req.query.time || Date.now();
   let timeArray = [];
   if(Array.isArray(time)) {
     timeArray = time;
@@ -409,7 +409,7 @@ exports.getServerPortFlow = (req, res) => {
 exports.getAccountServerFlow = (req, res) => {
   const accountId = +req.params.accountId;
   const type = req.query.type;
-  const time = req.query.time || Date.now();
+  const time = +req.query.time || Date.now();
   let timeArray = [];
   if(Array.isArray(time)) {
     timeArray = time;

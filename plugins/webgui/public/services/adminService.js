@@ -153,13 +153,13 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment,
         $http.get('/api/admin/flow/' + serverId, {
           params: {
             type,
-            time: new Date(queryTime),
+            time: queryTime,
           }
         }),
         $http.get('/api/admin/flow/' + serverId + '/user', {
           params: {
             type,
-            time: new Date(queryTime),
+            time: queryTime,
           }
         }),
       ]);
@@ -194,14 +194,14 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment,
           params: {
             port,
             type,
-            time: new Date(time),
+            time: time,
           }
         }),
         $http.get(`/api/admin/flow/account/${ accountId }`, {
           params: {
             port,
             type,
-            time: new Date(time),
+            time: time,
           }
         })
       ]);
