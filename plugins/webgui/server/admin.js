@@ -280,26 +280,26 @@ exports.getServerFlow = (req, res) => {
   const serverId = req.params.serverId;
   const port = req.query.port;
   const type = req.query.type;
-  const time = +req.query.time || Date.now();
+  const time = req.query.time || Date.now();
   let timeArray = [];
   if(Array.isArray(time)) {
-    timeArray = time;
+    timeArray = time.map(m => +m);
   } else if(type === 'day') {
     let i = 0;
     while(i < 25) {
-      timeArray.push(moment(time).hour(i).minute(0).second(0).millisecond(0).toDate().valueOf());
+      timeArray.push(moment(+time).hour(i).minute(0).second(0).millisecond(0).toDate().valueOf());
       i++;
     }
   } else if (type === 'hour') {
     let i = 0;
     while(i < 13) {
-      timeArray.push(moment(time).minute(i * 5).second(0).millisecond(0).toDate().valueOf());
+      timeArray.push(moment(+time).minute(i * 5).second(0).millisecond(0).toDate().valueOf());
       i++;
     }
   } else if (type === 'week') {
     let i = 0;
     while(i < 8) {
-      timeArray.push(moment(time).day(i).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf());
+      timeArray.push(moment(+time).day(i).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf());
       i++;
     }
   }
