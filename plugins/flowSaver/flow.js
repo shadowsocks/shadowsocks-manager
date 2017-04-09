@@ -108,27 +108,27 @@ const getServerFlow = async (serverId, timeArray) => {
     const startTime = +time;
     const endTime = +timeArray[index + 1];
     let getFlow;
-    if(isDay(startTime, endTime)) {
-      getFlow = knex('saveFlowDay')
-      .sum('flow as sumFlow')
-      .groupBy('id')
-      .select(['id'])
-      .where({ id: serverId })
-      .whereBetween('time', [startTime, endTime]).then(success => {
-        if(success[0]) { return success[0].sumFlow; }
-        return 0;
-      });
-    } else if(isHour(startTime, endTime)) {
-      getFlow = knex('saveFlowHour')
-      .sum('flow as sumFlow')
-      .groupBy('id')
-      .select(['id'])
-      .where({ id: serverId })
-      .whereBetween('time', [startTime, endTime]).then(success => {
-        if(success[0]) { return success[0].sumFlow; }
-        return 0;
-      });
-    } else {
+    // if(isDay(startTime, endTime)) {
+    //   getFlow = knex('saveFlowDay')
+    //   .sum('flow as sumFlow')
+    //   .groupBy('id')
+    //   .select(['id'])
+    //   .where({ id: serverId })
+    //   .whereBetween('time', [startTime, endTime]).then(success => {
+    //     if(success[0]) { return success[0].sumFlow; }
+    //     return 0;
+    //   });
+    // } else if(isHour(startTime, endTime)) {
+    //   getFlow = knex('saveFlowHour')
+    //   .sum('flow as sumFlow')
+    //   .groupBy('id')
+    //   .select(['id'])
+    //   .where({ id: serverId })
+    //   .whereBetween('time', [startTime, endTime]).then(success => {
+    //     if(success[0]) { return success[0].sumFlow; }
+    //     return 0;
+    //   });
+    // } else {
       getFlow = knex('saveFlow')
       .sum('flow as sumFlow')
       .groupBy('id')
@@ -138,7 +138,7 @@ const getServerFlow = async (serverId, timeArray) => {
         if(success[0]) { return success[0].sumFlow; }
         return 0;
       });
-    }
+    // }
     result.push(getFlow);
   });
   return Promise.all(result);

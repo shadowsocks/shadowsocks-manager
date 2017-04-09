@@ -30,8 +30,6 @@ const generateFlow = async (type) => {
     }
     if(type === '5min') {
       const minute = moment(firstFlow.time).minute();
-      console.log(minute);
-      console.log(minute - minute % 5);
       time = moment(firstFlow.time).minute(minute - minute % 5).second(0).millisecond(0).toDate().getTime();
     }
   } else {
@@ -47,7 +45,6 @@ const generateFlow = async (type) => {
   .select(['saveFlow.id as id'])
   .whereBetween('time', [time, time + interval]);
   if(!sum.length) { sum = [{id: 0, port: 0, flow: 0}]; }
-  // console.log(sum);
   await knex(tableName).insert(sum.map(m => {
     return {
       id: m.id,
