@@ -2,6 +2,7 @@
 
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
+const moment = require('moment');
 /*
 arguments: startTime, endTime
   or
@@ -51,6 +52,53 @@ const getFlow = function () {
   }
 };
 
+const isDay = (start, end) => {
+  let hour;
+  let minute;
+  let second;
+  let millisecond;
+  hour = moment(start).get('hour');
+  minute = moment(start).get('minute');
+  second = moment(start).get('second');
+  millisecond = moment(start).get('millisecond');
+  if(hour || minute || second || millisecond) {
+    return false;
+  }
+  hour = moment(end).get('hour');
+  minute = moment(end).get('minute');
+  second = moment(end).get('second');
+  millisecond = moment(end).get('millisecond');
+  if(hour || minute || second || millisecond) {
+    return false;
+  }
+  if(moment().hour(0).minute(0).second(0).millisecond(0).toDate().getTime() === start) {
+    return false;
+  }
+  return true;
+};
+
+const isHour = (start, end) => {
+  let minute;
+  let second;
+  let millisecond;
+  minute = moment(start).get('minute');
+  second = moment(start).get('second');
+  millisecond = moment(start).get('millisecond');
+  if(minute || second || millisecond) {
+    return false;
+  }
+  minute = moment(end).get('minute');
+  second = moment(end).get('second');
+  millisecond = moment(end).get('millisecond');
+  if(minute || second || millisecond) {
+    return false;
+  }
+  if(moment().minute(0).second(0).millisecond(0).toDate().getTime() === start) {
+    return false;
+  }
+  return true;
+};
+
 const getServerFlow = async (serverId, timeArray) => {
   const result = [];
   timeArray.forEach((time, index) => {
@@ -59,15 +107,38 @@ const getServerFlow = async (serverId, timeArray) => {
     }
     const startTime = +time;
     const endTime = +timeArray[index + 1];
-    const getFlow = knex('saveFlow')
-    .sum('flow as sumFlow')
-    .groupBy('id')
-    .select(['id'])
-    .where({ id: serverId })
-    .whereBetween('time', [startTime, endTime]).then(success => {
-      if(success[0]) { return success[0].sumFlow; }
-      return 0;
-    });
+    let getFlow;
+    if(isDay(startTime, endTime)) {
+      getFlow = knex('saveFlowDay')
+      .sum('flow as sumFlow')
+      .groupBy('id')
+      .select(['id'])
+      .where({ id: serverId })
+      .whereBetween('time', [startTime, endTime]).then(success => {
+        if(success[0]) { return success[0].sumFlow; }
+        return 0;
+      });
+    } else if(isHour(startTime, endTime)) {
+      getFlow = knex('saveFlowHour')
+      .sum('flow as sumFlow')
+      .groupBy('id')
+      .select(['id'])
+      .where({ id: serverId })
+      .whereBetween('time', [startTime, endTime]).then(success => {
+        if(success[0]) { return success[0].sumFlow; }
+        return 0;
+      });
+    } else {
+      getFlow = knex('saveFlow')
+      .sum('flow as sumFlow')
+      .groupBy('id')
+      .select(['id'])
+      .where({ id: serverId })
+      .whereBetween('time', [startTime, endTime]).then(success => {
+        if(success[0]) { return success[0].sumFlow; }
+        return 0;
+      });
+    }
     result.push(getFlow);
   });
   return Promise.all(result);

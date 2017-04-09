@@ -3,6 +3,7 @@ const logger = log4js.getLogger('flowSaver');
 const path = require('path');
 appRequire('plugins/flowSaver/server');
 appRequire('plugins/flowSaver/flow');
+appRequire('plugins/flowSaver/generateFlow');
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const later = require('later');
