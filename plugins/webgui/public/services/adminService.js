@@ -1,6 +1,6 @@
 const app = angular.module('app');
 
-app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment, preload) => {
+app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http, $q, moment, preload, $timeout) => {
   const getUser = (opt = {}) => {
     const search = opt.search || '';
     const filter = opt.filter || 'all';
@@ -130,21 +130,21 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', ($http, $q, moment,
   const getChartData = (serverId, type, time, doNotPreload) => {
     let queryTime;
     if(type === 'hour') {
-      !doNotPreload && getChartData(serverId, type, time - 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 2 * 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 3 * 3600000, true);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 3600000, true); }, 500);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 2 * 3600000, true); }, 600);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 3 * 3600000, true); }, 700);
       queryTime = moment(time).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     if(type === 'day') {
-      !doNotPreload && getChartData(serverId, type, time - 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 2 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 3 * 24 * 3600000, true);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 24 * 3600000, true); }, 500);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 2 * 24 * 3600000, true); }, 600);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 3 * 24 * 3600000, true); }, 700);
       queryTime = moment(time).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     if(type === 'week') {
-      !doNotPreload && getChartData(serverId, type, time - 7 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 2 * 7 * 24 * 3600000, true);
-      !doNotPreload && getChartData(serverId, type, time - 3 * 7 * 24 * 3600000, true);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 7 * 24 * 3600000, true); }, 500);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 2 * 7 * 24 * 3600000, true); }, 600);
+      !doNotPreload && $timeout(() => { getChartData(serverId, type, time - 3 * 7 * 24 * 3600000, true); }, 700);
       queryTime = moment(time).day(0).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
     }
     const id = `getChartData:${ serverId }:${ type }:${ queryTime }`;
