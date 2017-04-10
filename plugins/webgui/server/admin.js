@@ -322,7 +322,7 @@ exports.getServerLastHourFlow = (req, res) => {
   let timeArray = [];
   let i = 0;
   const now = Date.now();
-  const time = moment(now).add(0 - (moment(now).minute() % 5), 'm').toDate().valueOf();
+  const time = moment(now).add(0 - (moment(now).minute() % 5), 'm').second(0).millisecond(0).toDate().valueOf();
   while(i < 13) {
     timeArray.push(moment(time).add(i * 5 - 60, 'm').toDate().valueOf());
     i++;

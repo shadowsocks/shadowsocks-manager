@@ -121,6 +121,113 @@ const is5min = (start, end) => {
   return true;
 };
 
+const splitTime = (start, end) => {
+  const time = {
+    day: [],
+    hour: [],
+    fiveMin: [],
+    origin: [],
+  };
+  const now = Date.now();
+  const getMinute = moment(now).get('minute');
+  const splitEnd = {
+    day: moment(now).hour(0).minute(0).second(0).millisecond(0).toDate().getTime(),
+    hour: moment(now).minute(0).second(0).millisecond(0).toDate().getTime(),
+    fiveMin: moment(now).minute(getMinute - getMinute%5).second(0).millisecond(0).toDate().getTime(),
+  };
+  const isDay = time => {
+    const hour = moment(time).get('hour');
+    const minute = moment(time).get('minute');
+    const second = moment(time).get('second');
+    const millisecond = moment(time).get('millisecond');
+    if(hour || minute || second || millisecond) {
+      return false;
+    }
+    return true;
+  };
+  const isHour = time => {
+    const minute = moment(time).get('minute');
+    const second = moment(time).get('second');
+    const millisecond = moment(time).get('millisecond');
+    if(minute || second || millisecond) {
+      return false;
+    }
+    return true;
+  };
+  const is5min = time => {
+    const minute = moment(time).get('minute');
+    const second = moment(time).get('second');
+    const millisecond = moment(time).get('millisecond');
+    if(minute%5 || second || millisecond) {
+      return false;
+    }
+    return true;
+  };
+  const next = (time, type) => {
+    if(type === 'day') {
+      return moment(time).add(1, 'days').hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+    }
+    if(type === 'hour') {
+      return moment(time).add(1, 'hours').minute(0).second(0).millisecond(0).toDate().getTime();
+    }
+    if(type === '5min') {
+      const getMinute = moment(time).get('minute');
+      return moment(time).minute(getMinute - getMinute%5).add(5, 'minutes').second(0).millisecond(0).toDate().getTime();
+    }
+  };
+  let timeStart = start;
+  let timeEnd = end;
+  while(timeStart < timeEnd) {
+    if(isDay(timeStart) && next(timeStart, 'day') <= splitEnd.day && next(timeStart, 'day') <= end) {
+      time.day.push([timeStart, next(timeStart, 'day')]);
+      timeStart = next(timeStart, 'day');
+    } else if(isHour(timeStart) && next(timeStart, 'hour') <= splitEnd.hour && next(timeStart, 'hour') <= end) {
+      time.hour.push([timeStart, next(timeStart, 'hour')]);
+      timeStart = next(timeStart, 'hour');
+    } else if(is5min(timeStart) && next(timeStart, '5min') <= splitEnd.fiveMin && next(timeStart, '5min') <= end) {
+      time.fiveMin.push([timeStart, next(timeStart, '5min')]);
+      timeStart = next(timeStart, '5min');
+    } else if(next(timeStart, '5min') <= end && timeStart === start) {
+      time.origin.push([timeStart, next(timeStart, '5min')]);
+      timeStart = next(timeStart, '5min');
+    } else {
+      time.origin.push([timeStart, timeEnd]);
+      timeStart = timeEnd;
+    }
+  }
+  return time;
+};
+
+const getFlowFromSplitTime = async (serverId, port, start, end) => {
+  const time = splitTime(start, end);
+  const sum = [];
+  const getFlow = (tableName, startTime, endTime) => {
+    return knex(tableName)
+    .sum('flow as sumFlow')
+    .groupBy('port')
+    .select(['port'])
+    .where({ id: serverId, port })
+    .whereBetween('time', [startTime, endTime - 1]).then(success => {
+      if(success[0]) { return success[0].sumFlow; }
+      return 0;
+    });
+  };
+  time.day.forEach(f => {
+    sum.push(getFlow('saveFlowDay', f[0], f[1]));
+  });
+  time.hour.forEach(f => {
+    sum.push(getFlow('saveFlowHour', f[0], f[1]));
+  });
+  time.fiveMin.forEach(f => {
+    sum.push(getFlow('saveFlow5min', f[0], f[1]));
+  });
+  time.origin.forEach(f => {
+    sum.push(getFlow('saveFlow', f[0], f[1]));
+  });
+  const sumFlow = (await Promise.all(sum)).reduce((a, b) => a + b);
+  return sumFlow;
+};
+
 const getServerFlow = async (serverId, timeArray) => {
   const result = [];
   timeArray.forEach((time, index) => {
@@ -130,6 +237,7 @@ const getServerFlow = async (serverId, timeArray) => {
     const startTime = +time;
     const endTime = +timeArray[index + 1];
     let getFlow;
+    // result.push(getFlowFromSplitTime(serverId, startTime, endTime));
     if(isDay(startTime, endTime)) {
       getFlow = knex('saveFlowDay')
       .sum('flow as sumFlow')
