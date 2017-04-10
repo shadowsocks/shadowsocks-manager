@@ -328,8 +328,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
   }
 ])
-.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog',
-  ($scope, $state, $stateParams, $http, confirmDialog) => {
+.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog',
+  ($scope, $state, $stateParams, $http, confirmDialog, alertDialog) => {
     $scope.setTitle('编辑服务器');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
@@ -363,6 +363,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       };
     });
     $scope.confirm = () => {
+      alertDialog.loading();
       $http.put('/api/admin/server/' + $stateParams.serverId, {
         name: $scope.server.name,
         address: $scope.server.address,
@@ -370,7 +371,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         password: $scope.server.password,
         method: $scope.server.method,
       }).then(success => {
+        alertDialog.show('修改服务器成功', '确定');
         $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+      }).catch(() => {
+        alertDialog.show('修改服务器失败', '确定');
       });
     };
     $scope.cancel = () => {
