@@ -107,7 +107,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $http.get('/api/admin/server'),
     ]).then(success => {
       $scope.account = success[0].data;
-      $scope.servers = success[1].data;
+      $scope.servers = success[1].data.map(server => {
+        if(server.host.indexOf(':') >= 0) {
+          server.host = server.host.split(':')[1];
+        }
+        return server;
+      });
       $scope.getServerPortData($scope.servers[0].id, $scope.account.port);
     });
     let currentServerId;

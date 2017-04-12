@@ -2077,6 +2077,7 @@ const blackList = [
   '@wuzupmail.net',
   '@wwwnew.eu',
   '@www.bccto.com',
+  '@www.bccto.me',
   '@wxnw.net',
   '@x24.com',
   '@xagloo.co',

@@ -43,6 +43,9 @@ const checkData = async (receive) => {
 };
 
 const sendMessage = (data, options) => {
+  if(options && options.host) {
+    options.host = options.host.split(':')[0];
+  }
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {
       host,

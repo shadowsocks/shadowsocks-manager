@@ -64,7 +64,6 @@ exports.addServer = (req, res) => {
     }
     result.throw();
   }).then(success => {
-    // console.log(success);
     const name = req.body.name;
     const address = req.body.address;
     const port = +req.body.port;
@@ -101,7 +100,6 @@ exports.editServer = (req, res) => {
     }
     result.throw();
   }).then(success => {
-    console.log(success);
     const serverId = req.params.serverId;
     const name = req.body.name;
     const address = req.body.address;
