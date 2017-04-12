@@ -198,15 +198,15 @@ const splitTime = (start, end) => {
   return time;
 };
 
-const getFlowFromSplitTime = async (serverId, port, start, end) => {
+const getFlowFromSplitTime = async (serverId, start, end) => {
   const time = splitTime(start, end);
   const sum = [];
   const getFlow = (tableName, startTime, endTime) => {
     return knex(tableName)
     .sum('flow as sumFlow')
-    .groupBy('port')
-    .select(['port'])
-    .where({ id: serverId, port })
+    .groupBy('id')
+    .select(['id'])
+    .where({ id: serverId })
     .whereBetween('time', [startTime, endTime - 1]).then(success => {
       if(success[0]) { return success[0].sumFlow; }
       return 0;
@@ -224,7 +224,8 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
   time.origin.forEach(f => {
     sum.push(getFlow('saveFlow', f[0], f[1]));
   });
-  const sumFlow = (await Promise.all(sum)).reduce((a, b) => a + b);
+  const result = await Promise.all(sum);
+  const sumFlow = result.length ? result.reduce((a, b) => a + b) : 0;
   return sumFlow;
 };
 
