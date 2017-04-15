@@ -2,12 +2,21 @@
     <md-card>
         <md-list>
             <md-divider></md-divider>
-            <md-list-item ng-repeat="order in orders track by $index" ng-click="showOrderInfo(order)">
-                <div flex layout="row" layout-align="space-between center">
-                    <div flex="30" flex-xs="60">{{order.orderId}}</div>
+            <md-list-item ng-repeat="order in orders track by $index">
+                <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
+                    <div flex="30" flex-xs="60">
+                        <span hide-xs hide-sm>{{order.orderId}}</span>
+                        <span hide-gt-sm>
+                            <span style="font-size: 0.9em;">{{order.orderId | prettyOrderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        </span>
+                    </div>
                     <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
-                    <div hide-xs hide-sm flex="30" style="text-align: right;">{{order.createTime | date : 'yyyy-MM-dd HH:mm'}}</div>
-                    <div flex="10" flex-xs="40" style="text-align: right;">{{order.status | order}}</div>
+                    <div hide-xs hide-sm flex="30" style="text-align: right;">
+                        <span style="font-size: 0.9em;">{{order.createTime | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                    </div>
+                    <div flex="10" flex-xs="40" style="text-align: right;">
+                        <span style="font-size: 0.9em; color: #555">{{order.amount}}<span><br><span style="font-size: 0.9em; color: #000">{{order.status | order}}</span>
+                    </div>
                 </div>
                 <md-divider></md-divider>
             </md-list-item>

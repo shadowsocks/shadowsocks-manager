@@ -11,4 +11,9 @@ app.filter('order', function() {
     };
     return result[status] || '其它';
   };
+})
+.filter('prettyOrderId', function() {
+  return function(id) {
+    return `${ id.substr(0, 4) }-${ id.substr(4, 2) }-${ id.substr(6, 2) } ${ id.substr(8, 2) }:${ id.substr(10, 2) }:${ id.substr(12, 2) } ${ id.substr(14) }`;
+  };
 });
