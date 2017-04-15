@@ -98,8 +98,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$interval',
-  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $interval) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval',
+  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $q.all([
@@ -120,13 +120,17 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       currentServerId = serverId;
       $scope.serverPortFlow = 0;
       $scope.lastConnect = 0;
-      $http.get(`/api/admin/flow/${ serverId }/${ port }`).then(success => {
-        $scope.serverPortFlow = success.data[0];
-      });
-      $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`).then(success => {
-        $scope.lastConnect = success.data.lastConnect;
+      adminApi.getServerPortData(serverId, port).then(success => {
+        $scope.serverPortFlow = success.serverPortFlow;
+        $scope.lastConnect = success.lastConnect;
       });
       $scope.getChartData(serverId);
+      $scope.servers.forEach((server, index) => {
+        if(server.id === serverId) { return; }
+        $timeout(() => {
+          adminApi.getServerPortData(server.id, port);
+        }, index * 1000);
+      });
     };
     $scope.setInterval($interval(() => {
       const serverId = currentServerId;

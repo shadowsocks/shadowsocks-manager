@@ -100,19 +100,6 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return indexInfoPromise;
   };
 
-  const getServerPortData = (serverId, port) => {
-    const Promises = [
-      $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`),
-      $http.get(`/api/admin/flow/${ serverId }/${ port }`),
-    ];
-    return $q.all(Promises).then(success => {
-      return {
-        lastConnect: success[0].data.lastConnect,
-        flow: success[1].data[0],
-      };
-    });
-  };
-
   const getUserData = (userId) => {
     return $q.all([
       $http.get('/api/admin/user/' + userId),
@@ -207,6 +194,22 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
       ]);
     };
     return preload.get(id, promise, 90 * 1000);
+  };
+
+  const getServerPortData = (serverId, port) => {
+    const id = `getServerPortData:${ serverId }:${ port }:`;
+    const promise = () => {
+      return $q.all([
+        $http.get(`/api/admin/flow/${ serverId }/${ port }`),
+        $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`)
+      ]).then(success => {
+        return {
+          serverPortFlow: success[0].data[0],
+          lastConnect: success[1].data.lastConnect,
+        };
+      });
+    };
+    return preload.get(id, promise, 60 * 1000);
   };
 
   return {
