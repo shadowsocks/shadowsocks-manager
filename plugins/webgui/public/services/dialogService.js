@@ -395,8 +395,14 @@ app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdMedia', '$mdDialog', 'bind', function($scope, $mdMedia, $mdDialog, bind) {
       $scope.publicInfo = bind;
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
     }],
     fullscreen: true,
     clickOutsideToClose: true,
