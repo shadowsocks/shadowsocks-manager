@@ -13,7 +13,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
     table.string('title');
-    table.string('content');
+    table.string('content', 16384);
     table.bigInteger('time');
   });
 };

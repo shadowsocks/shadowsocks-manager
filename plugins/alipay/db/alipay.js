@@ -21,7 +21,7 @@ const createTable = async () => {
     table.integer('account');
     table.string('qrcode');
     table.string('status');
-    table.string('alipayData');
+    table.string('alipayData', 4096);
     table.bigInteger('createTime');
     table.bigInteger('expireTime');
   });
