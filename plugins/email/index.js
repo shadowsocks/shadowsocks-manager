@@ -9,11 +9,14 @@ const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
 const smtpConfig = {
   host: config.plugins.email.host,
   port: config.plugins.email.port || 465,
-  secure: true,
+  secure: (config.plugins.email.port === 465 || !config.plugins.email.port) ? true : false,
   auth: {
     user: config.plugins.email.username,
     pass: config.plugins.email.password,
-  }
+  },
+  tls: {
+    rejectUnauthorized: !config.plugins.email.allowUnauthorizedTls,
+  },
 };
 
 const transporter = nodemailer.createTransport(smtpConfig);
