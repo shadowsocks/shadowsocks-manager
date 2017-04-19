@@ -365,6 +365,7 @@ exports.getServerUserFlow = (req, res) => {
 };
 
 exports.getServerPortFlow = (req, res) => {
+  console.time('AAA');
   const serverId = +req.params.serverId;
   const port = +req.params.port;
   let account = null;
@@ -397,6 +398,7 @@ exports.getServerPortFlow = (req, res) => {
       return [0];
     }
   }).then(success => {
+    console.timeEnd('AAA');
     res.send(success);
   }).catch(err => {
     console.log(err);
