@@ -29,6 +29,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         search,
         sort: $scope.userSort.sort,
       }).then(success => {
+        $scope.total = success.total;
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
         success.users.forEach(f => {
