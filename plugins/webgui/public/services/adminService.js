@@ -103,13 +103,13 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
   const getUserData = (userId) => {
     return $q.all([
       $http.get('/api/admin/user/' + userId),
-      $http.get('/api/admin/user/account'),
+      // $http.get('/api/admin/user/account'),
       $http.get('/api/admin/order/' + userId),
     ]).then(success => {
       return {
         user: success[0].data,
-        account: success[1].data,
-        orders: success[2].data,
+        // account: success[1].data,
+        orders: success[1].data,
       };
     });
   };
@@ -212,6 +212,10 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return preload.get(id, promise, 60 * 1000);
   };
 
+  const getUserPortLastConnect = port => {
+    return $http.get(`/api/admin/user/${ port }/lastConnect`).then(success => success.data);
+  };
+
   return {
     getUser,
     getOrder,
@@ -225,5 +229,6 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     getUserData,
     getChartData,
     getAccountChartData,
+    getUserPortLastConnect,
   };
 }]);

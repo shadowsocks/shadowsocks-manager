@@ -96,8 +96,13 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     const getUserData = () => {
       adminApi.getUserData(userId).then(success => {
         $scope.user = success.user;
-        $scope.account = success.account;
+        // $scope.account = success.account;
         $scope.orders = success.orders;
+        $scope.user.account.forEach(f => {
+          adminApi.getUserPortLastConnect(f.port).then(success => {
+            f.lastConnect = success.lastConnect;
+          });
+        });
       });
     };
     getUserData();

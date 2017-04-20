@@ -37,7 +37,9 @@
         <md-card>
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <div flex="50" ng-click="toAccountPage(a.port)">{{a.port}}</div>
+                    <div flex="50" ng-click="toAccountPage(a.port)">
+                        <span>{{a.port}}</span><br><span ng-show="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | timeago}}</span>
+                    </div>
                     <div flex="50" layout="row" layout-align="space-between center">
                         <div></div>
                         <md-button class="md-icon-button" aria-label="delete" ng-click="deleteUserAccount(a.id)">

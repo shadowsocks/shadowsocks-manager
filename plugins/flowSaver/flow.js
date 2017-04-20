@@ -319,6 +319,18 @@ const getlastConnectTime = (serverId, port) => {
   });
 };
 
+const getUserPortLastConnect = port => {
+  return knex('saveFlow')
+  .select(['time'])
+  .where({ port })
+  .orderBy('time', 'desc').limit(1).then(success => {
+    if(success[0]) {
+      return { lastConnect: success[0].time };
+    }
+    return { lastConnect: 0 };
+  });
+};
+
 const getServerUserFlow = (serverId, timeArray) => {
   return knex('saveFlow').sum('saveFlow.flow as flow')
   .select([
@@ -351,3 +363,4 @@ exports.getServerPortFlow = getServerPortFlow;
 exports.getServerUserFlow = getServerUserFlow;
 exports.getlastConnectTime = getlastConnectTime;
 exports.getAccountServerFlow = getAccountServerFlow;
+exports.getUserPortLastConnect = getUserPortLastConnect;

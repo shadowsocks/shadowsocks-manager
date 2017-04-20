@@ -556,3 +556,13 @@ exports.getOrders = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getUserPortLastConnect = (req, res) => {
+  const port = +req.params.port;
+  flow.getUserPortLastConnect(port).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
