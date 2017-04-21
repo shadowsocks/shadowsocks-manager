@@ -17,7 +17,12 @@ const sendEmail = (req, res) => {
     return res.send(errors, 400);
   }
   const emailAddress = req.body.email;
-  email.sendCode(emailAddress, 'Free Shadowsocks 验证码', '您的验证码是:')
+  const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+  const session = req.sessionID;
+  email.sendCode(emailAddress, 'Free Shadowsocks 验证码', '您的验证码是:', {
+    ip,
+    session,
+  })
   .then(() => {
     return res.send('success');
   }).catch(error => {
