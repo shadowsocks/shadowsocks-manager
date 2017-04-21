@@ -1,5 +1,3 @@
-'use strict';
-
 const log4js = require('log4js');
 const logger = log4js.getLogger('freeAccount');
 
@@ -132,7 +130,10 @@ const createAccount = async (emailAddress) => {
     text += 'http://' + config.plugins.freeAccount.host;
     text += (config.plugins.freeAccount.port === 80) ? '' : (':' + config.plugins.freeAccount.port);
     text += '/' + address;
-    await email.sendMail(emailAddress, 'Free Shadowsocks 账号', text);
+    await email.sendMail(emailAddress, 'Free Shadowsocks 账号', text, {
+      ip: '',
+      session: '',
+    });
     logger.info(`[${ emailAddress }] Create accout: ${ address }`);
     return address;
   } catch(err) {
