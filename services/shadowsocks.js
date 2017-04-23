@@ -212,7 +212,7 @@ const getFlow = async (options) => {
     const endTime = moment(options.endTime || new Date()).toDate();
 
     const accounts = await knex('account').select([ 'port' ]);
-    const flows = await knex('flow').select([ 'port', 'sumFlow' ])
+    const flows = await knex('flow').select([ 'port' ])
     .sum('flow as sumFlow').groupBy('port')
     .whereBetween('time', [ startTime, endTime ]);
 
