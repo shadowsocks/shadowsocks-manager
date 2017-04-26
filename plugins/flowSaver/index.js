@@ -64,6 +64,6 @@ const saveFlow = async () => {
 // const timer0 = later.setInterval(() => {
 //   saveFlow();
 // }, sched0);
-cron.everyMinute(() => {
+cron.minute(() => {
   saveFlow();
-});
+}, 1);

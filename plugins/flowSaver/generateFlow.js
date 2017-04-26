@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
+const cron = appRequire('init/cron');
 
 const generateFlow = async (type) => {
   let tableName;
@@ -59,11 +60,6 @@ const generateFlow = async (type) => {
   generateFlow(type);
 };
 
-// knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 45 * 24 * 3600 * 1000]).then();
-// knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 45 * 24 * 3600 * 1000]).then();
-// knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 45 * 24 * 3600 * 1000]).then();
-// knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 45 * 24 * 3600 * 1000]).then();
-
 generateFlow('day');
 generateFlow('hour');
 generateFlow('5min');
@@ -71,6 +67,13 @@ setInterval(() => {
   generateFlow('day');
   generateFlow('hour');
 }, 30 * 60 * 1000);
-setInterval(() => {
+// setInterval(() => {
+//   generateFlow('5min');
+// }, 5 * 60 * 1000);
+cron.minute(() => {
+  generateFlow('day');
+  generateFlow('hour');
+}, 30);
+cron.minute(() => {
   generateFlow('5min');
-}, 5 * 60 * 1000);
+}, 5);
