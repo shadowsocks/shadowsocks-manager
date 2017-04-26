@@ -58,7 +58,7 @@
             <md-sidenav class="md-sidenav-left animate-show" md-component-id="innerLeft" md-is-locked-open="$mdMedia('gt-sm')" ng-show="!$mdMedia('gt-sm')" style="padding: 0px; background-color: #FAFAFA;" ng-style="sideNavWidth()" layout="column" layout-align="space-between stretch">
                 <md-content style="background-color: #FAFAFA; overflow-x: hidden;">
                     <div layout="column" layout-align="center start">
-                        <md-list>
+                        <md-list style="width: 100%;">
                             <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" ng-click="menuClick($index)">
                                 <md-item-content style="padding-left: 0px;" md-ink-ripple layout="row" layout-align="start center">
                                     <div style="padding-left: 0px;" class="inset">
