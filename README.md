@@ -159,7 +159,7 @@ Usage: ssmgr [options]
 First, ssmgr will read the config file in `--config`, and other parameters(`-detsmp`) will replace the config file values.
 
 ### Telegram
-Join the group if you have some problem: [https://t.me/joinchat/AAAAAAocQVv8fK_K6JDBgw](https://t.me/joinchat/AAAAAAocQVv8fK_K6JDBgw)
+Join the group if you have some problem: [https://t.me/ssmgr](https://t.me/ssmgr)
 
 ### Donate
 If you find this project helpful, please consider making a donation:  
