@@ -11,6 +11,7 @@ const createTable = async() => {
     table.integer('port');
     table.integer('flow');
     table.bigInteger('time');
+    table.index(['time', 'port'], 'index');
   });
 };
 
