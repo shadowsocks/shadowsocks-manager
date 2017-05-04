@@ -1,5 +1,3 @@
-'use strict';
-
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
 const moment = require('moment');
