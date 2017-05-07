@@ -1,6 +1,6 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('alipay');
-
+const cron = appRequire('init/cron');
 const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
 const alipay_f2f = new alipayf2f({
@@ -59,7 +59,8 @@ const createOrder = async (user, account, amount, orderType = 3) => {
   };
 };
 
-setInterval(async () => {
+cron.minute(async () => {
+// setInterval(async () => {
   const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
   orders.forEach(order => {
     if(order.status !== 'TRADE_SUCCESS' && order.status !== 'FINISH') {
@@ -92,7 +93,8 @@ setInterval(async () => {
       });
     };
   });
-}, 60 * 1000);
+}, 1);
+// }, 60 * 1000);
 
 const checkOrder = async (orderId) => {
   const order = await knex('alipay').select().where({
