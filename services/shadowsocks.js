@@ -1,6 +1,6 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
-
+const cron = appRequire('init/cron');
 const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 
@@ -125,10 +125,12 @@ const compareWithLastFlow = (flow, lastFlow) => {
 
 connect();
 startUp();
-setInterval(() => {
+// setInterval(() => {
+cron.minute(() => {
   resend();
   sendPing();
-}, 60 * 1000);
+}, 1);
+// }, 60 * 1000);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }

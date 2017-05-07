@@ -5,7 +5,7 @@ const serverManager = appRequire('plugins/flowSaver/server');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const moment = require('moment');
-
+const cron = appRequire('init/cron');
 let messages = [];
 
 const sendMessage = () => {
@@ -19,9 +19,11 @@ const sendMessage = () => {
   messages = [];
 };
 
-setInterval(() => {
+// setInterval(() => {
+cron.second(() => {
   sendMessage();
-}, 10 * 1000);
+}, 10);
+// }, 10 * 1000);
 
 const addPort = (data, server) => {
   messages.push([{
