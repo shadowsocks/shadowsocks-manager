@@ -308,7 +308,6 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       }, timeout);
     };
     $http.get('/api/admin/setting').then(success => {
-      // console.log(success.data);
       $scope.settings = success.data.value;
       $scope.$watch('settings', () => {
         $scope.saveSetting();

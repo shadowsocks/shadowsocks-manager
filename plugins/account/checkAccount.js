@@ -13,17 +13,14 @@ const sendMessage = () => {
     return;
   }
   messages.forEach(message => {
-    // console.log(message);
     manager.send(message[0], message[1]).then().catch();
   });
   messages = [];
 };
 
-// setInterval(() => {
 cron.second(() => {
   sendMessage();
 }, 10);
-// }, 10 * 1000);
 
 const addPort = (data, server) => {
   messages.push([{
@@ -68,11 +65,23 @@ const changePassword = async (id, password) => {
 };
 
 const checkFlow = async (server, port, startTime, endTime) => {
+  let isMultiServerFlow = false;
+  try {
+    isMultiServerFlow = await knex('webguiSetting').select().
+    where({ key: 'system' })
+    .then(success => {
+      if(!success.length) {
+        return Promise.reject('settings not found');
+      }
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value.multiServerFlow;
+    });
+  } catch (err) {}
   const flow = await knex('saveFlow')
   .sum('flow as sumFlow')
   .groupBy('port')
   .select(['port'])
-  .where({id: server, port,})
+  .where(isMultiServerFlow ? { port } : { id: server, port })
   .whereBetween('time', [startTime, endTime]);
   return flow[0] ? flow[0].sumFlow : 0;
 };

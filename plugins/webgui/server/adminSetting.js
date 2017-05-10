@@ -16,6 +16,7 @@ knex('webguiSetting').select().where({
     signUp: {
       isEnable: true,
     },
+    multiServerFlow: false,
   };
   return knex('webguiSetting').insert({
     key: 'system',

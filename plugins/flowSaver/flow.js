@@ -283,7 +283,7 @@ const getServerFlow = async (serverId, timeArray) => {
   return Promise.all(result);
 };
 
-const getServerPortFlow = async (serverId, port, timeArray) => {
+const getServerPortFlow = async (serverId, port, timeArray, isMultiServerFlow) => {
   const result = [];
   timeArray.forEach((time, index) => {
     if(index === timeArray.length - 1) {
@@ -295,7 +295,7 @@ const getServerPortFlow = async (serverId, port, timeArray) => {
     .sum('flow as sumFlow')
     .groupBy('port')
     .select(['port'])
-    .where({ id: serverId, port })
+    .where(isMultiServerFlow ? { port } : { id: serverId, port })
     .whereBetween('time', [startTime, endTime]).then(success => {
       if(success[0]) { return success[0].sumFlow; }
       return 0;
