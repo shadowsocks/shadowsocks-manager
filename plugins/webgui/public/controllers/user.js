@@ -209,5 +209,12 @@ app
         color: '#a33',
       };
     };
+    $scope.isAccountOutOfDate = account => {
+      if(account.type >=2 && account.type <= 5) {
+        return Date.now() >= account.data.expire;
+      } else {
+        return false;
+      }
+    };
   }
 ]);
