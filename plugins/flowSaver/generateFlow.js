@@ -78,6 +78,7 @@ generateFlow('5min');
 cron.minute(() => {
   generateFlow('day');
   generateFlow('hour');
+  knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
 }, 30);
 cron.minute(() => {
   generateFlow('5min');
