@@ -137,13 +137,13 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     const id = `getChartData:${ serverId }:${ type }:${ queryTime }`;
     const promise = () => {
       return $q.all([
-        $http.get('/api/admin/flow/' + serverId, {
+        $http.get(`/api/admin/flow/${ serverId }`, {
           params: {
             type,
             time: queryTime,
           }
         }),
-        $http.get('/api/admin/flow/' + serverId + '/user', {
+        $http.get(`/api/admin/flow/${ serverId }/user`, {
           params: {
             type,
             time: queryTime,

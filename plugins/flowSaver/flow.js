@@ -277,8 +277,20 @@ const getServerPortFlow = async (serverId, port, timeArray, isMultiServerFlow) =
   return Promise.all(result);
 };
 
-const getlastConnectTime = (serverId, port) => {
-  return knex('saveFlow')
+const getlastConnectTime = async (serverId, port) => {
+  const lastConnectFromSaveFlow = await knex('saveFlow')
+  .select(['time'])
+  .where({ id: serverId, port })
+  .orderBy('time', 'desc').limit(1).then(success => {
+    if(success[0]) {
+      return success[0].time;
+    }
+    return 0;
+  });
+  if(lastConnectFromSaveFlow) {
+    return { lastConnect: lastConnectFromSaveFlow };
+  }
+  return knex('saveFlow5min')
   .select(['time'])
   .where({ id: serverId, port })
   .orderBy('time', 'desc').limit(1).then(success => {
@@ -289,8 +301,20 @@ const getlastConnectTime = (serverId, port) => {
   });
 };
 
-const getUserPortLastConnect = port => {
-  return knex('saveFlow')
+const getUserPortLastConnect = async port => {
+  const lastConnectFromSaveFlow = await knex('saveFlow')
+  .select(['time'])
+  .where({ port })
+  .orderBy('time', 'desc').limit(1).then(success => {
+    if(success[0]) {
+      return success[0].time;
+    }
+    return 0;
+  });
+  if(lastConnectFromSaveFlow) {
+    return { lastConnect: lastConnectFromSaveFlow };
+  }
+  return knex('saveFlow5min')
   .select(['time'])
   .where({ port })
   .orderBy('time', 'desc').limit(1).then(success => {
