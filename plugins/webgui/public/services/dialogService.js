@@ -173,7 +173,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
         }
         return 250;
       };
-      $scope.qrCode = () => { return $scope.publicInfo.qrCode || 'AAA'; };
+      $scope.qrCode = () => { return $scope.publicInfo.qrCode || 'invalid qrcode'; };
       $scope.pay = () => {
         window.location.href = $scope.publicInfo.qrCode;
       };

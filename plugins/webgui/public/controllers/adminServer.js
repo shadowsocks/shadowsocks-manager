@@ -185,7 +185,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const setChart = (lineData, pieData) => {
       $scope.pieChart = {
         data: pieData.map(m => m.flow),
-        labels: pieData.map(m => m.port + (m.username ? ` [${ m.username }]` : '')),
+        labels: pieData.map(m => m.port + (m.userName ? ` [${ m.userName }]` : '')),
         options: {
           responsive: false,
           tooltips: {

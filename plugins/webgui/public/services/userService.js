@@ -39,7 +39,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       });
     } else {
       account.forEach((a, index) => {
-        $http.get('/api/user/account/' + a.id).then(success => {
+        $http.get(`/api/user/account/${ a.id }`).then(success => {
           if(!success.data.id) {
             account.splice(index, 1);
             return;

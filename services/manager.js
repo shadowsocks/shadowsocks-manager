@@ -60,12 +60,12 @@ const sendMessage = (data, options) => {
     client.on('data', data => {
       receiveData(receive, data).then(message => {
         if(!message) {
-          reject(new Error('empty message from ssmgr[s]'));
+          reject(new Error(`empty message from ssmgr[s]`));
         } else if(message.code === 0) {
           resolve(message.data);
         } else {
           logger.error(message);
-          reject(new Error('ssmgr[s] return an error code'));
+          reject(new Error(`ssmgr[s] return an error code`));
         }
         client.end();
       }).catch(err => {

@@ -348,7 +348,6 @@ const getAccountServerFlow = (accountId, timeArray) => {
   .leftJoin('account_plugin', 'account_plugin.port', 'saveFlow5min.port')
   .where({ 'account_plugin.id': accountId })
   .whereBetween('saveFlow5min.time', timeArray);
-  ;
 };
 
 exports.getFlow = getFlow;
