@@ -195,7 +195,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
               label: function(tooltipItem, data) {
                 const label = data.labels[tooltipItem.index];
                 const datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                return label + ': ' + scaleLabel(datasetLabel);
+                //return label + ': ' + scaleLabel(datasetLabel);
+                return [
+                  label, scaleLabel(datasetLabel)
+                ];
               }
             }
           },
