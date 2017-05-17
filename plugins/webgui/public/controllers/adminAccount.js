@@ -137,7 +137,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       adminApi.getServerPortData(serverId, $scope.account.port).then(success => {
         if(serverId !== currentServerId) { return; }
         $scope.lastConnect = success.lastConnect;
-        $scope.serverPortFlow = success.flow;
+        $scope.serverPortFlow = success.serverPortFlow;
       });
     }, 60 * 1000));
     const base64Encode = str => {
