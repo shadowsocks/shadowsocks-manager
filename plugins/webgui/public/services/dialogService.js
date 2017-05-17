@@ -447,6 +447,12 @@ app.factory('markdownDialog', [ '$mdDialog', ($mdDialog) => {
     bindToController: true,
     controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
       $scope.publicInfo = bind;
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
     }],
     fullscreen: true,
     clickOutsideToClose: true,
