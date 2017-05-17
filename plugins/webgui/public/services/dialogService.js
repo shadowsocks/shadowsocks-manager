@@ -529,3 +529,54 @@ app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userAp
     show,
   };
 }]);
+
+app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
+  const publicInfo = {};
+  const hide = () => {
+    return $mdDialog.hide()
+    .then(success => {
+      dialogPromise = null;
+      return;
+    }).catch(err => {
+      dialogPromise = null;
+      return;
+    });
+  };
+  publicInfo.hide = hide;
+  let dialogPromise = null;
+  const isDialogShow = () => {
+    if(dialogPromise && !dialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
+  const dialog = {
+    templateUrl: '/public/views/user/qrcodeDialog.html',
+    escapeToClose: false,
+    locals: { bind: publicInfo },
+    bindToController: true,
+    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+      $scope.publicInfo = bind;
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
+    }],
+    fullscreen: true,
+    clickOutsideToClose: true,
+  };
+  const show = (serverName, ssAddress) => {
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    publicInfo.serverName = serverName;
+    publicInfo.ssAddress = ssAddress;
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
+  return {
+    show,
+  };
+}]);

@@ -101,8 +101,8 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', '$interval', '$localStorage', 'changePasswordDialog',
-  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, $interval, $localStorage, changePasswordDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog',
+  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog) => {
     $scope.setTitle('我的账号');
     $scope.flexGtSm = 100;
     if(!$localStorage.user.serverInfo) {
@@ -215,6 +215,10 @@ app
       } else {
         return false;
       }
+    };
+    $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
+      const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
+      qrcodeDialog.show(serverName, ssAddress);
     };
   }
 ]);

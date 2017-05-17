@@ -1,0 +1,24 @@
+<md-dialog aria-label="qrcode dialog" ng-style="setDialogWidth()">
+    <md-toolbar hide-gt-sm>
+        <div class="md-toolbar-tools">
+            <h2>{{ publicInfo.serverName }}</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="publicInfo.hide()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="column" layout-align="center center">
+                <a ng-href="{{ publicInfo.ssAddress }}">
+                    <qr layout-margin text="publicInfo.ssAddress" image="true"></qr>
+                </a>
+                <div>
+                    <br>说明：<br><br>点击二维码或者用移动设备扫描二维码可自动填充服务器信息
+                </div>
+                <div style="word-break: break-all;"><br>{{ publicInfo.ssAddress }}</div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

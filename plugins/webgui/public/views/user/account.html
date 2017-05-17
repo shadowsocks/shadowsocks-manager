@@ -88,9 +88,9 @@
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div hide-xs></div>
-                                <a ng-href="{{createQrCode(server.method, a.password , server.host, a.port, server.name)}}">
-                                <qr size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port, server.name)" image="true"></qr>
-                                </a>
+                                <!--<a ng-href="{{createQrCode(server.method, a.password , server.host, a.port, server.name)}}">-->
+                                <qr ng-click="showQrcodeDialog(server.method, a.password , server.host, a.port, server.name)" size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port, server.name)" image="true"></qr>
+                                <!--</a>-->
                                 <div hide-xs></div>
                             </div>
                         </div>
