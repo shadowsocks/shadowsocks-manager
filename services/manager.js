@@ -60,35 +60,25 @@ const sendMessage = (data, options) => {
     client.on('data', data => {
       receiveData(receive, data).then(message => {
         if(!message) {
-          reject(new Error(`empty message from ssmgr[s]`));
+          reject(new Error(`empty message from ssmgr[s] [${ options.host || host }:${ options.port || port }]`));
         } else if(message.code === 0) {
           resolve(message.data);
         } else {
           logger.error(message);
-          reject(new Error(`ssmgr[s] return an error code`));
+          reject(new Error(`ssmgr[s] return an error code [${ options.host || host }:${ options.port || port }]`));
         }
         client.end();
       }).catch(err => {
         logger.error(err);
         client.end();
       });
-      // const message = JSON.parse(data.toString());
-      // // logger.info(message);
-      // if(message.code === 0) {
-      //   resolve(message.data);
-      // } else {
-      //   reject('failure');
-      // }
-      // client.end();
     });
     client.on('close', () => {
-      // logger.error('socket close');
-      // reject('failure');
-      reject(new Error(`ssmgr[s] connection close`));
+      reject(new Error(`ssmgr[s] connection close  [${ options.host || host }:${ options.port || port }]`));
     });
     client.on('error', err => {
       logger.error(err);
-      reject(new Error(`connect to ssmgr[s] fail`));
+      reject(new Error(`connect to ssmgr[s] fail  [${ options.host || host }:${ options.port || port }]`));
     });
   });
   return promise;
