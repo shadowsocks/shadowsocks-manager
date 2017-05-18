@@ -1,9 +1,12 @@
 <md-card>
     <md-card-content>
+        <div flex layout="row" layout-align="center center" ng-hide="notices">
+            <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+        </div>
         <md-list>
-            <md-divider></md-divider>
-            <md-list-item ng-repeat="notice in notices track by $index">
-                <div ng-click="editNotice(notice.id)">
+            <md-divider ng-show="notices"></md-divider>
+            <md-list-item ng-repeat="notice in notices track by $index" ng-click="editNotice(notice.id)">
+                <div>
                     {{ notice.title }}
                 </div>
                 <md-divider></md-divider>
