@@ -308,8 +308,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet) => {
+.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog) => {
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.typeList = [
@@ -335,6 +335,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $state.go('admin.account');
     };
     $scope.confirm = () => {
+      alertDialog.loading();
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
         port: +$scope.account.port,
@@ -344,7 +345,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
       }).then(success => {
+        alertDialog.show('添加账号成功', '确定');
         $state.go('admin.account');
+      }).catch(() => {
+        alertDialog.show('添加账号失败', '确定');
       });
     };
     $scope.pickTime = () => {
@@ -365,8 +369,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog) => {
+.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog, alertDialog) => {
     $scope.setTitle('编辑账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
@@ -406,7 +410,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     };
     $scope.confirm = () => {
-      $http.put('/api/admin/account/' + accountId + '/data', {
+      alertDialog.loading();
+      $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
         port: +$scope.account.port,
         password: $scope.account.password,
@@ -415,7 +420,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
       }).then(success => {
+        alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });
+      }).catch(() => {
+        alertDialog.show('修改账号失败', '确定');
       });
     };
     $scope.pickTime = () => {
