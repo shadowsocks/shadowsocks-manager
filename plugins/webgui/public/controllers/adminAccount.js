@@ -395,7 +395,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       autoRemove: 0,
     };
     const accountId = $stateParams.accountId;
-    $http.get('/api/admin/account/' + accountId).then(success => {
+    $http.get('/api/admin/server').then(success => {
+      $scope.servers = success.data;
+    });
+    $http.get(`/api/admin/account/${ accountId }`).then(success => {
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
