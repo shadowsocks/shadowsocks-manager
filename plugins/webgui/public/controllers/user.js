@@ -122,6 +122,15 @@ app
     if($scope.account.length >= 2) {
       $scope.flexGtSm = 50;
     }
+    
+    const setAccountServerList = (account, server) => {
+      account.forEach(a => {
+        a.serverList = $scope.servers.filter(f => {
+          return !a.server || a.server.indexOf(f.id) >= 0;
+        });
+      });
+    };
+    setAccountServerList($scope.account, $scope.servers);
 
     const getUserAccountInfo = () => {
       userApi.getUserAccount().then(success => {
@@ -136,6 +145,7 @@ app
         } else {
           $scope.account = success.account;
         }
+        setAccountServerList($scope.account, $scope.servers);
         $localStorage.user.serverInfo.data = success.servers;
         $localStorage.user.serverInfo.time = Date.now();
         $localStorage.user.accountInfo.data = success.account;
