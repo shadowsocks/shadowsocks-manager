@@ -397,8 +397,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
-    });
-    $http.get(`/api/admin/account/${ accountId }`).then(success => {
+      return $http.get(`/api/admin/account/${ accountId }`);
+    }).then(success => {
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
@@ -407,6 +407,18 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;
         $scope.account.flow = success.data.data.flow / 1000000;
+      }
+      $scope.account.server = success.data.server;
+      $scope.accountServer = !!$scope.account.server;
+      $scope.accountServerObj = {};
+      if($scope.account.server) {
+        $scope.servers.forEach(server => {
+          if($scope.account.server.indexOf(server.id) >= 0) {
+            $scope.accountServerObj[server.id] = true;
+          } else {
+            $scope.accountServerObj[server.id] = false;
+          }
+        });
       }
     });
     $scope.cancel = () => {
