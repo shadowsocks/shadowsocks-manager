@@ -77,7 +77,7 @@ cron.minute(async () => {
       const accountId = order.account;
       const userId = order.user;
       push.pushMessage('支付成功', {
-        body: `订单[ ${ order.orderId } ]支付成功`,
+        body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
       account.setAccountLimit(userId, accountId, order.orderType)
       .then(() => {
