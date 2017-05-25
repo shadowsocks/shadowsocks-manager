@@ -146,7 +146,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }));
     };
     $scope.createQrCode = (method, password, host, port, serverName) => {
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + serverName;
+      const checkAscii = str => {
+        return str.split('').filter(f => {
+          return f.charCodeAt() >= 31 && f.charCodeAt() <= 127 ;
+        }).join('');
+      };
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + checkAscii(serverName);
     };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
