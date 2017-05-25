@@ -267,6 +267,7 @@ exports.changeAccountData = (req, res) => {
     limit: +req.body.limit,
     flow: +req.body.flow,
     autoRemove: +req.body.autoRemove,
+    server: req.body.server,
   }).then(success => {
     res.send('success');
   }).catch(err => {

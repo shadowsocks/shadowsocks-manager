@@ -426,6 +426,13 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.confirm = () => {
       alertDialog.loading();
+      const server = Object.keys($scope.accountServerObj)
+      .map(m => {
+        if($scope.accountServerObj[m]) {
+          return +m;
+        }
+      })
+      .filter(f => f);
       $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
         port: +$scope.account.port,
@@ -434,6 +441,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        server: $scope.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });
