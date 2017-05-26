@@ -146,7 +146,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }));
     };
     $scope.createQrCode = (method, password, host, port, serverName) => {
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + serverName;
+      const checkAscii = str => {
+        return str.split('').filter(f => {
+          return f.charCodeAt() >= 31 && f.charCodeAt() <= 127 ;
+        }).join('');
+      };
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + checkAscii(serverName);
     };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
@@ -395,7 +400,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       autoRemove: 0,
     };
     const accountId = $stateParams.accountId;
-    $http.get('/api/admin/account/' + accountId).then(success => {
+    $http.get('/api/admin/server').then(success => {
+      $scope.servers = success.data;
+      return $http.get(`/api/admin/account/${ accountId }`);
+    }).then(success => {
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
@@ -405,12 +413,31 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.account.limit = success.data.data.limit;
         $scope.account.flow = success.data.data.flow / 1000000;
       }
+      $scope.account.server = success.data.server;
+      $scope.accountServer = !!$scope.account.server;
+      $scope.accountServerObj = {};
+      if($scope.account.server) {
+        $scope.servers.forEach(server => {
+          if($scope.account.server.indexOf(server.id) >= 0) {
+            $scope.accountServerObj[server.id] = true;
+          } else {
+            $scope.accountServerObj[server.id] = false;
+          }
+        });
+      }
     });
     $scope.cancel = () => {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     };
     $scope.confirm = () => {
       alertDialog.loading();
+      const server = Object.keys($scope.accountServerObj)
+      .map(m => {
+        if($scope.accountServerObj[m]) {
+          return +m;
+        }
+      })
+      .filter(f => f);
       $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
         port: +$scope.account.port,
@@ -419,6 +446,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        server: $scope.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });

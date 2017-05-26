@@ -94,6 +94,7 @@ const editAccount = async (id, options) => {
   update.type = options.type;
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
+  update.server = options.server ? JSON.stringify(options.server) : null;
   if(options.type === 1) {
     update.data = null;
     update.port = +options.port;

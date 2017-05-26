@@ -18,7 +18,7 @@
             </md-card-header>
             <md-card-content>
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
-                    <md-tab ng-repeat="server in servers track by server.id"
+                    <md-tab ng-repeat="server in a.serverList track by server.id"
                            label="{{server.name}}"
                            md-on-select="getServerPortData(a, server.id, a.port)">
                         <div layout="row" layout-align="center center" layout-wrap>

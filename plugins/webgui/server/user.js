@@ -31,6 +31,7 @@ exports.getAccount = (req, res) => {
           f.data.to = f.data.from + time[f.type];
         }
       }
+      f.server = f.server ? JSON.parse(f.server) : f.server;
     });
     res.send(success);
   }).catch(err => {

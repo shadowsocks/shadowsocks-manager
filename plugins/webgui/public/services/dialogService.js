@@ -555,7 +555,7 @@ app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function($scope, $mdDialog, $mdMedia, bind) {
       $scope.publicInfo = bind;
       $scope.setDialogWidth = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {

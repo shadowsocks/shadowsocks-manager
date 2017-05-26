@@ -291,8 +291,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
   }
 ])
-.controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http',
-  ($scope, $state, $stateParams, $http) => {
+.controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
+  ($scope, $state, $stateParams, $http, alertDialog) => {
     $scope.setTitle('新增服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     $scope.methods = [
@@ -316,14 +316,20 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.server = {};
     $scope.confirm = () => {
+      alertDialog.loading();
       $http.post('/api/admin/server', {
         name: $scope.server.name,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
         method: $scope.server.method,
+      }, {
+        timeout: 15,
       }).then(success => {
+        alertDialog.show('添加服务器成功', '确定');
         $state.go('admin.server');
+      }).catch(() => {
+        alertDialog.show('添加服务器失败', '确定');
       });
     };
     $scope.cancel = () => {

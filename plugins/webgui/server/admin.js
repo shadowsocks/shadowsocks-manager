@@ -194,6 +194,7 @@ exports.getOneAccount = (req, res) => {
           accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
         }
       }
+      accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
       return res.send(accountInfo);
     }
     Promise.reject('account not found');
@@ -266,6 +267,7 @@ exports.changeAccountData = (req, res) => {
     limit: +req.body.limit,
     flow: +req.body.flow,
     autoRemove: +req.body.autoRemove,
+    server: req.body.server,
   }).then(success => {
     res.send('success');
   }).catch(err => {
