@@ -43,16 +43,16 @@ app
     ($scope, $state) => {
       $scope.icons = [{
         icon: 'flash_on',
-        title: '快速搭建',
-        content: '仅依赖Node.js，无需安装数据库（可选MySQL）',
+        title: '极速网络',
+        content: '满意的相应速度，满足日常需求',
       }, {
         icon: 'build',
-        title: '易于配置',
-        content: '带有插件系统，仅需修改配置文件即可运行',
+        title: '手把手',
+        content: '人工帮你配置',
       }, {
         icon: 'vpn_key',
-        title: '官方标准',
-        content: '支持libev和python版本的标准manager API',
+        title: '便宜资费',
+        content: '只要几块钱，满足日常需求',
       }];
       $scope.login = () => { $state.go('home.login'); };
       $scope.signup = () => { $state.go('home.signup'); };
