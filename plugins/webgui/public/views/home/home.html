@@ -34,11 +34,14 @@
                     <md-button hide-gt-sm class="md-icon-button" aria-label="menu" ng-click="menuButton()">
                         <i class="material-icons">menu</i>
                     </md-button>
-                    <div>Shadowsocks-Manager</div>
+                    <div>游戏加速</div>
                     <span flex></span>
                     <md-button hide-sm hide-xs ng-repeat="menu in menus" aria-label="menu.icon" ng-click="menuClick($index)">
                         {{menu.name}}
                     </md-button>
+                </div>
+                <div class="md-toolbar-tools" ng-hide="publicInfo.searchBar">
+                注意：老用户已购买的服务依然可用，邮箱为登录名，密码为password，删除对shadowsocksr的支持。
                 </div>
             </md-toolbar>
         </div>

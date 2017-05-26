@@ -200,7 +200,8 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
     if(expireTime <= Date.now()) {
       expireTime = 30 * 86400 * 1000 * number + Date.now();
     } else {
-      expireTime += 30 * 86400 * 1000 * number;
+      //expireTime += 30 * 86400 * 1000 * number;
+      expireTime = 30 * 86400 * 1000 * number + Date.now();
     }
     accountData.create = expireTime;
     accountData.limit = 0;
@@ -269,7 +270,8 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   if(expireTime <= Date.now()) {
     expireTime = timePeriod[orderType] + Date.now();
   } else {
-    expireTime += timePeriod[orderType];
+    //expireTime += timePeriod[orderType];
+    expireTime = timePeriod[orderType] + Date.now();
   }
   let countTime = timePeriod[orderType];
   if(orderType === 6) { countTime = timePeriod[3]; }

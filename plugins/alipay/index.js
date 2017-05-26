@@ -36,7 +36,7 @@ const createOrder = async (user, account, amount, orderType = 3) => {
   const time = 60;
   const qrCode = await alipay_f2f.createQRPay({
     tradeNo: orderId,
-    subject: 'ss续费',
+    subject: '账单扫码支付',
     totalAmount: +amount,
     body: 'ss',
     timeExpress: 10,
