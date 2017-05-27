@@ -30,7 +30,7 @@
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
-                <md-list-item>
+                <md-list-item  ng-click="publicInfo.toUserPage(publicInfo.order.userId)">
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="30">用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
                     </div>
@@ -38,7 +38,9 @@
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">创建时间：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.createTime | date : 'yyyy-MM-dd HH:mm' }}</div>
+                        <div flex="30">创建时间：</div><div flex="70" style="text-align:right; font-size: 0.9em;">
+                            <span style="font-size: 0.9em;">{{ publicInfo.order.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ publicInfo.order.createTime | timeago }}</span>
+                        </div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>

@@ -1,5 +1,3 @@
-'use strict';
-
 const os = require('os');
 const fs = require('fs');
 const fse = require('fs-extra');

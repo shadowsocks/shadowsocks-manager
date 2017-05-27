@@ -55,5 +55,3 @@ log.setFileAppenders(logName);
 if(program.run) {
   config.set('runShadowsocks', program.run);
 }
-
-// logger.info('Config:\n', JSON.stringify(config.all(), null, 2));

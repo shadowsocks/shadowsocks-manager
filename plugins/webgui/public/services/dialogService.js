@@ -370,7 +370,7 @@ app.factory('orderFilterDialog' , [ '$mdDialog', ($mdDialog) => {
   };
 }]);
 
-app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
+app.factory('orderDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
   const publicInfo = {};
   const hide = () => {
     return $mdDialog.hide()
@@ -383,6 +383,11 @@ app.factory('orderDialog', [ '$mdDialog', ($mdDialog) => {
     });
   };
   publicInfo.hide = hide;
+  const toUserPage = userId => {
+    hide();
+    $state.go('admin.userPage', { userId });
+  };
+  publicInfo.toUserPage = toUserPage;
   let dialogPromise = null;
   const isDialogShow = () => {
     if(dialogPromise && !dialogPromise.$$state.status) {

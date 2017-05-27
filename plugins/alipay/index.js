@@ -131,6 +131,7 @@ const orderList = async (options = {}) => {
   const orders = await knex('alipay').select([
     'alipay.orderId',
     'alipay.orderType',
+    'user.id as userId',
     'user.username',
     'account_plugin.port',
     'alipay.amount',
@@ -160,6 +161,7 @@ const orderListAndPaging = async (options = {}) => {
   let orders = knex('alipay').select([
     'alipay.orderId',
     'alipay.orderType',
+    'user.id as userId',
     'user.username',
     'account_plugin.port',
     'alipay.amount',
