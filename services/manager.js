@@ -39,6 +39,8 @@ const checkData = async (receive) => {
     data = buffer.slice(2, length + 2);
     const message = JSON.parse(data.toString());
     return message;
+  } else {
+    return;
   }
 };
 
@@ -60,7 +62,7 @@ const sendMessage = (data, options) => {
     client.on('data', data => {
       receiveData(receive, data).then(message => {
         if(!message) {
-          reject(new Error(`empty message from ssmgr[s] [${ options.host || host }:${ options.port || port }]`));
+          // reject(new Error(`empty message from ssmgr[s] [${ options.host || host }:${ options.port || port }]`));
         } else if(message.code === 0) {
           resolve(message.data);
         } else {

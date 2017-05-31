@@ -451,6 +451,14 @@ exports.getUsers = (req, res) => {
     search,
     sort,
   }).then(success => {
+    success.users = success.users.map(m => {
+      return {
+        id: m.id,
+        email: m.email,
+        lastLogin: m.lastLogin,
+        username: m.username,
+      };
+    });
     return res.send(success);
   }).catch(err => {
     console.log(err);

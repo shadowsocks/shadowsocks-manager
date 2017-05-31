@@ -125,12 +125,10 @@ const compareWithLastFlow = (flow, lastFlow) => {
 
 connect();
 startUp();
-// setInterval(() => {
 cron.minute(() => {
   resend();
   sendPing();
 }, 1);
-// }, 60 * 1000);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }
