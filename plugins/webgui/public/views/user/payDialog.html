@@ -12,7 +12,7 @@
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;">请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderType" flex>
-                    <md-radio-button value="hour">
+                    <md-radio-button value="hour" ng-show="publicInfo.price.hour">
                         <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                             <span flex="15"></span>
                             <span flex="30">一小时</span>
@@ -21,7 +21,7 @@
                             <span flex="15"></span>
                         </span>
                     </md-radio-button>
-                    <md-radio-button value="day">
+                    <md-radio-button value="day" ng-show="publicInfo.price.day">
                         <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                             <span flex="15"></span>
                             <span flex="30">一天</span>
@@ -30,7 +30,7 @@
                             <span flex="15"></span>
                         </span>
                     </md-radio-button>
-                    <md-radio-button value="week">
+                    <md-radio-button value="week" ng-show="publicInfo.price.week">
                         <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                             <span flex="15"></span>
                             <span flex="30">一周</span>
@@ -39,7 +39,7 @@
                             <span flex="15"></span>
                         </span>
                     </md-radio-button>
-                    <md-radio-button value="month">
+                    <md-radio-button value="month" ng-show="publicInfo.price.month">
                       <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                           <span flex="15"></span>
                           <span flex="30">一个月</span>
@@ -48,7 +48,7 @@
                           <span flex="15"></span>
                       </span>
                     </md-radio-button>
-                    <md-radio-button value="season">
+                    <md-radio-button value="season" ng-show="publicInfo.price.season">
                       <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                           <span flex="15"></span>
                           <span flex="30">三个月</span>
@@ -57,7 +57,7 @@
                           <span flex="15"></span>
                       </span>
                     </md-radio-button>
-                    <md-radio-button value="year">
+                    <md-radio-button value="year" ng-show="publicInfo.price.year">
                       <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
                           <span flex="15"></span>
                           <span flex="30">一年</span>
