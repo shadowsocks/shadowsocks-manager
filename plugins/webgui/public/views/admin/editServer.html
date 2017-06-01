@@ -49,6 +49,13 @@
                         </md-item-template>
                     </md-autocomplete>
                 </div>
+                <md-input-container class="md-block">
+                    <label>流量比例</label>
+                    <input type="text" required name="scale" ng-model="server.scale">
+                    <div ng-messages="serverForm.scale.$error">
+                        <div ng-message="required">流量比例不能为空</div>
+                    </div>
+                </md-input-container>
             </form>
         </div>
         <div flex="10" flex-gt-sm="30"></div>

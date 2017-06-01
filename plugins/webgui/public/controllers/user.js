@@ -122,6 +122,10 @@ app
     if($scope.account.length >= 2) {
       $scope.flexGtSm = 50;
     }
+
+    $http.get('/api/user/multiServerFlow').then(success => {
+      $scope.isMultiServerFlow = success.data.status;
+    });
     
     const setAccountServerList = (account, server) => {
       account.forEach(a => {

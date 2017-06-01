@@ -21,18 +21,19 @@ const del = (id) => {
   });
 };
 
-const edit = (id, name, host, port, password, method) => {
+const edit = (id, name, host, port, password, method, scale = 1) => {
   return knex('server').where({ id }).update({
     name,
     host,
     port,
     password,
     method,
+    scale,
   });
 };
 
 const list = () => {
-  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method']).orderBy('name');
+  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method', 'scale']).orderBy('name');
 };
 
 exports.add = add;

@@ -47,7 +47,7 @@
                                             <div flex="40">流量：</div>
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="a.type === 1">不限量</span>
-                                                <span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow | flow}}</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">{{a.serverPortFlow | flow}} / {{a.data.flow * (isMultiServerFlow ? 1 : server.scale) | flow}}</span>
                                             </div>
                                         </div>
                                     </md-list-item>

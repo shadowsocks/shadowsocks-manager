@@ -111,6 +111,18 @@ const checkServer = async () => {
   account.exist = number => {
     return !!account.filter(f => f.port === number)[0];
   };
+  let isMultiServerFlow = false;
+  try {
+    isMultiServerFlow = await knex('webguiSetting').select().
+    where({ key: 'system' })
+    .then(success => {
+      if(!success.length) {
+        return Promise.reject('settings not found');
+      }
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value.multiServerFlow;
+    });
+  } catch (err) {}
   const promises = [];
   server.forEach(s => {
     const checkServerAccount = async s => {
@@ -153,7 +165,10 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             const flow = await checkFlow(s.id, a.port, startTime, Date.now());
-            if(flow >= data.flow) {
+            if(isMultiServerFlow && flow >= data.flow) {
+              port.exist(a.port) && delPort(a, s);
+              return;
+            } else if (!isMultiServerFlow && flow >= data.flow * s.scale) {
               port.exist(a.port) && delPort(a, s);
               return;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {

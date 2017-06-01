@@ -88,6 +88,7 @@ app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)', isUser, user.getServerPortFlow);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
 app.put('/api/user/:accountId(\\d+)/password', isUser, user.changePassword);
+app.get('/api/user/multiServerFlow', isUser, user.getMultiServerFlowStatus);
 
 app.get('/api/user/status/alipay', isUser, user.getAlipayStatus);
 

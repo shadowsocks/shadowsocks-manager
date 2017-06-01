@@ -76,7 +76,7 @@ exports.getOneAccount = (req, res) => {
 };
 
 exports.getServers = (req, res) => {
-  knex('server').select(['id', 'host', 'name', 'method']).orderBy('name').then(success => {
+  knex('server').select(['id', 'host', 'name', 'method', 'scale']).orderBy('name').then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
@@ -226,5 +226,22 @@ exports.getNotice = (req, res) => {
 exports.getAlipayStatus = (req, res) => {
   return res.send({
     status: config.plugins.alipay.use,
+  });
+};
+
+exports.getMultiServerFlowStatus = (req, res) => {
+  knex('webguiSetting').select().where({
+    key: 'system',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0];
+  }).then(success => {
+    return res.send({ status: success.value.multiServerFlow });
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
   });
 };
