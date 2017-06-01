@@ -13,10 +13,9 @@ const time = minute * 60 * 1000;
 
 const saveFlow = async () => {
   try {
-    const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password']);
+    const servers = await knex('server').whereNotIn('id', 3).select(['id', 'name', 'host', 'port', 'password']);
     const promises = [];
     servers.forEach(server => {
-      if (server.id != 3) {
       const saveServerFlow = async server => {
         const lastestFlow = await knex('saveFlow').select(['time']).where({
           id: server.id,
@@ -50,7 +49,6 @@ const saveFlow = async () => {
         }
       };
       promises.push(saveServerFlow(server));
-      };
     });
     await Promise.all(promises);
   } catch(err) {

@@ -32,7 +32,7 @@ const edit = (id, name, host, port, password, method) => {
 };
 
 const list = () => {
-  return knex('server').select(['id', 'name', 'host', 'port', 'password', 'method']).orderBy('name');
+  return knex('server').whereNotIn('id', 3).select(['id', 'name', 'host', 'port', 'password', 'method']).orderBy('name');
 };
 
 exports.add = add;
