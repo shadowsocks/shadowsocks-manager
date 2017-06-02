@@ -324,7 +324,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         password: $scope.server.password,
         method: $scope.server.method,
       }, {
-        timeout: 15,
+        timeout: 15000,
       }).then(success => {
         alertDialog.show('添加服务器成功', '确定');
         $state.go('admin.server');
