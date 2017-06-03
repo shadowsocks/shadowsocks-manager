@@ -30,7 +30,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/signup',
       controller: 'HomeSignupController',
       templateUrl: '/public/views/home/signup.html',
-    })
+    }).state('home.download', {
+          url: '/download',
+          controller: 'HomeDownloadController',
+          templateUrl: '/public/views/home/download.html',
+      })
     .state('home.resetPassword', {
       url: '/password/reset/:token',
       controller: 'HomeResetPasswordController',
