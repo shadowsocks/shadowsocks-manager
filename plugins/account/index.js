@@ -224,7 +224,9 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   if(orderType === 7) { limit = 12; }
   const flow = {};
   for (const p in payType) {
-    flow[payType[p]] = config.plugins.account.pay[p].flow;
+    if(config.plugins.account.pay[p]) {
+      flow[payType[p]] = config.plugins.account.pay[p].flow;
+    }
   };
   if(!accountId) {
     const port = await knex('account_plugin').select()
