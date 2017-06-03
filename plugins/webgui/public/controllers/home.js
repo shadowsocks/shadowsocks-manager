@@ -30,7 +30,7 @@ app
                 click: 'home.login'
             }, {
                 name: '下载',
-                icon: 'logout',
+                icon: 'file_download',
                 click: 'home.download'
             }, {
                 name: '注册',
