@@ -2,7 +2,7 @@ const gcmSenderId = appRequire('services/config').get('plugins.webgui.gcmSenderI
 
 const manifest = {
   short_name: 'ssmgr',
-  name: 'Shadowsocks-Manager',
+  name: 'Woodome-VPN',
   icons: [
     {
       src: '/libs/favicon.png',

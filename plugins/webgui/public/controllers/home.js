@@ -25,13 +25,17 @@ app
                 icon: 'home',
                 click: 'home.index'
             }, {
-                name: '登录',
-                icon: 'cloud',
-                click: 'home.login'
+                name: '轻松上手',
+                icon: 'school',
+                click: 'home.tutorials'
             }, {
                 name: '下载',
                 icon: 'file_download',
                 click: 'home.download'
+            }, {
+                name: '登录',
+                icon: 'cloud',
+                click: 'home.login'
             }, {
                 name: '注册',
                 icon: 'face',
@@ -104,9 +108,14 @@ app
         }
     ])
     .controller('HomeDownloadController', ['$scope',
-        ($scope)=>{
+        ($scope) => {
             $scope.imagePath = 'img/washedout.png';
             console.log("download");
+        }
+    ])
+    .controller('HomeTutorialsController', ['$window',
+        ($window)=>{
+            $window.location.href = 'http://www.google.com';
         }
     ])
     .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',
