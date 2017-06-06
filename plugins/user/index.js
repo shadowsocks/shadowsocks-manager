@@ -172,18 +172,24 @@ const getUserAndPaging = async (opt = {}) => {
   };
 };
 
-const deleteUser = userId => {
+const deleteUser = async userId => {
   if(!userId) {
     return Promise.reject('invalid userId');
   }
-  return knex('user').delete().where({
-    id: userId,
-  }).then(success => {
-    if(success >= 1) {
-      return success;
-    }
-    return Promise.reject('delete user fail');
+  const existAccount = await knex('account_plugin').select().where({
+    userId,
   });
+  if(existAccount.length) {
+    return Promise.reject('delete user fail');
+  }
+  const deleteCount = await knex('user').delete().where({
+    id: userId,
+  });
+  if(deleteCount >= 1) {
+    return;
+  } else {
+    return Promise.reject('delete user fail');
+  }
 };
 
 exports.add = addUser;
