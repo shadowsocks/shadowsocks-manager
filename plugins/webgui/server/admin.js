@@ -503,6 +503,16 @@ exports.getOneUser = (req, res) => {
   });
 };
 
+exports.deleteUser = (req, res) => {
+  const userId = req.params.userId;
+  user.delete(userId).then(success => {
+    return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getUserAccount = (req, res) => {
   account.getAccount().then(success => {
     success = success.filter(f => {

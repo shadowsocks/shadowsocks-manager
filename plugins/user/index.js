@@ -172,6 +172,20 @@ const getUserAndPaging = async (opt = {}) => {
   };
 };
 
+const deleteUser = userId => {
+  if(!userId) {
+    return Promise.reject('invalid userId');
+  }
+  return knex('user').delete().where({
+    id: userId,
+  }).then(success => {
+    if(success >= 1) {
+      return success;
+    }
+    return Promise.reject('delete user fail');
+  });
+};
+
 exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
@@ -180,3 +194,4 @@ exports.getRecentSignUp = getRecentSignUpUsers;
 exports.getRecentLogin = getRecentLoginUsers;
 exports.getOne = getOneUser;
 exports.getUserAndPaging = getUserAndPaging;
+exports.delete = deleteUser;
