@@ -8,6 +8,8 @@
 
 # shadowsocks-manager
 
+[![Join the chat at https://gitter.im/shadowsocks-manager/Lobby](https://badges.gitter.im/shadowsocks-manager/Lobby.svg)](https://gitter.im/shadowsocks-manager/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A shadowsocks manager tool for multi user and traffic control.  
 Base on Node.js and SQLite.
 
