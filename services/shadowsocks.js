@@ -227,7 +227,7 @@ const getFlow = async (options) => {
       return m;
     });
     if(options.clear) {
-      await knex('flow').whereBetween('time', [ startTime, endTime ]).delete();
+      await knex('flow').truncate();
     }
     return accounts;
   } catch(err) {
