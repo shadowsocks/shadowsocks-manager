@@ -103,6 +103,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
             f.lastConnect = success.lastConnect;
           });
         });
+      }).catch(err => {
+        $state.go('admin.user');
       });
     };
     getUserData();
