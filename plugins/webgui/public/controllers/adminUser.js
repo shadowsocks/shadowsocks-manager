@@ -4,6 +4,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
   ($scope, $state, $stateParams, adminApi, $mdMedia, $localStorage, userSortDialog, $timeout) => {
     $scope.setTitle('用户');
     $scope.setMenuSearchButton('search');
+    $scope.setFabButton(() => {
+      $state.go('admin.addUser');
+    });
     if(!$localStorage.admin.userSortSettings) {
       $localStorage.admin.userSortSettings = {
         sort: 'id_asc',
@@ -166,5 +169,11 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       $state.go('admin.user');
     });
     };
+  }
+])
+.controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog',
+  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog) => {
+    $scope.setTitle('添加用户');
+    $scope.setMenuButton('arrow_back', 'admin.user');
   }
 ]);
