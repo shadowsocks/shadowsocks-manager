@@ -174,11 +174,9 @@ exports.getAccountByPort = (req, res) => {
 };
 
 exports.getOneAccount = (req, res) => {
-  const accountId = req.params.accountId;
-  account.getAccount().then(success => {
-    const accountInfo = success.filter(f => {
-      return f.id === +accountId;
-    })[0];
+  const accountId = +req.params.accountId;
+  account.getAccount({ id: accountId }).then(success => {
+    const accountInfo = success[0];
     if(accountInfo) {
       accountInfo.data = JSON.parse(accountInfo.data);
       if(accountInfo.type >= 2 && accountInfo.type <= 5) {
@@ -199,7 +197,7 @@ exports.getOneAccount = (req, res) => {
       accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
       return res.send(accountInfo);
     }
-    Promise.reject('account not found');
+    return res.status(403).end();
   }).catch(err => {
     console.log(err);
     res.status(403).end();

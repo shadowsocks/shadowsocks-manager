@@ -103,7 +103,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $q.all([
-      $http.get('/api/admin/account/' + $stateParams.accountId),
+      $http.get(`/api/admin/account/${ $stateParams.accountId }`),
       $http.get('/api/admin/server'),
       $http.get('/api/admin/setting'),
     ]).then(success => {
@@ -116,6 +116,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       });
       $scope.getServerPortData($scope.servers[0].id, $scope.account.port);
       $scope.isMultiServerFlow = success[2].data.value.multiServerFlow;
+    }).catch(err => {
+      $state.go('admin.account');
     });
     let currentServerId;
     $scope.getServerPortData = (serverId, port) => {
