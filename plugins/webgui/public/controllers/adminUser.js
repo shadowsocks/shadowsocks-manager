@@ -171,9 +171,27 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
   }
 ])
-.controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog) => {
+.controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
+  ($scope, $state, $stateParams, $http, alertDialog) => {
     $scope.setTitle('添加用户');
     $scope.setMenuButton('arrow_back', 'admin.user');
+    $scope.user = {};
+    $scope.confirm = () => {
+      alertDialog.loading();
+      $http.post('/api/admin/user/add', {
+        email: $scope.user.email,
+        password: $scope.user.password,
+      }, {
+        timeout: 15000,
+      }).then(success => {
+        alertDialog.show('添加用户成功', '确定');
+        $state.go('admin.user');
+      }).catch(() => {
+        alertDialog.show('添加用户失败', '确定');
+      });
+    };
+    $scope.cancel = () => {
+      $state.go('admin.user');
+    };
   }
 ]);

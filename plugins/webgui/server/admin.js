@@ -595,3 +595,26 @@ exports.getUserPortLastConnect = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.addUser = (req, res) => {
+  req.checkBody('email', 'Invalid email').notEmpty();
+  req.checkBody('password', 'Invalid password').notEmpty();
+  req.getValidationResult().then(result => {
+    if(result.isEmpty()) {
+      const email = req.body.email;
+      const password = req.body.password;
+      return user.add({
+        username: email,
+        email,
+        password,
+        type: 'normal',
+      });
+    }
+    result.throw();
+  }).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
