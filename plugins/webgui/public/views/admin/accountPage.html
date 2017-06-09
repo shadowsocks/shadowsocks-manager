@@ -22,7 +22,7 @@
                 <md-tabs md-selected="0" md-border-bottom md-dynamic-height>
                     <md-tab ng-repeat="server in servers track by server.id"
                             label="{{server.name}}"
-                            md-on-select="getServerPortData(server.id, account.port)">
+                            md-on-select="getServerPortData(server, account.port)">
                         <div layout="row" layout-align="center center" layout-wrap>
                             <div flex-lg="10"></div>
                             <div flex="60" flex-lg="50" flex-xs="100">
@@ -56,7 +56,7 @@
                                             <div flex="40">流量：</div>
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="account.type === 1">不限量</span>
-                                                <span ng-if="account.type >=2 && account.type <= 5">{{serverPortFlow | flow}} / {{account.data.flow * (isMultiServerFlow ? 1 : server.scale) | flow}}</span>
+                                                <span ng-if="account.type >=2 && account.type <= 5"><span ng-style="server.isFlowOutOfLimit ? {color: '#a33'} : {color: '#333'}">{{serverPortFlow | flow}}</span> / {{account.data.flow * (isMultiServerFlow ? 1 : server.scale) | flow}}</span>
                                             </div>
                                         </div>
                                     </md-list-item>

@@ -114,25 +114,28 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         }
         return server;
       });
-      $scope.getServerPortData($scope.servers[0].id, $scope.account.port);
+      $scope.getServerPortData($scope.servers[0], $scope.account.port);
       $scope.isMultiServerFlow = success[2].data.value.multiServerFlow;
     }).catch(err => {
       $state.go('admin.account');
     });
     let currentServerId;
-    $scope.getServerPortData = (serverId, port) => {
+    $scope.getServerPortData = (server, port) => {
+      const serverId = server.id;
       currentServerId = serverId;
       $scope.serverPortFlow = 0;
       $scope.lastConnect = 0;
       adminApi.getServerPortData(serverId, port).then(success => {
         $scope.serverPortFlow = success.serverPortFlow;
         $scope.lastConnect = success.lastConnect;
+        const maxFlow = $scope.account.data.flow * ($scope.isMultiServerFlow ? 1 : server.scale);
+        server.isFlowOutOfLimit = $scope.serverPortFlow >= maxFlow;
       });
       $scope.getChartData(serverId);
       $scope.servers.forEach((server, index) => {
         if(server.id === serverId) { return; }
         $timeout(() => {
-          adminApi.getServerPortData(server.id, port);
+          adminApi.getServerPortData(serverId, port);
         }, index * 1000);
       });
     };
@@ -310,10 +313,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       return {
         color: '#a33',
       };
-    };
-    $scope.toUserPage = userId => {
-      if(!userId) { return; }
-      $state.go('admin.userPage', { userId });
     };
   }
 ])
