@@ -98,8 +98,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval',
-  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog',
+  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $q.all([
@@ -153,12 +153,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       }));
     };
     $scope.createQrCode = (method, password, host, port, serverName) => {
-      const checkAscii = str => {
-        return str.split('').filter(f => {
-          return f.charCodeAt() >= 31 && f.charCodeAt() <= 127 ;
-        }).join('');
-      };
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + checkAscii(serverName);
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+    };
+    $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
+      const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
+      qrcodeDialog.show(serverName, ssAddress);
     };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
