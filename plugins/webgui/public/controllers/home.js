@@ -115,7 +115,7 @@ app
     ])
     .controller('HomeTutorialsController', ['$window',
         ($window)=>{
-            $window.location.href = 'http://www.google.com';
+            $window.location.href = 'https://wangruifei.github.io/2017/06/09/categories_%20Business/';
         }
     ])
     .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',
