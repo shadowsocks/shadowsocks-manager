@@ -314,6 +314,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         color: '#a33',
       };
     };
+    $scope.toUserPage = userId => {
+      if(!userId) { return; }
+      $state.go('admin.userPage', { userId });
+    };
   }
 ])
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog',
