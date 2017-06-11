@@ -484,6 +484,17 @@ exports.getRecentLoginUsers = (req, res) => {
   });
 };
 
+exports.getRecentOrders = (req, res) => {
+  alipay.orderListAndPaging({
+    pageSize: 5,
+  }).then(success => {
+    return res.send(success.orders);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getOneUser = (req, res) => {
   const userId = req.params.userId;
   let userInfo = null;

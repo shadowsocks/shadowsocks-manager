@@ -166,6 +166,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     if($localStorage.admin.indexInfo) {
       $scope.signupUsers = $localStorage.admin.indexInfo.data.signup;
       $scope.loginUsers = $localStorage.admin.indexInfo.data.login;
+      $scope.orders = $localStorage.admin.indexInfo.data.order;
     }
     $scope.toUser = id => {
       $state.go('admin.userPage', { userId: id });
@@ -178,6 +179,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         };
         $scope.signupUsers = success.signup;
         $scope.loginUsers = success.login;
+        $scope.orders = success.order;
       });
     };
     updateIndexInfo();

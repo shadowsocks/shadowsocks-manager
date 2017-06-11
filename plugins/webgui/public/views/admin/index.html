@@ -41,4 +41,25 @@
             </md-card-content>
         </md-card>
     </div>
+    <div flex-xs="100" flex-sm="100" flex-gt-sm="50">
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-headline">最新订单</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+              <md-list>
+                  <md-divider></md-divider>
+                  <md-list-item ng-repeat="order in orders">
+                      <div flex layout="row" layout-align="space-between center">
+                          <div flex="30" flex-xs="60">{{order.orderId}}</div>
+                          <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;">{{order.createTime | timeagoshort}}</div>
+                      </div>
+                      <md-divider></md-divider>
+                  </md-list-item>
+              </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>
