@@ -160,8 +160,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     });
   }
 ])
-.controller('AdminIndexController', ['$scope', '$state', 'adminApi', '$localStorage', '$interval',
-  ($scope, $state, adminApi, $localStorage, $interval) => {
+.controller('AdminIndexController', ['$scope', '$state', 'adminApi', '$localStorage', '$interval', 'orderDialog',
+  ($scope, $state, adminApi, $localStorage, $interval, orderDialog) => {
     $scope.setTitle('首页');
     if($localStorage.admin.indexInfo) {
       $scope.signupUsers = $localStorage.admin.indexInfo.data.signup;
@@ -195,6 +195,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         updateIndexInfo();
       }
     }, 15 * 1000));
+    $scope.showOrderInfo = order => {
+      orderDialog.show(order);
+    };
   }
 ])
 .controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout', '$state',
