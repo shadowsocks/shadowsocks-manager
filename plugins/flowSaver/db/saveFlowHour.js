@@ -13,7 +13,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.integer('id');
     table.integer('port');
-    table.integer('flow');
+    table.bigInteger('flow');
     table.bigInteger('time');
     table.index(['time', 'port'], 'index');
   });
