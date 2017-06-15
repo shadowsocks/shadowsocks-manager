@@ -29,6 +29,7 @@ const setExistPort = flow => {
   existPortUpdatedAt = Date.now();
 };
 
+let firstFlow = true;
 const connect = () => {
   client.on('message', async (msg, rinfo) => {
     const msgStr = new String(msg);
@@ -59,7 +60,12 @@ const connect = () => {
         }
       });
       if(insertFlow.length > 0) {
-        knex('flow').insert(insertFlow).then();
+        if(firstFlow) {
+          firstFlow = false;
+        } else {
+          // logger.info(`Insert flow in db: ${JSON.stringify(insertFlow, null, 2)}`);
+          knex('flow').insert(insertFlow).then();
+        }
       }
     };
   });
@@ -74,7 +80,7 @@ const connect = () => {
 
 const sendMessage = (message) => {
   const randomTraceNumber = Math.random().toString().substr(2,6);
-  logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
+  // logger.info(`[${ randomTraceNumber }] Send to shadowsocks: ${ message }`);
   client.send(message, port, host);
   return Promise.resolve('ok');
 };
@@ -108,6 +114,9 @@ const compareWithLastFlow = (flow, lastFlow) => {
   }
   const realFlow = {};
   if(!lastFlow) {
+    for(f in flow) {
+      if(flow[f] <= 0) { delete flow[f]; }
+    }
     return flow;
   }
   for(const f in flow) {
@@ -119,6 +128,9 @@ const compareWithLastFlow = (flow, lastFlow) => {
   }
   if(Object.keys(realFlow).map(m => realFlow[m]).sort((a, b) => a > b)[0] < 0) {
     return flow;
+  }
+  for(r in realFlow) {
+    if(realFlow[r] <= 0) { delete realFlow[r]; }
   }
   return realFlow;
 };
