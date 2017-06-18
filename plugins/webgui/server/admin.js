@@ -8,7 +8,9 @@ const moment = require('moment');
 const alipay = appRequire('plugins/alipay/index');
 
 exports.getServers = (req, res) => {
-  serverManager.list().then(success => {
+  serverManager.list({
+    status: true,
+  }).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);

@@ -59,6 +59,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             server.host = servers[index].host;
             server.name = servers[index].name;
             server.port = servers[index].port;
+            server.status = servers[index].status;
             adminApi.getServerFlow(server.id).then(flow => {
               if(!server.flow) {
                 server.flow = {};
