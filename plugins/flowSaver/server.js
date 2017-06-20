@@ -62,12 +62,10 @@ const list = async (options = {}) => {
       serverStatus.push(getServerStatus(server, index));
     });
     const status = await Promise.all(serverStatus);
-    console.log(status);
     status.forEach(f => {
       serverList[f.index].status = f.status;
     });
   }
-  console.log(serverList);
   return serverList;
 };
 
