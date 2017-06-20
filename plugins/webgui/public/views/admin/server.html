@@ -3,7 +3,7 @@
         <md-card ng-click="toServerPage(server.id)">
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-title">{{server.name}}<span ng-show="server.status !== -1" style="color: #a33;">&nbsp;离线</span></span>
+                    <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span></span>
                     <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                 </md-card-header-text>
             </md-card-header>
