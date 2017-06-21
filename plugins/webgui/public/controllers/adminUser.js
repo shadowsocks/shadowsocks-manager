@@ -91,8 +91,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     });
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog) => {
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog',
+  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog) => {
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
@@ -158,16 +158,19 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteUser = () => {
       confirmDialog.show({
-      text: '真的要删除该用户吗？',
-      cancel: '取消',
-      confirm: '删除',
-      error: '删除用户失败',
-      fn: function () {
-        return $http.delete(`/api/admin/user/${ userId }`);
-      },
-    }).then(() => {
-      $state.go('admin.user');
-    });
+        text: '真的要删除该用户吗？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除用户失败',
+        fn: function () {
+          return $http.delete(`/api/admin/user/${ userId }`);
+        },
+      }).then(() => {
+        $state.go('admin.user');
+      });
+    };
+    $scope.sendEmail = () => {
+      emailDialog.show(userId);
     };
   }
 ])

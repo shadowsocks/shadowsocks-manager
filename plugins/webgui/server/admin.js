@@ -6,6 +6,7 @@ const user = appRequire('plugins/user/index');
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const alipay = appRequire('plugins/alipay/index');
+const email = appRequire('plugins/email/index');
 
 exports.getServers = (req, res) => {
   serverManager.list({
@@ -624,6 +625,27 @@ exports.addUser = (req, res) => {
       });
     }
     result.throw();
+  }).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.sendUserEmail = (req, res) => {
+  const userId = +req.params.userId;
+  const title = req.body.title;
+  const content = req.body.content;
+  req.checkBody('title', 'Invalid title').notEmpty();
+  req.checkBody('content', 'Invalid content').notEmpty();
+  req.getValidationResult().then(result => {
+    if(result.isEmpty()) {
+      return user.getOne(userId).then(user => user.email);
+    }
+    result.throw();
+  }).then(emailAddress => {
+    return email.sendMail(emailAddress, title, content);
   }).then(success => {
     return res.send(success);
   }).catch(err => {

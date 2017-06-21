@@ -41,7 +41,7 @@ const sendMail = async (to, subject, text, options = {}) => {
       });
     });
   };
-  const checkLimit = async (ip, session) => {
+  const checkLimit = async (ip = '', session = '') => {
     let ipNumber = await knex('email')
     .where({ ip })
     .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])

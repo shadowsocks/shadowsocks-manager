@@ -585,3 +585,63 @@ app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
     show,
   };
 }]);
+
+app.factory('emailDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
+  const publicInfo = {};
+  const hide = () => {
+    return $mdDialog.hide()
+    .then(success => {
+      dialogPromise = null;
+      return;
+    }).catch(err => {
+      dialogPromise = null;
+      return;
+    });
+  };
+  publicInfo.hide = hide;
+  let dialogPromise = null;
+  const isDialogShow = () => {
+    if(dialogPromise && !dialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
+  const dialog = {
+    templateUrl: '/public/views/admin/emailDialog.html',
+    escapeToClose: false,
+    locals: { bind: publicInfo },
+    bindToController: true,
+    controller: ['$scope', '$mdMedia', '$mdDialog', '$http', 'bind', function($scope, $mdMedia, $mdDialog, $http, bind) {
+      $scope.publicInfo = bind;
+      $scope.email = {
+        title: '',
+        content: '',
+      };
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
+      $scope.send = () => {
+        $http.post(`/api/admin/user/${ $scope.publicInfo.userId }/sendEmail`, {
+          title: $scope.email.title,
+          content: $scope.email.content,
+        });
+      };
+    }],
+    fullscreen: true,
+    clickOutsideToClose: true,
+  };
+  const show = userId => {
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    publicInfo.userId = userId;
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
+  return {
+    show,
+  };
+}]);
