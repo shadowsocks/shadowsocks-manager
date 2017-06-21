@@ -178,6 +178,7 @@ exports.sendResetPasswordEmail = (req, res) => {
     return emailPlugin.sendMail(email, 'ss密码重置', '请访问下列地址重置您的密码：\n' + address, {
       ip,
       session,
+      type: 'reset',
     });
   }).then(success => {
     return user.edit({

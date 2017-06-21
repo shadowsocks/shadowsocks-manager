@@ -645,7 +645,9 @@ exports.sendUserEmail = (req, res) => {
     }
     result.throw();
   }).then(emailAddress => {
-    return email.sendMail(emailAddress, title, content);
+    return email.sendMail(emailAddress, title, content, {
+      type: 'user',
+    });
   }).then(success => {
     return res.send(success);
   }).catch(err => {
