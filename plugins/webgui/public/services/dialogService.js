@@ -586,7 +586,7 @@ app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
   };
 }]);
 
-app.factory('emailDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
+app.factory('emailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state, $http) => {
   const publicInfo = {};
   const hide = () => {
     return $mdDialog.hide()
@@ -599,6 +599,18 @@ app.factory('emailDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
     });
   };
   publicInfo.hide = hide;
+  const send = (title, content) => {
+    load();
+    $http.post(`/api/admin/user/${ publicInfo.userId }/sendEmail`, {
+      title,
+      content,
+    }).then(success => {
+      hide();
+    }).catch(() => {
+      publicInfo.isLoading = false;
+    });
+  };
+  publicInfo.send = send;
   let dialogPromise = null;
   const isDialogShow = () => {
     if(dialogPromise && !dialogPromise.$$state.status) {
@@ -613,7 +625,7 @@ app.factory('emailDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
     bindToController: true,
     controller: ['$scope', '$mdMedia', '$mdDialog', '$http', 'bind', function($scope, $mdMedia, $mdDialog, $http, bind) {
       $scope.publicInfo = bind;
-      $scope.email = {
+      $scope.publicInfo.email = {
         title: '',
         content: '',
       };
@@ -623,17 +635,15 @@ app.factory('emailDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
         }
         return { 'min-width': '400px' };
       };
-      $scope.send = () => {
-        $http.post(`/api/admin/user/${ $scope.publicInfo.userId }/sendEmail`, {
-          title: $scope.email.title,
-          content: $scope.email.content,
-        });
-      };
     }],
     fullscreen: true,
-    clickOutsideToClose: true,
+    clickOutsideToClose: false,
+  };
+  const load = () => {
+    publicInfo.isLoading = true;
   };
   const show = userId => {
+    publicInfo.isLoading = false;
     if(isDialogShow()) {
       return dialogPromise;
     }

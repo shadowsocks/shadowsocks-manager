@@ -9,21 +9,24 @@
         </div>
     </md-toolbar>
     <md-dialog-content>
-        <div class="md-dialog-content">
+        <div class="md-dialog-content" ng-hide="publicInfo.isLoading">
             <form name="emailForm">
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>标题</label>
-                    <input name="title" ng-model="email.title">
+                    <input name="title" ng-model="publicInfo.email.title">
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>内容</label>
-                    <textarea ng-model="email.content" rows="5"></textarea>
+                    <textarea ng-model="publicInfo.email.content" rows="5"></textarea>
                 </md-input-container>
             </form>
+            <div layout="row" flex layout-align="space-around center">
+                <div flex="60"></div>
+                <md-button class="md-raised md-primary" ng-click="publicInfo.send(publicInfo.email.title, publicInfo.email.content)">发送</md-button>
+            </div>
         </div>
-        <div layout="row" flex layout-align="space-around center">
-            <div flex="60"></div>
-            <md-button class="md-raised md-primary" ng-click="send()">发送</md-button>
+        <div class="md-dialog-content" ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+            <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
         </div>
     </md-dialog-content>
 </md-dialog>
