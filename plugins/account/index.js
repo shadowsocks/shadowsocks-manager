@@ -229,15 +229,48 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     }
   };
   if(!accountId) {
-    const port = await knex('account_plugin').select()
-    .orderBy('port', 'DESC').limit(1)
-    .then(success => {
-      if(success.length) {
-        return success[0].port + 1;
-      } else {
-        return 50000;
-      }
-    });
+    const getNewPort = () => {
+      return knex('webguiSetting').select().where({
+        key: 'system',
+      }).then(success => {
+        if(!success.length) { return Promise.reject('settings not found'); }
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value.port;
+      }).then(port => {
+        if(port.random) {
+          const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+          const retry = 0;
+          let myPort = getRandomPort();
+          const checkIfPortExists = port => {
+            return knex('account_plugin').select()
+            .where({ port }).then(success => {
+              if(success.length) { return Promise.reject('exists'); }
+              return 'not exists';
+            });
+          };
+          return checkIfPortExists(myPort)
+          .then(success => myPort)
+          .catch(err => {
+            retry++;
+            if(retry <= 30) {
+              myPort = getRandomPort();
+              return checkIfPortExists(myPort);
+            }
+            return Promise.reject('Can not get a random port');
+          });
+        } else {
+          return knex('account_plugin').select()
+          .whereBetween('port', [port.start, port.end])
+          .orderBy('port', 'DESC').limit(1).then(success => {
+            if(success.length) {
+              return success[0].port + 1;
+            }
+            return port.start;
+          });
+        }
+      });
+    };
+    const port = await getNewPort();
     await addAccount(orderType, {
       user: userId,
       port,

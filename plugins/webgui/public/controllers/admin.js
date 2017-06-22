@@ -317,6 +317,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.$watch('settings', () => {
         $scope.saveSetting();
       }, true);
+      if(!$scope.settings.port) {
+        $scope.settings.port = { start: 50000, end: 60000, random: false };
+      }
     });
     $scope.toNotice = () => {
       $state.go('admin.notice');
