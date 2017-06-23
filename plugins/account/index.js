@@ -239,7 +239,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
       }).then(port => {
         if(port.random) {
           const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
-          const retry = 0;
+          let retry = 0;
           let myPort = getRandomPort();
           const checkIfPortExists = port => {
             return knex('account_plugin').select()
