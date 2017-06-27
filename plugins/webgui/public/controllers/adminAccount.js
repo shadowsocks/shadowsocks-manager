@@ -85,6 +85,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       accountFilter();
     });
     $scope.accountColor = account => {
+      console.log(account);
       if(account.type === 1) {
         return {
           background: 'blue-50', 'border-color': 'blue-300',
@@ -92,6 +93,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       } else if(account.data && account.data.expire <= Date.now()) {
         return {
           background: 'red-50', 'border-color': 'red-300',
+        };
+      } else if(account.autoRemove) {
+        return {
+          background: 'lime-50', 'border-color': 'lime-300',
         };
       }
       return {};
