@@ -85,7 +85,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       accountFilter();
     });
     $scope.accountColor = account => {
-      console.log(account);
       if(account.type === 1) {
         return {
           background: 'blue-50', 'border-color': 'blue-300',

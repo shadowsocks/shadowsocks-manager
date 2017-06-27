@@ -341,6 +341,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog',
   ($scope, $state, $stateParams, $http, confirmDialog, alertDialog) => {
     $scope.setTitle('编辑服务器');
+    const serverId = $stateParams.serverId
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
     });
@@ -363,7 +364,12 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
     };
-    $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+    $http.get(`/api/admin/server/${ serverId }`, {
+      params: {
+        noPort: true,
+      }
+    })
+    .then(success => {
       $scope.server = {
         name: success.data.name,
         address: success.data.host,

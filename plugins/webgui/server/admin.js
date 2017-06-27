@@ -21,12 +21,14 @@ exports.getServers = (req, res) => {
 
 exports.getOneServer = (req, res) => {
   const serverId = req.params.serverId;
+  const noPort = req.query.noPort;
   let result = null;
   knex('server').select().where({
     id: +serverId,
   }).then(success => {
     if(success.length) {
       result = success[0];
+      if(noPort) { return; }
       return manager.send({
         command: 'list',
       }, {
@@ -37,7 +39,7 @@ exports.getOneServer = (req, res) => {
     }
     res.status(404).end();
   }).then(success => {
-    result.ports = success;
+    if(success) { result.ports = success; }
     res.send(result);
   }).catch(err => {
     console.log(err);
