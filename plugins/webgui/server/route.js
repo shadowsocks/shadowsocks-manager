@@ -11,6 +11,7 @@ const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const push = appRequire('plugins/webgui/server/push');
 const path = require('path');
 const knex = appRequire('init/knex').knex;
+const config = appRequire('services/config').all();
 
 const isUser = (req, res, next) => {
   if(req.session.type === 'normal') {
@@ -102,7 +103,9 @@ app.post('/api/user/order/status', isUser, user.checkOrder);
 
 app.post('/api/user/alipay/callback', user.alipayCallback);
 
-app.post('/api/push/client', push.client);
+if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
+  app.post('/api/push/client', push.client);
+}
 
 app.get('/serviceworker.js', (req, res) => {
   res.header('Content-Type', 'text/javascript');

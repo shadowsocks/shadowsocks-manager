@@ -1,4 +1,5 @@
-const gcmSenderId = appRequire('services/config').get('plugins.webgui.gcmSenderId').toString();
+let gcmSenderId = appRequire('services/config').get('plugins.webgui.gcmSenderId');
+if(gcmSenderId) { gcmSenderId = gcmSenderId.toString(); }
 
 const manifest = {
   short_name: 'ssmgr',
