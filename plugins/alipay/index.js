@@ -3,13 +3,17 @@ const logger = log4js.getLogger('alipay');
 const cron = appRequire('init/cron');
 const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
-const alipay_f2f = new alipayf2f({
-  appid: config.plugins.alipay.appid,
-  notifyUrl: config.plugins.alipay.notifyUrl,
-  merchantPrivateKey: '-----BEGIN RSA PRIVATE KEY-----\n' + config.plugins.alipay.merchantPrivateKey + '\n-----END RSA PRIVATE KEY-----',
-  alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
-  gatewayUrl: config.plugins.alipay.gatewayUrl,
-});
+let alipay_f2f;
+if(config.plugins.alipay && config.plugins.alipay.use) {
+  alipay_f2f = new alipayf2f({
+    appid: config.plugins.alipay.appid,
+    notifyUrl: config.plugins.alipay.notifyUrl,
+    merchantPrivateKey: '-----BEGIN RSA PRIVATE KEY-----\n' + config.plugins.alipay.merchantPrivateKey + '\n-----END RSA PRIVATE KEY-----',
+    alipayPublicKey: '-----BEGIN PUBLIC KEY-----\n' + config.plugins.alipay.alipayPublicKey + '\n-----END PUBLIC KEY-----',
+    gatewayUrl: config.plugins.alipay.gatewayUrl,
+  });
+}
+
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 const moment = require('moment');
@@ -60,7 +64,7 @@ const createOrder = async (user, account, amount, orderType = 3) => {
 };
 
 cron.minute(async () => {
-// setInterval(async () => {
+  if(!alipay_f2f) { return; }
   const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
   orders.forEach(order => {
     if(order.status !== 'TRADE_SUCCESS' && order.status !== 'FINISH') {
@@ -94,7 +98,6 @@ cron.minute(async () => {
     };
   });
 }, 1);
-// }, 60 * 1000);
 
 const checkOrder = async (orderId) => {
   const order = await knex('alipay').select().where({

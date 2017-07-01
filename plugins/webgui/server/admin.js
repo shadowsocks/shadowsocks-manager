@@ -7,6 +7,8 @@ const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const alipay = appRequire('plugins/alipay/index');
 const email = appRequire('plugins/email/index');
+const config = appRequire('services/config').all();
+const isAlipayUse = config.plugins.alipay && config.plugins.alipay.use;
 
 exports.getServers = (req, res) => {
   serverManager.list({
@@ -490,6 +492,9 @@ exports.getRecentLoginUsers = (req, res) => {
 };
 
 exports.getRecentOrders = (req, res) => {
+  if(!isAlipayUse) {
+    return res.send([]);
+  }
   alipay.orderListAndPaging({
     pageSize: 5,
   }).then(success => {
@@ -574,6 +579,9 @@ exports.getServerPortLastConnect = (req, res) => {
 };
 
 exports.getUserOrders = (req, res) => {
+  if(!isAlipayUse) {
+    return res.send([]);
+  }
   const options = {
     userId: +req.params.userId,
   };
@@ -587,6 +595,15 @@ exports.getUserOrders = (req, res) => {
 };
 
 exports.getOrders = (req, res) => {
+  if(!isAlipayUse) {
+    return res.send({
+      maxPage: 0,
+      page: 1,
+      pageSize: 0,
+      total: 0,
+      orders: [],
+    });
+  }
   const options = {};
   options.page = +req.query.page || 1;
   options.pageSize = +req.query.pageSize || 20;

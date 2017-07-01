@@ -225,7 +225,7 @@ exports.getNotice = (req, res) => {
 
 exports.getAlipayStatus = (req, res) => {
   return res.send({
-    status: config.plugins.alipay.use,
+    status: config.plugins.alipay && config.plugins.alipay.use,
   });
 };
 
