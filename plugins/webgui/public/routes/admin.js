@@ -1,5 +1,11 @@
 const app = angular.module('app');
 
+// app.config(['$mdThemingProvider', $mdThemingProvider => {
+//   $mdThemingProvider.theme('default')
+//     .primaryPalette('pink')
+//     .accentPalette('orange');
+// }]);
+
 app.config(['$stateProvider', $stateProvider => {
   $stateProvider
     .state('admin', {
