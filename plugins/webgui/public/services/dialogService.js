@@ -623,12 +623,14 @@ app.factory('emailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdMedia', '$mdDialog', '$http', 'bind', function($scope, $mdMedia, $mdDialog, $http, bind) {
+    controller: ['$scope', '$mdMedia', '$mdDialog', '$http', '$localStorage', 'bind', function($scope, $mdMedia, $mdDialog, $http, $localStorage, bind) {
       $scope.publicInfo = bind;
-      $scope.publicInfo.email = {
-        title: '',
-        content: '',
-      };
+      if(!$localStorage.admin.email) {
+        $localStorage.admin.email = {
+          title: '', content: '',
+        };
+      }
+      $scope.publicInfo.email = $localStorage.admin.email;
       $scope.setDialogWidth = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
           return {};
