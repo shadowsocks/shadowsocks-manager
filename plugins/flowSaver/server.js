@@ -47,13 +47,13 @@ const list = async (options = {}) => {
     const serverStatus = [];
     const getServerStatus = (server, index) => {
       return manager.send({
-        command: 'list',
+        command: 'version',
       }, {
         host: server.host,
         port: server.port,
         password: server.password,
       }).then(success => {
-        return { status: 0, index };
+        return { status: success.version, index };
       }).catch(error => {
         return { status: -1, index };
       });

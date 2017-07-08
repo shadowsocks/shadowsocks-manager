@@ -674,3 +674,34 @@ exports.sendUserEmail = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getAccountIp = (req, res) => {
+  const accountId = +req.params.accountId;
+  const serverId = +req.params.serverId;
+  let serverInfo;
+  knex('server').select().where({
+    id: serverId,
+  }).then(success => {
+    if(success.length) {
+      serverInfo = success[0];
+    } else {
+      return Promise.reject('server not found');
+    }
+    return account.getAccount({ id: accountId }).then(success => success[0]);
+  }).then(accountInfo => {
+    const port = accountInfo.port;
+    return manager.send({
+      command: 'ip',
+      port,
+    }, {
+      host: serverInfo.host,
+      port: serverInfo.port,
+      password: serverInfo.password,
+    });
+  }).then(ip => {
+    return res.send({ ip });
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
