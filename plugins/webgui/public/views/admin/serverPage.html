@@ -2,9 +2,16 @@
     <div flex layout="row">
         <md-card flex>
             <md-card-header>
-                <md-card-header-text>
+                <md-card-header-text ng-show="server">
                     <span class="md-title">{{server.name}}</span>
                     <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
+                </md-card-header-text>
+                <md-card-header-text ng-hide="server">
+                    <span>
+                        <div flex layout="row" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                        </div>
+                    </span>
                 </md-card-header-text>
                 <div>
                     <md-button class="md-primary" aria-label="edit" ng-click="editServer()">

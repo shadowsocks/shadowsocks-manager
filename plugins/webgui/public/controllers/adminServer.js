@@ -128,7 +128,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
   ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
-    $http.get('/api/admin/server/' + $stateParams.serverId).then(success => {
+    const serverId = $stateParams.serverId;
+    $http.get(`/api/admin/server/${ serverId }`).then(success => {
       $scope.server = success.data;
     }).catch(() => {
       // $state.go('admin.server');
@@ -139,7 +140,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       });
     };
     $scope.editServer = () => {
-      $state.go('admin.editServer', { serverId: $stateParams.serverId });
+      $state.go('admin.editServer', { serverId });
     };
     $scope.deleteServer = id => {
       const confirm = $mdDialog.confirm()
@@ -149,7 +150,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         .ok('确认')
         .cancel('取消');
       $mdDialog.show(confirm).then(() => {
-        return $http.delete('/api/admin/server/' + $stateParams.serverId);
+        return $http.delete(`/api/admin/server/${ serverId }`);
       }).then(() => {
         $state.go('admin.server');
       }).catch(() => {
@@ -236,7 +237,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       };
     };
     $scope.getChartData = () => {
-      adminApi.getChartData($stateParams.serverId, $scope.flowType, flowTime[$scope.flowType])
+      adminApi.getChartData(serverId, $scope.flowType, flowTime[$scope.flowType])
       .then(success => {
         $scope.sumFlow = success[0].data.reduce((a, b) => {
           return a + b;
