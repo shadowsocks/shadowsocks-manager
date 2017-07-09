@@ -705,3 +705,38 @@ exports.getAccountIp = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getAccountIpFromAllServer = (req, res) => {
+  const accountId = +req.params.accountId;
+  let accountInfo;
+  account.getAccount({ id: accountId }).then(success => {
+    accountInfo = success[0];
+    return knex('server').select().where({});
+  }).then(servers => {
+    const getIp = (port, serverInfo) => {
+      return manager.send({
+        command: 'ip',
+        port,
+      }, {
+        host: serverInfo.host,
+        port: serverInfo.port,
+        password: serverInfo.password,
+      });
+    };
+    promiseArray = servers.map(server => {
+      return getIp(accountInfo.port, server).catch(err => []);
+    });
+    return Promise.all(promiseArray);
+  }).then(ips => {
+    const result = [];
+    ips.forEach(ip => {
+      ip.forEach(i => {
+        if(result.indexOf(i) < 0) { result.push(i); }
+      });
+    });
+    return res.send({ ip: result });
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

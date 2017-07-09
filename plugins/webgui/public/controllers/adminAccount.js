@@ -102,8 +102,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog',
-  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog', 'ipDialog',
+  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $q.all([
@@ -320,6 +320,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.toUserPage = userId => {
       if(!userId) { return; }
       $state.go('admin.userPage', { userId });
+    };
+    $scope.clientIp = (serverId, accountId) => {
+      ipDialog.show(serverId, accountId);
     };
   }
 ])

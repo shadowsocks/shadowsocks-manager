@@ -48,6 +48,7 @@ app.get('/api/admin/account', isAdmin, admin.getAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
 app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);
 app.get('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ip', isAdmin, admin.getAccountIp);
+app.get('/api/admin/account/:accountId(\\d+)/ip', isAdmin, admin.getAccountIpFromAllServer);
 app.post('/api/admin/account', isAdmin, admin.addAccount);
 app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccountPort);
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);

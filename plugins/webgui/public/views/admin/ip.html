@@ -1,0 +1,19 @@
+<md-dialog aria-label="ip dialog" ng-style="setDialogWidth()">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>最近连接IP</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="publicInfo.hide()">
+                <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="column" layout-align="center center">
+                <div ng-show="ip.length" ng-repeat="i in ip">{{i}}</div>
+                <div ng-show="ip.length === 0">无</div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

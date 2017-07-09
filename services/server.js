@@ -57,7 +57,6 @@ const receiveCommand = async (data, code) => {
     } else if (message.command === 'version') {
       return shadowsocks.getVersion();
     } else if (message.command === 'ip') {
-      console.log('GG');
       return shadowsocks.getClientIp(message.port);
     } else {
       return Promise.reject();

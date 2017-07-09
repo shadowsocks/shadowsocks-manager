@@ -657,3 +657,58 @@ app.factory('emailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state,
     show,
   };
 }]);
+
+app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
+  const publicInfo = {};
+  const hide = () => {
+    return $mdDialog.hide()
+    .then(success => {
+      dialogPromise = null;
+      return;
+    }).catch(err => {
+      dialogPromise = null;
+      return;
+    });
+  };
+  publicInfo.hide = hide;
+  let dialogPromise = null;
+  const isDialogShow = () => {
+    if(dialogPromise && !dialogPromise.$$state.status) {
+      return true;
+    }
+    return false;
+  };
+  const dialog = {
+    templateUrl: '/public/views/admin/ip.html',
+    escapeToClose: false,
+    locals: { bind: publicInfo },
+    bindToController: true,
+    controller: ['$scope', '$http', '$mdDialog', '$mdMedia', 'bind', function($scope, $http, $mdDialog, $mdMedia, bind) {
+      $scope.publicInfo = bind;
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
+      $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`)
+      .then(success => {
+        $scope.ip = success.data.ip;
+      });
+    }],
+    fullscreen: true,
+    clickOutsideToClose: true,
+  };
+  const show = (serverId, accountId) => {
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    publicInfo.serverId = serverId;
+    publicInfo.accountId = accountId;
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
+  return {
+    show,
+  };
+}]);
