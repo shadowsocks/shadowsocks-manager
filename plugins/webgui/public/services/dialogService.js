@@ -691,9 +691,11 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
         }
         return { 'min-width': '400px' };
       };
-      $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`)
-      .then(success => {
+      $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`).then(success => {
         $scope.ip = success.data.ip;
+        return $http.get(`/api/admin/account/${ $scope.publicInfo.accountId }/ip`);
+      }).then(success => {
+        $scope.allIp = success.data.ip;
       });
     }],
     fullscreen: true,

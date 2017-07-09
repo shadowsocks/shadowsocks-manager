@@ -305,4 +305,4 @@ exports.changePassword = changePassword;
 exports.listAccount = listAccount;
 exports.getFlow = getFlow;
 exports.getVersion = getVersion;
-exports.getClientIp = getIp;
+exports.getClientIp = getClientIp;

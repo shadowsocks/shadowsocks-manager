@@ -11,8 +11,17 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <div layout="column" layout-align="center center">
-                <div ng-show="ip.length" ng-repeat="i in ip">{{i}}</div>
-                <div ng-show="ip.length === 0">无</div>
+                <div flex layout="row" layout-align="center center" ng-show="!ip && !allIp">
+                    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                </div>
+                <div ng-hide="!ip && !allIp">
+                    <div>本服务器：</div>
+                    <div ng-show="ip.length" ng-repeat="i in ip">{{i}}</div>
+                    <div ng-show="ip.length === 0">暂无</div>
+                    <div>所有服务器：</div>
+                    <div ng-show="allIp.length" ng-repeat="i in allIp">{{i}}</div>
+                    <div ng-show="allIp.length === 0">暂无</div>
+                </div>
             </div>
         </div>
     </md-dialog-content>
