@@ -289,7 +289,8 @@ const getIp = port => {
 
 const getClientIp = port => {
   const result = [];
-  if(!clientIp[port]) { return result; }
+  if(!clientIp[port] || clientIp[port].length === 0) { return result; }
+  const recentIp = clientIp[port][clientIp[port].length - 1].ip;
   clientIp[port] = clientIp[port].filter(m => {
     return Date.now() - m.time <= 60 * 60 * 1000;
   });
@@ -298,6 +299,10 @@ const getClientIp = port => {
       if(result.indexOf(i) < 0) { result.push(i); }
     });
   });
+  if(!result.length) {
+    clientIp[port].push({ time: Date.now(), ip: recentIp });
+    return recentIp;
+  }
   return result;
 };
 

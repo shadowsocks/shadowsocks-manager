@@ -97,6 +97,7 @@ const checkData = (receive) => {
       receive.socket.end(pack({code: 0, data: s}));
       // receive.socket.close();
     }, e => {
+      logger.error(e);
       receive.socket.end(pack({code: 1}));
       // receive.socket.close();
     });

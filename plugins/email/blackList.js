@@ -1272,6 +1272,7 @@ const blackList = [
   '@mucincanon.com',
   '@mutant.me',
   '@mvrht.com',
+  '@mvrht.net',
   '@mwarner.org',
   '@mxfuel.com',
   '@my10minutemail.com',
