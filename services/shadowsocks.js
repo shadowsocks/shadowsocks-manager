@@ -49,7 +49,9 @@ const connect = () => {
           (function(port) {
             if(!clientIp[+port]) { clientIp[+port] = []; }
             getIp(+port).then(ip => {
-              clientIp[+port].push({ time: Date.now(), ip });
+              if(ip.length) {
+                clientIp[+port].push({ time: Date.now(), ip });
+              }
             });
           })(rf);
         }

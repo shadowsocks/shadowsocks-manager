@@ -4,6 +4,7 @@ const sessionParser = appRequire('plugins/webgui/index').sessionParser;
 const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
+const adminServer = appRequire('plugins/webgui/server/adminServer');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const push = appRequire('plugins/webgui/server/push');
@@ -38,11 +39,11 @@ app.post('/api/home/password/sendEmail', home.sendResetPasswordEmail);
 app.get('/api/home/password/reset', home.checkResetPasswordToken);
 app.post('/api/home/password/reset', home.resetPassword);
 
-app.get('/api/admin/server', isAdmin, admin.getServers);
-app.get('/api/admin/server/:serverId(\\d+)', isAdmin, admin.getOneServer);
-app.post('/api/admin/server', isAdmin, admin.addServer);
-app.put('/api/admin/server/:serverId(\\d+)', isAdmin, admin.editServer);
-app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, admin.deleteServer);
+app.get('/api/admin/server', isAdmin, adminServer.getServers);
+app.get('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.getOneServer);
+app.post('/api/admin/server', isAdmin, adminServer.addServer);
+app.put('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.editServer);
+app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);

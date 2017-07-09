@@ -1,4 +1,5 @@
 const blackList = [
+  '@tqosi.com',
   '@tmails.net',
   '@0-mail.com',
   '@027168.com',

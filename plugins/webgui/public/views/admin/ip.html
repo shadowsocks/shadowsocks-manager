@@ -10,18 +10,36 @@
     </md-toolbar>
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div layout="column" layout-align="center center">
-                <div flex layout="row" layout-align="center center" ng-show="!ip && !allIp">
-                    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
-                </div>
-                <div ng-hide="!ip && !allIp">
-                    <div>本服务器：</div>
-                    <div ng-show="ip.length" ng-repeat="i in ip">{{i}}</div>
-                    <div ng-show="ip.length === 0">暂无</div>
-                    <div>所有服务器：</div>
-                    <div ng-show="allIp.length" ng-repeat="i in allIp">{{i}}</div>
-                    <div ng-show="allIp.length === 0">暂无</div>
-                </div>
+            <div flex layout="row" layout-align="center center" ng-show="!ip && !allIp">
+                <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+            </div>
+            <div layout="column" layout-align="center stretch" ng-hide="!ip && !allIp">
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div>本服务器：</div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-repeat="i in ip">
+                        <div style="width: 100%; text-align: center;" ng-click="checkIp(i)">{{i}}</div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                    <md-list-item ng-show="ip.length === 0">
+                        <div style="width: 100%; text-align: center;">暂无</div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div>所有服务器：</div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-repeat="i in allIp">
+                        <div style="width: 100%; text-align: center;" ng-click="checkIp(i)">{{i}}</div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                    <md-list-item ng-show="allIp.length === 0">
+                        <div style="width: 100%; text-align: center;">暂无</div>
+                    </md-list-item>
+                </md-list>
             </div>
         </div>
     </md-dialog-content>

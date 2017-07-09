@@ -683,7 +683,7 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$http', '$mdDialog', '$mdMedia', 'bind', function($scope, $http, $mdDialog, $mdMedia, bind) {
+    controller: ['$scope', '$state', '$http', '$mdDialog', '$mdMedia', '$q', 'bind', function($scope, $state, $http, $mdDialog, $mdMedia, $q, bind) {
       $scope.publicInfo = bind;
       $scope.setDialogWidth = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
@@ -691,12 +691,17 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
         }
         return { 'min-width': '400px' };
       };
-      $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`).then(success => {
-        $scope.ip = success.data.ip;
-        return $http.get(`/api/admin/account/${ $scope.publicInfo.accountId }/ip`);
-      }).then(success => {
-        $scope.allIp = success.data.ip;
+      $q.all([
+        $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`),
+        $http.get(`/api/admin/account/${ $scope.publicInfo.accountId }/ip`),
+      ]).then(success => {
+        $scope.ip = success[0].data.ip;
+        $scope.allIp = success[1].data.ip;
       });
+      $scope.checkIp = ip => {
+        const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`
+        window.open(url, '_blank');
+      };
     }],
     fullscreen: true,
     clickOutsideToClose: true,
