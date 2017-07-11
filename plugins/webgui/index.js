@@ -16,7 +16,7 @@ const sessionParser = session({
   secret: '5E14cd8749A',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: null },
+  cookie: { secure: false, httpOnly: true, maxAge: 30 * 24 * 3600 * 1000 },
   store,
 });
 const bodyParser = require('body-parser');

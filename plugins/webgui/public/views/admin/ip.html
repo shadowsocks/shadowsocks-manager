@@ -17,7 +17,7 @@
                 <md-list>
                     <md-divider></md-divider>
                     <md-list-item>
-                        <div>本服务器：</div>
+                        <div>本服务器：<span ng-show="ip.length > 0">({{ip.length}})</span></div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat="i in ip">
@@ -29,7 +29,7 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item>
-                        <div>所有服务器：</div>
+                        <div>所有服务器：<span ng-show="allIp.length > 0">({{allIp.length}})</span></div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat="i in allIp">

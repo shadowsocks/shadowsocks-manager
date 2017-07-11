@@ -615,3 +615,21 @@ exports.getAccountIpFromAllServer = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getAccountIpInfo = (req, res) => {
+  // const ip = req.params.ip;
+  // const rp = require('request-promise');
+  // const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
+  // rp({
+  //   uri,
+  // }).then(success => {
+  //   function decode(s) {
+  //       return unescape(s.replace(/\\u/g, '%u'));
+  //   }
+  //   console.log(decode(success));
+  //   return res.send(success);
+  // }).catch(err => {
+  //   console.log(err);
+  //   res.status(403).end();
+  // });
+};

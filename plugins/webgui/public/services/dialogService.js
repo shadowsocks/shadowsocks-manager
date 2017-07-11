@@ -697,7 +697,17 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
       ]).then(success => {
         $scope.ip = success[0].data.ip;
         $scope.allIp = success[1].data.ip;
+
+        $scope.allIp.forEach(ip => {
+          // getIpInfo(ip);
+        });
       });
+      const getIpInfo = ip => {
+        const url = `/api/admin/account/ip/${ ip }`;
+        return $http.get(url).then(success => {
+          console.log(success.data);
+        });
+      };
       $scope.checkIp = ip => {
         const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`
         window.open(url, '_blank');
