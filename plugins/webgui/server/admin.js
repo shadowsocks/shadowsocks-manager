@@ -617,19 +617,24 @@ exports.getAccountIpFromAllServer = (req, res) => {
 };
 
 exports.getAccountIpInfo = (req, res) => {
-  // const ip = req.params.ip;
-  // const rp = require('request-promise');
-  // const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
-  // rp({
-  //   uri,
-  // }).then(success => {
-  //   function decode(s) {
-  //       return unescape(s.replace(/\\u/g, '%u'));
-  //   }
-  //   console.log(decode(success));
-  //   return res.send(success);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(403).end();
-  // });
+  const ip = req.params.ip;
+  const rp = require('request-promise');
+  const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
+  rp({
+    uri,
+  }).then(success => {
+    const decode = (s) => {
+      return unescape(s.replace(/\\u/g, '%u'));
+    };
+    return JSON.parse(decode(success));
+  }).then(success => {
+    if(success.code !== 0) {
+      return Promise.reject(success.code);
+    }
+    const result = [success.data.city, success.data.isp];
+    return res.send(result);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
 };

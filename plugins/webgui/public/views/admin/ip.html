@@ -21,7 +21,12 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat="i in ip">
-                        <div style="width: 100%; text-align: center;" ng-click="checkIp(i)">{{i}}</div>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="60">{{i.ip}}</div>
+                            <div flex="40" style="text-align:right">
+                                {{i.info}}
+                            </div>
+                        </div>
                         <md-divider ng-hide="$last"></md-divider>
                     </md-list-item>
                     <md-list-item ng-show="ip.length === 0">
@@ -33,7 +38,12 @@
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat="i in allIp">
-                        <div style="width: 100%; text-align: center;" ng-click="checkIp(i)">{{i}}</div>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="60">{{i.ip}}</div>
+                            <div flex="40" style="text-align:right">
+                                {{i.info}}
+                            </div>
+                        </div>
                         <md-divider></md-divider>
                     </md-list-item>
                     <md-list-item ng-show="allIp.length === 0">

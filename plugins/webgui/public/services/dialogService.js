@@ -695,18 +695,26 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
         $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ip`),
         $http.get(`/api/admin/account/${ $scope.publicInfo.accountId }/ip`),
       ]).then(success => {
-        $scope.ip = success[0].data.ip;
-        $scope.allIp = success[1].data.ip;
-
+        $scope.ip = success[0].data.ip.map(i => {
+          return { ip: i };
+        });
+        $scope.allIp = success[1].data.ip.map(i => {
+          return { ip: i };
+        });
+        $scope.ip.forEach(ip => {
+          getIpInfo(ip.ip).then(success => {
+            ip.info = success;
+          });
+        });
         $scope.allIp.forEach(ip => {
-          // getIpInfo(ip);
+          getIpInfo(ip.ip).then(success => {
+            ip.info = success;
+          });
         });
       });
       const getIpInfo = ip => {
         const url = `/api/admin/account/ip/${ ip }`;
-        return $http.get(url).then(success => {
-          console.log(success.data);
-        });
+        return $http.get(url).then(success => success.data);
       };
       $scope.checkIp = ip => {
         const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`
