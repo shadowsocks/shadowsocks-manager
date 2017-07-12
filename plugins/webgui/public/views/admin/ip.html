@@ -24,7 +24,8 @@
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="60">{{i.ip}}</div>
                             <div flex="40" style="text-align:right">
-                                {{i.info}}
+                                <span style="font-size: 0.9em;">{{ i.info[0] }}</span>
+                                <span style="font-size: 0.9em;">{{ i.info[1] }}</span>
                             </div>
                         </div>
                         <md-divider ng-hide="$last"></md-divider>
@@ -41,7 +42,8 @@
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="60">{{i.ip}}</div>
                             <div flex="40" style="text-align:right">
-                                {{i.info}}
+                                <span style="font-size: 0.9em;">{{ i.info[0] }}</span>
+                                <span style="font-size: 0.9em;">{{ i.info[1] }}</span>
                             </div>
                         </div>
                         <md-divider></md-divider>
