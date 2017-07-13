@@ -9,6 +9,7 @@ const alipay = appRequire('plugins/alipay/index');
 const email = appRequire('plugins/email/index');
 const config = appRequire('services/config').all();
 const isAlipayUse = config.plugins.alipay && config.plugins.alipay.use;
+const rp = require('request-promise');
 
 exports.getAccount = (req, res) => {
   account.getAccount().then(success => {
@@ -618,23 +619,44 @@ exports.getAccountIpFromAllServer = (req, res) => {
 
 exports.getAccountIpInfo = (req, res) => {
   const ip = req.params.ip;
-  const rp = require('request-promise');
   const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
-  rp({
-    uri,
-  }).then(success => {
-    const decode = (s) => {
-      return unescape(s.replace(/\\u/g, '%u'));
-    };
-    return JSON.parse(decode(success));
-  }).then(success => {
-    if(success.code !== 0) {
-      return Promise.reject(success.code);
-    }
-    const result = [success.data.city, success.data.isp];
-    return res.send(result);
+
+  const taobao = ip => {
+    const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
+    return rp({ uri }).then(success => {
+      const decode = (s) => {
+        return unescape(s.replace(/\\u/g, '%u'));
+      };
+      return JSON.parse(decode(success));
+    }).then(success => {
+      if(success.code !== 0) {
+        return Promise.reject(success.code);
+      }
+      const result = [success.data.region + success.data.city, success.data.isp];
+      return result;
+    });
+  };
+
+  const sina = ip => {
+    const uri = `https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=${ ip }`;
+    return rp({ uri }).then(success => {
+      const decode = (s) => {
+        return unescape(s.replace(/\\u/g, '%u'));
+      };
+      return JSON.parse(decode(success.match(/^var remote_ip_info = ([\s\S]+);$/)[1]));
+    }).then(success => {
+      // if(success.code !== 0) {
+      //   return Promise.reject(success.code);
+      // }
+      const result = [success.province + success.city, success.isp];
+      return result;
+    });
+  };
+  const getIpFunction = [taobao, sina];
+  const random = +Math.random().toString().substr(2) % getIpFunction.length;
+  getIpFunction[random](ip).then(success => {
+    return res.send(success);
   }).catch(err => {
-    console.log(err);
-    res.status(403).end();
+    return res.send(['', '']);
   });
 };
