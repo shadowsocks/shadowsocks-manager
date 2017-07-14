@@ -77,13 +77,16 @@ const checkFlow = async (server, port, startTime, endTime) => {
       return success[0].value.multiServerFlow;
     });
   } catch (err) {}
-  const flow = await knex('saveFlow')
-  .sum('flow as sumFlow')
-  .groupBy('port')
-  .select(['port'])
-  .where(isMultiServerFlow ? { port } : { id: server, port })
-  .whereBetween('time', [startTime, endTime]);
-  return flow[0] ? flow[0].sumFlow : 0;
+  const userFlow = await flow.getFlowFromSplitTime(server, port, startTime, endTime);
+  return userFlow;
+  // const userFlow = await knex('saveFlow')
+  // .sum('flow as sumFlow')
+  // .groupBy('port')
+  // .select(['port'])
+  // .where(isMultiServerFlow ? { port } : { id: server, port })
+  // .whereBetween('time', [startTime, endTime]);
+  // console.log((userFlow[0] ? userFlow[0].sumFlow : 0) + ' ' + z);
+  // return userFlow[0] ? userFlow[0].sumFlow : 0;
 };
 
 const checkServer = async () => {
@@ -165,6 +168,12 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             const flow = await checkFlow(s.id, a.port, startTime, Date.now());
+            // if(a.port === 39858 && s.id === 6) {
+            //   console.log(s.id + ' ' + flow + ' / ' + data.flow);
+            //   const _flow = appRequire('plugins/flowSaver/flow');
+            //   const z = await _flow.getFlowFromSplitTime(s.id, a.port, startTime, Date.now());
+            //   console.log(z);
+            // }
             if(isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return;
@@ -209,9 +218,11 @@ exports.delPort = delPort;
 exports.changePassword = changePassword;
 
 setTimeout(() => {
-  // TODO: fix load plugins
   checkServer();
 }, 10 * 1000);
-setInterval(() => {
+// setInterval(() => {
+//   checkServer();
+// }, 60 * 1000);
+cron.minute(() => {
   checkServer();
-}, 60 * 1000);
+}, 1);

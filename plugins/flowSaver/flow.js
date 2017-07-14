@@ -357,3 +357,5 @@ exports.getServerUserFlow = getServerUserFlow;
 exports.getlastConnectTime = getlastConnectTime;
 exports.getAccountServerFlow = getAccountServerFlow;
 exports.getUserPortLastConnect = getUserPortLastConnect;
+
+exports.getFlowFromSplitTime = getFlowFromSplitTime;
