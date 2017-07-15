@@ -83,18 +83,38 @@ cron.minute(async () => {
       push.pushMessage('支付成功', {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
-      account.setAccountLimit(userId, accountId, order.orderType)
-      .then(() => {
-        return knex('alipay').update({
+      return knex.transaction(trx => {
+        return knex('alipay').transacting(trx)
+        .update({
           status: 'FINISH',
         }).where({
           orderId: order.orderId,
+        })
+        .then(() => {
+          return account.setAccountLimit(userId, accountId, order.orderType);
+        })
+        .then(success => {
+          logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+          trx.commit(success);
+        })
+        .catch(err => {
+          logger.error(`订单支付失败: [${ order.orderId }]`, err);
+          trx.rollback(err);
         });
-      }).then(() => {
-        logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
-      }).catch(err => {
-        logger.error(`订单支付失败: [${ order.orderId }]`, err);
       });
+
+      // account.setAccountLimit(userId, accountId, order.orderType)
+      // .then(() => {
+      //   return knex('alipay').update({
+      //     status: 'FINISH',
+      //   }).where({
+      //     orderId: order.orderId,
+      //   });
+      // }).then(() => {
+      //   logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+      // }).catch(err => {
+      //   logger.error(`订单支付失败: [${ order.orderId }]`, err);
+      // });
     };
   });
 }, 1);
