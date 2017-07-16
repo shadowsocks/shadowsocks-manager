@@ -65,16 +65,69 @@ const createOrder = async (user, account, amount, orderType = 3) => {
 
 cron.minute(async () => {
   if(!alipay_f2f) { return; }
+  // const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
+  // orders.forEach(order => {
+  //   if(order.status !== 'TRADE_SUCCESS' && order.status !== 'FINISH') {
+  //     alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
+  //       if(success.code === '10000') {
+  //         knex('alipay').update({
+  //           status: success.trade_status
+  //         }).where({
+  //           orderId: order.orderId,
+  //         }).then();
+  //       }
+  //     });
+  //   } else if(order.status === 'TRADE_SUCCESS') {
+  //     const accountId = order.account;
+  //     const userId = order.user;
+  //     push.pushMessage('支付成功', {
+  //       body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
+  //     });
+  //     return knex.transaction(trx => {
+  //       return knex('alipay').transacting(trx)
+  //       .update({
+  //         status: 'FINISH',
+  //       }).where({
+  //         orderId: order.orderId,
+  //       })
+  //       .then(() => {
+  //         return account.setAccountLimit(userId, accountId, order.orderType);
+  //       })
+  //       .then(success => {
+  //         logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+  //         trx.commit(success);
+  //       })
+  //       .catch(err => {
+  //         logger.error(`订单支付失败: [${ order.orderId }]`, err);
+  //         trx.rollback(err);
+  //       });
+  //     });
+
+  //     // account.setAccountLimit(userId, accountId, order.orderType)
+  //     // .then(() => {
+  //     //   return knex('alipay').update({
+  //     //     status: 'FINISH',
+  //     //   }).where({
+  //     //     orderId: order.orderId,
+  //     //   });
+  //     // }).then(() => {
+  //     //   logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+  //     // }).catch(err => {
+  //     //   logger.error(`订单支付失败: [${ order.orderId }]`, err);
+  //     // });
+  //   };
+  // });
+
   const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
-  orders.forEach(order => {
+  const scanOrder = order => {
     if(order.status !== 'TRADE_SUCCESS' && order.status !== 'FINISH') {
-      alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
+      return alipay_f2f.checkInvoiceStatus(order.orderId).then(success => {
         if(success.code === '10000') {
-          knex('alipay').update({
+          return knex('alipay').update({
             status: success.trade_status
           }).where({
             orderId: order.orderId,
-          }).then();
+          });
         }
       });
     } else if(order.status === 'TRADE_SUCCESS') {
@@ -83,40 +136,23 @@ cron.minute(async () => {
       push.pushMessage('支付成功', {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
-      return knex.transaction(trx => {
-        return knex('alipay').transacting(trx)
-        .update({
+      return account.setAccountLimit(userId, accountId, order.orderType)
+      .then(() => {
+        return knex('alipay').update({
           status: 'FINISH',
         }).where({
           orderId: order.orderId,
-        })
-        .then(() => {
-          return account.setAccountLimit(userId, accountId, order.orderType);
-        })
-        .then(success => {
-          logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
-          trx.commit(success);
-        })
-        .catch(err => {
-          logger.error(`订单支付失败: [${ order.orderId }]`, err);
-          trx.rollback(err);
         });
+      }).then(() => {
+        logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+      }).catch(err => {
+        logger.error(`订单支付失败: [${ order.orderId }]`, err);
       });
-
-      // account.setAccountLimit(userId, accountId, order.orderType)
-      // .then(() => {
-      //   return knex('alipay').update({
-      //     status: 'FINISH',
-      //   }).where({
-      //     orderId: order.orderId,
-      //   });
-      // }).then(() => {
-      //   logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
-      // }).catch(err => {
-      //   logger.error(`订单支付失败: [${ order.orderId }]`, err);
-      // });
     };
-  });
+  };
+  for(const order of orders) {
+    await scanOrder(order);
+  }
 }, 1);
 
 const checkOrder = async (orderId) => {
