@@ -5,6 +5,7 @@ const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
 const adminServer = appRequire('plugins/webgui/server/adminServer');
+const adminFlow = appRequire('plugins/webgui/server/adminFlow');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const push = appRequire('plugins/webgui/server/push');
@@ -56,12 +57,12 @@ app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccount
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, admin.deleteAccount);
 
-app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, admin.getServerFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, admin.getServerLastHourFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/user', isAdmin, admin.getServerUserFlow);
-app.get('/api/admin/flow/account/:accountId(\\d+)', isAdmin, admin.getAccountServerFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)', isAdmin, admin.getServerPortFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isAdmin, admin.getServerPortLastConnect);
+app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
+app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, adminFlow.getServerLastHourFlow);
+app.get('/api/admin/flow/:serverId(\\d+)/user', isAdmin, adminFlow.getServerUserFlow);
+app.get('/api/admin/flow/account/:accountId(\\d+)', isAdmin, adminFlow.getAccountServerFlow);
+app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)', isAdmin, adminFlow.getServerPortFlow);
+app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isAdmin, adminFlow.getServerPortLastConnect);
 
 app.get('/api/admin/user', isAdmin, admin.getUsers);
 app.post('/api/admin/user/add', isAdmin, admin.addUser);

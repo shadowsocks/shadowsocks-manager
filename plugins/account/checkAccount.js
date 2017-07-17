@@ -168,12 +168,6 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             const flow = await checkFlow(s.id, a.port, startTime, Date.now());
-            // if(a.port === 39858 && s.id === 6) {
-            //   console.log(s.id + ' ' + flow + ' / ' + data.flow);
-            //   const _flow = appRequire('plugins/flowSaver/flow');
-            //   const z = await _flow.getFlowFromSplitTime(s.id, a.port, startTime, Date.now());
-            //   console.log(z);
-            // }
             if(isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return;
@@ -220,9 +214,6 @@ exports.changePassword = changePassword;
 setTimeout(() => {
   checkServer();
 }, 10 * 1000);
-// setInterval(() => {
-//   checkServer();
-// }, 60 * 1000);
 cron.minute(() => {
   checkServer();
 }, 1);
