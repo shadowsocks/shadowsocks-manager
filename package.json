@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.7.13",
+  "version": "0.8.0",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -52,6 +52,7 @@
     "moment": "^2.15.1",
     "mysql": "^2.13.0",
     "nodemailer": "^4.0.0",
+    "paypal-rest-sdk": "^1.7.1",
     "raven": "^1.1.4",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",

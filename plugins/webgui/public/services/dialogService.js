@@ -149,6 +149,32 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
           }
         });
       }, 5 * 1000);
+
+      // paypal.Button.render({
+      //   env: 'sandbox', // production or sandbox
+      //   commit: true,
+      //   payment: function() {
+      //     var CREATE_URL = '/api/user/paypal/create';
+      //     return paypal.request.post(CREATE_URL, {
+      //       accountId: publicInfo.accountId,
+      //       orderType: publicInfo.orderType,
+      //     })
+      //     .then(function(res) {
+      //         return res.paymentID;
+      //     });
+      //   },
+      //   onAuthorize: function(data, actions) {
+      //     var EXECUTE_URL = '/api/user/paypal/execute/';
+      //     var data = {
+      //       paymentID: data.paymentID,
+      //       payerID: data.payerID
+      //     };
+      //     return paypal.request.post(EXECUTE_URL, data)
+      //     .then(function (res) {
+      //       close();
+      //     });
+      //   }
+      // }, '#paypal-button-container');
     }).catch(() => {
       publicInfo.status = 'error';
     });

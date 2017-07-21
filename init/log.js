@@ -15,6 +15,7 @@ const category = [
   'alipay',
   'express',
   'flowSaver',
+  'paypal',
 ];
 
 log4js.configure({
