@@ -244,41 +244,41 @@ exports.getMultiServerFlowStatus = (req, res) => {
   });
 };
 
-const paypal = appRequire('plugins/paypal/index');
+// const paypal = appRequire('plugins/paypal/index');
 
-exports.createPaypalOrder = (req, res) => {
-  const userId = req.session.user;
-  const accountId = req.body.accountId;
-  const orderType = req.body.orderType;
-  let type;
-  let amount;
-  if(orderType === 'week') { type = 2; }
-  else if(orderType === 'month') { type = 3; }
-  else if(orderType === 'day') { type = 4; }
-  else if(orderType === 'hour') { type = 5; }
-  else if(orderType === 'season') { type = 6; }
-  else if(orderType === 'year') { type = 7; }
-  else { return res.status(403).end(); }
-  amount = config.plugins.account.pay[orderType].price;
-  paypal.createOrder(userId, accountId, amount, type).then(success => {
-    res.send(success);
-  })
-  .catch(error => {
-    res.status(403).end();
-  });
-};
+// exports.createPaypalOrder = (req, res) => {
+//   const userId = req.session.user;
+//   const accountId = req.body.accountId;
+//   const orderType = req.body.orderType;
+//   let type;
+//   let amount;
+//   if(orderType === 'week') { type = 2; }
+//   else if(orderType === 'month') { type = 3; }
+//   else if(orderType === 'day') { type = 4; }
+//   else if(orderType === 'hour') { type = 5; }
+//   else if(orderType === 'season') { type = 6; }
+//   else if(orderType === 'year') { type = 7; }
+//   else { return res.status(403).end(); }
+//   amount = config.plugins.account.pay[orderType].price;
+//   paypal.createOrder(userId, accountId, amount, type).then(success => {
+//     res.send(success);
+//   })
+//   .catch(error => {
+//     res.status(403).end();
+//   });
+// };
 
-exports.executePaypalOrder = (req, res) => {
-  paypal.executeOrder(req.body)
-  .then(success => {
-    res.send(success);
-  })
-  .catch(error => {
-    res.status(403).end();
-  });
-};
+// exports.executePaypalOrder = (req, res) => {
+//   paypal.executeOrder(req.body)
+//   .then(success => {
+//     res.send(success);
+//   })
+//   .catch(error => {
+//     res.status(403).end();
+//   });
+// };
 
-exports.paypalCallback = (req, res) => {
-  console.log(req.body);
-  return res.send('success');
-};
+// exports.paypalCallback = (req, res) => {
+//   console.log(req.body);
+//   return res.send('success');
+// };

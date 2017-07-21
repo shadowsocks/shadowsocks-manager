@@ -104,11 +104,11 @@ app.get('/api/user/order/price', isUser, user.getPrice);
 app.post('/api/user/order/qrcode', isUser, user.createOrder);
 app.post('/api/user/order/status', isUser, user.checkOrder);
 
-app.post('/api/user/paypal/create', isUser, user.createPaypalOrder);
-app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
+// app.post('/api/user/paypal/create', isUser, user.createPaypalOrder);
+// app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
 
 app.post('/api/user/alipay/callback', user.alipayCallback);
-app.post('/api/user/paypal/callback', user.paypalCallback);
+// app.post('/api/user/paypal/callback', user.paypalCallback);
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
