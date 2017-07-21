@@ -13,7 +13,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
     table.string('key').unique();
-    table.string('value');
+    table.string('value', 16384);
   });
 };
 

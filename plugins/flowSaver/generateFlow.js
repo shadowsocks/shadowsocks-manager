@@ -60,10 +60,10 @@ const generateFlow = async (type) => {
   generateFlow(type);
 };
 
-// knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 36 * 24 * 3600 * 1000]).then();
-// knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 36 * 24 * 3600 * 1000]).then();
-// knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 36 * 24 * 3600 * 1000]).then();
-// knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 36 * 24 * 3600 * 1000]).then();
+knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
+knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
+knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
+knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
 
 generateFlow('day');
 generateFlow('hour');

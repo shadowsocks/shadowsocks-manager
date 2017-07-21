@@ -101,6 +101,12 @@ app.config(['$stateProvider', $stateProvider => {
     .state('admin.unfinished', {
       url: '/unfinished',
       templateUrl: '/public/views/admin/unfinished.html',
-    });
+    })
+    .state('admin.paymentSetting', {
+      url: '/settings/payment',
+      controller: 'AdminPaymentSettingController',
+      templateUrl: '/public/views/admin/paymentSetting.html',
+    })
+    ;
   }])
 ;

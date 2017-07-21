@@ -178,8 +178,18 @@ exports.createOrder = (req, res) => {
   else if(orderType === 'season') { type = 6; }
   else if(orderType === 'year') { type = 7; }
   else { return res.status(403).end(); }
-  amount = config.plugins.account.pay[orderType].price;
-  alipay.createOrder(userId, accountId, amount, type).then(success => {
+  knex('webguiSetting').select().where({
+    key: 'payment',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    amount = success[orderType].alipay;
+    return alipay.createOrder(userId, accountId, amount, type);
+  }).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
@@ -206,10 +216,22 @@ exports.alipayCallback = (req, res) => {
 
 exports.getPrice = (req, res) => {
   const price = {};
-  for(const p in config.plugins.account.pay) {
-    price[p] = config.plugins.account.pay[p].price;
-  }
-  return res.send(price);
+  knex('webguiSetting').select().where({
+    key: 'payment',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    for(const s in success) {
+    price[s] = success[s].alipay;
+    }
+    return res.send(price);
+  }).catch(() => {
+    res.status(403).end();
+  });
 };
 
 exports.getNotice = (req, res) => {

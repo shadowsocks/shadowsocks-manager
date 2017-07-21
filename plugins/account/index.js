@@ -223,9 +223,18 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   if(orderType === 6) { limit = 3; }
   if(orderType === 7) { limit = 12; }
   const flow = {};
+  const paymentInfo = await knex('webguiSetting').select().where({
+    key: 'payment',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  });
   for (const p in payType) {
-    if(config.plugins.account.pay[p]) {
-      flow[payType[p]] = config.plugins.account.pay[p].flow;
+    if(paymentInfo[p].alipay) {
+      flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
     }
   };
   if(!accountId) {

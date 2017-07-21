@@ -1,0 +1,29 @@
+<md-card ng-repeat="t in time">
+    <md-card-header>
+        <md-card-header-text>
+            <span class="md-title">{{ t.name }}</span>
+        </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+        <md-list layout="row">
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+            <div flex>
+                <form name="settingForm">
+                    <md-input-container class="md-block">
+                        <label>支付宝</label>
+                        <input type="number" required name="alipay" ng-model="paymentData[t.id].alipay">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Paypal</label>
+                        <input type="number" required name="paypal" ng-model="paymentData[t.id].paypal">
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>流量（MB）</label>
+                        <input type="number" required name="flow" ng-model="paymentData[t.id].flow">
+                    </md-input-container>
+                </form>
+            </div>
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+        </md-list>
+    </md-card-content>
+</md-card>

@@ -86,6 +86,9 @@ app.post('/api/admin/notice', isAdmin, adminNotice.addNotice);
 app.put('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.editNotice);
 app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotice);
 
+app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
+app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
+
 app.get('/api/admin/setting', isAdmin, adminSetting.getSetting);
 app.put('/api/admin/setting', isAdmin, adminSetting.modifySetting);
 
