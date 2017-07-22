@@ -14,7 +14,7 @@ paypal.configure({
 });
 
 const createOrder = async (user, account, amount, type) => {
-  const amountUsd = (amount / +config.plugins.paypal.rate).toFixed(2);
+  // const amountUsd = (amount / +config.plugins.paypal.rate).toFixed(2);
   try {
     const create_payment_json = {
       intent: 'sale',
@@ -28,7 +28,7 @@ const createOrder = async (user, account, amount, type) => {
       transactions: [{
         amount: {
           currency: "USD",
-          total: amountUsd,
+          total: amount,
         },
         description: "ss"
       }]
