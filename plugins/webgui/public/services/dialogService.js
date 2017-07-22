@@ -126,6 +126,19 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
 app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $interval, $http) => {
   const publicInfo = {
     orderType: 'month',
+    time: [{
+      type: 'hour', name: '一小时'
+    }, {
+      type: 'day', name: '一天'
+    }, {
+      type: 'week', name: '一周'
+    }, {
+      type: 'month', name: '一个月'
+    }, {
+      type: 'season', name: '三个月'
+    }, {
+      type: 'year', name: '一年'
+    }],
   };
   let dialogPromise = null;
   const createOrder = () => {

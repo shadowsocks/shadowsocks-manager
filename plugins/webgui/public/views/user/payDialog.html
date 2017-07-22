@@ -16,59 +16,18 @@
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;">请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderType" flex>
-                    <md-radio-button value="hour" ng-show="publicInfo.alipay.hour">
+                    <md-radio-button ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-show="publicInfo.alipay[t.type] || publicInfo.paypal[t.type]">
                         <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                            <span flex="15"></span>
-                            <span flex="30">一小时</span>
+                            <span flex="10"></span>
+                            <span flex="30">{{ t.name }}</span>
                             <span flex="5"></span>
-                            <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.hour}}元</span>
-                            <span flex="15"></span>
+                            <span flex="45" style="text-align:right; color: #888">
+                                <span ng-show="publicInfo.alipay[t.type]">¥{{publicInfo.alipay[t.type]}}</span>
+                                <span ng-show="publicInfo.alipay[t.type] && publicInfo.paypal[t.type]">&nbsp;/&nbsp;</span>
+                                <span ng-show="publicInfo.paypal[t.type]">${{publicInfo.paypal[t.type]}}</span>
+                            </span>
+                            <span flex="10"></span>
                         </span>
-                    </md-radio-button>
-                    <md-radio-button value="day" ng-show="publicInfo.alipay.day">
-                        <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                            <span flex="15"></span>
-                            <span flex="30">一天</span>
-                            <span flex="5"></span>
-                            <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.day}}元</span>
-                            <span flex="15"></span>
-                        </span>
-                    </md-radio-button>
-                    <md-radio-button value="week" ng-show="publicInfo.alipay.week">
-                        <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                            <span flex="15"></span>
-                            <span flex="30">一周</span>
-                            <span flex="5"></span>
-                            <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.week}}元</span>
-                            <span flex="15"></span>
-                        </span>
-                    </md-radio-button>
-                    <md-radio-button value="month" ng-show="publicInfo.alipay.month">
-                      <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                          <span flex="15"></span>
-                          <span flex="30">一个月</span>
-                          <span flex="5"></span>
-                          <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.month}}元</span>
-                          <span flex="15"></span>
-                      </span>
-                    </md-radio-button>
-                    <md-radio-button value="season" ng-show="publicInfo.alipay.season">
-                      <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                          <span flex="15"></span>
-                          <span flex="30">三个月</span>
-                          <span flex="5"></span>
-                          <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.season}}元</span>
-                          <span flex="15"></span>
-                      </span>
-                    </md-radio-button>
-                    <md-radio-button value="year" ng-show="publicInfo.alipay.year">
-                      <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
-                          <span flex="15"></span>
-                          <span flex="30">一年</span>
-                          <span flex="5"></span>
-                          <span flex="35" style="text-align:right; color: #888">{{publicInfo.alipay.year}}元</span>
-                          <span flex="15"></span>
-                      </span>
                     </md-radio-button>
                 </md-radio-group>
             </div>
