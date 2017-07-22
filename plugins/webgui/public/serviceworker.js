@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-07-22 16:26:58';
+var ONLINE_CACHE_NAME = '2017-07-22 17:32:58';
 var onlineCacheUrl = [
   '/',
 

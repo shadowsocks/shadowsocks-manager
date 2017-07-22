@@ -1,4 +1,4 @@
-<md-dialog aria-label="pay dialog">
+<md-dialog aria-label="pay dialog" ng-style="setDialogWidth()">
     <div ng-show="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
@@ -17,7 +17,7 @@
                 <div style="margin-bottom: 20px;">请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderType" flex>
                     <md-radio-button ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-show="publicInfo.alipay[t.type] || publicInfo.paypal[t.type]">
-                        <span layout="row" layout-align="space-between center" style="min-width: 180px; max-width: 220px;">
+                        <span layout="row" layout-align="space-between center" style="min-width: 280px; max-width: 380px;">
                             <span flex="10"></span>
                             <span flex="30">{{ t.name }}</span>
                             <span flex="5"></span>

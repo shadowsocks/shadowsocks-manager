@@ -69,8 +69,8 @@ cron.minute(() => {
   generateFlow('hour');
   knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
   knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 7 * 24 * 3600 * 1000]).then();
+  knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 14 * 24 * 3600 * 1000]).then();
+  knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 3 * 24 * 3600 * 1000]).then();
 }, 30);
 cron.minute(() => {
   generateFlow('5min');

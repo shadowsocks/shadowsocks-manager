@@ -19,11 +19,11 @@ const createOrder = async (user, account, amount, type) => {
     const create_payment_json = {
       intent: 'sale',
       payer: {
-        payment_method: "paypal"
+        payment_method: 'paypal'
       },
       redirect_urls: {
-        return_url: "http://baidu.com",
-        cancel_url: "http://baidu.com"
+        return_url: config.plugins.webgui.site + '/user/account',
+        cancel_url: config.plugins.webgui.site + '/user/account',
       },
       transactions: [{
         amount: {

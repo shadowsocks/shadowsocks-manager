@@ -206,8 +206,15 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
+    fullscreen: true,
     controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function($scope, $mdDialog, $mdMedia, bind) {
       $scope.publicInfo = bind;
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '400px' };
+      };
       $scope.getQrCodeSize = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
           return 200;
@@ -759,7 +766,7 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
         return $http.get(url).then(success => success.data);
       };
       $scope.checkIp = ip => {
-        const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`
+        const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`;
         window.open(url, '_blank');
       };
     }],
