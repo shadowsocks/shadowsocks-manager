@@ -376,7 +376,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     // };
     $http.get('/api/admin/setting/payment').then(success => {
       $scope.paymentData = success.data;
-      console.log($scope.paymentData);
+      // console.log($scope.paymentData);
       $scope.$watch('paymentData', () => {
         $scope.saveSetting();
       }, true);
