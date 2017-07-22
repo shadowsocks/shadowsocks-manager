@@ -202,17 +202,32 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
   if(port) { where.port = port; }
   const time = splitTime(start, end);
   const sum = [];
-  const getFlow = (tableName, startTime, endTime) => {
-    return knex(tableName)
-    .sum('flow as sumFlow')
-    .groupBy('id')
-    .select(['id'])
-    .where(where)
-    .whereBetween('time', [startTime, endTime - 1]).then(success => {
-      if(success[0]) { return success[0].sumFlow; }
-      return 0;
-    });
-  };
+  let getFlow;
+  if(serverId) {
+    getFlow = (tableName, startTime, endTime) => {
+      return knex(tableName)
+      .sum('flow as sumFlow')
+      .groupBy('id')
+      .select(['id'])
+      .where(where)
+      .whereBetween('time', [startTime, endTime - 1]).then(success => {
+        if(success[0]) { return success[0].sumFlow; }
+        return 0;
+      });
+    };
+  } else {
+    getFlow = (tableName, startTime, endTime) => {
+      return knex(tableName)
+      .sum('flow as sumFlow')
+      .groupBy('port')
+      .select(['port'])
+      .where(where)
+      .whereBetween('time', [startTime, endTime - 1]).then(success => {
+        if(success[0]) { return success[0].sumFlow; }
+        return 0;
+      });
+    };
+  }
   time.day.forEach(f => {
     sum.push(getFlow('saveFlowDay', f[0], f[1]));
   });
