@@ -211,7 +211,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
   const chooseOrderType = accountId => {
     publicInfo.status = 'loading';
     $http.get('/api/user/order/price').then(success => {
-      publicInfo.price = success.data.alipay;
+      publicInfo.alipay = success.data.alipay;
       publicInfo.paypal = success.data.paypal;
       publicInfo.status = 'choose';
       publicInfo.accountId = accountId;
