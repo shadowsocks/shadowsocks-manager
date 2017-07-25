@@ -230,18 +230,16 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
   };
   const chooseOrderType = accountId => {
     publicInfo.status = 'loading';
+    dialogPromise = $mdDialog.show(dialog);
     $http.get('/api/user/order/price').then(success => {
       publicInfo.alipay = success.data.alipay;
       publicInfo.paypal = success.data.paypal;
       publicInfo.status = 'choose';
       publicInfo.accountId = accountId;
-      dialogPromise = $mdDialog.show(dialog);
-      return dialogPromise;
     }).catch(() => {
       publicInfo.status = 'error';
-      dialogPromise = $mdDialog.show(dialog);
-      return dialogPromise;
     });
+    return dialogPromise;
   };
   return {
     chooseOrderType,

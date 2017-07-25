@@ -14,7 +14,6 @@ paypal.configure({
 });
 
 const createOrder = async (user, account, amount, type) => {
-  // const amountUsd = (amount / +config.plugins.paypal.rate).toFixed(2);
   try {
     const create_payment_json = {
       intent: 'sale',
@@ -27,10 +26,10 @@ const createOrder = async (user, account, amount, type) => {
       },
       transactions: [{
         amount: {
-          currency: "USD",
+          currency: 'USD',
           total: amount,
         },
-        description: "ss"
+        description: 'ss'
       }]
     };
     const payment = await new Promise((resolve, reject) => {
@@ -39,8 +38,6 @@ const createOrder = async (user, account, amount, type) => {
           console.log(error);
           reject(error);
         } else {
-          // console.log("Create Payment Response");
-          // console.log(payment);
           resolve(payment);
         }
       });
@@ -53,8 +50,9 @@ const createOrder = async (user, account, amount, type) => {
       amount: amount + '',
       user,
       account: (account !== 'undefined' && account) ? account : null,
-      status: 'create',
+      status: 'created',
       createTime: Date.now(),
+      expireTime: Date.now() + 3600 * 1000,
     });
     return { paymentID: payment.id };
   } catch (err) {
@@ -70,8 +68,6 @@ const executeOrder = async (order) => {
         console.log(error);
         reject(error);
       } else {
-        // console.log("Get Payment Response");
-        // console.log(JSON.stringify(payment, null, 2));
         resolve(payment);
       }
     });
@@ -88,8 +84,6 @@ const executeOrder = async (order) => {
         console.log(error);
         return reject(error);
       } else {
-      //   console.log("Get Payment Response");
-      //   console.log(JSON.stringify(payment));
         return resolve();
       }
     });
@@ -110,12 +104,12 @@ const checkOrder = async paypalId => {
       }
     });
   });
-  await knex('paypal').update({ status: orderInfo.state }).where({ paypalId });
+  await knex('paypal').update({ status: orderInfo.state, paypalData: JSON.stringify(orderInfo) }).where({ paypalId });
   return;
 };
 
 cron.minute(async () => {
-  const orders = await knex('paypal').select();
+  const orders = await knex('paypal').select().whereNotBetween('expireTime', [0, Date.now()]);
   const scanOrder = order => {
     if(order.status !== 'approved' && order.status !== 'finish') {
       return checkOrder(order.paypalId);

@@ -21,6 +21,7 @@ const createTable = async () => {
     table.string('status');
     table.string('paypalData', 4096);
     table.bigInteger('createTime');
+    table.bigInteger('expireTime');
   });
 };
 
