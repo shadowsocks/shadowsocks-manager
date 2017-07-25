@@ -3,7 +3,7 @@
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in accountInfo.account track by $index">
         <md-card ng-click="toAccount(a.id)" md-colors="{{accountColor(a)}}">
             <md-card-content>
-                <div layout="row" layout-align="space-between center">
+                <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
                     <div flex="30">{{a.port}}</div>
                     <div flex="70" style="text-align:right; color: #aaa; font-size: 0.8em;">{{a.user}}</div>
                 </div>
