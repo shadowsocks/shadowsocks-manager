@@ -176,8 +176,11 @@ app
       userApi.getServerPortData(account, serverId, port).then(success => {
         account.lastConnect = success.lastConnect;
         account.serverPortFlow = success.flow;
-        const maxFlow = account.data.flow * ($scope.isMultiServerFlow ? 1 : scale);
-        account.isFlowOutOfLimit[serverId] = account.serverPortFlow >= maxFlow;
+        let maxFlow = 0;
+        if(account.data) {
+          maxFlow = account.data.flow * ($scope.isMultiServerFlow ? 1 : scale);
+        }
+        account.isFlowOutOfLimit[serverId] = maxFlow ? ( account.serverPortFlow >= maxFlow ) : false;
       });
     };
 
