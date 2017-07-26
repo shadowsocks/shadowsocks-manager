@@ -77,7 +77,8 @@ const checkFlow = async (server, port, startTime, endTime) => {
       return success[0].value.multiServerFlow;
     });
   } catch (err) {}
-  const userFlow = await flow.getFlowFromSplitTime(server, port, startTime, endTime);
+  const serverId = isMultiServerFlow ? null : server;
+  const userFlow = await flow.getFlowFromSplitTime(serverId, port, startTime, endTime);
   return userFlow;
   // const userFlow = await knex('saveFlow')
   // .sum('flow as sumFlow')
