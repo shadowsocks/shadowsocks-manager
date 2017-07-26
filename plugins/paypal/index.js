@@ -52,7 +52,7 @@ const createOrder = async (user, account, amount, type) => {
       account: (account !== 'undefined' && account) ? account : null,
       status: 'created',
       createTime: Date.now(),
-      expireTime: Date.now() + 3600 * 1000,
+      expireTime: Date.now() + 2 * 60 * 60 * 1000,
     });
     return { paymentID: payment.id };
   } catch (err) {

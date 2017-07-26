@@ -135,7 +135,16 @@ app.get('/manifest.json', (req, res) => {
 });
 
 const version = appRequire('package').version;
-const homePage = (req, res) => res.render('index', { version });
+const configForFrontend = {
+  site: config.plugins.webgui.site,
+  alipay: config.plugins.alipay && config.plugins.alipay.use,
+  paypal: config.plugins.paypal && config.plugins.paypal.use,
+  paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
+};
+const homePage = (req, res) => res.render('index', {
+  version,
+  config: configForFrontend,
+});
 app.get('/', homePage);
 app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);

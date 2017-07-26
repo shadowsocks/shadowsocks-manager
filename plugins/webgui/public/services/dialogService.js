@@ -162,10 +162,10 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
           }
         });
       }, 5 * 1000);
-
+      const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
       if(publicInfo.paypal[publicInfo.orderType]) {
         paypal.Button.render({
-          env: 'sandbox', // production or sandbox
+          env, // production or sandbox
           commit: true,
           payment: function() {
             var CREATE_URL = '/api/user/paypal/create';

@@ -40,7 +40,10 @@
      <script src="https://www.paypalobjects.com/api/checkout.js"></script> 
 
     <script src="/libs/bundle.js"></script>
-    <script>window.ssmgrVersion = '<%= version%>'</script>
+    <script>
+        window.ssmgrVersion = '<%= version%>'
+        window.ssmgrConfig = '<%- JSON.stringify(config)%>'
+    </script>
     <div ng-controller="MainController" layout-fill>
         <div layout-fill layout="row" layout-align="center center" ng-show="mainLoading">
             <div layout="column" layout-align="center center">
