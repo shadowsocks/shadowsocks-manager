@@ -79,11 +79,6 @@ app
         };
       });
     };
-
-    $scope.alipayStatus = false;
-    userApi.getAlipayStatus().then(success => {
-      $scope.alipayStatus = success.status;
-    });
   }
 ])
 .controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog',
@@ -170,8 +165,9 @@ app
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
 
-    $scope.getServerPortData = (account, serverId, scale, port) => {
+    $scope.getServerPortData = (account, serverId, port) => {
       account.currentServerId = serverId;
+      const scale = $scope.servers.filter(f => f.id === serverId)[0].scale;
       if(!account.isFlowOutOfLimit) { account.isFlowOutOfLimit = {}; }
       userApi.getServerPortData(account, serverId, port).then(success => {
         account.lastConnect = success.lastConnect;
@@ -188,7 +184,7 @@ app
       if(status === 'visible') {
         if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
           $scope.account.forEach(a => {
-            $scope.getServerPortData(a, a.currentServerId, scale, a.port);
+            $scope.getServerPortData(a, a.currentServerId, a.port);
           });
         }
       }

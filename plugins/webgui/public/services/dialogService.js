@@ -236,10 +236,11 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
       publicInfo.paypal = success.data.paypal;
       publicInfo.status = 'choose';
       publicInfo.accountId = accountId;
+      return dialogPromise;
     }).catch(() => {
       publicInfo.status = 'error';
+      return dialogPromise;
     });
-    return dialogPromise;
   };
   return {
     chooseOrderType,
