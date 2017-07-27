@@ -209,6 +209,16 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
     };
+    $scope.myPayType = '支付宝';
+    let tabSwitchTime = 0;
+    $scope.payTypes = [{ name: '支付宝' }, { name: 'Paypal' }];
+    $scope.selectPayType = type => {
+      tabSwitchTime = Date.now();
+      $scope.myPayType = type;
+      $scope.orders = [];
+      $scope.currentPage = 1;
+      $scope.getOrders();
+    };
     if(!$localStorage.admin.orderFilterSettings) {
       $localStorage.admin.orderFilterSettings = {
         filter: {
@@ -232,14 +242,16 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       if($mdMedia('gt-md')) { return 50; }
     };
     $scope.getOrders = (search) => {
+      const oldTabSwitchTime = tabSwitchTime;
       $scope.isOrderLoading = true;
-      adminApi.getOrder({
+      adminApi.getOrder($scope.myPayType, {
         page: $scope.currentPage,
         pageSize: getPageSize(),
         search,
         // sort: $scope.userSort.sort,
         filter: Object.keys($scope.orderFilter.filter).filter(f => $scope.orderFilter.filter[f]),
       }).then(success => {
+        if(oldTabSwitchTime !== tabSwitchTime) { return; }
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
         success.orders.forEach(f => {

@@ -9,13 +9,21 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     const pageSize = opt.pageSize || 20;
     return $http.get('/api/admin/user', { params: opt }).then(success => success.data);
   };
-  const getOrder = (opt = {}) => {
+  const getOrder = (payType, opt = {}) => {
+    if(payType === 'Paypal') {
+      opt.filter = opt.filter.map(m => {
+        if(m === 'CREATE') return 'created';
+        if(m === 'TRADE_SUCCESS') return 'approved';
+        if(m === 'FINISH') return 'finish';
+      }).filter(f => f);
+    }
+    const url = payType === '支付宝' ? '/api/admin/alipay' : '/api/admin/paypal';
     const search = opt.search || '';
     const filter = opt.filter || '';
-    const sort = opt.sort || 'alipay.createTime_desc';
+    // const sort = opt.sort || 'alipay.createTime_desc';
     const page = opt.page || 1;
     const pageSize = opt.pageSize || 20;
-    return $http.get('/api/admin/alipay', { params: opt }).then(success => success.data);
+    return $http.get(url, { params: opt }).then(success => success.data);
   };
   const getServer = () => {
     return $http.get('/api/admin/server').then(success => success.data);

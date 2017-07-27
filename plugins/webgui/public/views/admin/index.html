@@ -77,7 +77,7 @@
               <md-list>
                   <md-divider></md-divider>
                   <md-list-item ng-repeat="order in paypalOrders">
-                      <div flex layout="row" layout-align="space-between center">
+                      <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
                           <div flex="30" flex-xs="60">
                               <span style="font-size: 0.9em;">{{ order.orderId }}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                           </div>
