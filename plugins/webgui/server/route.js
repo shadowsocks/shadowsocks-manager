@@ -77,8 +77,8 @@ app.delete('/api/admin/user/:userId(\\d+)', isAdmin, admin.deleteUser);
 app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.deleteUserAccount);
 app.get('/api/admin/user/:port(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
-app.get('/api/admin/order', isAdmin, admin.getOrders);
-app.get('/api/admin/order/recentOrder', isAdmin, admin.getRecentOrders);
+app.get('/api/admin/alipay', isAdmin, admin.getOrders);
+app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);

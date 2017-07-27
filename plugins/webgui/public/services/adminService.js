@@ -15,7 +15,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     const sort = opt.sort || 'alipay.createTime_desc';
     const page = opt.page || 1;
     const pageSize = opt.pageSize || 20;
-    return $http.get('/api/admin/order', { params: opt }).then(success => success.data);
+    return $http.get('/api/admin/alipay', { params: opt }).then(success => success.data);
   };
   const getServer = () => {
     return $http.get('/api/admin/server').then(success => success.data);
@@ -91,7 +91,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     indexInfoPromise = $q.all([
       $http.get('/api/admin/user/recentSignUp').then(success => success.data),
       $http.get('/api/admin/user/recentLogin').then(success => success.data),
-      $http.get('/api/admin/order/recentOrder').then(success => success.data),
+      $http.get('/api/admin/alipay/recentOrder').then(success => success.data),
       $http.get('/api/admin/paypal/recentOrder').then(success => success.data),
     ]).then(success => {
       return {
