@@ -26,25 +26,6 @@ This plugin provide a webgui to control shadowsocks.
         use: true
       account:
         use: true
-        pay:
-          hour:
-            price: 0.03
-            flow: 500000000
-          day:
-            price: 0.5
-            flow: 7000000000
-          week:
-            price: 3
-            flow: 50000000000
-          month:
-            price: 10
-            flow: 200000000000
-          season:
-            price: 30
-            flow: 200000000000
-          year:
-            price: 120
-            flow: 200000000000
       email:
         use: true
         username: 'username'
@@ -60,10 +41,15 @@ This plugin provide a webgui to control shadowsocks.
       alipay:
         use: true
         appid: 2015012104922471
-        notifyUrl: ''
+        notifyUrl: 'http://yourwebsite.com/api/user/alipay/callback'
         merchantPrivateKey: 'xxxxxxxxxxxx'
         alipayPublicKey: 'xxxxxxxxxxx'
         gatewayUrl: 'https://openapi.alipay.com/gateway.do'
+      paypal:
+        use: true
+        mode: 'live' # sandbox or live
+        client_id: 'At9xcGd1t5L6OrICKNnp2g9'
+        client_secret: 'EP40s6pQAZmqp_G_nrU9kKY4XaZph'
 
     db: 'webgui.sqlite'
     ```
