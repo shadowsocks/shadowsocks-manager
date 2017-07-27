@@ -8,6 +8,10 @@ app.filter('order', function() {
       TRADE_SUCCESS: '付款',
       FINISH: '完成',
       TRADE_CLOSED: '关闭',
+      created: '创建',
+      approved: '付款',
+      finish: '完成',
+      closed: '关闭',
     };
     return result[status] || '其它';
   };
