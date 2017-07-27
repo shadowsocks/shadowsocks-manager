@@ -165,6 +165,13 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
       const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
       if(publicInfo.paypal[publicInfo.orderType]) {
         paypal.Button.render({
+          locale: 'zh_CN',
+          style: {
+            label: 'checkout', // checkout | credit | pay
+            size:  'medium',   // small    | medium | responsive
+            shape: 'rect',     // pill     | rect
+            color: 'blue'      // gold     | blue   | silver
+          },
           env, // production or sandbox
           commit: true,
           payment: function() {

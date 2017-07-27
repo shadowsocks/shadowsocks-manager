@@ -119,8 +119,9 @@ cron.minute(async () => {
       push.pushMessage('支付成功', {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
-      return account.setAccountLimit(userId, accountId, order.orderType)
-      .then(() => {
+      return checkOrder(order.paypalId).then(() => {
+        return account.setAccountLimit(userId, accountId, order.orderType);
+      }).then(() => {
         return knex('paypal').update({
           status: 'finish',
         }).where({
