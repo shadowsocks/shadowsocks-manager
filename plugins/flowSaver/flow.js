@@ -341,28 +341,56 @@ const getUserPortLastConnect = async port => {
 };
 
 const getServerUserFlow = (serverId, timeArray) => {
-  return knex('saveFlow5min').sum('saveFlow5min.flow as flow')
+  const timeStart = timeArray[0];
+  const timeEnd = timeArray[1];
+  let tableName = 'saveFlow5min';
+  if(timeArray.length === 2) {
+    if(timeEnd - timeStart === 3600 * 1000 && Date.now() - timeEnd >= 15 * 60 * 1000) {
+      tableName = 'saveFlowHour';
+    }
+    if(timeEnd - timeStart === 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
+      tableName = 'saveFlowDay';
+    }
+    if(timeEnd - timeStart === 7 * 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
+      tableName = 'saveFlowDay';
+    }
+  }
+  const where = {};
+  where[tableName + '.id'] = +serverId;
+  return knex(tableName).sum(`${ tableName }.flow as flow`)
   .select([
-    'saveFlow5min.port',
+    `${ tableName }.port`,
     'user.userName',
   ])
-  .groupBy('saveFlow5min.port')
-  .leftJoin('account_plugin', 'account_plugin.port', 'saveFlow5min.port')
+  .groupBy(`${ tableName }.port`)
+  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
   .leftJoin('user', 'account_plugin.userId', 'user.id')
-  .where({
-    'saveFlow5min.id': +serverId,
-  }).whereBetween('saveFlow5min.time', timeArray);
+  .where(where).whereBetween(`${ tableName }.time`, timeArray);
 };
 
 const getAccountServerFlow = (accountId, timeArray) => {
-  return knex('saveFlow5min').sum('saveFlow5min.flow as flow').groupBy('saveFlow5min.id')
+  const timeStart = timeArray[0];
+  const timeEnd = timeArray[1];
+  let tableName = 'saveFlow5min';
+  if(timeArray.length === 2) {
+    if(timeEnd - timeStart === 3600 * 1000 && Date.now() - timeEnd >= 15 * 60 * 1000) {
+      tableName = 'saveFlowHour';
+    }
+    if(timeEnd - timeStart === 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
+      tableName = 'saveFlowDay';
+    }
+    if(timeEnd - timeStart === 7 * 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
+      tableName = 'saveFlowDay';
+    }
+  }
+  return knex(tableName).sum(`${ tableName }.flow as flow`).groupBy(`${ tableName }.id`)
   .select([
     'server.name',
   ])
-  .leftJoin('server', 'server.id', 'saveFlow5min.id')
-  .leftJoin('account_plugin', 'account_plugin.port', 'saveFlow5min.port')
+  .leftJoin('server', 'server.id', `${ tableName }.id`)
+  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
   .where({ 'account_plugin.id': accountId })
-  .whereBetween('saveFlow5min.time', timeArray);
+  .whereBetween(`${ tableName }.time`, timeArray);
 };
 
 exports.getFlow = getFlow;
