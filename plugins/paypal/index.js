@@ -137,3 +137,52 @@ cron.minute(async () => {
     await scanOrder(order);
   }
 }, 1);
+
+const orderListAndPaging = async (options = {}) => {
+  const search = options.search || '';
+  const filter = options.filter || [];
+  const sort = options.sort || 'paypal.createTime_desc';
+  const page = options.page || 1;
+  const pageSize = options.pageSize || 20;
+
+  let count = knex('paypal').select();
+  let orders = knex('paypal').select([
+    'paypal.orderId',
+    'paypal.orderType',
+    'user.id as userId',
+    'user.username',
+    'account_plugin.port',
+    'paypal.amount',
+    'paypal.status',
+    'paypal.paypalData',
+    'paypal.createTime',
+    'paypal.expireTime',
+  ])
+  .leftJoin('user', 'user.id', 'paypal.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account');
+
+  if(filter.length) {
+    count = count.whereIn('paypal.status', filter);
+    orders = orders.whereIn('paypal.status', filter);
+  }
+  if(search) {
+    count = count.where('paypal.orderId', 'like', `%${ search }%`);
+    orders = orders.where('paypal.orderId', 'like', `%${ search }%`);
+  }
+
+  count = await count.count('orderId as count').then(success => success[0].count);
+  orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
+  orders.forEach(f => {
+    f.paypalData = JSON.parse(f.paypalData);
+  });
+  const maxPage = Math.ceil(count / pageSize);
+  return {
+    total: count,
+    page,
+    maxPage,
+    pageSize,
+    orders,
+  };
+};
+
+exports.orderListAndPaging = orderListAndPaging;

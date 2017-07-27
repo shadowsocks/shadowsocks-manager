@@ -68,7 +68,7 @@ app.get('/api/admin/user', isAdmin, admin.getUsers);
 app.post('/api/admin/user/add', isAdmin, admin.addUser);
 app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
 app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
-app.get('/api/admin/order/recentOrder', isAdmin, admin.getRecentOrders);
+
 app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
 app.get('/api/admin/user/:userId(\\d+)', isAdmin, admin.getOneUser);
 app.post('/api/admin/user/:userId(\\d+)/sendEmail', isAdmin, admin.sendUserEmail);
@@ -78,6 +78,9 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 app.get('/api/admin/user/:port(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
 app.get('/api/admin/order', isAdmin, admin.getOrders);
+app.get('/api/admin/order/recentOrder', isAdmin, admin.getRecentOrders);
+app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
+app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);
 
 app.get('/api/admin/notice', isAdmin, adminNotice.getNotice);

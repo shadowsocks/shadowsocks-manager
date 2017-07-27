@@ -6,9 +6,11 @@ const user = appRequire('plugins/user/index');
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const alipay = appRequire('plugins/alipay/index');
+const paypal = appRequire('plugins/paypal/index');
 const email = appRequire('plugins/email/index');
 const config = appRequire('services/config').all();
 const isAlipayUse = config.plugins.alipay && config.plugins.alipay.use;
+const isPaypalUse = config.plugins.paypal && config.plugins.paypal.use;
 const rp = require('request-promise');
 
 exports.getAccount = (req, res) => {
@@ -217,6 +219,20 @@ exports.getRecentOrders = (req, res) => {
   });
 };
 
+exports.getPaypalRecentOrders = (req, res) => {
+  if(!isPaypalUse) {
+    return res.send([]);
+  }
+  paypal.orderListAndPaging({
+    pageSize: 5,
+  }).then(success => {
+    return res.send(success.orders);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getOneUser = (req, res) => {
   const userId = req.params.userId;
   let userInfo = null;
@@ -311,6 +327,31 @@ exports.getOrders = (req, res) => {
   options.sort = req.query.sort || 'alipay.createTime_desc';
   options.filter = req.query.filter || '';
   alipay.orderListAndPaging(options)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getPaypalOrders = (req, res) => {
+  if(!isPaypalUse) {
+    return res.send({
+      maxPage: 0,
+      page: 1,
+      pageSize: 0,
+      total: 0,
+      orders: [],
+    });
+  }
+  const options = {};
+  options.page = +req.query.page || 1;
+  options.pageSize = +req.query.pageSize || 20;
+  options.search = req.query.search || '';
+  options.sort = req.query.sort || 'paypal.createTime_desc';
+  options.filter = req.query.filter || '';
+  paypal.orderListAndPaging(options)
   .then(success => {
     res.send(success);
   }).catch(err => {

@@ -180,6 +180,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $scope.signupUsers = success.signup;
         $scope.loginUsers = success.login;
         $scope.orders = success.order;
+        $scope.paypalOrders = success.paypalOrder;
       });
     };
     updateIndexInfo();
