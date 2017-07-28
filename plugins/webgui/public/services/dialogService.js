@@ -125,6 +125,7 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
 
 app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $interval, $http) => {
   const publicInfo = {
+    config: JSON.parse(window.ssmgrConfig),
     orderType: 'month',
     time: [{
       type: 'hour', name: '一小时'

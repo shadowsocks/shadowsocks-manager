@@ -7,11 +7,14 @@ const account = appRequire('plugins/account/index');
 const moment = require('moment');
 const push = appRequire('plugins/webgui/server/push');
 const config = appRequire('services/config').all();
-paypal.configure({
-  mode: config.plugins.paypal.mode,
-  client_id: config.plugins.paypal.client_id,
-  client_secret: config.plugins.paypal.client_secret,
-});
+
+if(config.plugins.paypal && config.plugins.paypal.use) {
+  paypal.configure({
+    mode: config.plugins.paypal.mode,
+    client_id: config.plugins.paypal.client_id,
+    client_secret: config.plugins.paypal.client_secret,
+  });
+}
 
 const createOrder = async (user, account, amount, type) => {
   try {
@@ -109,6 +112,7 @@ const checkOrder = async paypalId => {
 };
 
 cron.minute(async () => {
+  if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }
   const orders = await knex('paypal').select().whereNotBetween('expireTime', [0, Date.now()]);
   const scanOrder = order => {
     if(order.status !== 'approved' && order.status !== 'finish') {
@@ -189,5 +193,6 @@ const orderListAndPaging = async (options = {}) => {
 exports.orderListAndPaging = orderListAndPaging;
 
 cron.minute(() => {
+  if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }
   knex('paypal').delete().where({ status: 'created' }).whereBetween('expireTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
 }, 30);
