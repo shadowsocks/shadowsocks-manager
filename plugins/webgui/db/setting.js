@@ -8,7 +8,7 @@ const createTable = async() => {
   }
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
-    return knex.schema.raw('alter table webguiSetting modify column value varchar(16384)');
+    return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();

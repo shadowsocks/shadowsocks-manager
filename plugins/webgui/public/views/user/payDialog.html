@@ -8,7 +8,7 @@
                 <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
                 <div>支付宝扫码支付</div>
                 <div>手机请点击二维码付款</div>
-                <div style="margin-top: 30px;" ng-if="publicInfo.paypal[publicInfo.orderType]" layout="column" layout-align="center center">
+                <div style="margin-top: 30px;" ng-if="publicInfo.paypal[publicInfo.orderType] && publicInfo.config.paypal" layout="column" layout-align="center center">
                     <div>Paypal支付请点击下面按钮</div>
                     <div style="margin-top: 5px;" id="paypal-button-container"></div>
                 </div> 
