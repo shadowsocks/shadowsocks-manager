@@ -342,7 +342,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog',
   ($scope, $state, $stateParams, $http, confirmDialog, alertDialog) => {
     $scope.setTitle('编辑服务器');
-    const serverId = $stateParams.serverId
+    const serverId = $stateParams.serverId;
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
     });

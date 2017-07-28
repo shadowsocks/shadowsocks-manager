@@ -187,3 +187,7 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 exports.orderListAndPaging = orderListAndPaging;
+
+cron.minute(() => {
+  knex('paypal').delete().where({ status: 'created' }).whereBetween('expireTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
+}, 30);
