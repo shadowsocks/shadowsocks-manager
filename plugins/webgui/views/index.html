@@ -6,44 +6,44 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Shadowsocks-Manager">
-    <link rel="apple-touch-startup-image" href="/libs/favicon.png">
-    <link rel="apple-touch-icon" href="/libs/favicon.png">
-    <meta name="msapplication-TileImage" content="/libs/favicon.png">
+    <link rel="apple-touch-startup-image" href="<%= cdn%>/libs/favicon.png">
+    <link rel="apple-touch-icon" href="<%= cdn%>/libs/favicon.png">
+    <meta name="msapplication-TileImage" content="<%= cdn%>/libs/favicon.png">
     <meta name="msapplication-TileColor" content="#3F51B5">
     <meta name="theme-color" content="#3F51B5">
-    <link rel="stylesheet" href="/libs/style.css">
-    <link rel="stylesheet" href="/libs/angular-material.min.css">
-    <link rel="shortcut icon" href="/libs/favicon.png">
+    <link rel="stylesheet" href="<%= cdn%>/libs/style.css">
+    <link rel="stylesheet" href="<%= cdn%>/libs/angular-material.min.css">
+    <link rel="shortcut icon" href="<%= cdn%>/libs/favicon.png">
     <link rel="manifest" href="/manifest.json">
     <title>Shadowsocks-Manager</title>
     <base href="/">
 </head>
 
 <body ng-app="app" ng-cloak>
-    <script src="/libs/angular.min.js"></script>
-    <script src="/libs/angular-inview.js"></script>
-    <script src="/libs/angular-animate.min.js"></script>
-    <script src="/libs/angular-aria.min.js"></script>
-    <script src="/libs/angular-messages.min.js"></script>
-    <script src="/libs/angular-material.min.js"></script>
-    <script src="/libs/angular-ui-router.min.js"></script>
-    <script src="/libs/qrcode.min.js"></script>
-    <script src="/libs/angular-qr.min.js"></script>
-    <script src="/libs/ngStorage.min.js"></script>
-    <script src="/libs/Chart.min.js"></script>
-    <script src="/libs/angular-chart.min.js"></script>
-    <script src="/libs/moment.min.js"></script>
-    <script src="/libs/angular-moment.min.js"></script>
-    <script src="/libs/angular-websocket.min.js"></script>
-    <script src="/libs/marked.min.js"></script>
-    <script src="/libs/angular-marked.min.js"></script>
-     <script src="https://www.paypalobjects.com/api/checkout.js"></script> 
-
-    <script src="/libs/bundle.js"></script>
+    <script src="<%= cdn%>/libs/angular.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-inview.js"></script>
+    <script src="<%= cdn%>/libs/angular-animate.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-aria.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-messages.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-material.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-ui-router.min.js"></script>
+    <script src="<%= cdn%>/libs/qrcode.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-qr.min.js"></script>
+    <script src="<%= cdn%>/libs/ngStorage.min.js"></script>
+    <script src="<%= cdn%>/libs/Chart.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-chart.min.js"></script>
+    <script src="<%= cdn%>/libs/moment.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-moment.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-websocket.min.js"></script>
+    <script src="<%= cdn%>/libs/marked.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-marked.min.js"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script> 
     <script>
         window.ssmgrVersion = '<%= version%>'
+        window.cdn = '<%= cdn%>'
         window.ssmgrConfig = '<%- JSON.stringify(config)%>'
     </script>
+    <script src="/libs/bundle.js"></script>
     <div ng-controller="MainController" layout-fill>
         <div layout-fill layout="row" layout-align="center center" ng-show="mainLoading">
             <div layout="column" layout-align="center center">

@@ -1,21 +1,23 @@
 const app = angular.module('app');
+const window = require('window');
+const cdn = window.cdn || '';
 
 app.config(['$stateProvider', $stateProvider => {
   $stateProvider
     .state('user', {
       url: '/user',
       abstract: true,
-      templateUrl: '/public/views/user/user.html',
+      templateUrl: `${ cdn }/public/views/user/user.html`,
     })
     .state('user.index', {
       url: '/index',
       controller: 'UserIndexController',
-      templateUrl: '/public/views/user/index.html',
+      templateUrl: `${ cdn }/public/views/user/index.html`,
     })
     .state('user.account', {
       url: '/account',
       controller: 'UserAccountController',
-      templateUrl: '/public/views/user/account.html',
+      templateUrl: `${ cdn }/public/views/user/account.html`,
     });
   }])
 ;

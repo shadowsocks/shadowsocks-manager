@@ -63,6 +63,11 @@ gulp.task('webguiBuild', () => {
       path: path.resolve(__dirname, 'libs'),
       filename: 'bundle.js'
     },
+    externals: [
+      {
+        window: 'window'
+      }
+    ],
     module: {
       loaders: [{
         test: /\.js$/,

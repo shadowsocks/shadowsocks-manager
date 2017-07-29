@@ -144,8 +144,10 @@ const configForFrontend = {
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
 };
+const cdn = config.plugins.webgui.cdn;
 const homePage = (req, res) => res.render('index', {
   version,
+  cdn,
   config: configForFrontend,
 });
 app.get('/', homePage);

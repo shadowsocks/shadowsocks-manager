@@ -1,5 +1,6 @@
 const app = angular.module('app');
-
+const window = require('window');
+const cdn = window.cdn || '';
 app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   const publicInfo = {};
   publicInfo.isLoading = false;
@@ -25,7 +26,7 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   };
   publicInfo.close = close;
   const dialog = {
-    templateUrl: '/public/views/home/alertDialog.html',
+    templateUrl: `${ cdn }/public/views/home/alertDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -109,7 +110,7 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
   };
   publicInfo.confirmFn = confirmFn;
   const dialog = {
-    templateUrl: '/public/views/home/confirmDialog.html',
+    templateUrl: `${ cdn }/public/views/home/confirmDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -210,7 +211,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
   publicInfo.createOrder = createOrder;
   publicInfo.close = close;
   const dialog = {
-    templateUrl: '/public/views/user/payDialog.html',
+    templateUrl: `${ cdn }/public/views/user/payDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -311,7 +312,7 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/accountSortAndFilterDialog.html',
+    templateUrl: `${ cdn }/public/views/admin/accountSortAndFilterDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -359,7 +360,7 @@ app.factory('userSortDialog' , [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/userSortDialog.html',
+    templateUrl: `${ cdn }/public/views/admin/userSortDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -403,7 +404,7 @@ app.factory('orderFilterDialog' , [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/orderFilterDialog.html',
+    templateUrl: `${ cdn }/public/views/admin/orderFilterDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -452,7 +453,7 @@ app.factory('orderDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/orderDialog.html',
+    templateUrl: `${ cdn }/public/views/admin/orderDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -502,7 +503,7 @@ app.factory('markdownDialog', [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/previewNotice.html',
+    templateUrl: `${ cdn }/public/views/admin/previewNotice.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -577,7 +578,7 @@ app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userAp
   publicInfo.close = close;
   publicInfo.changePassword = changePassword;
   const dialog = {
-    templateUrl: '/public/views/user/changePassword.html',
+    templateUrl: `${ cdn }/public/views/user/changePassword.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -612,7 +613,7 @@ app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/user/qrcodeDialog.html',
+    templateUrl: `${ cdn }/public/views/user/qrcodeDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -675,7 +676,7 @@ app.factory('emailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state,
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/emailDialog.html',
+    templateUrl: `${ cdn }/public/views/admin/emailDialog.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
@@ -735,7 +736,7 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: '/public/views/admin/ip.html',
+    templateUrl: `${ cdn }/public/views/admin/ip.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
