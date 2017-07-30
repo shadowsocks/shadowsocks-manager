@@ -80,17 +80,10 @@ const checkFlow = async (server, port, startTime, endTime) => {
   const serverId = isMultiServerFlow ? null : server;
   const userFlow = await flow.getFlowFromSplitTime(serverId, port, startTime, endTime);
   return userFlow;
-  // const userFlow = await knex('saveFlow')
-  // .sum('flow as sumFlow')
-  // .groupBy('port')
-  // .select(['port'])
-  // .where(isMultiServerFlow ? { port } : { id: server, port })
-  // .whereBetween('time', [startTime, endTime]);
-  // console.log((userFlow[0] ? userFlow[0].sumFlow : 0) + ' ' + z);
-  // return userFlow[0] ? userFlow[0].sumFlow : 0;
 };
 
 const checkServer = async () => {
+  logger.info('check account');
   const account = await knex('account_plugin').select();
   account.forEach(a => {
     if(a.type >= 2 && a.type <= 5) {
@@ -139,7 +132,7 @@ const checkServer = async () => {
         port.exist = number => {
           return !!port.filter(f => f.port === number)[0];
         };
-        account.forEach(async a => {
+        const checkAccountStatus = async a => {
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
           if(accountServer) {
             newAccountServer = accountServer.filter(f => {
@@ -189,7 +182,12 @@ const checkServer = async () => {
             addPort(a, s);
             return;
           }
+        };
+        const checkAccountStatusPromises = [];
+        account.forEach(a => {
+          checkAccountStatusPromises.push(checkAccountStatus(a));
         });
+        Promise.all(checkAccountStatusPromises);
         port.forEach(async p => {
           if(!account.exist(p.port)) {
             delPort(p, s);
@@ -203,7 +201,12 @@ const checkServer = async () => {
     };
     promises.push(checkServerAccount(s));
   });
-  Promise.all(promises);
+  // Promise.all(promises);
+  promises.forEach((p, index) => {
+    setTimeout(() => {
+      p.then();
+    }, 5 * 60 * 1000 / promises.length * index);
+  });
 };
 
 exports.checkServer = checkServer;
@@ -212,9 +215,9 @@ exports.addPort = addPort;
 exports.delPort = delPort;
 exports.changePassword = changePassword;
 
-setTimeout(() => {
-  checkServer();
-}, 10 * 1000);
+// setTimeout(() => {
+//   checkServer();
+// }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 1);
+}, 5);
