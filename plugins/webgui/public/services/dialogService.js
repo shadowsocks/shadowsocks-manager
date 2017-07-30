@@ -145,26 +145,33 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
-    $http.post('/api/user/order/qrcode', {
-      accountId: publicInfo.accountId,
-      orderType: publicInfo.orderType,
-    }).then(success => {
-      publicInfo.orderId = success.data.orderId;
-      publicInfo.qrCode = success.data.qrCode;
-      publicInfo.status = 'pay';
+    if(publicInfo.alipay[publicInfo.orderType]) {
+      $http.post('/api/user/order/qrcode', {
+        accountId: publicInfo.accountId,
+        orderType: publicInfo.orderType,
+      }).then(success => {
+        publicInfo.orderId = success.data.orderId;
+        publicInfo.qrCode = success.data.qrCode;
+        publicInfo.status = 'pay';
 
-      interval = $interval(() => {
-        $http.post('/api/user/order/status', {
-          orderId: publicInfo.orderId,
-        }).then(success => {
-          const orderStatus = success.data.status;
-          if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
-            publicInfo.status = 'success';
-            interval && $interval.cancel(interval);
-          }
-        });
-      }, 5 * 1000);
-      const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
+        interval = $interval(() => {
+          $http.post('/api/user/order/status', {
+            orderId: publicInfo.orderId,
+          }).then(success => {
+            const orderStatus = success.data.status;
+            if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
+              publicInfo.status = 'success';
+              interval && $interval.cancel(interval);
+            }
+          });
+        }, 5 * 1000);
+      }).catch(() => {
+        publicInfo.status = 'error';
+      });
+    } else {
+      publicInfo.status = 'pay';
+    }
+    const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
       if(publicInfo.paypal[publicInfo.orderType]) {
         paypal.Button.render({
           locale: 'zh_CN',
@@ -199,9 +206,6 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
           }
         }, '#paypal-button-container');
       }
-    }).catch(() => {
-      publicInfo.status = 'error';
-    });
   };
   let interval = null;
   const close = () => {
