@@ -82,6 +82,8 @@ const checkFlow = async (server, port, startTime, endTime) => {
   return userFlow;
 };
 
+const checkFlowTime = {};
+
 const checkServer = async () => {
   logger.info('check account');
   const account = await knex('account_plugin').select();
@@ -161,11 +163,20 @@ const checkServer = async () => {
             while(startTime + timePeriod <= Date.now()) {
               startTime += timePeriod;
             }
-            const flow = await checkFlow(s.id, a.port, startTime, Date.now());
-            if(isMultiServerFlow && flow >= data.flow) {
+            let flow = 0;
+            if(!checkFlowTime['' + s.id + a.port] || (checkFlowTime['' + s.id + a.port] && Date.now() >= checkFlowTime['' + s.id + a.port])) {
+              flow = await checkFlow(s.id, a.port, startTime, Date.now());
+              const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
+              if(nextTime <= 0) {
+                checkFlowTime['' + s.id + a.port] = Date.now() + 5 * 60 * 1000;
+              } else {
+                checkFlowTime['' + s.id + a.port] = Date.now() + nextTime;
+              }
+            }
+            if(flow && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return;
-            } else if (!isMultiServerFlow && flow >= data.flow * s.scale) {
+            } else if (flow && !isMultiServerFlow && flow >= data.flow * s.scale) {
               port.exist(a.port) && delPort(a, s);
               return;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
@@ -201,12 +212,12 @@ const checkServer = async () => {
     };
     promises.push(checkServerAccount(s));
   });
-  // Promise.all(promises);
-  promises.forEach((p, index) => {
-    setTimeout(() => {
-      p.then();
-    }, 5 * 60 * 1000 / promises.length * index);
-  });
+  Promise.all(promises);
+  // promises.forEach((p, index) => {
+  //   setTimeout(() => {
+  //     p.then();
+  //   }, 5 * 60 * 1000 / promises.length * index);
+  // });
 };
 
 exports.checkServer = checkServer;
@@ -215,9 +226,9 @@ exports.addPort = addPort;
 exports.delPort = delPort;
 exports.changePassword = changePassword;
 
-// setTimeout(() => {
-//   checkServer();
-// }, 8 * 1000);
+setTimeout(() => {
+  checkServer();
+}, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 5);
+}, 2);
