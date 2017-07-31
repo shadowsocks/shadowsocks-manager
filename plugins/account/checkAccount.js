@@ -82,7 +82,16 @@ const checkFlow = async (server, port, startTime, endTime) => {
   return userFlow;
 };
 
-const checkFlowTime = {};
+const checkAccountTime = {};
+
+const deleteCheckAccountTimePort = port => {
+  const reg = new RegExp('^\d{1,3}\|' + port + '$');
+  for(cat in checkAccountTime) {
+    if(cat.match(reg)) {
+      delete checkAccountTime[cat];
+    }
+  }
+};
 
 const checkServer = async () => {
   logger.info('check account');
@@ -131,8 +140,15 @@ const checkServer = async () => {
           port: s.port,
           password: s.password,
         });
+        port.list = {};
+        port.forEach(f => {
+          port.list[f.port] = true;
+        });
+        // port.exist = number => {
+        //   return !!port.filter(f => f.port === number)[0];
+        // };
         port.exist = number => {
-          return !!port.filter(f => f.port === number)[0];
+          return !!port.list[number];
         };
         const checkAccountStatus = async a => {
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
@@ -164,13 +180,13 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             let flow = -1;
-            if(!checkFlowTime['' + s.id + a.port] || (checkFlowTime['' + s.id + a.port] && Date.now() >= checkFlowTime['' + s.id + a.port])) {
+            if(!checkAccountTime['' + s.id + '|' + a.port] || (checkAccountTime['' + s.id + '|' + a.port] && Date.now() >= checkAccountTime['' + s.id + '|' + a.port])) {
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
               if(nextTime <= 0) {
-                checkFlowTime['' + s.id + a.port] = Date.now() + 5 * 60 * 1000;
+                checkAccountTime['' + s.id + '|' + a.port] = Date.now() + 10 * 60 * 1000;
               } else {
-                checkFlowTime['' + s.id + a.port] = Date.now() + nextTime;
+                checkAccountTime['' + s.id + '|' + a.port] = Date.now() + nextTime;
               }
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
@@ -213,11 +229,6 @@ const checkServer = async () => {
     promises.push(checkServerAccount(s));
   });
   Promise.all(promises);
-  // promises.forEach((p, index) => {
-  //   setTimeout(() => {
-  //     p.then();
-  //   }, 5 * 60 * 1000 / promises.length * index);
-  // });
 };
 
 exports.checkServer = checkServer;
@@ -225,6 +236,7 @@ exports.sendMessage = sendMessage;
 exports.addPort = addPort;
 exports.delPort = delPort;
 exports.changePassword = changePassword;
+exports.deleteCheckAccountTimePort = deleteCheckAccountTimePort;
 
 setTimeout(() => {
   checkServer();

@@ -5,6 +5,7 @@ const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
 
 const addAccount = async (type, options) => {
+  checkAccount.deleteCheckAccountTimePort(options.port);
   if(type === 6 || type === 7) {
     type = 3;
   }
@@ -82,6 +83,7 @@ const delAccount = async (id) => {
 };
 
 const editAccount = async (id, options) => {
+  checkAccount.deleteCheckAccountTimePort(options.port);
   const account = await knex('account_plugin').select().where({ id }).then(success => {
     if(success.length) {
       return success[0];
