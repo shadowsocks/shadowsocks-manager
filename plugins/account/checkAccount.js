@@ -173,16 +173,16 @@ const checkServer = async () => {
                 checkFlowTime['' + s.id + a.port] = Date.now() + nextTime;
               }
             }
-            if(flow && isMultiServerFlow && flow >= data.flow) {
+            if(isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return;
-            } else if (flow && !isMultiServerFlow && flow >= data.flow * s.scale) {
+            } else if (!isMultiServerFlow && flow >= data.flow * s.scale) {
               port.exist(a.port) && delPort(a, s);
               return;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
               port.exist(a.port) && delPort(a, s);
               return;
-            } else if(!port.exist(a.port)) {
+            } else if(!port.exist(a.port) && flow) {
               addPort(a, s);
               return;
             }
