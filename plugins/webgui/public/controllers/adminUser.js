@@ -100,7 +100,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       adminApi.getUserData(userId).then(success => {
         $scope.user = success.user;
         $scope.account = success.account;
-        $scope.orders = success.orders;
+        $scope.alipayOrders = success.alipayOrders;
+        $scope.paypalOrders = success.paypalOrders;
         $scope.user.account.forEach(f => {
           adminApi.getUserPortLastConnect(f.port).then(success => {
             f.lastConnect = success.lastConnect;

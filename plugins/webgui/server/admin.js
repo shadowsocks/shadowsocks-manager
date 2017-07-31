@@ -310,6 +310,22 @@ exports.getUserOrders = (req, res) => {
   });
 };
 
+exports.getPaypalUserOrders = (req, res) => {
+  if(!isPaypalUse) {
+    return res.send([]);
+  }
+  const options = {
+    userId: +req.params.userId,
+  };
+  paypal.orderList(options)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getOrders = (req, res) => {
   if(!isAlipayUse) {
     return res.send({

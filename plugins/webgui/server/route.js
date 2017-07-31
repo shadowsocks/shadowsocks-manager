@@ -79,9 +79,10 @@ app.get('/api/admin/user/:port(\\d+)/lastConnect', isAdmin, admin.getUserPortLas
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
+app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
-app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);
+app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
 app.get('/api/admin/notice', isAdmin, adminNotice.getNotice);
 app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.getOneNotice);
