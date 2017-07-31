@@ -217,6 +217,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.myPayType = type;
       $scope.orders = [];
       $scope.currentPage = 1;
+      $scope.isOrderPageFinish = false;
       $scope.getOrders();
     };
     if(!$localStorage.admin.orderFilterSettings) {

@@ -55,6 +55,7 @@ const sendMessage = (data, options) => {
     }, () => {
       client.write(pack(data, (options? options.password: null) || password));
     });
+    client.setTimeout(12 * 1000);
     const receive = {
       data: Buffer.from(''),
       socket: client,
