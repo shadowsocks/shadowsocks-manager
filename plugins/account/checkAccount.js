@@ -163,7 +163,7 @@ const checkServer = async () => {
             while(startTime + timePeriod <= Date.now()) {
               startTime += timePeriod;
             }
-            let flow = 0;
+            let flow = -1;
             if(!checkFlowTime['' + s.id + a.port] || (checkFlowTime['' + s.id + a.port] && Date.now() >= checkFlowTime['' + s.id + a.port])) {
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
@@ -173,16 +173,16 @@ const checkServer = async () => {
                 checkFlowTime['' + s.id + a.port] = Date.now() + nextTime;
               }
             }
-            if(isMultiServerFlow && flow >= data.flow) {
+            if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return;
-            } else if (!isMultiServerFlow && flow >= data.flow * s.scale) {
+            } else if (flow >= 0 && !isMultiServerFlow && flow >= data.flow * s.scale) {
               port.exist(a.port) && delPort(a, s);
               return;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
               port.exist(a.port) && delPort(a, s);
               return;
-            } else if(!port.exist(a.port) && flow) {
+            } else if(!port.exist(a.port) && flow >= 0) {
               addPort(a, s);
               return;
             }
