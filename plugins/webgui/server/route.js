@@ -93,6 +93,9 @@ app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotic
 app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
 
+app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
+app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
+
 app.get('/api/admin/setting', isAdmin, adminSetting.getSetting);
 app.put('/api/admin/setting', isAdmin, adminSetting.modifySetting);
 

@@ -110,7 +110,7 @@ exports.getServerPortFlow = (req, res) => {
           i++;
         }
       }
-      return knex('webguiSetting').select().where({ key: 'system' })
+      return knex('webguiSetting').select().where({ key: 'account' })
       .then(success => {
         if(!success.length) {
           return Promise.reject('settings not found');
@@ -255,7 +255,7 @@ exports.getAlipayStatus = (req, res) => {
 
 exports.getMultiServerFlowStatus = (req, res) => {
   knex('webguiSetting').select().where({
-    key: 'system',
+    key: 'account',
   }).then(success => {
     if(!success.length) {
       return Promise.reject('settings not found');

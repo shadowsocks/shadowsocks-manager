@@ -68,7 +68,7 @@ const checkFlow = async (server, port, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
     isMultiServerFlow = await knex('webguiSetting').select().
-    where({ key: 'system' })
+    where({ key: 'account' })
     .then(success => {
       if(!success.length) {
         return Promise.reject('settings not found');
@@ -122,7 +122,7 @@ const checkServer = async () => {
   let isMultiServerFlow = false;
   try {
     isMultiServerFlow = await knex('webguiSetting').select().
-    where({ key: 'system' })
+    where({ key: 'account' })
     .then(success => {
       if(!success.length) {
         return Promise.reject('settings not found');

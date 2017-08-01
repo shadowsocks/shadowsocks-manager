@@ -1,0 +1,92 @@
+<div>
+    <md-card>
+        <md-card-content>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">新用户自动分配账号</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.isEnable" aria-label="accountForNewUser"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable" layout="row">
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+                <div flex>
+                    <form name="newAccountForm">
+                        <md-input-container class="md-block" style="height: 54px;">
+                            <label>类型</label>
+                            <md-select ng-model="accountData.accountForNewUser.type">
+                                <md-option ng-value="2">周</md-option>
+                                <md-option ng-value="3">月</md-option>
+                                <md-option ng-value="4">天</md-option>
+                                <md-option ng-value="5">小时</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>流量(MB)</label>
+                            <input type="number" required name="flow" ng-model="accountData.accountForNewUser.flow">
+                            <!-- <div ng-messages="accountForm.flow.$error">
+                                <div ng-message="required">流量不能为空</div>
+                            </div> -->
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>周期</label>
+                            <input type="number" required name="limit" ng-model="accountData.accountForNewUser.limit">
+                            <!-- <div ng-messages="accountForm.flow.$error">
+                                <div ng-message="required">流量不能为空</div>
+                            </div> -->
+                        </md-input-container>
+                    </form>
+                </div>
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+            </md-list>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">随机分配端口号</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.port.random" aria-label="isRandomPort"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ></md-divider>
+            <md-list layout="row">
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+                <div flex>
+                    <form name="portForm">
+                        <md-input-container class="md-block">
+                            <label>起始端口</label>
+                            <input type="number" required name="startPort" ng-model="accountData.port.start">
+                        </md-input-container>
+                        <md-input-container class="md-block">
+                            <label>结束端口</label>
+                            <input type="number" required name="endPort" ng-model="accountData.port.end">
+                        </md-input-container>
+                    </form>
+                </div>
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+            </md-list>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">开放注册</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.signUp.isEnable" aria-label="signUp"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75">合并多服务器流量统计</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.multiServerFlow" aria-label="multiServer"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

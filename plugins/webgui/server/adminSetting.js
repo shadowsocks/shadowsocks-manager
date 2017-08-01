@@ -1,7 +1,7 @@
 const knex = appRequire('init/knex').knex;
 
 knex('webguiSetting').select().where({
-  key: 'system',
+  key: 'account',
 }).then(success => {
   if(success.length) {
     return;
@@ -24,7 +24,7 @@ knex('webguiSetting').select().where({
     }
   };
   return knex('webguiSetting').insert({
-    key: 'system',
+    key: 'account',
     value: JSON.stringify(value),
   });
 }).then();
@@ -126,6 +126,37 @@ exports.modifyPayment = (req, res) => {
     value: JSON.stringify(data)
   }).where({
     key: 'payment',
+  }).then(success => {
+    return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getAccount = (req, res) => {
+  knex('webguiSetting').select().where({
+    key: 'account',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.modifyAccount = (req, res) => {
+  const data = req.body.data;
+  knex('webguiSetting').update({
+    value: JSON.stringify(data)
+  }).where({
+    key: 'account',
   }).then(success => {
     return res.send('success');
   }).catch(err => {

@@ -44,7 +44,7 @@ exports.signup = (req, res) => {
       const userId = success[0];
       // let port = 50000;
       return knex('webguiSetting').select().where({
-        key: 'system',
+        key: 'account',
       })
       .then(success => JSON.parse(success[0].value))
       .then(success => {
@@ -54,7 +54,7 @@ exports.signup = (req, res) => {
         }
         const getNewPort = () => {
           return knex('webguiSetting').select().where({
-            key: 'system',
+            key: 'account',
           }).then(success => {
             if(!success.length) { return Promise.reject('settings not found'); }
             success[0].value = JSON.parse(success[0].value);
@@ -169,7 +169,7 @@ exports.sendCode = (req, res) => {
     return Promise.reject('invalid email');
   }).then(() => {
     return knex('webguiSetting').select().where({
-      key: 'system',
+      key: 'account',
     })
     .then(success => JSON.parse(success[0].value))
     .then(success => {

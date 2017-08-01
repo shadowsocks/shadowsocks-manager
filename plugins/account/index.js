@@ -242,7 +242,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   if(!accountId) {
     const getNewPort = () => {
       return knex('webguiSetting').select().where({
-        key: 'system',
+        key: 'account',
       }).then(success => {
         if(!success.length) { return Promise.reject('settings not found'); }
         success[0].value = JSON.parse(success[0].value);
