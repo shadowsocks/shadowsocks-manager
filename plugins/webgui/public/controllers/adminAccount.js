@@ -109,7 +109,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $q.all([
       $http.get(`/api/admin/account/${ $stateParams.accountId }`),
       $http.get('/api/admin/server'),
-      $http.get('/api/admin/setting'),
+      $http.get('/api/admin/setting/account'),
     ]).then(success => {
       $scope.account = success[0].data;
       $scope.servers = success[1].data.map(server => {
@@ -119,7 +119,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         return server;
       });
       $scope.getServerPortData($scope.servers[0], $scope.account.port);
-      $scope.isMultiServerFlow = success[2].data.value.multiServerFlow;
+      $scope.isMultiServerFlow = success[2].data.multiServerFlow;
     }).catch(err => {
       $state.go('admin.account');
     });
