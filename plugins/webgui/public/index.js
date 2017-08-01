@@ -9,4 +9,5 @@ angular.module('app', [
   'ngStorage',
   'angular-inview',
   'hc.marked',
+  'pascalprecht.translate',
 ]);
