@@ -27,6 +27,7 @@
     <script src="<%= cdn%>/libs/angular-messages.min.js"></script>
     <script src="<%= cdn%>/libs/angular-material.min.js"></script>
     <script src="<%= cdn%>/libs/angular-ui-router.min.js"></script>
+    <script src="<%= cdn%>/libs/angular-translate.min.js"></script>
     <script src="<%= cdn%>/libs/qrcode.min.js"></script>
     <script src="<%= cdn%>/libs/angular-qr.min.js"></script>
     <script src="<%= cdn%>/libs/ngStorage.min.js"></script>
@@ -51,6 +52,28 @@
             </div>
         </div>
         <div ng-hide="mainLoading" ui-view layout-fill></div>
+        <style>
+            .fabToolbardemoBasicUsage md-fab-toolbar.md-right md-fab-trigger.align-with-text {left: 7px; }
+            md-fab-toolbar md-fab-trigger .md-fab-toolbar-background{left:0;}
+            md-fab-toolbar{ position: fixed; bottom: 0; right: 10px; width: 100%;}
+        </style>
+         <md-fab-toolbar md-open="demo.isOpen" count="demo.count"
+                  md-direction="left">
+            <md-fab-trigger class="align-with-text">
+              <md-button aria-label="menu" class="md-fab md-primary">
+                <md-icon>flash_on</md-icon>
+              </md-button>
+            </md-fab-trigger>
+
+            <md-toolbar>
+              <md-fab-actions class="md-toolbar-tools">
+                <md-button ng-repeat="state in userState" aria-label="photo" class="md-icon-button" 
+                ng-click="changeLanguage(state)">
+                  {{state}}
+                </md-button>
+              </md-fab-actions>
+            </md-toolbar>
+          </md-fab-toolbar>
     </div>
 </body>
 
