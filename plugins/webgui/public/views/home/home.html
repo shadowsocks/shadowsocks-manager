@@ -18,7 +18,7 @@
                                 <md-icon class="material-icons">{{menu.icon}}</md-icon>
                             </div>
                             <div class="inset">
-                                {{menu.name}}
+                                {{ menu.name | translate }}
                             </div>
                         </md-item-content>
                     </md-list-item>
@@ -37,7 +37,7 @@
                     <div>Shadowsocks-Manager</div>
                     <span flex></span>
                     <md-button hide-sm hide-xs ng-repeat="menu in menus" aria-label="menu.icon" ng-click="menuClick($index)">
-                        {{menu.name}}
+                        {{ menu.name | translate }}
                     </md-button>
                 </div>
             </md-toolbar>
