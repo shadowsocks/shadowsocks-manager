@@ -39,7 +39,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     }];
     let lastSave = 0;
     let lastSavePromise = null;
-    const saveTime = 5000;
+    const saveTime = 3500;
     $scope.saveSetting = () => {
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);
@@ -62,11 +62,11 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
   }
 ]).controller('AdminAccountSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
-    $scope.setTitle('支付设置');
+    $scope.setTitle('账号设置');
     $scope.setMenuButton('arrow_back', 'admin.settings');
     let lastSave = 0;
     let lastSavePromise = null;
-    const saveTime = 5000;
+    const saveTime = 3500;
     $scope.saveSetting = () => {
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);
@@ -85,6 +85,5 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
-    
   }
 ]);
