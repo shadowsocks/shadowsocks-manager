@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const cron = appRequire('init/cron');
+const config = appRequire('services/config').all();
 
 const generateFlow = async (type) => {
   let tableName;
@@ -64,13 +65,34 @@ generateFlow('day');
 generateFlow('hour');
 generateFlow('5min');
 
+/*
+plugins:
+    flowSaver:
+        use: true
+        saveFlowDays: 60
+        saveFlow5minDays: 180
+        saveFlowHourDays: 370
+        saveFlowDayDays: 500
+ */
+
+let saveFlowDays = 60;
+let saveFlow5minDays = 180;
+let saveFlowHourDays = 370;
+let saveFlowDayDays = 500;
+if(config.empty) {
+    saveFlowDays = config.plugins.flowSaver.saveFlowDays;
+    saveFlow5minDays = config.plugins.flowSaver.saveFlow5minDays;
+    saveFlowHourDays = config.plugins.flowSaver.saveFlowHourDays;
+    saveFlowDayDays = config.plugins.flowSaver.saveFlowDayDays;
+}
+
 cron.minute(() => {
   generateFlow('day');
   generateFlow('hour');
-  knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
-  knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 14 * 24 * 3600 * 1000]).then();
-  knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 3 * 24 * 3600 * 1000]).then();
+  knex('saveFlow').delete().whereBetween('time', [0, Date.now() - saveFlowDays * 24 * 3600 * 1000]).then();
+    knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - saveFlow5minDays * 24 * 3600 * 1000]).then();
+    knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - saveFlowHourDays * 24 * 3600 * 1000]).then();
+    knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - saveFlowDayDays * 24 * 3600 * 1000]).then();
 }, 30);
 cron.minute(() => {
   generateFlow('5min');
