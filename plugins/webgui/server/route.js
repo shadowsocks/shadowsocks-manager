@@ -79,9 +79,10 @@ app.get('/api/admin/user/:port(\\d+)/lastConnect', isAdmin, admin.getUserPortLas
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
+app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
-app.get('/api/admin/order/:userId(\\d+)', isAdmin, admin.getUserOrders);
+app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
 app.get('/api/admin/notice', isAdmin, adminNotice.getNotice);
 app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.getOneNotice);
@@ -91,9 +92,8 @@ app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotic
 
 app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
-
-app.get('/api/admin/setting', isAdmin, adminSetting.getSetting);
-app.put('/api/admin/setting', isAdmin, adminSetting.modifySetting);
+app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
+app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);

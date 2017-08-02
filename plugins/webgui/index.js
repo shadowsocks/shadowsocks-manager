@@ -1,5 +1,3 @@
-'use strict';
-
 const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
 const expressLogger = log4js.getLogger('express');

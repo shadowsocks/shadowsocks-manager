@@ -119,7 +119,19 @@ const is5min = (start, end) => {
   return true;
 };
 
-const splitTime = (start, end) => {
+// const child = appFork('plugins/flowSaver/flowChildProcess');
+// child.setMaxListeners(200);
+const splitTime = async (start, end) => {
+  // const random = Math.random().toString().substr(2);
+  // return new Promise((resolve, reject) => {
+  //   child.on('message', msg => {
+  //     if(msg[0] === 'splitTime' && msg[1] === random) {
+  //       return resolve(msg[2]);
+  //     }
+  //   });
+  //   child.send(['splitTime', random, start, end]);
+  // });
+
   const time = {
     day: [],
     hour: [],
@@ -175,22 +187,52 @@ const splitTime = (start, end) => {
   };
   let timeStart = start;
   let timeEnd = end;
+  let last;
   while(timeStart < timeEnd) {
     if(isDay(timeStart) && next(timeStart, 'day') <= splitEnd.day && next(timeStart, 'day') <= end) {
-      time.day.push([timeStart, next(timeStart, 'day')]);
+      if(last === 'day' && time.day.length) {
+        const length = time.day.length;
+        time.day[length - 1] = [
+          time.day[length - 1][0],
+          next(timeStart, 'day')
+        ];
+      } else {
+        time.day.push([timeStart, next(timeStart, 'day')]);
+      }
       timeStart = next(timeStart, 'day');
+      last = 'day';
     } else if(isHour(timeStart) && next(timeStart, 'hour') <= splitEnd.hour && next(timeStart, 'hour') <= end) {
-      time.hour.push([timeStart, next(timeStart, 'hour')]);
+      if(last === 'hour' && time.hour.length) {
+        const length = time.hour.length;
+        time.hour[length - 1] = [
+          time.hour[length - 1][0],
+          next(timeStart, 'hour')
+        ];
+      } else {
+        time.hour.push([timeStart, next(timeStart, 'hour')]);
+      }
       timeStart = next(timeStart, 'hour');
+      last = 'hour';
     } else if(is5min(timeStart) && next(timeStart, '5min') <= splitEnd.fiveMin && next(timeStart, '5min') <= end) {
-      time.fiveMin.push([timeStart, next(timeStart, '5min')]);
+      if(last === '5min' && time.fiveMin.length) {
+        const length = time.fiveMin.length;
+        time.fiveMin[length - 1] = [
+          time.fiveMin[length - 1][0],
+          next(timeStart, '5min')
+        ];
+      } else {
+        time.fiveMin.push([timeStart, next(timeStart, '5min')]);
+      }
       timeStart = next(timeStart, '5min');
+      last = '5min';
     } else if(next(timeStart, '5min') <= end && timeStart === start) {
       time.origin.push([timeStart, next(timeStart, '5min')]);
       timeStart = next(timeStart, '5min');
+      last = '5min';
     } else {
       time.origin.push([timeStart, timeEnd]);
       timeStart = timeEnd;
+      last = 'origin';
     }
   }
   return time;
@@ -200,7 +242,7 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
   let where = {};
   if(serverId) { where.id = serverId; }
   if(port) { where.port = port; }
-  const time = splitTime(start, end);
+  const time = await splitTime(start, end);
   const sum = [];
   let getFlow;
   if(serverId) {
@@ -242,6 +284,15 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
   });
   const result = await Promise.all(sum);
   const sumFlow = result.length ? result.reduce((a, b) => a + b) : 0;
+  // const random = Math.random().toString().substr(2);
+  // return new Promise((resolve, reject) => {
+  //   child.on('message', msg => {
+  //     if(msg[0] === 'sumFlow' && msg[1] === random) {
+  //       return resolve(msg[2]);
+  //     }
+  //   });
+  //   child.send(['sumFlow', random, result]);
+  // });
   return sumFlow;
 };
 
@@ -260,25 +311,6 @@ const getServerFlow = async (serverId, timeArray) => {
 };
 
 const getServerPortFlow = async (serverId, port, timeArray, isMultiServerFlow) => {
-  // const result = [];
-  // timeArray.forEach((time, index) => {
-  //   if(index === timeArray.length - 1) {
-  //     return;
-  //   }
-  //   const startTime = time;
-  //   const endTime = timeArray[index + 1];
-  //   const getFlow = knex('saveFlow')
-  //   .sum('flow as sumFlow')
-  //   .groupBy('port')
-  //   .select(['port'])
-  //   .where(isMultiServerFlow ? { port } : { id: serverId, port })
-  //   .whereBetween('time', [startTime, endTime]).then(success => {
-  //     if(success[0]) { return success[0].sumFlow; }
-  //     return 0;
-  //   });
-  //   result.push(getFlow);
-  // });
-  // return Promise.all(result);
   const result = [];
   timeArray.forEach((time, index) => {
     if(index === timeArray.length - 1) {

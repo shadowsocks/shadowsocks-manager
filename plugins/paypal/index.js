@@ -143,6 +143,33 @@ cron.minute(async () => {
   }
 }, 1);
 
+const orderList = async (options = {}) => {
+  const where = {};
+  if(options.userId) {
+    where['user.id'] = options.userId;
+  }
+  const orders = await knex('paypal').select([
+    'paypal.orderId',
+    'paypal.orderType',
+    'user.id as userId',
+    'user.username',
+    'account_plugin.port',
+    'paypal.amount',
+    'paypal.status',
+    'paypal.paypalData',
+    'paypal.createTime',
+    'paypal.expireTime',
+  ])
+  .leftJoin('user', 'user.id', 'paypal.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account')
+  .where(where)
+  .orderBy('paypal.createTime', 'DESC');
+  orders.forEach(f => {
+    f.paypalData = JSON.parse(f.paypalData);
+  });
+  return orders;
+};
+
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
   const filter = options.filter || [];
@@ -191,6 +218,7 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 exports.orderListAndPaging = orderListAndPaging;
+exports.orderList = orderList;
 
 cron.minute(() => {
   if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }

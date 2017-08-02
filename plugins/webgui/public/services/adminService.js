@@ -116,12 +116,14 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return $q.all([
       $http.get('/api/admin/user/' + userId),
       $http.get('/api/admin/user/account'),
-      $http.get('/api/admin/order/' + userId),
+      $http.get('/api/admin/alipay/' + userId),
+      $http.get('/api/admin/paypal/' + userId),
     ]).then(success => {
       return {
         user: success[0].data,
         account: success[1].data,
-        orders: success[2].data,
+        alipayOrders: success[2].data,
+        paypalOrders: success[3].data,
       };
     });
   };

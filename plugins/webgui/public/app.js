@@ -8,6 +8,7 @@ require('./controllers/adminAccount');
 require('./controllers/adminServer');
 require('./controllers/adminUser');
 require('./controllers/adminNotice');
+require('./controllers/adminSetting');
 
 require('./routes/home');
 require('./routes/user');

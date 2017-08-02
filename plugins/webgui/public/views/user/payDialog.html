@@ -5,9 +5,11 @@
     <md-dialog-content ng-show="publicInfo.status !== 'loading'">
         <div class="md-dialog-content">
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'pay'">
-                <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
-                <div>支付宝扫码支付</div>
-                <div>手机请点击二维码付款</div>
+                <div ng-if="publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay"  layout="column" layout-align="center center">
+                    <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
+                    <div>支付宝扫码支付</div>
+                    <div>手机请点击二维码付款</div>
+                </div>
                 <div style="margin-top: 30px;" ng-if="publicInfo.paypal[publicInfo.orderType] && publicInfo.config.paypal" layout="column" layout-align="center center">
                     <div>Paypal支付请点击下面按钮</div>
                     <div style="margin-top: 5px;" id="paypal-button-container"></div>
