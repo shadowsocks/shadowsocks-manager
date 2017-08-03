@@ -16,7 +16,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
         account: success[0].data,
         servers: success[1].data.map(server => {
           if(server.host.indexOf(':') >= 0) {
-            server.host = server.host.split(':')[1];
+            server.host = server.host.substr(server.host.lastIndexOf(':')+1);
           }
           return server;
         }),

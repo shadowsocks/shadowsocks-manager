@@ -26,8 +26,9 @@ const createTable = async () => {
   }
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
   if(list.length === 0) {
-    const host = config.manager.address.split(':')[0];
-    const port = +config.manager.address.split(':')[1];
+    const addridx = config.manager.address.lastIndexOf(':');
+	const host = config.manager.address.substring(0,addridx);
+	const port = +config.manager.address.substr(addridx+1);
     const password = config.manager.password;
     await manager.send({
       command: 'flow',

@@ -113,8 +113,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     ]).then(success => {
       $scope.account = success[0].data;
       $scope.servers = success[1].data.map(server => {
-        if(server.host.indexOf(':') >= 0) {
-          server.host = server.host.split(':')[1];
+        if(server.host.lastIndexOf(':') >= 0) {
+          server.host = server.host.substr(server.host.lastIndexOf(':')+1);
         }
         return server;
       });

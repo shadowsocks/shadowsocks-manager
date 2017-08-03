@@ -5,8 +5,9 @@ const net = require('net');
 const path = require('path');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
-const host = config.manager.address.split(':')[0];
-const port = +config.manager.address.split(':')[1];
+const addridx = config.manager.address.lastIndexOf(':');
+const host = config.manager.address.substring(0,addridx);
+const port = +config.manager.address.substr(addridx+1);
 const password = config.manager.password;
 
 const pack = (data, password) => {
@@ -46,7 +47,7 @@ const checkData = async (receive) => {
 
 const sendMessage = (data, options) => {
   if(options && options.host) {
-    options.host = options.host.split(':')[0];
+	options.host = options.host.substr(0,server.host.lastIndexOf(':'));
   }
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {
