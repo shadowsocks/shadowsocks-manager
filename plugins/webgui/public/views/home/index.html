@@ -3,11 +3,11 @@
         <img src="/libs/home.png" style="margin: 5vw; width: 300px;"></img>
     </div>
     <div layout="row" layout-align="space-around center" style="background-color: #E0E0E0; width: 100%;">
-        <md-button hide-gt-sm ng-click="login()" translate>
-            {{ '登录' | translate}}
+        <md-button hide-gt-sm ng-click="login()">
+            {{ '登录' | translate }}
         </md-button>
-        <md-button hide-gt-sm ng-click="signup()" translate>
-            {{ '注册' | translate}}
+        <md-button hide-gt-sm ng-click="signup()">
+            {{ '注册' | translate }}
         </md-button>
     </div>
     <div hide-xs hide-sm hide-md style="height: 55px;"></div>
@@ -17,10 +17,10 @@
             ng-repeat="icon in icons">
             <div flex="5"></div>
             <md-icon class="material-icons" style="font-size: 84px; color: #3F51B5; height: 108px; position: relative; left: -32px;">
-                {{icon.icon}}
+                {{ icon.icon }}
             </md-icon>
-            <h2>{{icon.title | translate }}</h2>
-            <div>{{icon.content | translate }}</div>
+            <h2>{{ icon.title | translate }}</h2>
+            <div>{{ icon.content | translate }}</div>
             <div flex="5"></div>
         </div>
     </div>
