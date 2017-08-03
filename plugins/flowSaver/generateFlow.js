@@ -79,22 +79,22 @@ plugins:
         saveFlowDayDays: 500
  */
 
-let saveFlowDays = 60;
-let saveFlow5minDays = 180;
-let saveFlowHourDays = 370;
-let saveFlowDayDays = 500;
-if (config.plugins.flowSaver.saveFlowDays) {
-    saveFlowDays = config.plugins.flowSaver.saveFlowDays;
-}
-if (config.plugins.flowSaver.saveFlow5minDays) {
-    saveFlow5minDays = config.plugins.flowSaver.saveFlow5minDays;
-}
-if (config.plugins.flowSaver.saveFlowHourDays) {
-    saveFlowHourDays = config.plugins.flowSaver.saveFlowHourDays;
-}
-if (config.plugins.flowSaver.saveFlowDayDays) {
-    saveFlowDayDays = config.plugins.flowSaver.saveFlowDayDays;
-}
+const saveFlowDays = 60;
+const saveFlow5minDays = 180;
+const saveFlowHourDays = 370;
+const saveFlowDayDays = 500;
+// if (config.plugins.flowSaver.saveFlowDays) {
+//     saveFlowDays = config.plugins.flowSaver.saveFlowDays;
+// }
+// if (config.plugins.flowSaver.saveFlow5minDays) {
+//     saveFlow5minDays = config.plugins.flowSaver.saveFlow5minDays;
+// }
+// if (config.plugins.flowSaver.saveFlowHourDays) {
+//     saveFlowHourDays = config.plugins.flowSaver.saveFlowHourDays;
+// }
+// if (config.plugins.flowSaver.saveFlowDayDays) {
+//     saveFlowDayDays = config.plugins.flowSaver.saveFlowDayDays;
+// }
 
 cron.minute(() => {
     generateFlow('day');
