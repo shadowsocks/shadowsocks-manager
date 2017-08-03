@@ -501,22 +501,6 @@ exports.getAccountIpFromAllServer = (req, res) => {
 exports.getAccountIpInfo = (req, res) => {
   const ip = req.params.ip;
 
-  const ipip = ip => {
-    const uri = `http://freeapi.ipip.net/${ ip }`;
-    return rp({ uri }).then(success => {
-      const decode = (s) => {
-        return unescape(s.replace(/\\u/g, '%u'));
-      };
-      return JSON.parse(decode(success));
-    }).then(success => {
-      if(success.code !== 0) {
-        return Promise.reject(success.code);
-      }
-      const result = [];
-      return result;
-    });
-  };
-
   const taobao = ip => {
     const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
     return rp({ uri }).then(success => {
@@ -528,6 +512,19 @@ exports.getAccountIpInfo = (req, res) => {
       if(success.code !== 0) {
         return Promise.reject(success.code);
       }
+      const result = [success.data.region + success.data.city, success.data.isp];
+      return result;
+    });
+  };
+
+  const ipip = ip => {
+    const uri = `http://freeapi.ipip.net/${ ip }`;
+    return rp({ uri }).then(success => {
+      const decode = (s) => {
+        return unescape(s.replace(/\\u/g, '%u'));
+      };
+      return JSON.parse(decode(success));
+    }).then(success => {
         return [success[0] + success[1] + success[2] + success[3] + success[4]];
     });
   };
@@ -546,7 +543,7 @@ exports.getAccountIpInfo = (req, res) => {
         return [success.province + success.city, success.isp];
     });
   };
-  const getIpFunction = [taobao, ipip];
+  const getIpFunction = [taobao, ipip, sina];
   const random = +Math.random().toString().substr(2) % getIpFunction.length;
   getIpFunction[random](ip).then(success => {
     return res.send(success);
