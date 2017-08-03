@@ -5,8 +5,8 @@ module.exports = {
     '邮箱': 'Email',
     '密码': 'Password',
     '找回密码': 'Reset password',
-    '验证码': 'Code',
-    '发送验证码': 'Send',
+    '验证码': 'Verification code',
+    '发送验证码': 'Get verification code',
     '请选择语言：': 'Choose language: ',
     '快速搭建':'Build fast',
     '易于配置':'Config easily',
@@ -17,4 +17,6 @@ module.exports = {
     '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
     '验证码不能为空': 'Code cannot be empty',
     '密码不能为空': 'Password cannot be empty',
+    '验证码已发至邮箱': 'A verfication code has been sent out to your email',
+    '确定':'OK',
 };
