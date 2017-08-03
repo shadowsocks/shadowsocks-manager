@@ -112,7 +112,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $http.get('/api/admin/setting/account'),
     ]).then(success => {
       $scope.account = success[0].data;
-      $scope.servers = success[1].data;
+      $scope.servers = success[1].data.data.map(server => {
+        if(server.host.indexOf(',') >= 0) {
+          server.host = server.host.split(',')[1];
+        }
+        return server;
+      });
       $scope.getServerPortData($scope.servers[0], $scope.account.port);
       $scope.isMultiServerFlow = success[2].data.multiServerFlow;
     }).catch(err => {

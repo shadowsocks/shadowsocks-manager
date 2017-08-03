@@ -13,7 +13,12 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     ]).then(success => {
       return {
         account: success[0].data,
-        servers: success[1].data,
+        servers: success[1].data.map(server => {
+          if(server.host.indexOf(',') >= 0) {
+            server.host = server.host.split(',')[1];
+          }
+          return server;
+        }),
       };
     });
     return userAccountPromise;
