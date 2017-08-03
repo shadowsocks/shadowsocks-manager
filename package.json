@@ -1,5 +1,5 @@
 {
-  "name": "shadowsocks-manager-methol",
+  "name": "shadowsocks-manager",
   "version": "1.8.21",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
