@@ -19,7 +19,10 @@ module.exports = {
     '验证码不能为空': 'Code cannot be empty',
     '密码不能为空': 'Password cannot be empty',
     '验证码已发至邮箱': 'A verfication code has been sent out to your email',
-    '确定':'OK',
+    '确定': 'OK',
+    '取消': 'Cancel',
+    '关闭': 'Close',
+    '下一步': 'Next',
 
     '服务器': 'Server',
     '用户': 'User',
@@ -43,4 +46,16 @@ module.exports = {
     '最近连接': 'Recent Connection',
     '修改密码': 'Change Password',
     '续费': 'Pay & Extend Service',
+
+    '修改密码': '',
+    '请选择续费周期：': '',
+    '一小时': '',
+    '一天': '',
+    '一周': '',
+    '一个月': '',
+    '三个月': '',
+    '一年': '',
+    '支付宝扫码支付': '',
+    '手机请点击二维码付款': '',
+    'Paypal支付请点击下面按钮': '',
 };
