@@ -1,5 +1,4 @@
 const app = angular.module('app');
-const net = require('net');
 
 app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$http', 'accountSortDialog','$interval', 'adminApi', '$localStorage', 'accountSortTool',
   ($scope, $state, $stateParams, $http, accountSortDialog, $interval, adminApi, $localStorage, accountSortTool) => {
@@ -113,12 +112,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $http.get('/api/admin/setting/account'),
     ]).then(success => {
       $scope.account = success[0].data;
-      $scope.servers = success[1].data.map(server => {
-        if(server.host.lastIndexOf(':') >= 0 && !net.isIPv6(server.host)) {
-          server.host = server.host.substring(0, server.host.lastIndexOf(':'));
-        }
-        return server;
-      });
+      $scope.servers = success[1].data;
       $scope.getServerPortData($scope.servers[0], $scope.account.port);
       $scope.isMultiServerFlow = success[2].data.multiServerFlow;
     }).catch(err => {
