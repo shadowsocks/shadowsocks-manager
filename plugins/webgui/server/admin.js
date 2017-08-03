@@ -500,11 +500,10 @@ exports.getAccountIpFromAllServer = (req, res) => {
 
 exports.getAccountIpInfo = (req, res) => {
   const ip = req.params.ip;
-  const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
 
   const taobao = ip => {
     const uri = `http://ip.taobao.com/service/getIpInfo.php?ip=${ ip }`;
-    return rp({ uri }).then(success => {
+    return rp({ uri, timeout: 10 * 1000 }).then(success => {
       const decode = (s) => {
         return unescape(s.replace(/\\u/g, '%u'));
       };
@@ -520,22 +519,42 @@ exports.getAccountIpInfo = (req, res) => {
 
   const sina = ip => {
     const uri = `https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js&ip=${ ip }`;
-    return rp({ uri }).then(success => {
+    return rp({ uri, timeout: 10 * 1000 }).then(success => {
       const decode = (s) => {
         return unescape(s.replace(/\\u/g, '%u'));
       };
       return JSON.parse(decode(success.match(/^var remote_ip_info = ([\s\S]+);$/)[1]));
     }).then(success => {
-      // if(success.code !== 0) {
-      //   return Promise.reject(success.code);
-      // }
       const result = [success.province + success.city, success.isp];
       return result;
     });
   };
-  const getIpFunction = [taobao, sina];
-  const random = +Math.random().toString().substr(2) % getIpFunction.length;
-  getIpFunction[random](ip).then(success => {
+
+  const ipip = ip => {
+    const uri = `https://freeapi.ipip.net/${ ip }`;
+    return rp({ uri, timeout: 10 * 1000 }).then(success => {
+      const decode = (s) => {
+        return unescape(s.replace(/\\u/g, '%u'));
+      };
+      return JSON.parse(decode(success));
+    }).then(success => {
+      const result = [success[1] + success[2], success[4]];
+      return result;
+    });
+  };
+
+  // const getIpFunction = [taobao, sina, ipip];
+  // const random = +Math.random().toString().substr(2) % getIpFunction.length;
+  // getIpFunction[random](ip)
+  const getIpFunction = ip => {
+    return taobao(ip).catch(() => {
+      return sina(ip);
+    }).catch(() => {
+      return ipip(ip);
+    });
+  };
+  getIpFunction(ip)
+  .then(success => {
     return res.send(success);
   }).catch(err => {
     return res.send(['', '']);
