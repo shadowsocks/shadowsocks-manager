@@ -18,7 +18,7 @@
                                 <md-icon class="material-icons">{{menu.icon}}</md-icon>
                             </div>
                             <div class="inset">
-                                {{menu.name}}
+                                {{ menu.name | translate }}
                             </div>
                         </md-item-content>
                     </md-list-item>
@@ -35,7 +35,7 @@
                     <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
                         <i class="material-icons">menu</i>
                     </md-button>
-                    <div>{{title}}</div>
+                    <div>{{ title | translate }}</div>
                     <span flex></span>
                     <md-button aria-label="language menu" class="md-icon-button" ng-click="chooseLanguage()" ng-if="currentState === 'user.index'">
                         <md-icon class="material-icons">language</md-icon>
@@ -54,7 +54,7 @@
                                         <md-icon class="material-icons">{{menu.icon}}</md-icon>
                                     </div>
                                     <div class="inset" ng-show="innerSideNav">
-                                        {{menu.name}}
+                                        {{ menu.name | translate }}
                                     </div>
                                 </md-item-content>
                             </md-list-item>

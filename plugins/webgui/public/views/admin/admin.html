@@ -18,7 +18,7 @@
                                 <md-icon class="material-icons">{{menu.icon}}</md-icon>
                             </div>
                             <div class="inset">
-                                {{menu.name}}
+                                {{ menu.name | translate }}
                             </div>
                         </md-item-content>
                     </md-list-item>
@@ -38,7 +38,7 @@
                     <md-button class="md-icon-button" aria-label="cancel search" ng-click="cancelSearch()" ng-if="menuSearch.input">
                         <i class="material-icons">arrow_back</i>
                     </md-button>
-                    <div ng-if="!menuSearch.input">{{title}}</div>
+                    <div ng-if="!menuSearch.input">{{ title | translate }}</div>
                     <span flex ng-if="!menuSearch.input"></span>
                     <md-input-container class="search-input" flex ng-if="menuSearch.input">
                         <label>&nbsp;</label>
@@ -68,7 +68,7 @@
                                         <md-icon class="material-icons">{{menu.icon}}</md-icon>
                                     </div>
                                     <div class="inset" ng-show="innerSideNav">
-                                        {{menu.name}}
+                                        {{ menu.name | translate }}
                                     </div>
                                 </md-item-content>
                             </md-list-item>
