@@ -45,13 +45,13 @@
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="center center" ng-show="publicInfo.status !== 'loading'">
         <md-button class="md-primary" ng-show="publicInfo.status === 'choose'" ng-click="publicInfo.close()">
-            取消
+            {{ '取消' | translate }}
         </md-button>
         <md-button class="md-primary" ng-show="publicInfo.status === 'choose'" ng-click="publicInfo.createOrder()">
-            下一步
+            {{ '下一步' | translate }}
         </md-button>
         <md-button class="md-primary" ng-show="publicInfo.status === 'pay' || publicInfo.status === 'success' || publicInfo.status === 'error'" ng-click="publicInfo.close()">
-            关闭
+            {{ '关闭' | translate }}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

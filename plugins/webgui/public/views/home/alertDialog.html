@@ -5,13 +5,13 @@
     <md-dialog-content ng-hide="publicInfo.isLoading">
         <div class="md-dialog-content">
             <div layout="row" layout-align="center center">
-                <div style="white-space: pre-wrap;">{{publicInfo.content}}</div>
+                <div style="white-space: pre-wrap;">{{ publicInfo.content | translate }}</div>
             </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
         <md-button class="md-primary" ng-click="publicInfo.close()">
-            {{publicInfo.button}}
+            {{ publicInfo.button | translate }}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -14,13 +14,13 @@
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="center center" ng-show="publicInfo.status !== 'loading'">
         <md-button class="md-primary" ng-click="publicInfo.cancelFn()" ng-show="publicInfo.status === 'show'">
-            {{publicInfo.cancel}}
+            {{publicInfo.cancel | translate }}
         </md-button>
         <md-button class="md-warn" ng-click="publicInfo.confirmFn()" ng-show="publicInfo.status === 'show'">
-            {{publicInfo.confirm}}
+            {{publicInfo.confirm | translate }}
         </md-button>
         <md-button class="md-primary" ng-click="publicInfo.cancelFn()" ng-show="publicInfo.status === 'error'">
-            确定
+            {{ '确定' | translate }}
         </md-button>
     </md-dialog-actions>
 </md-dialog>
