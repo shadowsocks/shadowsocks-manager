@@ -9,8 +9,9 @@ const exec = require('child_process').exec;
 const clientIp = {};
 
 const config = appRequire('services/config').all();
-const host = config.shadowsocks.address.split(':')[0];
-const port = +config.shadowsocks.address.split(':')[1];
+const addridx = config.manager.address.lastIndexOf(':');
+const host = config.manager.address.substring(0,addridx);
+const port = +config.manager.address.substr(addridx+1);
 
 const knex = appRequire('init/knex').knex;
 

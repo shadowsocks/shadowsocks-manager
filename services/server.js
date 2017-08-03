@@ -6,8 +6,9 @@ const crypto = require('crypto');
 const path = require('path');
 const config = appRequire('services/config').all();
 const password = config.manager.password;
-const host = config.manager.address.split(':')[0];
-const port = +config.manager.address.split(':')[1];
+const addridx = config.manager.address.lastIndexOf(':');
+const host = config.manager.address.substring(0,addridx);
+const port = +config.manager.address.substr(addridx+1);
 
 const shadowsocks = appRequire('services/shadowsocks');
 
