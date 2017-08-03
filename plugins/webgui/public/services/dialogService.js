@@ -824,11 +824,13 @@ app.factory('languageDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$translate', 'bind', function($scope, $translate, bind) {
+    controller: ['$scope', '$translate', '$localStorage', 'bind', function($scope, $translate, $localStorage, bind) {
       $scope.publicInfo = bind;
-      $scope.publicInfo.myLanguage = 'zh';
+      $scope.publicInfo.myLanguage = $localStorage.language || 'zh';
       $scope.chooseLanguage = () => {
         $translate.use($scope.publicInfo.myLanguage);
+        $localStorage.language = $scope.publicInfo.myLanguage;
+        $scope.publicInfo.hide();
       };
       $scope.languages = [
         { id: 'zh', name: '中文' },
