@@ -5,7 +5,7 @@
         <div flex layout="column" layout-align="space-around stretch">
             <form name="userForm">
                 <md-input-container class="md-block">
-                    <label>邮箱</label>
+                    <label>{{ '邮箱' | translate }}</label>
                     <input type="email" required name="email" ng-model="user.email">
                     <div ng-messages="userForm.email.$error">
                         <div ng-message="required">邮箱不能为空</div>
@@ -13,11 +13,8 @@
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>密码</label>
+                    <label>{{ '密码' | translate }}</label>
                     <input type="password" required name="password" ng-model="user.password" ng-keypress="enterKey($event)">
-                    <!-- <div ng-messages="userForm.password.$error">
-                        <div ng-message="required">密码不能为空</div>
-                    </div> -->
                 </md-input-container>
             </form>
         </div>
@@ -26,8 +23,8 @@
     <div flex layout="row" layout-align="center start">
         <div flex="10" flex-gt-sm="30"></div>
         <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-primary" ng-click="findPassword()">找回密码</md-button>
-            <md-button class="md-raised md-primary" ng-click="login()" ng-disabled="!user.email || !user.password">登录</md-button>
+            <md-button class="md-primary" ng-click="findPassword()">{{ '找回密码' | translate }}</md-button>
+            <md-button class="md-raised md-primary" ng-click="login()" ng-disabled="!user.email || !user.password">{{ '登录' | translate }}</md-button>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
@@ -48,7 +45,7 @@
                         <div flex layout="column" layout-align="space-around stretch">
                             <form name="userForm">
                                 <md-input-container class="md-block">
-                                    <label>邮箱</label>
+                                    <label>{{ '邮箱' | translate }}</label>
                                     <input type="email" required name="email" ng-model="user.email">
                                     <div ng-messages="userForm.email.$error">
                                         <div ng-message="required">邮箱不能为空</div>
@@ -56,11 +53,8 @@
                                     </div>
                                 </md-input-container>
                                 <md-input-container class="md-block">
-                                    <label>密码</label>
+                                    <label>{{ '密码' | translate }}</label>
                                     <input type="password" required name="password" ng-model="user.password" ng-keypress="enterKey($event)">
-                                    <!-- <div ng-messages="userForm.password.$error">
-                                        <div ng-message="required">密码不能为空</div>
-                                    </div> -->
                                 </md-input-container>
                             </form>
                         </div>
@@ -69,8 +63,8 @@
                     <div flex layout="row" layout-align="center start">
                         <div flex="10"></div>
                         <div layout="row" flex layout-align="space-around center">
-                            <md-button class="md-primary" ng-click="findPassword()">找回密码</md-button>
-                            <md-button class="md-raised md-primary" ng-click="login()" ng-disabled="!user.email || !user.password">登录</md-button>
+                            <md-button class="md-primary" ng-click="findPassword()">{{ '找回密码' | translate }}</md-button>
+                            <md-button class="md-raised md-primary" ng-click="login()" ng-disabled="!user.email || !user.password">{{ '登录' | translate }}</md-button>
                         </div>
                         <div flex="10"></div>
                     </div>
