@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-08-02 00:46:33';
+var ONLINE_CACHE_NAME = '2017-08-03 09:41:23';
 var onlineCacheUrl = [
   '/',
 
@@ -21,6 +21,7 @@ var onlineCacheUrl = [
   '/libs/moment.min.js',
   '/libs/angular-moment.min.js',
   '/libs/angular-websocket.min.js',
+  '/libs/angular-translate.min.js',
   '/libs/bundle.js',
 
   '/libs/favicon.png',
