@@ -1,9 +1,9 @@
 <md-card>
     <md-card-title>
-        <md-card-title-text><span class="md-headline">公告</span></md-card-title-text>
+        <md-card-title-text><span class="md-headline">{{ '公告' | translate }}</span></md-card-title-text>
     </md-card-title>
     <md-card-content>
-        <div ng-hide="notices.length">暂无公告</div>
+        <div ng-hide="notices.length">{{ '暂无公告' | translate }}</div>
         <md-list>
             <md-divider></md-divider>
             <md-list-item ng-repeat="notice in notices" ng-click="showNotice(notice)">
