@@ -1,10 +1,12 @@
 'use strict';
 
 const config = appRequire('services/config').all();
-
+const addridx = config.manager.address.lastIndexOf(':');
+const host = config.manager.address.substring(0,addridx);
+const port = +config.manager.address.substr(addridx+1);
 let managerAddress = {
-  host: config.manager.address.split(':')[0],
-  port: +config.manager.address.split(':')[1],
+  host: host,
+  port: port,
   password: config.manager.password,
 };
 
