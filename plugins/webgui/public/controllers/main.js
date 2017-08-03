@@ -1,32 +1,7 @@
 const app = angular.module('app');
 
-app.config(['$translateProvider',function ($translateProvider) {
-  $translateProvider.translations('zh', {
-  });
-  $translateProvider.translations('en', {
-    '首页':'HOME',
-    '登录':'SIGN IN',
-    '注册':'SIGN UP',
-    '快速搭建':'Build fast',
-    '易于配置':'Config easily',
-    '官方标准':'Official API',
-    '仅依赖Node.js，无需安装数据库（可选MySQL）' :'Just depend on Node.js and Sqlite or Mysql',
-    '带有插件系统，仅需修改配置文件即可运行'      :'Based on Plugin, just run it after edit the config',
-    '支持libev和python版本的标准manager API'    :'Support ss-libev and ss-python with manager API',
-  });
-  $translateProvider.preferredLanguage('zh');
-}]);
-
 app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 
   ($scope, $localStorage, $location, $http, $translate) => {
-
-    $scope.userState = ('zh en').split(' ');//.map((state) => { return state; });
-
-    $scope.changeLanguage = function (key) {
-      console.log(key);
-      $translate.use(key);
-    };
-
     $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
     $localStorage.$default({
