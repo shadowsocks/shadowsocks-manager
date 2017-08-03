@@ -46,8 +46,8 @@ const checkData = async (receive) => {
 };
 
 const sendMessage = (data, options) => {
-  if(options && options.host) {
-	options.host = options.host.substr(0,server.host.lastIndexOf(':'));
+  if(options && options.host && options.host.indexOf(':') >= 0 && !net.isIPv6(options.host))) {
+      options.host = options.host.substr(options.host.lastIndexOf(':')+1);
   }
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {

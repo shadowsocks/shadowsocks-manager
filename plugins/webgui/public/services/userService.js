@@ -1,5 +1,5 @@
 const app = angular.module('app');
-
+const net = require('net');
 app.factory('userApi', ['$q', '$http', ($q, $http) => {
   let userAccountPromise = null;
   const getUserAccount = () => {
@@ -15,8 +15,8 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       return {
         account: success[0].data,
         servers: success[1].data.map(server => {
-          if(server.host.indexOf(':') >= 0) {
-            server.host = server.host.substr(server.host.lastIndexOf(':')+1);
+          if(server.host.lastIndexOf(':') >= 0 && !net.isIPv6(server.host)) {
+            server.host = server.host.substring(0, server.host.lastIndexOf(':'));
           }
           return server;
         }),
