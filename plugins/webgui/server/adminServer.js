@@ -4,7 +4,7 @@ const knex = appRequire('init/knex').knex;
 
 exports.getServers = (req, res) => {
   serverManager.list({
-    status: true,
+    status: !!req.query.status,
   }).then(success => {
     res.send(success);
   }).catch(err => {

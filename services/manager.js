@@ -55,7 +55,7 @@ const sendMessage = (data, options) => {
     }, () => {
       client.write(pack(data, (options? options.password: null) || password));
     });
-    client.setTimeout(12 * 1000);
+    client.setTimeout(10 * 1000);
     const receive = {
       data: Buffer.from(''),
       socket: client,
@@ -77,11 +77,16 @@ const sendMessage = (data, options) => {
       });
     });
     client.on('close', () => {
-      reject(new Error(`ssmgr[s] connection close  [${ options.host || host }:${ options.port || port }]`));
+      reject(new Error(`ssmgr[s] connection close [${ options.host || host }:${ options.port || port }]`));
     });
     client.on('error', err => {
       logger.error(err);
-      reject(new Error(`connect to ssmgr[s] fail  [${ options.host || host }:${ options.port || port }]`));
+      reject(new Error(`connect to ssmgr[s] fail [${ options.host || host }:${ options.port || port }]`));
+    });
+    client.on('timeout', () => {
+      logger.error('timeout');
+      reject(new Error(`connect to ssmgr[s] timeout [${ options.host || host }:${ options.port || port }]`));
+      client.end();
     });
   });
   return promise;

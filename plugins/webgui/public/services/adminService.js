@@ -25,8 +25,12 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     const pageSize = opt.pageSize || 20;
     return $http.get(url, { params: opt }).then(success => success.data);
   };
-  const getServer = () => {
-    return $http.get('/api/admin/server').then(success => success.data);
+  const getServer = status => {
+    return $http.get('/api/admin/server', {
+      params: {
+        status
+      }
+    }).then(success => success.data);
   };
 
   let accountPromise = null;
