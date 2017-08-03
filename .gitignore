@@ -42,3 +42,5 @@ config/development.yml
 
 .vscode
 lib
+package-lock.json
+.idea/

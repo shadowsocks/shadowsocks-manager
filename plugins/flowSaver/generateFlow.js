@@ -1,77 +1,109 @@
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const cron = appRequire('init/cron');
+const config = appRequire('services/config').all();
 
 const generateFlow = async (type) => {
-  let tableName;
-  let interval;
-  if(type === 'day') {
-    tableName = 'saveFlowDay';
-    interval = 24 * 3600 * 1000;
-  }
-  if(type === 'hour') {
-    tableName = 'saveFlowHour';
-    interval = 3600 * 1000;
-  }
-  if(type === '5min') {
-    tableName = 'saveFlow5min';
-    interval = 5 * 60 * 1000;
-  }
-  const count = await knex('saveFlow').count('id as count').then(success => success[0].count);
-  if(!count) { return; }
-  const recent = await knex(tableName).select().orderBy('time', 'DESC').limit(1).then(success => success[0]);
-  let time;
-  if(!recent) {
-    const firstFlow = await knex('saveFlow').select().orderBy('time', 'ASC').limit(1).then(success => success[0]);
-    if(type === 'day') {
-      time = moment(firstFlow.time).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+    let tableName;
+    let interval;
+    if (type === 'day') {
+        tableName = 'saveFlowDay';
+        interval = 24 * 3600 * 1000;
     }
-    if(type === 'hour') {
-      time = moment(firstFlow.time).minute(0).second(0).millisecond(0).toDate().getTime();
+    if (type === 'hour') {
+        tableName = 'saveFlowHour';
+        interval = 3600 * 1000;
     }
-    if(type === '5min') {
-      const minute = moment(firstFlow.time).minute();
-      time = moment(firstFlow.time).minute(minute - minute % 5).second(0).millisecond(0).toDate().getTime();
+    if (type === '5min') {
+        tableName = 'saveFlow5min';
+        interval = 5 * 60 * 1000;
     }
-  } else {
-    time = recent.time + interval;
-  }
-  if(Date.now() - time < interval) {
-    return;
-  }
-  let sum = await knex('saveFlow')
-  .sum('flow as sumFlow')
-  .groupBy(['port', 'id'])
-  .select(['saveFlow.port as port'])
-  .select(['saveFlow.id as id'])
-  .whereBetween('time', [time, time + interval]);
-  if(!sum.length) { sum = [{id: 0, port: 0, flow: 0}]; }
-  await knex(tableName).insert(sum.map(m => {
-    return {
-      id: m.id,
-      port: m.port,
-      flow: m.sumFlow,
-      time,
-    };
-  }));
-  await knex(tableName).delete().where({
-    id: 0,
-  }).whereBetween('time', [0, time - 1]);
-  generateFlow(type);
+    const count = await knex('saveFlow').count('id as count').then(success => success[0].count);
+    if (!count) {
+        return;
+    }
+    const recent = await knex(tableName).select().orderBy('time', 'DESC').limit(1).then(success => success[0]);
+    let time;
+    if (!recent) {
+        const firstFlow = await knex('saveFlow').select().orderBy('time', 'ASC').limit(1).then(success => success[0]);
+        if (type === 'day') {
+            time = moment(firstFlow.time).hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+        }
+        if (type === 'hour') {
+            time = moment(firstFlow.time).minute(0).second(0).millisecond(0).toDate().getTime();
+        }
+        if (type === '5min') {
+            const minute = moment(firstFlow.time).minute();
+            time = moment(firstFlow.time).minute(minute - minute % 5).second(0).millisecond(0).toDate().getTime();
+        }
+    } else {
+        time = recent.time + interval;
+    }
+    if (Date.now() - time < interval) {
+        return;
+    }
+    let sum = await knex('saveFlow')
+            .sum('flow as sumFlow')
+            .groupBy(['port', 'id'])
+            .select(['saveFlow.port as port'])
+            .select(['saveFlow.id as id'])
+            .whereBetween('time', [time, time + interval]);
+    if (!sum.length) {
+        sum = [{id: 0, port: 0, flow: 0}];
+    }
+    await knex(tableName).insert(sum.map(m => {
+        return {
+            id: m.id,
+            port: m.port,
+            flow: m.sumFlow,
+            time,
+        };
+    }));
+    await knex(tableName).delete().where({
+                                             id: 0,
+                                         }).whereBetween('time', [0, time - 1]);
+    generateFlow(type);
 };
 
 generateFlow('day');
 generateFlow('hour');
 generateFlow('5min');
 
+/*
+plugins:
+    flowSaver:
+        use: true
+        saveFlowDays: 60
+        saveFlow5minDays: 180
+        saveFlowHourDays: 370
+        saveFlowDayDays: 500
+ */
+
+const saveFlowDays = 60;
+const saveFlow5minDays = 180;
+const saveFlowHourDays = 370;
+const saveFlowDayDays = 500;
+// if (config.plugins.flowSaver.saveFlowDays) {
+//     saveFlowDays = config.plugins.flowSaver.saveFlowDays;
+// }
+// if (config.plugins.flowSaver.saveFlow5minDays) {
+//     saveFlow5minDays = config.plugins.flowSaver.saveFlow5minDays;
+// }
+// if (config.plugins.flowSaver.saveFlowHourDays) {
+//     saveFlowHourDays = config.plugins.flowSaver.saveFlowHourDays;
+// }
+// if (config.plugins.flowSaver.saveFlowDayDays) {
+//     saveFlowDayDays = config.plugins.flowSaver.saveFlowDayDays;
+// }
+
 cron.minute(() => {
-  generateFlow('day');
-  generateFlow('hour');
-  knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
-  knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 31 * 24 * 3600 * 1000]).then();
+    generateFlow('day');
+    generateFlow('hour');
+    knex('saveFlow').delete().whereBetween('time', [0, Date.now() - saveFlowDays * 24 * 3600 * 1000]).then();
+    knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - saveFlow5minDays * 24 * 3600 * 1000]).then();
+    knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - saveFlowHourDays * 24 * 3600 * 1000]).then();
+    knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - saveFlowDayDays * 24 * 3600 * 1000]).then();
 }, 30);
 cron.minute(() => {
-  generateFlow('5min');
+    generateFlow('5min');
 }, 5);
