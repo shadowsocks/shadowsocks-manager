@@ -34,8 +34,9 @@ const getFlow = function () {
     .where({id})
     .whereBetween('time', [startTime, endTime]);
   } else {
-    const host = config.manager.address.split(':')[0];
-    const port = +config.manager.address.split(':')[1];
+    const addridx = config.manager.address.lastIndexOf(':');
+	const host = config.manager.address.substring(0,addridx);
+	const port = +config.manager.address.substr(addridx+1);
     const startTime = arguments[0];
     const endTime = arguments[1];
     return knex('saveFlow').innerJoin('server', 'server.id', 'saveFlow.id')

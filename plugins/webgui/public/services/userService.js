@@ -1,5 +1,4 @@
 const app = angular.module('app');
-
 app.factory('userApi', ['$q', '$http', ($q, $http) => {
   let userAccountPromise = null;
   const getUserAccount = () => {
@@ -15,8 +14,8 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       return {
         account: success[0].data,
         servers: success[1].data.map(server => {
-          if(server.host.indexOf(':') >= 0) {
-            server.host = server.host.split(':')[1];
+          if(server.host.indexOf(',') >= 0) {
+            server.host = server.host.split(',')[1];
           }
           return server;
         }),
