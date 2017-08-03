@@ -27,3 +27,5 @@ require('./services/homeService.js');
 require('./services/userService.js');
 require('./services/dialogService.js');
 // require('./services/websocketService.js');
+
+require('./translate/index.js');

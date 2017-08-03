@@ -241,6 +241,6 @@ exports.deleteCheckAccountTimePort = deleteCheckAccountTimePort;
 setTimeout(() => {
   checkServer();
 }, 8 * 1000);
-cron.minute(() => {
+cron.second(() => {
   checkServer();
-}, 2);
+}, 127);
