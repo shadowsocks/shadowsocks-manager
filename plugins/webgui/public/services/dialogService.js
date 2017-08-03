@@ -511,7 +511,7 @@ app.factory('markdownDialog', [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', '$mdMedia', '$mdDialog', 'bind', function($scope, $mdMedia, $mdDialog, bind) {
       $scope.publicInfo = bind;
       $scope.setDialogWidth = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
@@ -826,15 +826,15 @@ app.factory('languageDialog' , [ '$mdDialog', ($mdDialog) => {
     bindToController: true,
     controller: ['$scope', '$translate', '$localStorage', 'bind', function($scope, $translate, $localStorage, bind) {
       $scope.publicInfo = bind;
-      $scope.publicInfo.myLanguage = $localStorage.language || 'zh';
+      $scope.publicInfo.myLanguage = $localStorage.language || navigator.language || 'zh-CN';
       $scope.chooseLanguage = () => {
         $translate.use($scope.publicInfo.myLanguage);
         $localStorage.language = $scope.publicInfo.myLanguage;
         $scope.publicInfo.hide();
       };
       $scope.languages = [
-        { id: 'zh', name: '中文' },
-        { id: 'en', name: 'English' },
+        { id: 'zh-CN', name: '中文' },
+        { id: 'en-US', name: 'English' },
       ];
     }],
     clickOutsideToClose: true,

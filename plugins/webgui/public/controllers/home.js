@@ -1,8 +1,8 @@
 const app = angular.module('app');
 
 app
-  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage', 'languageDialog',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, languageDialog) => {
+  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage',
+    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage) => {
       if ($localStorage.home.status === 'normal') {
         $state.go('user.index');
       } else if ($localStorage.home.status === 'admin') {
@@ -36,9 +36,6 @@ app
       $scope.menuClick = (index) => {
         $mdSidenav('left').close();
         $state.go($scope.menus[index].click);
-      };
-      $scope.chooseLanguage = () => {
-        languageDialog.show();
       };
     }
   ])
