@@ -8,8 +8,8 @@
                     <label>{{ '邮箱' | translate }}</label>
                     <input type="email" required name="email" ng-model="user.email">
                     <div ng-messages="userForm.email.$error">
-                        <div ng-message="required">邮箱不能为空</div>
-                        <div ng-message="email">必须填写一个有效邮箱地址</div>
+                        <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
+                        <div ng-message="email">{{ '必须填写一个有效邮箱地址' | translate }}</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
@@ -48,8 +48,8 @@
                                     <label>{{ '邮箱' | translate }}</label>
                                     <input type="email" required name="email" ng-model="user.email">
                                     <div ng-messages="userForm.email.$error">
-                                        <div ng-message="required">邮箱不能为空</div>
-                                        <div ng-message="email">必须填写一个有效邮箱地址</div>
+                                        <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
+                                        <div ng-message="email">{{ '必须填写一个有效邮箱地址' | translate }}</div>
                                     </div>
                                 </md-input-container>
                                 <md-input-container class="md-block">

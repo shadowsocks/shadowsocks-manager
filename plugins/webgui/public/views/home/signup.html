@@ -8,8 +8,8 @@
                     <label>{{ '邮箱' | translate }}</label>
                     <input type="email" required name="email" ng-model="user.email">
                     <div ng-messages="userForm.email.$error">
-                        <div ng-message="required">邮箱不能为空</div>
-                        <div ng-message="email">必须填写一个有效邮箱地址</div>
+                        <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
+                        <div ng-message="email">{{ '必须填写一个有效邮箱地址' | translate }}</div>
                     </div>
                 </md-input-container>
                 <div layout="row">
@@ -17,13 +17,13 @@
                         <label>{{ '验证码' | translate }}</label>
                         <input type="text" required name="code" ng-model="user.code">
                         <div ng-messages="userForm.code.$error">
-                            <div ng-message="required">验证码不能为空</div>
+                            <div ng-message="required">{{ '验证码不能为空' | translate }}</div>
                         </div>
                     </md-input-container>
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="5"></div>
                         <div style="margin-bottom: 25px;">
-                            <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">发送验证码</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
+                            <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">{{ '发送验证码' | translate }}</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <label>{{ '密码' | translate }}</label>
                         <input type="password" required name="password" ng-model="user.password">
                         <div ng-messages="userForm.password.$error">
-                            <div ng-message="required">密码不能为空</div>
+                            <div ng-message="required">{{ '密码不能为空' | translate }}</div>
                         </div>
                     </md-input-container>
                     <div flex layout="row" layout-align="space-between center">
@@ -46,13 +46,6 @@
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
-    <!-- <div flex layout="row" layout-align="center start">
-        <div flex="10" flex-gt-sm="30"></div>
-        <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-raised md-primary" ng-click="signup()">注册</md-button>
-        </div>
-        <div flex="10" flex-gt-sm="30"></div>
-    </div> -->
 </div>
 <div layout="column" hide-xs hide-sm>
     <div flex="20" style="height: 120px;"></div>
@@ -73,8 +66,8 @@
                                   <label>{{ '邮箱' | translate }}</label>
                                   <input type="email" required name="email" ng-model="user.email">
                                   <div ng-messages="userForm.email.$error">
-                                      <div ng-message="required">邮箱不能为空</div>
-                                      <div ng-message="email">必须填写一个有效邮箱地址</div>
+                                      <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
+                                      <div ng-message="email">{{ '必须填写一个有效邮箱地址' | translate }}</div>
                                   </div>
                               </md-input-container>
                               <div layout="row">
@@ -82,7 +75,7 @@
                                       <label>{{ '验证码' | translate }}</label>
                                       <input type="text" required name="code" ng-model="user.code">
                                       <div ng-messages="userForm.code.$error">
-                                          <div ng-message="required">验证码不能为空</div>
+                                          <div ng-message="required">{{ '验证码不能为空' | translate }}</div>
                                       </div>
                                   </md-input-container>
                                   <div flex layout="row" layout-align="space-between center">
@@ -97,7 +90,7 @@
                                       <label>{{ '密码' | translate }}</label>
                                       <input type="password" required name="password" ng-model="user.password">
                                       <div ng-messages="userForm.password.$error">
-                                          <div ng-message="required">密码不能为空</div>
+                                          <div ng-message="required">{{ '密码不能为空' | translate }}</div>
                                       </div>
                                   </md-input-container>
                                   <div flex layout="row" layout-align="space-between center">
