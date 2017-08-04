@@ -7,21 +7,21 @@
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'pay'">
                 <div ng-if="publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay"  layout="column" layout-align="center center">
                     <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
-                    <div>支付宝扫码支付</div>
-                    <div>手机请点击二维码付款</div>
+                    <div translate>支付宝扫码支付</div>
+                    <div translate>手机请点击二维码付款</div>
                 </div>
                 <div style="margin-top: 30px;" ng-if="publicInfo.paypal[publicInfo.orderType] && publicInfo.config.paypal" layout="column" layout-align="center center">
-                    <div>Paypal支付请点击下面按钮</div>
+                    <div translate>Paypal支付请点击下面按钮</div>
                     <div style="margin-top: 5px;" id="paypal-button-container"></div>
                 </div> 
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'choose'">
-                <div style="margin-bottom: 20px;">请选择续费周期：</div>
+                <div style="margin-bottom: 20px;" translate>请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderType" flex>
                     <md-radio-button ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-show="publicInfo.alipay[t.type] || publicInfo.paypal[t.type]">
                         <span layout="row" layout-align="space-between center" style="min-width: 300px; max-width: 390px;">
                             <span flex="10"></span>
-                            <span flex="30">{{ t.name }}</span>
+                            <span flex="30" translate>{{ t.name }}</span>
                             <span flex="5"></span>
                             <span flex="45" style="text-align:right; color: #888">
                                 <span ng-show="publicInfo.alipay[t.type] && publicInfo.config.alipay">¥{{publicInfo.alipay[t.type]}}</span>

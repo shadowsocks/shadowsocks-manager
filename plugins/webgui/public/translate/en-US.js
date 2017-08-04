@@ -39,7 +39,7 @@ module.exports = {
 
     '地址：': 'Address:',
     '端口：': 'Port:',
-    '密码：': 'Passcode:',
+    '密码：': 'Password:',
     '加密方式：': 'Encryption Method:',
     '流量：': 'Data Usage:',
     '周期：': 'Time Period:',
@@ -59,7 +59,7 @@ module.exports = {
     '一个月': 'One month',
     '三个月': 'Three months',
     '一年': 'One year',
-    '支付宝扫码支付': 'Alipay Barcode Payment',
+    '支付宝扫码支付': 'Alipay QR code Payment',
     '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
     'Paypal支付请点击下面按钮': 'For Paypal users, please click the following button',
 
