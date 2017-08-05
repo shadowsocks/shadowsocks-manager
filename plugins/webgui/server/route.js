@@ -157,6 +157,7 @@ const configForFrontend = {
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
 };
+
 const cdn = config.plugins.webgui.cdn;
 const homePage = (req, res) => {
   return knex('webguiSetting').select().where({
@@ -168,6 +169,9 @@ const homePage = (req, res) => {
     success[0].value = JSON.parse(success[0].value);
     return success[0].value;
   }).then(success => {
+    configForFrontend.title = success.title;
+    configForFrontend.themePrimary = success.themePrimary;
+    configForFrontend.themeAccent = success.themeAccent;
     return res.render('index', {
       title: success.title,
       version,

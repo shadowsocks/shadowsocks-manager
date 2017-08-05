@@ -1,11 +1,6 @@
 const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
-// app.config(['$mdThemingProvider', $mdThemingProvider => {
-//   $mdThemingProvider.theme('default')
-//     .primaryPalette('pink')
-//     .accentPalette('orange');
-// }]);
 app.config(['$sceProvider', $sceProvider => {
   $sceProvider.enabled(false);
 }]);
@@ -123,3 +118,8 @@ app.config(['$stateProvider', $stateProvider => {
     ;
   }])
 ;
+const config = JSON.parse(window.ssmgrConfig);
+app.config(['$mdThemingProvider', $mdThemingProvider => {
+  config.themePrimary && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
+  config.themeAccent && $mdThemingProvider.theme('default').primaryPalette(config.themeAccent);
+}]);
