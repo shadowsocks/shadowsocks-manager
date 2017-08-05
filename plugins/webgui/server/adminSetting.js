@@ -29,6 +29,20 @@ knex('webguiSetting').select().where({
   });
 }).then();
 knex('webguiSetting').select().where({
+  key: 'base',
+}).then(success => {
+  if(success.length) {
+    return;
+  }
+  const value = {
+    title: 'Shadowsocks-Manager'
+  };
+  return knex('webguiSetting').insert({
+    key: 'base',
+    value: JSON.stringify(value),
+  });
+}).then();
+knex('webguiSetting').select().where({
   key: 'payment',
 }).then(success => {
   if(success.length) {
@@ -126,6 +140,37 @@ exports.modifyAccount = (req, res) => {
     value: JSON.stringify(data)
   }).where({
     key: 'account',
+  }).then(success => {
+    return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getBase = (req, res) => {
+  knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.modifyBase = (req, res) => {
+  const data = req.body.data;
+  knex('webguiSetting').update({
+    value: JSON.stringify(data)
+  }).where({
+    key: 'base',
   }).then(success => {
     return res.send('success');
   }).catch(err => {

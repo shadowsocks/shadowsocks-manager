@@ -93,5 +93,26 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
   ($scope, $http, $timeout, $state) => {
     $scope.setTitle('基本设置');
     $scope.setMenuButton('arrow_back', 'admin.settings');
+    let lastSave = 0;
+    let lastSavePromise = null;
+    const saveTime = 3500;
+    $scope.saveSetting = () => {
+      if(Date.now() - lastSave <= saveTime) {
+        lastSavePromise && $timeout.cancel(lastSavePromise);
+      }
+      const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+      lastSave = Date.now();
+      lastSavePromise = $timeout(() => {
+        $http.put('/api/admin/setting/base', {
+          data: $scope.baseData,
+        });
+      }, timeout);
+    };
+    $http.get('/api/admin/setting/base').then(success => {
+      $scope.baseData = success.data;
+      $scope.$watch('baseData', () => {
+        $scope.saveSetting();
+      }, true);
+    });
   }
 ]);

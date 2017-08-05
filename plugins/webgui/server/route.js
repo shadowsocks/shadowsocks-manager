@@ -94,6 +94,8 @@ app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
 app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
 app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
+app.get('/api/admin/setting/base', isAdmin, adminSetting.getBase);
+app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
