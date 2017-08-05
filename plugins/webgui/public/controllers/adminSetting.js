@@ -12,6 +12,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toAccount = () => {
       $state.go('admin.accountSetting');
     };
+    $scope.toBase = () => {
+      $state.go('admin.baseSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -85,5 +88,10 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
+  }
+]).controller('AdminBaseSettingController', ['$scope', '$http', '$timeout', '$state',
+  ($scope, $http, $timeout, $state) => {
+    $scope.setTitle('基本设置');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
   }
 ]);

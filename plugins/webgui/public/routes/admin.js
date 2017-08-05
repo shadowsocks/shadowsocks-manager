@@ -110,6 +110,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminPaymentSettingController',
       templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
     })
+    .state('admin.baseSetting', {
+      url: '/settings/base',
+      controller: 'AdminBaseSettingController',
+      templateUrl: `${ cdn }/public/views/admin/baseSetting.html`,
+    })
     .state('admin.accountSetting', {
       url: '/settings/account',
       controller: 'AdminAccountSettingController',
