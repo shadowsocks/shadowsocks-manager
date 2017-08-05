@@ -145,7 +145,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
-    if(publicInfo.alipay[publicInfo.orderType]) {
+    if(publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay) {
       $http.post('/api/user/order/qrcode', {
         accountId: publicInfo.accountId,
         orderType: publicInfo.orderType,
