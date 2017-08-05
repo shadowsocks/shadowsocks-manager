@@ -107,6 +107,7 @@ const editAccount = async (id, options) => {
     update.port = +options.port;
   }
   await knex('account_plugin').update(update).where({ id });
+  await checkAccount.checkServer();
   return;
 };
 

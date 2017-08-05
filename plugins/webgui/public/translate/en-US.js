@@ -57,7 +57,7 @@ module.exports = {
     '一天': 'One day',
     '一周': 'One week',
     '一个月': 'One month',
-    '三个月': 'Three months',
+    '三个月': '3 months',
     '一年': 'One year',
     '支付宝扫码支付': 'Alipay QR code Payment',
     '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
