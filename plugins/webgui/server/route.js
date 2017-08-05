@@ -136,7 +136,18 @@ app.get('/serviceworker.js', (req, res) => {
 
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
 app.get('/manifest.json', (req, res) => {
-  return res.json(manifest);
+  return knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    manifest.name = success.title;
+    return res.json(manifest);
+  });
 });
 
 const version = appRequire('package').version;
@@ -147,11 +158,24 @@ const configForFrontend = {
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
 };
 const cdn = config.plugins.webgui.cdn;
-const homePage = (req, res) => res.render('index', {
-  version,
-  cdn,
-  config: configForFrontend,
-});
+const homePage = (req, res) => {
+  return knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    return res.render('index', {
+      title: success.title,
+      version,
+      cdn,
+      config: configForFrontend,
+    });
+  });
+};
 app.get('/', homePage);
 app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);

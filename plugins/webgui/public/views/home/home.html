@@ -8,7 +8,7 @@
                     <div layout="column" class="md-toolbar-tools-bottom inset">
                         <user-avatar></user-avatar>
                         <span></span>
-                        <div>Shadowsocks</div>
+                        <div>Home</div>
                     </div>
                 </md-toolbar>
                 <md-list>
@@ -34,7 +34,7 @@
                     <md-button hide-gt-sm class="md-icon-button" aria-label="menu" ng-click="menuButton()">
                         <i class="material-icons">menu</i>
                     </md-button>
-                    <div>Shadowsocks-Manager</div>
+                    <div>{{ ssmgrTitle }}</div>
                     <span flex></span>
                     <md-button hide-sm hide-xs ng-repeat="menu in menus" aria-label="menu.icon" ng-click="menuClick($index)">
                         {{ menu.name | translate }}
