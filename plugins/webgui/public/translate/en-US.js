@@ -47,9 +47,12 @@ module.exports = {
   '最近连接：': 'Recent Connection:',
   '修改密码': 'Change Password',
   '续费': 'Renew',
-  '不限时': 'unlimited time',
-  '不限量': 'unlimited data',
+  '不限时': 'unlimited',
+  '不限量': 'unlimited',
   '无': 'none',
+  '或': 'or',
+  '点击这里': 'Click Here',
+  '付款立即开通帐号': 'pay and assign an account now',
   '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to automate the retrieval of server information',
   '目前该用户没有分配账号，请联系管理员处理': 'The current user has not been assigned an account, please contact the administrator',
   '请选择续费周期：': 'Please choose the length of service:',
@@ -97,4 +100,6 @@ module.exports = {
   '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email,\n please check it ',
   '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has been sent, \n please do not request it again',
   '请输入正确的邮箱地址': 'A right format of email is required',
+
+  '已过期': 'expired',
 };
