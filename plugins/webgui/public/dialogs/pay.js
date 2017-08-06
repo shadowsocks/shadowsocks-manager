@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $interval, $http) => {
+app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdDialog, $interval, $timeout, $http) => {
   const publicInfo = {
     config: JSON.parse(window.ssmgrConfig),
     orderType: 'month',
@@ -125,7 +125,9 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$http', ($mdDialog, $inte
     $http.get('/api/user/order/price').then(success => {
       publicInfo.alipay = success.data.alipay;
       publicInfo.paypal = success.data.paypal;
-      publicInfo.status = 'choose';
+      $timeout(() => {
+        publicInfo.status = 'choose';
+      }, 125);
       publicInfo.accountId = accountId;
       return dialogPromise;
     }).catch(() => {

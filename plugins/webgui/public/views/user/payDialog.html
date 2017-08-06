@@ -15,7 +15,7 @@
                     <div style="margin-top: 5px;" id="paypal-button-container"></div>
                 </div> 
             </div>
-            <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'choose'">
+            <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;" translate>请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderType" flex>
                     <md-radio-button ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-show="(publicInfo.alipay[t.type] && publicInfo.config.alipay) || (publicInfo.paypal[t.type] && publicInfo.config.paypal)">
