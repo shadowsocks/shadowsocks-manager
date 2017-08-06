@@ -92,8 +92,14 @@ const deleteCheckAccountTimePort = port => {
     }
   }
 };
-
+let lastCheck = 0;
 const checkServer = async () => {
+  if(!lastCheck) {
+    lastCheck = Date.now();
+  } else if(Date.now() - lastCheck <= 29 * 1000) {
+    return;
+  }
+  lastCheck = Date.now();
   logger.info('check account');
   const account = await knex('account_plugin').select();
   account.forEach(a => {
@@ -144,9 +150,6 @@ const checkServer = async () => {
         port.forEach(f => {
           port.list[f.port] = true;
         });
-        // port.exist = number => {
-        //   return !!port.filter(f => f.port === number)[0];
-        // };
         port.exist = number => {
           return !!port.list[number];
         };

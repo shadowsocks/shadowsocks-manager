@@ -12,6 +12,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toAccount = () => {
       $state.go('admin.accountSetting');
     };
+    $scope.toBase = () => {
+      $state.go('admin.baseSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -85,5 +88,84 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
+  }
+]).controller('AdminBaseSettingController', ['$scope', '$http', '$timeout', '$state',
+  ($scope, $http, $timeout, $state) => {
+    $scope.setTitle('基本设置');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.baseData = {};
+    let lastSave = 0;
+    let lastSavePromise = null;
+    const saveTime = 3500;
+    $scope.saveSetting = () => {
+      if(Date.now() - lastSave <= saveTime) {
+        lastSavePromise && $timeout.cancel(lastSavePromise);
+      }
+      const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+      lastSave = Date.now();
+      lastSavePromise = $timeout(() => {
+        $http.put('/api/admin/setting/base', {
+          data: $scope.baseData,
+        });
+      }, timeout);
+    };
+    $http.get('/api/admin/setting/base').then(success => {
+      $scope.baseData = success.data;
+      $scope.setBorder('primaryStyle', $scope.baseData.themePrimary);
+      $scope.setBorder('accentStyle', $scope.baseData.themeAccent);
+      $scope.$watch('baseData', () => {
+        $scope.saveSetting();
+      }, true);
+    });
+    $scope.colors = [
+      { value: 'red', color: '#F44336' },
+      { value: 'pink', color: '#E91E63' },
+      { value: 'purple', color: '#9C27B0' },
+      { value: 'deep-purple', color: '#673AB7' },
+      { value: 'indigo', color: '#3F51B5' },
+      { value: 'blue', color: '#2196F3' },
+      { value: 'light-blue', color: '#03A9F4' },
+      { value: 'cyan', color: '#00BCD4' },
+      { value: 'teal', color: '#009688' },
+      { value: 'green', color: '#4CAF50' },
+      { value: 'light-green', color: '#8BC34A' },
+      { value: 'lime', color: '#CDDC39' },
+      { value: 'yellow', color: '#FFEB3B' },
+      { value: 'amber', color: '#FFC107' },
+      { value: 'orange', color: '#FF9800' },
+      { value: 'deep-orange', color: '#FF5722' },
+      { value: 'brown', color: '#795548' },
+      { value: 'blue-grey', color: '#607D8B' },
+      { value: 'grey', color: '#9E9E9E' },
+    ];
+    $scope.colors.forEach(color => {
+      color.primaryStyle = {
+        'background': color.color,
+        'border-style': 'solid',
+        'border-width': '0px',
+      };
+      color.accentStyle = {
+        'background': color.color,
+        'border-style': 'solid',
+        'border-width': '0px',
+      };
+    });
+    $scope.setBorder = (type, color) => {
+      $scope.colors.forEach(c => {
+        if(c.value === color) {
+          c[type]['border-width'] = '2px';
+        } else {
+          c[type]['border-width'] = '0px';
+        }
+      });
+    };
+    $scope.setPrimaryColor = color => {
+      $scope.baseData.themePrimary = color;
+      $scope.setBorder('primaryStyle', color);
+    };
+    $scope.setAccentColor = color => {
+      $scope.baseData.themeAccent = color;
+      $scope.setBorder('accentStyle', color);
+    };
   }
 ]);

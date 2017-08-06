@@ -1,0 +1,48 @@
+<div>
+    <md-card>
+        <md-card-content>
+            <md-divider></md-divider>
+            <md-list layout="row">
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+                <div flex>
+                    <form name="baseForm">
+                        <md-input-container class="md-block">
+                            <label>网站标题</label>
+                            <input type="text" required name="title" ng-model="baseData.title">
+                        </md-input-container>
+                        <md-divider></md-divider>
+                        <div style="margin: 15px;">
+                            <div style="margin-top: 10px; margin-bottom: 10px;">主题颜色</div>
+                            <md-grid-list
+                                md-cols-xs="4" md-cols-sm="6" md-cols-gt-sm="12"
+                                md-row-height="1:1"
+                                md-gutter="12px">
+                                <md-grid-tile
+                                    ng-repeat="c in colors"
+                                    ng-style="c.primaryStyle"
+                                    ng-click="setPrimaryColor(c.value)">
+                                </md-grid-tile>
+                            </md-grid-list>
+                        </div>
+                        <md-divider></md-divider>
+                        <div style="margin: 15px;">
+                            <div style="margin-top: 10px; margin-bottom: 10px;">主题第二颜色</div>
+                            <md-grid-list
+                                md-cols-xs="4" md-cols-sm="6" md-cols-gt-sm="12"
+                                md-row-height="1:1"
+                                md-gutter="6px">
+                                <md-grid-tile
+                                    ng-repeat="c in colors"
+                                    ng-style="c.accentStyle"
+                                    ng-click="setAccentColor(c.value)">
+                                </md-grid-tile>
+                            </md-grid-list>
+                        </div>
+                    </form>
+                </div>
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+            </md-list>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

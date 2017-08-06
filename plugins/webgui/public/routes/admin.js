@@ -1,11 +1,6 @@
 const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
-// app.config(['$mdThemingProvider', $mdThemingProvider => {
-//   $mdThemingProvider.theme('default')
-//     .primaryPalette('pink')
-//     .accentPalette('orange');
-// }]);
 app.config(['$sceProvider', $sceProvider => {
   $sceProvider.enabled(false);
 }]);
@@ -110,6 +105,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminPaymentSettingController',
       templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
     })
+    .state('admin.baseSetting', {
+      url: '/settings/base',
+      controller: 'AdminBaseSettingController',
+      templateUrl: `${ cdn }/public/views/admin/baseSetting.html`,
+    })
     .state('admin.accountSetting', {
       url: '/settings/account',
       controller: 'AdminAccountSettingController',
@@ -118,3 +118,33 @@ app.config(['$stateProvider', $stateProvider => {
     ;
   }])
 ;
+const config = JSON.parse(window.ssmgrConfig);
+app.config(['$mdThemingProvider', $mdThemingProvider => {
+  const checkColor = color => {
+    const colors = [
+      'red',
+      'pink',
+      'purple',
+      'deep-purple',
+      'indigo',
+      'blue',
+      'light-blue',
+      'cyan',
+      'teal',
+      'green',
+      'light-green',
+      'lime',
+      'yellow',
+      'amber',
+      'orange',
+      'deep-orange',
+      'brown',
+      'grey',
+      'blue-grey',
+    ];
+    return colors.indexOf(color) >= 0;
+  };
+  checkColor(config.themePrimary) && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
+  checkColor(config.themeAccent) && $mdThemingProvider.theme('default').accentPalette(config.themeAccent);
+  $mdThemingProvider.alwaysWatchTheme(true);
+}]);

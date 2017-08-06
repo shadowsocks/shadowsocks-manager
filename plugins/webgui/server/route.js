@@ -94,6 +94,8 @@ app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
 app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
 app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
+app.get('/api/admin/setting/base', isAdmin, adminSetting.getBase);
+app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
@@ -134,7 +136,18 @@ app.get('/serviceworker.js', (req, res) => {
 
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
 app.get('/manifest.json', (req, res) => {
-  return res.json(manifest);
+  return knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    manifest.name = success.title;
+    return res.json(manifest);
+  });
 });
 
 const version = appRequire('package').version;
@@ -144,12 +157,29 @@ const configForFrontend = {
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
 };
+
 const cdn = config.plugins.webgui.cdn;
-const homePage = (req, res) => res.render('index', {
-  version,
-  cdn,
-  config: configForFrontend,
-});
+const homePage = (req, res) => {
+  return knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    configForFrontend.title = success.title;
+    configForFrontend.themePrimary = success.themePrimary;
+    configForFrontend.themeAccent = success.themeAccent;
+    return res.render('index', {
+      title: success.title,
+      version,
+      cdn,
+      config: configForFrontend,
+    });
+  });
+};
 app.get('/', homePage);
 app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);

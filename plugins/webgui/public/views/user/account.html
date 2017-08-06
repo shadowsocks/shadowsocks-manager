@@ -2,10 +2,10 @@
     <div flex ng-if="account && !account.length">
         <md-card>
             <md-card-content>
-                <div style="margin-top: 30px; margin-bottom: 30px;">目前该用户没有分配账号，请联系管理员处理</div>
-                <div ng-show="config.alipay || config.paypal" ng-click="createOrder()" style="margin-bottom: 30px;">或
-                    <span><md-button class="md-primary">点击这里</md-button></span>
-                付款立即开通帐号</div>
+                <div style="margin-top: 30px; margin-bottom: 30px;" translate>目前该用户没有分配账号，请联系管理员处理</div>
+                <div ng-show="config.alipay || config.paypal" ng-click="createOrder()" style="margin-bottom: 30px;">{{ '或' | translate }}
+                    <span><md-button class="md-primary">{{ '点击这里' | translate }}</md-button></span>
+                {{ '付款立即开通帐号' | translate }}</div>
             </md-card-content>
         </md-card>
     </div>
@@ -13,7 +13,7 @@
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-title">{{a.port}}<span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;已过期</span></span>
+                    <span class="md-title">{{a.port}}<span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span></span>
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
