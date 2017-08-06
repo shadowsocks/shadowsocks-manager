@@ -146,4 +146,5 @@ app.config(['$mdThemingProvider', $mdThemingProvider => {
   };
   checkColor(config.themePrimary) && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
   checkColor(config.themeAccent) && $mdThemingProvider.theme('default').accentPalette(config.themeAccent);
+  $mdThemingProvider.alwaysWatchTheme(true);
 }]);
