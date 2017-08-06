@@ -145,5 +145,5 @@ app.config(['$mdThemingProvider', $mdThemingProvider => {
     return colors.indexOf(color) >= 0;
   };
   checkColor(config.themePrimary) && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
-  checkColor(config.themeAccent) && $mdThemingProvider.theme('default').primaryPalette(config.themeAccent);
+  checkColor(config.themeAccent) && $mdThemingProvider.theme('default').accentPalette(config.themeAccent);
 }]);

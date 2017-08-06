@@ -85,7 +85,7 @@ module.exports = {
   '账号设置': 'Account Configuration',
 
   '用户注册失败': 'Registration failed',
-  '网络异常，请稍后再试': 'Network abnormal, pleas try it later',
+  '网络异常，请稍后再试': 'Network abnormal, please try it later',
   '用户名或密码错误': 'User name or password is incorrect',
   '该用户尚未注册的': 'This user has not been registered',
   '请输入正确的用户名格式': 'The right format of user name is required',
