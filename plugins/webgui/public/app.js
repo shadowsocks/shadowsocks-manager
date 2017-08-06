@@ -29,3 +29,5 @@ require('./services/dialogService.js');
 // require('./services/websocketService.js');
 
 require('./translate/index.js');
+
+require('./dialogs/index.js');
