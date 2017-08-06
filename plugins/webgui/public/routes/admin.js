@@ -120,6 +120,30 @@ app.config(['$stateProvider', $stateProvider => {
 ;
 const config = JSON.parse(window.ssmgrConfig);
 app.config(['$mdThemingProvider', $mdThemingProvider => {
-  config.themePrimary && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
-  config.themeAccent && $mdThemingProvider.theme('default').primaryPalette(config.themeAccent);
+  const checkColor = color => {
+    const colors = [
+      'red',
+      'pink',
+      'purple',
+      'deep-purple',
+      'indigo',
+      'blue',
+      'light-blue',
+      'cyan',
+      'teal',
+      'green',
+      'light-green',
+      'lime',
+      'yellow',
+      'amber',
+      'orange',
+      'deep-orange',
+      'brown',
+      'grey',
+      'blue-grey',
+    ];
+    return colors.indexOf(color) >= 0;
+  };
+  checkColor(config.themePrimary) && $mdThemingProvider.theme('default').primaryPalette(config.themePrimary);
+  checkColor(config.themeAccent) && $mdThemingProvider.theme('default').primaryPalette(config.themeAccent);
 }]);
