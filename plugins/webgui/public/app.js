@@ -10,9 +10,12 @@ require('./controllers/adminUser');
 require('./controllers/adminNotice');
 require('./controllers/adminSetting');
 
-require('./routes/home');
-require('./routes/user');
-require('./routes/admin');
+// require('./routes/home');
+// require('./routes/user');
+// require('./routes/admin');
+require('./routes/index.js');
+
+require('./configs/index.js');
 
 require('./filters/flow');
 require('./filters/time');
