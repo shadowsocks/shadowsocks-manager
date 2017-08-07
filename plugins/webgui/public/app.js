@@ -1,22 +1,5 @@
 require('./index');
 
-require('./controllers/main');
-require('./controllers/home');
-require('./controllers/user');
-require('./controllers/admin');
-require('./controllers/adminAccount');
-require('./controllers/adminServer');
-require('./controllers/adminUser');
-require('./controllers/adminNotice');
-require('./controllers/adminSetting');
-
-// require('./routes/home');
-// require('./routes/user');
-// require('./routes/admin');
-require('./routes/index.js');
-
-require('./configs/index.js');
-
 require('./filters/flow');
 require('./filters/time');
 require('./filters/substr');
@@ -31,5 +14,7 @@ require('./services/userService.js');
 // require('./services/websocketService.js');
 
 require('./translate/index.js');
-
+require('./routes/index.js');
+require('./configs/index.js');
 require('./dialogs/index.js');
+require('./controllers/index.js');
