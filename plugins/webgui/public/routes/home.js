@@ -1,15 +1,6 @@
 const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
-app.config(['$urlRouterProvider', '$locationProvider',
-  ($urlRouterProvider, $locationProvider) => {
-    $locationProvider.html5Mode(true);
-    $urlRouterProvider
-      .when('/', '/home/index')
-      .otherwise('/home/index')
-    ;
-  }
-]);
 
 app.config(['$stateProvider', $stateProvider => {
   $stateProvider
@@ -41,19 +32,3 @@ app.config(['$stateProvider', $stateProvider => {
   }
 ]);
 
-app.service('authInterceptor', ['$q', '$localStorage', function($q, $localStorage) {
-  const service = this;
-  service.responseError = function(response) {
-    if (response.status == 401) {
-      $localStorage.home = {};
-      $localStorage.admin = {};
-      $localStorage.user = {};
-      window.location = '/';
-    }
-    return $q.reject(response);
-  };
-}]).config(['$httpProvider', '$compileProvider', ($httpProvider, $compileProvider) => {
-  $httpProvider.interceptors.push('authInterceptor');
-  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss):/);
-}])
-;
