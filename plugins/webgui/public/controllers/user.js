@@ -190,7 +190,12 @@ app
       }
     });
     $scope.setInterval($interval(() => {
-      if($scope.account) { userApi.updateAccount($scope.account); }
+      if($scope.account) {
+        userApi.updateAccount($scope.account)
+        .then(() => {
+          setAccountServerList($scope.account, $scope.servers);
+        });
+      }
       $scope.account.forEach(a => {
         const currentServerId = a.currentServerId;
         userApi.getServerPortData(a, a.currentServerId, a.port).then(success => {

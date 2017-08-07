@@ -32,7 +32,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
   };
   const updateAccount = account => {
     if(!account.length) {
-      $http.get('/api/user/account').then(success => {
+      return $http.get('/api/user/account').then(success => {
         success.data.forEach(a => {
           account.push(a);
         });
@@ -49,6 +49,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
           a.type = success.data.type;
         });
       });
+      return $q.resolve();
     }
   };
 
@@ -84,6 +85,5 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     changePassword,
     updateAccount,
     getNotice,
-    // getAlipayStatus,
   };
 }]);
