@@ -79,7 +79,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdD
             };
             return paypal.request.post(EXECUTE_URL, data)
             .then(function (res) {
-              close();
+              publicInfo.status = 'success';
             });
           }
         }, '#paypal-button-container');

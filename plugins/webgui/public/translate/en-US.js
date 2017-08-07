@@ -102,4 +102,9 @@ module.exports = {
   '请输入正确的邮箱地址': 'A right format of email is required',
 
   '已过期': 'expired',
+
+  '支付成功': '',
+  '订单会在两分钟内生效，请稍候': '',
+  '系统错误': '',
+  '生成支付订单出错，请稍后再试': '',
 };

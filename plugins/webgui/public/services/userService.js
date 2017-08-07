@@ -78,10 +78,6 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     return $http.get('/api/user/notice').then(success => success.data);
   };
 
-  // const getAlipayStatus = () => {
-  //   return $http.get('/api/user/status/alipay').then(success => success.data);
-  // };
-
   return {
     getServerPortData,
     getUserAccount,
