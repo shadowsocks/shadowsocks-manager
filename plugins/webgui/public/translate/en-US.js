@@ -52,9 +52,9 @@ module.exports = {
   '无': 'none',
   '或': 'or',
   '点击这里': 'Click Here',
-  '付款立即开通帐号': 'pay and get an account now',
+  '付款立即开通帐号': 'to pay and get an account now.',
   '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
-  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator.',
+  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
   '请选择续费周期：': 'Service duration:',
   '一小时': '1 hour',
   '一天': '1 day',
@@ -99,7 +99,7 @@ module.exports = {
   '当前时段尚未开放注册': 'Registration is currently unavailable.',
   '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your Email address.',
   '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
-  '请输入正确的邮箱地址': 'E-mail address invalid.',
+  '请输入正确的邮箱地址': 'Invalid Email address.',
 
   '已过期': 'expired',
 
