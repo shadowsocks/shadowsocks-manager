@@ -64,7 +64,7 @@ module.exports = {
   '一年': '1 year',
   '支付宝扫码支付': 'Alipay QR code Payment',
   '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
-  'Paypal支付请点击下面按钮': 'For Paypal users, please click the following button',
+  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
 
   '最新注册用户': 'Last Registered User',
   '最近登录用户': 'Last Logon User',
