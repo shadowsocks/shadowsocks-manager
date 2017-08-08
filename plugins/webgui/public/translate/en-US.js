@@ -104,7 +104,7 @@ module.exports = {
   '已过期': 'expired',
 
   '支付成功': 'Payment successful.',
-  '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please be patient.',
-  '系统错误': 'System error',
+  '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
+  '系统错误': 'An error occurred.',
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
 };
