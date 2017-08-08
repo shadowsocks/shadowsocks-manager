@@ -93,8 +93,8 @@ module.exports = {
   '该用户尚未注册的': 'This user has not been registered',
   '请输入正确的用户名格式': 'The right format of user name is required',
   '密码重试次数已达上限\n请稍后再试': 'The limit of invalid password attempts has been reached\n Please try it later',
-  '验证码发送错误': 'Code sending error',
-  '发送错误，请更换邮箱尝试': 'Code sending error: change your email and try it again',
+  '验证码发送错误': 'A code sending error has occurred',
+  '发送错误，请更换邮箱尝试': 'A code sending error has occurred: please change your email and try it again',
   '请求过于频繁，请稍后再试': 'Too frequent requests, please try it later',
   '当前时段尚未开放注册': 'The registration is closed currently',
   '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email,\n please check it ',
@@ -103,8 +103,8 @@ module.exports = {
 
   '已过期': 'expired',
 
-  '支付成功': '',
-  '订单会在两分钟内生效，请稍候': '',
-  '系统错误': '',
-  '生成支付订单出错，请稍后再试': '',
+  '支付成功': 'The payment is done',
+  '订单会在两分钟内生效，请稍候': 'The order will take effect in 2 minutes, please wait',
+  '系统错误': 'A system error has occurred',
+  '生成支付订单出错，请稍后再试': 'An order error has occurred, please try it later',
 };
