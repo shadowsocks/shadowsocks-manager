@@ -27,7 +27,7 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   };
   publicInfo.close = close;
   const dialog = {
-    templateUrl: `${ cdn }/public/views/home/alertDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/alert.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,

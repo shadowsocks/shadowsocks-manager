@@ -23,7 +23,7 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
     return false;
   };
   const dialog = {
-    templateUrl: `${ cdn }/public/views/admin/ip.html`,
+    templateUrl: `${ cdn }/public/views/dialog/ip.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,

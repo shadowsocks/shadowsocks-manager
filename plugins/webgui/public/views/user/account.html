@@ -76,7 +76,7 @@
                                           <div flex="60" style="text-align:right">
                                               <span ng-if="a.type === 1">{{ '不限时' | translate }}</span>
                                               <span ng-if="a.type >=2 && a.type <= 5">
-                                                  <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago }}</span>
+                                                  <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
                                               </span>
                                           </div>
                                         </div>
@@ -85,7 +85,7 @@
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
                                           <div flex="40">{{ '最近连接：' | translate }}</div><div flex="60" style="text-align:right">
-                                              <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago }}</span>
+                                              <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
                                           </div>
                                         </div>
                                     </md-list-item>

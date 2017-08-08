@@ -1,8 +1,8 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-var ONLINE_CACHE_NAME = '2017-08-08 08:32:41';
+var ONLINE_CACHE_NAME = '2017-08-08 18:35:42';
 var onlineCacheUrl = [
-  // '/',
+  '/',
 
   '/libs/angular.min.js',
   '/libs/angular-inview.js',
@@ -35,7 +35,6 @@ var onlineCacheUrl = [
   '/libs/MaterialIcons-Regular.ttf',
   '/libs/MaterialIcons-Regular.eot',
 
-  '/public/views/home/alertDialog.html',
   '/public/views/home/home.html',
   '/public/views/home/index.html',
   '/public/views/home/login.html',
@@ -45,7 +44,6 @@ var onlineCacheUrl = [
   '/public/views/user/account.html',
   '/public/views/user/changePassword.html',
   '/public/views/user/index.html',
-  '/public/views/user/payDialog.html',
   '/public/views/user/qrcodeDialog.html',
   '/public/views/user/user.html',
 
@@ -61,9 +59,7 @@ var onlineCacheUrl = [
   '/public/views/admin/editAccount.html',
   '/public/views/admin/editNotice.html',
   '/public/views/admin/editServer.html',
-  '/public/views/admin/emailDialog.html',
   '/public/views/admin/index.html',
-  '/public/views/admin/ip.html',
   '/public/views/admin/newNotice.html',
   '/public/views/admin/notice.html',
   '/public/views/admin/orderDialog.html',
@@ -79,6 +75,11 @@ var onlineCacheUrl = [
   '/public/views/admin/user.html',
   '/public/views/admin/userPage.html',
   '/public/views/admin/userSortDialog.html',
+
+  '/public/views/dialog/alert.html',
+  '/public/views/dialog/email.html',
+  '/public/views/dialog/ip.html',
+  '/public/views/dialog/pay.html',
 ];
 
 this.addEventListener('activate', function(event) {
@@ -95,7 +96,7 @@ this.addEventListener('activate', function(event) {
   );
 });
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(ONLINE_CACHE_NAME)
     .then(function(cache) {
@@ -105,34 +106,36 @@ self.addEventListener('install', function(event) {
   );
 });
 
-self.addEventListener('fetch', function(event) {
-  var isMatch = function () {
+self.addEventListener('fetch', event => {
+  const isMatch = () => {
     return (
       event.request.url.match(self.registration.scope + 'user/') ||
       event.request.url.match(self.registration.scope + 'home/') ||
       event.request.url.match(self.registration.scope + 'admin/')
     );
   };
+  const isRoot = () => {
+    return (event.request.url === self.registration.scope);
+  };
   if (isMatch()) {
     event.respondWith(
       fetch(event.request)
-      .then(function(response) {
-        return response;
-      }).catch(function(err) {
-        var request = new Request('/');
-        return caches.match(request);
-      }).then(function(response) {
-        return response;
-      })
+      .then(response=> response)
+      .catch(err => caches.match(new Request('/')))
+      .then(response=> response)
+    );
+  } else if (isRoot()) {
+    event.respondWith(
+      fetch(event.request)
+      .then(response=> response)
+      .catch(err=> caches.match(event.request))
+      .then(response => response)
     );
   } else {
     event.respondWith(
       caches.match(event.request)
-      .then(function(response) {
-          if (response) {
-              return response;
-          }
-          return fetch(event.request);
+      .then(response => {
+        return response ? response : fetch(event.request);
       })
     );
   }

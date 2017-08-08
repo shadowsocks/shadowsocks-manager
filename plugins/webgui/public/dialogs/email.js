@@ -35,7 +35,7 @@ app.factory('emailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state,
     return false;
   };
   const dialog = {
-    templateUrl: `${ cdn }/public/views/admin/emailDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/email.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,

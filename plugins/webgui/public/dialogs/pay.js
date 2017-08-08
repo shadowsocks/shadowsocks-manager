@@ -93,7 +93,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdD
   publicInfo.createOrder = createOrder;
   publicInfo.close = close;
   const dialog = {
-    templateUrl: `${ cdn }/public/views/user/payDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/pay.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
