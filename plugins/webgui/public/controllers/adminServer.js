@@ -1,8 +1,14 @@
 const app = angular.module('app');
 
-app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout', '$interval',
-  ($scope, $http, $state, moment, $localStorage, adminApi, $timeout, $interval) => {
+app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout', '$interval', 'serverChartDialog',
+  ($scope, $http, $state, moment, $localStorage, adminApi, $timeout, $interval, serverChartDialog) => {
     $scope.setTitle('服务器');
+    $scope.setMenuRightButton('timeline');
+    $scope.serverChart = $localStorage.admin.serverChart ? $localStorage.admin.serverChart : { showChart: true };
+    $localStorage.admin.serverChart = $scope.serverChart;
+    $scope.$on('RightButtonClick', () => {
+      serverChartDialog.show($scope.serverChart);
+    });
     const scaleLabel = (number) => {
       if(number < 1) {
         return number.toFixed(1) +' B';

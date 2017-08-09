@@ -7,7 +7,7 @@
                     <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                 </md-card-header-text>
             </md-card-header>
-            <div layout="row" layout-align="center center">
+            <div layout="row" layout-align="center center" ng-if="serverChart.showChart">
                 <div style="width: 95%; max-width: 500px;">
                     <canvas class="chart chart-line"
                         chart-data="server.chart.data"
@@ -18,7 +18,7 @@
                     </canvas>
                 </div>
             </div>
-            <md-card-actions layout="row" layout-align="start center">
+            <md-card-actions layout="row" layout-align="start center" ng-if="serverChart.showChart">
             </md-card-actions>
             <md-card-content layout="column">
                 <div layout="row" layout-align="space-between center">
