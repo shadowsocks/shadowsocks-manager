@@ -28,7 +28,7 @@ app.factory('orderDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
     return false;
   };
   const dialog = {
-    templateUrl: `${ cdn }/public/views/admin/orderDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/order.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
