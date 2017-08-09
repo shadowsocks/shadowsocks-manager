@@ -47,7 +47,7 @@ app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userAp
   publicInfo.close = close;
   publicInfo.changePassword = changePassword;
   const dialog = {
-    templateUrl: `${ cdn }/public/views/user/changePassword.html`,
+    templateUrl: `${ cdn }/public/views/dialog/changePassword.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
