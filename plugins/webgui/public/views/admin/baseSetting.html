@@ -6,10 +6,19 @@
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
                 <div flex>
                     <form name="baseForm">
-                        <md-input-container class="md-block" style="margin-bottom: -15px;">
-                            <label>网站标题</label>
-                            <input type="text" required name="title" ng-model="baseData.title">
-                        </md-input-container>
+                        <md-list-item>
+                            <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                                <label>网站标题</label>
+                                <input type="text" required name="title" ng-model="baseData.title">
+                            </md-input-container>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item>
+                            <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                                <div flex="75">使用Service Worker缓存静态页面</div>
+                                <div flex layout="row" layout-align="end center"><md-switch ng-model="baseData.serviceWorker" ng-change="serviceWorkerUpdate()" aria-label="serviceWorker"></md-switch></div>
+                            </div>
+                        </md-list-item>
                         <md-divider></md-divider>
                         <div style="margin: 15px;">
                             <div style="margin-top: 10px; margin-bottom: 10px;">主题颜色</div>

@@ -12,9 +12,10 @@ const KnexSessionStore = require('connect-session-knex')(session);
 const store = new KnexSessionStore({ knex });
 const sessionParser = session({
   secret: '5E14cd8749A',
-  resave: false,
+  rolling: true,
+  resave: true,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: 30 * 24 * 3600 * 1000 },
+  cookie: { secure: false, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000 },
   store,
 });
 const bodyParser = require('body-parser');
@@ -35,6 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(sessionParser);
 
 app.engine('.html', require('ejs').__express);
+app.engine('.js', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views', path.resolve('./plugins/webgui/views'));
 

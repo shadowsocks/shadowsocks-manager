@@ -167,5 +167,8 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $scope.baseData.themeAccent = color;
       $scope.setBorder('accentStyle', color);
     };
+    $scope.serviceWorkerUpdate = () => {
+      $scope.baseData.serviceWorkerTime = Date.now();
+    };
   }
 ]);

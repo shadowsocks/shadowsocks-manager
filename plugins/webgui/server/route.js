@@ -122,17 +122,17 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
 }
 
-app.get('/serviceworker.js', (req, res) => {
-  res.header('Content-Type', 'text/javascript');
-  res.sendFile('serviceworker.js', {
-    root: path.resolve(__dirname, '../public/'),
-  }, err => {
-    if (err) {
-      console.log(err);
-      return res.status(404).end();
-    }
-  });
-});
+// app.get('/serviceworker.js', (req, res) => {
+//   res.header('Content-Type', 'text/javascript');
+//   res.sendFile('serviceworker.js', {
+//     root: path.resolve(__dirname, '../public/'),
+//   }, err => {
+//     if (err) {
+//       console.log(err);
+//       return res.status(404).end();
+//     }
+//   });
+// });
 
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
 app.get('/manifest.json', (req, res) => {
@@ -207,6 +207,25 @@ app.get('/', homePage);
 app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);
 app.get(/^\/user\//, homePage);
+
+app.get('/serviceworker.js', (req, res) => {
+  return knex('webguiSetting').select().where({
+    key: 'base',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    res.header('Content-Type', 'text/javascript');
+    res.render('serviceworker.ejs', {
+      serviceWorker: !!success.serviceWorker,
+      serviceWorkerTime: success.serviceWorkerTime,
+    });
+  });
+  
+});
 
 // wss.on('connection', function connection(ws) {
 //   // console.log(ws);
