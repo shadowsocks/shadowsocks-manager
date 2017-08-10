@@ -11,7 +11,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.$on('RightButtonClick', () => {
       serverChartDialog.show($scope.serverChart);
     });
-    const scaleLabel = (number) => {
+    const scaleLabel = number => {
       if(number < 1) {
         return number.toFixed(1) +' B';
       } else if (number < 1000) {
@@ -77,17 +77,19 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
               server.flow.month = flow.month;
             });
             if($scope.serverChart.showChart) {
-              adminApi.getServerFlowLastHour(server.id)
-              .then(success => {
-                if(!server.chart) {
-                  server.chart = {
-                    data: [[]],
-                  };
-                }
-                success.flow.forEach((number, index) => {
-                  server.chart.data[0][index] = number;
+              $timeout(() => {
+                adminApi.getServerFlowLastHour(server.id)
+                .then(success => {
+                  if(!server.chart) {
+                    server.chart = {
+                      data: [[]],
+                    };
+                  }
+                  success.flow.forEach((number, index) => {
+                    server.chart.data[0][index] = number;
+                  });
                 });
-              });
+              }, index * 1000);
             }
           });
         } else {
@@ -101,17 +103,19 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
               server.flow = flow;
             });
             if($scope.serverChart.showChart) {
-              adminApi.getServerFlowLastHour(server.id)
-              .then(success => {
-                if(!server.chart) {
-                  server.chart = {
-                    data: [[]],
-                  };
-                }
-                success.flow.forEach((number, index) => {
-                  server.chart.data[0][index] = number;
+              $timeout(() => {
+                adminApi.getServerFlowLastHour(server.id)
+                .then(success => {
+                  if(!server.chart) {
+                    server.chart = {
+                      data: [[]],
+                    };
+                  }
+                  success.flow.forEach((number, index) => {
+                    server.chart.data[0][index] = number;
+                  });
                 });
-              });
+              }, index * 1000);
             }
           });
         }
@@ -120,13 +124,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     updateServerInfo();
     $scope.$on('visibilitychange', (event, status) => {
       if(status === 'visible') {
-        if($localStorage.admin.serverInfo && Date.now() - $localStorage.admin.serverInfo.time >= 20 * 1000) {
+        if($localStorage.admin.serverInfo && Date.now() - $localStorage.admin.serverInfo.time >= 30 * 1000) {
           updateServerInfo();
         }
       }
     });
     $scope.setInterval($interval(() => {
-      if($localStorage.admin.serverInfo && Date.now() - $localStorage.admin.serverInfo.time >= 90 * 1000) {
+      if(document.visibilityState === 'visible' && $localStorage.admin.serverInfo && Date.now() - $localStorage.admin.serverInfo.time >= 90 * 1000) {
         updateServerInfo();
       }
     }, 15 * 1000));

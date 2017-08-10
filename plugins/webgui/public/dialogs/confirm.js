@@ -54,7 +54,7 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
   };
   publicInfo.confirmFn = confirmFn;
   const dialog = {
-    templateUrl: `${ cdn }/public/views/home/confirmDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/confirm.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,

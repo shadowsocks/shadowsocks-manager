@@ -23,7 +23,7 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
     return false;
   };
   const dialog = {
-    templateUrl: `${ cdn }/public/views/home/languageDialog.html`,
+    templateUrl: `${ cdn }/public/views/dialog/language.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
