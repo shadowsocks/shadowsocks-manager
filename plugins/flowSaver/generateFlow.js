@@ -50,30 +50,43 @@ const generateFlow = async (type) => {
     .whereBetween('time', [time, time + interval]);
     if(!sum.length) { sum = [{id: 0, port: 0, flow: 0}]; }
     logger.info(`Generate ${ type } flow, length: ${ sum.length }`);
-    await knex(tableName).insert(sum.map(m => {
-      return {
-        id: m.id,
-        port: m.port,
-        flow: m.sumFlow,
-        time,
-      };
-    }));
+    const insertPromises = [];
+    for(let i = 0; i < Math.ceil(sum.length/20); i++) {
+      logger.info(`From ${ i * 20 } to ${ i * 20 + 20 }`);
+      const insert = knex(tableName).insert(sum.slice(i * 20, i * 20 + 20).map(m => {
+        return {
+          id: m.id,
+          port: m.port,
+          flow: m.sumFlow,
+          time,
+        };
+      }));
+      insertPromises.push(insert);
+    }
+    await Promise.all(insertPromises);
+    // await knex(tableName).insert(sum.map(m => {
+    //   return {
+    //     id: m.id,
+    //     port: m.port,
+    //     flow: m.sumFlow,
+    //     time,
+    //   };
+    // }));
     await knex(tableName).delete().where({
       id: 0,
     }).whereBetween('time', [0, time - 1]); 
   } catch (err) {
     logger.error(err);
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 30 * 1000);
+    });
   }
   await generateFlow(type);
 };
 
-// generateFlow('day');
-// generateFlow('hour');
-// generateFlow('5min');
-
 cron.minute(() => {
-  // generateFlow('day');
-  // generateFlow('hour');
   knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 36 * 3600 * 1000]).then();
   knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 35 * 24 * 3600 * 1000]).then();
   knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 7 * 24 * 3600 * 1000]).then();
@@ -88,3 +101,6 @@ cron.cron(() => {
 cron.cron(() => {
   generateFlow('day');
 }, '1 0 * * *');
+cron.cron(() => {
+  generateFlow('day');
+}, '15 1 * * *');
