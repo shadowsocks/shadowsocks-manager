@@ -81,8 +81,13 @@ const connect = () => {
         if(firstFlow) {
           firstFlow = false;
         } else {
-          // logger.info(`Insert flow in db: ${JSON.stringify(insertFlow, null, 2)}`);
-          knex('flow').insert(insertFlow).then();
+          // knex('flow').insert(insertFlow).then();
+          const insertPromises = [];
+          for(let i = 0; i < Math.ceil(insertFlow.length/50); i++) {
+            const insert = knex('flow').insert(insertFlow.slice(i * 50, i * 50 + 50));
+            insertPromises.push(insert);
+          }
+          Promise.all(insertPromises).then();
         }
       }
     };

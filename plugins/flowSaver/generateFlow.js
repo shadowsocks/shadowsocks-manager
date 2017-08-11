@@ -51,9 +51,9 @@ const generateFlow = async (type) => {
     if(!sum.length) { sum = [{id: 0, port: 0, flow: 0}]; }
     logger.info(`Generate ${ type } flow, length: ${ sum.length }`);
     const insertPromises = [];
-    for(let i = 0; i < Math.ceil(sum.length/20); i++) {
-      logger.info(`From ${ i * 20 } to ${ i * 20 + 20 }`);
-      const insert = knex(tableName).insert(sum.slice(i * 20, i * 20 + 20).map(m => {
+    for(let i = 0; i < Math.ceil(sum.length/50); i++) {
+      logger.info(`insert generate flow from ${ i *50 } to ${ i * 50 + 50 }`);
+      const insert = knex(tableName).insert(sum.slice(i * 50, i * 50 + 50).map(m => {
         return {
           id: m.id,
           port: m.port,
@@ -64,14 +64,6 @@ const generateFlow = async (type) => {
       insertPromises.push(insert);
     }
     await Promise.all(insertPromises);
-    // await knex(tableName).insert(sum.map(m => {
-    //   return {
-    //     id: m.id,
-    //     port: m.port,
-    //     flow: m.sumFlow,
-    //     time,
-    //   };
-    // }));
     await knex(tableName).delete().where({
       id: 0,
     }).whereBetween('time', [0, time - 1]); 
@@ -101,6 +93,3 @@ cron.cron(() => {
 cron.cron(() => {
   generateFlow('day');
 }, '1 0 * * *');
-cron.cron(() => {
-  generateFlow('day');
-}, '15 1 * * *');

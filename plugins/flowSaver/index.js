@@ -44,7 +44,12 @@ const saveFlow = async () => {
         if(flow.length === 0) {
           return;
         }
-        await knex('saveFlow').insert(flow);
+        const insertPromises = [];
+        for(let i = 0; i < Math.ceil(flow.length/50); i++) {
+          const insert = knex('saveFlow').insert(flow.slice(i * 50, i * 50 + 50));
+          insertPromises.push(insert);
+        }
+        await Promise.all(insertPromises);
       }
     };
     servers.forEach(server => {
