@@ -107,4 +107,21 @@ module.exports = {
   '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
   '系统错误': 'An error occurred.',
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
+
+  '修改': 'Modify',
+
+  '网站标题': '',
+  '使用Service Worker缓存静态页面': '',
+  '新用户自动分配账号': '',
+  '随机分配端口号': '',
+  '开放注册': '',
+  '合并多服务器流量统计': '',
+  '注册时间': '',
+  '上次登录': '',
+
+  '创建': '',
+  '等待': '',
+  '付款': '',
+  '完成': '',
+  '关闭': '',
 };

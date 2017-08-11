@@ -49,8 +49,9 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
   const loading = () => {
     publicInfo.isLoading = true;
     if(!isDialogShow()) {
-      show();
+      return show();
     }
+    return alertDialogPromise;
   };
   return {
     show,

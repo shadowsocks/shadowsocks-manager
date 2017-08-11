@@ -219,7 +219,7 @@ app.get('/serviceworker.js', (req, res) => {
     return success[0].value;
   }).then(success => {
     res.header('Content-Type', 'text/javascript');
-    res.render('serviceworker.ejs', {
+    res.render('serviceworker.js', {
       serviceWorker: !!success.serviceWorker,
       serviceWorkerTime: success.serviceWorkerTime,
     });

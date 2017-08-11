@@ -221,8 +221,9 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 cron.minute(() => {
+  if(!alipay_f2f) { return; }
   knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
-}, 30);
+}, 37);
 
 exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;

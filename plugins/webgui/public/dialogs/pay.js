@@ -104,7 +104,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdD
         if($mdMedia('xs') || $mdMedia('sm')) {
           return {};
         }
-        return { 'min-width': '400px' };
+        return { 'min-width': '405px' };
       };
       $scope.getQrCodeSize = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {

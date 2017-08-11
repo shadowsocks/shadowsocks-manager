@@ -14,31 +14,31 @@
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">订单号：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderId }}</div>
+                        <div flex="30" translate>订单号：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderId }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">订单类型：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderType }}</div>
+                        <div flex="30" translate>订单类型：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderType }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">金额：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.amount }}</div>
+                        <div flex="30" translate>金额：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.amount }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item  ng-click="publicInfo.toUserPage(publicInfo.order.userId)">
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                        <div flex="30" translate>用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">创建时间：</div><div flex="70" style="text-align:right; font-size: 0.9em;">
+                        <div flex="30" translate>创建时间：</div><div flex="70" style="text-align:right; font-size: 0.9em;">
                             <span style="font-size: 0.9em;">{{ publicInfo.order.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ publicInfo.order.createTime | timeago }}</span>
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30">状态：</div><div flex="70" style="text-align:right;">{{ publicInfo.order.status | order }}</div>
+                        <div flex="30" translate>状态：</div><div flex="70" style="text-align:right;">{{ publicInfo.order.status | order }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
