@@ -6,7 +6,7 @@
           暂无可分配的账号
         </div>
         <div layout="row" layout-wrap flex ng-if="account.length">
-          <div flex="50" ng-repeat="a in account">
+          <div flex="50" flex-gt-md="33" ng-repeat="a in account">
             <md-checkbox ng-model="a.isChecked">
               {{ a.port }}
             </md-checkbox>

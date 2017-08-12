@@ -61,11 +61,14 @@
                     </md-switch>
                 </div>
             </div>
-            <div layout="row" layout-wrap flex ng-if="accountServer">
+            <div layout="column" layout-wrap flex ng-if="accountServer">
                 <div layout="column" layout-wrap flex ng-repeat="server in servers">
                     <div flex="100">
                         <md-checkbox ng-model="accountServerObj[server.id]">
-                            {{ server.name }}
+                            <div layout="row" layout-align="space-between center">
+                                <span flex>{{ server.name }}</span>
+                                <span flex style="color: #777">{{ server.host }}</span>
+                            </div>
                         </md-checkbox>
                     </div>
                 </div>

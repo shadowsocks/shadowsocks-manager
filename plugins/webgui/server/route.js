@@ -57,6 +57,14 @@ app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccount
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, admin.deleteAccount);
 
+app.get('/api/admin/account/mac/:macAddress', (req, res) => {
+  const mac = req.params.macAddress;
+  const macAccount = appRequire('plugins/macAccount/index');
+  macAccount.getAccount(mac).then(success => {
+    res.send(success);
+  });
+});
+
 app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, adminFlow.getServerLastHourFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/user', isAdmin, adminFlow.getServerUserFlow);
