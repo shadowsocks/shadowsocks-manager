@@ -78,6 +78,44 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
     });
   };
   publicInfo.setPort = setPort;
+  const setMac = () => {
+    $http.post(`/api/admin/account/mac/${ publicInfo.mac.macAddress }`, {
+      userId: publicInfo.userId,
+      accountId: publicInfo.mac.account,
+      serverId: publicInfo.mac.server
+    }).then(success => {
+      hide();
+    });
+  };
+  publicInfo.setMac = setMac;
+  const editMac = () => {
+    $http.put(`/api/admin/account/mac`, {
+      id: publicInfo.mac.id,
+      macAddress: publicInfo.mac.macAddress,
+      accountId: publicInfo.mac.account,
+      serverId: publicInfo.mac.server
+    }).then(success => {
+      hide();
+    });
+  };
+  publicInfo.editMac = editMac;
+  const edit = (accountInfo, account, server) => {
+    publicInfo.account = account;
+    publicInfo.server = server;
+    publicInfo.mac = {
+      id: accountInfo.id,
+      macAddress: accountInfo.mac,
+      account: accountInfo.accountId,
+      server: accountInfo.serverId,
+    };
+    publicInfo.isLoading = false;
+    publicInfo.status = 'edit';
+    if(isDialogShow()) {
+      return dialogPromise;
+    }
+    dialogPromise = $mdDialog.show(dialog);
+    return dialogPromise;
+  };
   const show = (userId, account, server) => {
     publicInfo.userId = userId;
     publicInfo.account = account;
@@ -96,5 +134,6 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
   };
   return {
     show,
+    edit,
   };
 }]);

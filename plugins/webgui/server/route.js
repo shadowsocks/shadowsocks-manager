@@ -58,10 +58,10 @@ app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccount
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, admin.deleteAccount);
 
-app.get('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.getMacAccount);
+app.get('/api/admin/account/mac', isAdmin, adminAccount.getMacAccount);
 app.post('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.addMacAccount);
-app.put('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.editMacAccount);
-app.delete('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.deleteMacAccount);
+app.put('/api/admin/account/mac', isAdmin, adminAccount.editMacAccount);
+app.delete('/api/admin/account/mac', isAdmin, adminAccount.deleteMacAccount);
 
 app.get('/api/user/account/mac/:macAddress', adminAccount.getMacAccountForUser);
 

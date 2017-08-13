@@ -73,4 +73,31 @@
             </md-button>
         </md-dialog-actions>
     </form>
+    <form ng-cloak ng-show="publicInfo.status === 'edit' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block">
+                    <label>MAC地址</label>
+                    <input type="text" required name="macAddress" ng-model="publicInfo.mac.macAddress">
+                </md-input-container>
+                <md-input-container class="md-block" style="height: 54px;">
+                    <label>端口</label>
+                    <md-select ng-model="publicInfo.mac.account">
+                        <md-option ng-value="account.id" ng-repeat="account in publicInfo.account">{{ account.port }}</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container class="md-block" style="height: 54px;">
+                    <label>服务器</label>
+                    <md-select ng-model="publicInfo.mac.server">
+                        <md-option ng-value="server.id" ng-repeat="server in publicInfo.server">{{ server.name }}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.editMac()">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
 </md-dialog>

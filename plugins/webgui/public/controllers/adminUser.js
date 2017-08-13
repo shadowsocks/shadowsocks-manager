@@ -107,6 +107,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
             f.lastConnect = success.lastConnect;
           });
         });
+        $scope.user.macAccount = success.macAccount;
       }).catch(err => {
         $state.go('admin.user');
       });
@@ -125,12 +126,31 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
 
       });
     };
+    $scope.deleteMacAccount = accountId => {
+      confirmDialog.show({
+        text: '删除该账号？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除账号失败',
+        fn: function () { return $http.delete('/api/admin/account/mac/', {
+          params: { id: accountId },
+        }); },
+      }).then(() => {
+        getUserData();
+      }).catch(() => {
+
+      });
+    };
     $scope.setFabButton(() => {
       addAccountDialog.show(userId, $scope.user.account, $scope.server).then(success => {
         getUserData();
       });
     });
-
+    $scope.editMacAccount = account => {
+      addAccountDialog.edit(account, $scope.user.account, $scope.server).then(success => {
+        getUserData();
+      });
+    };
     $scope.toAccountPage = port => {
       adminApi.getAccountId(port).then(id => {
         $state.go('admin.accountPage', { accountId: id });

@@ -13,15 +13,23 @@ const getIp = address => {
   });
 };
 
-const newAccount = async (mac, userId, serverId, accountId) => {
-
+const newAccount = (mac, userId, serverId, accountId) => {
+  return knex('mac_account').insert({
+    mac, userId, serverId, accountId,
+  });
 };
 
-const getAccount = async (mac, serverId, accountId) => {
+const getAccount = async userId => {
+  const accounts = await knex('mac_account').where({
+    'mac_account.userId': userId,
+  });
+  return accounts;
+};
+
+const getAccountForUser = async (mac, serverId, accountId) => {
   const macAccount = await knex('mac_account').where({ mac }).then(success => success[0]);
   const myServerId = serverId || macAccount.serverId;
   const myAccountId = accountId || macAccount.accountId;
-  console.log(myServerId, myAccountId);
   const accounts = await knex('mac_account').select([
     'mac_account.id',
     'mac_account.mac',
@@ -47,10 +55,18 @@ const getAccount = async (mac, serverId, accountId) => {
   };
 };
 
-const editAccount = async (id, mac, serverId, accountId) => {
-  
+const editAccount = (id, mac, serverId, accountId) => {
+  return knex('mac_account').update({
+    mac, serverId, accountId,
+  }).where({ id });
 };
 
-const deleteAccount = async id => {};
+const deleteAccount = id => {
+  return knex('mac_account').delete().where({ id });
+};
 
+exports.editAccount = editAccount;
+exports.newAccount = newAccount;
 exports.getAccount = getAccount;
+exports.deleteAccount = deleteAccount;
+exports.getAccountForUser = getAccountForUser;
