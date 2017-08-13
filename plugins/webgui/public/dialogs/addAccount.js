@@ -50,9 +50,18 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
       publicInfo.account = success.data;
     });
   };
+  const macAddress = () => {
+    publicInfo.status = 'mac';
+    publicInfo.mac = {
+      account: publicInfo.account[0].id,
+      server: publicInfo.server[0].id,
+    };
+  };
   const next = () => {
     if(publicInfo.accountType === 'port') {
       getAccountPort();
+    } else if(publicInfo.accountType === 'mac') {
+      macAddress();
     }
   };
   publicInfo.next = next;
@@ -69,8 +78,10 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
     });
   };
   publicInfo.setPort = setPort;
-  const show = userId => {
+  const show = (userId, account, server) => {
     publicInfo.userId = userId;
+    publicInfo.account = account;
+    publicInfo.server = server;
     publicInfo.isLoading = false;
     if(macAccount) {
       publicInfo.status = 'choose';

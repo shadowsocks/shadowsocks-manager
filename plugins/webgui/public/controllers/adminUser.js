@@ -99,6 +99,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     const getUserData = () => {
       adminApi.getUserData(userId).then(success => {
         $scope.user = success.user;
+        $scope.server = success.server;
         $scope.alipayOrders = success.alipayOrders;
         $scope.paypalOrders = success.paypalOrders;
         $scope.user.account.forEach(f => {
@@ -125,7 +126,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       });
     };
     $scope.setFabButton(() => {
-      addAccountDialog.show(userId).then(success => {
+      addAccountDialog.show(userId, $scope.user.account, $scope.server).then(success => {
         getUserData();
       });
     });
