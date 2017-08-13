@@ -8,6 +8,7 @@ const adminServer = appRequire('plugins/webgui/server/adminServer');
 const adminFlow = appRequire('plugins/webgui/server/adminFlow');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
+const adminAccount = appRequire('plugins/webgui/server/adminAccount');
 const push = appRequire('plugins/webgui/server/push');
 const path = require('path');
 const knex = appRequire('init/knex').knex;
@@ -57,13 +58,12 @@ app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccount
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);
 app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, admin.deleteAccount);
 
-app.get('/api/admin/account/mac/:macAddress', (req, res) => {
-  const mac = req.params.macAddress;
-  const macAccount = appRequire('plugins/macAccount/index');
-  macAccount.getAccount(mac).then(success => {
-    res.send(success);
-  });
-});
+app.get('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.getMacAccount);
+app.post('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.addMacAccount);
+app.put('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.editMacAccount);
+app.delete('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.deleteMacAccount);
+
+app.get('/api/user/account/mac/:macAddress', adminAccount.getMacAccountForUser);
 
 app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, adminFlow.getServerLastHourFlow);
@@ -164,6 +164,7 @@ const configForFrontend = {
   alipay: config.plugins.alipay && config.plugins.alipay.use,
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
+  macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
 };
 
 const cdn = config.plugins.webgui.cdn;

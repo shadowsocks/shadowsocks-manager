@@ -1,0 +1,49 @@
+<md-dialog aria-label="add account">
+    <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <form ng-cloak ng-show="publicInfo.status === 'choose' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div style="margin-bottom: 20px;">请选择添加账号类型：</div>
+                <md-radio-group ng-model="publicInfo.accountType">
+                    <md-radio-button value="port">
+                        端口
+                    </md-radio-button>
+                    <md-radio-button value="mac">
+                        MAC地址
+                    </md-radio-button>
+                </md-radio-group>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
+            <md-button ng-click="publicInfo.next()">
+                下一步
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    <form ng-cloak ng-show="publicInfo.status === 'port' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="row" layout-wrap flex ng-show="publicInfo.account.length === 0">
+                    暂无可分配的账号
+                </div>
+                <div layout="row" layout-wrap flex ng-show="publicInfo.account.length">
+                    <div flex="50" flex-gt-md="33" ng-repeat="a in publicInfo.account">
+                        <md-checkbox ng-model="a.isChecked">
+                            {{ a.port }}
+                        </md-checkbox>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.setPort()">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

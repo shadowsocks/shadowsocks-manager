@@ -91,15 +91,14 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     });
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog) => {
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog',
+  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog) => {
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
     const getUserData = () => {
       adminApi.getUserData(userId).then(success => {
         $scope.user = success.user;
-        $scope.account = success.account;
         $scope.alipayOrders = success.alipayOrders;
         $scope.paypalOrders = success.paypalOrders;
         $scope.user.account.forEach(f => {
@@ -125,30 +124,12 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
 
       });
     };
-    const openDialog = () => {
-      $scope.dialog = $mdDialog.show({
-        templateUrl: '/public/views/admin/pickAccount.html',
-        parent: angular.element(document.body),
-        clickOutsideToClose:true,
-        preserveScope: true,
-        scope: $scope,
-      });
-    };
     $scope.setFabButton(() => {
-      openDialog();
-    });
-    $scope.confirmAccount = () => {
-      $mdDialog.hide($scope.dialog);
-      const promise = [];
-      $scope.account.forEach(f => {
-        if(f.isChecked) {
-          promise.push($http.put(`/api/admin/user/${ userId }/${ f.id }`));
-        }
-      });
-      Promise.all(promise).then(success => {
+      addAccountDialog.show(userId).then(success => {
         getUserData();
       });
-    };
+    });
+
     $scope.toAccountPage = port => {
       adminApi.getAccountId(port).then(id => {
         $state.go('admin.accountPage', { accountId: id });
