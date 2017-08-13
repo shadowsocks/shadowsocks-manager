@@ -13,6 +13,10 @@ const getIp = address => {
   });
 };
 
+const newAccount = async (mac, userId, serverId, accountId) => {
+
+};
+
 const getAccount = async (mac, serverId, accountId) => {
   const macAccount = await knex('mac_account').where({ mac }).then(success => success[0]);
   const myServerId = serverId || macAccount.serverId;
@@ -42,5 +46,11 @@ const getAccount = async (mac, serverId, accountId) => {
     method: server.method,
   };
 };
+
+const editAccount = async (id, mac, serverId, accountId) => {
+  
+};
+
+const deleteAccount = async id => {};
 
 exports.getAccount = getAccount;
