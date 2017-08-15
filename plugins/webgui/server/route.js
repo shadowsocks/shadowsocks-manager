@@ -104,6 +104,9 @@ app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
 app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
 app.get('/api/admin/setting/base', isAdmin, adminSetting.getBase);
 app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
+app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
+app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
+
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);

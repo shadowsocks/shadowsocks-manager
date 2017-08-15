@@ -184,7 +184,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       { type: 'order', name: '订单完成' },
     ];
     $scope.setEmail = type => {
-      setEmailDialog.show();
+      setEmailDialog.show(type);
     };
   }
 ]);

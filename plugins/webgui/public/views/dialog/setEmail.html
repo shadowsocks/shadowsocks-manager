@@ -22,7 +22,7 @@
             </form>
             <div layout="row" flex layout-align="space-around center">
                 <div flex="60"></div>
-                <md-button class="md-raised md-primary">确定</md-button>
+                <md-button class="md-raised md-primary" ng-click="publicInfo.set(publicInfo.title, publicInfo.content)">保存</md-button>
             </div>
         </div>
         <div class="md-dialog-content" ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>

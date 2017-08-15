@@ -17,7 +17,7 @@ app.factory('setEmailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $sta
   publicInfo.hide = hide;
   const set = (title, content) => {
     load();
-    $http.post(``, {
+    $http.put('/api/admin/setting/mail', {
       type: publicInfo.emailType,
       title,
       content,
@@ -28,10 +28,16 @@ app.factory('setEmailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $sta
     });
   };
   publicInfo.set = set;
-  const get = (title, content) => {
+  const get = () => {
     load();
-    $http.get(``,).then(success => {
-      hide();
+    $http.get('/api/admin/setting/mail', {
+      params: {
+        type: publicInfo.emailType,
+      }
+    }).then(success => {
+      publicInfo.title = success.data.title;
+      publicInfo.content = success.data.content;
+      publicInfo.isLoading = false;
     }).catch(() => {
       publicInfo.isLoading = false;
     });
@@ -71,6 +77,7 @@ app.factory('setEmailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $sta
     }
     publicInfo.emailType = emailType;
     dialogPromise = $mdDialog.show(dialog);
+    publicInfo.get();
     return dialogPromise;
   };
   return {
