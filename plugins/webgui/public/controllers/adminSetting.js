@@ -15,6 +15,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toBase = () => {
       $state.go('admin.baseSetting');
     };
+    $scope.toMail = () => {
+      $state.go('admin.mailSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -169,6 +172,19 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
     $scope.serviceWorkerUpdate = () => {
       $scope.baseData.serviceWorkerTime = Date.now();
+    };
+  }
+]).controller('AdminMailSettingController', ['$scope', '$http', '$timeout', '$state', 'setEmailDialog',
+  ($scope, $http, $timeout, $state, setEmailDialog) => {
+    $scope.setTitle('邮件设置');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.mails = [
+      { type: 'code', name: '注册验证码' },
+      { type: 'reset', name: '密码重置' },
+      { type: 'order', name: '订单完成' },
+    ];
+    $scope.setEmail = type => {
+      setEmailDialog.show();
     };
   }
 ]);

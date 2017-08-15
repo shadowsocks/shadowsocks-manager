@@ -1,90 +1,73 @@
 const knex = appRequire('init/knex').knex;
 
-knex('webguiSetting').select().where({
-  key: 'account',
-}).then(success => {
-  if(success.length) {
-    return;
-  }
-  const value = {
-    accountForNewUser: {
-      isEnable: true,
-      flow: 350,
-      type: 5,
-      limit: 8,
-    },
-    signUp: {
-      isEnable: true,
-    },
-    multiServerFlow: false,
-    port: {
-      start: 50000,
-      end: 60000,
-      random: false,
+const setDefaultValue = (key, value) => {
+  knex('webguiSetting').select().where({
+    key,
+  }).then(success => {
+    if(success.length) {
+      return;
     }
-  };
-  return knex('webguiSetting').insert({
-    key: 'account',
-    value: JSON.stringify(value),
-  });
-}).then();
-knex('webguiSetting').select().where({
-  key: 'base',
-}).then(success => {
-  if(success.length) {
-    return;
+    return knex('webguiSetting').insert({
+      key,
+      value: JSON.stringify(value),
+    });
+  }).then();
+};
+setDefaultValue('account', {
+  accountForNewUser: {
+    isEnable: true,
+    flow: 350,
+    type: 5,
+    limit: 8,
+  },
+  signUp: {
+    isEnable: true,
+  },
+  multiServerFlow: false,
+  port: {
+    start: 50000,
+    end: 60000,
+    random: false,
   }
-  const value = {
-    title: 'Shadowsocks-Manager'
-  };
-  return knex('webguiSetting').insert({
-    key: 'base',
-    value: JSON.stringify(value),
-  });
-}).then();
-knex('webguiSetting').select().where({
-  key: 'payment',
-}).then(success => {
-  if(success.length) {
-    return;
-  }
-  const value = {
-    hour: {
-      alipay: 0.15,
-      paypal: 0,
-      flow: 500,
-    },
-    day: {
-      alipay: 0.66,
-      paypal: 0,
-      flow: 5000,
-    },
-    week: {
-      alipay: 2.99,
-      paypal: 0,
-      flow: 30000,
-    },
-    month: {
-      alipay: 9.99,
-      paypal: 0,
-      flow: 100000,
-    },
-    season: {
-      alipay: 26.99,
-      paypal: 0,
-      flow: 100000,
-    },
-    year: {
-      alipay: 99.99,
-      paypal: 0,
-      flow: 100000,
-    },
-  };
-  return knex('webguiSetting').insert({
-    key: 'payment',
-    value: JSON.stringify(value),
-  });
-}).then();
+});
+setDefaultValue('base', {
+  title: 'Shadowsocks-Manager',
+  themeAccent: 'pink',
+  themePrimary: 'blue',
+  serviceWorker: false,
+});
+setDefaultValue('payment', {
+  hour: {
+    alipay: 0.15,
+    paypal: 0,
+    flow: 500,
+  },
+  day: {
+    alipay: 0.66,
+    paypal: 0,
+    flow: 5000,
+  },
+  week: {
+    alipay: 2.99,
+    paypal: 0,
+    flow: 30000,
+  },
+  month: {
+    alipay: 9.99,
+    paypal: 0,
+    flow: 100000,
+  },
+  season: {
+    alipay: 26.99,
+    paypal: 0,
+    flow: 100000,
+  },
+  year: {
+    alipay: 99.99,
+    paypal: 0,
+    flow: 100000,
+  },
+});
 
 exports.getPayment = (req, res) => {
   knex('webguiSetting').select().where({

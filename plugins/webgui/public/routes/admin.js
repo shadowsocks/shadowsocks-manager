@@ -57,6 +57,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/account',
       controller: 'AdminAccountSettingController',
       templateUrl: `${ cdn }/public/views/admin/accountSetting.html`,
+    })
+    .state('admin.mailSetting', {
+      url: '/settings/mail',
+      controller: 'AdminMailSettingController',
+      templateUrl: `${ cdn }/public/views/admin/mailSetting.html`,
     });
   }
 ]);

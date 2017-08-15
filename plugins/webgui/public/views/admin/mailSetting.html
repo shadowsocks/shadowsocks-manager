@@ -1,0 +1,13 @@
+<md-card>
+    <md-card-content>
+        <md-list>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="mail in mails" ng-click="setEmail(mail.type)">
+                <div>
+                    {{ mail.name }}
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-card-content>
+</md-card>
