@@ -81,7 +81,11 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
       return findEmail[0].remark;
     }
     const code = Math.random().toString().substr(2, 6);
-    text += '\n' + code;
+    if(text.indexOf('${code}') >= 0) {
+      text = text.replace(/\$\{code\}/g, '[ ' + code + ']');
+    } else {
+      text += '\n[ ' + code + ']';
+    }
     await sendMail(to, subject, text, {
       type: 'code',
       remark: code,

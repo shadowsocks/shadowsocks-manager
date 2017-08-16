@@ -71,6 +71,8 @@ app.factory('setEmailDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $sta
     publicInfo.isLoading = true;
   };
   const show = emailType => {
+    publicInfo.title = '';
+    publicInfo.content = '';
     publicInfo.isLoading = false;
     if(isDialogShow()) {
       return dialogPromise;
