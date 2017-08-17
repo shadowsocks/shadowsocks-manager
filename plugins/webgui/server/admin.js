@@ -178,6 +178,7 @@ exports.getUsers = (req, res) => {
         email: m.email,
         lastLogin: m.lastLogin,
         username: m.username,
+        port: m.port,
       };
     });
     return res.send(success);

@@ -89,6 +89,14 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     $scope.$on('RightButtonClick', () => {
       $scope.userSortDialog();
     });
+    $scope.userColor = user => {
+      if(!user.port) {
+        return {
+          background: 'red-50', 'border-color': 'blue-300',
+        };
+      }
+      return {};
+    };
   }
 ])
 .controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog',
