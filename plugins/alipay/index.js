@@ -79,6 +79,29 @@ const createOrder = async (user, account, amount, orderType = 3) => {
   };
 };
 
+const sendSuccessMail = async userId => {
+  const emailPlugin = appRequire('plugins/email/index');
+  const user = await knex('user').select().where({
+    type: 'normal',
+    id: userId,
+  }).then(success => {
+    if(success.length) {
+      return success[0];
+    }
+    return Promise.reject('user not found');
+  });
+  const orderMail = await knex('webguiSetting').select().where({
+    key: 'mail',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value.order;
+  });
+  await emailPlugin.sendMail(user.email, orderMail.title, orderMail.content);
+};
+
 cron.minute(async () => {
   if(!alipay_f2f) { return; }
   const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
@@ -109,6 +132,7 @@ cron.minute(async () => {
         });
       }).then(() => {
         logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+        sendSuccessMail(userId);
       }).catch(err => {
         logger.error(`订单支付失败: [${ order.orderId }]`, err);
       });
