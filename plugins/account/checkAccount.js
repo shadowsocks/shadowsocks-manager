@@ -92,6 +92,15 @@ const deleteCheckAccountTimePort = port => {
     }
   }
 };
+const deleteCheckAccountTimeServer = Server => {
+  const reg = new RegExp('^' + Server + '\|\d{1,5}$');
+  for(cat in checkAccountTime) {
+    if(cat.match(reg)) {
+      delete checkAccountTime[cat];
+    }
+  }
+};
+
 let lastCheck = 0;
 const checkServer = async () => {
   if(!lastCheck) {
@@ -240,6 +249,7 @@ exports.addPort = addPort;
 exports.delPort = delPort;
 exports.changePassword = changePassword;
 exports.deleteCheckAccountTimePort = deleteCheckAccountTimePort;
+exports.deleteCheckAccountTimeServer = deleteCheckAccountTimeServer;
 
 setTimeout(() => {
   checkServer();
