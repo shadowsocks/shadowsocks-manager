@@ -25,7 +25,7 @@
                             <div flex="60">{{i.ip}}</div>
                             <div flex="40" style="text-align:right">
                                 <span style="font-size: 0.9em;">{{ i.info[0] }}</span>
-                                <span style="font-size: 0.9em;">{{ i.info[1] }}</span>
+                                <span ng-show="i.info[1]" style="font-size: 0.9em;">{{ i.info[1] }}</span>
                             </div>
                         </div>
                         <md-divider ng-hide="$last"></md-divider>
@@ -43,7 +43,7 @@
                             <div flex="60">{{i.ip}}</div>
                             <div flex="40" style="text-align:right">
                                 <span style="font-size: 0.9em;">{{ i.info[0] }}</span>
-                                <span style="font-size: 0.9em;">{{ i.info[1] }}</span>
+                                <span ng-show="i.info[1]" style="font-size: 0.9em;">{{ i.info[1] }}</span>
                             </div>
                         </div>
                         <md-divider></md-divider>

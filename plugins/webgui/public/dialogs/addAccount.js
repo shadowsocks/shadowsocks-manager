@@ -30,15 +30,29 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdMedia', '$mdDialog', '$http', '$localStorage', 'bind', function($scope, $mdMedia, $mdDialog, $http, $localStorage, bind) {
-      $scope.publicInfo = bind;
-      $scope.setDialogWidth = () => {
-        if($mdMedia('xs') || $mdMedia('sm')) {
-          return {};
-        }
-        return { 'min-width': '400px' };
-      };
-    }],
+    controller: ['$scope', '$mdMedia', '$mdDialog', '$http', '$localStorage', 'bind',
+      function($scope, $mdMedia, $mdDialog, $http, $localStorage, bind) {
+        $scope.publicInfo = bind;
+        $scope.setDialogWidth = () => {
+          if($mdMedia('xs') || $mdMedia('sm')) {
+            return {};
+          }
+          return { 'min-width': '400px' };
+        };
+        $scope.$watch('publicInfo.mac.account', () => {
+          const account = $scope.publicInfo.account.filter(f => {
+            return f.id === $scope.publicInfo.mac.account;
+          })[0];
+          if(!account.server) {
+            $scope.publicInfo.validServer = $scope.publicInfo.server;
+          } else {
+            $scope.publicInfo.validServer = $scope.publicInfo.server.filter(f => {
+              return JSON.parse(account.server).indexOf(f.id) >= 0;
+            });
+          }
+        });
+      }
+    ],
     fullscreen: true,
     clickOutsideToClose: true,
   };
