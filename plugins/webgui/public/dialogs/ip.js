@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
+app.factory('ipDialog', [ '$mdDialog', 'adminApi', ($mdDialog, adminApi) => {
   const publicInfo = {};
   const hide = () => {
     return $mdDialog.hide()
@@ -56,14 +56,7 @@ app.factory('ipDialog', [ '$mdDialog', ($mdDialog) => {
           });
         });
       });
-      const getIpInfo = ip => {
-        const url = `/api/admin/account/ip/${ ip }`;
-        return $http.get(url).then(success => success.data);
-      };
-      $scope.checkIp = ip => {
-        const url = `http://www.ip138.com/ips138.asp?ip=${ ip }&action=2`;
-        window.open(url, '_blank');
-      };
+      const getIpInfo = ip => adminApi.getIpInfo(ip);
     }],
     fullscreen: true,
     clickOutsideToClose: true,

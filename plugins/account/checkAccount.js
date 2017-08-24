@@ -253,8 +253,8 @@ const checkServer = async () => {
   });
   Promise.all(promises).then(success => {
     const sum = success.reduce((a, b) => a + b);
-    if(sum <= 30) {
-      let deleteCount = 30 - sum;
+    if(sum <= 40) {
+      let deleteCount = 40 - sum;
       Object.keys(checkAccountTime).filter((f, i, arr) => {
         return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
       }).forEach(f => {

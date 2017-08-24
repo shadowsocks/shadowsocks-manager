@@ -62,7 +62,7 @@
                 <md-input-container class="md-block" style="height: 54px;">
                     <label>服务器</label>
                     <md-select ng-model="publicInfo.mac.server">
-                        <md-option ng-value="server.id" ng-repeat="server in publicInfo.server">{{ server.name }}</md-option>
+                        <md-option ng-value="server.id" ng-repeat="server in publicInfo.validServer">{{ server.name }}</md-option>
                     </md-select>
                 </md-input-container>
             </div>
@@ -89,7 +89,7 @@
                 <md-input-container class="md-block" style="height: 54px;">
                     <label>服务器</label>
                     <md-select ng-model="publicInfo.mac.server">
-                        <md-option ng-value="server.id" ng-repeat="server in publicInfo.server">{{ server.name }}</md-option>
+                        <md-option ng-value="server.id" ng-repeat="server in publicInfo.validServer">{{ server.name }}</md-option>
                     </md-select>
                 </md-input-container>
             </div>

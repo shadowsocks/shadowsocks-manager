@@ -250,6 +250,15 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return $http.get(`/api/admin/user/${ port }/lastConnect`).then(success => success.data);
   };
 
+  const getIpInfo = ip => {
+    const id = `getIpInfo:${ ip }`;
+    const promise = () => {
+      const url = `/api/admin/account/ip/${ ip }`;
+      return $http.get(url).then(success => success.data);
+    };
+    return preload.get(id, promise, 300 * 1000);
+  };
+
   return {
     getUser,
     getOrder,
@@ -264,5 +273,6 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     getChartData,
     getAccountChartData,
     getUserPortLastConnect,
+    getIpInfo,
   };
 }]);
