@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const serverPlugin = appRequire('plugins/flowSaver/server');
+const accountPlugin = appRequire('plugins/account/index');
 const dns = require('dns');
 
 const getIp = address => {
@@ -47,11 +48,30 @@ const getAccountForUser = async (mac, serverId, accountId) => {
     return s.id === myServerId;
   })[0];
   const address = await getIp(server.host);
+  const validServers = JSON.parse((await accountPlugin.getAccount({ id: myAccountId }))[0].server);
+  const serverList = servers.filter(f => {
+    if(!validServers) {
+      return true;
+    } else {
+      return validServers.indexOf(f.id) >= 0;
+    }
+  }).map(f => {
+    return getIp(f.host).then(success => {
+      return {
+        name: f.name,
+        address: success,
+      };
+    });
+  });
+  const serverReturn = await Promise.all(serverList);
   return {
-    address,
-    port: account.port,
-    password: account.password,
-    method: server.method,
+    default: {
+      address,
+      port: account.port,
+      password: account.password,
+      method: server.method,
+    },
+    servers: serverReturn,
   };
 };
 
