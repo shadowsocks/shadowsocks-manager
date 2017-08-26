@@ -6,6 +6,6 @@ app.filter('mac', function() {
       if(index % 2 === 0) {
         return m + array[index + 1];
       }
-    }).filter(f => f).join('-');
+    }).filter(f => f).join(':');
   };
 });
