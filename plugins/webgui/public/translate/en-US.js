@@ -46,6 +46,8 @@ module.exports = {
   '到期时间：': 'Due Date:',
   '最近连接：': 'Last Connected:',
   '修改密码': 'Change Password',
+  '修改密码成功': 'Change password success',
+  '修改密码失败': 'Change password fail',
   '续费': 'Recharge',
   '不限时': 'unlimited',
   '不限量': 'unlimited',
