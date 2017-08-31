@@ -2,8 +2,12 @@ const knex = appRequire('init/knex').knex;
 const serverPlugin = appRequire('plugins/flowSaver/server');
 const accountPlugin = appRequire('plugins/account/index');
 const dns = require('dns');
+const net = require('net');
 
 const getIp = address => {
+  if(net.isIP(address)) {
+    return Promise.resolve(address);
+  }
   return new Promise((resolve, reject) => {
     dns.lookup(address, (err, address, family) => {
       if(err) {
