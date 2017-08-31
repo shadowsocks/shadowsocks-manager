@@ -133,18 +133,6 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
 }
 
-// app.get('/serviceworker.js', (req, res) => {
-//   res.header('Content-Type', 'text/javascript');
-//   res.sendFile('serviceworker.js', {
-//     root: path.resolve(__dirname, '../public/'),
-//   }, err => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(404).end();
-//     }
-//   });
-// });
-
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
 app.get('/manifest.json', (req, res) => {
   return knex('webguiSetting').select().where({
@@ -171,6 +159,7 @@ const configForFrontend = {
 };
 
 const cdn = config.plugins.webgui.cdn;
+const analytics = config.plugins.webgui.googleAnalytics || '';
 const colors = [
   { value: 'red', color: '#F44336' },
   { value: 'pink', color: '#E91E63' },
@@ -211,6 +200,7 @@ const homePage = (req, res) => {
       title: success.title,
       version,
       cdn,
+      analytics,
       config: configForFrontend,
     });
   });

@@ -37,6 +37,7 @@ This plugin provide a webgui to control shadowsocks.
         port: '80'
         site: 'http://yourwebsite.com'
         # cdn: 'http://xxx.xxx.com'
+        # googleAnalytics: 'UA-xxxxxxxx-x'
         gcmSenderId: '456102641793'
         gcmAPIKey: 'AAAAGzzdqrE:XXXXXXXXXXXXXX'
       alipay:
