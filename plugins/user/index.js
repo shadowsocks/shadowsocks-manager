@@ -206,6 +206,21 @@ const deleteUser = async userId => {
   }
 };
 
+const changePassword = async (userId, oldPassword, newPassword) => {
+  const userInfo = await knex('user').where({
+    id: userId,
+  }).then(user => {
+    if(!user.length) { return Promise.reject('user not found'); }
+    return user[0];
+  });
+  await checkPassword(userInfo.username, oldPassword);
+  await editUser({
+    id: userId, 
+  }, {
+    password: newPassword,
+  });
+};
+
 exports.add = addUser;
 exports.edit = editUser;
 exports.checkPassword = checkPassword;
@@ -215,3 +230,4 @@ exports.getRecentLogin = getRecentLoginUsers;
 exports.getOne = getOneUser;
 exports.getUserAndPaging = getUserAndPaging;
 exports.delete = deleteUser;
+exports.changePassword = changePassword;
