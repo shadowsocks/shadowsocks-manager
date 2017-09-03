@@ -36,6 +36,10 @@ app
       icon: 'account_circle',
       click: 'user.account'
     }, {
+      name: '修改密码',
+      icon: 'vpn_key',
+      click: 'user.changePassword'
+    }, {
       name: 'divider',
     }, {
       name: '退出',
@@ -240,6 +244,30 @@ app
     $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
       const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
       qrcodeDialog.show(serverName, ssAddress);
+    };
+  }
+]).controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+    $scope.setTitle('修改密码');
+    $scope.data = {
+      password: '',
+      newPassword: '',
+      newPasswordAgain: '',
+    };
+    $scope.confirm = () => {
+      alertDialog.loading();
+      userApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
+        alertDialog.show('修改密码成功，请重新登录', '确定')
+        .then(() => {
+          return $http.post('/api/home/logout');
+        }).then(() => {
+          $localStorage.home = {};
+          $localStorage.user = {};
+          $state.go('home.index');
+        });
+      }).catch(err => {
+        alertDialog.show('修改密码失败', '确定');
+      });
     };
   }
 ]);

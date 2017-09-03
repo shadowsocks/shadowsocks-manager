@@ -18,6 +18,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/account',
       controller: 'UserAccountController',
       templateUrl: `${ cdn }/public/views/user/account.html`,
+    })
+    .state('user.changePassword', {
+      url: '/changePassword',
+      controller: 'UserChangePasswordController',
+      templateUrl: `${ cdn }/public/views/user/changePassword.html`,
     });
   }])
 ;
