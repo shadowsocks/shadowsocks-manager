@@ -143,10 +143,10 @@ exports.getServerPortLastConnect = (req, res) => {
   });
 };
 
-exports.changePassword = (req, res) => {
+exports.changeShadowsocksPassword = (req, res) => {
   const accountId = +req.params.accountId;
   const password = req.body.password;
-  if(!password) { return res.status(403).end(); };
+  if(!password) { return res.status(403).end(); }
   const isUserHasTheAccount = (accountId) => {
     return account.getAccount({userId: req.session.user, id: accountId}).then(success => {
       if(success.length) {
@@ -318,4 +318,19 @@ exports.executePaypalOrder = (req, res) => {
 exports.paypalCallback = (req, res) => {
   console.log(req.body);
   return res.send('success');
+};
+
+exports.changePassword = (req, res) => {
+  const oldPassword = req.body.password;
+  const newPassword = req.body.newPassword;
+  if(!oldPassword || !newPassword) {
+    return res.status(403).end();
+  }
+  const userId = req.session.user;
+  user.changePassword(userId, oldPassword, newPassword).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
 };

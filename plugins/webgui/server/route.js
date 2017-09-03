@@ -114,7 +114,7 @@ app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
 app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)', isUser, user.getServerPortFlow);
 app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
-app.put('/api/user/:accountId(\\d+)/password', isUser, user.changePassword);
+app.put('/api/user/:accountId(\\d+)/password', isUser, user.changeShadowsocksPassword);
 app.get('/api/user/multiServerFlow', isUser, user.getMultiServerFlowStatus);
 
 app.get('/api/user/status/alipay', isUser, user.getAlipayStatus);
@@ -128,6 +128,8 @@ app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
 
 app.post('/api/user/alipay/callback', user.alipayCallback);
 app.post('/api/user/paypal/callback', user.paypalCallback);
+
+app.post('/api/user/changePassword', user.changePassword);
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);

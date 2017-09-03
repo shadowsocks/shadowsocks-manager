@@ -36,7 +36,7 @@ app.factory('changePasswordDialog', [ '$mdDialog', 'userApi', ($mdDialog, userAp
   const changePassword = () => {
     if(!publicInfo.password) { return; }
     publicInfo.status = 'loading';
-    userApi.changePassword(publicInfo.accountId, publicInfo.password)
+    userApi.changeShadowsocksPassword(publicInfo.accountId, publicInfo.password)
     .then(() => {
       publicInfo.status = 'success';
     })
