@@ -74,8 +74,42 @@ exports.getOneAccount = (req, res) => {
 };
 
 exports.getServers = (req, res) => {
-  knex('server').select(['id', 'host', 'name', 'method', 'scale']).orderBy('name').then(success => {
-    res.send(success);
+  const userId = req.session.user;
+  let servers;
+  knex('server').select(['id', 'host', 'name', 'method', 'scale']).orderBy('name')
+  .then(success => {
+    servers = success;
+    return account.getAccount({
+      userId,
+    }).then(accounts => {
+      return accounts.map(f => {
+        f.server = f.server ? JSON.parse(f.server) : f.server;
+        return f;
+      });
+    });
+  })
+  .then(success => {
+    if(!success.length) {
+      return res.send([]);
+    }
+    const isAll = success.some(account => {
+      if(!account.server) { return true; }
+    });
+    if(isAll) {
+      return res.send(servers);
+    } else {
+      let accountArray = [];
+      success.forEach(account => {
+        account.server.forEach(s => {
+          if(accountArray.indexOf(s) < 0) {
+            accountArray.push(s);
+          }
+        });
+      });
+      return res.send(servers.filter(f => {
+        return accountArray.indexOf(f.id) >= 0;
+      }));
+    }
   }).catch(err => {
     console.log(err);
     res.status(500).end();
