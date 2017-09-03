@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
+app.factory('alertDialog' , [ '$q', '$mdDialog', ($q, $mdDialog) => {
   const publicInfo = {};
   publicInfo.isLoading = false;
   publicInfo.content = '';
@@ -44,14 +44,14 @@ app.factory('alertDialog' , [ '$mdDialog', ($mdDialog) => {
       return alertDialogPromise;
     }
     alertDialogPromise = $mdDialog.show(dialog);
-    return alertDialogPromise;
+    return $q.resolve();
   };
   const loading = () => {
     publicInfo.isLoading = true;
     if(!isDialogShow()) {
       return show();
     }
-    return alertDialogPromise;
+    return $q.resolve();
   };
   return {
     show,
