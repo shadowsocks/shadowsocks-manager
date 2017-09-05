@@ -232,6 +232,7 @@ const checkServer = async () => {
         });
         const checkFlowNumber = await Promise.all(checkAccountStatusPromises)
         .then(success => {
+          if(!success.length) { return 0; }
           const checkFlowNumber = success.reduce((a, b) => {
             return a + b;
           });
