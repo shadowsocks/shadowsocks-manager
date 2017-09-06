@@ -102,12 +102,13 @@ exports.editServer = (req, res) => {
   }).then(success => {
     const serverId = req.params.serverId;
     const name = req.body.name;
+    const comment = req.body.comment;
     const address = req.body.address;
     const port = +req.body.port;
     const password = req.body.password;
     const method = req.body.method;
     const scale = req.body.scale;
-    return serverManager.edit(serverId, name, address, port, password, method, scale);
+    return serverManager.edit(serverId, name, address, port, password, method, scale, comment);
   }).then(success => {
     res.send('success');
   }).catch(err => {

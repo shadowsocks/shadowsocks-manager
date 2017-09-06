@@ -9,8 +9,12 @@
                     <label>名称</label>
                     <input type="text" required name="name" ng-model="server.name">
                     <div ng-messages="serverForm.name.$error">
-                        <div ng-message="required">邮箱不能为空</div>
+                        <div ng-message="required">名称不能为空</div>
                     </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>备注</label>
+                    <input type="text" required name="comment" ng-model="server.comment">
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label>地址</label>

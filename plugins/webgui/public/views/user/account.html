@@ -90,6 +90,12 @@
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
+                                    <md-list-item>
+                                        <div flex layout="row" layout-align="space-between center">
+                                            <div flex="40">{{ '备注' | translate }}</div><div flex="60" style="text-align:right">{{ server.comment || '无' }}</div>
+                                        </div>
+                                    </md-list-item>
+                                    <md-divider></md-divider>
                                 </md-list>
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">

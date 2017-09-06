@@ -391,6 +391,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     .then(success => {
       $scope.server = {
         name: success.data.name,
+        comment: success.data.comment,
         address: success.data.host,
         port: +success.data.port,
         password: success.data.password,
@@ -402,6 +403,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       alertDialog.loading();
       $http.put('/api/admin/server/' + $stateParams.serverId, {
         name: $scope.server.name,
+        comment: $scope.server.comment,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
