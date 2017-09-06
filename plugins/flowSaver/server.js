@@ -23,10 +23,11 @@ const del = (id) => {
   });
 };
 
-const edit = (id, name, host, port, password, method, scale = 1) => {
+const edit = (id, name, host, port, password, method, scale = 1, comment = '') => {
   checkAccount.deleteCheckAccountTimeServer(id);
   return knex('server').where({ id }).update({
     name,
+    comment,
     host,
     port,
     password,
