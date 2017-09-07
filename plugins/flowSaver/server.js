@@ -44,7 +44,8 @@ const list = async (options = {}) => {
     'port',
     'password',
     'method',
-    'scale'
+    'scale',
+    'comment',
   ]).orderBy('name');
   if(options.status) {
     const serverStatus = [];

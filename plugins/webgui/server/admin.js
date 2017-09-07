@@ -544,9 +544,6 @@ exports.getAccountIpInfo = (req, res) => {
     });
   };
 
-  // const getIpFunction = [taobao, sina, ipip];
-  // const random = +Math.random().toString().substr(2) % getIpFunction.length;
-  // getIpFunction[random](ip)
   const getIpFunction = ip => {
     return taobao(ip).catch(() => {
       return sina(ip);
