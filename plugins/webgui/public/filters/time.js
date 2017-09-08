@@ -77,13 +77,13 @@ app.filter('translateTime', ['$translate', $translate => {
       const matchMinute = input.match(/([0-9]){1,}分/);
       let ret = '';
       if(matchDay) {
-        ret += matchDay[1] + (+matchDay[1] <= 1 ? ' day ' : ' days ');
+        ret += matchDay[0].substr(0, matchDay[0].length - 1) + (+matchDay[0].substr(0, matchDay[0].length - 1) <= 1 ? ' day ' : ' days ');
       }
       if(matchHour) {
-        ret += matchHour[1] + (+matchHour[1] <= 1 ? ' hour ' : ' hours ');
+        ret += matchHour[0].substr(0, matchHour[0].length - 2) + (+matchHour[0].substr(0, matchHour[0].length - 2) <= 1 ? ' hour ' : ' hours ');
       }
       if(matchMinute) {
-        ret += matchMinute[1] + (+matchMinute[1] <= 1 ? ' min ' : ' mins');
+        ret += matchMinute[0].substr(0, matchMinute[0].length - 1) + (+matchMinute[0].substr(0, matchMinute[0].length - 1) <= 1 ? ' min ' : ' mins');
       }
       if(input.match(/几秒/)) {
         ret += 'a few seconds';
