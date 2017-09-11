@@ -1,8 +1,11 @@
 <div>
     <md-card>
         <md-card-content>
-            <md-divider></md-divider>
-            <md-list layout="row">
+            <div flex layout="row" layout-align="center center" ng-hide="baseData.themePrimary">
+                <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+            </div>
+            <md-divider ng-show="baseData.themePrimary"></md-divider>
+            <md-list layout="row" ng-show="baseData.themePrimary">
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
                 <div flex>
                     <form name="baseForm">

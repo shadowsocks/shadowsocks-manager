@@ -305,12 +305,6 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     });
     return;
   }
-  // const account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
-  //   if(success.length) {
-  //     return success[0];
-  //   }
-  //   return Promise.reject('account not found');
-  // });
   const accountData = JSON.parse(account.data);
   accountData.flow = flow[orderType];
   const timePeriod = {

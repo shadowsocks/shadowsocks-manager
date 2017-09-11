@@ -88,7 +88,7 @@ app
 .controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog',
   ($scope, $state, userApi, markdownDialog) => {
     $scope.setTitle('首页');
-    $scope.notices = [];
+    // $scope.notices = [];
     userApi.getNotice().then(success => {
       $scope.notices = success;
     });
