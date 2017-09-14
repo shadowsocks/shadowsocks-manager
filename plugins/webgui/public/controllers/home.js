@@ -165,4 +165,18 @@ app
         });
       };
     }
-  ]);
+  ])
+  .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage',
+  ($scope, $http, $state, $stateParams, $localStorage) => {
+    const mac = $stateParams.mac;
+    $http.post('/api/home/macLogin', {
+      mac,
+    }).then(() => {
+      $localStorage.home.status = 'normal';
+      $state.go('user.index');
+    }).catch(() => {
+      $state.go('home.index');
+    });
+  }
+])
+;

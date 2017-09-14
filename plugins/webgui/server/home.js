@@ -152,6 +152,25 @@ exports.login = (req, res) => {
   });
 };
 
+exports.macLogin = (req, res) => {
+  delete req.session.user;
+  delete req.session.type;
+  const mac = req.body.mac;
+  knex('mac_account').where({ mac }).then(success => {
+    if(!success.length) {
+      return Promise.reject('');
+    }
+    return success[0];
+  }).then(success => {
+    req.session.user = +success.userId;
+    req.session.type = 'normal';
+    console.log(req.session.id);
+    return res.send('success');
+  }).catch(err => {
+    return res.status(403).end();
+  });
+};
+
 exports.logout = (req, res) => {
   delete req.session.user;
   delete req.session.type;
