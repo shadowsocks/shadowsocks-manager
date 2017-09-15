@@ -26,6 +26,8 @@ This plugin provide a webgui to control shadowsocks.
         use: true
       account:
         use: true
+      macAccount:
+        use: true
       email:
         use: true
         username: 'username'

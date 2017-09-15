@@ -9,6 +9,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const push = appRequire('plugins/webgui/server/push');
+const macAccount = appRequire('plugins/macAccount/index');
 
 exports.signup = (req, res) => {
   req.checkBody('email', 'Invalid email').isEmail();
@@ -156,15 +157,11 @@ exports.macLogin = (req, res) => {
   delete req.session.user;
   delete req.session.type;
   const mac = req.body.mac;
-  knex('mac_account').where({ mac }).then(success => {
-    if(!success.length) {
-      return Promise.reject('');
-    }
-    return success[0];
-  }).then(success => {
-    req.session.user = +success.userId;
+  const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+  macAccount.login(mac, ip)
+  .then(success => {
+    req.session.user = success.userId;
     req.session.type = 'normal';
-    console.log(req.session.id);
     return res.send('success');
   }).catch(err => {
     return res.status(403).end();
