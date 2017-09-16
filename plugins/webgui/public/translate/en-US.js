@@ -33,6 +33,7 @@ module.exports = {
   '退出': 'Exit',
 
   '我的账号': 'My account',
+  '账号': 'Account',
   '点击进入': 'Enter',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
@@ -126,4 +127,8 @@ module.exports = {
   '付款': 'Paid',
   '完成': 'Success',
   '关闭': 'Closed',
+
+  '原密码': 'Old password',
+  '新密码': 'New password',
+  '重复新密码': 'New password again',
 };
