@@ -98,8 +98,9 @@ const getAccountForUser = async (mac, ip) => {
     });
   });
   const serverReturn = await Promise.all(serverList);
-  return {
+  const data = {
     default: {
+      name: server.name,
       address,
       port: account.port,
       password: account.password,
@@ -107,6 +108,11 @@ const getAccountForUser = async (mac, ip) => {
     },
     servers: serverReturn,
   };
+  if(!serverReturn.filter(f => f.name === server.name)[0]) {
+    data.default.name = serverReturn[0].name;
+    data.default.address = serverReturn[0].address;
+  }
+  return data;
 };
 
 const editAccount = (id, mac, serverId, accountId) => {
