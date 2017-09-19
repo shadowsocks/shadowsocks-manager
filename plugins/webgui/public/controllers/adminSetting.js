@@ -92,8 +92,8 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       }, true);
     });
   }
-]).controller('AdminBaseSettingController', ['$scope', '$http', '$timeout', '$state',
-  ($scope, $http, $timeout, $state) => {
+]).controller('AdminBaseSettingController', ['$scope', '$http', '$timeout', '$state', '$q',
+  ($scope, $http, $timeout, $state, $q) => {
     $scope.setTitle('基本设置');
     $scope.setMenuButton('arrow_back', 'admin.settings');
     $scope.baseData = {};
@@ -172,6 +172,39 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
     $scope.serviceWorkerUpdate = () => {
       $scope.baseData.serviceWorkerTime = Date.now();
+    };
+
+    const getSubscriptionData = () => {
+      navigator.serviceWorker.ready.then(reg => {
+        return reg.pushManager.getSubscription();
+      }).then(subscription => {
+        if (!subscription) {
+          $scope.receiveBrowserPush = false;
+        } else {
+          $scope.receiveBrowserPush = true;
+        }
+      });
+    };
+    getSubscriptionData();
+    $scope.changeBrowserPush = () => {
+      navigator.serviceWorker.ready.then(reg => {
+        if($scope.receiveBrowserPush) {
+          return reg.pushManager.subscribe({
+            userVisibleOnly: true
+          }).then(success => {
+            $http.post('/api/push/client', { data: success });
+          });
+        } else {
+          let subscription;
+          return reg.pushManager.getSubscription()
+          .then(success => {
+            subscription = success;
+            return $http.put('/api/push/client', { data: success });
+          }).then(success => {
+            return subscription.unsubscribe();
+          });
+        }
+      });
     };
   }
 ]).controller('AdminMailSettingController', ['$scope', '$http', '$timeout', '$state', 'setEmailDialog',

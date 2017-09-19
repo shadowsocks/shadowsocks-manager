@@ -51,10 +51,10 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   exports.client = (req, res) => {
     const data = req.body.data;
     if(!req.session.type || req.session.type === 'normal') {
-      knex('push').delete().where({ endpoint: data.endpoint }).then(() => {
+      return knex('push').delete().where({ endpoint: data.endpoint })
+      .then(() => {
         res.send('success');
       });
-      return;
     }
     insertPushList(data).then(success => {
       res.send('success');
@@ -63,7 +63,18 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
       res.status(403).end();
     });
   };
+  exports.deleteClient = (req, res) => {
+    const data = req.body.data;
+    return knex('push').delete().where({ endpoint: data.endpoint })
+    .then(() => {
+      res.send('success');
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(403).end();
+    });
+  };
 } else {
-  exports.pushMessage = () => { return Promise.resolve(); };
+  exports.pushMessage = () => Promise.resolve();
   exports.client = () => {};
 }

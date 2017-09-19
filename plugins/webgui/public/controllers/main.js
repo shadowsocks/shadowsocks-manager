@@ -43,12 +43,12 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
         return navigator.serviceWorker.ready;
       }).then(reg => {
         console.log('Service Worker is ready to go!', reg.scope);
-        reg.pushManager.subscribe({
-          userVisibleOnly: true
-        }).then(subscribe => {
-          pushSubscribe = subscribe;
-          $scope.sendPushSubscribe();
-        });
+        // reg.pushManager.subscribe({
+        //   userVisibleOnly: true
+        // }).then(subscribe => {
+        //   pushSubscribe = subscribe;
+        //   $scope.sendPushSubscribe();
+        // });
       }).catch(function(error) {
         console.log('Service Worker failed to boot', error);
       });
