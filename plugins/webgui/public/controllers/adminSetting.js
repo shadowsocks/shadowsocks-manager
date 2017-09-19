@@ -174,7 +174,12 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $scope.baseData.serviceWorkerTime = Date.now();
     };
 
+    $scope.showBrowserPush = false;
     const getSubscriptionData = () => {
+      if(!('serviceWorker' in navigator)) {
+        return;
+      }
+      $scope.showBrowserPush = true;
       navigator.serviceWorker.ready.then(reg => {
         return reg.pushManager.getSubscription();
       }).then(subscription => {
@@ -199,7 +204,11 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
           return reg.pushManager.getSubscription()
           .then(success => {
             subscription = success;
-            return $http.put('/api/push/client', { data: success });
+            return $http.delete('/api/push/client', {
+              params: {
+                data: success
+              }
+            });
           }).then(success => {
             return subscription.unsubscribe();
           });

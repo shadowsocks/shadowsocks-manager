@@ -32,23 +32,12 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       $localStorage.home.url = $location.url();
     });
 
-    let pushSubscribe;
-    $scope.sendPushSubscribe = () => {
-      if(!pushSubscribe) { return; }
-      $http.post('/api/push/client', { data: pushSubscribe });
-    };
     const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
     if(!isWechatBrowser() && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('/serviceworker.js').then(function() {
         return navigator.serviceWorker.ready;
       }).then(reg => {
         console.log('Service Worker is ready to go!', reg.scope);
-        // reg.pushManager.subscribe({
-        //   userVisibleOnly: true
-        // }).then(subscribe => {
-        //   pushSubscribe = subscribe;
-        //   $scope.sendPushSubscribe();
-        // });
       }).catch(function(error) {
         console.log('Service Worker failed to boot', error);
       });

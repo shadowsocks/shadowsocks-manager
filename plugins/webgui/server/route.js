@@ -134,7 +134,7 @@ app.post('/api/user/changePassword', user.changePassword);
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
-  app.put('/api/push/client', push.deleteClient);
+  app.delete('/api/push/client', push.deleteClient);
 }
 
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
