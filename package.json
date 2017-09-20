@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.8.73",
+  "version": "0.8.74",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -50,12 +50,11 @@
     "mysql": "^2.13.0",
     "nodemailer": "^4.0.0",
     "paypal-rest-sdk": "^1.7.1",
-    "raven": "^1.1.4",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "sqlite3": "^3.1.4",
     "web-push": "^3.2.2",
-    "webpack": "^1.14.0",
+    "webpack": "^1.15.0",
     "webpack-stream": "^3.2.0",
     "ws": "^2.0.2"
   },
