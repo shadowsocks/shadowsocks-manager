@@ -52,7 +52,6 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.admin = {};
-          $scope.sendPushSubscribe();
           $state.go('home.index');
         });
       },
