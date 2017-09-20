@@ -481,7 +481,7 @@ exports.getAccountIpFromAllServer = (req, res) => {
         password: serverInfo.password,
       });
     };
-    promiseArray = servers.map(server => {
+    const promiseArray = servers.map(server => {
       return getIp(accountInfo.port, server).catch(err => []);
     });
     return Promise.all(promiseArray);
