@@ -28,7 +28,7 @@ gulp.task('freeAccountBuild', () => {
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015']
+          presets: ['env']
         }
       }]
     },
@@ -73,7 +73,7 @@ gulp.task('webguiBuild', () => {
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015']
+          presets: ['env']
         }
       }]
     },
@@ -120,7 +120,7 @@ gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
     '!plugins/webgui/public/**',
   ])
   .pipe(babel({
-    presets: ['stage-3'],
+    presets: ['env'],
   }))
   .pipe(gulp.dest('lib'));
 });
