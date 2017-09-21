@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.8.74",
+  "version": "0.8.75",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "prepublish": "gulp"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
-  "license": "GPL",
+  "license": "GPL-3.0",
   "keywords": [
     "shadowsocks",
     "manager",
@@ -48,7 +48,7 @@
     "log4js": "^1.0.0",
     "moment": "^2.15.1",
     "mysql": "^2.13.0",
-    "nodemailer": "^4.0.0",
+    "nodemailer": "^4.1.0",
     "paypal-rest-sdk": "^1.7.1",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",

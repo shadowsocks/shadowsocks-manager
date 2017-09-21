@@ -7,7 +7,7 @@ const log = appRequire('init/log');
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
-const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr/');
+const ssmgrPath = path.resolve(os.homedir(), './.ssmgr/');
 
 program
   .version('shadowsocks-manager ' + version)

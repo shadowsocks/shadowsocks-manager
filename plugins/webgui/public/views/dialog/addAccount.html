@@ -1,4 +1,4 @@
-<md-dialog aria-label="add account">
+<md-dialog aria-label="add account" ng-style="setDialogWidth()">
     <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
@@ -32,7 +32,7 @@
                     暂无可分配的账号
                 </div>
                 <div layout="row" layout-wrap flex ng-show="publicInfo.account.length">
-                    <div flex="50" flex-gt-md="33" ng-repeat="a in publicInfo.account">
+                    <div flex="50" flex-md="33" flex-gt-md="25" ng-repeat="a in publicInfo.account">
                         <md-checkbox ng-model="a.isChecked">
                             {{ a.port }}
                         </md-checkbox>
@@ -41,6 +41,9 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
             <md-button ng-click="publicInfo.setPort()">
                 确定
             </md-button>
@@ -68,6 +71,9 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
             <md-button ng-click="publicInfo.setMac()">
                 确定
             </md-button>
@@ -95,6 +101,9 @@
             </div>
         </md-dialog-content>
         <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
             <md-button ng-click="publicInfo.editMac()">
                 确定
             </md-button>

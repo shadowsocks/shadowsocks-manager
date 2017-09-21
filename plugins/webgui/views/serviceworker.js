@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-const ONLINE_CACHE_NAME = '2017-09-20 20:29:37' + ' <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2017-09-21 14:19:28' + ' <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -41,10 +41,12 @@ const onlineCacheUrl = [
   '/public/views/home/home.html',
   '/public/views/home/index.html',
   '/public/views/home/login.html',
+  '/public/views/home/macLogin.html',
   '/public/views/home/resetPassword.html',
   '/public/views/home/signup.html',
 
   '/public/views/user/account.html',
+  '/public/views/user/changePassword.html',
   '/public/views/user/index.html',
   '/public/views/user/qrcodeDialog.html',
   '/public/views/user/user.html',
@@ -62,6 +64,7 @@ const onlineCacheUrl = [
   '/public/views/admin/editNotice.html',
   '/public/views/admin/editServer.html',
   '/public/views/admin/index.html',
+  '/public/views/admin/mailSetting.html',
   '/public/views/admin/newNotice.html',
   '/public/views/admin/notice.html',
   '/public/views/admin/orderFilterDialog.html',
@@ -69,6 +72,7 @@ const onlineCacheUrl = [
   '/public/views/admin/paymentSetting.html',
   '/public/views/admin/pickAccount.html',
   '/public/views/admin/pickTime.html',
+  '/public/views/admin/previewNotice.html',
   '/public/views/admin/server.html',
   '/public/views/admin/serverPage.html',
   '/public/views/admin/settings.html',
@@ -77,13 +81,17 @@ const onlineCacheUrl = [
   '/public/views/admin/userPage.html',
   '/public/views/admin/userSortDialog.html',
 
+  '/public/views/dialog/addAccount.html',
   '/public/views/dialog/alert.html',
   '/public/views/dialog/changePassword.html',
+  '/public/views/dialog/confirm.html',
   '/public/views/dialog/email.html',
   '/public/views/dialog/ip.html',
+  '/public/views/dialog/language.html',
   '/public/views/dialog/order.html',
   '/public/views/dialog/pay.html',
   '/public/views/dialog/serverChart.html',
+  '/public/views/dialog/setEmail.html',
 ];
 
 this.addEventListener('activate', function(event) {

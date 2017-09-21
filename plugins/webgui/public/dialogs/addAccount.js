@@ -37,7 +37,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
           if($mdMedia('xs') || $mdMedia('sm')) {
             return {};
           }
-          return { 'min-width': '400px' };
+          return { 'min-width': '400px', 'max-width': '640px' };
         };
         $scope.$watch('publicInfo.mac.account', () => {
           const account = $scope.publicInfo.account.filter(f => {
