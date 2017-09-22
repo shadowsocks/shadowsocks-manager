@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-const ONLINE_CACHE_NAME = '2017-09-21 14:19:28' + ' <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2017-09-22 12:33:28' + ' <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -94,7 +94,7 @@ const onlineCacheUrl = [
   '/public/views/dialog/setEmail.html',
 ];
 
-this.addEventListener('activate', function(event) {
+self.addEventListener('activate', function(event) {
   const cacheWhitelist = [ONLINE_CACHE_NAME];
   event.waitUntil(
     caches.keys().then(function(keyList) {
