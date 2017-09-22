@@ -123,7 +123,7 @@ gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
     presets: [
       [
         'env', {
-          target: {
+          targets: {
             node: '6.0'
           },
         }
