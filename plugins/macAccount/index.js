@@ -28,15 +28,19 @@ const loginFail = ip => {
 };
 
 const getIp = address => {
-  if(net.isIP(address)) {
-    return Promise.resolve(address);
+  let myAddress = address;
+  if(address.indexOf(':') >= 0) {
+    myAddress = address.split(':')[1];
+  }
+  if(net.isIP(myAddress)) {
+    return Promise.resolve(myAddress);
   }
   return new Promise((resolve, reject) => {
-    dns.lookup(address, (err, address, family) => {
+    dns.lookup(myAddress, (err, myAddress, family) => {
       if(err) {
         return reject(err);
       }
-      return resolve(address);
+      return resolve(myAddress);
     });
   });
 };
