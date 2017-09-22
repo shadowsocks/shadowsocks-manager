@@ -120,7 +120,15 @@ gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
     '!plugins/webgui/public/**',
   ])
   .pipe(babel({
-    presets: ['env'],
+    presets: [
+      [
+        'env', {
+          target: {
+            node: '6.0'
+          },
+        }
+      ]
+    ],
   }))
   .pipe(gulp.dest('lib'));
 });
