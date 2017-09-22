@@ -30,7 +30,7 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   };
 
   const insertPushList = async data => {
-    push = await knex('push').select().where({
+    const push = await knex('push').select().where({
       endpoint: data.endpoint,
     }).then(success => success[0]);
     if(push) {
