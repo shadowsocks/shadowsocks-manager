@@ -10,6 +10,7 @@ const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const adminAccount = appRequire('plugins/webgui/server/adminAccount');
 const push = appRequire('plugins/webgui/server/push');
+const os = require('os');
 const path = require('path');
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
@@ -136,6 +137,28 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
   app.delete('/api/push/client', push.deleteClient);
 }
+
+app.get('/favicon.png', (req, res) => {
+  let file = './libs/favicon.png';
+  let options = {
+    root: './plugins/webgui/'
+  };
+  const iconPath = config.plugins.webgui.icon;
+  if(iconPath) {
+    const ssmgrPath = path.resolve(os.homedir(), './.ssmgr/');
+    if (iconPath[0] === '/' || iconPath[0] === '.') {
+      options = {};
+      file = path.resolve(iconPath);
+    } else if (iconPath[0] === '~') {
+      file = '.' + iconPath.substr(1);
+      options.root = os.homedir();
+    } else {
+      file = iconPath;
+      options.root = ssmgrPath;
+    }
+  }
+  res.sendFile(file, options);
+});
 
 const manifest = appRequire('plugins/webgui/views/manifest').manifest;
 app.get('/manifest.json', (req, res) => {
