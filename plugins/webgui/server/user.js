@@ -76,7 +76,7 @@ exports.getOneAccount = (req, res) => {
 exports.getServers = (req, res) => {
   const userId = req.session.user;
   let servers;
-  knex('server').select(['id', 'host', 'name', 'method', 'scale', 'comment']).orderBy('name')
+  knex('server').select(['id', 'host', 'name', 'method', 'scale', 'comment', 'shift']).orderBy('name')
   .then(success => {
     servers = success;
     return account.getAccount({

@@ -397,6 +397,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         password: success.data.password,
         method: success.data.method,
         scale: success.data.scale,
+        shift: success.data.shift,
       };
     });
     $scope.confirm = () => {
@@ -409,6 +410,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         password: $scope.server.password,
         method: $scope.server.method,
         scale: $scope.server.scale,
+        shift: $scope.server.shift,
       }).then(success => {
         alertDialog.show('修改服务器成功', '确定');
         $state.go('admin.serverPage', { serverId: $stateParams.serverId });

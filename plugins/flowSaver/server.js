@@ -23,7 +23,7 @@ const del = (id) => {
   });
 };
 
-const edit = (id, name, host, port, password, method, scale = 1, comment = '') => {
+const edit = (id, name, host, port, password, method, scale = 1, comment = '', shift = 0) => {
   checkAccount.deleteCheckAccountTimeServer(id);
   return knex('server').where({ id }).update({
     name,
@@ -33,6 +33,7 @@ const edit = (id, name, host, port, password, method, scale = 1, comment = '') =
     password,
     method,
     scale,
+    shift,
   });
 };
 
@@ -46,6 +47,7 @@ const list = async (options = {}) => {
     'method',
     'scale',
     'comment',
+    'shift',
   ]).orderBy('name');
   if(options.status) {
     const serverStatus = [];

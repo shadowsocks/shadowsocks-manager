@@ -81,7 +81,7 @@ const getAccountForUser = async (mac, ip) => {
   const account = accounts.filter(a => {
     return a.accountId === myAccountId;
   })[0];
-  const servers = await serverPlugin.list();
+  const servers = await serverPlugin.list({ status: false });
   const server = servers.filter(s => {
     return s.id === myServerId;
   })[0];

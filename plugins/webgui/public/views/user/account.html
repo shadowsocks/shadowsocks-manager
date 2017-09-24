@@ -32,7 +32,7 @@
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">{{ '端口：' | translate }}</div><div flex="60" style="text-align:right">{{a.port}}</div>
+                                            <div flex="40">{{ '端口：' | translate }}</div><div flex="60" style="text-align:right">{{a.port + server.shift}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
@@ -100,7 +100,7 @@
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div hide-xs></div>
-                                <qr ng-click="showQrcodeDialog(server.method, a.password , server.host, a.port, server.name)" size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port, server.name)" image="true"></qr>
+                                <qr ng-click="showQrcodeDialog(server.method, a.password , server.host, a.port + server.shift, server.name)" size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port + server.shift, server.name)" image="true"></qr>
                                 <div hide-xs></div>
                             </div>
                         </div>

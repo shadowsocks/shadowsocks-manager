@@ -84,6 +84,7 @@ exports.editServer = (req, res) => {
   req.checkBody('password', 'Invalid password').notEmpty();
   req.checkBody('method', 'Invalid method').notEmpty();
   req.checkBody('scale', 'Invalid scale').notEmpty();
+  req.checkBody('shift', 'Invalid shift').isInt();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
       const address = req.body.address;
@@ -108,7 +109,8 @@ exports.editServer = (req, res) => {
     const password = req.body.password;
     const method = req.body.method;
     const scale = req.body.scale;
-    return serverManager.edit(serverId, name, address, port, password, method, scale, comment);
+    const shift = req.body.shift;
+    return serverManager.edit(serverId, name, address, port, password, method, scale, comment, shift);
   }).then(success => {
     res.send('success');
   }).catch(err => {

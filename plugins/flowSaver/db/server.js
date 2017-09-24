@@ -31,6 +31,12 @@ const createTable = async () => {
       table.string('comment').defaultTo("");
     });
   }
+  const hasColumnShift = await knex.schema.hasColumn(tableName, 'shift');
+  if(!hasColumnShift) {
+    await knex.schema.table(tableName, function(table) {
+      table.integer('shift').defaultTo(0);
+    });
+  }
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
   if(list.length === 0) {
     const host = config.manager.address.split(':')[0];
