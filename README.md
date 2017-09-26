@@ -50,18 +50,13 @@ docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [s
 here is the `Dockerfile`
 
 ```
-FROM ubuntu:16.04
+FROM ubuntu:17.04
 MAINTAINER gyteng <igyteng@gmail.com>
 RUN apt-get update && \
-    apt-get install curl git sudo -y && \
+    apt-get install curl git sudo shadowsocks-libev -y && \
     curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get install -y nodejs && \
-    npm i -g shadowsocks-manager && \
-    git clone https://github.com/shadowsocks/shadowsocks-libev.git ~/shadowsocks && \
-    mkdir -p ~/build-area/ && \
-    cp ~/shadowsocks/scripts/build_deb.sh ~/build-area/ && \
-    cd ~/build-area && \
-    ./build_deb.sh
+    npm i -g shadowsocks-manager
 ENTRYPOINT ["/usr/bin/ssmgr"]
 ```
 
@@ -124,15 +119,10 @@ The listening address in `--manager-address` of step 1 and in `shadowsocks -> ad
 ```
 
 ### Plugins
-`[================100%]` [cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
-`[================100%]` [telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
-`[================100%]` [flowSaver](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/flowSaver/README.md)  
-`[================100%]` [email]()  
-`[================100%]` [user]()  
-`[================100%]` [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
-`[================100%]` [account]()  
-`[================95%-]` [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
-`[================100%]` [alipay]()  
+[cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
+[telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
+[freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
+[webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
 
 ### Parameter
 
