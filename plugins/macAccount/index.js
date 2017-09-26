@@ -98,6 +98,8 @@ const getAccountForUser = async (mac, ip) => {
       return {
         name: f.name,
         address: success,
+        port: account.port + f.shift,
+        method: f.method,
       };
     });
   });
