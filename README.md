@@ -50,12 +50,13 @@ docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [s
 here is the `Dockerfile`
 
 ```
-FROM ubuntu:17.04
+FROM ubuntu:16.04
 MAINTAINER gyteng <igyteng@gmail.com>
 RUN apt-get update && \
-    apt-get install curl git sudo shadowsocks-libev -y && \
+    apt-get install curl git sudo software-properties-common -y && \
+    add-apt-repository ppa:max-c-lv/shadowsocks-libev -y && \
     curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y nodejs shadowsocks-libev && \
     npm i -g shadowsocks-manager
 ENTRYPOINT ["/usr/bin/ssmgr"]
 ```
