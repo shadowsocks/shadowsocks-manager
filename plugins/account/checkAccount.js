@@ -23,7 +23,6 @@ cron.second(() => {
 }, 10);
 
 const addPort = (data, server) => {
-  console.log(`ADD: [${server.name}][${data.port}]`);
   messages.push([{
     command: 'add',
     port: data.port + server.shift,
@@ -36,8 +35,6 @@ const addPort = (data, server) => {
 };
 
 const delPort = (data, server) => {
-  console.log(server);
-  console.log(`DEL: [${server.name}][${data.port}]`);
   messages.push([{
     command: 'del',
     port: data.port + server.shift,
@@ -286,4 +283,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 1);
+}, 2);
