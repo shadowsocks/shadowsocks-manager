@@ -239,13 +239,18 @@ const splitTime = async (start, end) => {
 };
 
 const getFlowFromSplitTime = async (serverId, port, start, end) => {
-  let where = {};
-  if(serverId) { where.id = serverId; }
-  if(port) { where.port = port; }
+  // let where = {};
+  // if(serverId) { where.id = serverId; }
+  // if(port) { where.port = port; }
   const time = await splitTime(start, end);
   const sum = [];
   let getFlow;
   if(serverId) {
+    let where = { id: serverId };
+    if(port) {
+      const server = await knex('server').where({ id: serverId }).then(success => success[0]);
+      where.port = port + server.shift;
+    }
     getFlow = (tableName, startTime, endTime) => {
       return knex(tableName)
       .sum('flow as sumFlow')
@@ -258,16 +263,40 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
       });
     };
   } else {
+    const servers = await knex('server').select();
     getFlow = (tableName, startTime, endTime) => {
-      return knex(tableName)
+      let knexQuery = knex(tableName)
       .sum('flow as sumFlow')
       .groupBy('port')
-      .select(['port'])
-      .where(where)
-      .whereBetween('time', [startTime, endTime - 1]).then(success => {
+      .select(['port']);
+      servers.forEach((server, index) => {
+        if(index === 0) {
+          knexQuery = knexQuery.where({
+            id: server.id,
+            port: port + server.shift,
+          });
+        } else {
+          knexQuery = knexQuery.orWhere({
+            id: server.id,
+            port: port + server.shift,
+          });
+        }
+      });
+      return knexQuery.whereBetween('time', [startTime, endTime - 1]).then(success => {
         if(success[0]) { return success[0].sumFlow; }
         return 0;
       });
+
+
+      // return knex(tableName)
+      // .sum('flow as sumFlow')
+      // .groupBy('port')
+      // .select(['port'])
+      // .where(where)
+      // .whereBetween('time', [startTime, endTime - 1]).then(success => {
+      //   if(success[0]) { return success[0].sumFlow; }
+      //   return 0;
+      // });
     };
   }
   time.day.forEach(f => {
@@ -325,9 +354,10 @@ const getServerPortFlow = async (serverId, port, timeArray, isMultiServerFlow) =
 };
 
 const getlastConnectTime = async (serverId, port) => {
+  const server = await knex('server').where({ id: serverId }).then(success => success[0]);
   const lastConnectFromSaveFlow = await knex('saveFlow')
   .select(['time'])
-  .where({ id: serverId, port })
+  .where({ id: serverId, port: port + server.shift })
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return success[0].time;
@@ -339,7 +369,7 @@ const getlastConnectTime = async (serverId, port) => {
   }
   return knex('saveFlow5min')
   .select(['time'])
-  .where({ id: serverId, port })
+  .where({ id: serverId, port: port + server.shift })
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return { lastConnect: success[0].time };
@@ -349,27 +379,66 @@ const getlastConnectTime = async (serverId, port) => {
 };
 
 const getUserPortLastConnect = async port => {
-  const lastConnectFromSaveFlow = await knex('saveFlow')
-  .select(['time'])
-  .where({ port })
+  const servers = await knex('server').select();
+  let knexQuery = knex('saveFlow').select(['time']);
+  let knex5MinQuery = knex('saveFlow5min').select(['time']);
+  servers.forEach((server, index) => {
+    if(index === 0) {
+      knexQuery = knexQuery.where({
+        id: server.id,
+        port: port + server.shift,
+      });
+      knex5MinQuery = knex5MinQuery.where({
+        id: server.id,
+        port: port + server.shift,
+      });
+    } else {
+      knexQuery = knexQuery.orWhere({
+        id: server.id,
+        port: port + server.shift,
+      });
+      knex5MinQuery = knex5MinQuery.orWhere({
+        id: server.id,
+        port: port + server.shift,
+      });
+    }
+  });
+  const lastConnectFromSaveFlow = await knexQuery
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return success[0].time;
     }
     return 0;
   });
+
+  // const lastConnectFromSaveFlow = await knex('saveFlow')
+  // .select(['time'])
+  // .where({ port })
+  // .orderBy('time', 'desc').limit(1).then(success => {
+  //   if(success[0]) {
+  //     return success[0].time;
+  //   }
+  //   return 0;
+  // });
   if(lastConnectFromSaveFlow) {
     return { lastConnect: lastConnectFromSaveFlow };
   }
-  return knex('saveFlow5min')
-  .select(['time'])
-  .where({ port })
+  return knex5MinQuery
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return { lastConnect: success[0].time };
     }
     return { lastConnect: 0 };
   });
+  // return knex('saveFlow5min')
+  // .select(['time'])
+  // .where({ port })
+  // .orderBy('time', 'desc').limit(1).then(success => {
+  //   if(success[0]) {
+  //     return { lastConnect: success[0].time };
+  //   }
+  //   return { lastConnect: 0 };
+  // });
 };
 
 const getServerUserFlow = (serverId, timeArray) => {

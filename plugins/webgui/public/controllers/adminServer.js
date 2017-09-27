@@ -153,7 +153,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       // $state.go('admin.server');
     });
     $scope.toAccountPage = port => {
-      adminApi.getAccountId(port).then(id => {
+      adminApi.getAccountId(port - $scope.server.shift).then(id => {
         $state.go('admin.accountPage', { accountId: id });
       });
     };

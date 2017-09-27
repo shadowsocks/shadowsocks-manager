@@ -23,9 +23,10 @@ cron.second(() => {
 }, 10);
 
 const addPort = (data, server) => {
+  console.log(`ADD: [${server.name}][${data.port}]`);
   messages.push([{
     command: 'add',
-    port: data.port,
+    port: data.port + server.shift,
     password: data.password,
   }, {
     host: server.host,
@@ -35,9 +36,11 @@ const addPort = (data, server) => {
 };
 
 const delPort = (data, server) => {
+  console.log(server);
+  console.log(`DEL: [${server.name}][${data.port}]`);
   messages.push([{
     command: 'del',
-    port: data.port,
+    port: data.port + server.shift,
   }, {
     host: server.host,
     port: server.port,
@@ -53,7 +56,7 @@ const changePassword = async (id, password) => {
   server.forEach(s => {
     messages.push([{
       command: 'pwd',
-      port,
+      port: port + s.shift,
       password,
     }, {
       host: s.host,
@@ -131,8 +134,10 @@ const checkServer = async () => {
     }
   });
   const server = await serverManager.list();
-  account.exist = number => {
-    return !!account.filter(f => f.port === number)[0];
+  account.exist = (number, server) => {
+    return !!account.filter(f => {
+      return f.port + server.shift === number;
+    })[0];
   };
   let isMultiServerFlow = false;
   try {
@@ -160,7 +165,7 @@ const checkServer = async () => {
           port.list[f.port] = true;
         });
         port.exist = number => {
-          return !!port.list[number];
+          return !!port.list[number + s.shift];
         };
         const checkAccountStatus = async a => {
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
@@ -192,13 +197,14 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             let flow = -1;
-            if(!checkAccountTime['' + s.id + '|' + a.port] || (checkAccountTime['' + s.id + '|' + a.port] && Date.now() >= checkAccountTime['' + s.id + '|' + a.port])) {
+            const checkId = '' + s.id + '|' + (a.port + s.shift);
+            if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
               if(nextTime <= 0) {
-                checkAccountTime['' + s.id + '|' + a.port] = Date.now() + 10 * 60 * 1000;
+                checkAccountTime[checkId] = Date.now() + 10 * 60 * 1000;
               } else {
-                checkAccountTime['' + s.id + '|' + a.port] = Date.now() + nextTime;
+                checkAccountTime[checkId] = Date.now() + nextTime;
               }
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
@@ -240,8 +246,10 @@ const checkServer = async () => {
           return checkFlowNumber;
         });
         port.forEach(async p => {
-          if(!account.exist(p.port)) {
-            delPort(p, s);
+          if(!account.exist(p.port, s)) {
+            delPort({
+              port: p.port - s.shift
+            }, s);
           }
         });
         return checkFlowNumber;
@@ -278,4 +286,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 2);
+}, 1);
