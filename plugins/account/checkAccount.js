@@ -84,16 +84,19 @@ const checkFlow = async (server, port, startTime, endTime) => {
 
 const checkAccountTime = {};
 
-const deleteCheckAccountTimePort = port => {
-  const reg = new RegExp('^\d{1,3}\|' + port + '$');
-  for(const cat in checkAccountTime) {
-    if(cat.match(reg)) {
-      delete checkAccountTime[cat];
+const deleteCheckAccountTimePort = async port => {
+  const servers = await knex('server').select();
+  servers.forEach(server => {
+    const reg = new RegExp('^' + server.id + '\\|' + ( port + server.shift ) + '$');
+    for(const cat in checkAccountTime) {
+      if(cat.match(reg)) {
+        delete checkAccountTime[cat];
+      }
     }
-  }
+  });
 };
-const deleteCheckAccountTimeServer = Server => {
-  const reg = new RegExp('^' + Server + '\|\d{1,5}$');
+const deleteCheckAccountTimeServer = serverId => {
+  const reg = new RegExp('^' + serverId + '\\|\\d{1,5}$');
   for(const cat in checkAccountTime) {
     if(cat.match(reg)) {
       delete checkAccountTime[cat];

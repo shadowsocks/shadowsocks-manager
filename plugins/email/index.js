@@ -120,7 +120,7 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
     if(text.indexOf('${code}') >= 0) {
       text = text.replace(/\$\{code\}/g, '[ ' + code + ']');
     } else {
-      text += '\n[ ' + code + ']';
+      text += '\n[ ' + code + ' ]';
     }
     await sendMail(to, subject, text, {
       type: 'code',

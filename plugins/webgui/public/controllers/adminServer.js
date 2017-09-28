@@ -334,7 +334,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
     };
-    $scope.server = {};
+    $scope.server = {
+      scale: 1,
+      shift: 0,
+    };
     $scope.confirm = () => {
       alertDialog.loading();
       $http.post('/api/admin/server', {
@@ -343,6 +346,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         port: +$scope.server.port,
         password: $scope.server.password,
         method: $scope.server.method,
+        comment: $scope.server.comment,
+        scale: $scope.server.scale,
+        shift: $scope.server.shift,
       }, {
         timeout: 15000,
       }).then(success => {

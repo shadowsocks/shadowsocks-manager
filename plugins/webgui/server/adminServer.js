@@ -47,6 +47,8 @@ exports.addServer = (req, res) => {
   req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
   req.checkBody('password', 'Invalid password').notEmpty();
   req.checkBody('method', 'Invalid method').notEmpty();
+  req.checkBody('scale', 'Invalid scale').notEmpty();
+  req.checkBody('shift', 'Invalid shift').isInt();
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
       const address = req.body.address;
@@ -64,11 +66,14 @@ exports.addServer = (req, res) => {
     result.throw();
   }).then(success => {
     const name = req.body.name;
+    const comment = req.body.comment;
     const address = req.body.address;
     const port = +req.body.port;
     const password = req.body.password;
     const method = req.body.method;
-    return serverManager.add(name, address, port, password, method);
+    const scale = req.body.scale;
+    const shift = req.body.shift;
+    return serverManager.add(name, address, port, password, method, scale, comment, shift);
   }).then(success => {
     res.send('success');
   }).catch(err => {

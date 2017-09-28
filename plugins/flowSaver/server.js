@@ -2,13 +2,16 @@ const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
 
-const add = (name, host, port, password, method) => {
+const add = (name, host, port, password, method, scale = 1, comment = '', shift = 0) => {
   return knex('server').insert({
     name,
+    comment,
     host,
     port,
     password,
     method,
+    scale,
+    shift,
   });
 };
 
