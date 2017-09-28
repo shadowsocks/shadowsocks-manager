@@ -73,7 +73,17 @@ exports.addServer = (req, res) => {
     const method = req.body.method;
     const scale = req.body.scale;
     const shift = req.body.shift;
-    return serverManager.add(name, address, port, password, method, scale, comment, shift);
+    // return serverManager.add(name, address, port, password, method, scale, comment, shift);
+    return serverManager.add({
+      name,
+      host: address,
+      port,
+      password,
+      method,
+      scale,
+      comment,
+      shift,
+    });
   }).then(success => {
     res.send('success');
   }).catch(err => {
@@ -115,7 +125,18 @@ exports.editServer = (req, res) => {
     const method = req.body.method;
     const scale = req.body.scale;
     const shift = req.body.shift;
-    return serverManager.edit(serverId, name, address, port, password, method, scale, comment, shift);
+    // return serverManager.edit(serverId, name, address, port, password, method, scale, comment, shift);
+    return serverManager.edit({
+      id: serverId,
+      name,
+      host: address,
+      port,
+      password,
+      method,
+      scale,
+      comment,
+      shift,
+    });
   }).then(success => {
     res.send('success');
   }).catch(err => {

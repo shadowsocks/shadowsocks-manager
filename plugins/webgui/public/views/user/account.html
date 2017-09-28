@@ -26,19 +26,19 @@
                                 <md-list>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">{{ '地址：' | translate }}</div><div flex="60" style="text-align:right">{{server.host}}</div>
+                                            <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{server.host}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">{{ '端口：' | translate }}</div><div flex="60" style="text-align:right">{{a.port + server.shift}}</div>
+                                            <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{a.port + server.shift}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">{{ '密码：' | translate }}</div><div flex="60" style="text-align:right">{{a.password}}</div>
+                                            <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{a.password}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
@@ -72,9 +72,9 @@
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                          <div flex="40">{{ '到期时间：' | translate }}</div>
+                                          <div flex="40" translate>到期时间：</div>
                                           <div flex="60" style="text-align:right">
-                                              <span ng-if="a.type === 1">{{ '不限时' | translate }}</span>
+                                              <span ng-if="a.type === 1" translate>不限时</span>
                                               <span ng-if="a.type >=2 && a.type <= 5">
                                                   <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
                                               </span>
@@ -84,7 +84,7 @@
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                          <div flex="40">{{ '最近连接：' | translate }}</div><div flex="60" style="text-align:right">
+                                          <div flex="40" translate>最近连接：</div><div flex="60" style="text-align:right">
                                               <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
                                           </div>
                                         </div>

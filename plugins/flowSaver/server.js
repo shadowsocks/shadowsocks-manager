@@ -2,7 +2,8 @@ const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
 
-const add = (name, host, port, password, method, scale = 1, comment = '', shift = 0) => {
+const add = options => {
+  const { name, host, port, password, method, scale = 1, comment = '', shift = 0 } = options;
   return knex('server').insert({
     name,
     comment,
@@ -18,15 +19,14 @@ const add = (name, host, port, password, method, scale = 1, comment = '', shift 
 const del = (id) => {
   return knex.transaction(trx => {
     return knex('server').transacting(trx).where({ id }).delete()
-    .then(() => {
-      return knex('saveFlow').transacting(trx).where({ id }).delete();
-    })
+    .then(() => knex('saveFlow').transacting(trx).where({ id }).delete())
     .then(trx.commit)
     .catch(trx.rollback);
   });
 };
 
-const edit = (id, name, host, port, password, method, scale = 1, comment = '', shift = 0) => {
+const edit = options => {
+  const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0 } = options;
   checkAccount.deleteCheckAccountTimeServer(id);
   return knex('server').where({ id }).update({
     name,
