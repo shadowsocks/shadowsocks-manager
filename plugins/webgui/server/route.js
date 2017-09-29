@@ -229,6 +229,7 @@ const homePage = (req, res) => {
       cdn,
       analytics,
       config: configForFrontend,
+      paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
     });
   });
 };

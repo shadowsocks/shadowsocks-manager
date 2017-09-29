@@ -56,7 +56,6 @@
     </script>
     <% } %>
     <script src="/libs/bundle.js"></script>
-    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <div ng-controller="MainController" layout-fill>
         <div layout-fill layout="row" layout-align="center center" ng-show="mainLoading">
             <div layout="column" layout-align="center center">
@@ -65,6 +64,10 @@
         </div>
         <div ng-hide="mainLoading" ui-view layout-fill></div>
     </div>
+    <% if (paypal) { %>
+        <script async src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <% } %>
+    
 </body>
 
 </html>

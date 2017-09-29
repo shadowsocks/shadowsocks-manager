@@ -450,7 +450,7 @@ exports.getAccountIp = (req, res) => {
     const port = accountInfo.port;
     return manager.send({
       command: 'ip',
-      port,
+      port: port + serverInfo.shift,
     }, {
       host: serverInfo.host,
       port: serverInfo.port,
@@ -474,7 +474,7 @@ exports.getAccountIpFromAllServer = (req, res) => {
     const getIp = (port, serverInfo) => {
       return manager.send({
         command: 'ip',
-        port,
+        port: port + serverInfo.shift,
       }, {
         host: serverInfo.host,
         port: serverInfo.port,
