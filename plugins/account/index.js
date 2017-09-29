@@ -337,7 +337,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     autoRemove: 0,
   }).where({ id: accountId });
   checkAccount.deleteCheckAccountTimePort(port);
-  await checkAccount.checkServer();
+  // await checkAccount.checkServer();
   return;
 };
 

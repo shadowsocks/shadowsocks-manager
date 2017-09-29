@@ -197,11 +197,13 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             let flow = -1;
-            const checkId = '' + s.id + '|' + (a.port + s.shift);
+            const checkId = s.id + '|' + (a.port + s.shift);
             if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
-              if(nextTime <= 0) {
+              if(!checkAccountTime[checkId]) {
+                checkAccountTime[checkId] = Date.now() + 150 * 1000;
+              } else if(nextTime <= 0) {
                 checkAccountTime[checkId] = Date.now() + 10 * 60 * 1000;
               } else {
                 checkAccountTime[checkId] = Date.now() + nextTime;
