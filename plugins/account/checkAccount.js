@@ -199,6 +199,12 @@ const checkServer = async () => {
             let flow = -1;
             const checkId = s.id + '|' + (a.port + s.shift);
             if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
+              const sleep = time => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => resolve(), time);
+                });
+              };
+              await sleep(Math.ceil(Math.random() * 30000));
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
               if(!checkAccountTime[checkId]) {
@@ -264,8 +270,8 @@ const checkServer = async () => {
   });
   Promise.all(promises).then(success => {
     const sum = success.reduce((a, b) => a + b);
-    if(sum <= 40) {
-      let deleteCount = 40 - sum;
+    if(sum <= 50) {
+      let deleteCount = 50 - sum;
       Object.keys(checkAccountTime).filter((f, i, arr) => {
         return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
       }).forEach(f => {
