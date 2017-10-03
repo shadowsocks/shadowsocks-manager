@@ -249,6 +249,7 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
     let where = { id: serverId };
     if(port) {
       const server = await knex('server').where({ id: serverId }).then(success => success[0]);
+      if(!server) { return 0; }
       where.port = port + server.shift;
     }
     getFlow = (tableName, startTime, endTime) => {
@@ -355,6 +356,7 @@ const getServerPortFlow = async (serverId, port, timeArray, isMultiServerFlow) =
 
 const getlastConnectTime = async (serverId, port) => {
   const server = await knex('server').where({ id: serverId }).then(success => success[0]);
+  if(!server) { return { lastConnect: 0 }; }
   const lastConnectFromSaveFlow = await knex('saveFlow')
   .select(['time'])
   .where({ id: serverId, port: port + server.shift })
