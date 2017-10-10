@@ -4,6 +4,7 @@ const sessionParser = appRequire('plugins/webgui/index').sessionParser;
 const home = appRequire('plugins/webgui/server/home');
 const user = appRequire('plugins/webgui/server/user');
 const admin = appRequire('plugins/webgui/server/admin');
+const adminUser = appRequire('plugins/webgui/server/adminUser');
 const adminServer = appRequire('plugins/webgui/server/adminServer');
 const adminFlow = appRequire('plugins/webgui/server/adminFlow');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
@@ -74,8 +75,8 @@ app.get('/api/admin/flow/account/:accountId(\\d+)', isAdmin, adminFlow.getAccoun
 app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)', isAdmin, adminFlow.getServerPortFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isAdmin, adminFlow.getServerPortLastConnect);
 
-app.get('/api/admin/user', isAdmin, admin.getUsers);
-app.post('/api/admin/user/add', isAdmin, admin.addUser);
+app.get('/api/admin/user', isAdmin, adminUser.getUsers);
+app.post('/api/admin/user/add', isAdmin, adminUser.addUser);
 app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
 app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 
