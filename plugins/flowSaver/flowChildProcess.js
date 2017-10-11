@@ -126,6 +126,7 @@ const splitTime = (start, end) => {
   };
   let timeStart = start;
   let timeEnd = end;
+  let last = 'origin';
   while(timeStart < timeEnd) {
     if(isDay(timeStart) && next(timeStart, 'day') <= splitEnd.day && next(timeStart, 'day') <= end) {
       if(last === 'day' && time.day.length) {

@@ -167,6 +167,8 @@ Join the group if you have some problem: [https://t.me/ssmgr](https://t.me/ssmgr
 
 * [BandwagonHost](https://bandwagonhost.com/aff.php?aff=19999)
 
+* [dediserve](https://manage.dediserve.com/?affid=841)
+
 ### Donate
 If you find this project helpful, please consider making a donation:  
 

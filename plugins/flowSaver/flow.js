@@ -127,8 +127,7 @@ child.on('message', msg => {
   if(msg[0] === 'splitTime') {
     splitTimePromises[msg[1]](msg[2]);
     delete splitTimePromises[msg[1]];
-  }
-  if(msg[0] === 'sumFlow') {
+  } else if(msg[0] === 'sumFlow') {
     sumFlowPromises[msg[1]](msg[2]);
     delete sumFlowPromises[msg[1]];
   }
