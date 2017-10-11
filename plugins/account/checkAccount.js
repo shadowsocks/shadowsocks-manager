@@ -204,7 +204,8 @@ const checkServer = async () => {
                   setTimeout(() => resolve(), time);
                 });
               };
-              await sleep(Math.ceil(Math.random() * 30000));
+              const sleepTime = Math.ceil(Math.random() * 60000);
+              await sleep(sleepTime);
               flow = await checkFlow(s.id, a.port, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
               if(!checkAccountTime[checkId]) {

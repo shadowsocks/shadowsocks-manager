@@ -6,9 +6,6 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('flowSaver');
 
 const createTable = async () => {
-  if(config.empty) {
-    await knex.schema.dropTableIfExists(tableName);
-  }
   await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');
     table.string('name');

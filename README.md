@@ -70,7 +70,7 @@ For example, you can run this command:
   config file:  
   ```
   type: s
-  empty: false
+
   shadowsocks:
     address: 127.0.0.1:6001
   manager:
@@ -138,7 +138,6 @@ Usage: ssmgr [options]
     -V, --version                output the version number
     -c, --config [file]          config file, default: ~/.ssmgr/default.yml
     -d, --db [file]              sqlite3 file, sample: ~/.ssmgr/db.sqlite
-    -e, --empty                  clean database
     -t, --type [type]            type, s for server side, m for manager side
     -s, --shadowsocks [address]  ss-manager address, sample: 127.0.0.1:6001
     -m, --manager [address]      manager address, sample: 0.0.0.0:6002

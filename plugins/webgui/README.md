@@ -13,7 +13,6 @@ This plugin provide a webgui to control shadowsocks.
 
     ```
     type: m
-    empty: false
 
     manager:
       address: 127.0.0.1:6002
