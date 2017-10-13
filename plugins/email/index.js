@@ -118,7 +118,7 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
     }
     const code = Math.random().toString().substr(2, 6);
     if(text.indexOf('${code}') >= 0) {
-      text = text.replace(/\$\{code\}/g, '[ ' + code + ']');
+      text = text.replace(/\$\{code\}/g, '[ ' + code + ' ]');
     } else {
       text += '\n[ ' + code + ' ]';
     }

@@ -278,21 +278,36 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
       let knexQuery = knex(tableName)
       .sum('flow as sumFlow')
       .groupBy('port')
-      .select(['port']);
-      servers.forEach((server, index) => {
-        if(index === 0) {
-          knexQuery = knexQuery.where({
-            id: server.id,
-            port: port + server.shift,
-          });
-        } else {
-          knexQuery = knexQuery.orWhere({
-            id: server.id,
-            port: port + server.shift,
-          });
-        }
+      .select(['port']).whereBetween('time', [startTime, endTime - 1]).andWhere(function() {
+        let self = this;
+        servers.forEach((server, index) => {
+          if(index === 0) {
+            self = self.where({
+              id: server.id,
+              port: port + server.shift,
+            });
+          } else {
+            self = self.orWhere({
+              id: server.id,
+              port: port + server.shift,
+            });
+          }
+        });
       });
-      return knexQuery.whereBetween('time', [startTime, endTime - 1]).then(success => {
+      // servers.forEach((server, index) => {
+      //   if(index === 0) {
+      //     knexQuery = knexQuery.where({
+      //       id: server.id,
+      //       port: port + server.shift,
+      //     });
+      //   } else {
+      //     knexQuery = knexQuery.orWhere({
+      //       id: server.id,
+      //       port: port + server.shift,
+      //     });
+      //   }
+      // });
+      return knexQuery.then(success => {
         if(success[0]) { return success[0].sumFlow; }
         return 0;
       });
