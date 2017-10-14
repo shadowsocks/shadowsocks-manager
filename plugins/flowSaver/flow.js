@@ -140,7 +140,6 @@ const splitTime = async (start, end) => {
     child.send(['splitTime', random, start, end]);
   });
   
-
   const time = {
     day: [],
     hour: [],
@@ -447,6 +446,7 @@ const getServerUserFlow = (serverId, timeArray) => {
     if(timeEnd - timeStart === 7 * 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
       tableName = 'saveFlowDay';
     }
+    timeArray[1] -= 1;
   }
   const where = {};
   where[tableName + '.id'] = +serverId;
@@ -475,6 +475,7 @@ const getAccountServerFlow = (accountId, timeArray) => {
     if(timeEnd - timeStart === 7 * 24 * 3600 * 1000 && Date.now() - timeEnd >= 3600 * 1000) {
       tableName = 'saveFlowDay';
     }
+    timeArray[1] -= 1;
   }
   return knex(tableName).sum(`${ tableName }.flow as flow`).groupBy(`${ tableName }.id`)
   .select([
