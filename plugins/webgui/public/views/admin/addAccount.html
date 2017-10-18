@@ -6,10 +6,10 @@
             <div style="height: 30px;"></div>
             <form name="accountForm">
                 <md-input-container class="md-block">
-                    <label>类型</label>
+                    <label translate>类型</label>
                     <div layout="row">
                         <md-select ng-model="account.type" flex="75">
-                            <md-option ng-repeat="type in typeList" value="{{type.value}}">{{type.key}}</md-option>
+                            <md-option ng-repeat="type in typeList" value="{{type.value}}" translate>{{type.key}}</md-option>
                         </md-select>
                         <div ng-if="+account.type >= 2 && +account.type <= 5" layout="row" layout-align="end center">
                             <md-button ng-click="pickTime()">
@@ -19,21 +19,21 @@
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>端口</label>
+                    <label translate>端口</label>
                     <input type="number" required name="port" ng-model="account.port">
                     <div ng-messages="accountForm.port.$error">
                         <div ng-message="required">端口不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>密码</label>
+                    <label translate>密码</label>
                     <input type="text" required name="password" ng-model="account.password">
                     <div ng-messages="accountForm.password.$error">
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
-                    <label>流量(MB)</label>
+                    <label translate>流量(MB)</label>
                     <input type="number" required name="flow" ng-model="account.flow">
                     <div ng-messages="accountForm.flow.$error">
                         <div ng-message="required">流量不能为空</div>

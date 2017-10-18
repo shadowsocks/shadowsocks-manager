@@ -133,4 +133,7 @@ module.exports = {
   '新密码': 'New password',
   '重复新密码': 'New password again',
 
+  '类型': 'Type',
+  '端口': 'Port',
+  '流量(MB)': 'Data Usage(MB)',
 };
