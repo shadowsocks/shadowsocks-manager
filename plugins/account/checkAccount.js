@@ -67,8 +67,9 @@ const changePassword = async (id, password) => {
 const checkFlow = async (server, port, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
-    isMultiServerFlow = await knex('webguiSetting').select().
-    where({ key: 'account' })
+    isMultiServerFlow = await knex('webguiSetting')
+    .select()
+    .where({ key: 'account' })
     .then(success => {
       if(!success.length) {
         return Promise.reject('settings not found');
