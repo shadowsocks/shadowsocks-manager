@@ -152,9 +152,10 @@ const getAccountForUser = async (mac, ip) => {
   const serverReturn = await Promise.all(serverList);
   const data = {
     default: {
+      id: server.id,
       name: server.name,
       address,
-      port: account.port,
+      port: account.port + server.shift,
       password: account.password,
       method: server.method,
     },
