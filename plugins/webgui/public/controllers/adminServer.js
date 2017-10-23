@@ -203,9 +203,12 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       }
     };
     const setChart = (lineData, pieData) => {
+      const pieDataSort = pieData.sort((a, b) => {
+        return a.flow >= b.flow;
+      });
       $scope.pieChart = {
-        data: pieData.map(m => m.flow),
-        labels: pieData.map(m => m.port + (m.userName ? ` [${ m.userName }]` : '')),
+        data: pieDataSort.map(m => m.flow),
+        labels: pieDataSort.map(m => m.port + (m.userName ? ` [${ m.userName }]` : '')),
         options: {
           responsive: false,
           tooltips: {
@@ -215,7 +218,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
               label: function(tooltipItem, data) {
                 const label = data.labels[tooltipItem.index];
                 const datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                //return label + ': ' + scaleLabel(datasetLabel);
                 return [
                   label, scaleLabel(datasetLabel)
                 ];
