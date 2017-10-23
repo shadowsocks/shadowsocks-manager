@@ -25,8 +25,12 @@ if(config.plugins.email.type === 'smtp') {
     tls: {
       rejectUnauthorized: !config.plugins.email.allowUnauthorizedTls,
     },
+    proxy: config.plugins.email.proxy || '',
   };
   transporter = nodemailer.createTransport(emailConfig);
+  if(config.plugins.email.proxy && config.plugins.email.proxy.indexOf('socks') >= 0) {
+    transporter.set('proxy_socks_module', require('socks'));
+  }
 } else if (config.plugins.email.type === 'mailgun') {
   emailConfig = {
     baseUrl: config.plugins.email.baseUrl,
