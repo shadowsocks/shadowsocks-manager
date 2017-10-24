@@ -453,10 +453,11 @@ const getServerUserFlow = (serverId, timeArray) => {
   return knex(tableName).sum(`${ tableName }.flow as flow`)
   .select([
     `${ tableName }.port`,
+    `${ tableName }.accountId`,
     'user.userName',
   ])
-  .groupBy(`${ tableName }.port`)
-  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
+  .groupBy(`${ tableName }.accountId`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${ tableName }.accountId`)
   .leftJoin('user', 'account_plugin.userId', 'user.id')
   .where(where).whereBetween(`${ tableName }.time`, timeArray);
 };
@@ -482,7 +483,7 @@ const getAccountServerFlow = (accountId, timeArray) => {
     'server.name',
   ])
   .leftJoin('server', 'server.id', `${ tableName }.id`)
-  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${ tableName }.accountId`)
   .where({ 'account_plugin.id': accountId })
   .whereBetween(`${ tableName }.time`, timeArray);
 };
