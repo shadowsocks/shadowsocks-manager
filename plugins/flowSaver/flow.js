@@ -247,9 +247,7 @@ const splitTime = async (start, end) => {
 };
 
 const getFlowFromSplitTime = async (serverId, port, start, end) => {
-  // let where = {};
-  // if(serverId) { where.id = serverId; }
-  // if(port) { where.port = port; }
+
   const time = await splitTime(start, end);
   const sum = [];
   let getFlow;
@@ -273,38 +271,31 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
     };
   } else {
     const servers = await knex('server').select();
+    const accountId = (await knex('account_plugin').select(['id']).where({ port }).then(s => s[0])).id;
     getFlow = (tableName, startTime, endTime) => {
+      const where = {};
+      where[`${ tableName }.accountId`] = accountId;
+      console.log(where);
       let knexQuery = knex(tableName)
       .sum('flow as sumFlow')
-      .groupBy('port')
-      .select(['port']).whereBetween('time', [startTime, endTime - 1]).andWhere(function() {
-        let self = this;
-        servers.forEach((server, index) => {
-          if(index === 0) {
-            self = self.where({
-              id: server.id,
-              port: port + server.shift,
-            });
-          } else {
-            self = self.orWhere({
-              id: server.id,
-              port: port + server.shift,
-            });
-          }
-        });
-      });
-      // servers.forEach((server, index) => {
-      //   if(index === 0) {
-      //     knexQuery = knexQuery.where({
-      //       id: server.id,
-      //       port: port + server.shift,
-      //     });
-      //   } else {
-      //     knexQuery = knexQuery.orWhere({
-      //       id: server.id,
-      //       port: port + server.shift,
-      //     });
-      //   }
+      .groupBy('accountId')
+      .select(['port']).whereBetween('time', [startTime, endTime - 1])
+      .andWhere(where);
+      // .andWhere(function() {
+      //   let self = this;
+      //   servers.forEach((server, index) => {
+      //     if(index === 0) {
+      //       self = self.where({
+      //         id: server.id,
+      //         port: port + server.shift,
+      //       });
+      //     } else {
+      //       self = self.orWhere({
+      //         id: server.id,
+      //         port: port + server.shift,
+      //       });
+      //     }
+      //   });
       // });
       return knexQuery.then(success => {
         if(success[0]) { return success[0].sumFlow; }
