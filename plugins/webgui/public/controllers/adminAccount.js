@@ -106,6 +106,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
   ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
+    $scope.accountId = +$stateParams.accountId;
     $q.all([
       $http.get(`/api/admin/account/${ $stateParams.accountId }`),
       $http.get('/api/admin/server'),
@@ -118,18 +119,18 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         }
         return server;
       });
-      $scope.getServerPortData($scope.servers[0], $scope.account.port);
+      $scope.getServerPortData($scope.servers[0], $scope.accountId);
       $scope.isMultiServerFlow = success[2].data.multiServerFlow;
     }).catch(err => {
       $state.go('admin.account');
     });
     let currentServerId;
-    $scope.getServerPortData = (server, port) => {
+    $scope.getServerPortData = (server, accountId) => {
       const serverId = server.id;
       currentServerId = serverId;
       $scope.serverPortFlow = 0;
       $scope.lastConnect = 0;
-      adminApi.getServerPortData(serverId, port).then(success => {
+      adminApi.getServerPortData(serverId, accountId).then(success => {
         $scope.serverPortFlow = success.serverPortFlow;
         $scope.lastConnect = success.lastConnect;
         let maxFlow = 0;
@@ -142,13 +143,13 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.servers.forEach((server, index) => {
         if(server.id === serverId) { return; }
         $timeout(() => {
-          adminApi.getServerPortData(serverId, port);
+          adminApi.getServerPortData(serverId, accountId);
         }, index * 1000);
       });
     };
     $scope.setInterval($interval(() => {
       const serverId = currentServerId;
-      adminApi.getServerPortData(serverId, $scope.account.port).then(success => {
+      adminApi.getServerPortData(serverId, $scope.accountId).then(success => {
         if(serverId !== currentServerId) { return; }
         $scope.lastConnect = success.lastConnect;
         $scope.serverPortFlow = success.serverPortFlow;

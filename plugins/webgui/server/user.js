@@ -118,10 +118,10 @@ exports.getServers = (req, res) => {
 
 exports.getServerPortFlow = (req, res) => {
   const serverId = +req.params.serverId;
-  const port = +req.params.port;
+  const accountId = +req.params.accountId;
   let account = null;
   knex('account_plugin').select().where({
-    port,
+    id: accountId,
   }).then(success => {
     if(!success.length) {
       return Promise.reject('account not found');
@@ -152,7 +152,7 @@ exports.getServerPortFlow = (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value.multiServerFlow;
       }).then(isMultiServerFlow => {
-        return flow.getServerPortFlow(serverId, port, timeArray, isMultiServerFlow);
+        return flow.getServerPortFlow2(serverId, accountId, timeArray, isMultiServerFlow);
       });
     } else {
       return [ 0 ];
@@ -167,8 +167,8 @@ exports.getServerPortFlow = (req, res) => {
 
 exports.getServerPortLastConnect = (req, res) => {
   const serverId = +req.params.serverId;
-  const port = +req.params.port;
-  flow.getlastConnectTime(serverId, port)
+  const accountId = +req.params.accountId;
+  flow.getlastConnectTime(serverId, accountId)
   .then(success => {
     res.send(success);
   }).catch(err => {

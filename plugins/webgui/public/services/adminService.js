@@ -230,12 +230,12 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return preload.get(id, promise, 90 * 1000);
   };
 
-  const getServerPortData = (serverId, port) => {
-    const id = `getServerPortData:${ serverId }:${ port }:`;
+  const getServerPortData = (serverId, accountId) => {
+    const id = `getServerPortData:${ serverId }:${ accountId }:`;
     const promise = () => {
       return $q.all([
-        $http.get(`/api/admin/flow/${ serverId }/${ port }`),
-        $http.get(`/api/admin/flow/${ serverId }/${ port }/lastConnect`)
+        $http.get(`/api/admin/flow/${ serverId }/${ accountId }`),
+        $http.get(`/api/admin/flow/${ serverId }/${ accountId }/lastConnect`)
       ]).then(success => {
         return {
           serverPortFlow: success[0].data[0],
@@ -246,8 +246,8 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return preload.get(id, promise, 60 * 1000);
   };
 
-  const getUserPortLastConnect = port => {
-    return $http.get(`/api/admin/user/${ port }/lastConnect`).then(success => success.data);
+  const getUserPortLastConnect = accountId => {
+    return $http.get(`/api/admin/user/${ accountId }/lastConnect`).then(success => success.data);
   };
 
   const getIpInfo = ip => {
