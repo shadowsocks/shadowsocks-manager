@@ -275,7 +275,6 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
     getFlow = (tableName, startTime, endTime) => {
       const where = {};
       where[`${ tableName }.accountId`] = accountId;
-      console.log(where);
       let knexQuery = knex(tableName)
       .sum('flow as sumFlow')
       .groupBy('accountId')
