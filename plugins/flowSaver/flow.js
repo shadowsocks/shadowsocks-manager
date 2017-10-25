@@ -247,9 +247,7 @@ const splitTime = async (start, end) => {
 };
 
 const getFlowFromSplitTime = async (serverId, port, start, end) => {
-  // let where = {};
-  // if(serverId) { where.id = serverId; }
-  // if(port) { where.port = port; }
+
   const time = await splitTime(start, end);
   const sum = [];
   let getFlow;
@@ -273,38 +271,30 @@ const getFlowFromSplitTime = async (serverId, port, start, end) => {
     };
   } else {
     const servers = await knex('server').select();
+    const accountId = (await knex('account_plugin').select(['id']).where({ port }).then(s => s[0])).id;
     getFlow = (tableName, startTime, endTime) => {
+      const where = {};
+      where[`${ tableName }.accountId`] = accountId;
       let knexQuery = knex(tableName)
       .sum('flow as sumFlow')
-      .groupBy('port')
-      .select(['port']).whereBetween('time', [startTime, endTime - 1]).andWhere(function() {
-        let self = this;
-        servers.forEach((server, index) => {
-          if(index === 0) {
-            self = self.where({
-              id: server.id,
-              port: port + server.shift,
-            });
-          } else {
-            self = self.orWhere({
-              id: server.id,
-              port: port + server.shift,
-            });
-          }
-        });
-      });
-      // servers.forEach((server, index) => {
-      //   if(index === 0) {
-      //     knexQuery = knexQuery.where({
-      //       id: server.id,
-      //       port: port + server.shift,
-      //     });
-      //   } else {
-      //     knexQuery = knexQuery.orWhere({
-      //       id: server.id,
-      //       port: port + server.shift,
-      //     });
-      //   }
+      .groupBy('accountId')
+      .select(['port']).whereBetween('time', [startTime, endTime - 1])
+      .andWhere(where);
+      // .andWhere(function() {
+      //   let self = this;
+      //   servers.forEach((server, index) => {
+      //     if(index === 0) {
+      //       self = self.where({
+      //         id: server.id,
+      //         port: port + server.shift,
+      //       });
+      //     } else {
+      //       self = self.orWhere({
+      //         id: server.id,
+      //         port: port + server.shift,
+      //       });
+      //     }
+      //   });
       // });
       return knexQuery.then(success => {
         if(success[0]) { return success[0].sumFlow; }
@@ -453,10 +443,11 @@ const getServerUserFlow = (serverId, timeArray) => {
   return knex(tableName).sum(`${ tableName }.flow as flow`)
   .select([
     `${ tableName }.port`,
+    `${ tableName }.accountId`,
     'user.userName',
   ])
-  .groupBy(`${ tableName }.port`)
-  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
+  .groupBy(`${ tableName }.accountId`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${ tableName }.accountId`)
   .leftJoin('user', 'account_plugin.userId', 'user.id')
   .where(where).whereBetween(`${ tableName }.time`, timeArray);
 };
@@ -482,7 +473,7 @@ const getAccountServerFlow = (accountId, timeArray) => {
     'server.name',
   ])
   .leftJoin('server', 'server.id', `${ tableName }.id`)
-  .leftJoin('account_plugin', 'account_plugin.port', `${ tableName }.port`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${ tableName }.accountId`)
   .where({ 'account_plugin.id': accountId })
   .whereBetween(`${ tableName }.time`, timeArray);
 };
