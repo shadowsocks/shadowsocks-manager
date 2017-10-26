@@ -351,8 +351,8 @@ exports.getPaypalOrders = (req, res) => {
 };
 
 exports.getUserPortLastConnect = (req, res) => {
-  const port = +req.params.port;
-  flow.getUserPortLastConnect(port).then(success => {
+  const accountId = +req.params.accountId;
+  flow.getUserPortLastConnect(accountId).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
