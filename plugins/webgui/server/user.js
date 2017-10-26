@@ -152,7 +152,7 @@ exports.getServerPortFlow = (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value.multiServerFlow;
       }).then(isMultiServerFlow => {
-        return flow.getServerPortFlow2(serverId, accountId, timeArray, isMultiServerFlow);
+        return flow.getServerPortFlow(serverId, accountId, timeArray, isMultiServerFlow);
       });
     } else {
       return [ 0 ];

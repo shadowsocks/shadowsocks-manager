@@ -108,7 +108,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.accountId = +$stateParams.accountId;
     $q.all([
-      $http.get(`/api/admin/account/${ $stateParams.accountId }`),
+      $http.get(`/api/admin/account/${ $scope.accountId }`),
       $http.get('/api/admin/server'),
       $http.get('/api/admin/setting/account'),
     ]).then(success => {
@@ -122,6 +122,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.getServerPortData($scope.servers[0], $scope.accountId);
       $scope.isMultiServerFlow = success[2].data.multiServerFlow;
     }).catch(err => {
+      console.log(err);
       $state.go('admin.account');
     });
     let currentServerId;
@@ -257,8 +258,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         },
       };
     };
-    $scope.getChartData = (serverId) => {
-      adminApi.getAccountChartData(serverId, $stateParams.accountId, $scope.account.port, $scope.flowType.value, flowTime[$scope.flowType.value])
+    $scope.getChartData = serverId => {
+      adminApi.getAccountChartData(serverId, $scope.accountId, $scope.flowType.value, flowTime[$scope.flowType.value])
       .then(success => {
         $scope.sumFlow = success[0].data.reduce((a, b) => {
           return a + b;

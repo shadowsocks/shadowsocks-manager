@@ -4,7 +4,7 @@ const knex = appRequire('init/knex').knex;
 
 exports.getServerFlow = (req, res) => {
   const serverId = req.params.serverId;
-  const port = req.query.port;
+  const accountId = req.query.accountId;
   const type = req.query.type;
   const time = req.query.time || Date.now();
   let timeArray = [];
@@ -30,8 +30,8 @@ exports.getServerFlow = (req, res) => {
     }
   }
   let getFlow;
-  if(port) {
-    getFlow = flow.getServerPortFlow(serverId, +port, timeArray);
+  if(accountId) {
+    getFlow = flow.getServerPortFlow(serverId, +accountId, timeArray);
   } else {
     getFlow = flow.getServerFlow(serverId, timeArray);
   }
@@ -128,7 +128,7 @@ exports.getServerPortFlow = (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value.multiServerFlow;
       }).then(isMultiServerFlow => {
-        return flow.getServerPortFlow2(serverId, accountId, timeArray, isMultiServerFlow);
+        return flow.getServerPortFlow(serverId, accountId, timeArray, isMultiServerFlow);
       });
     } else {
       return [ 0 ];
