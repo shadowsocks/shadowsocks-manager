@@ -133,7 +133,7 @@ const getAccountForUser = async (mac, ip) => {
       return serverInfo;
     }).then(success => {
       if(startTime) {
-        return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.port, startTime, Date.now());
+        return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
       } else {
         return -1;
       }
