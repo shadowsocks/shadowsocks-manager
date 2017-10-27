@@ -64,7 +64,7 @@ const changePassword = async (id, password) => {
   return;
 };
 
-const checkFlow = async (server, port, startTime, endTime) => {
+const checkFlow = async (server, accountId, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
     isMultiServerFlow = await knex('webguiSetting')
@@ -79,7 +79,7 @@ const checkFlow = async (server, port, startTime, endTime) => {
     });
   } catch (err) {}
   const serverId = isMultiServerFlow ? null : server;
-  const userFlow = await flow.getFlowFromSplitTime(serverId, port, startTime, endTime);
+  const userFlow = await flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
   return userFlow;
 };
 
@@ -207,7 +207,7 @@ const checkServer = async () => {
               };
               const sleepTime = Math.ceil(Math.random() * 60000);
               await sleep(sleepTime);
-              flow = await checkFlow(s.id, a.port, startTime, Date.now());
+              flow = await checkFlow(s.id, a.id, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
               if(!checkAccountTime[checkId]) {
                 checkAccountTime[checkId] = Date.now() + 150 * 1000;
