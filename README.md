@@ -53,11 +53,15 @@ here is the `Dockerfile`
 FROM ubuntu:16.04
 MAINTAINER gyteng <igyteng@gmail.com>
 RUN apt-get update && \
-    apt-get install net-tools curl git sudo software-properties-common -y && \
+    apt-get install tzdata net-tools curl git sudo software-properties-common python-pip -y && \
+    pip install git+https://github.com/shadowsocks/shadowsocks.git@master && \
     add-apt-repository ppa:max-c-lv/shadowsocks-libev -y && \
     curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
     apt-get install -y nodejs shadowsocks-libev && \
-    npm i -g shadowsocks-manager
+    npm i -g shadowsocks-manager && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    rm /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata
 ENTRYPOINT ["/usr/bin/ssmgr"]
 ```
 
