@@ -317,11 +317,15 @@ const getClientIp = port => {
   clientIp = clientIp.filter(f => {
     return Date.now() - f.time <= 15 * 60 * 1000;
   });
-  return clientIp.filter(f => {
+  const result = [];
+  clientIp.filter(f => {
     return Date.now() - f.time <= 15 * 60 * 1000 && f.port === port;
   }).map(m => {
     return m.ip;
+  }).forEach(f => {
+    if(result.indexOf(f) < 0) { result.push(f); }
   });
+  return result;
 };
 
 exports.addAccount = addAccount;
