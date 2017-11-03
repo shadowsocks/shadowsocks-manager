@@ -32,7 +32,7 @@ const run = async () => {
   });
 
   shadowsocks.stderr.on('data', (data) => {
-    // console.log(`stderr: ${data}`);
+    // console.error(`stderr: ${data}`);
   });
 
   shadowsocks.on('close', (code) => {
