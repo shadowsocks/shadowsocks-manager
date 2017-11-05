@@ -13,11 +13,10 @@ gulp.task('clean', () => {
   ]);
 });
 
-gulp.task('freeAccountCopy', ['freeAccountBuild'], () => {
+gulp.task('freeAccountCopy', () => {
   return gulp
     .src([
       'plugins/freeAccount/libs/**',
-      'plugins/freeAccount/public/**',
       'plugins/freeAccount/views/**',
     ], {
       base: './'
@@ -81,13 +80,12 @@ gulp.task('babelCopy', ['clean'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babel', ['webguiCopy', 'babelCopy'], () => {
+gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
   return gulp.src([
     '**/*.js',
     '!node_modules/**',
     '!lib/**',
     '!plugins/freeAccount/libs/**',
-    '!plugins/freeAccount/public/**',
     '!plugins/webgui/libs/**',
     '!plugins/webgui/public/**',
   ])
