@@ -31,6 +31,7 @@ This plugin creates a website to share shadowsocks for free.
       freeAccount:
         use: true
         port: 12345
+        # port value can be a range: '1000-2000,2003,2005-2009'
         flow: 500000000
         time: 3600000
         address: 'free.ssmgr.top'
@@ -61,6 +62,7 @@ This plugin creates a website to share shadowsocks for free.
       freeAccount:
         use: true
         port: 12345
+        # port value can be a range: '1000-2000,2003,2005-2009'
         flow: 500000000
         time: 3600000
         address: 'free.ssmgr.top'

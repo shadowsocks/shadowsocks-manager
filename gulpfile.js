@@ -8,7 +8,6 @@ const webpackStream = require('webpack-stream');
 gulp.task('clean', () => {
   return del([
     'lib',
-    'plugins/freeAccount/libs/bundle.js',
     'plugins/webgui/libs/bundle.js',
   ]);
 });
