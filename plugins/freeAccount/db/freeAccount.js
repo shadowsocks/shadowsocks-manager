@@ -1,5 +1,3 @@
-'use strict';
-
 const knex = appRequire('init/knex').knex;
 const tableName = 'freeAccount';
 
@@ -9,14 +7,8 @@ const createTable = async() => {
     await knex.schema.dropTableIfExists(tableName);
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
-    table.string('address').primary();
-    table.string('email');
-    table.integer('port');
-    table.integer('flow');
-    table.integer('currentFlow');
-    table.bigInteger('time');
-    table.bigInteger('expired');
-    table.boolean('isDisabled');
+    table.string('key').primary();
+    table.string('value');
   });
 };
 
