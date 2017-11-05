@@ -13,34 +13,6 @@ gulp.task('clean', () => {
   ]);
 });
 
-gulp.task('freeAccountBuild', () => {
-  return gulp.src([
-    'plugins/freeAccount/public/**',
-  ])
-  .pipe(webpackStream({
-    entry: './plugins/freeAccount/public/app.js',
-    output: {
-      path: path.resolve(__dirname, 'libs'),
-      filename: 'bundle.js'
-    },
-    module: {
-      loaders: [{
-        test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['env']
-        }
-      }]
-    },
-    plugins: [new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    })]
-  }))
-  .pipe(gulp.dest('plugins/freeAccount/libs'));
-});
-
 gulp.task('freeAccountCopy', ['freeAccountBuild'], () => {
   return gulp
     .src([
@@ -109,7 +81,7 @@ gulp.task('babelCopy', ['clean'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
+gulp.task('babel', ['webguiCopy', 'babelCopy'], () => {
   return gulp.src([
     '**/*.js',
     '!node_modules/**',

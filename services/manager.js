@@ -48,6 +48,9 @@ const sendMessage = (data, options) => {
   if(options && options.host) {
     options.host = options.host.split(':')[0];
   }
+  if(!options) {
+    options = { host, port, password };
+  }
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {
       host,
