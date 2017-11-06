@@ -10,6 +10,7 @@ const flow = config.plugins.freeAccount.flow;
 const time = config.plugins.freeAccount.time;
 const address = config.plugins.freeAccount.address;
 const method = config.plugins.freeAccount.method;
+const analytics = config.plugins.freeAccount.analytics || '';
 
 let currentPassword = '';
 let updateTime = Date.now();
@@ -168,15 +169,19 @@ const app = express();
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views', path.resolve('./plugins/freeAccount/views'));
+app.set('trust proxy', 'loopback');
 app.use('/libs', express.static(path.resolve('./plugins/freeAccount/libs')));
 const listenPort = config.plugins.freeAccount.listen.split(':')[1];
 const listenHost = config.plugins.freeAccount.listen.split(':')[0];
 app.get('/', (req, res) => {
+  logger.info(`[${ req.ip }] /`);
   return res.render('index', {
-    qrcode: 'ss://' + Buffer.from(`${ method }:${ currentPassword }@${ address }:${ currentPort }`).toString('base64')
+    qrcode: 'ss://' + Buffer.from(`${ method }:${ currentPassword }@${ address }:${ currentPort }`).toString('base64'),
+    analytics,
   });
 });
 app.get('/updateTime', (req, res) => {
+  logger.info(`[${ req.ip }] /updateTime`);
   return res.send({ time: updateTime });
 });
 app.listen(listenPort, listenHost, () => {
