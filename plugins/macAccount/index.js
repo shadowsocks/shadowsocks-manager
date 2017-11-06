@@ -129,6 +129,7 @@ const getAccountForUser = async (mac, ip) => {
         address: success,
         port: account.port + f.shift,
         method: f.method,
+        comment: f.comment,
       };
       return serverInfo;
     }).then(success => {
@@ -158,6 +159,7 @@ const getAccountForUser = async (mac, ip) => {
       port: account.port + server.shift,
       password: account.password,
       method: server.method,
+      comment: server.comment,
     },
     servers: serverReturn,
   };
