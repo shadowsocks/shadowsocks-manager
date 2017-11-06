@@ -12,7 +12,7 @@ gulp.task('clean', () => {
   ]);
 });
 
-gulp.task('freeAccountCopy', () => {
+gulp.task('freeAccountCopy', ['clean'], () => {
   return gulp
     .src([
       'plugins/freeAccount/libs/**',
