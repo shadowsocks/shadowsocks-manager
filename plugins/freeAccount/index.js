@@ -11,6 +11,7 @@ const time = config.plugins.freeAccount.time;
 const address = config.plugins.freeAccount.address;
 const method = config.plugins.freeAccount.method;
 const analytics = config.plugins.freeAccount.analytics || '';
+const password = config.plugins.freeAccount.password || '';
 
 let currentPassword = '';
 let updateTime = Date.now();
@@ -38,7 +39,7 @@ randomPort();
 
 const randomPassword = () => {
   updateTime = Date.now();
-  currentPassword = Math.random().toString().substr(2, 10);
+  currentPassword = password + Math.random().toString().substr(2, 10);
   return currentPassword;
 };
 

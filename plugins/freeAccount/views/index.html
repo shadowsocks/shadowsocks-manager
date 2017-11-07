@@ -40,7 +40,7 @@
     </div>
     <script>
       var time = Date.now();
-      var qr = qrcode(7, 'Q');
+      var qr = qrcode(8, 'Q');
       qr.addData('<%= qrcode%>');
       qr.make();
       document.getElementById('qrcode').innerHTML = qr.createImgTag(6);

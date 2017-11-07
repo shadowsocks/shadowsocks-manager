@@ -257,6 +257,10 @@ app.get('/serviceworker.js', (req, res) => {
   
 });
 
+app.get('*', (req, res) => {
+  res.redirect('/');
+});
+
 // wss.on('connection', function connection(ws) {
 //   // console.log(ws);
 //   ws.on('message', function incoming(message) {
