@@ -15,7 +15,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 process.on('uncaughtException', (err) => {
-  logger.error(`Caught exception: ${err}`);
+  logger.error(`Caught exception:`);
+  logger.error(err);
 });
 
 require('./init/utils');
