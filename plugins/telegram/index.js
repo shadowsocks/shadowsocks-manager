@@ -125,5 +125,5 @@ appRequire('plugins/telegram/port');
 appRequire('plugins/telegram/help');
 // if(isFlowSaverUse) {
   appRequire('plugins/telegram/server');
-  // appRequire('plugins/telegram/flow');
+  appRequire('plugins/telegram/flow');
 // }
