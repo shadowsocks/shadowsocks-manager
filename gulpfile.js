@@ -48,10 +48,10 @@ gulp.task('webguiBuild', () => {
               'env', {
                 targets: {
                   browsers: [
-                    'Chrome >= 52',
+                    'Chrome >= 53',
                     'FireFox >= 44',
                     'Safari >= 7',
-                    'Explorer 11',
+                    'ie >= 9',
                     'last 4 Edge versions'
                   ]
                 }

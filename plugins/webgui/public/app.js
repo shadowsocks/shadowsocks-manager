@@ -1,3 +1,4 @@
+require('babel-polyfill');
 require('./index');
 
 require('./directives/focusMe');
