@@ -6,8 +6,25 @@ const cron = appRequire('init/cron');
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const port = config.plugins.freeAccount.port;
-const flow = config.plugins.freeAccount.flow;
-const time = config.plugins.freeAccount.time;
+let flow = config.plugins.freeAccount.flow;
+if(flow.toString().trim().substr(-1).toUpperCase() === 'K') {
+  flow = +flow.substr(0, flow.length - 1) * 1000;
+}
+if(flow.toString().trim().substr(-1).toUpperCase() === 'M') {
+  flow = +flow.substr(0, flow.length - 1) * 1000 * 1000;
+}
+if(flow.toString().trim().substr(-1).toUpperCase() === 'G') {
+  flow = +flow.substr(0, flow.length - 1) * 1000 * 1000 * 1000;
+}
+flow = +flow;
+let time = config.plugins.freeAccount.time;
+if(time.toString().trim().substr(-1).toUpperCase() === 'M') {
+  time = +time.substr(0, time.length - 1) * 60 * 1000;
+}
+if(time.toString().trim().substr(-1).toUpperCase() === 'H') {
+  time = +time.substr(0, time.length - 1) * 60 * 60 * 1000;
+}
+time = +time;
 const address = config.plugins.freeAccount.address;
 const method = config.plugins.freeAccount.method;
 const analytics = config.plugins.freeAccount.analytics || '';

@@ -33,7 +33,9 @@ This plugin creates a website to share shadowsocks for free.
         port: 12345
         # port value can be a range: '1000-2000,2003,2005-2009'
         flow: 500000000
+        # or 500M, 500K, 500G
         time: 3600000
+        # or 30m, 2h
         address: 'free.ssmgr.top'
         method: 'aes-256-cfb'
         listen: '0.0.0.0:80'
