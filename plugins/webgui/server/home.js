@@ -11,6 +11,10 @@ const emailPlugin = appRequire('plugins/email/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 
+const formatMacAddress = mac => {
+  return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
+};
+
 exports.signup = (req, res) => {
   req.checkBody('email', 'Invalid email').isEmail();
   req.checkBody('code', 'Invalid code').notEmpty();
@@ -156,7 +160,7 @@ exports.login = (req, res) => {
 exports.macLogin = (req, res) => {
   delete req.session.user;
   delete req.session.type;
-  const mac = req.body.mac;
+  const mac = formatMacAddress(req.body.mac);
   const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
   macAccount.login(mac, ip)
   .then(success => {
