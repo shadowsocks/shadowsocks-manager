@@ -19,6 +19,10 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 [https://wall.gyteng.com](https://wall.gyteng.com)
 
+## FreeAccount Demo:
+
+[https://free.ssmgr.top](https://free.ssmgr.top)
+
 ## Dependencies
 
 Node.js 6.*
