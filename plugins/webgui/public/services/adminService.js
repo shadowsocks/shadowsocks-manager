@@ -258,6 +258,13 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return preload.get(id, promise, 300 * 1000);
   };
 
+  const changePassword = (password, newPassword) => {
+    return $http.post('/api/admin/setting/changePassword', {
+      password,
+      newPassword,
+    });
+  };
+
   return {
     getUser,
     getOrder,
@@ -273,5 +280,6 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     getAccountChartData,
     getUserPortLastConnect,
     getIpInfo,
+    changePassword,
   };
 }]);

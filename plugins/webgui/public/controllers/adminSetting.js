@@ -18,6 +18,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toMail = () => {
       $state.go('admin.mailSetting');
     };
+    $scope.toPassword = () => {
+      $state.go('admin.passwordSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -227,6 +230,31 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     ];
     $scope.setEmail = type => {
       setEmailDialog.show(type);
+    };
+  }
+]).controller('AdminPasswordSettingController', ['$scope', '$http', '$timeout', '$state', 'adminApi', 'alertDialog', '$localStorage',
+  ($scope, $http, $timeout, $state, adminApi, alertDialog, $localStorage) => {
+    $scope.setTitle('修改密码');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.data = {
+      password: '',
+      newPassword: '',
+      newPasswordAgain: '',
+    };
+    $scope.confirm = () => {
+      alertDialog.loading();
+      adminApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
+        alertDialog.show('修改密码成功，请重新登录', '确定')
+        .then(() => {
+          return $http.post('/api/home/logout');
+        }).then(() => {
+          $localStorage.home = {};
+          $localStorage.admin = {};
+          $state.go('home.index');
+        });
+      }).catch(err => {
+        alertDialog.show('修改密码失败', '确定');
+      });
     };
   }
 ]);

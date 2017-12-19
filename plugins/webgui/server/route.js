@@ -110,7 +110,7 @@ app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
-// app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
+app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
