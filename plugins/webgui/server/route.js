@@ -110,6 +110,8 @@ app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
+// app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
+
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
@@ -131,7 +133,7 @@ app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
 app.post('/api/user/alipay/callback', user.alipayCallback);
 app.post('/api/user/paypal/callback', user.paypalCallback);
 
-app.post('/api/user/changePassword', user.changePassword);
+app.post('/api/user/changePassword', isUser, user.changePassword);
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);

@@ -1,4 +1,5 @@
 const knex = appRequire('init/knex').knex;
+const user = appRequire('plugins/user/index');
 
 const setDefaultValue = (key, value) => {
   knex('webguiSetting').select().where({
@@ -216,6 +217,21 @@ exports.modifyMail = (req, res) => {
     });
   }).then(success => {
     return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.changePassword = (req, res) => {
+  const oldPassword = req.body.password;
+  const newPassword = req.body.newPassword;
+  if(!oldPassword || !newPassword) {
+    return res.status(403).end();
+  }
+  const userId = req.session.user;
+  user.changePassword(userId, oldPassword, newPassword).then(success => {
+    res.send('success');
   }).catch(err => {
     console.log(err);
     res.status(403).end();
