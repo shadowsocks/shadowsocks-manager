@@ -113,9 +113,12 @@ const getAccountForUser = async (mac, ip) => {
     return success[0].value.multiServerFlow;
   });
   const servers = await serverPlugin.list({ status: false });
-  const server = servers.filter(s => {
+  let server = servers.filter(s => {
     return s.id === myServerId;
   })[0];
+  if(!server) {
+    server = servers[0];
+  }
   const address = await getIp(server.host);
   const validServers = JSON.parse(accountData.server);
   const serverList = servers.filter(f => {
