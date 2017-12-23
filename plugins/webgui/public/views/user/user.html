@@ -33,7 +33,7 @@
             <md-toolbar>
                 <div class="md-toolbar-tools">
                     <md-button class="md-icon-button" aria-label="menu" ng-click="menuButton()">
-                        <i class="material-icons">menu</i>
+                        <i class="material-icons">{{menuButtonIcon || 'menu'}}</i>
                     </md-button>
                     <div>{{ title | translate }}</div>
                     <span flex></span>

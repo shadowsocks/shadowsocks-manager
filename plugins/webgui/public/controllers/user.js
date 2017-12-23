@@ -21,6 +21,9 @@ app
       }
     };
     $scope.menuButton = function() {
+      if($scope.menuButtonIcon) {
+        return $scope.menuButtonClick();
+      }
       if ($mdMedia('gt-sm')) {
         $scope.innerSideNav = !$scope.innerSideNav;
       } else {
@@ -38,7 +41,7 @@ app
     }, {
       name: '设置',
       icon: 'settings',
-      click: 'user.changePassword'
+      click: 'user.settings'
     }, {
       name: 'divider',
     }, {
@@ -52,7 +55,7 @@ app
         });
       },
     }];
-    $scope.menuClick = (index) => {
+    $scope.menuClick = index => {
       $mdSidenav('left').close();
       if(typeof $scope.menus[index].click === 'function') {
         $scope.menus[index].click();
@@ -60,6 +63,16 @@ app
         $state.go($scope.menus[index].click);
       }
     };
+
+    $scope.menuButtonIcon = '';
+    $scope.menuButtonClick = () => {};
+    $scope.setMenuButton = (icon, to) => {
+      $scope.menuButtonIcon = icon;
+      $scope.menuButtonClick = () => {
+        $state.go(to);
+      };
+    };
+
     $scope.title = '';
     $scope.setTitle = str => { $scope.title = str; };
     $scope.interval = null;
@@ -69,6 +82,7 @@ app
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.title = '';
       $scope.interval && $interval.cancel($scope.interval);
+      $scope.menuButtonIcon = '';
     });
 
     if(!$localStorage.user.serverInfo && !$localStorage.user.accountInfo) {
@@ -259,9 +273,18 @@ app
     };
   }
 ])
-.controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+.controller('UserSettingsController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
   ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
     $scope.setTitle('设置');
+    $scope.toPassword = () => {
+      $state.go('user.changePassword');
+    };
+  }
+])
+.controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+    $scope.setTitle('修改密码');
+    $scope.setMenuButton('arrow_back', 'user.settings');
     $scope.data = {
       password: '',
       newPassword: '',
