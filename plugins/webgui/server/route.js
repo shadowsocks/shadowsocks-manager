@@ -134,8 +134,11 @@ app.post('/api/user/alipay/callback', user.alipayCallback);
 app.post('/api/user/paypal/callback', user.paypalCallback);
 
 app.post('/api/user/changePassword', isUser, user.changePassword);
-app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
-app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
+
+if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
+  app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
+  app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
+}
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
@@ -187,6 +190,7 @@ const configForFrontend = {
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
+  telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
 };
 
 const cdn = config.plugins.webgui.cdn;
