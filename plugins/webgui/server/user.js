@@ -368,3 +368,25 @@ exports.changePassword = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getTelegramCode = (req, res) => {
+  const telegramUser = appRequire('plugins/webgui_telegram/user');
+  const userId = req.session.user;
+  telegramUser.getCode(userId).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.unbindTelegram = (req, res) => {
+  const telegramUser = appRequire('plugins/webgui_telegram/user');
+  const userId = req.session.user;
+  telegramUser.unbindUser(userId).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

@@ -279,6 +279,9 @@ app
     $scope.toPassword = () => {
       $state.go('user.changePassword');
     };
+    $scope.toTelegram = () => {
+      $state.go('user.telegram');
+    };
   }
 ])
 .controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
@@ -304,6 +307,28 @@ app
       }).catch(err => {
         alertDialog.show('修改密码失败', '确定');
       });
+    };
+  }
+])
+.controller('UserTelegramController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+    $scope.setTitle('绑定Telegram');
+    $scope.setMenuButton('arrow_back', 'user.settings');
+    $scope.isLoading = true;
+    $scope.code = {};
+    const getCode = () => {
+      $http.get('/api/user/telegram/code').then(success => {
+        $scope.code = success.data;
+        $scope.isLoading = false;
+      });
+    };
+    $scope.setInterval($interval(() => {
+      getCode();
+    }, 5 * 1000));
+    getCode();
+    $scope.unbind = () => {
+      $scope.isLoading = true;
+      $http.post('/api/user/telegram/unbind');
     };
   }
 ]);
