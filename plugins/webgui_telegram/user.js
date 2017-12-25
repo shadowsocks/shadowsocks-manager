@@ -3,6 +3,37 @@ const getMe = appRequire('plugins/webgui_telegram/index').getMe;
 const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
 
+const isUserBindMessage = message => {
+  if(!message.message || !message.message.text) { return false; }
+  if(!message.message || !message.message.chat || !message.message.chat.type === 'private') { return false; }
+  if(!message.message.text.trim().match(/^\d{8}$/)) { return false; }
+  return true;
+};
+
+const codes = {};
+let fails = [];
+
+telegram.on('message', message => {
+  if(isUserBindMessage(message)) {
+    let isFailed = true;
+    const telegramId = message.message.chat.id.toString();
+    fails = fails.filter(f => { return Date.now() - f.time <= 10 * 60 * 1000; });
+    if(fails.filter(f => { return f.id === telegramId; }).length >= 10) {
+      console.log('telegram id is blocked in 10 mins');
+      return;
+    }
+    for(const code in codes) {
+      if(codes[code].code === message.message.text.trim()) {
+        isFailed = false;
+        bindUser(code, message);
+      }
+    }
+    if(isFailed) {
+      fails.push({ id: telegramId, time: Date.now() });
+    }
+  }
+});
+
 const bindUser = async (userId, message) => {
   const telegramId = message.message.chat.id.toString();
   if(!telegramId) {
@@ -31,21 +62,6 @@ const unbindUser = async (userId) => {
   await user.edit({ id: userId }, { telegram: null });
   telegram.emit('send', +exists.telegram, 'Telegram账号已经解除绑定');
 };
-
-telegram.on('message', message => {
-  console.log(message);
-  if(message.message && message.message.text) {
-    if(message.message.text.trim().match(/^\d{8}$/)) {
-      for(const code in codes) {
-        if(codes[code].code === message.message.text.trim()) {
-          bindUser(code, message);
-        }
-      }
-    }
-  }
-});
-
-const codes = {};
 
 exports.getCode = async (userId) => {
   const exists = await knex('user').where({

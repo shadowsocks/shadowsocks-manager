@@ -1,3 +1,5 @@
+import { is } from 'bluebird';
+
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
 const token = config.plugins.webgui_telegram.token;
@@ -64,7 +66,6 @@ const getUpdateId = async () => {
 
 const getMessage = async () => {
   const updateId = await getUpdateId();
-  // console.log('updateId: ' + updateId);
   try {
     const result = await rp({
       method: 'GET',
@@ -78,6 +79,7 @@ const getMessage = async () => {
     const resultObj = JSON.parse(result);
     if(resultObj.ok && resultObj.result.length) {
       resultObj.result.forEach(message => {
+        console.log(message);
         telegram.emit('message', message);
       });
     }
@@ -99,6 +101,15 @@ const getMe = async () => {
   return JSON.parse(result);
 };
 
+const isUser = async (telegramId) => {
+  const exists = await knex('user').where({
+    telegram: telegramId,
+    type: 'normal',
+  }).then(success => success[0]);
+  if(!exists) { return Promise.reject('not a tg user'); }
+  return exists.id;
+};
+
 const pull = () => {
   getMessage()
   .then(() => {
@@ -111,5 +122,7 @@ pull();
 
 exports.telegram = telegram;
 exports.getMe = getMe;
+exports.isUser = isUser;
 
 appRequire('plugins/webgui_telegram/user');
+appRequire('plugins/webgui_telegram/help');

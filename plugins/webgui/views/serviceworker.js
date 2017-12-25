@@ -1,6 +1,6 @@
 // importScripts('/libs/serviceworker-cache-polyfill.js');
 
-const ONLINE_CACHE_NAME = '2017-12-20 09:14:31' + ' <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2017-12-25 15:47:24' + ' <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
