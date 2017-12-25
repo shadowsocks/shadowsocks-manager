@@ -1,5 +1,3 @@
-import { is } from 'bluebird';
-
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
 const token = config.plugins.webgui_telegram.token;
@@ -126,3 +124,4 @@ exports.isUser = isUser;
 
 appRequire('plugins/webgui_telegram/user');
 appRequire('plugins/webgui_telegram/help');
+appRequire('plugins/webgui_telegram/account');

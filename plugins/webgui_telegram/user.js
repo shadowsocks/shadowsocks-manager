@@ -46,7 +46,7 @@ const bindUser = async (userId, message) => {
     return Promise.reject('');
   }
   await user.edit({ id: userId }, { telegram: telegramId });
-  telegram.emit('reply', message, 'Telegram账号绑定成功');
+  telegram.emit('reply', message, 'Telegram账号绑定成功，输入 help 查看使用方法');
 };
 
 const unbindUser = async (userId) => {
