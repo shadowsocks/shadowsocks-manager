@@ -17,6 +17,19 @@ const sendMessage = (text, chat_id, reply_to_message_id) => {
   });
 };
 
+const sendMarkdown = (text, chat_id) => {
+  return rp({
+    method: 'GET',
+    uri: url + 'sendMessage',
+    qs: {
+      chat_id,
+      text,
+      parse_mode: 'Markdown',
+    },
+    simple: false,
+  });
+};
+
 const sendKeyboard = (text, chat_id, keyboard) => {
   return rp({
     method: 'GET',
@@ -53,6 +66,9 @@ telegram.on('reply', (message, text) => {
 });
 telegram.on('send', (chat_id, text) => {
   sendMessage(text, chat_id);
+});
+telegram.on('markdwon', (chat_id, text) => {
+  sendMarkdown(text, chat_id);
 });
 telegram.on('keyboard', (chat_id, text, keyboard) => {
   sendKeyboard(text, chat_id, JSON.stringify(keyboard));

@@ -88,11 +88,11 @@ telegram.on('message', async message => {
     // console.log(myAccount);
     // console.log(myServer);
     if(!myAccount || !myServer) { return; }
-    let returnMessage = '';
-    const ssurl = 'ss://' + Buffer.from(`${ myServer.method }:${ myServer.password }@${ myServer.host }:${ myAccount.port }`).toString('base64');
-    returnMessage += `地址：${ myServer.host }\n端口：${ myAccount.port }\n密码：${ myServer.password }\n加密方式：${ myServer.method }\n\n`;
-    returnMessage += ssurl;
+    let returnMessage = '账号信息\n\n';
+    const ssurl = 'ss://' + Buffer.from(`${ myServer.method }:${ myAccount.password }@${ myServer.host }:${ myAccount.port }`).toString('base64');
+    returnMessage += `地址：${ myServer.host }\n端口：${ myAccount.port }\n密码：${ myAccount.password }\n加密方式：${ myServer.method }\n\n`;
     telegram.emit('send', telegramId, returnMessage);
+    telegram.emit('markdwon', telegramId, `[${ ssurl }](${ ssurl })`);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };
     telegram.emit('photo', telegramId, `${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`);
