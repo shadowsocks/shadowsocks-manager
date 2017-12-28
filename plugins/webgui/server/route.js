@@ -136,8 +136,10 @@ app.post('/api/user/paypal/callback', user.paypalCallback);
 app.post('/api/user/changePassword', isUser, user.changePassword);
 
 if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
+  const telegram = appRequire('plugins/webgui_telegram/account');
   app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
   app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
+  app.get('/api/user/telegram/qrcode/:qrcodeId', telegram.qrcode);
 }
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {

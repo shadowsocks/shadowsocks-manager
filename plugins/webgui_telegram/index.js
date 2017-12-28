@@ -17,6 +17,31 @@ const sendMessage = (text, chat_id, reply_to_message_id) => {
   });
 };
 
+const sendKeyboard = (text, chat_id, keyboard) => {
+  return rp({
+    method: 'GET',
+    uri: url + 'sendMessage',
+    qs: {
+      chat_id,
+      text,
+      reply_markup: keyboard,
+    },
+    simple: false,
+  });
+};
+
+const sendPhoto = (photo, chat_id) => {
+  return rp({
+    method: 'GET',
+    uri: url + 'sendPhoto',
+    qs: {
+      chat_id,
+      photo,
+    },
+    simple: false,
+  });
+};
+
 const EventEmitter = require('events');
 class Telegram extends EventEmitter {}
 const telegram = new Telegram();
@@ -28,6 +53,12 @@ telegram.on('reply', (message, text) => {
 });
 telegram.on('send', (chat_id, text) => {
   sendMessage(text, chat_id);
+});
+telegram.on('keyboard', (chat_id, text, keyboard) => {
+  sendKeyboard(text, chat_id, JSON.stringify(keyboard));
+});
+telegram.on('photo', (chat_id, photo) => {
+  sendPhoto(photo, chat_id);
 });
 
 const setUpdateId = async (id) => {
