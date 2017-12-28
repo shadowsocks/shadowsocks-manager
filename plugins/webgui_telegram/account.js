@@ -4,7 +4,14 @@ const account = appRequire('plugins/account/index');
 const server = appRequire('plugins/flowSaver/server');
 const config = appRequire('services/config').all();
 const crypto = require('crypto');
+const moment = require('moment');
 const qr = require('qr-image');
+
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(() => { resolve(); }, time);
+  });
+};
 
 const isGetAccount = message => {
   if(!message.message || !message.message.text) { return false; }
@@ -92,6 +99,19 @@ telegram.on('message', async message => {
     const ssurl = 'ss://' + Buffer.from(`${ myServer.method }:${ myAccount.password }@${ myServer.host }:${ myAccount.port }`).toString('base64');
     returnMessage += `地址：${ myServer.host }\n端口：${ myAccount.port }\n密码：${ myAccount.password }\n加密方式：${ myServer.method }\n\n`;
     telegram.emit('send', telegramId, returnMessage);
+    if(myAccount.type >= 2 && myAccount.type <= 5) {
+      let timePeriod = 0;
+      if(myAccount.type === 2) { timePeriod = 7 * 86400 * 1000; }
+      if(myAccount.type === 3) { timePeriod = 30 * 86400 * 1000; }
+      if(myAccount.type === 4) { timePeriod = 1 * 86400 * 1000; }
+      if(myAccount.type === 5) { timePeriod = 3600 * 1000; }
+      const data = JSON.parse(myAccount.data);
+      const expireTime = data.create + data.limit * timePeriod;
+      await sleep(250);
+      const isExpired = Date.now() >= expireTime ? ' [已过期]' : '';
+      telegram.emit('send', telegramId, `过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`);
+    }
+    await sleep(250);
     telegram.emit('markdwon', telegramId, `[${ ssurl }](${ ssurl })`);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };

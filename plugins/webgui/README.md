@@ -48,6 +48,9 @@ This plugin provide a webgui to control shadowsocks.
         merchantPrivateKey: 'xxxxxxxxxxxx'
         alipayPublicKey: 'xxxxxxxxxxx'
         gatewayUrl: 'https://openapi.alipay.com/gateway.do'
+      # webgui_telegram:
+      #   use: true
+      #   token: '191374681:AAw6oaVPR4nnY7T4CtW78QX-Xy2Q5WD3wmZ'
       paypal:
         use: true
         mode: 'live' # sandbox or live
