@@ -140,6 +140,7 @@ if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
   app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
   app.get('/api/user/telegram/qrcode/:qrcodeId', telegram.qrcode);
+  app.post('/api/user/telegram/login', telegram.login);
 }
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {

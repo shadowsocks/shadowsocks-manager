@@ -24,6 +24,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'HomeMacLoginController',
       templateUrl: `${ cdn }/public/views/home/macLogin.html`,
     })
+    .state('home.telegramLogin', {
+      url: '/login/telegram/:token',
+      controller: 'HomeTelegramLoginController',
+      templateUrl: `${ cdn }/public/views/home/telegramLogin.html`,
+    })
     .state('home.signup', {
       url: '/signup',
       controller: 'HomeSignupController',

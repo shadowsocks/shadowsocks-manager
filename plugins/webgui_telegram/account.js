@@ -1,3 +1,5 @@
+import { exec } from 'child_process';
+
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const isUser = appRequire('plugins/webgui_telegram/index').isUser;
 const account = appRequire('plugins/account/index');
@@ -11,6 +13,13 @@ const sleep = time => {
   return new Promise(resolve => {
     setTimeout(() => { resolve(); }, time);
   });
+};
+
+const isLogin = message => {
+  if(!message.message || !message.message.text) { return false; }
+  if(!message.message || !message.message.chat || !message.message.chat.type === 'private') { return false; }
+  if(message.message.text.trim() !== 'login') { return false; }
+  return true;
 };
 
 const isGetAccount = message => {
@@ -70,9 +79,15 @@ telegram.on('message', async message => {
         return validServers.indexOf(f.id) >= 0;
       }
     });
+    let row = 4;
+    if(servers.length <= 4) {
+      row = 2;
+    } else if (servers.length <= 9) {
+      row = 3;
+    }
     const serverArray = [];
     servers.forEach((server, index) => {
-      if(index % 4 === 0) {
+      if(index % row === 0) {
         serverArray.push([]);
       }
       serverArray[serverArray.length -1].push({
@@ -80,6 +95,14 @@ telegram.on('message', async message => {
         callback_data: `accountId[${ myAccount.id }]serverId[${ server.id }]`,
       });
     });
+    if(serverArray.length > 1 && serverArray[serverArray.length - 1].length < row) {
+      '----'.substr(0, row - serverArray[serverArray.length - 1].length).split('').forEach(f => {
+        serverArray[serverArray.length -1].push({
+          text: f,
+          callback_data: ' ',
+        });
+      });
+    }
     telegram.emit('keyboard', telegramId, '请选择服务器', {
       inline_keyboard: serverArray,
     });
@@ -92,8 +115,6 @@ telegram.on('message', async message => {
     const myServer = (await server.list()).filter(server => {
       return server.id === +serverId;
     })[0];
-    // console.log(myAccount);
-    // console.log(myServer);
     if(!myAccount || !myServer) { return; }
     let returnMessage = '账号信息\n\n';
     const ssurl = 'ss://' + Buffer.from(`${ myServer.method }:${ myAccount.password }@${ myServer.host }:${ myAccount.port }`).toString('base64');
@@ -116,6 +137,21 @@ telegram.on('message', async message => {
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };
     telegram.emit('photo', telegramId, `${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`);
+  } else if(isLogin(message)) {
+    const telegramId = message.message.chat.id.toString();
+    const userId = await isUser(telegramId);
+    const token = crypto.randomBytes(32).toString('hex');
+    tokens[token] = {
+      userId: +userId,
+      time: Date.now(),
+    };
+    telegram.emit('keyboard', telegramId, '登录', {
+      inline_keyboard: [[{
+        text: '点击这里登录网页版',
+        url: `${ config.plugins.webgui.site }/home/login/telegram/${ token }`
+      }]],
+    });
+    // telegram.emit('markdwon', telegramId, `[点击这里登录网页版](${ config.plugins.webgui.site }/home/login/telegram/${ token })`);
   }
 });
 
@@ -133,4 +169,24 @@ const qrcode = (req, res) => {
   code.pipe(res);
 };
 
+const tokens = {};
+
+const login = (req, res) => {
+  const token = req.body.token;
+  for(const t in tokens) {
+    if(Date.now() - tokens[t].time > 5 * 60 * 1000) {
+      delete tokens[t];
+    }
+  }
+  if(tokens[token] && Date.now() - tokens[token].time <= 5 * 60 * 1000) {
+    req.session.user = tokens[token].userId;
+    req.session.type = 'normal';
+    req.session.save();
+    return res.send('success');
+  } else {
+    return res.status(403).end();
+  }
+};
+
 exports.qrcode = qrcode;
+exports.login = login;

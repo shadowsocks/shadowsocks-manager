@@ -15,6 +15,6 @@ telegram.on('message', async message => {
   telegram.emit(
     'reply',
     message,
-    '该功能正在开发中，目前支持的指令：\n\naccount: 显示ss账号信息',
+    '该功能正在开发中，目前支持的指令：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版',
   );
 });

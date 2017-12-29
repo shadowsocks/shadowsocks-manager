@@ -166,16 +166,29 @@ app
     }
   ])
   .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage',
-  ($scope, $http, $state, $stateParams, $localStorage) => {
-    const mac = $stateParams.mac;
-    $http.post('/api/home/macLogin', {
-      mac,
-    }).then(() => {
-      $localStorage.home.status = 'normal';
-      $state.go('user.index');
-    }).catch(() => {
-      $state.go('home.index');
-    });
-  }
-])
+    ($scope, $http, $state, $stateParams, $localStorage) => {
+      const mac = $stateParams.mac;
+      $http.post('/api/home/macLogin', {
+        mac,
+      }).then(() => {
+        $localStorage.home.status = 'normal';
+        $state.go('user.index');
+      }).catch(() => {
+        $state.go('home.index');
+      });
+    }
+  ])
+  .controller('HomeTelegramLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage',
+    ($scope, $http, $state, $stateParams, $localStorage) => {
+      const token = $stateParams.token;
+      $http.post('/api/user/telegram/login', {
+        token,
+      }).then(() => {
+        $localStorage.home.status = 'normal';
+        $state.go('user.index');
+      }).catch(() => {
+        $state.go('home.index');
+      });
+    }
+  ])
 ;
