@@ -156,11 +156,11 @@ const isUser = async (telegramId) => {
 };
 
 const pull = () => {
-  getMessage()
+  return getMessage()
   .then(() => {
-    pull();
+    return pull();
   }).catch(() => {
-    pull();
+    return pull();
   });
 };
 pull();
