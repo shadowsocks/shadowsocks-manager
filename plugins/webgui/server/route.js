@@ -138,7 +138,9 @@ app.post('/api/user/changePassword', isUser, user.changePassword);
 if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   const telegram = appRequire('plugins/webgui_telegram/account');
   app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
+  app.get('/api/admin/telegram/code', isAdmin, adminSetting.getTelegramCode);
   app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
+  app.post('/api/admin/telegram/unbind', isAdmin, adminSetting.unbindTelegram);
   app.get('/api/user/telegram/qrcode/:qrcodeId', telegram.qrcode);
   app.post('/api/user/telegram/login', telegram.login);
 }

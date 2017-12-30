@@ -146,10 +146,19 @@ const getMe = async () => {
   return JSON.parse(result);
 };
 
-const isUser = async (telegramId) => {
+const isUser = async telegramId => {
   const exists = await knex('user').where({
     telegram: telegramId,
     type: 'normal',
+  }).then(success => success[0]);
+  if(!exists) { return Promise.reject('not a tg user'); }
+  return exists.id;
+};
+
+const isAdmin = async telegramId => {
+  const exists = await knex('user').where({
+    telegram: telegramId,
+    type: 'admin',
   }).then(success => success[0]);
   if(!exists) { return Promise.reject('not a tg user'); }
   return exists.id;
@@ -168,6 +177,7 @@ pull();
 exports.telegram = telegram;
 exports.getMe = getMe;
 exports.isUser = isUser;
+exports.isAdmin = isAdmin;
 
 appRequire('plugins/webgui_telegram/user');
 appRequire('plugins/webgui_telegram/help');

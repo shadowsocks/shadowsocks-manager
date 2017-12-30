@@ -21,6 +21,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toPassword = () => {
       $state.go('admin.passwordSetting');
     };
+    $scope.toTelegram = () => {
+      $state.go('admin.telegramSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -257,4 +260,26 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       });
     };
   }
-]);
+]).controller('AdminTelegramSettingController', ['$scope', '$http', '$interval', '$state',
+  ($scope, $http, $interval, $state) => {
+    $scope.setTitle('绑定Telegram');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.isLoading = true;
+    $scope.code = {};
+    const getCode = () => {
+      $http.get('/api/admin/telegram/code').then(success => {
+        $scope.code = success.data;
+        $scope.isLoading = false;
+      });
+    };
+    $scope.setInterval($interval(() => {
+      getCode();
+    }, 5 * 1000));
+    getCode();
+    $scope.unbind = () => {
+      $scope.isLoading = true;
+      $http.post('/api/admin/telegram/unbind');
+    };
+  }
+])
+;

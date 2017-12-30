@@ -67,6 +67,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/password',
       controller: 'AdminPasswordSettingController',
       templateUrl: `${ cdn }/public/views/admin/changePassword.html`,
+    })
+    .state('admin.telegramSetting', {
+      url: '/settings/telegram',
+      controller: 'AdminTelegramSettingController',
+      templateUrl: `${ cdn }/public/views/admin/telegramSetting.html`,
     });
   }
 ]);
