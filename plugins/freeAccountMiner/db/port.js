@@ -1,5 +1,5 @@
 const knex = appRequire('init/knex').knex;
-const tableName = 'freeAccount';
+const tableName = 'port';
 
 const config = appRequire('services/config').all();
 const createTable = async() => {
@@ -8,8 +8,12 @@ const createTable = async() => {
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
-    table.string('key').primary();
-    table.string('value');
+    table.string('user').primary();
+    table.bigInteger('create');
+    table.bigInteger('flow');
+    table.bigInteger('balance');
+    table.integer('port');
+    table.string('password');
   });
 };
 

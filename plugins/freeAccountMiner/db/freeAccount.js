@@ -1,5 +1,5 @@
 const knex = appRequire('init/knex').knex;
-const tableName = 'freeAccount';
+const tableName = 'freeAccountMiner';
 
 const config = appRequire('services/config').all();
 const createTable = async() => {
