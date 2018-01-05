@@ -14,6 +14,12 @@ if(config.plugins.alipay && config.plugins.alipay.use) {
   });
 }
 
+const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
+let telegram;
+if(isTelegram) {
+  telegram = appRequire('plugins/webgui_telegram/admin');
+}
+
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 const moment = require('moment');
@@ -123,6 +129,7 @@ cron.minute(async () => {
       push.pushMessage('支付成功', {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
+      isTelegram && telegram.push(`订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`);
       return account.setAccountLimit(userId, accountId, order.orderType)
       .then(() => {
         return knex('alipay').update({

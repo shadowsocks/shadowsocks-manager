@@ -20,7 +20,7 @@
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
                     <md-tab ng-repeat="server in a.serverList track by server.id"
                            label="{{server.name}}"
-                           md-on-select="getServerPortData(a, server.id, a.port)">
+                           md-on-select="getServerPortData(a, server.id)">
                         <div layout="row" layout-align="center center" layout-wrap>
                             <div flex="60" flex-xs="100">
                                 <md-list>

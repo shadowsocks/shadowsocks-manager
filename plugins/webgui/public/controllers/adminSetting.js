@@ -18,6 +18,12 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toMail = () => {
       $state.go('admin.mailSetting');
     };
+    $scope.toPassword = () => {
+      $state.go('admin.passwordSetting');
+    };
+    $scope.toTelegram = () => {
+      $state.go('admin.telegramSetting');
+    };
     $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
@@ -229,4 +235,51 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       setEmailDialog.show(type);
     };
   }
-]);
+]).controller('AdminPasswordSettingController', ['$scope', '$http', '$timeout', '$state', 'adminApi', 'alertDialog', '$localStorage',
+  ($scope, $http, $timeout, $state, adminApi, alertDialog, $localStorage) => {
+    $scope.setTitle('修改密码');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.data = {
+      password: '',
+      newPassword: '',
+      newPasswordAgain: '',
+    };
+    $scope.confirm = () => {
+      alertDialog.loading();
+      adminApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
+        alertDialog.show('修改密码成功，请重新登录', '确定')
+        .then(() => {
+          return $http.post('/api/home/logout');
+        }).then(() => {
+          $localStorage.home = {};
+          $localStorage.admin = {};
+          $state.go('home.index');
+        });
+      }).catch(err => {
+        alertDialog.show('修改密码失败', '确定');
+      });
+    };
+  }
+]).controller('AdminTelegramSettingController', ['$scope', '$http', '$interval', '$state',
+  ($scope, $http, $interval, $state) => {
+    $scope.setTitle('绑定Telegram');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.isLoading = true;
+    $scope.code = {};
+    const getCode = () => {
+      $http.get('/api/admin/telegram/code').then(success => {
+        $scope.code = success.data;
+        $scope.isLoading = false;
+      });
+    };
+    $scope.setInterval($interval(() => {
+      getCode();
+    }, 5 * 1000));
+    getCode();
+    $scope.unbind = () => {
+      $scope.isLoading = true;
+      $http.post('/api/admin/telegram/unbind');
+    };
+  }
+])
+;

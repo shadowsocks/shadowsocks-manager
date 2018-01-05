@@ -1,0 +1,34 @@
+<div>
+    <md-card>
+        <md-card-content>
+            <md-divider></md-divider>
+            <md-list ng-show="isLoading">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex layout="row" layout-align="center center">
+                            <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-list ng-show="code.code && !isLoading">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div>请添加 Telegram 账号 <a ng-href="https://t.me/{{code.telegram}}" target="_blank">@{{ code.telegram }}</a> 并输入“{{ code.code }}”完成绑定</div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-list ng-show="code.user && !isLoading">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>已绑定</div>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button class="md-primary" ng-click="unbind()">解除绑定&gt;&gt;</md-button>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

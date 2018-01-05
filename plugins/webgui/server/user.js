@@ -118,10 +118,10 @@ exports.getServers = (req, res) => {
 
 exports.getServerPortFlow = (req, res) => {
   const serverId = +req.params.serverId;
-  const port = +req.params.port;
+  const accountId = +req.params.accountId;
   let account = null;
   knex('account_plugin').select().where({
-    port,
+    id: accountId,
   }).then(success => {
     if(!success.length) {
       return Promise.reject('account not found');
@@ -152,7 +152,7 @@ exports.getServerPortFlow = (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value.multiServerFlow;
       }).then(isMultiServerFlow => {
-        return flow.getServerPortFlow(serverId, port, timeArray, isMultiServerFlow);
+        return flow.getServerPortFlow(serverId, accountId, timeArray, isMultiServerFlow);
       });
     } else {
       return [ 0 ];
@@ -167,8 +167,8 @@ exports.getServerPortFlow = (req, res) => {
 
 exports.getServerPortLastConnect = (req, res) => {
   const serverId = +req.params.serverId;
-  const port = +req.params.port;
-  flow.getlastConnectTime(serverId, port)
+  const accountId = +req.params.accountId;
+  flow.getlastConnectTime(serverId, accountId)
   .then(success => {
     res.send(success);
   }).catch(err => {
@@ -362,6 +362,28 @@ exports.changePassword = (req, res) => {
   }
   const userId = req.session.user;
   user.changePassword(userId, oldPassword, newPassword).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getTelegramCode = (req, res) => {
+  const telegramUser = appRequire('plugins/webgui_telegram/user');
+  const userId = req.session.user;
+  telegramUser.getCode(userId).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.unbindTelegram = (req, res) => {
+  const telegramUser = appRequire('plugins/webgui_telegram/user');
+  const userId = req.session.user;
+  telegramUser.unbindUser(userId).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);

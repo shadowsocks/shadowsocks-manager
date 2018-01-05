@@ -1,5 +1,3 @@
-'use strict';
-
 const telegram = appRequire('plugins/telegram/index').telegram;
 const knex = appRequire('init/knex').knex;
 

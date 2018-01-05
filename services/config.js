@@ -24,9 +24,14 @@ if(global.configFile) {
 
 try {
   logger.info('Config file path: ', configFilePath);
-  config = yaml.safeLoad(fs.readFileSync(configFilePath), 'utf8');
+  const configFileData = fs.readFileSync(configFilePath);
+  if(configFilePath.substr(configFilePath.length - 5) === '.json') {
+    config = JSON.parse(configFileData);
+  } else {
+    config = yaml.safeLoad(configFileData, 'utf8');
+  }
 } catch (err) {
-  logger.info(err);
+  logger.error(err);
 }
 
 exports.all = () => {

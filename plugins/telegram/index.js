@@ -1,5 +1,3 @@
-'use strict';
-
 const log4js = require('log4js');
 const logger = log4js.getLogger('telegram');
 
@@ -7,7 +5,7 @@ const rp = require('request-promise');
 const knex = appRequire('init/knex').knex;
 const _ = require('lodash');
 const config = appRequire('services/config').all();
-const isFlowSaverUse = _.get(config, 'plugins.flowSaver.use');
+// const isFlowSaverUse = _.get(config, 'plugins.flowSaver.use');
 const token = config.plugins.telegram.token;
 
 const url = `https://api.telegram.org/bot${ token }/`;
@@ -125,7 +123,5 @@ exports.telegram = telegram;
 appRequire('plugins/telegram/auth');
 appRequire('plugins/telegram/port');
 appRequire('plugins/telegram/help');
-if(isFlowSaverUse) {
-  appRequire('plugins/telegram/server');
-  appRequire('plugins/telegram/flow');
-}
+appRequire('plugins/telegram/server');
+appRequire('plugins/telegram/flow');

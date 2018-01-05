@@ -1,14 +1,12 @@
-'use strict';
-
 const telegram = appRequire('plugins/telegram/index').telegram;
 const managerAddress = appRequire('plugins/telegram/managerAddress');
-const flowSaverServer = appRequire('plugins/flowSaver/server');
+const serverManager = appRequire('plugins/telegram/serverManager');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('telegram');
 
 const list = (message) => {
-  flowSaverServer.list().then(servers => {
+  serverManager.list().then(servers => {
     let str = '';
     servers.forEach(server => {
       str += `[${server.id}]${server.name}, ${server.host}:${server.port} ${server.password}\n`;
@@ -20,7 +18,7 @@ const list = (message) => {
 };
 
 const add = (message, name, host, port, password) => {
-  flowSaverServer.add(name, host, port, password)
+  serverManager.add(name, host, port, password)
   .then(success => {
     telegram.emit('send', message, `Add server ${name} success.`);
   })
@@ -30,7 +28,7 @@ const add = (message, name, host, port, password) => {
 };
 
 const edit = (message, id, name, host, port, password) => {
-  flowSaverServer.edit(id, name, host, port, password)
+  serverManager.edit({id, name, host, port, password})
   .then(success => {
     telegram.emit('send', message, `Edit server ${name} success.`);
   })
@@ -40,7 +38,7 @@ const edit = (message, id, name, host, port, password) => {
 };
 
 const del = (message, id) => {
-  flowSaverServer.del(id)
+  serverManager.del(id)
   .then(success => {
     telegram.emit('send', message, `Delete server ${id} success.`);
   })
@@ -50,7 +48,7 @@ const del = (message, id) => {
 };
 
 const switchServer = (message, id) => {
-  flowSaverServer.list().then(servers => {
+  serverManager.list().then(servers => {
     const server = servers.filter(f => {
       return f.id === +id;
     })[0];

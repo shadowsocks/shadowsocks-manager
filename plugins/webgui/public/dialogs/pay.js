@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdDialog, $interval, $timeout, $http) => {
+app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$localStorage', ($mdDialog, $interval, $timeout, $http, $localStorage) => {
   const publicInfo = {
     config: JSON.parse(window.ssmgrConfig),
     orderType: 'month',
@@ -52,7 +52,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', ($mdD
     const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
       if(publicInfo.paypal[publicInfo.orderType]) {
         paypal.Button.render({
-          locale: 'zh_CN',
+          locale: $localStorage.language ? $localStorage.language.replace('-', '_') : 'zh_CN',
           style: {
             label: 'checkout', // checkout | credit | pay
             size:  'medium',   // small    | medium | responsive

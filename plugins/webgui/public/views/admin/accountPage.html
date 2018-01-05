@@ -22,7 +22,7 @@
                 <md-tabs md-selected="0" md-border-bottom md-dynamic-height>
                     <md-tab ng-repeat="server in servers track by server.id"
                             label="{{server.name}}"
-                            md-on-select="getServerPortData(server, account.port)"
+                            md-on-select="getServerPortData(server, accountId)"
                             ng-disabled="account.server && account.server.indexOf(server.id) < 0">
                         <div layout="row" layout-align="center center" layout-wrap>
                             <div flex-lg="10"></div>
@@ -80,7 +80,7 @@
                                           <div flex="60" style="text-align:right">
                                               <span ng-if="account.type === 1" translate>不限时</span>
                                               <span ng-if="account.type >=2 && account.type <= 5">
-                                                  <span style="font-size: 0.9em;">{{account.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(account.data.expire)}}">{{ account.data.expire | timeago }}</span>
+                                                  <span style="font-size: 0.9em;">{{account.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(account.data.expire)}}">{{ account.data.expire | timeago | translateTime }}</span>
                                               </span>
                                           </div>
                                         </div>
@@ -89,7 +89,7 @@
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center" ng-click="clientIp(server.id, account.id)">
                                           <div flex="40" translate>最近连接：</div><div flex="60" style="text-align:right">
-                                              <span ng-if="lastConnect" style="font-size: 0.9em;">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="lastConnect" style="font-size: 0.9em;">{{ lastConnect | timeago }}</span>
+                                              <span ng-if="lastConnect" style="font-size: 0.9em;">{{lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="lastConnect" style="font-size: 0.9em;">{{ lastConnect | timeago | translateTime }}</span>
                                           </div>
                                         </div>
                                     </md-list-item>
@@ -132,7 +132,7 @@
                         </div>
                         <div layout="row" layout-xs="column" layout-sm="column" layout-warp layout-align="center center">
                             <div flex-md="5" flex-gt-md="15"></div>
-                            <div flex>
+                            <div width="{{getChartSize().line[0]}}">
                                 <div layout="row" layout-align="center center">
                                     <div>
                                         <canvas
@@ -148,11 +148,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div flex>
+                            <div width="{{getChartSize().pie[0]}}">
                                 <div layout="row" layout-align="center center">
                                     <div>
                                         <canvas class="chart chart-pie"
-                                            width="{{getChartSize().pie[0]}}"
+                                            width="{{getChartSize().pie[0]}} + 200"
                                             height="{{getChartSize().pie[1]}}"
                                             chart-data="pieChart.data"
                                             chart-labels="pieChart.labels"

@@ -11,9 +11,21 @@ const moment = require('moment');
 const minute = 1;
 const time = minute * 60 * 1000;
 
+let accountInfo = {};
+
+const updateAccountInfo = async () => {
+  const accounts = await knex('account_plugin').select().where({});
+  accountInfo = {};
+  accounts.forEach(account => {
+    accountInfo[account.port] = account.id;
+  });
+  return;
+};
+
 const saveFlow = async () => {
   try {
-    const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password']);
+    const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password', 'shift']);
+    await updateAccountInfo();
     const promises = [];
     const saveServerFlow = async server => {
       const lastestFlow = await knex('saveFlow').select(['time']).where({
@@ -34,6 +46,7 @@ const saveFlow = async () => {
         flow = flow.map(f => {
           return {
             id: server.id,
+            accountId: accountInfo[f.port - server.shift] || 0,
             port: f.port,
             flow: f.sumFlow,
             time: Date.now(),
@@ -45,7 +58,7 @@ const saveFlow = async () => {
           return;
         }
         const insertPromises = [];
-        for(let i = 0; i < Math.ceil(flow.length/50); i++) {
+        for(let i = 0; i < Math.ceil(flow.length / 50); i++) {
           const insert = knex('saveFlow').insert(flow.slice(i * 50, i * 50 + 50));
           insertPromises.push(insert);
         }

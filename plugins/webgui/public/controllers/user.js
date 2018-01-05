@@ -21,6 +21,9 @@ app
       }
     };
     $scope.menuButton = function() {
+      if($scope.menuButtonIcon) {
+        return $scope.menuButtonClick();
+      }
       if ($mdMedia('gt-sm')) {
         $scope.innerSideNav = !$scope.innerSideNav;
       } else {
@@ -38,7 +41,7 @@ app
     }, {
       name: '设置',
       icon: 'settings',
-      click: 'user.changePassword'
+      click: 'user.settings'
     }, {
       name: 'divider',
     }, {
@@ -52,7 +55,7 @@ app
         });
       },
     }];
-    $scope.menuClick = (index) => {
+    $scope.menuClick = index => {
       $mdSidenav('left').close();
       if(typeof $scope.menus[index].click === 'function') {
         $scope.menus[index].click();
@@ -60,6 +63,16 @@ app
         $state.go($scope.menus[index].click);
       }
     };
+
+    $scope.menuButtonIcon = '';
+    $scope.menuButtonClick = () => {};
+    $scope.setMenuButton = (icon, to) => {
+      $scope.menuButtonIcon = icon;
+      $scope.menuButtonClick = () => {
+        $state.go(to);
+      };
+    };
+
     $scope.title = '';
     $scope.setTitle = str => { $scope.title = str; };
     $scope.interval = null;
@@ -69,6 +82,7 @@ app
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.title = '';
       $scope.interval && $interval.cancel($scope.interval);
+      $scope.menuButtonIcon = '';
     });
 
     if(!$localStorage.user.serverInfo && !$localStorage.user.accountInfo) {
@@ -169,11 +183,11 @@ app
       return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
     };
 
-    $scope.getServerPortData = (account, serverId, port) => {
+    $scope.getServerPortData = (account, serverId) => {
       account.currentServerId = serverId;
       const scale = $scope.servers.filter(f => f.id === serverId)[0].scale;
       if(!account.isFlowOutOfLimit) { account.isFlowOutOfLimit = {}; }
-      userApi.getServerPortData(account, serverId, port).then(success => {
+      userApi.getServerPortData(account, serverId).then(success => {
         account.lastConnect = success.lastConnect;
         account.serverPortFlow = success.flow;
         let maxFlow = 0;
@@ -188,7 +202,7 @@ app
       if(status === 'visible') {
         if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
           $scope.account.forEach(a => {
-            $scope.getServerPortData(a, a.currentServerId, a.port);
+            $scope.getServerPortData(a, a.currentServerId);
           });
         }
       }
@@ -258,9 +272,22 @@ app
       };
     };
   }
-]).controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+])
+.controller('UserSettingsController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
   ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
     $scope.setTitle('设置');
+    $scope.toPassword = () => {
+      $state.go('user.changePassword');
+    };
+    $scope.toTelegram = () => {
+      $state.go('user.telegram');
+    };
+  }
+])
+.controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+    $scope.setTitle('修改密码');
+    $scope.setMenuButton('arrow_back', 'user.settings');
     $scope.data = {
       password: '',
       newPassword: '',
@@ -280,6 +307,28 @@ app
       }).catch(err => {
         alertDialog.show('修改密码失败', '确定');
       });
+    };
+  }
+])
+.controller('UserTelegramController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+    $scope.setTitle('绑定Telegram');
+    $scope.setMenuButton('arrow_back', 'user.settings');
+    $scope.isLoading = true;
+    $scope.code = {};
+    const getCode = () => {
+      $http.get('/api/user/telegram/code').then(success => {
+        $scope.code = success.data;
+        $scope.isLoading = false;
+      });
+    };
+    $scope.setInterval($interval(() => {
+      getCode();
+    }, 5 * 1000));
+    getCode();
+    $scope.unbind = () => {
+      $scope.isLoading = true;
+      $http.post('/api/user/telegram/unbind');
     };
   }
 ]);

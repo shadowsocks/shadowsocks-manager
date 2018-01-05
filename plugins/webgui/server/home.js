@@ -11,6 +11,16 @@ const emailPlugin = appRequire('plugins/email/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 
+const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
+let telegram;
+if(isTelegram) {
+  telegram = appRequire('plugins/webgui_telegram/admin');
+}
+
+const formatMacAddress = mac => {
+  return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
+};
+
 exports.signup = (req, res) => {
   req.checkBody('email', 'Invalid email').isEmail();
   req.checkBody('code', 'Invalid code').notEmpty();
@@ -118,6 +128,7 @@ exports.signup = (req, res) => {
     push.pushMessage('注册', {
       body: `用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`,
     });
+    isTelegram && telegram.push(`用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`);
     res.send('success');
   }).catch(err => {
     logger.error(`[${ req.body.email }] signup fail: ${ err }`);
@@ -156,7 +167,7 @@ exports.login = (req, res) => {
 exports.macLogin = (req, res) => {
   delete req.session.user;
   delete req.session.type;
-  const mac = req.body.mac;
+  const mac = formatMacAddress(req.body.mac);
   const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
   macAccount.login(mac, ip)
   .then(success => {

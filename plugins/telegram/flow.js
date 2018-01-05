@@ -1,16 +1,14 @@
-'use strict';
-
 const telegram = appRequire('plugins/telegram/index').telegram;
 const managerAddress = appRequire('plugins/telegram/managerAddress');
-const flow = appRequire('plugins/flowSaver/flow');
+const flow = appRequire('plugins/telegram/flowSaver');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('telegram');
 
 const flowNumber = (number) => {
   if(number < 1000) return number + ' B';
-  else if(number < 1000 * 1000) return number / 1000 + ' KB';
-  else if(number < 1000 * 1000 * 1000) return (number / 1000000).toFixed(2) + ' MB';
+  else if(number < 1000 * 1000) return (number / 1000).toFixed(0) + ' KB';
+  else if(number < 1000 * 1000 * 1000) return (number / 1000000).toFixed(1) + ' MB';
   else if(number < 1000 * 1000 * 1000 * 1000) return (number / 1000000000).toFixed(3) + ' GB';
 };
 

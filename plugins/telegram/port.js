@@ -1,5 +1,3 @@
-'use strict';
-
 const telegram = appRequire('plugins/telegram/index').telegram;
 const manager = appRequire('services/manager');
 const managerAddress = appRequire('plugins/telegram/managerAddress');

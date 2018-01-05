@@ -6,7 +6,7 @@ const client = dgram.createSocket('udp4');
 const version = appRequire('package').version;
 const exec = require('child_process').exec;
 
-const clientIp = {};
+let clientIp = [];
 
 const config = appRequire('services/config').all();
 const host = config.shadowsocks.address.split(':')[0];
@@ -47,11 +47,16 @@ const connect = () => {
       for(const rf in realFlow) {
         if(realFlow[rf]) {
           (function(port) {
-            if(!clientIp[+port]) { clientIp[+port] = []; }
-            getIp(+port).then(ip => {
-              if(ip.length) {
-                clientIp[+port].push({ time: Date.now(), ip });
-              }
+            // if(!clientIp[+port]) { clientIp[+port] = []; }
+            // getIp(+port).then(ip => {
+            //   if(ip.length) {
+            //     clientIp[+port].push({ time: Date.now(), ip });
+            //   }
+            // });
+            getIp(+port).then(ips => {
+              ips.forEach(ip => {
+                clientIp.push({ port: +port, time: Date.now(), ip });
+              });
             });
           })(rf);
         }
@@ -293,21 +298,33 @@ const getIp = port => {
 };
 
 const getClientIp = port => {
+  // const result = [];
+  // if(!clientIp[port] || clientIp[port].length === 0) { return result; }
+  // const recentIp = clientIp[port][clientIp[port].length - 1].ip;
+  // clientIp[port] = clientIp[port].filter(m => {
+  //   return Date.now() - m.time <= 60 * 60 * 1000;
+  // });
+  // clientIp[port].forEach(ci => {
+  //   ci.ip.forEach(i => {
+  //     if(result.indexOf(i) < 0) { result.push(i); }
+  //   });
+  // });
+  // if(!result.length) {
+  //   clientIp[port].push({ time: Date.now(), ip: recentIp });
+  //   return recentIp;
+  // }
+  // return result;
+  clientIp = clientIp.filter(f => {
+    return Date.now() - f.time <= 15 * 60 * 1000;
+  });
   const result = [];
-  if(!clientIp[port] || clientIp[port].length === 0) { return result; }
-  const recentIp = clientIp[port][clientIp[port].length - 1].ip;
-  clientIp[port] = clientIp[port].filter(m => {
-    return Date.now() - m.time <= 60 * 60 * 1000;
+  clientIp.filter(f => {
+    return Date.now() - f.time <= 15 * 60 * 1000 && f.port === port;
+  }).map(m => {
+    return m.ip;
+  }).forEach(f => {
+    if(result.indexOf(f) < 0) { result.push(f); }
   });
-  clientIp[port].forEach(ci => {
-    ci.ip.forEach(i => {
-      if(result.indexOf(i) < 0) { result.push(i); }
-    });
-  });
-  if(!result.length) {
-    clientIp[port].push({ time: Date.now(), ip: recentIp });
-    return recentIp;
-  }
   return result;
 };
 

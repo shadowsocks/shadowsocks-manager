@@ -1,5 +1,3 @@
-'use strict';
-
 const config = appRequire('services/config').all();
 
 let managerAddress = {

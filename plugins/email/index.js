@@ -25,8 +25,12 @@ if(config.plugins.email.type === 'smtp') {
     tls: {
       rejectUnauthorized: !config.plugins.email.allowUnauthorizedTls,
     },
+    proxy: config.plugins.email.proxy || '',
   };
   transporter = nodemailer.createTransport(emailConfig);
+  if(config.plugins.email.proxy && config.plugins.email.proxy.indexOf('socks') >= 0) {
+    transporter.set('proxy_socks_module', require('socks'));
+  }
 } else if (config.plugins.email.type === 'mailgun') {
   emailConfig = {
     baseUrl: config.plugins.email.baseUrl,
@@ -118,7 +122,7 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
     }
     const code = Math.random().toString().substr(2, 6);
     if(text.indexOf('${code}') >= 0) {
-      text = text.replace(/\$\{code\}/g, '[ ' + code + ']');
+      text = text.replace(/\$\{code\}/g, '[ ' + code + ' ]');
     } else {
       text += '\n[ ' + code + ' ]';
     }

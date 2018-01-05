@@ -64,6 +64,9 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
     });
   };
   exports.deleteClient = (req, res) => {
+    if(!req.query.data) {
+      return res.send('success');
+    }
     const data = JSON.parse(req.query.data);
     return knex('push').delete().where({ endpoint: data.endpoint })
     .then(() => {

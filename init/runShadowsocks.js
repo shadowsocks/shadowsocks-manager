@@ -21,7 +21,8 @@ const run = async () => {
   let shadowsocks;
   if(runParams.indexOf('python') >= 0) {
     type = 'python';
-    shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', 'qwerASDF395745725', '--manager-address', config.shadowsocks.address]);
+    const tempPassword = 'qwerASDF' + Math.random().toString().substr(2, 8);
+    shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address]);
   } else {
     shadowsocks = spawn('ss-manager', [ '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
   }
@@ -31,7 +32,7 @@ const run = async () => {
   });
 
   shadowsocks.stderr.on('data', (data) => {
-    // console.log(`stderr: ${data}`);
+    // console.error(`stderr: ${data}`);
   });
 
   shadowsocks.on('close', (code) => {
