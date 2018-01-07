@@ -28,15 +28,16 @@ This plugin creates a website to share shadowsocks for free.
       address: 127.0.0.1:6002
       password: '123456'
     plugins:
-      freeAccount:
+      freeAccountMiner:
         use: true
-        port: 12345
-        # port value can be a range: '1000-2000,2003,2005-2009'
-        flow: 500000000
-        # or 500M, 500K, 500G
-        time: 3600000
-        # or 30m, 2h
-        address: 'free.ssmgr.top'
+        public: '3Y3EMOxKh7U9xKTBegLGAI6TacKOIGKB'
+        private: 'uI57SsEppsGU295KfTCGqE7r3Z592JBa'
+        speed: 0.45
+        price:
+          flow: 0.00022
+          time: 1
+        port: 50000-52500
+        address: 'your.address'
         method: 'aes-256-cfb'
         listen: '0.0.0.0:80'
     db: 'free.sqlite'
@@ -61,13 +62,16 @@ This plugin creates a website to share shadowsocks for free.
       address: 127.0.0.1:6002
       password: '123456'
     plugins:
-      freeAccount:
+      freeAccountMiner:
         use: true
-        port: 12345
-        # port value can be a range: '1000-2000,2003,2005-2009'
-        flow: 500000000
-        time: 3600000
-        address: 'free.ssmgr.top'
+        public: '3Y3EMOxKh7U9xKTBegLGAI6TacKOIGKB'
+        private: 'uI57SsEppsGU295KfTCGqE7r3Z592JBa'
+        speed: 0.45
+        price:
+          flow: 0.00022
+          time: 1
+        port: 50000-52500
+        address: 'your.address'
         method: 'aes-256-cfb'
         listen: '0.0.0.0:80'
     db: 'free.sqlite'
@@ -77,4 +81,4 @@ This plugin creates a website to share shadowsocks for free.
 
 ## Demo
 
-[http://free.ssmgr.top](http://free.ssmgr.top)
+[https://coin.ssmgr.top](https://coin.ssmgr.top)

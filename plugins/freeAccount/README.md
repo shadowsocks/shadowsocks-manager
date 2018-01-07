@@ -77,4 +77,4 @@ This plugin creates a website to share shadowsocks for free.
 
 ## Demo
 
-[http://free.ssmgr.top](http://free.ssmgr.top)
+[https://free.ssmgr.top](https://free.ssmgr.top)
