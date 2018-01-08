@@ -67,6 +67,7 @@ This plugin creates a website to share shadowsocks for free.
         public: '3Y3EMOxKh7U9xKTBegLGAI6TacKOIGKB'
         private: 'uI57SsEppsGU295KfTCGqE7r3Z592JBa'
         speed: 0.45
+        timeout: 900000
         price:
           flow: 0.00022
           time: 1

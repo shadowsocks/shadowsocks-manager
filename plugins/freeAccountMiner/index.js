@@ -82,10 +82,6 @@ const prettyTime = number => {
 };
 
 const checkPort = async () => {
-  const isOutOfPrice = port => {
-    const left = port.balance - (Date.now() - port.create) / 1000 * price.time - port.flow * price.flow;
-    return left <= 0;
-  };
   const accounts = await manager.send({ command: 'list' });
   const ports = await knex('port').select();
   ports.forEach(port => {
@@ -158,6 +154,13 @@ const resetMine = async user => {
 };
 
 const checkUser = async user => {
+  const time = +user.substr(0, 13);
+  if(Date.now() - time >= 24 * 60 * 60 * 1000) {
+    await knex('port').delete().where({ user });
+    return {
+      status: -1
+    };
+  }
   const mineData = await getMine(user);
   if(mineData.success) {
     const exists = await knex('port').where({ user }).then(s => s[0]);
