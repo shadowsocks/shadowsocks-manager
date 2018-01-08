@@ -12,10 +12,15 @@ const privateKey = config.plugins.freeAccountMiner.private;
 const analytics = config.plugins.freeAccountMiner.analytics;
 const address = config.plugins.freeAccountMiner.address;
 const method = config.plugins.freeAccountMiner.method;
-const timeout = 60 * 60 * 1000;
+const timeout = config.plugins.freeAccountMiner.timeout || 15 * 60 * 1000;
 const price = {
   flow: config.plugins.freeAccountMiner.price.flow,
   time: config.plugins.freeAccountMiner.price.time,
+};
+
+const isOutOfPrice = port => {
+  const left = port.balance - (Date.now() - port.create) / 1000 / 60 * price.time - port.flow / 1000000 * price.flow;
+  return left <= 0;
 };
 
 const randomPort = async () => {
@@ -76,37 +81,6 @@ const prettyTime = number => {
   }
 };
 
-const getKey = async (key, defaultValue) => {
-  try {
-    const result = await knex('freeAccountMiner').select().where({
-      key
-    }).then(success => success[0]);
-    return JSON.parse(result.value);
-  } catch (err) {
-    await knex('freeAccountMiner').insert({
-      key,
-      value: JSON.stringify(defaultValue)
-    });
-    return getKey(key);
-  }
-};
-
-const setKey = async (key, value) => {
-  try {
-    await getKey(key);
-    await knex('freeAccountMiner').update({
-      value: JSON.stringify(value)
-    }).where({
-      key
-    });
-  } catch (err) {
-    await knex('freeAccountMiner').insert({
-      key,
-      value: JSON.stringify(value)
-    });
-  }
-};
-
 const checkPort = async () => {
   const isOutOfPrice = port => {
     const left = port.balance - (Date.now() - port.create) / 1000 * price.time - port.flow * price.flow;
@@ -115,9 +89,10 @@ const checkPort = async () => {
   const accounts = await manager.send({ command: 'list' });
   const ports = await knex('port').select();
   ports.forEach(port => {
-    const time = +port.user.substr(0, 13);
-    if(Date.now() - time >= timeout) {
+    if(Date.now() - port.update >= timeout) {
+      manager.send({ command: 'del', port: port.port });
       knex('port').delete().where({ user: port.user }).then();
+      return;
     }
     const exists = accounts.filter(f => f.port === port.port)[0];
     if(!exists && !isOutOfPrice(port)) {
@@ -170,25 +145,40 @@ const getMine = async user => {
   }).then(s => JSON.parse(s));
 };
 
+const resetMine = async user => {
+  return rp({
+    method: 'POST',
+    uri: 'https://api.coinhive.com/user/reset',
+    form: {
+      secret: privateKey,
+      name: user,
+    },
+    simple: false,
+  });
+};
+
 const checkUser = async user => {
-  const time = +user.substr(0, 13);
-  if(Date.now() - time >= timeout) {
-    await knex('port').delete().where({ user });
-    return {
-      status: -1
-    };
-  }
   const mineData = await getMine(user);
   if(mineData.success) {
     const exists = await knex('port').where({ user }).then(s => s[0]);
     if(exists) {
-      await knex('port').update({
+      if(Date.now() - exists.update >= timeout) {
+        await knex('port').delete().where({ user });
+        await resetMine(user);
+      }
+      const update = {
         balance: mineData.balance,
-      }).where({ user });
+      };
+      if(mineData.balance > exists.balance) {
+        update.update = Date.now();
+      }
+      await knex('port').update(update).where({ user });
     } else {
+      await resetMine(user);
       await knex('port').insert({
         user,
         create: Date.now(),
+        update: Date.now(),
         flow: 0,
         balance: mineData.balance,
         port: await randomPort(),
@@ -201,7 +191,7 @@ const checkUser = async user => {
     };
   }
   return knex('port').where({ user }).then(s => {
-    let flowLeft = +((s[0].balance - (Date.now() - s[0].create) / 1000 * price.time - s[0].flow * price.flow) / price.flow).toFixed(0);
+    let flowLeft = (s[0].balance - (Date.now() - s[0].create) / 1000 / 60 * price.time - s[0].flow / 1000000 * price.flow) * price.flow;
     if(flowLeft < 0) { flowLeft = 0; }
     return {
       status: 0,

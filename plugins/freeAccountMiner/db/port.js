@@ -10,6 +10,7 @@ const createTable = async() => {
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.string('user').primary();
     table.bigInteger('create');
+    table.bigInteger('update');
     table.bigInteger('flow');
     table.bigInteger('balance');
     table.integer('port');
