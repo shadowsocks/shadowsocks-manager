@@ -194,7 +194,8 @@ const checkUser = async user => {
     };
   }
   return knex('port').where({ user }).then(s => {
-    let flowLeft = (s[0].balance - (Date.now() - s[0].create) / 1000 / 60 * price.time - s[0].flow / 1000000 * price.flow) * price.flow;
+    const balanceLeft = +(s[0].balance - (Date.now() - s[0].create) / 1000 / 60 * price.time - s[0].flow / 1000000 * price.flow).toFixed(0);
+    let flowLeft = +(balanceLeft / price.flow * 1000000).toFixed(0);
     if(flowLeft < 0) { flowLeft = 0; }
     return {
       status: 0,
