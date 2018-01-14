@@ -23,6 +23,10 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 [https://free.ssmgr.top](https://free.ssmgr.top)
 
+## FreeAccountMiner Demo:
+
+[https://coin.ssmgr.top](https://coin.ssmgr.top)
+
 ## Dependencies
 
 Node.js 6.*
@@ -132,9 +136,10 @@ The listening address in `--manager-address` of step 1 and in `shadowsocks -> ad
 ```
 
 ### Plugins
-[cli](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/cli/README.md)  
+
 [telegram](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/telegram/README.md)  
 [freeAccount](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccount/README.md)  
+[freeAccountMiner](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/freeAccountMiner/README.md)  
 [webgui](https://github.com/shadowsocks/shadowsocks-manager/blob/master/plugins/webgui/README.md)  
 
 ### Parameter

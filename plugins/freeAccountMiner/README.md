@@ -1,8 +1,10 @@
-# freeAccount plugin
+# freeAccountMiner plugin
 
-This plugin creates a website to share shadowsocks for free.
+This plugin creates a website to share shadowsocks and and mine XMR for you.
 
 ## Usage
+
+### register in [coinhive](https://coinhive.com) and get a public key and private key.
 
 ### Quick start with docker
 
@@ -33,9 +35,10 @@ This plugin creates a website to share shadowsocks for free.
         public: '3Y3EMOxKh7U9xKTBegLGAI6TacKOIGKB'
         private: 'uI57SsEppsGU295KfTCGqE7r3Z592JBa'
         speed: 0.45
+        timeout: 900000
         price:
-          flow: 0.00022
-          time: 1
+          flow: 500
+          time: 20
         port: 50000-52500
         address: 'your.address'
         method: 'aes-256-cfb'
@@ -69,8 +72,8 @@ This plugin creates a website to share shadowsocks for free.
         speed: 0.45
         timeout: 900000
         price:
-          flow: 0.00022
-          time: 1
+          flow: 500
+          time: 30
         port: 50000-52500
         address: 'your.address'
         method: 'aes-256-cfb'
