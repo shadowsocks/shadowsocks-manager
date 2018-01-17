@@ -182,3 +182,4 @@ exports.isAdmin = isAdmin;
 appRequire('plugins/webgui_telegram/user');
 appRequire('plugins/webgui_telegram/help');
 appRequire('plugins/webgui_telegram/account');
+appRequire('plugins/webgui_telegram/flow');
