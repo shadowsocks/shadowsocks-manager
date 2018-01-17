@@ -202,9 +202,16 @@ const login = async (mac, ip) => {
   }
 };
 
+const getAccountByAccountId = accountId => {
+  return knex('mac_account').where({
+    accountId
+  });
+};
+
 exports.editAccount = editAccount;
 exports.newAccount = newAccount;
 exports.getAccount = getAccount;
 exports.deleteAccount = deleteAccount;
 exports.getAccountForUser = getAccountForUser;
 exports.login = login;
+exports.getAccountByAccountId = getAccountByAccountId;

@@ -3,6 +3,7 @@ const serverManager = appRequire('plugins/flowSaver/server');
 const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
+const macAccount = appRequire('plugins/macAccount/index');
 
 const addAccount = async (type, options) => {
   checkAccount.deleteCheckAccountTimePort(options.port);
@@ -74,6 +75,12 @@ const getAccount = async (options = {}) => {
 };
 
 const delAccount = async (id) => {
+  const macAccounts = await macAccount.getAccountByAccountId(id);
+  if(macAccounts.length) {
+    macAccounts.forEach(f => {
+      macAccount.deleteAccount(f.id);
+    });
+  }
   const result = await knex('account_plugin').delete().where({ id });
   if(!result) {
     return Promise.reject('Account id[' + id + '] not found');

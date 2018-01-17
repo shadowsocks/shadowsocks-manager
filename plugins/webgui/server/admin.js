@@ -12,6 +12,7 @@ const config = appRequire('services/config').all();
 const isAlipayUse = config.plugins.alipay && config.plugins.alipay.use;
 const isPaypalUse = config.plugins.paypal && config.plugins.paypal.use;
 const rp = require('request-promise');
+const macAccount = appRequire('plugins/macAccount/index');
 
 exports.getAccount = (req, res) => {
   account.getAccount().then(success => {
@@ -260,7 +261,12 @@ exports.setUserAccount = (req, res) => {
 exports.deleteUserAccount = (req, res) => {
   const userId = req.params.userId;
   const accountId = req.params.accountId;
-  account.editAccount(accountId, { userId: null }).then(success => {
+  macAccount.getAccountByAccountId(accountId).then(macAccounts => {
+    if(macAccounts.length) {
+      return res.status(403).end();
+    }
+    return account.editAccount(accountId, { userId: null });
+  }).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
