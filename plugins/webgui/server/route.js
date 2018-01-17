@@ -51,6 +51,7 @@ app.put('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.editServer);
 app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
+app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
 app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);
 app.get('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ip', isAdmin, admin.getAccountIp);

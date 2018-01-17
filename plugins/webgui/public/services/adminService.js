@@ -44,6 +44,15 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     return accountPromise;
   };
 
+  let macAccountPromise = null;
+  const getMacAccount = () => {
+    if(macAccountPromise && !macAccountPromise.$$state.status) {
+      return macAccountPromise;
+    }
+    macAccountPromise = $http.get('/api/admin/macAccount').then(success => success.data);
+    return macAccountPromise;
+  };
+
   const getServerFlow = serverId => {
     return $q.all([
       $http.get('/api/admin/flow/' + serverId, {
@@ -270,6 +279,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     getOrder,
     getServer,
     getAccount,
+    getMacAccount,
     getServerFlow,
     getServerFlowLastHour,
     getAccountId,

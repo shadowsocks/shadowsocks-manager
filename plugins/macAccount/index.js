@@ -208,6 +208,11 @@ const getAccountByAccountId = accountId => {
   });
 };
 
+const getAllAccount = async () => {
+  const accounts = await knex('mac_account').where({});
+  return accounts;
+};
+
 exports.editAccount = editAccount;
 exports.newAccount = newAccount;
 exports.getAccount = getAccount;
@@ -215,3 +220,4 @@ exports.deleteAccount = deleteAccount;
 exports.getAccountForUser = getAccountForUser;
 exports.login = login;
 exports.getAccountByAccountId = getAccountByAccountId;
+exports.getAllAccount = getAllAccount;

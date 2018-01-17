@@ -38,6 +38,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.accountInfo.originalAccount = accounts;
         $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
         $scope.sortAndFilter();
+        return adminApi.getMacAccount();
+      }).then(macAccounts => {
+        $scope.macAccount = macAccounts;
       });
     };
     getAccountInfo();
@@ -58,6 +61,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
     $scope.toAccount = id => {
       $state.go('admin.accountPage', { accountId: id });
+    };
+    $scope.toMacAccount = userId => {
+      $state.go('admin.userPage', { userId });
     };
     $scope.sortAndFilterDialog = () => {
       accountSortDialog.show($scope.accountMethod, $scope.accountInfo);

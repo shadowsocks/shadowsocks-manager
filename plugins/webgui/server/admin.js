@@ -514,3 +514,12 @@ exports.getAccountIpInfo = (req, res) => {
     return res.send(['', '']);
   });
 };
+
+exports.getAllMacAccount = (req, res) => {
+  macAccount.getAllAccount().then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

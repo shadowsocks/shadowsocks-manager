@@ -11,6 +11,7 @@
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "GPL-3.0",
   "keywords": [
+    "ssmgr",
     "shadowsocks",
     "manager",
     "gfw"
