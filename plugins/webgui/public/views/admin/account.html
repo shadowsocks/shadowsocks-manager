@@ -16,7 +16,8 @@
         <md-card ng-click="toMacAccount(a.userId)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
-                    <div flex="100">{{ a.mac | mac }}</div>
+                    <div flex="70">{{ a.mac | mac }}</div>
+                    <div flex="30" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ a.port }}</div>
                 </div>
             </md-card-content>
         </md-card>
