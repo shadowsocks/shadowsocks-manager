@@ -17,6 +17,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     }
     $scope.accountMethod = $localStorage.admin.accountFilterSettings;
     $scope.accountInfo = {};
+    $scope.macAccountInfo = {};
     $scope.sortAndFilter = () => {
       accountSortTool($scope.accountInfo, $scope.accountMethod);
     };
@@ -26,8 +27,16 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         data: [],
       };
     }
+    if(!$localStorage.admin.macAccountInfo) {
+      $localStorage.admin.macAccountInfo = {
+        time: Date.now(),
+        data: [],
+      };
+    }
     $scope.accountInfo.originalAccount = $localStorage.admin.accountInfo.data;
     $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
+    $scope.macAccountInfo.originalAccount = $localStorage.admin.macAccountInfo.data;
+    $scope.macAccountInfo.account = angular.copy($scope.macAccountInfo.originalAccount);
     $scope.sortAndFilter();
     const getAccountInfo = () => {
       adminApi.getAccount().then(accounts => {
@@ -40,7 +49,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.sortAndFilter();
         return adminApi.getMacAccount();
       }).then(macAccounts => {
-        $scope.macAccount = macAccounts;
+        // $scope.macAccount = macAccounts;
+        $scope.macAccountInfo.originalAccount = macAccounts;
+        $scope.macAccountInfo.account = angular.copy($scope.macAccountInfo.originalAccount);
       });
     };
     getAccountInfo();
@@ -75,6 +86,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       accountSortTool($scope.accountInfo, $scope.accountMethod);
       $scope.accountInfo.account = $scope.accountInfo.account.filter(f => {
         return (f.port + (f.user ? f.user : '')).indexOf($scope.menuSearch.text) >= 0;
+      });
+      $scope.macAccountInfo.account = $scope.macAccountInfo.originalAccount.filter(f => {
+        return (f.port + f.mac).indexOf($scope.menuSearch.text) >= 0;
       });
     };
     $scope.$on('cancelSearch', () => {
