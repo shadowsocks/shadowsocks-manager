@@ -47,6 +47,15 @@
                 </div>
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
             </md-list>
+            <md-divider></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item ng-show="accountData.accountForNewUser.isEnable">
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>到期自动删除</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.autoRemove" aria-label="accountForNewUser"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
             <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
             <md-list ng-show="accountData.accountForNewUser.isEnable">
                 <md-list-item>

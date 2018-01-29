@@ -92,7 +92,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
           $scope.accountData.accountForNewUser.server = [];
           for(const ele in $scope.accountServerObj) {
             if($scope.accountServerObj[ele]) {
-              $scope.accountData.accountForNewUser.server.push(ele);
+              $scope.accountData.accountForNewUser.server.push(+ele);
             }
           };
         }

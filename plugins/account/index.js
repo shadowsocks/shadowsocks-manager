@@ -17,6 +17,7 @@ const addAccount = async (type, options) => {
       port: options.port,
       password: options.password,
       status: 0,
+      server: options.server ? options.server : null,
       autoRemove: 0,
     });
     await checkAccount.checkServer();
@@ -33,6 +34,7 @@ const addAccount = async (type, options) => {
         limit: options.limit || 1,
       }),
       status: 0,
+      server: options.server ? options.server : null,
       autoRemove: options.autoRemove || 0,
     });
     await checkAccount.checkServer();

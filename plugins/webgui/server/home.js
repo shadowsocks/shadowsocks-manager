@@ -103,11 +103,6 @@ exports.signup = (req, res) => {
             }
           });
         };
-        // return knex('account_plugin').select().orderBy('port', 'DESC').limit(1)
-        // .then(success => {
-        //   if(success.length) {
-        //     port = success[0].port + 1;
-        //   }
         getNewPort().then(port => {
           return account.addAccount(newUserAccount.type || 5, {
             user: userId,
@@ -116,7 +111,8 @@ exports.signup = (req, res) => {
             time: Date.now(),
             limit: newUserAccount.limit || 8,
             flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
-            autoRemove: 1,
+            server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
+            autoRemove: newUserAccount.autoRemove ? 1 : 0,
           });
         });
       });
