@@ -86,14 +86,41 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
       lastSave = Date.now();
       lastSavePromise = $timeout(() => {
+        if(!$scope.setServerForNewUser) {
+          $scope.accountData.accountForNewUser.server = null;
+        } else {
+          $scope.accountData.accountForNewUser.server = [];
+          for(const ele in $scope.accountServerObj) {
+            if($scope.accountServerObj[ele]) {
+              $scope.accountData.accountForNewUser.server.push(ele);
+            }
+          };
+        }
         $http.put('/api/admin/setting/account', {
           data: $scope.accountData,
         });
       }, timeout);
     };
+    $scope.setServerForNewUser = false;
+    $scope.accountServerObj = {};
     $http.get('/api/admin/setting/account').then(success => {
       $scope.accountData = success.data;
+      if($scope.accountData.accountForNewUser.server) {
+        $scope.setServerForNewUser = true;
+        $scope.accountData.accountForNewUser.server.forEach(f => {
+          $scope.accountServerObj[f] = true;
+        });
+      }
+      return $http.get('/api/admin/server');
+    }).then(success => {
+      $scope.servers = success.data;
       $scope.$watch('accountData', () => {
+        $scope.saveSetting();
+      }, true);
+      $scope.$watch('setServerForNewUser', () => {
+        $scope.saveSetting();
+      }, true);
+      $scope.$watch('accountServerObj', () => {
         $scope.saveSetting();
       }, true);
     });
