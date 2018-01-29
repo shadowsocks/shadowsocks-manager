@@ -310,6 +310,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
       time: Date.now(),
       limit,
       flow: flow[orderType],
+      server: null,
       autoRemove: 0,
     });
     return;
@@ -343,6 +344,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   await knex('account_plugin').update({
     type: orderType >= 6 ? 3 : orderType,
     data: JSON.stringify(accountData),
+    server: null,
     autoRemove: 0,
   }).where({ id: accountId });
   checkAccount.deleteCheckAccountTimePort(port);

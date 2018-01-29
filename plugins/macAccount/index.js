@@ -223,6 +223,14 @@ const getAllAccount = async () => {
   return accounts;
 };
 
+const removeInvalidMacAccount = async () => {
+  const accounts = await knex('mac_account').whereNull('accountId');
+  accounts.forEach(account => {
+    knex('mac_account').where({ id: account.id }).del();
+  });
+};
+removeInvalidMacAccount();
+
 exports.editAccount = editAccount;
 exports.newAccount = newAccount;
 exports.getAccount = getAccount;
