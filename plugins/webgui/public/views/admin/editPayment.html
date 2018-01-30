@@ -7,6 +7,7 @@
               </md-card-header-text>
           </md-card-header>
           <md-card-content>
+              <md-divider></md-divider>
               <md-list layout="row">
                   <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
                   <div flex>
@@ -32,6 +33,39 @@
                   </div>
                   <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
               </md-list>
+              <md-divider></md-divider>
+              <md-list>
+                  <md-list-item>
+                      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                          <div flex="75" translate>到期自动删除</div>
+                          <div flex layout="row" layout-align="end center"><md-switch ng-model="paymentData.autoRemove" aria-label="autoRemove"></md-switch></div>
+                      </div>
+                  </md-list-item>
+              </md-list>
+              <md-divider></md-divider>
+              <md-list>
+                  <md-list-item>
+                      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                          <div flex="75" translate>自定义可用服务器</div>
+                          <div flex layout="row" layout-align="end center"><md-switch ng-model="setServerForPayment" aria-label="server"></md-switch></div>
+                      </div>
+                  </md-list-item>
+                  <md-list-item ng-show="setServerForPayment">
+                      <div layout="column" layout-wrap flex>
+                          <div layout="column" layout-wrap flex ng-repeat="server in servers">
+                              <div flex="100">
+                                  <md-checkbox ng-model="accountServerObj[server.id]">
+                                      <div layout="row" layout-align="space-between center">
+                                          <span flex>{{ server.name }}</span>
+                                          <span flex style="color: #777">{{ server.host }}</span>
+                                      </div>
+                                  </md-checkbox>
+                              </div>
+                          </div>
+                      </div>
+                  </md-list-item>
+              </md-list>
+              <md-divider></md-divider>
           </md-card-content>
       </md-card>
   </div>

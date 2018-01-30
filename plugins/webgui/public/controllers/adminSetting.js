@@ -353,15 +353,42 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
       lastSave = Date.now();
       lastSavePromise = $timeout(() => {
+        if(!$scope.setServerForPayment) {
+          $scope.paymentData.server = null;
+        } else {
+          $scope.paymentData.server = [];
+          for(const ele in $scope.accountServerObj) {
+            if($scope.accountServerObj[ele]) {
+              $scope.paymentData.server.push(+ele);
+            }
+          };
+        }
         $http.put('/api/admin/setting/payment', {
           data: $scope.payment,
         });
       }, timeout);
     };
+    $scope.setServerForPayment = false;
+    $scope.accountServerObj = {};
     $http.get('/api/admin/setting/payment').then(success => {
       $scope.payment = success.data;
       $scope.paymentData = $scope.payment[$scope.paymentType];
+      if($scope.paymentData.server) {
+        $scope.setServerForPayment = true;
+        $scope.paymentData.server.forEach(f => {
+          $scope.accountServerObj[f] = true;
+        });
+      }
+      return $http.get('/api/admin/server');
+    }).then(success => {
+      $scope.servers = success.data;
       $scope.$watch('paymentData', () => {
+        $scope.saveSetting();
+      }, true);
+      $scope.$watch('setServerForPayment', () => {
+        $scope.saveSetting();
+      }, true);
+      $scope.$watch('accountServerObj', () => {
         $scope.saveSetting();
       }, true);
     });
