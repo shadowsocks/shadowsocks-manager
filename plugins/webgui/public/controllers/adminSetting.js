@@ -7,7 +7,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $state.go('admin.notice');
     };
     $scope.toPayment = () => {
-      $state.go('admin.paymentSetting');
+      $state.go('admin.paymentList');
     };
     $scope.toAccount = () => {
       $state.go('admin.accountSetting');
@@ -307,6 +307,64 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $scope.isLoading = true;
       $http.post('/api/admin/telegram/unbind');
     };
+  }
+]).controller('AdminPaymentListController', ['$scope', '$http', '$state',
+  ($scope, $http, $state) => {
+    $scope.setTitle('支付设置');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.time = [{
+      id: 'hour',
+      name: '小时',
+    }, {
+      id: 'day',
+      name: '天',
+    }, {
+      id: 'week',
+      name: '周',
+    }, {
+      id: 'month',
+      name: '月',
+    }, {
+      id: 'season',
+      name: '季',
+    }, {
+      id: 'year',
+      name: '年',
+    }];
+    $scope.editPayment = id => {
+      $state.go('admin.editPayment', { paymentType: id });
+    };
+    $http.get('/api/admin/setting/payment').then(success => {
+      $scope.paymentData = success.data;
+    });
+  }
+]).controller('AdminEditPaymentController', ['$scope', '$http', '$timeout', '$interval', '$state', '$stateParams',
+  ($scope, $http, $timeout, $interval, $state, $stateParams) => {
+    $scope.setTitle('修改支付');
+    $scope.setMenuButton('arrow_back', 'admin.paymentList');
+    $scope.paymentType = $stateParams.paymentType;
+    let lastSave = 0;
+    let lastSavePromise = null;
+    const saveTime = 3500;
+    $scope.saveSetting = () => {
+      if(Date.now() - lastSave <= saveTime) {
+        lastSavePromise && $timeout.cancel(lastSavePromise);
+      }
+      const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+      lastSave = Date.now();
+      lastSavePromise = $timeout(() => {
+        $http.put('/api/admin/setting/payment', {
+          data: $scope.payment,
+        });
+      }, timeout);
+    };
+    $http.get('/api/admin/setting/payment').then(success => {
+      $scope.payment = success.data;
+      $scope.paymentData = $scope.payment[$scope.paymentType];
+      $scope.$watch('paymentData', () => {
+        $scope.saveSetting();
+      }, true);
+    });
   }
 ])
 ;

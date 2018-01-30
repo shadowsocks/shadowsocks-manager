@@ -1,0 +1,38 @@
+<div layout="row" layout-wrap>
+  <div flex="100">
+      <md-card>
+          <md-card-header>
+              <md-card-header-text>
+                  <span class="md-title">{{ paymentType }}</span>
+              </md-card-header-text>
+          </md-card-header>
+          <md-card-content>
+              <md-list layout="row">
+                  <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+                  <div flex>
+                      <form name="settingForm" layout="row" layout-wrap>
+                          <md-input-container class="md-block" flex="45">
+                              <label>支付宝</label>
+                              <input type="number" required name="alipay" ng-model="paymentData.alipay">
+                          </md-input-container>
+                          <div flex="10"></div>
+                          <md-input-container class="md-block"  flex="45">
+                              <label>Paypal</label>
+                              <input type="number" required name="paypal" ng-model="paymentData.paypal">
+                          </md-input-container>
+                          <md-input-container class="md-block"  flex="100">
+                              <label>流量（MB）</label>
+                              <input type="number" required name="flow" ng-model="paymentData.flow">
+                          </md-input-container>
+                          <md-input-container class="md-block"  flex="100">
+                              <label>订单名称</label>
+                              <input type="text" required name="flow" ng-model="paymentData.orderName">
+                          </md-input-container>
+                      </form>
+                  </div>
+                  <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+              </md-list>
+          </md-card-content>
+      </md-card>
+  </div>
+</div>
