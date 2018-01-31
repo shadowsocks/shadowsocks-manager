@@ -70,7 +70,6 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
-    
   }
 ]).controller('AdminAccountSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
@@ -343,6 +342,24 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.setTitle('修改支付');
     $scope.setMenuButton('arrow_back', 'admin.paymentList');
     $scope.paymentType = $stateParams.paymentType;
+    $scope.paymentTypeName = type => {
+      switch(type) {
+        case 'hour':
+          return '小时'; break;
+        case 'day':
+          return '天'; break;
+        case 'week':
+          return '周'; break;
+        case 'month':
+          return '月'; break;
+        case 'season':
+          return '季'; break;
+        case 'year':
+          return '年'; break;
+        default:
+          return '';
+      }
+    };
     let lastSave = 0;
     let lastSavePromise = null;
     const saveTime = 3500;

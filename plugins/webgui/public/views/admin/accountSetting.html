@@ -89,21 +89,28 @@
                 </md-list-item>
             </md-list>
             <md-divider ></md-divider>
-            <md-list layout="row">
-                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
-                <div flex>
-                    <form name="portForm">
-                        <md-input-container class="md-block">
-                            <label>起始端口</label>
-                            <input type="number" required name="startPort" ng-model="accountData.port.start">
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>结束端口</label>
-                            <input type="number" required name="endPort" ng-model="accountData.port.end">
-                        </md-input-container>
-                    </form>
-                </div>
-                <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="100" translate>新端口号分配范围</div>
+                    </div>
+                </md-list-item>
+                <md-list-item layout="row">
+                    <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+                    <div flex>
+                        <form name="portForm" layout="column" layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm="50">
+                                <label>起始端口</label>
+                                <input type="number" required name="startPort" ng-model="accountData.port.start">
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm="50">
+                                <label>结束端口</label>
+                                <input type="number" required name="endPort" ng-model="accountData.port.end">
+                            </md-input-container>
+                        </form>
+                    </div>
+                    <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
+                </md-list-item>
             </md-list>
             <md-divider></md-divider>
             <md-list>

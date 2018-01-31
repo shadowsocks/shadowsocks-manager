@@ -217,16 +217,24 @@ const getAllAccount = async () => {
     'mac_account.serverId as serverId',
     'account_plugin.port as port',
   ]).leftJoin('account_plugin', 'mac_account.accountId', 'account_plugin.id')
-  .where({
-
-  });
+  .where({});
   return accounts;
 };
 
 const removeInvalidMacAccount = async () => {
-  const accounts = await knex('mac_account').whereNull('accountId');
-  accounts.forEach(account => {
-    knex('mac_account').where({ id: account.id }).del();
+  const accounts = await knex('mac_account').select([
+    'mac_account.id as id',
+    'mac_account.mac as mac',
+    'mac_account.userId as userId',
+    'mac_account.accountId as accountId',
+    'mac_account.serverId as serverId',
+    'account_plugin.port as port',
+  ]).leftJoin('account_plugin', 'mac_account.accountId', 'account_plugin.id')
+  .where({});
+  accounts.filter(f => {
+    return f.port === null;
+  }).forEach(account => {
+    knex('mac_account').where({ id: account.id }).del().then();
   });
 };
 removeInvalidMacAccount();
