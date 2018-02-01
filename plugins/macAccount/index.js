@@ -184,7 +184,7 @@ const editAccount = (id, mac, serverId, accountId) => {
 };
 
 const deleteAccount = id => {
-  return knex('mac_account').delete().where({ id });
+  return knex('mac_account').delete().where({ id }).then();
 };
 
 const login = async (mac, ip) => {
@@ -221,6 +221,12 @@ const getAllAccount = async () => {
   return accounts;
 };
 
+const getAccountByUserId = userId => {
+  return knex('mac_account').where({
+    userId
+  });
+};
+
 const removeInvalidMacAccount = async () => {
   const accounts = await knex('mac_account').select([
     'mac_account.id as id',
@@ -228,11 +234,11 @@ const removeInvalidMacAccount = async () => {
     'mac_account.userId as userId',
     'mac_account.accountId as accountId',
     'mac_account.serverId as serverId',
-    'account_plugin.port as port',
-  ]).leftJoin('account_plugin', 'mac_account.accountId', 'account_plugin.id')
+    'user.username as username',
+  ]).leftJoin('user', 'mac_account.userId', 'user.id')
   .where({});
   accounts.filter(f => {
-    return f.port === null;
+    return f.username === null;
   }).forEach(account => {
     knex('mac_account').where({ id: account.id }).del().then();
   });
@@ -247,3 +253,4 @@ exports.getAccountForUser = getAccountForUser;
 exports.login = login;
 exports.getAccountByAccountId = getAccountByAccountId;
 exports.getAllAccount = getAllAccount;
+exports.getAccountByUserId = getAccountByUserId;

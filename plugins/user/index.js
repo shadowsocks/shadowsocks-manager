@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const crypto = require('crypto');
+const macAccount = appRequire('plugins/macAccount/index');
 
 const checkPasswordLimit = {
   number: 5,
@@ -195,6 +196,12 @@ const deleteUser = async userId => {
   });
   if(existAccount.length) {
     return Promise.reject('delete user fail');
+  }
+  const macAccounts = await macAccount.getAccountByUserId(userId);
+  if(macAccounts.length) {
+    macAccounts.forEach(f => {
+      macAccount.deleteAccount(f.id);
+    });
   }
   const deleteCount = await knex('user').delete().where({
     id: userId,

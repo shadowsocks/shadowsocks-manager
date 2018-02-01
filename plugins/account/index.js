@@ -77,12 +77,12 @@ const getAccount = async (options = {}) => {
 };
 
 const delAccount = async (id) => {
-  const macAccounts = await macAccount.getAccountByAccountId(id);
-  if(macAccounts.length) {
-    macAccounts.forEach(f => {
-      macAccount.deleteAccount(f.id);
-    });
-  }
+  // const macAccounts = await macAccount.getAccountByAccountId(id);
+  // if(macAccounts.length) {
+  //   macAccounts.forEach(f => {
+  //     macAccount.deleteAccount(f.id);
+  //   });
+  // }
   const result = await knex('account_plugin').delete().where({ id });
   if(!result) {
     return Promise.reject('Account id[' + id + '] not found');
