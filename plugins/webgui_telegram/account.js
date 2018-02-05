@@ -172,6 +172,8 @@ const qrcode = (req, res) => {
 const tokens = {};
 
 const login = (req, res) => {
+  delete req.session.user;
+  delete req.session.type;
   const token = req.body.token;
   for(const t in tokens) {
     if(Date.now() - tokens[t].time > 5 * 60 * 1000) {

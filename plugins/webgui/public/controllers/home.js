@@ -171,9 +171,12 @@ app
       $http.post('/api/home/macLogin', {
         mac,
       }).then(() => {
+        $localStorage.user = {};
         $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
+        $localStorage.home = {};
+        $localStorage.user = {};
         $state.go('home.index');
       });
     }
@@ -184,9 +187,12 @@ app
       $http.post('/api/user/telegram/login', {
         token,
       }).then(() => {
+        $localStorage.user = {};
         $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
+        $localStorage.home = {};
+        $localStorage.user = {};
         $state.go('home.index');
       });
     }
