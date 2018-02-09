@@ -1,5 +1,4 @@
-import { exec } from 'child_process';
-
+const tg = appRequire('plugins/webgui_telegram/index');
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const isUser = appRequire('plugins/webgui_telegram/index').isUser;
 const account = appRequire('plugins/account/index');
@@ -51,7 +50,7 @@ telegram.on('message', async message => {
     const userId = await isUser(telegramId);
     const myAccount = await account.getAccount({ userId });
     if(!myAccount.length) {
-      return telegram.emit('send', telegramId, '当前并没有分配账号');
+      tg.sendMessage('当前并没有分配账号', telegramId);
     }
     const keyboard = myAccount.map(m => {
       return {
@@ -59,7 +58,7 @@ telegram.on('message', async message => {
         callback_data: `accountId[${ m.id }]`,
       };
     });
-    telegram.emit('keyboard', telegramId, '请选择账号', {
+    tg.sendKeyboard('请选择账号', telegramId, {
       inline_keyboard: [
         keyboard
       ],
@@ -103,7 +102,7 @@ telegram.on('message', async message => {
         });
       });
     }
-    telegram.emit('keyboard', telegramId, '请选择服务器', {
+    tg.sendKeyboard('请选择服务器', telegramId, {
       inline_keyboard: serverArray,
     });
   } else if(isCallbackServer(message)) {
@@ -119,7 +118,7 @@ telegram.on('message', async message => {
     let returnMessage = '账号信息\n\n';
     const ssurl = 'ss://' + Buffer.from(`${ myServer.method }:${ myAccount.password }@${ myServer.host }:${ myAccount.port }`).toString('base64');
     returnMessage += `地址：${ myServer.host }\n端口：${ myAccount.port }\n密码：${ myAccount.password }\n加密方式：${ myServer.method }\n\n`;
-    telegram.emit('send', telegramId, returnMessage);
+    tg.sendMessage(returnMessage, telegramId);
     if(myAccount.type >= 2 && myAccount.type <= 5) {
       let timePeriod = 0;
       if(myAccount.type === 2) { timePeriod = 7 * 86400 * 1000; }
@@ -130,13 +129,13 @@ telegram.on('message', async message => {
       const expireTime = data.create + data.limit * timePeriod;
       await sleep(250);
       const isExpired = Date.now() >= expireTime ? ' [已过期]' : '';
-      telegram.emit('send', telegramId, `过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`);
+      tg.sendMessage(`过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`, telegramId);
     }
     await sleep(250);
-    telegram.emit('markdwon', telegramId, `[${ ssurl }](${ ssurl })`);
+    tg.sendMarkdown(`[${ ssurl }](${ ssurl })`, telegramId);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };
-    telegram.emit('photo', telegramId, `${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`);
+    tg.sendPhoto(`${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`, telegramId);
   } else if(isLogin(message)) {
     const telegramId = message.message.chat.id.toString();
     const userId = await isUser(telegramId);
@@ -145,13 +144,12 @@ telegram.on('message', async message => {
       userId: +userId,
       time: Date.now(),
     };
-    telegram.emit('keyboard', telegramId, '登录', {
+    tg.sendKeyboard('登录', telegramId, {
       inline_keyboard: [[{
         text: '点击这里登录网页版',
         url: `${ config.plugins.webgui.site }/home/login/telegram/${ token }`
       }]],
     });
-    // telegram.emit('markdwon', telegramId, `[点击这里登录网页版](${ config.plugins.webgui.site }/home/login/telegram/${ token })`);
   }
 });
 

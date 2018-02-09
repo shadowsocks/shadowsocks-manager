@@ -37,7 +37,7 @@ const sendKeyboard = (text, chat_id, keyboard) => {
     qs: {
       chat_id,
       text,
-      reply_markup: keyboard,
+      reply_markup: JSON.stringify(keyboard),
     },
     simple: false,
   });
@@ -175,9 +175,15 @@ const pull = () => {
 pull();
 
 exports.telegram = telegram;
+
 exports.getMe = getMe;
 exports.isUser = isUser;
 exports.isAdmin = isAdmin;
+
+exports.sendKeyboard = sendKeyboard;
+exports.sendMarkdown = sendMarkdown;
+exports.sendMessage = sendMessage;
+exports.sendPhoto = sendPhoto;
 
 appRequire('plugins/webgui_telegram/user');
 appRequire('plugins/webgui_telegram/help');

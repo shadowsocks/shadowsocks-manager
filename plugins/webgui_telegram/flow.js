@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const flow = appRequire('plugins/flowSaver/flow');
+const tg = appRequire('plugins/webgui_telegram/index');
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const cron = appRequire('init/cron');
 const log4js = require('log4js');
@@ -38,7 +39,8 @@ const getUsers = async () => {
       const myFlow = await flow.getFlowFromSplitTime(null, account.id, start, end);
       const message = `昨日流量统计：[${ account.port }] ${ prettyFlow(myFlow) }`;
       logger.info(message);
-      telegram.emit('send', +user.telegram, message);
+      // telegram.emit('send', +user.telegram, message);
+      tg.sendMessage(message, +user.telegram);
     });
   });
 };

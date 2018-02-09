@@ -1,3 +1,4 @@
+const tg = appRequire('plugins/webgui_telegram/index');
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const getMe = appRequire('plugins/webgui_telegram/index').getMe;
 const knex = appRequire('init/knex').knex;
@@ -46,7 +47,8 @@ const bindUser = async (userId, message) => {
     return Promise.reject('');
   }
   await user.edit({ id: userId }, { telegram: telegramId });
-  telegram.emit('reply', message, 'Telegram账号绑定成功，输入 help 查看使用方法');
+  // telegram.emit('reply', message, 'Telegram账号绑定成功，输入 help 查看使用方法');
+  tg.sendMessage('Telegram账号绑定成功，输入 help 查看使用方法', telegramId);
 };
 
 const unbindUser = async (userId) => {
@@ -60,7 +62,8 @@ const unbindUser = async (userId) => {
     return Promise.reject('');
   }
   await user.edit({ id: userId }, { telegram: null });
-  telegram.emit('send', +exists.telegram, 'Telegram账号已经解除绑定');
+  // telegram.emit('send', +exists.telegram, 'Telegram账号已经解除绑定');
+  tg.sendMessage('Telegram账号已经解除绑定', +exists.telegram);
 };
 
 exports.getCode = async (userId) => {
