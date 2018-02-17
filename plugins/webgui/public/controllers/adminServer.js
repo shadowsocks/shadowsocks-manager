@@ -93,12 +93,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             }
           });
         } else {
+          console.log('update server list 2');
           $localStorage.admin.serverInfo = {
             time: Date.now(),
             data: servers,
           };
           $scope.servers = servers;
-          $scope.servers.forEach(server => {
+          $scope.servers.forEach((server, index) => {
             adminApi.getServerFlow(server.id).then(flow => {
               server.flow = flow;
             });
