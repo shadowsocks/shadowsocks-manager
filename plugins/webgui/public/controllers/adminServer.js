@@ -93,7 +93,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             }
           });
         } else {
-          console.log('update server list 2');
           $localStorage.admin.serverInfo = {
             time: Date.now(),
             data: servers,
