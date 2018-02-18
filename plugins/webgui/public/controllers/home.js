@@ -96,8 +96,8 @@ app
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog',
-    ($scope, $state, $interval, $timeout, homeApi, alertDialog) => {
+  .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', '$localStorage',
+    ($scope, $state, $interval, $timeout, homeApi, alertDialog, $localStorage) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
@@ -123,9 +123,14 @@ app
         alertDialog.loading().then(() => {
           return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password);
         })
-        .then(success => {
+        .then(userType => {
+          $localStorage.home.status = userType;
           alertDialog.show('用户注册成功', '确定').then(success => {
-            $state.go('home.login');
+            if(userType === 'admin') {
+              $state.go('admin.index');
+            } else {
+              $state.go('user.index');
+            }
           });
         }).catch(err => {
           alertDialog.show(err, '确定');
