@@ -24,6 +24,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminNewNoticeController',
       templateUrl: `${ cdn }/public/views/admin/newNotice.html`,
     })
+    .state('admin.affiliates', {
+      url: '/affiliates',
+      controller: 'AdminAffiliatesController',
+      templateUrl: `${ cdn }/public/views/admin/affiliates.html`,
+    })
     .state('admin.paymentSetting', {
       url: '/settings/payment',
       controller: 'AdminPaymentSettingController',
@@ -58,6 +63,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/password',
       controller: 'AdminPasswordSettingController',
       templateUrl: `${ cdn }/public/views/admin/changePassword.html`,
+    })
+    .state('admin.affiliatesSetting', {
+      url: '/settings/affiliates',
+      controller: 'AdminAffiliatesSettingController',
+      templateUrl: `${ cdn }/public/views/admin/affiliatesSetting.html`,
     })
     .state('admin.telegramSetting', {
       url: '/settings/telegram',

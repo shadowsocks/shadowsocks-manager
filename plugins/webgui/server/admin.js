@@ -3,6 +3,7 @@ const serverManager = appRequire('plugins/flowSaver/server');
 const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
 const user = appRequire('plugins/user/index');
+const affliates = appRequire('plugins/affiliates/index');
 const knex = appRequire('init/knex').knex;
 const moment = require('moment');
 const alipay = appRequire('plugins/alipay/index');
@@ -518,6 +519,15 @@ exports.getAccountIpInfo = (req, res) => {
 exports.getAllMacAccount = (req, res) => {
   macAccount.getAllAccount().then(success => {
     return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getAffiliatesRecords = (req, res) => {
+  affliates.getAllAffiliatesRecords().then(success => {
+    res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();

@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
+const config = appRequire('services/config').all();
 
 const setDefaultValue = (key, value) => {
   knex('webguiSetting').select().where({
@@ -37,6 +38,14 @@ setDefaultValue('base', {
   themePrimary: 'blue',
   serviceWorker: false,
 });
+
+if (config.plugins.affiliates && config.plugins.affiliates.use){
+  setDefaultValue('affiliates', {
+    flow: config.plugins.affiliates.flow,
+    duration: config.plugins.affiliates.duration
+  });
+}
+
 setDefaultValue('payment', {
   hour: {
     alipay: 0.15,
@@ -169,6 +178,37 @@ exports.modifyBase = (req, res) => {
     value: JSON.stringify(data)
   }).where({
     key: 'base',
+  }).then(success => {
+    return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getAffiliates = (req, res) => {
+  knex('webguiSetting').select().where({
+    key: 'affiliates',
+  }).then(success => {
+    if(!success.length) {
+      return Promise.reject('settings not found');
+    }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value;
+  }).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.modifyAffiliates = (req, res) => {
+  const data = req.body.data;
+  knex('webguiSetting').update({
+    value: JSON.stringify(data)
+  }).where({
+    key: 'affiliates',
   }).then(success => {
     return res.send('success');
   }).catch(err => {

@@ -21,6 +21,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toPassword = () => {
       $state.go('admin.passwordSetting');
     };
+    $scope.toAffiliates = () => {
+      $state.go('admin.affiliatesSetting');
+    };
     $scope.toTelegram = () => {
       $state.go('admin.telegramSetting');
     };
@@ -285,6 +288,33 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         alertDialog.show('修改密码失败', '确定');
       });
     };
+  }
+]).controller('AdminAffiliatesSettingController', ['$scope', '$http', '$timeout', '$state', 'adminApi', 'alertDialog', '$localStorage',
+  ($scope, $http, $timeout, $state, adminApi, alertDialog, $localStorage) => {
+    $scope.setTitle('推荐设置');
+    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.affiliatesData = null;
+    let lastSave = 0;
+    let lastSavePromise = null;
+    const saveTime = 3500;
+    $scope.saveSetting = () => {
+      if(Date.now() - lastSave <= saveTime) {
+        lastSavePromise && $timeout.cancel(lastSavePromise);
+      }
+      const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+      lastSave = Date.now();
+      lastSavePromise = $timeout(() => {
+        $http.put('/api/admin/setting/affiliates', {
+          data: $scope.affiliatesData,
+        });
+      }, timeout);
+    };
+    $http.get('/api/admin/setting/affiliates').then(success => {
+      $scope.affiliatesData = success.data;
+      $scope.$watch('affiliatesData', () => {
+        $scope.saveSetting();
+      }, true);
+    });
   }
 ]).controller('AdminTelegramSettingController', ['$scope', '$http', '$interval', '$state',
   ($scope, $http, $interval, $state) => {

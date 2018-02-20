@@ -102,12 +102,18 @@ app.post('/api/admin/notice', isAdmin, adminNotice.addNotice);
 app.put('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.editNotice);
 app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotice);
 
+if(config.plugins.affiliates && config.plugins.affiliates.use) {
+  app.get('/api/admin/affiliates/records', isAdmin, admin.getAffiliatesRecords);
+}
+
 app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
 app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
 app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
 app.get('/api/admin/setting/base', isAdmin, adminSetting.getBase);
 app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
+app.get('/api/admin/setting/affiliates', isAdmin, adminSetting.getAffiliates);
+app.put('/api/admin/setting/affiliates', isAdmin, adminSetting.modifyAffiliates);
 app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
@@ -135,6 +141,11 @@ app.post('/api/user/alipay/callback', user.alipayCallback);
 app.post('/api/user/paypal/callback', user.paypalCallback);
 
 app.post('/api/user/changePassword', isUser, user.changePassword);
+
+if(config.plugins.affiliates && config.plugins.affiliates.use) {
+  app.get('/api/user/affiliates/records', isUser, user.getAffiliatesRecords);
+  app.get('/api/user/affiliates/link', isUser, user.getAffiliatesLink);
+}
 
 if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   const telegram = appRequire('plugins/webgui_telegram/account');

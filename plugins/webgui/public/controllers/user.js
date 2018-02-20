@@ -43,6 +43,10 @@ app
       icon: 'settings',
       click: 'user.settings'
     }, {
+      name: '推荐注册',
+      icon: 'card_giftcard',
+      click: 'user.affiliates'
+    }, {
       name: 'divider',
     }, {
       name: '退出',
@@ -311,6 +315,28 @@ app
         alertDialog.show('修改密码失败', '确定');
       });
     };
+  }
+])
+.controller('UserAffiliatesController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+    $scope.setTitle('推荐注册');
+    
+    $scope.affiliatesLink = '正在获取...';
+    $http.get('/api/user/affiliates/link').then(success => {
+      $scope.affiliatesLink =window.location.origin + success.data;
+    }).catch(err => {
+        $scope.affiliatesLink = '获取推荐链接失败'
+    });
+
+    $scope.affiliatesRecordsData = null;
+    $scope.isLoading = true;
+    $http.get('/api/user/affiliates/records').then(success => {
+      $scope.affiliatesRecordsData = success.data;
+        $scope.isLoading = false;
+    }).catch(err => {
+        alertDialog.show('获取推荐记录失败', '确定');
+        $scope.isLoading = false;
+    });
   }
 ])
 .controller('UserTelegramController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',

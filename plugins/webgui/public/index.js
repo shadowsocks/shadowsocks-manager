@@ -7,6 +7,7 @@ angular.module('app', [
   'angularMoment',
   'ngWebSocket',
   'ngStorage',
+  'ngCookies',
   'angular-inview',
   'hc.marked',
   'pascalprecht.translate',

@@ -21,6 +21,7 @@ const sessionParser = session({
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 app.set('trust proxy', 'loopback');
@@ -34,6 +35,7 @@ app.use(expressValidator());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(sessionParser);
+app.use(cookieParser());
 
 app.engine('.html', require('ejs').__express);
 app.engine('.js', require('ejs').__express);

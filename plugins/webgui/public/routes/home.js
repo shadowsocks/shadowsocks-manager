@@ -9,6 +9,10 @@ app.config(['$stateProvider', $stateProvider => {
       abstract: true,
       templateUrl: `${ cdn }/public/views/home/home.html`,
     })
+    .state('home.affiliates', {
+      url: '/af/:afftoken',
+      controller: 'HomeAffiliatesController',
+    })
     .state('home.index', {
       url: '/index',
       controller: 'HomeIndexController',
