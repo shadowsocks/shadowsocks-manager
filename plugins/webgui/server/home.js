@@ -99,6 +99,8 @@ exports.signup = (req, res) => {
       type,
     });
   }).then(success => {
+    req.session.user = success[0];
+    req.session.type = type;
     if(success[0] > 1) {
       const userId = success[0];
       registeringUserId = userId;
@@ -350,7 +352,7 @@ exports.signup = (req, res) => {
       body: `用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`,
     });
     isTelegram && telegram.push(`用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`);
-    res.send('success');
+    res.send(type);
   }).catch(err => {
     logger.error(`[${ req.body.email }] signup fail: ${ err }`);
     res.status(403).end();

@@ -6,7 +6,9 @@ app.factory('homeApi', ['$http', $http => {
       email,
       code,
       password,
-    }).catch(err => {
+    })
+    .then(success => success.data)
+    .catch(err => {
       if(err.status === 403) {
         return Promise.reject('用户注册失败');
       } else {
