@@ -40,6 +40,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       icon: 'attach_money',
       click: 'admin.pay',
     }, {
+      name: '推荐注册',
+      icon: 'card_giftcard',
+      click: 'admin.affiliates',
+    }, {
       name: '设置',
       icon: 'settings',
       click: 'admin.settings',

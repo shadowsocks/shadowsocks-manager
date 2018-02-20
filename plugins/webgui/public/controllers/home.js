@@ -39,6 +39,15 @@ app
       };
     }
   ])
+  .controller('HomeAffiliatesController', ['$scope', '$state', '$cookies', '$stateParams',
+    ($scope, $state, $cookies, $stateParams) => {
+      const afftoken = $stateParams.afftoken;
+      var expireDate = new Date();
+      expireDate.setDate(expireDate.getDate() + 90);
+      $cookies.put('afftoken', afftoken, {'expires': expireDate});
+      $state.go('home.index');
+    }
+  ])
   .controller('HomeIndexController', ['$scope', '$state',
     ($scope, $state) => {
       $scope.icons = [{

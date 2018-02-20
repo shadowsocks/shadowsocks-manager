@@ -24,6 +24,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'UserSettingsController',
       templateUrl: `${ cdn }/public/views/user/settings.html`,
     })
+    .state('user.affiliates', {
+      url: '/affiliates',
+      controller: 'UserAffiliatesController',
+      templateUrl: `${ cdn }/public/views/user/affiliates.html`,
+    })
     .state('user.changePassword', {
       url: '/changePassword',
       controller: 'UserChangePasswordController',

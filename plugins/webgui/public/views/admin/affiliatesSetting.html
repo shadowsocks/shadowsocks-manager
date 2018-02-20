@@ -1,0 +1,28 @@
+<div>
+<div>
+    <md-card>
+        <md-card-content>
+            <div flex layout="row" layout-align="center center" ng-hide="affiliatesData">
+                <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+            </div>
+            <md-divider ng-show="affiliatesData"></md-divider>
+            <md-list layout="row" ng-show="affiliatesData">
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+                <div flex>
+                    <form name="settingForm" layout="row" layout-wrap>
+                        <md-input-container class="md-block"  flex="100">
+                            <label>奖励流量（MB）</label>
+                            <input type="number" required name="flow" ng-model="affiliatesData.flow">
+                        </md-input-container>
+                        <md-input-container class="md-block"  flex="100">
+                            <label>奖励时长（天）</label>
+                            <input type="number" required name="duration" ng-model="affiliatesData.duration">
+                        </md-input-container>
+                    </form>
+                </div>
+                <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+            </md-list>
+            <md-divider ng-show="affiliatesData"></md-divider>
+        </md-card-content>
+    </md-card>
+</div>

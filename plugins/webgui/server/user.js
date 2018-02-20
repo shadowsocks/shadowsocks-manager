@@ -1,6 +1,8 @@
 const user = appRequire('plugins/user/index');
 const account = appRequire('plugins/account/index');
+const crypto = require('crypto');
 const flow = appRequire('plugins/flowSaver/flow');
+const affiliates = appRequire('plugins/affiliates/index');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const config = appRequire('services/config').all();
@@ -363,6 +365,35 @@ exports.changePassword = (req, res) => {
   const userId = req.session.user;
   user.changePassword(userId, oldPassword, newPassword).then(success => {
     res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getAffiliatesLink = (req, res) => {
+  const userId = req.session.user;
+  const userIp = req.headers['x-real-ip'] || 
+    (req.headers['x-forwarded-for'] && req.headers['x-forwarded-for'].split(',').pop()) || 
+    req.connection.remoteAddress || 
+    req.socket.remoteAddress || 
+    req.connection.socket.remoteAddress;
+  const tokenPassword = config.plugins.affiliates.tokenPassword;
+
+  const encrypt = (text, password) => {
+    var cipher = crypto.createCipher('aes-256-ctr' ,password)
+    var crypted = cipher.update(text,'utf8','hex')
+    crypted += cipher.final('hex');
+    return crypted;
+  };
+  const afftoken = encrypt(userIp + ':' + userId, tokenPassword);
+  res.send('/home/af/'+afftoken);
+};
+
+exports.getAffiliatesRecords = (req, res) => {
+  const userId = req.session.user;
+  affiliates.getAffiliatesRecords(userId).then(success => {
+    res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();
