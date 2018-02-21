@@ -7,7 +7,7 @@
         <md-list-item ng-repeat="batch in batchList">
             <div flex layout="row" layout-align="space-between center" ng-click="showBatch(batch.batchNumber)">
                 <div flex="30" flex-xs="60">
-                    <span hide-xs hide-sm>{{batch.type | prettyOrderType}}卡</span>
+                    <span>{{batch.type | prettyOrderType}}卡</span>
                 </div>
                 <div flex="10" flex-xs="40" style="text-align: right;">
                     <span style="font-size: 0.9em; color: #555">{{batch.createTime | timeago}}</span>
