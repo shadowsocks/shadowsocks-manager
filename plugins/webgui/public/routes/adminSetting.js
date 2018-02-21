@@ -63,6 +63,16 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/telegram',
       controller: 'AdminTelegramSettingController',
       templateUrl: `${ cdn }/public/views/admin/telegramSetting.html`,
+    })
+    .state('admin.listGiftCardBatch', {
+      url: '/settings/giftcard',
+      controller: 'AdminGiftCardController',
+      templateUrl: `${ cdn }/public/views/admin/giftcardBatchList.html`
+    })
+    .state('admin.giftcardBatchDetails', {
+      url: '/settings/giftcard/batch/:batchNumber',
+      controller: 'AdminGiftCardBatchDetailsController',
+      templateUrl: `${ cdn }/public/views/admin/giftcardBatchDetails.html`
     });
   }
 ]);

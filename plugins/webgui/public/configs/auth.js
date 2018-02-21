@@ -13,6 +13,6 @@ app.service('authInterceptor', ['$q', '$localStorage', function($q, $localStorag
   };
 }]).config(['$httpProvider', '$compileProvider', ($httpProvider, $compileProvider) => {
   $httpProvider.interceptors.push('authInterceptor');
-  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss):/);
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss|blob):/);
 }])
 ;

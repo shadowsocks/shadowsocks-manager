@@ -1,0 +1,29 @@
+<md-card>
+    <md-card-content layout="row" layout-align="space-between" ng-if="batchList.length === 0">
+        <div>暂无充值码</div>
+    </md-card-content>
+    <md-list ng-if="batchList-length !== 0">
+        <md-divider></md-divider>
+        <md-list-item ng-repeat="batch in batchList">
+            <div flex layout="row" layout-align="space-between center" ng-click="showBatch(batch.batchNumber)">
+                <div flex="30" flex-xs="60">
+                    <span hide-xs hide-sm>{{batch.type | prettyOrderType}}卡</span>
+                </div>
+                <div flex="10" flex-xs="40" style="text-align: right;">
+                    <span style="font-size: 0.9em; color: #555">{{batch.createTime | timeago}}</span>
+                    <br>
+                    <span style="font-size: 0.9em; color: #000">
+                        {{batch.status | prettyPrintBatchStatus}}
+                        <span ng-if="batch.status === 'AVAILABLE'">
+                            ({{batch.availableCount}} / {{batch.totalCount}})
+                        </span>
+                        <span ng-if="batch.status !== 'AVAILABLE'">
+                            ({{batch.totalCount}})
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+</md-card>

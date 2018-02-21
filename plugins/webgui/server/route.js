@@ -10,6 +10,7 @@ const adminFlow = appRequire('plugins/webgui/server/adminFlow');
 const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const adminAccount = appRequire('plugins/webgui/server/adminAccount');
+const adminGiftCard = appRequire('plugins/webgui/server/adminGiftCard');
 const push = appRequire('plugins/webgui/server/push');
 const os = require('os');
 const path = require('path');
@@ -17,7 +18,7 @@ const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
 
 const isUser = (req, res, next) => {
-  if(req.session.type === 'normal') {
+  if (req.session.type === 'normal') {
     knex('user').update({
       lastLogin: Date.now(),
     }).where({ id: req.session.user }).then();
@@ -27,7 +28,7 @@ const isUser = (req, res, next) => {
   }
 };
 const isAdmin = (req, res, next) => {
-  if(req.session.type === 'admin') {
+  if (req.session.type === 'admin') {
     return next();
   } else {
     return res.status(401).end();
@@ -111,6 +112,11 @@ app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
 app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
+app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);
+app.get('/api/admin/giftcard/details/:batchNumber', isAdmin, adminGiftCard.getBatchDetails);
+app.post('/api/admin/giftcard/revoke', isAdmin, adminGiftCard.revokeBatch);
+app.post('/api/admin/giftcard/add', isAdmin, adminGiftCard.addGiftCard);
+
 app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
 
 app.get('/api/user/notice', isUser, user.getNotice);
@@ -128,6 +134,8 @@ app.get('/api/user/order/price', isUser, user.getPrice);
 app.post('/api/user/order/qrcode', isUser, user.createOrder);
 app.post('/api/user/order/status', isUser, user.checkOrder);
 
+app.post('/api/user/giftcard/use', isUser, user.payByGiftCard);
+
 app.post('/api/user/paypal/create', isUser, user.createPaypalOrder);
 app.post('/api/user/paypal/execute', isUser, user.executePaypalOrder);
 
@@ -136,7 +144,7 @@ app.post('/api/user/paypal/callback', user.paypalCallback);
 
 app.post('/api/user/changePassword', isUser, user.changePassword);
 
-if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
+if (config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   const telegram = appRequire('plugins/webgui_telegram/account');
   app.get('/api/user/telegram/code', isUser, user.getTelegramCode);
   app.get('/api/admin/telegram/code', isAdmin, adminSetting.getTelegramCode);
@@ -146,7 +154,7 @@ if(config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   app.post('/api/user/telegram/login', telegram.login);
 }
 
-if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
+if (config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.post('/api/push/client', push.client);
   app.delete('/api/push/client', push.deleteClient);
 }
@@ -157,7 +165,7 @@ app.get('/favicon.png', (req, res) => {
     root: './plugins/webgui/'
   };
   const iconPath = config.plugins.webgui.icon;
-  if(iconPath) {
+  if (iconPath) {
     const ssmgrPath = path.resolve(os.homedir(), './.ssmgr/');
     if (iconPath[0] === '/' || iconPath[0] === '.') {
       options = {};
@@ -178,7 +186,7 @@ app.get('/manifest.json', (req, res) => {
   return knex('webguiSetting').select().where({
     key: 'base',
   }).then(success => {
-    if(!success.length) {
+    if (!success.length) {
       return Promise.reject('settings not found');
     }
     success[0].value = JSON.parse(success[0].value);
@@ -197,6 +205,7 @@ const configForFrontend = {
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
   telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
+  giftcard: config.plugins.giftcard && config.plugins.giftcard.use
 };
 
 const cdn = config.plugins.webgui.cdn;
@@ -226,7 +235,7 @@ const homePage = (req, res) => {
   return knex('webguiSetting').select().where({
     key: 'base',
   }).then(success => {
-    if(!success.length) {
+    if (!success.length) {
       return Promise.reject('settings not found');
     }
     success[0].value = JSON.parse(success[0].value);
@@ -256,7 +265,7 @@ app.get('/serviceworker.js', (req, res) => {
   return knex('webguiSetting').select().where({
     key: 'base',
   }).then(success => {
-    if(!success.length) {
+    if (!success.length) {
       return Promise.reject('settings not found');
     }
     success[0].value = JSON.parse(success[0].value);
@@ -268,7 +277,7 @@ app.get('/serviceworker.js', (req, res) => {
       serviceWorkerTime: success.serviceWorkerTime,
     });
   });
-  
+
 });
 
 app.get('*', (req, res) => {

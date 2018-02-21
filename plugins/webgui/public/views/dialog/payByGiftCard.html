@@ -1,0 +1,31 @@
+<md-dialog aria-label="confirm dialog">
+    <div ng-show="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-dialog-content ng-show="publicInfo.status !== 'loading'">
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'show'">
+                <form>
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <label>充值码</label>
+                        <input ng-model="publicInfo.password">
+                    </md-input-container>
+                </form>
+            </div>
+            <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'finish'">
+                <div style="white-space: pre-wrap;">{{ publicInfo.message }}</div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="center center" ng-show="publicInfo.status !== 'loading'">
+        <md-button class="md-primary" ng-click="publicInfo.submit()" ng-show="publicInfo.status === 'show'">
+            {{ '确定' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-click="publicInfo.close()" ng-show="publicInfo.status === 'show'">
+            {{ '关闭' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-click="publicInfo.close()" ng-show="publicInfo.status === 'finish'">
+            {{ '确定' | translate }}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>
