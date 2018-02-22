@@ -397,7 +397,7 @@ exports.unbindTelegram = (req, res) => {
 exports.payByGiftCard = async (req, resp) => {
   const password = String(req.body.password);
   const userId = Number(req.session.user);
-  const accountId = Number(req.body.accountId);
+  const accountId = req.body.accountId != null ? Number(req.body.accountId) : null;
   if (userId === NaN || accountId === NaN) {
     resp.status(400).end();
     return;
