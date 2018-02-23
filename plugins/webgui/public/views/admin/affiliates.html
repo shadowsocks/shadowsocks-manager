@@ -13,16 +13,16 @@
                   <md-divider></md-divider>
                   <md-list-item>
                       <div flex layout="row" layout-align="space-between center">
-                          <div flex="30">已推荐用户数</div>
+                          <div flex="30">{{ '已推荐用户数' | translate }}</div>
                           <div flex="70" style="text-align: right;">
-                              <span style="font-size: 0.9em;">{{ affiliatesRecordsData.count }} 个</span>
+                              <span style="font-size: 0.9em;">{{ affiliatesRecordsData.count }}</span>
                           </div>
                       </div>
                   </md-list-item>
                   <md-divider></md-divider>
                   <md-list-item>
                       <div flex layout="row" layout-align="space-between center">
-                          <div flex="30">已获得流量</div>
+                          <div flex="30">{{ '已获得流量' | translate }}</div>
                           <div flex="70" style="text-align: right;">
                               <span style="font-size: 0.9em;">{{ (affiliatesRecordsData.flow || 0) | flow}}</span>
                           </div>
@@ -31,9 +31,9 @@
                   <md-divider></md-divider>
                   <md-list-item>
                       <div flex layout="row" layout-align="space-between center">
-                          <div flex="30">已获得时长</div>
+                          <div flex="30">{{ '已获得时长' | translate }}</div>
                           <div flex="70" style="text-align: right;">
-                              <span style="font-size: 0.9em;">{{ (affiliatesRecordsData.duration || 0) }} 天</span>
+                              <span style="font-size: 0.9em;">{{ (affiliatesRecordsData.duration || 0) + '天' | translateTime }}</span>
                           </div>
                       </div>
                   </md-list-item>

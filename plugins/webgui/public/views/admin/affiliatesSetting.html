@@ -11,11 +11,11 @@
                 <div flex>
                     <form name="settingForm" layout="row" layout-wrap>
                         <md-input-container class="md-block"  flex="100">
-                            <label>奖励流量（MB）</label>
+                            <label>{{ '奖励流量（MB）' | translate }}</label>
                             <input type="number" required name="flow" ng-model="affiliatesData.flow">
                         </md-input-container>
                         <md-input-container class="md-block"  flex="100">
-                            <label>奖励时长（天）</label>
+                            <label>{{ '奖励时长（天）' | translate }}</label>
                             <input type="number" required name="duration" ng-model="affiliatesData.duration">
                         </md-input-container>
                     </form>
