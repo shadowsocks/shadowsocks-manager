@@ -30,6 +30,7 @@ app
         $mdSidenav('left').toggle();
       }
     };
+    
     $scope.menus = [{
       name: '首页',
       icon: 'home',
@@ -42,23 +43,30 @@ app
       name: '设置',
       icon: 'settings',
       click: 'user.settings'
-    }, {
-      name: '推荐注册',
-      icon: 'card_giftcard',
-      click: 'user.affiliates'
-    }, {
-      name: 'divider',
-    }, {
-      name: '退出',
-      icon: 'exit_to_app',
-      click: function() {
-        $http.post('/api/home/logout').then(() => {
-          $localStorage.home = {};
-          $localStorage.user = {};
-          $state.go('home.index');
-        });
-      },
     }];
+    if (JSON.parse(window.ssmgrConfig).affiliates){
+      $scope.menus.push({
+        name: '推荐注册',
+        icon: 'card_giftcard',
+        click: 'user.affiliates'
+      });
+    }  
+    $scope.menus = $scope.menus.concat(
+      [{
+        name: 'divider',
+      }, {
+        name: '退出',
+        icon: 'exit_to_app',
+        click: function() {
+          $http.post('/api/home/logout').then(() => {
+            $localStorage.home = {};
+            $localStorage.user = {};
+            $state.go('home.index');
+          });
+        },
+      }]
+    );
+    
     $scope.menuClick = index => {
       $mdSidenav('left').close();
       if(typeof $scope.menus[index].click === 'function') {

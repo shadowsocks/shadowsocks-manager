@@ -203,11 +203,12 @@ app.get('/manifest.json', (req, res) => {
 const version = appRequire('package').version;
 const configForFrontend = {
   site: config.plugins.webgui.site,
+  affiliates: config.plugins.affiliates.use,
   alipay: config.plugins.alipay && config.plugins.alipay.use,
   paypal: config.plugins.paypal && config.plugins.paypal.use,
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
-  telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
+  telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,  
 };
 
 const cdn = config.plugins.webgui.cdn;

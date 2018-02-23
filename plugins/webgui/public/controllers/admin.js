@@ -39,27 +39,33 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '订单',
       icon: 'attach_money',
       click: 'admin.pay',
-    }, {
-      name: '推荐注册',
-      icon: 'card_giftcard',
-      click: 'admin.affiliates',
-    }, {
-      name: '设置',
-      icon: 'settings',
-      click: 'admin.settings',
-    }, {
-      name: 'divider',
-    }, {
-      name: '退出',
-      icon: 'exit_to_app',
-      click: function() {
-        $http.post('/api/home/logout').then(() => {
-          $localStorage.home = {};
-          $localStorage.admin = {};
-          $state.go('home.index');
-        });
-      },
     }];
+    if (JSON.parse(window.ssmgrConfig).affiliates){
+      $scope.menus.push({
+        name: '推荐注册',
+        icon: 'card_giftcard',
+        click: 'admin.affiliates',
+      });
+    }
+    $scope.menus = $scope.menus.concat(
+      [{
+        name: '设置',
+        icon: 'settings',
+        click: 'admin.settings',
+      }, {
+        name: 'divider',
+      }, {
+        name: '退出',
+        icon: 'exit_to_app',
+        click: function() {
+          $http.post('/api/home/logout').then(() => {
+            $localStorage.home = {};
+            $localStorage.admin = {};
+            $state.go('home.index');
+          });
+        },
+      }]
+    );
     $scope.menuButton = function() {
       if($scope.menuButtonIcon) {
         return $scope.menuButtonClick();

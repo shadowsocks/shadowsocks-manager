@@ -50,7 +50,7 @@ exports.signup = (req, res) => {
   }).then(success => {
     const ipIsUsed = success[0].count;
     if (ipIsUsed){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: ip used');
     }
     return;
   }).then(success => {
@@ -72,13 +72,13 @@ exports.signup = (req, res) => {
     }
     const afftokenRaw = decrypt(afftoken, tokenPassword);
     if (!afftokenRaw || afftokenRaw.split(':').length != 2){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: token broken');
     }
     referrerIp = afftokenRaw.split(':')[0];
     referrerUserId = parseInt(afftokenRaw.split(':')[1]);
     
     if (referrerIp == userIp){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: referring self');
     }
     return;
   }).then(success => {
@@ -172,17 +172,15 @@ exports.signup = (req, res) => {
     }
   }).then(success => { //Process the affiliates bonus.
     if (!config.plugins.affiliates || !config.plugins.affiliates.use){
-      return 'skiped';
+      return;
     }
     if (!referrerIp || !referrerUserId || !registeringUserId || !userIp){
-      console.log('P0',referrerIp,referrerUserId,registeringUserId,userIp);
-      return 'skiped';
+      return;
     }
 
     return knex('account_plugin').select().where({
         userId: referrerUserId,
     }).then(success => {
-      console.log('P1', success);
       if (success.length == 0) { //Referrer has no account currently, create one for him/her
         return knex('webguiSetting').select().where({
           key: 'account',
@@ -322,29 +320,45 @@ exports.signup = (req, res) => {
       }
     });
   })
-  .then(success => {
-    if (success != 'bonus_assigned'){
+  .then(success => { //Write the records to affiliates table.
+    if (!config.plugins.affiliates || !config.plugins.affiliates.use){
       return;
     }
-    return knex('webguiSetting').select().where({
-      key: 'affiliates',
-    })
-    .then(success => {
-      if(!success.length) { return Promise.reject('settings not found'); }
-      return JSON.parse(success[0].value)
-    })
-    .then(affiliatesSettings => {
-      const durationDays = affiliatesSettings && affiliatesSettings.duration ? affiliatesSettings.duration : config.plugins.affiliates.duration;
-      const addFlow = affiliatesSettings && affiliatesSettings.flow ? affiliatesSettings.flow : config.plugins.affiliates.flow;
+
+    if (success == 'bonus_assigned'){
+      return knex('webguiSetting').select().where({
+        key: 'affiliates',
+      })
+      .then(success => {
+        if(!success.length) { return Promise.reject('settings not found'); }
+        return JSON.parse(success[0].value)
+      })
+      .then(affiliatesSettings => {
+        const durationDays = affiliatesSettings && affiliatesSettings.duration ? affiliatesSettings.duration : config.plugins.affiliates.duration;
+        const addFlow = affiliatesSettings && affiliatesSettings.flow ? affiliatesSettings.flow : config.plugins.affiliates.flow;
+        return affiliates.addAffiliates(
+          userIp,
+          registeringUserId,
+          Date.now(),
+          referrerUserId,
+          addFlow * 1000000,
+          durationDays
+        );
+      });
+    } else if (registeringUserId && userIp){ 
+      //If bonus is not assigned, but register is successful, only record the userIp.
+      //This prevent fraud register from a same IP.
       return affiliates.addAffiliates(
         userIp,
         registeringUserId,
         Date.now(),
-        referrerUserId,
-        addFlow * 1000000,
-        durationDays
+        null,
+        0,
+        0
       );
-    });
+    } else{
+      return;
+    }
   })
   .then(success => {
     logger.info(`[${ req.body.email }] signup success`);
@@ -430,7 +444,7 @@ exports.sendCode = (req, res) => {
   }).then(success => {
     const ipIsUsed = success[0].count;
     if (ipIsUsed){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: ip used');
     }
     return;
   }).then(success => {
@@ -452,13 +466,13 @@ exports.sendCode = (req, res) => {
     }
     const afftokenRaw = decrypt(afftoken, tokenPassword);
     if (!afftokenRaw || afftokenRaw.split(':').length != 2){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: token broken');
     }
     referrerIp = afftokenRaw.split(':')[0];
     referrerUserId = parseInt(afftokenRaw.split(':')[1]);
     
     if (referrerIp == userIp){
-      return Promise.reject('fraud register');
+      return Promise.reject('fraud register: referring self');
     }
     return;
   }).then(() => {
@@ -492,7 +506,7 @@ exports.sendCode = (req, res) => {
     res.send('success');
   }).catch(err => {
     logger.error(err);
-    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'fraud register'];
+    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'fraud register: ip used', 'fraud register: token broken', 'fraud register: referring self'];
     if(errorData.indexOf(err) < 0) {
       return res.status(403).end();
     } else {
