@@ -231,8 +231,11 @@ const getBatchDetails = async (batchNumber) => {
   return Object.assign(batchInfo, { cards: sqlCardsResult });
 };
 
-const revokeBatch = async (batchNumber) => {
-  await knex(dbTableName).where({ batchNumber }).update({ status: cardStatusEnum.revoked });
+const revokeBatch = async batchNumber => {
+  await knex(dbTableName).where({
+    batchNumber,
+    status: cardStatusEnum.available,
+  }).update({ status: cardStatusEnum.revoked });
 };
 
 exports.generateGiftCard = generateGiftCard;
