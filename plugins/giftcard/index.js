@@ -124,15 +124,16 @@ const orderListAndPaging = async (options = {}) => {
   where[dbTableName + '.status'] = cardStatusEnum.used;
   let count = knex(dbTableName).select().where(where);
   let orders = knex(dbTableName).select([
-    `${dbTableName}.id as orderId`,
+    `${dbTableName}.password as orderId`,
     `${dbTableName}.orderType`,
     'user.id as userId',
     'user.username',
     'account_plugin.port',
     `${dbTableName}.status`,
-    `${dbTableName}.createTime`,
+    `${dbTableName}.usedTime as createTime`,
   ])
   .where(where)
+  .orderBy(`${dbTableName}.usedTime`, 'DESC')
   .leftJoin('user', 'user.id', `${dbTableName}.user`)
   .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`);
 
@@ -141,15 +142,12 @@ const orderListAndPaging = async (options = {}) => {
     orders = orders.whereIn(`${dbTableName}.status`, filter);
   }
   if (search) {
-    count = count.where(`${dbTableName}.id`, 'like', `%${search}%`);
-    orders = orders.where(`${dbTableName}.id`, 'like', `%${search}%`);
+    count = count.where(`${dbTableName}.password`, 'like', `%${search}%`);
+    orders = orders.where(`${dbTableName}.password`, 'like', `%${search}%`);
   }
 
   count = await count.count('id as count').then(success => success[0].count);
   orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
-  // orders.forEach(f => {
-  //     f.paypalData = JSON.parse(f.paypalData);
-  // });
   const maxPage = Math.ceil(count / pageSize);
   return {
     total: count,

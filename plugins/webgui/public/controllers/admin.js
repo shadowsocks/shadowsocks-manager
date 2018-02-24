@@ -208,9 +208,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
     };
-    $scope.myPayType = '支付宝';
+    $scope.myPayType = '';
     let tabSwitchTime = 0;
-    $scope.payTypes = [{ name: '支付宝' }, { name: 'Paypal' }, { name: '充值码' }];
+    $scope.payTypes = [];
+    if($scope.config.alipay) { $scope.payTypes.push({ name: '支付宝' }); }
+    if($scope.config.paypal) { $scope.payTypes.push({ name: 'Paypal' }); }
+    if($scope.config.giftcard) { $scope.payTypes.push({ name: '充值码' }); }
+    if($scope.payTypes.length) { $scope.myPayType = $scope.payTypes[0].name; }
     $scope.selectPayType = type => {
       tabSwitchTime = Date.now();
       $scope.myPayType = type;
@@ -242,6 +246,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       if($mdMedia('gt-md')) { return 50; }
     };
     $scope.getOrders = search => {
+      if(!$scope.payTypes.length) { return; }
       const oldTabSwitchTime = tabSwitchTime;
       $scope.isOrderLoading = true;
       adminApi.getOrder($scope.myPayType, {

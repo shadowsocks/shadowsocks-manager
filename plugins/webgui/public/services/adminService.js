@@ -17,18 +17,10 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
         if(m === 'FINISH') return 'finish';
       }).filter(f => f);
     }
-    // if(payType === '充值码') {
-    //   opt.filter = opt.filter.map(m => {
-    //     if(m === 'CREATE') return 'created';
-    //     if(m === 'TRADE_SUCCESS') return 'approved';
-    //     if(m === 'FINISH') return 'finish';
-    //   }).filter(f => f);
-    // }
     let url;
     if(payType === '支付宝') { url = '/api/admin/alipay'; }
     if(payType === 'Paypal') { url = '/api/admin/paypal'; }
     if(payType === '充值码') { url = '/api/admin/giftcard'; }
-    // const url = payType === '支付宝' ? '/api/admin/alipay' : '/api/admin/paypal';
     const search = opt.search || '';
     const filter = opt.filter || '';
     // const sort = opt.sort || 'alipay.createTime_desc';
