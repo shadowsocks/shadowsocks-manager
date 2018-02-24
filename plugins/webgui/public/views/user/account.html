@@ -3,9 +3,11 @@
         <md-card>
             <md-card-content>
                 <div style="margin-top: 30px; margin-bottom: 30px;" translate>目前该用户没有分配账号，请联系管理员处理</div>
-                <div ng-show="config.alipay || config.paypal" ng-click="createOrder()" style="margin-bottom: 30px;">{{ '或' | translate }}
-                    <span><md-button class="md-primary">{{ '点击这里' | translate }}</md-button></span>
-                {{ '付款立即开通帐号' | translate }}</div>
+                <div ng-show="config.alipay || config.paypal || config.giftcard" style="margin-bottom: 30px;">
+                    {{ '或者，你也可以' | translate }}
+                    <md-button ng-show="config.alipay || config.paypal" ng-click="createOrder()" class="md-primary">{{ '使用支付工具开通帐号' | translate }}</md-button>
+                    <md-button ng-show="config.giftcard" ng-click="useGiftCard()" class="md-primary">{{ '使用充值码开通帐号' | translate }}</md-button>
+                </div>
             </md-card-content>
         </md-card>
     </div>
@@ -13,38 +15,42 @@
         <md-card ng-click="toAccount(a.id)">
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-title">{{a.port}}<span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span></span>
+                    <span class="md-title">{{a.port}}
+                        <span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
+                    </span>
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
-                    <md-tab ng-repeat="server in a.serverList track by server.id"
-                           label="{{server.name}}"
-                           md-on-select="getServerPortData(a, server.id)">
+                    <md-tab ng-repeat="server in a.serverList track by server.id" label="{{server.name}}" md-on-select="getServerPortData(a, server.id)">
                         <div layout="row" layout-align="center center" layout-wrap>
                             <div flex="60" flex-xs="100">
                                 <md-list>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{server.host}}</div>
+                                            <div flex="40" translate>地址：</div>
+                                            <div flex="60" style="text-align:right">{{server.host}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{a.port + server.shift}}</div>
+                                            <div flex="40" translate>端口：</div>
+                                            <div flex="60" style="text-align:right">{{a.port + server.shift}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{a.password}}</div>
+                                            <div flex="40" translate>密码：</div>
+                                            <div flex="60" style="text-align:right">{{a.password}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40">{{ '加密方式：' | translate }}</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                            <div flex="40">{{ '加密方式：' | translate }}</div>
+                                            <div flex="60" style="text-align:right">{{server.method}}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
@@ -53,7 +59,9 @@
                                             <div flex="40">{{ '流量：'| translate }}</div>
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="a.type === 1">{{ '不限量' | translate }}</span>
-                                                <span ng-if="a.type >=2 && a.type <= 5"><span ng-style="a.isFlowOutOfLimit[server.id] ? {color: '#a33'} : {color: '#333'}">{{a.serverPortFlow | flow}}</span> / {{a.data.flow * (isMultiServerFlow ? 1 : server.scale) | flow}}</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">
+                                                    <span ng-style="a.isFlowOutOfLimit[server.id] ? {color: '#a33'} : {color: '#333'}">{{a.serverPortFlow | flow}}</span> / {{a.data.flow * (isMultiServerFlow
+                                                    ? 1 : server.scale) | flow}}</span>
                                             </div>
                                         </div>
                                     </md-list-item>
@@ -64,7 +72,9 @@
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="a.type === 1">{{ '无' | translate }}</span>
                                                 <span ng-if="a.type >=2 && a.type <= 5">
-                                                    <span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                    <span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                    <br>
+                                                    <span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -72,27 +82,34 @@
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                          <div flex="40" translate>到期时间：</div>
-                                          <div flex="60" style="text-align:right">
-                                              <span ng-if="a.type === 1" translate>不限时</span>
-                                              <span ng-if="a.type >=2 && a.type <= 5">
-                                                  <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
-                                              </span>
-                                          </div>
+                                            <div flex="40" translate>到期时间：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.type === 1" translate>不限时</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5">
+                                                    <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                    <br>
+                                                    <span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
+                                                </span>
+                                            </div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                          <div flex="40" translate>最近连接：</div><div flex="60" style="text-align:right">
-                                              <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
-                                          </div>
+                                            <div flex="40" translate>最近连接：</div>
+                                            <div flex="60" style="text-align:right">
+                                                <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}
+                                                    <span>
+                                                        <br>
+                                                        <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
+                                            </div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
                                     <md-list-item>
                                         <div flex layout="row" layout-align="space-between center">
-                                            <div flex="40" translate>备注：</div><div flex="60" style="text-align:right">{{ server.comment || '无' }}</div>
+                                            <div flex="40" translate>备注：</div>
+                                            <div flex="60" style="text-align:right">{{ server.comment || '无' }}</div>
                                         </div>
                                     </md-list-item>
                                     <md-divider></md-divider>
@@ -100,14 +117,17 @@
                             </div>
                             <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                                 <div hide-xs></div>
-                                <qr ng-click="showQrcodeDialog(server.method, a.password , server.host, a.port + server.shift, server.name)" size="getQrCodeSize()" layout-margin text="createQrCode(server.method, a.password , server.host, a.port + server.shift, server.name)" image="true"></qr>
+                                <qr ng-click="showQrcodeDialog(server.method, a.password , server.host, a.port + server.shift, server.name)" size="getQrCodeSize()"
+                                    layout-margin text="createQrCode(server.method, a.password , server.host, a.port + server.shift, server.name)"
+                                    image="true"></qr>
                                 <div hide-xs></div>
                             </div>
                         </div>
                     </md-tab>
                 </md-tabs>
                 <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{ '修改密码' | translate }}</md-button>
-                <md-button ng-show="config.alipay || config.paypal" class="md-primary" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a.id)">{{ '续费' | translate }}</md-button>
+                <md-button ng-show="config.alipay || config.paypal" class="md-primary" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a.id)">{{ '使用支付工具续费' | translate }}</md-button>
+                <md-button ng-show="config.giftcard" class="md-primary" ng-if="a.type >= 2 && a.type <= 5" ng-click="useGiftCard(a.id)">{{ '使用充值码续费' | translate }}</md-button>
             </md-card-content>
         </md-card>
     </div>
