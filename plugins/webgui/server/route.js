@@ -113,7 +113,7 @@ app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
 
 app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);
-app.get('/api/admin/giftcard/details/:batchNumber', isAdmin, adminGiftCard.getBatchDetails);
+app.get('/api/admin/giftcard/details/:batchNumber(\\d+)', isAdmin, adminGiftCard.getBatchDetails);
 app.post('/api/admin/giftcard/revoke', isAdmin, adminGiftCard.revokeBatch);
 app.post('/api/admin/giftcard/add', isAdmin, adminGiftCard.addGiftCard);
 
@@ -277,7 +277,6 @@ app.get('/serviceworker.js', (req, res) => {
       serviceWorkerTime: success.serviceWorkerTime,
     });
   });
-
 });
 
 app.get('*', (req, res) => {

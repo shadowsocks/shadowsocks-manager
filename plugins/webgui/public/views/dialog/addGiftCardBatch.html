@@ -1,4 +1,4 @@
-<md-dialog aria-label="confirm dialog">
+<md-dialog aria-label="add gift card dialog">
     <div ng-show="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
         <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
@@ -20,6 +20,10 @@
                             <md-option ng-value="4">天</md-option>
                             <md-option ng-value="5">小时</md-option>
                         </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>备注</label>
+                        <input type="text" required name="comment" ng-model="publicInfo.comment">
                     </md-input-container>
                 </form>
             </div>

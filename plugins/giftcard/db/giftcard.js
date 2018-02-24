@@ -16,6 +16,7 @@ const createTable = async () => {
     table.integer('account');
     table.bigInteger('createTime').notNull();
     table.bigInteger('usedTime');
+    table.string('comment').defaultTo('');
   });
 };
 

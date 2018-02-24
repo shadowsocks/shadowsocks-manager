@@ -396,9 +396,9 @@ exports.unbindTelegram = (req, res) => {
 
 exports.payByGiftCard = async (req, resp) => {
   const password = String(req.body.password);
-  const userId = Number(req.session.user);
-  const accountId = req.body.accountId != null ? Number(req.body.accountId) : null;
-  if (userId === NaN || accountId === NaN) {
+  const userId = +req.session.user;
+  const accountId = req.body.accountId != null ? +req.body.accountId : null;
+  if (!userId || !accountId) {
     resp.status(400).end();
     return;
   }
@@ -409,4 +409,4 @@ exports.payByGiftCard = async (req, resp) => {
     logger.error(`使用充值码时出现错误：${err.toString()}`);
     resp.status(500).end();
   }
-}
+};

@@ -27,7 +27,7 @@ const batchStatusEnum = {
   revoked: 'REVOKED'
 };
 
-const generateGiftCard = async (count, orderType) => {
+const generateGiftCard = async (count, orderType, comment = '') => {
   const currentCount = (await knex(dbTableName).count('* as cnt'))[0].cnt;
   const batchNumber = currentCount === 0 ? 1 :
     ((await knex(dbTableName).max('batchNumber as mx'))[0].mx + 1);
@@ -40,6 +40,7 @@ const generateGiftCard = async (count, orderType) => {
       batchNumber,
       password,
       createTime: Date.now(),
+      comment,
     });
   }
   await knex(dbTableName).insert(cards);
@@ -177,12 +178,12 @@ const generateBatchInfo = (x) => {
     else
       status = batchStatusEnum.usedup;
   }
-
   return {
     batchNumber: x.batchNumber,
     status: status,
     type: x.orderType,
     createTime: x.createTime,
+    comment: x.comment,
     totalCount: x.totalCount,
     availableCount: x.availableCount
   };
@@ -194,10 +195,10 @@ const listBatch = async () => {
     'status',
     'orderType',
     'createTime',
+    'comment',
     knex.raw('COUNT(*) as totalCount'),
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
   ]).groupBy('batchNumber');
-
   const finalResult = sqlResult.map(generateBatchInfo);
   return finalResult;
 };
