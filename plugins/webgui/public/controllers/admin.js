@@ -210,7 +210,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.myPayType = '支付宝';
     let tabSwitchTime = 0;
-    $scope.payTypes = [{ name: '支付宝' }, { name: 'Paypal' }];
+    $scope.payTypes = [{ name: '支付宝' }, { name: 'Paypal' }, { name: '充值码' }];
     $scope.selectPayType = type => {
       tabSwitchTime = Date.now();
       $scope.myPayType = type;
@@ -241,7 +241,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       if($mdMedia('md')) { return 40; }
       if($mdMedia('gt-md')) { return 50; }
     };
-    $scope.getOrders = (search) => {
+    $scope.getOrders = search => {
       const oldTabSwitchTime = tabSwitchTime;
       $scope.isOrderLoading = true;
       adminApi.getOrder($scope.myPayType, {

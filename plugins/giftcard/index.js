@@ -90,73 +90,76 @@ const processOrder = async (userId, accountId, password) => {
   return { success: true, type: card.orderType, cardId: card.id };
 };
 
-/*
-const orderList = async (options = {}) => {
-    const where = {};
-    if (options.userId) {
-        where['user.id'] = options.userId;
-    }
-    const orders = await knex(dbTableName).select([
-        `${dbTableName}.id`,
-        `${dbTableName}.orderType`,
-        'user.id as userId',
-        'user.username',
-        'account_plugin.port',
-        `${dbTableName}.status`,
-        `${dbTableName}.createTime`,
-    ])
-        .leftJoin('user', 'user.id', `${dbTableName}.user`)
-        .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
-        .where(where)
-        .orderBy(`${dbTableName}.createTime`, 'DESC');
-    return orders;
-};
+
+// const orderList = async (options = {}) => {
+//     const where = {};
+//     if (options.userId) {
+//         where['user.id'] = options.userId;
+//     }
+//     const orders = await knex(dbTableName).select([
+//         `${dbTableName}.id`,
+//         `${dbTableName}.orderType`,
+//         'user.id as userId',
+//         'user.username',
+//         'account_plugin.port',
+//         `${dbTableName}.status`,
+//         `${dbTableName}.createTime`,
+//     ])
+//         .leftJoin('user', 'user.id', `${dbTableName}.user`)
+//         .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
+//         .where(where)
+//         .orderBy(`${dbTableName}.createTime`, 'DESC');
+//     return orders;
+// };
 
 
 const orderListAndPaging = async (options = {}) => {
-    const search = options.search || '';
-    const filter = options.filter || [];
-    const sort = options.sort || `${dbTableName}.createTime_desc`;
-    const page = options.page || 1;
-    const pageSize = options.pageSize || 20;
+  const search = options.search || '';
+  const filter = options.filter || [];
+  const sort = options.sort || `${dbTableName}.createTime_desc`;
+  const page = options.page || 1;
+  const pageSize = options.pageSize || 20;
 
-    let count = knex(dbTableName).select();
-    let orders = knex(dbTableName).select([
-        `${dbTableName}.id`,
-        `${dbTableName}.orderType`,
-        'user.id as userId',
-        'user.username',
-        'account_plugin.port',
-        `${dbTableName}.status`,
-        `${dbTableName}.createTime`,
-    ])
-        .leftJoin('user', 'user.id', `${dbTableName}.user`)
-        .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
+  const where = {};
+  where[dbTableName + '.status'] = cardStatusEnum.used;
+  let count = knex(dbTableName).select().where(where);
+  let orders = knex(dbTableName).select([
+    `${dbTableName}.id as orderId`,
+    `${dbTableName}.orderType`,
+    'user.id as userId',
+    'user.username',
+    'account_plugin.port',
+    `${dbTableName}.status`,
+    `${dbTableName}.createTime`,
+  ])
+  .where(where)
+  .leftJoin('user', 'user.id', `${dbTableName}.user`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`);
 
-    if (filter.length) {
-        count = count.whereIn(`${dbTableName}.status`, filter);
-        orders = orders.whereIn(`${dbTableName}.status`, filter);
-    }
-    if (search) {
-        count = count.where(`${dbTableName}.id`, 'like', `%${search}%`);
-        orders = orders.where(`${dbTableName}.id`, 'like', `%${search}%`);
-    }
+  if (filter.length) {
+    count = count.whereIn(`${dbTableName}.status`, filter);
+    orders = orders.whereIn(`${dbTableName}.status`, filter);
+  }
+  if (search) {
+    count = count.where(`${dbTableName}.id`, 'like', `%${search}%`);
+    orders = orders.where(`${dbTableName}.id`, 'like', `%${search}%`);
+  }
 
-    count = await count.count('id as count').then(success => success[0].count);
-    orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
-    orders.forEach(f => {
-        f.paypalData = JSON.parse(f.paypalData);
-    });
-    const maxPage = Math.ceil(count / pageSize);
-    return {
-        total: count,
-        page,
-        maxPage,
-        pageSize,
-        orders,
-    };
+  count = await count.count('id as count').then(success => success[0].count);
+  orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
+  // orders.forEach(f => {
+  //     f.paypalData = JSON.parse(f.paypalData);
+  // });
+  const maxPage = Math.ceil(count / pageSize);
+  return {
+    total: count,
+    page,
+    maxPage,
+    pageSize,
+    orders,
+  };
 };
-*/
+
 const checkOrder = async (id) => {
   const order = await knex(dbTableName).select().where({
     id,
@@ -209,6 +212,7 @@ const getBatchDetails = async (batchNumber) => {
     'status',
     'orderType',
     'createTime',
+    'comment',
     knex.raw('COUNT(*) as totalCount'),
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
   ]).where({ batchNumber });
@@ -240,7 +244,7 @@ const revokeBatch = async batchNumber => {
 };
 
 exports.generateGiftCard = generateGiftCard;
-// exports.orderListAndPaging = orderListAndPaging;
+exports.orderListAndPaging = orderListAndPaging;
 // exports.orderList = orderList;
 exports.checkOrder = checkOrder;
 exports.processOrder = processOrder;

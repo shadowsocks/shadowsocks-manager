@@ -61,3 +61,13 @@ exports.getBatchDetails = async (req, resp) => {
     resp.status(400).end();
   }
 };
+
+exports.getOrders = async (req, resp) => {
+  try {
+    const details = await giftcard.orderListAndPaging();
+    resp.send(details);
+  } catch (err) {
+    logger.error(err);
+    resp.status(500).end();
+  }
+};
