@@ -19,7 +19,11 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }, {
       type: 'year', name: '一年'
     }],
+    payType: [],
   };
+  if(publicInfo.config.alipay) { publicInfo.payType.push({ type: 'alipay', name: '支付宝' }); }
+  if(publicInfo.config.paypal) { publicInfo.payType.push({ type: 'paypal', name: 'Paypal' }); }
+  if(publicInfo.config.giftcard) { publicInfo.payType.push({ type: 'giftcard', name: '充值码' }); }
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
@@ -119,6 +123,11 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }],
     clickOutsideToClose: false,
   };
+  const choosePayType = accountId => {
+    publicInfo.status = 'type';
+    publicInfo.accountId = accountId;
+    dialogPromise = $mdDialog.show(dialog);
+  };
   const chooseOrderType = accountId => {
     publicInfo.status = 'loading';
     dialogPromise = $mdDialog.show(dialog);
@@ -136,6 +145,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     });
   };
   return {
+    choosePayType,
     chooseOrderType,
     createOrder,
   };

@@ -237,8 +237,9 @@ app
         getUserAccountInfo();
       });
     };
-    $scope.createOrder = (accountId) => {
-      payDialog.chooseOrderType(accountId);
+    $scope.createOrder = accountId => {
+      payDialog.choosePayType(accountId);
+      // payDialog.chooseOrderType(accountId);
     };
     $scope.useGiftCard = (accountId) => {
       payByGiftCardDialog.show(accountId).then(() => getUserAccountInfo());

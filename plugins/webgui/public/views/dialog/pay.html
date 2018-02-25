@@ -4,6 +4,14 @@
     </div>
     <md-dialog-content ng-show="publicInfo.status !== 'loading'">
         <div class="md-dialog-content">
+            <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'type'">
+                请选择支付方式：
+                <md-radio-group flex>
+                    <md-radio-button ng-repeat="pt in publicInfo.payType" value="{{pt.type}}" >
+                        {{ pt.name }}
+                    </md-radio-button>
+                </md-radio-group>
+            </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'pay'">
                 <div ng-if="publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay"  layout="column" layout-align="center center">
                     <qr size="getQrCodeSize()" layout-margin text="qrCode()" image="true" ng-click="pay()"></qr>
