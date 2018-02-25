@@ -71,10 +71,7 @@
                                             <div flex="40">{{ '周期：' | translate }}</div>
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="a.type === 1">{{ '无' | translate }}</span>
-                                                <span ng-if="a.type >=2 && a.type <= 5">
-                                                    <span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span>
-                                                    <br>
-                                                    <span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                                <span ng-if="a.type >=2 && a.type <= 5"><span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -86,9 +83,7 @@
                                             <div flex="60" style="text-align:right">
                                                 <span ng-if="a.type === 1" translate>不限时</span>
                                                 <span ng-if="a.type >=2 && a.type <= 5">
-                                                    <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span>
-                                                    <br>
-                                                    <span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
+                                                    <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -98,10 +93,7 @@
                                         <div flex layout="row" layout-align="space-between center">
                                             <div flex="40" translate>最近连接：</div>
                                             <div flex="60" style="text-align:right">
-                                                <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}
-                                                    <span>
-                                                        <br>
-                                                        <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
+                                                <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
                                             </div>
                                         </div>
                                     </md-list-item>
