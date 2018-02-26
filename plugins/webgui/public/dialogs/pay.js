@@ -5,7 +5,7 @@ const cdn = window.cdn || '';
 app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$localStorage', ($mdDialog, $interval, $timeout, $http, $localStorage) => {
   const publicInfo = {
     config: JSON.parse(window.ssmgrConfig),
-    orderType: 'month',
+    // orderType: 'month',
     time: [{
       type: 'hour', name: '一小时'
     }, {
@@ -24,10 +24,11 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
   if(publicInfo.config.alipay) { publicInfo.payType.push({ type: 'alipay', name: '支付宝' }); }
   if(publicInfo.config.paypal) { publicInfo.payType.push({ type: 'paypal', name: 'Paypal' }); }
   if(publicInfo.config.giftcard) { publicInfo.payType.push({ type: 'giftcard', name: '充值码' }); }
+  publicInfo.myPayType = publicInfo.payType[0].type;
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
-    if(publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay) {
+    if(publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay && publicInfo.myPayType === 'alipay') {
       $http.post('/api/user/order/qrcode', {
         accountId: publicInfo.accountId,
         orderType: publicInfo.orderType,
@@ -54,40 +55,40 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       publicInfo.status = 'pay';
     }
     const env = JSON.parse(window.ssmgrConfig).paypalMode === 'sandbox' ? 'sandbox' : 'production';
-      if(publicInfo.paypal[publicInfo.orderType]) {
-        paypal.Button.render({
-          locale: $localStorage.language ? $localStorage.language.replace('-', '_') : 'zh_CN',
-          style: {
-            label: 'checkout', // checkout | credit | pay
-            size:  'medium',   // small    | medium | responsive
-            shape: 'rect',     // pill     | rect
-            color: 'blue'      // gold     | blue   | silver
-          },
-          env, // production or sandbox
-          commit: true,
-          payment: function() {
-            var CREATE_URL = '/api/user/paypal/create';
-            return paypal.request.post(CREATE_URL, {
-              accountId: publicInfo.accountId,
-              orderType: publicInfo.orderType,
-            })
-            .then(function(res) {
-              return res.paymentID;
-            });
-          },
-          onAuthorize: function(data, actions) {
-            var EXECUTE_URL = '/api/user/paypal/execute/';
-            var data = {
-              paymentID: data.paymentID,
-              payerID: data.payerID
-            };
-            return paypal.request.post(EXECUTE_URL, data)
-            .then(function (res) {
-              publicInfo.status = 'success';
-            });
-          }
-        }, '#paypal-button-container');
-      }
+    if(publicInfo.paypal[publicInfo.orderType] && publicInfo.myPayType === 'paypal') {
+      paypal.Button.render({
+        locale: $localStorage.language ? $localStorage.language.replace('-', '_') : 'zh_CN',
+        style: {
+          label: 'checkout', // checkout | credit | pay
+          size:  'medium',   // small    | medium | responsive
+          shape: 'rect',     // pill     | rect
+          color: 'blue'      // gold     | blue   | silver
+        },
+        env, // production or sandbox
+        commit: true,
+        payment: function() {
+          var CREATE_URL = '/api/user/paypal/create';
+          return paypal.request.post(CREATE_URL, {
+            accountId: publicInfo.accountId,
+            orderType: publicInfo.orderType,
+          })
+          .then(function(res) {
+            return res.paymentID;
+          });
+        },
+        onAuthorize: function(data, actions) {
+          var EXECUTE_URL = '/api/user/paypal/execute/';
+          var data = {
+            paymentID: data.paymentID,
+            payerID: data.payerID
+          };
+          return paypal.request.post(EXECUTE_URL, data)
+          .then(function (res) {
+            publicInfo.status = 'success';
+          });
+        }
+      }, '#paypal-button-container');
+    }
   };
   let interval = null;
   const close = () => {
@@ -127,23 +128,67 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     publicInfo.status = 'type';
     publicInfo.accountId = accountId;
     dialogPromise = $mdDialog.show(dialog);
+    if(publicInfo.payType.length === 1) {
+      publicInfo.jumpToPayPage();
+    }
   };
-  const chooseOrderType = accountId => {
+  const chooseOrderType = () => {
     publicInfo.status = 'loading';
-    dialogPromise = $mdDialog.show(dialog);
     $http.get('/api/user/order/price').then(success => {
       publicInfo.alipay = success.data.alipay;
       publicInfo.paypal = success.data.paypal;
+      if(publicInfo.myPayType === 'alipay') {
+        if(success.data.alipay.month) {
+          publicInfo.orderType = 'month';
+        } else {
+          publicInfo.orderType = Object.keys(success.data.alipay)[0];
+        }
+      }
+      if(publicInfo.myPayType === 'paypal') {
+        if(success.data.paypal.month) {
+          publicInfo.orderType = 'month';
+        } else {
+          publicInfo.orderType = Object.keys(success.data.paypal)[0];
+        }
+      }
       $timeout(() => {
         publicInfo.status = 'choose';
       }, 125);
-      publicInfo.accountId = accountId;
-      return dialogPromise;
     }).catch(() => {
       publicInfo.status = 'error';
-      return dialogPromise;
     });
   };
+  const giftCard = () => {
+    publicInfo.status = 'giftcard';
+  };
+  const payByGiftCard = () => {
+    publicInfo.status = 'loading';
+    $http.post('/api/user/giftcard/use', {
+      accountId: publicInfo.accountId,
+      password: publicInfo.giftCardPassword
+    }).then(result => {
+      const data = result.data;
+      if (data.success) {
+        publicInfo.status = 'success';
+        publicInfo.message = `成功充值${prettyOrderType(data.type)}卡（卡号 ${data.cardId}）`;
+      } else {
+        publicInfo.status = 'error';
+        publicInfo.message = data.message;
+      }
+    }).catch(err => {
+      publicInfo.status = 'error';
+      publicInfo.message = '充值出现错误';
+    });
+  };
+  const jumpToPayPage = () => {
+    if(publicInfo.myPayType === 'giftcard') {
+      giftCard();
+    } else {
+      chooseOrderType();
+    }
+  };
+  publicInfo.jumpToPayPage = jumpToPayPage;
+  publicInfo.payByGiftCard = payByGiftCard;
   return {
     choosePayType,
     chooseOrderType,

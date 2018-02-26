@@ -27,7 +27,7 @@ app.factory('payByGiftCardDialog', ['$mdDialog', '$http', '$filter',
         const close = () => {
             $mdDialog.hide();
             dialogPromise = null;
-        }
+        };
 
         const submit = () => {
             publicInfo.status = "loading";
@@ -45,7 +45,7 @@ app.factory('payByGiftCardDialog', ['$mdDialog', '$http', '$filter',
                     }
                 })
                 .catch((err) => { publicInfo.status = "finish"; publicInfo.message = "充值出现错误"; });
-        }
+        };
         publicInfo.close = close;
         publicInfo.submit = submit;
 
