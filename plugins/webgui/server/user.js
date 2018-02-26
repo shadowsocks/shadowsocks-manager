@@ -4,9 +4,9 @@ const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const config = appRequire('services/config').all();
-const giftcard = appRequire('plugins/giftcard'),
-  log4js = require('log4js'),
-  logger = log4js.getLogger('webgui');
+const giftcard = appRequire('plugins/giftcard');
+const log4js = require('log4js');
+const logger = log4js.getLogger('webgui');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -395,7 +395,7 @@ exports.unbindTelegram = (req, res) => {
 };
 
 exports.payByGiftCard = async (req, resp) => {
-  const password = String(req.body.password);
+  const password = req.body.password;
   const userId = +req.session.user;
   const accountId = req.body.accountId ? +req.body.accountId : null;
   if (!userId) {

@@ -5,7 +5,6 @@ const cdn = window.cdn || '';
 app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$localStorage', ($mdDialog, $interval, $timeout, $http, $localStorage) => {
   const publicInfo = {
     config: JSON.parse(window.ssmgrConfig),
-    // orderType: 'month',
     time: [{
       type: 'hour', name: '一小时'
     }, {
@@ -44,6 +43,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
             const orderStatus = success.data.status;
             if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
               publicInfo.status = 'success';
+              publicInfo.message = '订单会在两分钟内生效，请稍候';
               interval && $interval.cancel(interval);
             }
           });
@@ -85,6 +85,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
           return paypal.request.post(EXECUTE_URL, data)
           .then(function (res) {
             publicInfo.status = 'success';
+            publicInfo.message = '订单会在两分钟内生效，请稍候';
           });
         }
       }, '#paypal-button-container');
@@ -131,6 +132,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     if(publicInfo.payType.length === 1) {
       publicInfo.jumpToPayPage();
     }
+    return dialogPromise;
   };
   const chooseOrderType = () => {
     publicInfo.status = 'loading';
@@ -170,7 +172,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       const data = result.data;
       if (data.success) {
         publicInfo.status = 'success';
-        publicInfo.message = `成功充值${prettyOrderType(data.type)}卡（卡号 ${data.cardId}）`;
+        publicInfo.message = `充值码[ ${ publicInfo.giftCardPassword } ]使用成功`;
       } else {
         publicInfo.status = 'error';
         publicInfo.message = data.message;

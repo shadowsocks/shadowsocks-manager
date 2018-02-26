@@ -51,11 +51,11 @@
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'success'">
                 <div style="margin-bottom: 20px;">支付成功</div>
-                <div style="margin-bottom: 20px;">订单会在两分钟内生效，请稍候</div>
+                <div style="margin-bottom: 20px;">{{ publicInfo.message }}</div>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'error'">
-                <div style="margin-bottom: 20px;">系统错误</div>
-                <div style="margin-bottom: 20px;">生成支付订单出错，请稍后再试</div>
+                <div style="margin-bottom: 20px;">支付失败</div>
+                <div style="margin-bottom: 20px;">{{ publicInfo.message }}</div>
             </div>
         </div>
     </md-dialog-content>

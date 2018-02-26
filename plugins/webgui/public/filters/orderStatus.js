@@ -32,5 +32,5 @@ app.filter('order', function () {
       7: "年"
     };
     return cardType[type];
-  }
+  };
 });
