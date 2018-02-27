@@ -23,7 +23,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
   if(publicInfo.config.alipay) { publicInfo.payType.push({ type: 'alipay', name: '支付宝' }); }
   if(publicInfo.config.paypal) { publicInfo.payType.push({ type: 'paypal', name: 'Paypal' }); }
   if(publicInfo.config.giftcard) { publicInfo.payType.push({ type: 'giftcard', name: '充值码' }); }
-  publicInfo.myPayType = publicInfo.payType[0].type;
+  publicInfo.myPayType = publicInfo.payType[0] ? publicInfo.payType[0].type : undefined;
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
