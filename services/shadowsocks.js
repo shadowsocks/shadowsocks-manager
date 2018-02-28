@@ -325,12 +325,12 @@ const getGfwStatus = () => {
 const getVersion = () => {
   return getGfwStatus().then(success => {
     return {
-      version: version + 'T',
+      version,
       isGfw: success.isGfw,
     };
   }).catch(err => {
     return {
-      version: version + 'T',
+      version,
     };
   });
 };
