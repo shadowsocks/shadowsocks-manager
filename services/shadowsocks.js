@@ -181,6 +181,9 @@ cron.minute(() => {
   resend();
   sendPing();
 }, 1);
+cron.minute(() => {
+  getGfwStatus();
+}, 10);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }
@@ -288,51 +291,43 @@ const getFlow = async (options) => {
   }
 };
 
+let isGfw = false;
 const getGfwStatus = () => {
   const sites = [
     'baidu.com:80',
     'qq.com:80',
     'taobao.com:80',
   ];
-  return new Promise((resolve, reject) => {
-    const site = sites[+Math.random().toString().substr(2) % sites.length];
-    const req = http.request({
-      hostname: site.split(':')[0],
-      port: +site.split(':')[1],
-      path: '/',
-      method: 'GET',
-      timeout: 2000,
-    }, res => {
-      // console.log(`STATUS: ${res.statusCode}`);
-      if(res.statusCode === 200) {
-        resolve({ isGfw: false });
-      }
-      res.setEncoding('utf8');
-      res.on('data', (chunk) => {});
-      res.on('end', () => {});
-    });
-    req.on('timeout', () => {
-      req.abort();
-      resolve({ isGfw: true });
-    });
-    req.on('error', (e) => {
-      resolve({ isGfw: true });
-    });
-    req.end();
+  const site = sites[+Math.random().toString().substr(2) % sites.length];
+  const req = http.request({
+    hostname: site.split(':')[0],
+    port: +site.split(':')[1],
+    path: '/',
+    method: 'GET',
+    timeout: 2000,
+  }, res => {
+    if(res.statusCode === 200) {
+      isGfw = false;
+    }
+    res.setEncoding('utf8');
+    res.on('data', (chunk) => {});
+    res.on('end', () => {});
   });
+  req.on('timeout', () => {
+    req.abort();
+    isGfw = true;
+  });
+  req.on('error', (e) => {
+    isGfw = true;
+  });
+  req.end();
 };
 
 const getVersion = () => {
-  return getGfwStatus().then(success => {
-    return {
-      version,
-      isGfw: success.isGfw,
-    };
-  }).catch(err => {
-    return {
-      version,
-    };
-  });
+  return {
+    version,
+    isGfw,
+  };
 };
 
 const getIp = port => {
