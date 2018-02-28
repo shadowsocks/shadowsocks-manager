@@ -62,7 +62,7 @@ const list = async (options = {}) => {
         port: server.port,
         password: server.password,
       }).then(success => {
-        return { status: success.version, index };
+        return { status: success.version, isGfw: success.isGfw, index };
       }).catch(error => {
         return { status: -1, index };
       });
@@ -73,6 +73,7 @@ const list = async (options = {}) => {
     const status = await Promise.all(serverStatus);
     status.forEach(f => {
       serverList[f.index].status = f.status;
+      serverList[f.index].isGfw = !!f.isGfw;
     });
   }
   return serverList;
