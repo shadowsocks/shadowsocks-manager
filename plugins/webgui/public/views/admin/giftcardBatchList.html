@@ -1,4 +1,4 @@
-<md-card>
+<!-- <md-card>
     <md-card-content layout="row" layout-align="space-between" ng-if="batchList.length === 0">
         <div>暂无充值码</div>
     </md-card-content>
@@ -26,4 +26,31 @@
             <md-divider></md-divider>
         </md-list-item>
     </md-list>
-</md-card>
+</md-card> -->
+
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="batch in batchList track by $index">
+        <md-card ng-click="showBatch(batch.batchNumber)" md-colors="{{batchColor(batch)}}">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
+                    <div flex="30">
+                        <span>{{ batch.type | prettyOrderType }}卡</span>
+                        <span>
+                            <!-- {{batch.status | prettyPrintBatchStatus}} -->
+                            <span ng-if="batch.status === 'AVAILABLE'">
+                                ({{batch.availableCount}} / {{batch.totalCount}})
+                            </span>
+                            <span ng-if="batch.status !== 'AVAILABLE'">
+                                ({{batch.totalCount}})
+                            </span>
+                        </span>
+                    </div>
+                    <div flex="70" style="text-align:right; color: #aaa; font-size: 0.8em;">{{batch.createTime | timeago}}</div>
+                </div>
+                <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
+                    <div flex="100" style="color: #aaa; font-size: 0.8em;">{{ batch.comment }}</div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

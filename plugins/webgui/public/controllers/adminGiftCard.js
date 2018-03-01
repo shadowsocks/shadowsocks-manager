@@ -16,11 +16,19 @@ app.controller('AdminGiftCardController', ['$scope', '$http', 'addGiftCardBatchD
       addGiftCardBatchDialog.show().then(() => showBatch());
     });
     showBatch();
+    $scope.batchColor = batch => {
+      if(batch.status === 'REVOKED') {
+        return {
+          background: 'red-50', 'border-color': 'red-300',
+        };
+      }
+      return {};
+    };
   }
 ]).controller('AdminGiftCardBatchDetailsController', ['$scope', '$http', '$stateParams', 'confirmDialog', 'alertDialog',
   ($scope, $http, $stateParams, confirmDialog, alertDialog) => {
     const batchNumber = $stateParams.batchNumber;
-    $scope.setTitle(`充值码批次 ${batchNumber}`);
+    $scope.setTitle(`充值码[ ${batchNumber} ]`);
     $scope.setMenuButton('arrow_back', 'admin.listGiftCardBatch');
     const showDetails = () => {
       $http.get(`/api/admin/giftcard/details/${batchNumber}`).then(result => {
