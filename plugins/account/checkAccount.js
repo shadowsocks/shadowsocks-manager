@@ -64,6 +64,41 @@ const changePassword = async (id, password) => {
   return;
 };
 
+const getAccountFlow = async (serverId, port) => {
+  const exists = await knex('account_flow').where({
+    serverId,
+    port,
+  }).then(success => success[0]);
+  return exists;
+};
+
+const setAccountFlow = async (serverId, accountId, flow, port, nextCheckTime) => {
+  const exists = await knex('account_flow').where({
+    serverId,
+    accountId,
+  }).then(success => success[0]);
+  if(!exists) {
+    await knex('account_flow').insert({
+      serverId,
+      accountId,
+      port,
+      flow,
+      checkTime: Date.now(),
+      nextCheckTime,
+    });
+  } else {
+    await knex('account_flow').update({
+      port,
+      flow,
+      checkTime: Date.now(),
+      nextCheckTime,
+    }).where({
+      serverId,
+      accountId,
+    });
+  }
+};
+
 const checkFlow = async (server, accountId, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
@@ -83,26 +118,32 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
   return userFlow;
 };
 
-const checkAccountTime = {};
+// const checkAccountTime = {};
 
 const deleteCheckAccountTimePort = async port => {
   const servers = await knex('server').select();
-  servers.forEach(server => {
-    const reg = new RegExp('^' + server.id + '\\|' + ( port + server.shift ) + '$');
-    for(const cat in checkAccountTime) {
-      if(cat.match(reg)) {
-        delete checkAccountTime[cat];
-      }
-    }
+  servers.forEach(async server => {
+    // const reg = new RegExp('^' + server.id + '\\|' + ( port + server.shift ) + '$');
+    // for(const cat in checkAccountTime) {
+    //   if(cat.match(reg)) {
+    //     delete checkAccountTime[cat];
+    //   }
+    // }
+    await knex('account_flow').delete().where({
+      serverId: server.id,
+      port: port + server.shift,
+    });
   });
+  return;
 };
 const deleteCheckAccountTimeServer = serverId => {
-  const reg = new RegExp('^' + serverId + '\\|\\d{1,5}$');
-  for(const cat in checkAccountTime) {
-    if(cat.match(reg)) {
-      delete checkAccountTime[cat];
-    }
-  }
+  // const reg = new RegExp('^' + serverId + '\\|\\d{1,5}$');
+  // for(const cat in checkAccountTime) {
+  //   if(cat.match(reg)) {
+  //     delete checkAccountTime[cat];
+  //   }
+  // }
+  return knex('account_flow').delete().where({ serverId });
 };
 
 let lastCheck = 0;
@@ -198,8 +239,10 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             let flow = -1;
-            const checkId = s.id + '|' + (a.port + s.shift);
-            if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
+            // const checkId = s.id + '|' + (a.port + s.shift);
+            const accountFlowData = await getAccountFlow(s.id, a.port + s.shift);
+            // if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
+            if(!accountFlowData || (accountFlowData && Date.now() >= accountFlowData.nextCheckTime)) {
               const sleep = time => {
                 return new Promise((resolve, reject) => {
                   setTimeout(() => resolve(), time);
@@ -209,13 +252,15 @@ const checkServer = async () => {
               await sleep(sleepTime);
               flow = await checkFlow(s.id, a.id, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
-              if(!checkAccountTime[checkId]) {
-                checkAccountTime[checkId] = Date.now() + 150 * 1000;
+              let nextCheckTime;
+              if(!accountFlowData) {
+                nextCheckTime = Date.now() + 150 * 1000;
               } else if(nextTime <= 0) {
-                checkAccountTime[checkId] = Date.now() + 10 * 60 * 1000;
+                nextCheckTime = Date.now() + 10 * 60 * 1000;
               } else {
-                checkAccountTime[checkId] = Date.now() + nextTime;
+                nextCheckTime = Date.now() + nextTime;
               }
+              await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
@@ -274,10 +319,15 @@ const checkServer = async () => {
     const sum = success.reduce((a, b) => a + b);
     if(sum <= 50) {
       let deleteCount = 50 - sum;
-      Object.keys(checkAccountTime).filter((f, i, arr) => {
-        return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
-      }).forEach(f => {
-        delete checkAccountTime[f];
+      // Object.keys(checkAccountTime).filter((f, i, arr) => {
+      //   return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
+      // }).forEach(f => {
+      //   delete checkAccountTime[f];
+      // });
+      knex('account_flow').select().orderByRaw('RAND()').limit(deleteCount).then(success => {
+        return knex('account_flow').update({
+          nextCheckTime: null,
+        }).whereIn('id', success.map(m => m.id));
       });
     }
   });
@@ -296,4 +346,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 2);
+}, 1);

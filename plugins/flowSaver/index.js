@@ -22,6 +22,21 @@ const updateAccountInfo = async () => {
   return;
 };
 
+const updateAccountFlow = async (serverId, accountId, flow) => {
+  const exists = await knex('account_flow').where({
+    serverId,
+    accountId,
+  }).then(success => success[0]);
+  if(!exists) { return; }
+  await knex('account_flow').update({
+    flow: exists.flow + flow,
+    updateTime: Date.now(),
+  }).where({
+    serverId,
+    accountId,
+  });
+};
+
 const saveFlow = async () => {
   try {
     const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password', 'shift']);
@@ -57,6 +72,9 @@ const saveFlow = async () => {
         if(flow.length === 0) {
           return;
         }
+        flow.forEach(async f => {
+          await updateAccountFlow(f.id, f.accountId, f.flow);
+        });
         const insertPromises = [];
         for(let i = 0; i < Math.ceil(flow.length / 50); i++) {
           const insert = knex('saveFlow').insert(flow.slice(i * 50, i * 50 + 50));
