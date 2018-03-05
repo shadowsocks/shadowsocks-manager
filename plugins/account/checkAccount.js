@@ -324,10 +324,8 @@ const checkServer = async () => {
       // }).forEach(f => {
       //   delete checkAccountTime[f];
       // });
-      knex('account_flow').select().orderByRaw('RAND()').limit(deleteCount).then(success => {
-        return knex('account_flow').update({
-          nextCheckTime: null,
-        }).whereIn('id', success.map(m => m.id));
+      knex('account_flow').select(['id']).orderBy('id').limit(deleteCount).then(success => {
+        return knex('account_flow').delete().whereIn('id', success.map(m => m.id));
       });
     }
   });
@@ -346,4 +344,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 1);
+}, 2);
