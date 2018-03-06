@@ -252,9 +252,9 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     if(payType[p] === orderType) {
       paymentType = p;
     }
-    if(paymentInfo[p].alipay) {
-      flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
-    }
+    // if(paymentInfo[p].alipay) {
+    flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
+    // }
   };
   let account;
   if(accountId) {
