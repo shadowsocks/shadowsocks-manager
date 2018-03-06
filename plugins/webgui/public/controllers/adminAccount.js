@@ -367,6 +367,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
   ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog) => {
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
+    $scope.accountServer = false;
+    $scope.accountServerObj = {};
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -391,6 +393,16 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.confirm = () => {
       alertDialog.loading();
+      if($scope.account.server) {
+        $scope.servers.forEach(server => {
+          if($scope.account.server.indexOf(server.id) >= 0) {
+            $scope.accountServerObj[server.id] = true;
+          } else {
+            $scope.accountServerObj[server.id] = false;
+          }
+        });
+      }
+      const server = Object.keys($scope.accountServerObj).map(m => +m);
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
         port: +$scope.account.port,
@@ -399,6 +411,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        server: $scope.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
         $state.go('admin.account');
@@ -422,6 +435,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.account.limit = 1;
       }
     };
+    $http.get('/api/admin/server').then(success => {
+      $scope.servers = success.data;
+    });
   }
 ])
 .controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog',

@@ -103,8 +103,9 @@ exports.addAccount = (req, res) => {
       const limit = +req.body.limit;
       const flow = +req.body.flow;
       const autoRemove = +req.body.autoRemove || 0;
+      const server = req.body.server ? JSON.stringify(req.body.server) : null;
       return account.addAccount(type, {
-        port, password, time, limit, flow, autoRemove,
+        port, password, time, limit, flow, autoRemove, server,
       });
     }
     result.throw();
