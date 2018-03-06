@@ -104,6 +104,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
+    $scope.user = { username: '...' };
     const getUserData = () => {
       adminApi.getUserData(userId).then(success => {
         $scope.user = success.user;

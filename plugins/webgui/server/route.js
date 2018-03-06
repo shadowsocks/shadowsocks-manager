@@ -276,6 +276,7 @@ app.get('/serviceworker.js', (req, res) => {
     res.render('serviceworker.js', {
       serviceWorker: !!success.serviceWorker,
       serviceWorkerTime: success.serviceWorkerTime,
+      test: [''],
     });
   });
 });

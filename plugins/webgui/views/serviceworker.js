@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-03-06 22:14:42' + ' <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-03-06 22:14:42 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -94,6 +94,12 @@ const onlineCacheUrl = [
   '/public/views/dialog/serverChart.html',
   '/public/views/dialog/setEmail.html',
 ];
+
+// const a = [
+//   <% for(let i=0; i < test.length; i++) {%>
+//     '<%= test[i] %>',
+//   <% } %>
+// ];
 
 self.addEventListener('activate', function(event) {
   const cacheWhitelist = [ONLINE_CACHE_NAME];

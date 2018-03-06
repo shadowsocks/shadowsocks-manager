@@ -127,6 +127,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.accountId = +$stateParams.accountId;
+    $scope.account = { port: '...' };
     $q.all([
       $http.get(`/api/admin/account/${ $scope.accountId }`),
       $http.get('/api/admin/server'),
