@@ -11,6 +11,7 @@ const adminSetting = appRequire('plugins/webgui/server/adminSetting');
 const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const adminAccount = appRequire('plugins/webgui/server/adminAccount');
 const adminGiftCard = appRequire('plugins/webgui/server/adminGiftCard');
+const adminGroup = appRequire('plugins/webgui/server/adminGroup');
 const push = appRequire('plugins/webgui/server/push');
 const os = require('os');
 const path = require('path');
@@ -117,6 +118,10 @@ app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);
 app.get('/api/admin/giftcard/details/:batchNumber(\\d+)', isAdmin, adminGiftCard.getBatchDetails);
 app.post('/api/admin/giftcard/revoke', isAdmin, adminGiftCard.revokeBatch);
 app.post('/api/admin/giftcard/add', isAdmin, adminGiftCard.addGiftCard);
+
+app.get('/api/admin/group', isAdmin, adminGroup.getGroups);
+app.get('/api/admin/group/:id(\\d+)', isAdmin, adminGroup.getOneGroup);
+app.post('/api/admin/group', isAdmin, adminGroup.addGroup);
 
 app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
 

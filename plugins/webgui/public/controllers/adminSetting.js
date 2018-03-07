@@ -3,31 +3,53 @@ const app = angular.module('app');
 app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
     $scope.setTitle('设置');
-    $scope.toGiftCard = () => {
-      $state.go('admin.listGiftCardBatch');
-    }
-    $scope.toNotice = () => {
-      $state.go('admin.notice');
+    $scope.toSetting = path => { $state.go(path); };
+    $scope.settingList = [
+      {
+        name: '基本设置',
+        to: 'admin.baseSetting',
+      },
+      {
+        name: '公告管理',
+        to: 'admin.notice',
+      },
+      {
+        name: '群组管理',
+        to: 'admin.groupSetting',
+      },
+      {
+        name: '支付设置',
+        to: 'admin.paymentList',
+      },
+      {
+        name: '邮件设置',
+        to: 'admin.mailSetting',
+      },
+      {
+        name: '账号设置',
+        to: 'admin.accountSetting',
+      },
+      {
+        name: '修改密码',
+        to: 'admin.passwordSetting',
+      },
+      {
+        name: '公告管理',
+        to: 'admin.notice',
+      },
+    ];
+    if($scope.config.telegram) {
+      $scope.settingList.push({
+        name: 'Telegram',
+        to: 'admin.telegramSetting',
+      });
     };
-    $scope.toPayment = () => {
-      $state.go('admin.paymentList');
+    if($scope.config.telegram) {
+      $scope.settingList.push({
+        name: '充值码',
+        to: 'admin.listGiftCardBatch',
+      });
     };
-    $scope.toAccount = () => {
-      $state.go('admin.accountSetting');
-    };
-    $scope.toBase = () => {
-      $state.go('admin.baseSetting');
-    };
-    $scope.toMail = () => {
-      $state.go('admin.mailSetting');
-    };
-    $scope.toPassword = () => {
-      $state.go('admin.passwordSetting');
-    };
-    $scope.toTelegram = () => {
-      $state.go('admin.telegramSetting');
-    };
-    $scope.empty = () => {};
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
@@ -413,5 +435,39 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       }, true);
     });
   }
+]).controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$state',
+($scope, $http, $timeout, $state) => {
+  $scope.setTitle('群组管理');
+  $scope.setMenuButton('arrow_back', 'admin.settings');
+  $scope.setFabButton(() => {
+    $state.go('admin.addGroup');
+  });
+  $http.get('/api/admin/group').then(success => {
+    $scope.groups = success.data;
+  });
+}
+]).controller('AdminAddGroupController', ['$scope', '$http', '$timeout', '$state', 'alertDialog',
+($scope, $http, $timeout, $state, alertDialog) => {
+  $scope.setTitle('新增群组');
+  $scope.setMenuButton('arrow_back', 'admin.groupSetting');
+  $scope.group = {};
+  $scope.confirm = () => {
+    alertDialog.loading();
+    $http.post('/api/admin/group', {
+      name: $scope.group.name,
+      comment: $scope.group.comment,
+    }, {
+      timeout: 15000,
+    }).then(success => {
+      alertDialog.show('添加群组成功', '确定');
+      $state.go('admin.groupSetting');
+    }).catch(() => {
+      alertDialog.show('添加群组失败', '确定');
+    });
+  };
+  $scope.cancel = () => {
+    $state.go('admin.groupSetting');
+  };
+}
 ])
 ;

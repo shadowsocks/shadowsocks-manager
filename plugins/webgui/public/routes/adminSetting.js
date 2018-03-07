@@ -73,6 +73,17 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/giftcard/batch/:batchNumber',
       controller: 'AdminGiftCardBatchDetailsController',
       templateUrl: `${ cdn }/public/views/admin/giftcardBatchDetails.html`
-    });
+    })
+    .state('admin.groupSetting', {
+      url: '/settings/group',
+      controller: 'AdminGroupSettingController',
+      templateUrl: `${ cdn }/public/views/admin/groupList.html`
+    })
+    .state('admin.addGroup', {
+      url: '/settings/addGroup',
+      controller: 'AdminAddGroupController',
+      templateUrl: `${ cdn }/public/views/admin/addGroup.html`
+    })
+    ;
   }
 ]);
