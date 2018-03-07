@@ -1,52 +1,52 @@
-const ONLINE_CACHE_NAME = '2018-03-06 22:14:42 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-03-07 15:18:43 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
 const onlineCacheUrl = [
   '/',
 
-  '/libs/angular.min.js',
-  '/libs/angular-inview.js',
   '/libs/angular-animate.min.js',
   '/libs/angular-aria.min.js',
-  '/libs/angular-messages.min.js',
-  '/libs/angular-material.min.js',
-  '/libs/angular-ui-router.min.js',
-  '/libs/qrcode.min.js',
-  '/libs/angular-qr.min.js',
-  '/libs/ngStorage.min.js',
-  '/libs/Chart.min.js',
-  '/libs/marked.min.js',
-  '/libs/angular-marked.min.js',
   '/libs/angular-chart.min.js',
-  '/libs/moment.min.js',
-  '/libs/angular-moment.min.js',
-  '/libs/angular-websocket.min.js',
-  '/libs/angular-translate.min.js',
-  '/libs/bundle.js',
-
-  '/favicon.png',
-
-  '/libs/style.css',
+  '/libs/angular-inview.js',
+  '/libs/angular-marked.min.js',
   '/libs/angular-material.min.css',
-
-  '/libs/MaterialIcons-Regular.woff2',
-  '/libs/MaterialIcons-Regular.woff',
-  '/libs/MaterialIcons-Regular.ttf',
+  '/libs/angular-material.min.js',
+  '/libs/angular-messages.min.js',
+  '/libs/angular-moment.min.js',
+  '/libs/angular-qr.min.js',
+  '/libs/angular-sanitize.min.js',
+  '/libs/angular-translate.min.js',
+  '/libs/angular-ui-router.min.js',
+  '/libs/angular-websocket.min.js',
+  '/libs/angular.min.js',
+  '/libs/bundle.js',
+  '/libs/Chart.min.js',
+  '/favicon.png',
+  '/libs/marked.min.js',
   '/libs/MaterialIcons-Regular.eot',
-
+  '/libs/MaterialIcons-Regular.ttf',
+  '/libs/MaterialIcons-Regular.woff',
+  '/libs/MaterialIcons-Regular.woff2',
+  '/libs/moment.min.js',
+  '/libs/ngStorage.min.js',
+  '/libs/qrcode.min.js',
+  '/libs/style.css',
+  
   '/public/views/home/home.html',
   '/public/views/home/index.html',
   '/public/views/home/login.html',
   '/public/views/home/macLogin.html',
-  '/public/views/home/telegramLogin.html',
   '/public/views/home/resetPassword.html',
   '/public/views/home/signup.html',
+  '/public/views/home/telegramLogin.html',
 
   '/public/views/user/account.html',
   '/public/views/user/changePassword.html',
   '/public/views/user/index.html',
   '/public/views/user/qrcodeDialog.html',
+  '/public/views/user/settings.html',
+  '/public/views/user/telegram.html',
   '/public/views/user/user.html',
 
   '/public/views/admin/account.html',
@@ -58,10 +58,13 @@ const onlineCacheUrl = [
   '/public/views/admin/addUser.html',
   '/public/views/admin/admin.html',
   '/public/views/admin/baseSetting.html',
+  '/public/views/admin/changePassword.html',
   '/public/views/admin/editAccount.html',
   '/public/views/admin/editNotice.html',
   '/public/views/admin/editPayment.html',
   '/public/views/admin/editServer.html',
+  '/public/views/admin/giftcardBatchDetails.html',
+  '/public/views/admin/giftcardBatchList.html',
   '/public/views/admin/index.html',
   '/public/views/admin/mailSetting.html',
   '/public/views/admin/newNotice.html',
@@ -83,6 +86,7 @@ const onlineCacheUrl = [
   '/public/views/admin/userSortDialog.html',
 
   '/public/views/dialog/addAccount.html',
+  '/public/views/dialog/addGiftCardBatch.html',
   '/public/views/dialog/alert.html',
   '/public/views/dialog/changePassword.html',
   '/public/views/dialog/confirm.html',
@@ -91,15 +95,10 @@ const onlineCacheUrl = [
   '/public/views/dialog/language.html',
   '/public/views/dialog/order.html',
   '/public/views/dialog/pay.html',
+  '/public/views/dialog/payByGiftCard.html',
   '/public/views/dialog/serverChart.html',
   '/public/views/dialog/setEmail.html',
 ];
-
-// const a = [
-//   <% for(let i=0; i < test.length; i++) {%>
-//     '<%= test[i] %>',
-//   <% } %>
-// ];
 
 self.addEventListener('activate', function(event) {
   const cacheWhitelist = [ONLINE_CACHE_NAME];

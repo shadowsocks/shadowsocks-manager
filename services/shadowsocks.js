@@ -180,10 +180,8 @@ startUp();
 cron.minute(() => {
   resend();
   sendPing();
-}, 1);
-cron.minute(() => {
   getGfwStatus();
-}, 10);
+}, 1);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }
@@ -292,7 +290,10 @@ const getFlow = async (options) => {
 };
 
 let isGfw = false;
+let getGfwStatusTime = null;
 const getGfwStatus = () => {
+  if(getGfwStatusTime && isGfw === false && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
+  getGfwStatusTime = Date.now();
   const sites = [
     'baidu.com:80',
     'qq.com:80',
