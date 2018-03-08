@@ -324,7 +324,7 @@ const checkServer = async () => {
       // }).forEach(f => {
       //   delete checkAccountTime[f];
       // });
-      knex('account_flow').select(['id']).orderBy('id').limit(deleteCount).then(success => {
+      knex('account_flow').select(['id']).orderBy('id').limit(Math.ceil(deleteCount / 2)).then(success => {
         return knex('account_flow').delete().whereIn('id', success.map(m => m.id));
       });
     }

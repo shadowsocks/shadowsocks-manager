@@ -144,6 +144,17 @@ const getOneUser = async (id) => {
   return user[0];
 };
 
+const getOneAdmin = async (id) => {
+  const user = await knex('user').select().where({
+    type: 'admin',
+    id,
+  }).where('id', '>', 1);
+  if(!user.length) {
+    return Promise.reject('User not found');
+  }
+  return user[0];
+};
+
 const getUserAndPaging = async (opt = {}) => {
 
   const search = opt.search || '';
@@ -151,9 +162,11 @@ const getUserAndPaging = async (opt = {}) => {
   const sort = opt.sort || 'id_asc';
   const page = opt.page || 1;
   const pageSize = opt.pageSize || 20;
+  const type = opt.type || ['normal'];
 
-  let count = knex('user').select().where({ type: 'normal' });
-  // let users = knex('user').select().where({ type: 'normal' });
+  let count = knex('user').select()
+  .where('id', '>', 1)
+  .whereIn('type', type);
 
   let users = knex('user').select([
     'user.id as id',
@@ -168,7 +181,8 @@ const getUserAndPaging = async (opt = {}) => {
     'user.resetPasswordTime as resetPasswordTime',
     'account_plugin.port as port',
   ]).leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
-  .where({ 'user.type': 'normal' }).groupBy('user.id');
+  .where('user.id', '>', 1)
+  .whereIn('user.type', type).groupBy('user.id');
 
   if(search) {
     count = count.where('username', 'like', `%${ search }%`);
@@ -205,7 +219,7 @@ const deleteUser = async userId => {
   }
   const deleteCount = await knex('user').delete().where({
     id: userId,
-  });
+  }).where('id', '>', 1);
   if(deleteCount >= 1) {
     return;
   } else {
@@ -235,6 +249,7 @@ exports.get = getUsers;
 exports.getRecentSignUp = getRecentSignUpUsers;
 exports.getRecentLogin = getRecentLoginUsers;
 exports.getOne = getOneUser;
+exports.getOneAdmin = getOneAdmin;
 exports.getUserAndPaging = getUserAndPaging;
 exports.delete = deleteUser;
 exports.changePassword = changePassword;

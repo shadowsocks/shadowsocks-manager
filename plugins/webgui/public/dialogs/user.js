@@ -30,6 +30,9 @@ app.factory('userSortDialog' , [ '$mdDialog', ($mdDialog) => {
     controller: ['$scope', '$mdDialog', '$localStorage', 'bind', function($scope, $mdDialog, $localStorage, bind) {
       $scope.publicInfo = bind;
       $scope.userSort = $localStorage.admin.userSortSettings;
+      if(!$scope.userSort.type) {
+        $scope.userSort.type = {};
+      }
     }],
     clickOutsideToClose: true,
   };

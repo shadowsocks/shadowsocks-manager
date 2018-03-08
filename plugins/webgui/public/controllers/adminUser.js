@@ -10,6 +10,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     if(!$localStorage.admin.userSortSettings) {
       $localStorage.admin.userSortSettings = {
         sort: 'id_asc',
+        type: 'normal',
       };
     }
     $scope.userSort = $localStorage.admin.userSortSettings;
@@ -31,6 +32,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         pageSize: getPageSize(),
         search,
         sort: $scope.userSort.sort,
+        type: $scope.userSort.type,
       }).then(success => {
         $scope.total = success.total;
         if(!search && $scope.menuSearch.text) { return; }
@@ -57,8 +59,12 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       $scope.isUserPageFinish = false;
       $scope.getUsers($scope.menuSearch.text);
     };
-    $scope.toUser = (id) => {
-      $state.go('admin.userPage', { userId: id });
+    $scope.toUser = user => {
+      if(user.type === 'normal') {
+        $state.go('admin.userPage', { userId: user.id });
+      } else {
+        $state.go('admin.adminPage', { userId: user.id });
+      }
     };
     $scope.$on('cancelSearch', () => {
       $scope.users = [];
@@ -203,12 +209,13 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
   ($scope, $state, $stateParams, $http, alertDialog) => {
     $scope.setTitle('添加用户');
     $scope.setMenuButton('arrow_back', 'admin.user');
-    $scope.user = {};
+    $scope.user = { type: 'normal' };
     $scope.confirm = () => {
       alertDialog.loading();
       $http.post('/api/admin/user/add', {
         email: $scope.user.email,
         password: $scope.user.password,
+        type: $scope.user.type,
       }, {
         timeout: 15000,
       }).then(success => {
@@ -222,4 +229,50 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       $state.go('admin.user');
     };
   }
-]);
+])
+.controller('AdminAdminPageController', ['$scope', '$state', '$stateParams', '$http', 'adminApi', 'setGroupDialog', 'confirmDialog',
+  ($scope, $state, $stateParams, $http, adminApi, setGroupDialog, confirmDialog) => {
+    $scope.setTitle('管理员信息');
+    $scope.setMenuButton('arrow_back', 'admin.user');
+    const userId = $stateParams.userId;
+    $scope.user = { username: '...' };
+
+    const getAdminData = () => {
+      adminApi.getAdminData(userId).then(success => {
+        $scope.user = success.user;
+      }).catch(err => {
+        $state.go('admin.user');
+      });
+    };
+    getAdminData();
+
+    $scope.deleteUser = () => {
+      confirmDialog.show({
+        text: '真的要删除该用户吗？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除用户失败',
+        fn: function () {
+          return $http.delete(`/api/admin/user/${ userId }`);
+        },
+      }).then(() => {
+        $state.go('admin.user');
+      });
+    };
+    $scope.setUserGroup = () => {
+      setGroupDialog.show(userId, $scope.user.group).then(success => {
+        getAdminData();
+      });
+    };
+
+    $http.get('/api/admin/group').then(success => {
+      $scope.groups = success.data;
+      $scope.groups.unshift({ id: 0, name: '无分组', comment: '' });
+      $scope.groupInfo = {};
+      $scope.groups.forEach(f => {
+        $scope.groupInfo[f.id] = { name: f.name, comment: f.comment };
+      });
+    });
+  }
+])
+;

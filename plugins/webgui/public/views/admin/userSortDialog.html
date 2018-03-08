@@ -10,6 +10,15 @@
                     <md-radio-button value="lastLogin_desc">上次登录 ↓</md-radio-button>
                 </md-radio-group>
             </div>
+            <div style="margin-bottom: 20px;">用户类型：</div>
+            <div layout="column"  layout-align="start stretch">
+                <div flex>
+                    <md-checkbox ng-model="userSort.type.normal">普通</md-checkbox>
+                </div>
+                <div flex>
+                    <md-checkbox ng-model="userSort.type.admin">管理员</md-checkbox>
+                </div>
+            </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row">

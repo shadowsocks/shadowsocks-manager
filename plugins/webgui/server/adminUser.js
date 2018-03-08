@@ -5,15 +5,18 @@ exports.getUsers = (req, res) => {
   const pageSize = +req.query.pageSize || 20;
   const search = req.query.search || '';
   const sort = req.query.sort || 'id_asc';
+  const type = req.query.type || ['normal'];
   user.getUserAndPaging({
     page,
     pageSize,
     search,
     sort,
+    type,
   }).then(success => {
     success.users = success.users.map(m => {
       return {
         id: m.id,
+        type: m.type,
         email: m.email,
         lastLogin: m.lastLogin,
         username: m.username,
@@ -30,15 +33,17 @@ exports.getUsers = (req, res) => {
 exports.addUser = (req, res) => {
   req.checkBody('email', 'Invalid email').notEmpty();
   req.checkBody('password', 'Invalid password').notEmpty();
+  req.checkBody('type', 'Invalid type').isIn(['normal', 'admin']);
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
       const email = req.body.email;
       const password = req.body.password;
+      const type = req.body.type;
       return user.add({
         username: email,
         email,
         password,
-        type: 'normal',
+        type,
       });
     }
     result.throw();
