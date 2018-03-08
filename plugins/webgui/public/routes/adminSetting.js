@@ -84,6 +84,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminAddGroupController',
       templateUrl: `${ cdn }/public/views/admin/addGroup.html`
     })
+    .state('admin.editGroup', {
+      url: '/settings/editGroup/:groupId',
+      controller: 'AdminEditGroupController',
+      templateUrl: `${ cdn }/public/views/admin/editGroup.html`
+    })
     ;
   }
 ]);

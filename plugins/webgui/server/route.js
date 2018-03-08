@@ -122,6 +122,8 @@ app.post('/api/admin/giftcard/add', isAdmin, adminGiftCard.addGiftCard);
 app.get('/api/admin/group', isAdmin, adminGroup.getGroups);
 app.get('/api/admin/group/:id(\\d+)', isAdmin, adminGroup.getOneGroup);
 app.post('/api/admin/group', isAdmin, adminGroup.addGroup);
+app.put('/api/admin/group/:id(\\d+)', isAdmin, adminGroup.editGroup);
+app.delete('/api/admin/group/:id(\\d+)', isAdmin, adminGroup.deleteGroup);
 app.post('/api/admin/group/:groupId(\\d+)/:userId(\\d+)', isAdmin, adminGroup.setUserGroup);
 
 app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);

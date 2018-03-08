@@ -254,6 +254,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         pageSize: getPageSize(),
         search,
         // sort: $scope.userSort.sort,
+        group: $scope.orderFilter.group,
         filter: Object.keys($scope.orderFilter.filter).filter(f => $scope.orderFilter.filter[f]),
       }).then(success => {
         if(oldTabSwitchTime !== tabSwitchTime) { return; }

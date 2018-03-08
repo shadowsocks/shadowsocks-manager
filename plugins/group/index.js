@@ -23,7 +23,12 @@ const editGroup = (id, name, comment) => {
   }).where({ id });
 };
 
-const deleteGroup = id => {};
+const deleteGroup = async id => {
+  const users = await knex('user').where({ group: id });
+  if(users.length > 0) { return Promise.reject('Can not delete group'); }
+  await knex('group').delete().where({ id });
+  return;
+};
 
 const setUserGroup = (groupId, userId) => {
   return knex('user').update({ group: groupId }).where({ id: userId });

@@ -30,9 +30,27 @@ exports.addGroup = (req, res, next) => {
   });
 };
 
-exports.editGroup = (req, res, next) => {};
+exports.editGroup = (req, res, next) => {
+  const id = +req.params.id;
+  const name = req.body.name;
+  const comment = req.body.comment;
+  group.editGroup(id, name, comment).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
 
-exports.deleteGroup = (req, res, next) => {};
+exports.deleteGroup = (req, res, next) => {
+  const id = +req.params.id;
+  group.deleteGroup(id).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
 
 exports.setUserGroup = (req, res, next) => {
   const groupId = +req.params.groupId;

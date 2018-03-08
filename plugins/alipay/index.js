@@ -221,6 +221,7 @@ const orderList = async (options = {}) => {
 
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
+  const group = options.group;
   const filter = options.filter || [];
   const sort = options.sort || 'alipay.createTime_desc';
   const page = options.page || 1;
@@ -231,6 +232,7 @@ const orderListAndPaging = async (options = {}) => {
     'alipay.orderId',
     'alipay.orderType',
     'user.id as userId',
+    'user.group as group',
     'user.username',
     'account_plugin.port',
     'alipay.amount',
@@ -245,6 +247,10 @@ const orderListAndPaging = async (options = {}) => {
   if(filter.length) {
     count = count.whereIn('alipay.status', filter);
     orders = orders.whereIn('alipay.status', filter);
+  }
+  if(group >= 0) {
+    count = count.leftJoin('user', 'user.id', 'alipay.user').where({ 'user.group': group });
+    orders = orders.where({ 'user.group': group });
   }
   if(search) {
     count = count.where('alipay.orderId', 'like', `%${ search }%`);

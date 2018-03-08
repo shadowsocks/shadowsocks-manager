@@ -322,6 +322,7 @@ exports.getOrders = (req, res) => {
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
   options.sort = req.query.sort || 'alipay.createTime_desc';
+  options.group = +req.query.group;
   options.filter = req.query.filter || '';
   alipay.orderListAndPaging(options)
   .then(success => {
