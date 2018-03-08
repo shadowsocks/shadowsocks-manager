@@ -33,3 +33,14 @@ exports.addGroup = (req, res, next) => {
 exports.editGroup = (req, res, next) => {};
 
 exports.deleteGroup = (req, res, next) => {};
+
+exports.setUserGroup = (req, res, next) => {
+  const groupId = +req.params.groupId;
+  const userId = +req.params.userId;
+  group.setUserGroup(groupId, userId).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

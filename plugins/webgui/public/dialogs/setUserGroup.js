@@ -2,9 +2,10 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
+app.factory('setGroupDialog' , [ '$mdDialog', $mdDialog => {
   const publicInfo = {};
   const hide = () => {
+    console.log('hide');
     return $mdDialog.hide()
     .then(success => {
       dialogPromise = null;
@@ -23,26 +24,31 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
     return false;
   };
   const dialog = {
-    templateUrl: `${ cdn }/public/views/dialog/language.html`,
+    templateUrl: `${ cdn }/public/views/dialog/setUserGroup.html`,
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$translate', '$localStorage', 'bind', function($scope, $translate, $localStorage, bind) {
+    controller: ['$scope', '$http', 'bind', function($scope, $http, bind) {
       $scope.publicInfo = bind;
-      $scope.publicInfo.myLanguage = $localStorage.language || navigator.language || 'zh-CN';
-      $scope.chooseLanguage = () => {
-        $translate.use($scope.publicInfo.myLanguage);
-        $localStorage.language = $scope.publicInfo.myLanguage;
-        $scope.publicInfo.hide();
+      $scope.groups = [];
+      $scope.publicInfo.isLoading = true;
+      $http.get('/api/admin/group').then(success => {
+        $scope.groups = success.data;
+        $scope.groups.unshift({ id: 0, name: '无分组', comment: '' });
+        $scope.publicInfo.isLoading = false;
+      });
+      $scope.publicInfo.setGroup = () => {
+        $http.post(`/api/admin/group/${ $scope.publicInfo.groupId }/${ $scope.publicInfo.userId }`)
+        .then(success => {
+          $scope.publicInfo.hide();
+        });
       };
-      $scope.languages = [
-        { id: 'zh-CN', name: '中文' },
-        { id: 'en-US', name: 'English' },
-      ];
     }],
     clickOutsideToClose: true,
   };
-  const show = () => {
+  const show = (userId, groupId) => {
+    publicInfo.userId = userId;
+    publicInfo.groupId = groupId;
     if(isDialogShow()) {
       return dialogPromise;
     }

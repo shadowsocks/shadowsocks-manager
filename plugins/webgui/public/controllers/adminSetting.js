@@ -33,10 +33,6 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         name: '修改密码',
         to: 'admin.passwordSetting',
       },
-      {
-        name: '公告管理',
-        to: 'admin.notice',
-      },
     ];
     if($scope.config.telegram) {
       $scope.settingList.push({

@@ -1,8 +1,8 @@
 <div>
     <md-card>
         <md-card-content>
-            <md-list ng-repeat="setting in settingList">
-                <md-divider></md-divider>
+            <md-divider ng-repeat-start="setting in settingList"></md-divider>
+            <md-list>
                 <md-list-item ng-click="toSetting(setting.to)">
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>{{ setting.name }}</div>
@@ -12,7 +12,7 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider></md-divider>
+            <md-divider ng-repeat-end ng-if="$last"></md-divider>
         </md-card-content>
     </md-card>
 </div>

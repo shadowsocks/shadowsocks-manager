@@ -25,8 +25,13 @@ const editGroup = (id, name, comment) => {
 
 const deleteGroup = id => {};
 
+const setUserGroup = (groupId, userId) => {
+  return knex('user').update({ group: groupId }).where({ id: userId });
+};
+
 exports.getGroups = getGroups;
 exports.getOneGroup = getOneGroup;
 exports.addGroup = addGroup;
 exports.editGroup = editGroup;
 exports.deleteGroup = deleteGroup;
+exports.setUserGroup = setUserGroup;

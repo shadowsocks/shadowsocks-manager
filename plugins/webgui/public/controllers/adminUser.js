@@ -99,8 +99,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog) => {
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog', 'setGroupDialog',
+  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog, setGroupDialog) => {
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
@@ -184,6 +184,19 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     $scope.sendEmail = () => {
       emailDialog.show(userId);
     };
+    $scope.setUserGroup = () => {
+      setGroupDialog.show(userId, $scope.user.group).then(success => {
+        getUserData();
+      });
+    };
+    $http.get('/api/admin/group').then(success => {
+      $scope.groups = success.data;
+      $scope.groups.unshift({ id: 0, name: '无分组', comment: '' });
+      $scope.groupInfo = {};
+      $scope.groups.forEach(f => {
+        $scope.groupInfo[f.id] = { name: f.name, comment: f.comment };
+      });
+    });
   }
 ])
 .controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
