@@ -4,48 +4,57 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
   ($scope, $http, $timeout, $state) => {
     $scope.setTitle('设置');
     $scope.toSetting = path => { $state.go(path); };
-    $scope.settingList = [
-      {
-        name: '基本设置',
-        to: 'admin.baseSetting',
-      },
-      {
-        name: '公告管理',
-        to: 'admin.notice',
-      },
-      {
-        name: '群组管理',
-        to: 'admin.groupSetting',
-      },
-      {
-        name: '支付设置',
-        to: 'admin.paymentList',
-      },
-      {
-        name: '邮件设置',
-        to: 'admin.mailSetting',
-      },
-      {
-        name: '账号设置',
-        to: 'admin.accountSetting',
-      },
-      {
-        name: '修改密码',
-        to: 'admin.passwordSetting',
-      },
-    ];
-    if($scope.config.telegram) {
-      $scope.settingList.push({
-        name: 'Telegram',
-        to: 'admin.telegramSetting',
-      });
-    };
-    if($scope.config.telegram) {
-      $scope.settingList.push({
-        name: '充值码',
-        to: 'admin.listGiftCardBatch',
-      });
-    };
+    if($scope.id === 1) {
+      $scope.settingList = [
+        {
+          name: '基本设置',
+          to: 'admin.baseSetting',
+        },
+        {
+          name: '公告管理',
+          to: 'admin.notice',
+        },
+        {
+          name: '群组管理',
+          to: 'admin.groupSetting',
+        },
+        {
+          name: '支付设置',
+          to: 'admin.paymentList',
+        },
+        {
+          name: '邮件设置',
+          to: 'admin.mailSetting',
+        },
+        {
+          name: '账号设置',
+          to: 'admin.accountSetting',
+        },
+        {
+          name: '修改密码',
+          to: 'admin.passwordSetting',
+        },
+      ];
+      if($scope.config.telegram) {
+        $scope.settingList.push({
+          name: 'Telegram',
+          to: 'admin.telegramSetting',
+        });
+      };
+      if($scope.config.telegram) {
+        $scope.settingList.push({
+          name: '充值码',
+          to: 'admin.listGiftCardBatch',
+        });
+      };
+    } else {
+      $scope.settingList = [
+        {
+          name: '修改密码',
+          to: 'admin.passwordSetting',
+        },
+      ];
+    }
   }
 ]).controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {

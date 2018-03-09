@@ -49,6 +49,9 @@ const addUser = async (options) => {
         password: createPassword(options.password, options.username)
       });
     }
+    if(options.group) {
+      Object.assign(insert, { group: options.group });
+    }
     return knex('user').insert(insert);
   } catch(err) {
     console.log(err);
@@ -119,17 +122,17 @@ const getUsers = async () => {
   return users;
 };
 
-const getRecentSignUpUsers = async (number) => {
-  const users = await knex('user').select().where({
-    type: 'normal',
-  }).orderBy('createTime', 'desc').limit(number);
+const getRecentSignUpUsers = async (number, group) => {
+  const where = { type: 'normal' };
+  if(group >= 0) { where.group = group; }
+  const users = await knex('user').select().where(where).orderBy('createTime', 'desc').limit(number);
   return users;
 };
 
-const getRecentLoginUsers = async (number) => {
-  const users = await knex('user').select().where({
-    type: 'normal',
-  }).orderBy('lastLogin', 'desc').limit(number);
+const getRecentLoginUsers = async (number, group) => {
+  const where = { type: 'normal' };
+  if(group >= 0) { where.group = group; }
+  const users = await knex('user').select().where(where).orderBy('lastLogin', 'desc').limit(number);
   return users;
 };
 

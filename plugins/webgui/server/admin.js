@@ -165,7 +165,8 @@ exports.changeAccountData = (req, res) => {
 };
 
 exports.getRecentSignUpUsers = (req, res) => {
-  user.getRecentSignUp(5).then(success => {
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  user.getRecentSignUp(5, group).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
@@ -174,7 +175,8 @@ exports.getRecentSignUpUsers = (req, res) => {
 };
 
 exports.getRecentLoginUsers = (req, res) => {
-  user.getRecentLogin(5).then(success => {
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  user.getRecentLogin(5, group).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
@@ -186,8 +188,10 @@ exports.getRecentOrders = (req, res) => {
   if(!isAlipayUse) {
     return res.send([]);
   }
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
   alipay.orderListAndPaging({
     pageSize: 5,
+    group,
   }).then(success => {
     return res.send(success.orders);
   }).catch(err => {
@@ -329,11 +333,16 @@ exports.getOrders = (req, res) => {
     });
   }
   const options = {};
+  if(req.adminInfo.id === 1) {
+    options.group = +req.query.group;
+  } else {
+    options.group = req.adminInfo.group;
+  }
   options.page = +req.query.page || 1;
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
   options.sort = req.query.sort || 'alipay.createTime_desc';
-  options.group = +req.query.group;
+  
   options.filter = req.query.filter || '';
   alipay.orderListAndPaging(options)
   .then(success => {

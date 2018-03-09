@@ -40,12 +40,14 @@ exports.addUser = (req, res) => {
     if(result.isEmpty()) {
       const email = req.body.email;
       const password = req.body.password;
-      const type = req.body.type;
+      const group = req.adminInfo.id === 1 ? 0 : req.adminInfo.group;
+      const type = req.adminInfo.id === 1 ? req.body.type: 'normal' ;
       return user.add({
         username: email,
         email,
         password,
         type,
+        group,
       });
     }
     result.throw();

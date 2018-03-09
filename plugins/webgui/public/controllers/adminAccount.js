@@ -67,9 +67,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         getAccountInfo();
       }
     }, 15 * 1000));
-    $scope.setFabButton(() => {
+    $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addAccount');
-    });
+    } : null);
     $scope.toAccount = id => {
       $state.go('admin.accountPage', { accountId: id });
     };
