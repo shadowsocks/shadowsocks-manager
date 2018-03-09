@@ -529,7 +529,8 @@ exports.getAccountIpInfo = (req, res) => {
 };
 
 exports.getAllMacAccount = (req, res) => {
-  macAccount.getAllAccount().then(success => {
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  macAccount.getAllAccount(group).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);

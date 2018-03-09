@@ -35,7 +35,7 @@
                     </md-list-item>
                     <md-divider></md-divider>
               </md-list>
-            <div flex layout="row">
+            <div flex layout="row" ng-if="id === 1">
                 <md-button class="md-primary" ng-click="sendEmail()">发送邮件</md-button>
                 <md-button class="md-primary" ng-click="setUserGroup()">设置分组</md-button>
                 <md-button class="md-warn" ng-click="deleteUser()">删除用户</md-button>
@@ -52,8 +52,7 @@
                     <div flex="50" ng-click="toAccountPage(a.port)">
                         <span>{{a.port}}</span><br><span ng-show="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | timeago | translateTime}}</span>
                     </div>
-                    <div flex="50" layout="row" layout-align="space-between center">
-                        <div></div>
+                    <div flex="50" layout="row" layout-align="space-between center" ng-if="id === 1">
                         <md-button class="md-icon-button" aria-label="delete" ng-click="deleteUserAccount(a.id)">
                             <md-icon class="material-icons">close</md-icon>
                         </md-button>

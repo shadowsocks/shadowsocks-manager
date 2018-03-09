@@ -6,7 +6,7 @@
                     <span class="md-title">{{account.port}}</span>
                     <span class="md-subhead" ng-click="toUserPage(account.userId)">{{account.user}}</span>
                 </md-card-header-text>
-                <div>
+                <div ng-if="id === 1">
                     <md-button class="md-primary" aria-label="edit" ng-click="editAccount(account.id)">
                         修改
                     </md-button>

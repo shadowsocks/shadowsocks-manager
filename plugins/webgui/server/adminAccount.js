@@ -6,7 +6,7 @@ const formatMacAddress = mac => {
 
 exports.getMacAccount = (req, res) => {
   const userId = +req.query.userId;
-  macAccount.getAccount(userId).then(success => {
+  macAccount.getAccount(userId, -1).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
