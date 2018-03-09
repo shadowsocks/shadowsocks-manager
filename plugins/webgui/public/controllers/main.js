@@ -4,6 +4,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
   ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
     $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
+    $scope.id = $scope.config.id;
     $localStorage.$default({
       admin: {},
       home: {},

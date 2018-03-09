@@ -58,6 +58,9 @@ const getAccount = async (options = {}) => {
   if(options.port) {
     where['account_plugin.port'] = options.port;
   }
+  if(options.group >= 0) {
+    where['user.group'] = options.group;
+  }
   const account = await knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.type',

@@ -138,9 +138,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.toServerPage = (serverId) => {
       $state.go('admin.serverPage', { serverId });
     };
-    $scope.setFabButton(() => {
+    $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addServer');
-    });
+    } : null);
   }
 ])
 .controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia',

@@ -78,7 +78,12 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.setTitle = str => { $scope.title = str; };
     $scope.fabButton = false;
     $scope.fabButtonClick = () => {};
-    $scope.setFabButton = (fn) => {
+    $scope.setFabButton = fn => {
+      if(!fn) {
+        $scope.fabButton = false;
+        $scope.fabButtonClick = () => {};
+        return;
+      }
       $scope.fabButton = true;
       $scope.fabButtonClick = fn;
     };

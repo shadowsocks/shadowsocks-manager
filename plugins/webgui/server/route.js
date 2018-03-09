@@ -30,10 +30,19 @@ const isUser = (req, res, next) => {
 };
 const isAdmin = (req, res, next) => {
   if (req.session.type === 'admin') {
-    return next();
+    knex('user').where({ id: req.session.user, type: 'admin' }).then(s => s[0]).then(user => {
+      if(!user) { return res.status(401).end(); }
+      req.adminInfo = user;
+      next();
+    });
   } else {
     return res.status(401).end();
   }
+};
+
+const isSuperAdmin = (req, res, next) => {
+  if(req.session.user !== 1) { return res.status(403).end(); }
+  next();
 };
 
 app.get('/api/home/login', home.status);
@@ -48,9 +57,9 @@ app.post('/api/home/password/reset', home.resetPassword);
 
 app.get('/api/admin/server', isAdmin, adminServer.getServers);
 app.get('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.getOneServer);
-app.post('/api/admin/server', isAdmin, adminServer.addServer);
-app.put('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.editServer);
-app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, adminServer.deleteServer);
+app.post('/api/admin/server', isAdmin, isSuperAdmin, adminServer.addServer);
+app.put('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.editServer);
+app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
 app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
@@ -59,10 +68,10 @@ app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);
 app.get('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ip', isAdmin, admin.getAccountIp);
 app.get('/api/admin/account/ip/:ip', isAdmin, admin.getAccountIpInfo);
 app.get('/api/admin/account/:accountId(\\d+)/ip', isAdmin, admin.getAccountIpFromAllServer);
-app.post('/api/admin/account', isAdmin, admin.addAccount);
-app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, admin.changeAccountPort);
-app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, admin.changeAccountData);
-app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, admin.deleteAccount);
+app.post('/api/admin/account', isAdmin, isSuperAdmin, admin.addAccount);
+app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, isSuperAdmin, admin.changeAccountPort);
+app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, isSuperAdmin, admin.changeAccountData);
+app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, isSuperAdmin, admin.deleteAccount);
 
 app.get('/api/admin/account/mac', isAdmin, adminAccount.getMacAccount);
 app.post('/api/admin/account/mac/:macAddress', isAdmin, adminAccount.addMacAccount);
@@ -79,7 +88,7 @@ app.get('/api/admin/flow/:serverId(\\d+)/:accountId(\\d+)', isAdmin, adminFlow.g
 app.get('/api/admin/flow/:serverId(\\d+)/:accountId(\\d+)/lastConnect', isAdmin, adminFlow.getServerPortLastConnect);
 
 app.get('/api/admin/user', isAdmin, adminUser.getUsers);
-app.post('/api/admin/user/add', isAdmin, adminUser.addUser);
+app.post('/api/admin/user/add', isAdmin, isSuperAdmin, adminUser.addUser);
 app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
 app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 
@@ -215,7 +224,7 @@ const configForFrontend = {
   paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
   telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
-  giftcard: config.plugins.giftcard && config.plugins.giftcard.use
+  giftcard: config.plugins.giftcard && config.plugins.giftcard.use,
 };
 
 const cdn = config.plugins.webgui.cdn;
@@ -242,6 +251,8 @@ const colors = [
   { value: 'grey', color: '#9E9E9E' },
 ];
 const homePage = (req, res) => {
+  let id = -1;
+  if(req.session && req.session.user) { id = req.session.user; }
   return knex('webguiSetting').select().where({
     key: 'base',
   }).then(success => {
@@ -251,6 +262,7 @@ const homePage = (req, res) => {
     success[0].value = JSON.parse(success[0].value);
     return success[0].value;
   }).then(success => {
+    configForFrontend.id = id;
     configForFrontend.title = success.title;
     configForFrontend.themePrimary = success.themePrimary;
     configForFrontend.themeAccent = success.themeAccent;

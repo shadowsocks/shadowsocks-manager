@@ -73,7 +73,7 @@
         <div flex="10" flex-gt-sm="30"></div>
         <div layout="row" flex layout-align="space-around center">
             <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!account.password || !account.port">确认</md-button>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

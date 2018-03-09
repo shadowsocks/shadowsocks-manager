@@ -10,7 +10,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     if(!$localStorage.admin.userSortSettings) {
       $localStorage.admin.userSortSettings = {
         sort: 'id_asc',
-        type: 'normal',
+        type: {
+          normal: true,
+        },
       };
     }
     $scope.userSort = $localStorage.admin.userSortSettings;

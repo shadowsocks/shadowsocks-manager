@@ -6,12 +6,14 @@ exports.getUsers = (req, res) => {
   const search = req.query.search || '';
   const sort = req.query.sort || 'id_asc';
   const type = req.query.type || ['normal'];
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
   user.getUserAndPaging({
     page,
     pageSize,
     search,
     sort,
     type,
+    group,
   }).then(success => {
     success.users = success.users.map(m => {
       return {

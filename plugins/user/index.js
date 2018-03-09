@@ -163,6 +163,7 @@ const getUserAndPaging = async (opt = {}) => {
   const page = opt.page || 1;
   const pageSize = opt.pageSize || 20;
   const type = opt.type || ['normal'];
+  const group = opt.group || -1;
 
   let count = knex('user').select()
   .where('id', '>', 1)
@@ -184,6 +185,10 @@ const getUserAndPaging = async (opt = {}) => {
   .where('user.id', '>', 1)
   .whereIn('user.type', type).groupBy('user.id');
 
+  if(group >= 0) {
+    count = count.where({ 'user.group': group });
+    users = users.where({ 'user.group': group });
+  }
   if(search) {
     count = count.where('username', 'like', `%${ search }%`);
     users = users.where('username', 'like', `%${ search }%`);

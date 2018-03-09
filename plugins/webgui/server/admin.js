@@ -15,7 +15,8 @@ const rp = require('request-promise');
 const macAccount = appRequire('plugins/macAccount/index');
 
 exports.getAccount = (req, res) => {
-  account.getAccount().then(success => {
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  account.getAccount({ group }).then(success => {
     success.forEach(account => {
       account.data = JSON.parse(account.data);
       if(account.type >= 2 && account.type <= 5) {
