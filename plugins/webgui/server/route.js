@@ -108,20 +108,20 @@ app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
-app.get('/api/admin/notice', isAdmin, adminNotice.getNotice);
-app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.getOneNotice);
-app.post('/api/admin/notice', isAdmin, adminNotice.addNotice);
-app.put('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.editNotice);
-app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, adminNotice.deleteNotice);
+app.get('/api/admin/notice', isAdmin, isSuperAdmin, adminNotice.getNotice);
+app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, isSuperAdmin, adminNotice.getOneNotice);
+app.post('/api/admin/notice', isAdmin, isSuperAdmin, adminNotice.addNotice);
+app.put('/api/admin/notice/:noticeId(\\d+)', isAdmin, isSuperAdmin, adminNotice.editNotice);
+app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, isSuperAdmin, adminNotice.deleteNotice);
 
-app.get('/api/admin/setting/payment', isAdmin, adminSetting.getPayment);
-app.put('/api/admin/setting/payment', isAdmin, adminSetting.modifyPayment);
-app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
-app.put('/api/admin/setting/account', isAdmin, adminSetting.modifyAccount);
-app.get('/api/admin/setting/base', isAdmin, adminSetting.getBase);
-app.put('/api/admin/setting/base', isAdmin, adminSetting.modifyBase);
-app.get('/api/admin/setting/mail', isAdmin, adminSetting.getMail);
-app.put('/api/admin/setting/mail', isAdmin, adminSetting.modifyMail);
+app.get('/api/admin/setting/payment', isAdmin, isSuperAdmin, adminSetting.getPayment);
+app.put('/api/admin/setting/payment', isAdmin, isSuperAdmin, adminSetting.modifyPayment);
+app.get('/api/admin/setting/account', isAdmin, isSuperAdmin, adminSetting.getAccount);
+app.put('/api/admin/setting/account', isAdmin, isSuperAdmin, adminSetting.modifyAccount);
+app.get('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.getBase);
+app.put('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.modifyBase);
+app.get('/api/admin/setting/mail', isAdmin, isSuperAdmin, adminSetting.getMail);
+app.put('/api/admin/setting/mail', isAdmin, isSuperAdmin, adminSetting.modifyMail);
 
 app.get('/api/admin/giftcard', isAdmin, adminGiftCard.getOrders);
 app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);

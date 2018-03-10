@@ -64,7 +64,13 @@ exports.getBatchDetails = async (req, resp) => {
 
 exports.getOrders = async (req, resp) => {
   try {
-    const details = await giftcard.orderListAndPaging();
+    const options = {};
+    if(req.adminInfo.id === 1) {
+      options.group = +req.query.group;
+    } else {
+      options.group = req.adminInfo.group;
+    }
+    const details = await giftcard.orderListAndPaging(options);
     resp.send(details);
   } catch (err) {
     logger.error(err);

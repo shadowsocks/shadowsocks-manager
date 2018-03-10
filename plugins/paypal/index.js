@@ -212,6 +212,7 @@ const orderList = async (options = {}) => {
 
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
+  const group = options.group;
   const filter = options.filter || [];
   const sort = options.sort || 'paypal.createTime_desc';
   const page = options.page || 1;
@@ -236,6 +237,10 @@ const orderListAndPaging = async (options = {}) => {
   if(filter.length) {
     count = count.whereIn('paypal.status', filter);
     orders = orders.whereIn('paypal.status', filter);
+  }
+  if(group >= 0) {
+    count = count.leftJoin('user', 'user.id', 'paypal.user').where({ 'user.group': group });
+    orders = orders.where({ 'user.group': group });
   }
   if(search) {
     count = count.where('paypal.orderId', 'like', `%${ search }%`);

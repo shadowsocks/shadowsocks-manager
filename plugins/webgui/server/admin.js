@@ -204,8 +204,10 @@ exports.getPaypalRecentOrders = (req, res) => {
   if(!isPaypalUse) {
     return res.send([]);
   }
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
   paypal.orderListAndPaging({
     pageSize: 5,
+    group,
   }).then(success => {
     return res.send(success.orders);
   }).catch(err => {
@@ -364,6 +366,11 @@ exports.getPaypalOrders = (req, res) => {
     });
   }
   const options = {};
+  if(req.adminInfo.id === 1) {
+    options.group = +req.query.group;
+  } else {
+    options.group = req.adminInfo.group;
+  }
   options.page = +req.query.page || 1;
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
