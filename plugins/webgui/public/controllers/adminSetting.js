@@ -41,7 +41,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
           to: 'admin.telegramSetting',
         });
       };
-      if($scope.config.telegram) {
+      if($scope.config.giftcard) {
         $scope.settingList.push({
           name: '充值码',
           to: 'admin.listGiftCardBatch',
