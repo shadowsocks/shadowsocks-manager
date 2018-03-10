@@ -150,6 +150,25 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const serverId = $stateParams.serverId;
     $http.get(`/api/admin/server/${ serverId }`).then(success => {
       $scope.server = success.data;
+      $scope.currentPorts = {};
+      $scope.server.ports.forEach(f => {
+        $scope.currentPorts[f.port] = {
+          port: f.port,
+          password: f.password,
+          exists: true,
+        };
+      });
+      return adminApi.getAccount();
+    }).then(accounts => {
+      accounts.forEach(account => {
+        if(!$scope.currentPorts[account.port]) {
+          $scope.currentPorts[account.port] = {
+            port: account.port,
+            password: account.password,
+            exists: false,
+          };
+        }
+      });
     }).catch(() => {
       // $state.go('admin.server');
     });

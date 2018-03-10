@@ -75,13 +75,25 @@
         </md-card>
     </div>
 </div>
-<div layout="row" layout-wrap>
+<!-- <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
         <md-card ng-click="toAccountPage(port.port)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="40">{{port.port}}</div>
-                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{port.password}}</div>
+                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ port.password }}</div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div> -->
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="(key, value) in currentPorts">
+        <md-card ng-click="toAccountPage(value.port)" md-colors="{{ value.exists ? {} : {'background': 'red-50'} }}">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="40">{{ value.port }}</div>
+                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</div>
                 </div>
             </md-card-content>
         </md-card>
