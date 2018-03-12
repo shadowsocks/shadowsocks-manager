@@ -6,7 +6,7 @@ exports.getUsers = (req, res) => {
   const search = req.query.search || '';
   const sort = req.query.sort || 'id_asc';
   const type = req.query.type || ['normal'];
-  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  const group = req.adminInfo.id === 1 ? +req.query.group : req.adminInfo.group;
   user.getUserAndPaging({
     page,
     pageSize,

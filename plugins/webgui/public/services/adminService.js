@@ -7,6 +7,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     const sort = opt.sort || 'id_desc';
     const page = opt.page || 1;
     const pageSize = opt.pageSize || 20;
+    const group = opt.group || -1;
     const type = [];
     for(const i in opt.type) {
       if(opt.type[i]) { type.push(i); }
@@ -16,6 +17,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
       sort,
       page,
       pageSize,
+      group,
       type,
     } }).then(success => success.data);
   };

@@ -35,6 +35,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         search,
         sort: $scope.userSort.sort,
         type: $scope.userSort.type,
+        group: $scope.userSort.group,
       }).then(success => {
         $scope.total = success.total;
         if(!search && $scope.menuSearch.text) { return; }
@@ -87,7 +88,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       $scope.getUsers();
     };
     $scope.userSortDialog = () => {
-      userSortDialog.show().then(() => {
+      userSortDialog.show($scope.id).then(() => {
         $scope.users = [];
         $scope.currentPage = 1;
         $scope.isUserPageFinish = false;
