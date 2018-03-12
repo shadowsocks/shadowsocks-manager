@@ -93,7 +93,8 @@ app.factory('orderFilterDialog' , [ '$mdDialog', '$http', ($mdDialog, $http) => 
     }],
     clickOutsideToClose: true,
   };
-  const show = () => {
+  const show = id => {
+    publicInfo.id = id;
     if(isDialogShow()) {
       return dialogPromise;
     }

@@ -7,33 +7,33 @@
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
-              <md-list>
-                  <md-divider></md-divider>
-                  <md-list-item>
-                      <div flex layout="row" layout-align="space-between center">
-                          <div flex="30">注册时间</div>
-                          <div flex="70" style="text-align: right;" ng-if="user.createTime">
-                              <span style="font-size: 0.9em;">{{ user.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.createTime | timeagoshort }}</span>
-                          </div>
-                      </div>
-                  </md-list-item>
-                  <md-divider></md-divider>
-                  <md-list-item>
-                      <div flex layout="row" layout-align="space-between center">
-                          <div flex="30">上次登录</div>
-                          <div flex="70" style="text-align: right;" ng-if="user.lastLogin">
-                              <span style="font-size: 0.9em;">{{ user.lastLogin | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.lastLogin | timeagoshort }}</span>
-                          </div>
-                      </div>
-                  </md-list-item>
-                  <md-divider></md-divider>
-                  <md-list-item>
+                <md-list>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="30">注册时间</div>
+                            <div flex="70" style="text-align: right;" ng-if="user.createTime">
+                                <span style="font-size: 0.9em;">{{ user.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.createTime | timeagoshort }}</span>
+                            </div>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="30">上次登录</div>
+                            <div flex="70" style="text-align: right;" ng-if="user.lastLogin">
+                                <span style="font-size: 0.9em;">{{ user.lastLogin | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.lastLogin | timeagoshort }}</span>
+                            </div>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-if="id === 1">
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="30">分组</div>
                             <div flex="70" style="text-align: right;">{{ groupInfo[user.group].name }}</div>
                         </div>
                     </md-list-item>
-                    <md-divider></md-divider>
+                    <md-divider ng-if="id === 1"></md-divider>
               </md-list>
             <div flex layout="row" ng-if="id === 1">
                 <md-button class="md-primary" ng-click="sendEmail()">发送邮件</md-button>
@@ -71,7 +71,7 @@
                     <div flex="50" ng-click="editMacAccount(a)">
                         <span>{{ a.mac | mac }}</span>
                     </div>
-                    <div flex="50" layout="row" layout-align="space-between center">
+                    <div flex="50" layout="row" layout-align="space-between center" ng-if="id === 1">
                         <div></div>
                         <md-button class="md-icon-button" aria-label="delete" ng-click="deleteMacAccount(a.id)">
                             <md-icon class="material-icons">close</md-icon>

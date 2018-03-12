@@ -27,6 +27,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '服务器',
       icon: 'cloud',
       click: 'admin.server',
+      hide: !!($scope.id !== 1),
     }, {
       name: '用户',
       icon: 'people',
@@ -307,7 +308,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.setMenuRightButton('sort_by_alpha');
     $scope.orderFilterDialog = () => {
-      orderFilterDialog.show().then(() => {
+      orderFilterDialog.show($scope.id).then(() => {
         $scope.orders = [];
         $scope.currentPage = 1;
         $scope.isOrderPageFinish = false;

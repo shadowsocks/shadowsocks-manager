@@ -164,6 +164,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       });
     } : null);
     $scope.editMacAccount = account => {
+      if($scope.id !== 1) { return; }
       addAccountDialog.edit(account, $scope.user.account, $scope.server).then(success => {
         getUserData();
       });
