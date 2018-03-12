@@ -54,6 +54,13 @@
                     </md-switch>
                 </div>
             </div>
+            <div ng-if="+account.type >= 2 && +account.type <= 5" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">合并多服务器流量统计</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.multiServerFlow" aria-label="multiServerFlow" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">

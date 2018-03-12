@@ -36,6 +36,7 @@ const addAccount = async (type, options) => {
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: options.autoRemove || 0,
+      multiServerFlow: options.multiServerFlow || 0,
     });
     await checkAccount.checkServer();
     return;
@@ -79,13 +80,7 @@ const getAccount = async (options = {}) => {
   return account;
 };
 
-const delAccount = async (id) => {
-  // const macAccounts = await macAccount.getAccountByAccountId(id);
-  // if(macAccounts.length) {
-  //   macAccounts.forEach(f => {
-  //     macAccount.deleteAccount(f.id);
-  //   });
-  // }
+const delAccount = async id => {
   const result = await knex('account_plugin').delete().where({ id });
   if(!result) {
     return Promise.reject('Account id[' + id + '] not found');
@@ -106,6 +101,7 @@ const editAccount = async (id, options) => {
   update.type = options.type;
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
+  update.multiServerFlow = options.multiServerFlow;
   // update.server = options.server ? JSON.stringify(options.server) : null;
   if(options.hasOwnProperty('server')) {
     update.server = options.server ? JSON.stringify(options.server) : null;

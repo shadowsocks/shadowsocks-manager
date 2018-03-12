@@ -412,6 +412,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
@@ -513,6 +514,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');

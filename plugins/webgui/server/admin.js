@@ -104,9 +104,10 @@ exports.addAccount = (req, res) => {
       const limit = +req.body.limit;
       const flow = +req.body.flow;
       const autoRemove = +req.body.autoRemove || 0;
+      const multiServerFlow = +req.body.multiServerFlow || 0;
       const server = req.body.server ? JSON.stringify(req.body.server) : null;
       return account.addAccount(type, {
-        port, password, time, limit, flow, autoRemove, server,
+        port, password, time, limit, flow, autoRemove, server, multiServerFlow,
       });
     }
     result.throw();
@@ -155,6 +156,7 @@ exports.changeAccountData = (req, res) => {
     limit: +req.body.limit,
     flow: +req.body.flow,
     autoRemove: +req.body.autoRemove,
+    multiServerFlow: +req.body.multiServerFlow,
     server: req.body.server,
   }).then(success => {
     res.send('success');
