@@ -40,6 +40,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
           return { 'min-width': '400px', 'max-width': '640px' };
         };
         $scope.$watch('publicInfo.mac.account', () => {
+          if(!$scope.publicInfo.mac) { return; }
           const account = $scope.publicInfo.account.filter(f => {
             return f.id === $scope.publicInfo.mac.account;
           })[0];
