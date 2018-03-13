@@ -49,7 +49,16 @@
             </md-list>
             <md-divider></md-divider>
             <md-list ng-show="accountData.accountForNewUser.isEnable">
-                <md-list-item ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>合并多服务器流量统计</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.multiServerFlow" aria-label="multiServer"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>到期自动删除</div>
                         <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.autoRemove" aria-label="autoremove"></md-switch></div>
@@ -122,7 +131,7 @@
                 </md-list-item>
             </md-list>
             <md-divider></md-divider>
-            <md-list>
+            <!-- <md-list>
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>合并多服务器流量统计</div>
@@ -130,7 +139,7 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider></md-divider>
+            <md-divider></md-divider> -->
         </md-card-content>
     </md-card>
 </div>

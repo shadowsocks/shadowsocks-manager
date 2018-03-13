@@ -81,6 +81,7 @@ app.delete('/api/admin/account/mac', isAdmin, adminAccount.deleteMacAccount);
 app.get('/api/user/account/mac/:macAddress', adminAccount.getMacAccountForUser);
 
 app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
+app.get('/api/admin/flow/top', isAdmin, adminFlow.getTopFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/lastHour', isAdmin, adminFlow.getServerLastHourFlow);
 app.get('/api/admin/flow/:serverId(\\d+)/user', isAdmin, adminFlow.getServerUserFlow);
 app.get('/api/admin/flow/account/:accountId(\\d+)', isAdmin, adminFlow.getAccountServerFlow);

@@ -159,13 +159,12 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
 
       });
     };
-    $scope.setFabButton($scope.id === 1 ? () => {
-      addAccountDialog.show(userId, $scope.user.account, $scope.server).then(success => {
+    $scope.setFabButton(() => {
+      addAccountDialog.show(userId, $scope.user.account, $scope.server, $scope.id).then(success => {
         getUserData();
       });
-    } : null);
+    });
     $scope.editMacAccount = account => {
-      if($scope.id !== 1) { return; }
       addAccountDialog.edit(account, $scope.user.account, $scope.server).then(success => {
         getUserData();
       });

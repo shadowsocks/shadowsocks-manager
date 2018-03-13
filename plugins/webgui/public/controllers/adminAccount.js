@@ -141,7 +141,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         return server;
       });
       $scope.getServerPortData($scope.servers[0], $scope.accountId);
-      $scope.isMultiServerFlow = success[2].data.multiServerFlow;
+      $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
     }).catch(err => {
       console.log(err);
       $state.go('admin.account');
@@ -476,6 +476,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
       $scope.account.autoRemove = success.data.autoRemove;
+      $scope.account.multiServerFlow = success.data.multiServerFlow;
       if(success.data.type >= 2 && success.data.type <= 5) {
         $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;

@@ -72,6 +72,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.data',
     'account_plugin.status',
     'account_plugin.autoRemove',
+    'account_plugin.multiServerFlow',
     'user.id as userId',
     'user.email as user',
   ])
@@ -315,6 +316,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
       flow: flow[orderType],
       server: paymentInfo[paymentType].server ? JSON.stringify(paymentInfo[paymentType].server) : null,
       autoRemove: paymentInfo[paymentType].autoRemove ? 1 : 0,
+      multiServerFlow: paymentInfo[paymentType].multiServerFlow ? 1 : 0,
     });
     return;
   }
@@ -349,6 +351,7 @@ const setAccountLimit = async (userId, accountId, orderType) => {
     data: JSON.stringify(accountData),
     server: paymentInfo[paymentType].server ? JSON.stringify(paymentInfo[paymentType].server) : null,
     autoRemove: paymentInfo[paymentType].autoRemove ? 1 : 0,
+    multiServerFlow: paymentInfo[paymentType].multiServerFlow ? 1 : 0,
   }).where({ id: accountId });
   await checkAccount.deleteCheckAccountTimePort(port);
   return;

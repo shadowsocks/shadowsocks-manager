@@ -165,14 +165,15 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     });
   }
 ])
-.controller('AdminIndexController', ['$scope', '$state', 'adminApi', '$localStorage', '$interval', 'orderDialog',
-  ($scope, $state, adminApi, $localStorage, $interval, orderDialog) => {
+.controller('AdminIndexController', ['$scope', '$state', 'adminApi', '$localStorage', '$interval', 'orderDialog', '$http',
+  ($scope, $state, adminApi, $localStorage, $interval, orderDialog, $http) => {
     $scope.setTitle('首页');
     if($localStorage.admin.indexInfo) {
       $scope.signupUsers = $localStorage.admin.indexInfo.data.signup;
       $scope.loginUsers = $localStorage.admin.indexInfo.data.login;
       $scope.orders = $localStorage.admin.indexInfo.data.order;
       $scope.paypalOrders = $localStorage.admin.indexInfo.data.paypalOrder;
+      $scope.topFlow = $localStorage.admin.indexInfo.data.topFlow;
     }
     $scope.toUser = id => {
       $state.go('admin.userPage', { userId: id });
@@ -187,6 +188,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $scope.loginUsers = success.login;
         $scope.orders = success.order;
         $scope.paypalOrders = success.paypalOrder;
+        $scope.topFlow = success.topFlow;
       });
     };
     updateIndexInfo();
@@ -204,6 +206,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }, 15 * 1000));
     $scope.showOrderInfo = order => {
       orderDialog.show(order);
+    };
+    $scope.toTopUser = top => {
+      $state.go('admin.userPage', { userId: top.userId });
     };
   }
 ])

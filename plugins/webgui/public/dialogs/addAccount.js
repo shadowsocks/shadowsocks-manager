@@ -131,14 +131,14 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
     dialogPromise = $mdDialog.show(dialog);
     return dialogPromise;
   };
-  const show = (userId, account, server) => {
+  const show = (userId, account, server, id) => {
     publicInfo.userId = userId;
     publicInfo.account = account;
     publicInfo.server = server;
+    publicInfo.id = id;
     publicInfo.isLoading = false;
-    if(macAccount) {
-      publicInfo.status = 'choose';
-    } else {
+    if(publicInfo.id !== 1) {
+      publicInfo.accountType = 'mac';
       next();
     }
     if(isDialogShow()) {

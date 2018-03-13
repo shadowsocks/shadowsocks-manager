@@ -115,6 +115,7 @@ exports.signup = (req, res) => {
             flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
             server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
             autoRemove: newUserAccount.autoRemove ? 1 : 0,
+            multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
           });
         });
       });

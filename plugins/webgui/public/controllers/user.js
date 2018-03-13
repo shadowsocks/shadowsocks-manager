@@ -138,9 +138,9 @@ app
     if($scope.account.length >= 2) {
       $scope.flexGtSm = 50;
     }
-    $http.get('/api/user/multiServerFlow').then(success => {
-      $scope.isMultiServerFlow = success.data.status;
-    });
+    // $http.get('/api/user/multiServerFlow').then(success => {
+    //   $scope.isMultiServerFlow = success.data.status;
+    // });
     
     const setAccountServerList = (account, server) => {
       account.forEach(a => {
@@ -194,7 +194,7 @@ app
         account.serverPortFlow = success.flow;
         let maxFlow = 0;
         if(account.data) {
-          maxFlow = account.data.flow * ($scope.isMultiServerFlow ? 1 : scale);
+          maxFlow = account.data.flow * (account.multiServerFlow ? 1 : scale);
         }
         account.isFlowOutOfLimit[serverId] = maxFlow ? ( account.serverPortFlow >= maxFlow ) : false;
       });

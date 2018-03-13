@@ -102,16 +102,18 @@ const setAccountFlow = async (serverId, accountId, flow, port, nextCheckTime) =>
 const checkFlow = async (server, accountId, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
-    isMultiServerFlow = await knex('webguiSetting')
-    .select()
-    .where({ key: 'account' })
-    .then(success => {
-      if(!success.length) {
-        return Promise.reject('settings not found');
-      }
-      success[0].value = JSON.parse(success[0].value);
-      return success[0].value.multiServerFlow;
-    });
+  //   isMultiServerFlow = await knex('webguiSetting')
+  //   .select()
+  //   .where({ key: 'account' })
+  //   .then(success => {
+  //     if(!success.length) {
+  //       return Promise.reject('settings not found');
+  //     }
+  //     success[0].value = JSON.parse(success[0].value);
+  //     return success[0].value.multiServerFlow;
+  //   });
+    const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+    isMultiServerFlow = !!accountInfo.isMultiServerFlow;
   } catch (err) {}
   const serverId = isMultiServerFlow ? null : server;
   const userFlow = await flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
@@ -181,18 +183,18 @@ const checkServer = async () => {
       return f.port + server.shift === number;
     })[0];
   };
-  let isMultiServerFlow = false;
-  try {
-    isMultiServerFlow = await knex('webguiSetting').select().
-    where({ key: 'account' })
-    .then(success => {
-      if(!success.length) {
-        return Promise.reject('settings not found');
-      }
-      success[0].value = JSON.parse(success[0].value);
-      return success[0].value.multiServerFlow;
-    });
-  } catch (err) {}
+  // let isMultiServerFlow = false;
+  // try {
+  //   isMultiServerFlow = await knex('webguiSetting').select().
+  //   where({ key: 'account' })
+  //   .then(success => {
+  //     if(!success.length) {
+  //       return Promise.reject('settings not found');
+  //     }
+  //     success[0].value = JSON.parse(success[0].value);
+  //     return success[0].value.multiServerFlow;
+  //   });
+  // } catch (err) {}
   const promises = [];
   server.forEach(s => {
     const checkServerAccount = async s => {
@@ -210,6 +212,7 @@ const checkServer = async () => {
           return !!port.list[number + s.shift];
         };
         const checkAccountStatus = async a => {
+          const isMultiServerFlow = a.isMultiServerFlow;
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
           if(accountServer) {
             const newAccountServer = accountServer.filter(f => {

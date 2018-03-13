@@ -130,12 +130,14 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
       $http.get('/api/admin/user/recentLogin').then(success => success.data),
       $http.get('/api/admin/alipay/recentOrder').then(success => success.data),
       $http.get('/api/admin/paypal/recentOrder').then(success => success.data),
+      $http.get('/api/admin/flow/top').then(success => success.data),
     ]).then(success => {
       return {
         signup: success[0],
         login: success[1],
         order: success[2],
         paypalOrder: success[3],
+        topFlow: success[4],
       };
     });
     return indexInfoPromise;
