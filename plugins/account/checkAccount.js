@@ -120,6 +120,11 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
   return userFlow;
 };
 
+const checkFlowFromAccountFlowTable = async (serverId, accountId) => {
+  const result = await knex('account_flow').sum('flow as sumFlow').groupBy('id').where({ serverId, accountId }).then(s => s[0]);
+  return result ? result.sumFlow : null;
+};
+
 // const checkAccountTime = {};
 
 const deleteCheckAccountTimePort = async port => {
@@ -242,6 +247,7 @@ const checkServer = async () => {
               startTime += timePeriod;
             }
             let flow = -1;
+            let flow2 = -1;
             // const checkId = s.id + '|' + (a.port + s.shift);
             const accountFlowData = await getAccountFlow(s.id, a.port + s.shift);
             // if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
@@ -264,6 +270,8 @@ const checkServer = async () => {
                 nextCheckTime = Date.now() + nextTime;
               }
               await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
+            } else {
+              flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
@@ -271,6 +279,12 @@ const checkServer = async () => {
             } else if (flow >= 0 && !isMultiServerFlow && flow >= data.flow * s.scale) {
               port.exist(a.port) && delPort(a, s);
               return 1;
+            } else if (flow2 >= 0 && isMultiServerFlow && flow2 >= data.flow) {
+              port.exist(a.port) && delPort(a, s);
+              return 0;
+            } else if (flow2 >= 0 && !isMultiServerFlow && flow2 >= data.flow * s.scale) {
+              port.exist(a.port) && delPort(a, s);
+              return 0;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
               port.exist(a.port) && delPort(a, s);
               return 0;
@@ -320,17 +334,22 @@ const checkServer = async () => {
   });
   Promise.all(promises).then(success => {
     const sum = success.reduce((a, b) => a + b);
-    if(sum <= 50) {
-      let deleteCount = 50 - sum;
+    let deleteCount = 0;
+    if(sum <= 10) {
+      deleteCount = 30;
       // Object.keys(checkAccountTime).filter((f, i, arr) => {
       //   return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
       // }).forEach(f => {
       //   delete checkAccountTime[f];
       // });
-      knex('account_flow').select(['id']).orderBy('id').limit(Math.ceil(deleteCount / 2)).then(success => {
-        return knex('account_flow').delete().whereIn('id', success.map(m => m.id));
-      });
+    } else if(sum > 10 && sum <= 50) {
+      deleteCount = 15;
+    } else if(sum > 50) {
+      deleteCount = 5;
     }
+    knex('account_flow').select(['id']).orderBy('id').limit(deleteCount).then(success => {
+      return knex('account_flow').delete().whereIn('id', success.map(m => m.id));
+    });
   });
 };
 

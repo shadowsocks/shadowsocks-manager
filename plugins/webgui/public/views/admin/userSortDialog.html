@@ -17,15 +17,15 @@
                 </md-radio-group>
             </div>
             <div style="margin-bottom: 20px;">用户类型：</div>
-            <div layout="row" layout-align="center center">
-                <div flex layout-align="center center">
-                    <md-checkbox ng-model="userSort.type.normal">普通</md-checkbox>
-                    <md-checkbox ng-model="userSort.type.admin">管理员</md-checkbox>
-                </div>
+            <div layout="row" layout-align="center stretch">
+                <div flex="15"></div>
+                <md-checkbox flex="35" ng-model="userSort.type.normal">普通</md-checkbox>
+                <md-checkbox flex="35" ng-model="userSort.type.admin">管理员</md-checkbox>
+                <div flex="15"></div>
             </div>
             <div style="margin-bottom: 0px;" ng-if="publicInfo.id === 1">分组：</div>
             <div layout="row" layout-align="center stretch" ng-if="publicInfo.id === 1">
-                <md-select ng-model="userSort.group" aria-label="group select">
+                <md-select ng-model="userSort.group" style="width: 250px;" aria-label="group select">
                     <md-option ng-repeat="group in publicInfo.groups" ng-value="group.id">
                         {{ group.name }}
                     </md-option>

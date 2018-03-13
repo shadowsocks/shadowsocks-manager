@@ -13,6 +13,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         type: {
           normal: true,
         },
+        group: -1,
       };
     }
     $scope.userSort = $localStorage.admin.userSortSettings;

@@ -12,6 +12,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
           expired: true,
           unexpired: true,
           unlimit: true,
+          mac: true,
         },
       };
     }
@@ -49,6 +50,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.sortAndFilter();
         return adminApi.getMacAccount();
       }).then(macAccounts => {
+        $localStorage.admin.macAccountInfo = {
+          time: Date.now(),
+          data: macAccounts,
+        };
         // $scope.macAccount = macAccounts;
         $scope.macAccountInfo.originalAccount = macAccounts;
         $scope.macAccountInfo.account = angular.copy($scope.macAccountInfo.originalAccount);
