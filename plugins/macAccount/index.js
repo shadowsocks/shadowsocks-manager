@@ -103,6 +103,7 @@ const getAccountForUser = async (mac, ip) => {
     'account_plugin.id as accountId',
     'account_plugin.port',
     'account_plugin.password',
+    'account_plugin.multiServerFlow as multiServerFlow',
   ])
   .leftJoin('user', 'mac_account.userId', 'user.id')
   .leftJoin('account_plugin', 'mac_account.userId', 'account_plugin.userId');
@@ -125,16 +126,17 @@ const getAccountForUser = async (mac, ip) => {
     }
     expire = accountData.data.create + accountData.data.limit * timePeriod;
   }
-  const isMultiServerFlow = await knex('webguiSetting')
-  .select()
-  .where({ key: 'account' })
-  .then(success => {
-    if(!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value.multiServerFlow;
-  });
+  // const isMultiServerFlow = await knex('webguiSetting')
+  // .select()
+  // .where({ key: 'account' })
+  // .then(success => {
+  //   if(!success.length) {
+  //     return Promise.reject('settings not found');
+  //   }
+  //   success[0].value = JSON.parse(success[0].value);
+  //   return success[0].value.multiServerFlow;
+  // });
+  const isMultiServerFlow = account.multiServerFlow;
   const servers = await serverPlugin.list({ status: false });
   let server = servers.filter(s => {
     return s.id === myServerId;
