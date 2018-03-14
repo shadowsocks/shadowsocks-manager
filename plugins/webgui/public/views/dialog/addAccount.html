@@ -20,7 +20,7 @@
             <md-button ng-click="publicInfo.hide()">
                 关闭
             </md-button>
-            <md-button ng-click="publicInfo.next()">
+            <md-button class="md-primary" ng-click="publicInfo.next()">
                 下一步
             </md-button>
         </md-dialog-actions>
@@ -44,7 +44,7 @@
             <md-button ng-click="publicInfo.hide()">
                 关闭
             </md-button>
-            <md-button ng-click="publicInfo.setPort()">
+            <md-button class="md-primary" ng-click="publicInfo.setPort()">
                 确定
             </md-button>
         </md-dialog-actions>
@@ -74,7 +74,7 @@
             <md-button ng-click="publicInfo.hide()">
                 关闭
             </md-button>
-            <md-button ng-click="publicInfo.setMac()">
+            <md-button class="md-primary" ng-click="publicInfo.setMac()" ng-disabled="!publicInfo.isMacAddress(publicInfo.mac.macAddress)">
                 确定
             </md-button>
         </md-dialog-actions>
@@ -104,7 +104,7 @@
             <md-button ng-click="publicInfo.hide()">
                 关闭
             </md-button>
-            <md-button ng-click="publicInfo.editMac()">
+            <md-button class="md-primary" ng-click="publicInfo.editMac()">
                 确定
             </md-button>
         </md-dialog-actions>

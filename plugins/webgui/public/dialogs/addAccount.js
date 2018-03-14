@@ -5,6 +5,11 @@ const cdn = window.cdn || '';
 app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state, $http) => {
   const macAccount = JSON.parse(window.ssmgrConfig).macAccount;
   const publicInfo = {};
+  publicInfo.isMacAddress = mac => {
+    if(!mac) { return false; }
+    if(!mac.match(/^[0-9a-f]{12}$/)) { return false; }
+    return true;
+  };
   publicInfo.status = 'choose';
   publicInfo.accountType = 'port';
   const hide = () => {
