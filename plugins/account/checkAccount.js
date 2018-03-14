@@ -113,7 +113,7 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
   //     return success[0].value.multiServerFlow;
   //   });
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
-    isMultiServerFlow = !!accountInfo.isMultiServerFlow;
+    isMultiServerFlow = !!accountInfo.multiServerFlow;
   } catch (err) {}
   const serverId = isMultiServerFlow ? null : server;
   const userFlow = await flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
