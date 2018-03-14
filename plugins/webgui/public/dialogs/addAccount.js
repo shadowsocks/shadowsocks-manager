@@ -44,7 +44,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
           const account = $scope.publicInfo.account.filter(f => {
             return f.id === $scope.publicInfo.mac.account;
           })[0];
-          if(!account.server) {
+          if(!account || !account.server) {
             $scope.publicInfo.validServer = $scope.publicInfo.server;
           } else {
             $scope.publicInfo.validServer = $scope.publicInfo.server.filter(f => {
@@ -132,6 +132,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
     return dialogPromise;
   };
   const show = (userId, account, server, id) => {
+    publicInfo.status = 'choose';
     publicInfo.userId = userId;
     publicInfo.account = account;
     publicInfo.server = server;
