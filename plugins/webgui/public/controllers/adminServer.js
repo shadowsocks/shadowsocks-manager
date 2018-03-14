@@ -161,9 +161,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       return adminApi.getAccount();
     }).then(accounts => {
       accounts.forEach(account => {
-        if(!$scope.currentPorts[account.port]) {
-          $scope.currentPorts[account.port] = {
-            port: account.port,
+        if(!$scope.currentPorts[account.port + server.shift]) {
+          $scope.currentPorts[account.port + server.shift] = {
+            port: account.port + server.shift,
             password: account.password,
             exists: false,
           };

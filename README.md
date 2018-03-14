@@ -21,11 +21,8 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## FreeAccount Demo:
 
-[https://free.ssmgr.top](https://free.ssmgr.top)
+[https://free.gyteng.com](https://free.gyteng.com)
 
-## FreeAccountMiner Demo:
-
-[https://coin.ssmgr.top](https://coin.ssmgr.top)
 
 ## Dependencies
 

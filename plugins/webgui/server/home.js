@@ -151,7 +151,10 @@ exports.login = (req, res) => {
     logger.info(`[${ req.body.email }] login success`);
     req.session.user = success.id;
     req.session.type = success.type;
-    res.send({ type: success.type });
+    res.send({
+      type: success.type,
+      id: success.id,
+    });
   }).catch(err => {
     logger.error(`User[${ req.body.email }] login fail: ${ err }`);
     const errorData = ['invalid body', 'user not exists', 'invalid password', 'password retry out of limit'];

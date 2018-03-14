@@ -5,6 +5,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
     $scope.id = $scope.config.id;
+    $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
       admin: {},
       home: {},

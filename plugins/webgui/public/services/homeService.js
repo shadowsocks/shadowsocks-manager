@@ -21,7 +21,7 @@ app.factory('homeApi', ['$http', $http => {
       email,
       password,
     }).then(success => {
-      return success.data.type;
+      return success.data;
     }).catch(err => {
       if(err.status === 403) {
         let errData = '用户名或密码错误';

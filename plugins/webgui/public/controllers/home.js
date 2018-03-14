@@ -65,14 +65,15 @@ app
         alertDialog.loading().then(() => {
           return homeApi.userLogin($scope.user.email, $scope.user.password);
         }).then(success => {
-          $localStorage.home.status = success;
+          $scope.setId(success.id);
+          $localStorage.home.status = success.type;
           return alertDialog.close().then(() => {
             return success;
           });
         }).then(success => {
-          if (success === 'normal') {
+          if (success.type === 'normal') {
             $state.go('user.index');
-          } else if (success === 'admin') {
+          } else if (success.type === 'admin') {
             $state.go('admin.index');
           }
         }).catch(err => {
