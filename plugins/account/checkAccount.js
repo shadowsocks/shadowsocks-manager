@@ -217,7 +217,7 @@ const checkServer = async () => {
           return !!port.list[number + s.shift];
         };
         const checkAccountStatus = async a => {
-          const isMultiServerFlow = a.isMultiServerFlow;
+          const isMultiServerFlow = !!a.multiServerFlow;
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
           if(accountServer) {
             const newAccountServer = accountServer.filter(f => {
@@ -288,7 +288,7 @@ const checkServer = async () => {
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
               port.exist(a.port) && delPort(a, s);
               return 0;
-            } else if(!port.exist(a.port) && flow >= 0) {
+            } else if(!port.exist(a.port) && (flow >= 0 || flow2 >= 0)) {
               addPort(a, s);
               return 0;
             } else {

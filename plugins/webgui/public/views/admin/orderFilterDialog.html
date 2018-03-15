@@ -2,21 +2,18 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <div style="margin-bottom: 20px;">过滤条件：</div>
-            <div layout="column" layout-align="center center">
+            <div layout="column" layout-align="center stretch">
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.CREATE">创建</md-checkbox>
-                </div>
-                <div flex>
                     <md-checkbox ng-model="orderFilter.filter.WAIT_BUYER_PAY">等待</md-checkbox>
                 </div>
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.TRADE_SUCCESS">付款</md-checkbox>
-                </div>
-                <div flex>
                     <md-checkbox ng-model="orderFilter.filter.FINISH">完成</md-checkbox>
                 </div>
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.TRADE_CLOSED">关闭</md-checkbox>
+                    <div></div>
                 </div>
                 <md-input-container ng-if="publicInfo.id === 1">
                     <label>分组</label>

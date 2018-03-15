@@ -243,6 +243,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
           FINISH: true,
           TRADE_CLOSED: true,
         },
+        group: -1,
       };
     }
     $scope.orderFilter = $localStorage.admin.orderFilterSettings;
