@@ -7,8 +7,9 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
   const publicInfo = {};
   publicInfo.isMacAddress = mac => {
     if(!mac) { return false; }
-    if(!mac.match(/^[0-9a-f]{12}$/)) { return false; }
-    return true;
+    const match = mac.toLowerCase().replace(/-/g, '').replace(/:/g, '').match(/^[0-9a-f]{12}$/);
+    if(!match) { return false; }
+    return match[0];
   };
   publicInfo.status = 'choose';
   publicInfo.accountType = 'port';
@@ -99,7 +100,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
   };
   publicInfo.setPort = setPort;
   const setMac = () => {
-    $http.post(`/api/admin/account/mac/${ publicInfo.mac.macAddress }`, {
+    $http.post(`/api/admin/account/mac/${ publicInfo.isMacAddress(publicInfo.mac.macAddress) }`, {
       userId: publicInfo.userId,
       accountId: publicInfo.mac.account,
       serverId: publicInfo.mac.server
@@ -111,7 +112,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
   const editMac = () => {
     $http.put(`/api/admin/account/mac`, {
       id: publicInfo.mac.id,
-      macAddress: publicInfo.mac.macAddress,
+      macAddress: publicInfo.isMacAddress(publicInfo.mac.macAddress),
       accountId: publicInfo.mac.account,
       serverId: publicInfo.mac.server
     }).then(success => {

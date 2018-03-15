@@ -121,8 +121,10 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
 };
 
 const checkFlowFromAccountFlowTable = async (serverId, accountId) => {
-  const result = await knex('account_flow').sum('flow as sumFlow').groupBy('id').where({ serverId, accountId }).then(s => s[0]);
-  return result ? result.sumFlow : null;
+  const where = { accountId };
+  if(serverId) { where.serverId = serverId; }
+  const result = await knex('account_flow').sum('flow as sumFlow').groupBy('id').where(where).then(s => s[0]);
+  return result ? result.sumFlow : -1;
 };
 
 // const checkAccountTime = {};
@@ -270,7 +272,8 @@ const checkServer = async () => {
                 nextCheckTime = Date.now() + nextTime;
               }
               await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
-            } else {
+            }
+            if(flow === -1) {
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
@@ -366,4 +369,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 2);
+}, 1);
