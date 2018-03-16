@@ -274,6 +274,13 @@ const checkServer = async () => {
               await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
             }
             if(flow === -1) {
+              const sleep = time => {
+                return new Promise((resolve, reject) => {
+                  setTimeout(() => resolve(), time);
+                });
+              };
+              const sleepTime = Math.ceil(Math.random() * 60000);
+              await sleep(sleepTime);
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
@@ -369,4 +376,4 @@ setTimeout(() => {
 }, 8 * 1000);
 cron.minute(() => {
   checkServer();
-}, 1);
+}, 2);
