@@ -279,7 +279,7 @@ const checkServer = async () => {
                   setTimeout(() => resolve(), time);
                 });
               };
-              const sleepTime = Math.ceil(Math.random() * 60000);
+              const sleepTime = Math.ceil(Math.random() * 120000);
               await sleep(sleepTime);
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
             }

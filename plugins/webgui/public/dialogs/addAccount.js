@@ -74,7 +74,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
   const macAddress = () => {
     publicInfo.status = 'mac';
     publicInfo.mac = {
-      account: publicInfo.account[0].id,
+      account: publicInfo.account[0] ? publicInfo.account[0].id : null,
       server: publicInfo.server[0].id,
     };
   };
