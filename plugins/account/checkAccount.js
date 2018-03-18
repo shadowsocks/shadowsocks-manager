@@ -221,7 +221,7 @@ const checkServer = async () => {
                   setTimeout(() => resolve(), time);
                 });
               };
-              const sleepTime = Math.ceil(Math.random() * 60000);
+              const sleepTime = Math.ceil(Math.random() * 120000);
               await sleep(sleepTime);
               flow = await checkFlow(s.id, a.id, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;
@@ -235,7 +235,7 @@ const checkServer = async () => {
               }
               await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
             }
-            if(flow === -1) {
+            if(flow === -1 && accountFlowData.updateTime && Date.now() - 15 * 60 * 1000 >= accountFlowData.checkTime) {
               const sleep = time => {
                 return new Promise((resolve, reject) => {
                   setTimeout(() => resolve(), time);
@@ -244,6 +244,16 @@ const checkServer = async () => {
               const sleepTime = Math.ceil(Math.random() * 120000);
               await sleep(sleepTime);
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
+              const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow2) / 200000000 * 60 * 1000;
+              let nextCheckTime;
+              if(!accountFlowData) {
+                nextCheckTime = Date.now() + 150 * 1000;
+              } else if(nextTime <= 0) {
+                nextCheckTime = Date.now() + 10 * 60 * 1000;
+              } else {
+                nextCheckTime = Date.now() + nextTime;
+              }
+              await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
