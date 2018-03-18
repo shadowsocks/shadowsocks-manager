@@ -264,7 +264,6 @@ const homePage = (req, res) => {
     return success[0].value;
   }).then(success => {
     configForFrontend.id = id;
-    configForFrontend.title = success.title;
     configForFrontend.themePrimary = success.themePrimary;
     configForFrontend.themeAccent = success.themeAccent;
     const filterColor = colors.filter(f => f.value === success.themePrimary);
