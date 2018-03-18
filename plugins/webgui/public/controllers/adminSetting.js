@@ -443,7 +443,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
 ]).controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
     $scope.setTitle('群组管理');
-    $scope.setMenuButton('arrow_back', 'admin.settings');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.settings');
+    });
     $scope.setFabButton(() => {
       $state.go('admin.addGroup');
     });

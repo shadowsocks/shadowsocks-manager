@@ -102,16 +102,6 @@ const setAccountFlow = async (serverId, accountId, flow, port, nextCheckTime) =>
 const checkFlow = async (server, accountId, startTime, endTime) => {
   let isMultiServerFlow = false;
   try {
-  //   isMultiServerFlow = await knex('webguiSetting')
-  //   .select()
-  //   .where({ key: 'account' })
-  //   .then(success => {
-  //     if(!success.length) {
-  //       return Promise.reject('settings not found');
-  //     }
-  //     success[0].value = JSON.parse(success[0].value);
-  //     return success[0].value.multiServerFlow;
-  //   });
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
     isMultiServerFlow = !!accountInfo.multiServerFlow;
   } catch (err) {}
@@ -127,17 +117,9 @@ const checkFlowFromAccountFlowTable = async (serverId, accountId) => {
   return result ? result.sumFlow : -1;
 };
 
-// const checkAccountTime = {};
-
 const deleteCheckAccountTimePort = async port => {
   const servers = await knex('server').select();
   servers.forEach(async server => {
-    // const reg = new RegExp('^' + server.id + '\\|' + ( port + server.shift ) + '$');
-    // for(const cat in checkAccountTime) {
-    //   if(cat.match(reg)) {
-    //     delete checkAccountTime[cat];
-    //   }
-    // }
     await knex('account_flow').delete().where({
       serverId: server.id,
       port: port + server.shift,
@@ -146,12 +128,6 @@ const deleteCheckAccountTimePort = async port => {
   return;
 };
 const deleteCheckAccountTimeServer = serverId => {
-  // const reg = new RegExp('^' + serverId + '\\|\\d{1,5}$');
-  // for(const cat in checkAccountTime) {
-  //   if(cat.match(reg)) {
-  //     delete checkAccountTime[cat];
-  //   }
-  // }
   return knex('account_flow').delete().where({ serverId });
 };
 
@@ -190,18 +166,6 @@ const checkServer = async () => {
       return f.port + server.shift === number;
     })[0];
   };
-  // let isMultiServerFlow = false;
-  // try {
-  //   isMultiServerFlow = await knex('webguiSetting').select().
-  //   where({ key: 'account' })
-  //   .then(success => {
-  //     if(!success.length) {
-  //       return Promise.reject('settings not found');
-  //     }
-  //     success[0].value = JSON.parse(success[0].value);
-  //     return success[0].value.multiServerFlow;
-  //   });
-  // } catch (err) {}
   const promises = [];
   server.forEach(s => {
     const checkServerAccount = async s => {
@@ -250,9 +214,7 @@ const checkServer = async () => {
             }
             let flow = -1;
             let flow2 = -1;
-            // const checkId = s.id + '|' + (a.port + s.shift);
             const accountFlowData = await getAccountFlow(s.id, a.port + s.shift);
-            // if(!checkAccountTime[checkId] || (checkAccountTime[checkId] && Date.now() >= checkAccountTime[checkId])) {
             if(!accountFlowData || (accountFlowData && Date.now() >= accountFlowData.nextCheckTime)) {
               const sleep = time => {
                 return new Promise((resolve, reject) => {
@@ -347,11 +309,6 @@ const checkServer = async () => {
     let deleteCount = 0;
     if(sum <= 10) {
       deleteCount = 30;
-      // Object.keys(checkAccountTime).filter((f, i, arr) => {
-      //   return Math.random() <= (deleteCount / arr.length / 2) ? f : null;
-      // }).forEach(f => {
-      //   delete checkAccountTime[f];
-      // });
     } else if(sum > 10 && sum <= 50) {
       deleteCount = 15;
     } else if(sum > 50) {
