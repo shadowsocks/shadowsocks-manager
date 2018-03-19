@@ -7,7 +7,7 @@ const createTable = async() => {
     const hasStatus = await knex.schema.hasColumn(tableName, 'status');
     if(!hasStatus) {
       await knex.schema.table(tableName, function(table) {
-        table.string('status');
+        table.string('status').defaultTo('checked');
       });
     }
     return;

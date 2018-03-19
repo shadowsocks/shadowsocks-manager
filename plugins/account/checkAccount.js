@@ -246,7 +246,9 @@ const checkServer = async () => {
               } else {
                 nextCheckTime = Date.now() + nextTime;
               }
-              await setAccountFlow(s.id, a.id, flow, a.port + s.shift, nextCheckTime);
+              if(flow2 > -1) {
+                await setAccountFlow(s.id, a.id, flow2, a.port + s.shift, nextCheckTime);
+              }
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
