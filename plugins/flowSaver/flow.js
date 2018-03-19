@@ -446,6 +446,7 @@ const getTopFlow = groupId => {
     'user.id as userId',
     'user.username as email',
     'account_plugin.port as port',
+    'account_plugin.id as accountId',
   ])
   .leftJoin('account_plugin', 'account_plugin.id', 'saveFlow.accountId')
   .leftJoin('user', 'account_plugin.userId', 'user.id')

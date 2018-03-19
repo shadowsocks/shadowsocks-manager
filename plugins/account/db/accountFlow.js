@@ -4,6 +4,12 @@ const tableName = 'account_flow';
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
+    const hasStatus = await knex.schema.hasColumn(tableName, 'status');
+    if(!hasStatus) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('status');
+      });
+    }
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
@@ -15,6 +21,7 @@ const createTable = async() => {
     table.bigInteger('checkTime');
     table.bigInteger('nextCheckTime');
     table.bigInteger('flow');
+    table.string('status').defaultTo('checked');
   });
 };
 

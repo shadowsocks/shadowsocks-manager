@@ -208,7 +208,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       orderDialog.show(order);
     };
     $scope.toTopUser = top => {
-      $state.go('admin.userPage', { userId: top.userId });
+      if(top.email) {
+        $state.go('admin.userPage', { userId: top.userId });
+      } else {
+        $state.go('admin.accountPage', { accountId: top.accountId });
+      }
     };
   }
 ])
