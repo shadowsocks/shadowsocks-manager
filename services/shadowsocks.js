@@ -292,15 +292,13 @@ const getFlow = async (options) => {
   }
 };
 
-let isGfw = false;
+let isGfw = 0;
 let getGfwStatusTime = null;
 const getGfwStatus = () => {
-  if(getGfwStatusTime && isGfw === false && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
+  if(getGfwStatusTime && isGfw === 0 && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
   getGfwStatusTime = Date.now();
   const sites = [
     'baidu.com:80',
-    'qq.com:80',
-    'taobao.com:80',
   ];
   const site = sites[+Math.random().toString().substr(2) % sites.length];
   const req = http.request({
@@ -311,7 +309,7 @@ const getGfwStatus = () => {
     timeout: 2000,
   }, res => {
     if(res.statusCode === 200) {
-      isGfw = false;
+      isGfw = 0;
     }
     res.setEncoding('utf8');
     res.on('data', (chunk) => {});
@@ -319,10 +317,10 @@ const getGfwStatus = () => {
   });
   req.on('timeout', () => {
     req.abort();
-    isGfw = true;
+    isGfw += 1;
   });
   req.on('error', (e) => {
-    isGfw = true;
+    isGfw += 1;
   });
   req.end();
 };
@@ -330,7 +328,7 @@ const getGfwStatus = () => {
 const getVersion = () => {
   return {
     version,
-    isGfw,
+    isGfw: !!(isGfw > 5),
   };
 };
 
