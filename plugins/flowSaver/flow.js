@@ -435,9 +435,7 @@ const getTopFlow = groupId => {
   const startTime = moment().hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
   const endTime = Date.now();
   const where = {};
-  if(groupId >= 0) {
-    where['user.group'] = groupId;
-  }
+  if(groupId >= 0) { where['user.group'] = groupId; }
   return knex('saveFlow').sum('saveFlow.flow as sumFlow')
   .groupBy('user.id')
   .orderBy('sumFlow', 'desc')
@@ -449,9 +447,8 @@ const getTopFlow = groupId => {
     'account_plugin.id as accountId',
   ])
   .leftJoin('account_plugin', 'account_plugin.id', 'saveFlow.accountId')
-  .leftJoin('user', 'account_plugin.userId', 'user.id')
+  .innerJoin('user', 'account_plugin.userId', 'user.id')
   .whereBetween('saveFlow.time', [startTime, endTime]).where(where);
-  ;
 };
 
 exports.getFlow = getFlow;

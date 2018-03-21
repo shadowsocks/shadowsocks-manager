@@ -120,7 +120,9 @@ const checkFlowFromAccountFlowTable = async (serverId, accountId) => {
 const deleteCheckAccountTimePort = async port => {
   const servers = await knex('server').select();
   servers.forEach(async server => {
-    await knex('account_flow').delete().where({
+    await knex('account_flow').update({
+      nextCheckTime: Date.now(),
+    }).where({
       serverId: server.id,
       port: port + server.shift,
     });
@@ -128,7 +130,9 @@ const deleteCheckAccountTimePort = async port => {
   return;
 };
 const deleteCheckAccountTimeServer = serverId => {
-  return knex('account_flow').delete().where({ serverId });
+  return knex('account_flow').update({
+    nextCheckTime: Date.now(),
+  }).where({ serverId });
 };
 
 let lastCheck = 0;
@@ -320,6 +324,19 @@ const checkServer = async () => {
       deleteCount = 5;
     }
     knex('account_flow').select(['id']).orderBy('id').limit(deleteCount).then(success => {
+      return knex('account_flow').update({ nextCheckTime: Date.now() }).whereIn('id', success.map(m => m.id));
+    });
+    knex('account_flow')
+    .select([
+      'account_flow.id as id',
+      'server.id as serverId',
+      'account_plugin.id as accountId',
+    ])
+    .leftOuterJoin('account_plugin', 'account_flow.accountId', 'account_plugin.id')
+    .leftOuterJoin('server', 'account_flow.serverId', 'server.id')
+    .whereNull('account_plugin.id')
+    .orWhereNull('server.id')
+    .then(success => {
       return knex('account_flow').delete().whereIn('id', success.map(m => m.id));
     });
   });
