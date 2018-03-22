@@ -357,6 +357,14 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   return;
 };
 
+const resetAccountId = async id => {
+  const account = await knex('account_plugin').where({ id }).then(s => s[0]);
+  if(!account) { return Promise.reject('reset account id fail'); }
+  const maxAccountId = await knex('account_plugin').max('id as maxId').then(s => s[0]);
+  if(!maxAccountId) { return Promise.reject('reset account id fail'); }
+  await knex('account_plugin').update({ id: maxAccountId.maxId + 1 }).where({ id });
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -368,3 +376,5 @@ exports.changePort = changePort;
 exports.addAccountLimit = addAccountLimit;
 exports.addAccountLimitToMonth = addAccountLimitToMonth;
 exports.setAccountLimit = setAccountLimit;
+
+exports.resetAccountId = resetAccountId;

@@ -333,7 +333,7 @@ const getVersion = () => {
 };
 
 const getIp = port => {
-  const cmd = `netstat -ntu | grep ":${ port } " | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
+  const cmd = `ss -an | grep ":${ port } " | grep ESTAB | awk '{print $6}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
   return new Promise((resolve, reject) => {
     exec(cmd, function(err, stdout, stderr){
       if(err) {

@@ -555,3 +555,13 @@ exports.getAllMacAccount = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.resetAccountFlow = (req, res) => {
+  const accountId = +req.params.accountId;
+  account.resetAccountId(accountId).then(success => {
+    return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
