@@ -480,6 +480,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.type = success.data.type;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
+      $scope.account.cleanFlow = false;
       $scope.account.autoRemove = success.data.autoRemove;
       $scope.account.multiServerFlow = success.data.multiServerFlow;
       if(success.data.type >= 2 && success.data.type <= 5) {
@@ -519,6 +520,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         time: $scope.account.time,
         limit: +$scope.account.limit,
         flow: +$scope.account.flow * 1000 * 1000,
+        cleanFlow: $scope.account.cleanFlow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.accountServer ? server : null,

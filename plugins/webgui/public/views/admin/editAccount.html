@@ -48,6 +48,13 @@
                 </md-input-container>
             </form>
             <div ng-if="+account.type >= 2 && +account.type <= 5" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">清除该账号流量</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.cleanFlow" aria-label="cleanFlow" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div ng-if="+account.type >= 2 && +account.type <= 5" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">到期自动删除</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">

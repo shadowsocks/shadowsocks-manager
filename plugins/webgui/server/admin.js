@@ -159,6 +159,9 @@ exports.changeAccountData = (req, res) => {
     multiServerFlow: +req.body.multiServerFlow,
     server: req.body.server,
   }).then(success => {
+    if(req.body.cleanFlow) {
+      flow.cleanAccountFlow(accountId);
+    }
     res.send('success');
   }).catch(err => {
     console.log(err);
@@ -558,7 +561,7 @@ exports.getAllMacAccount = (req, res) => {
 
 exports.resetAccountFlow = (req, res) => {
   const accountId = +req.params.accountId;
-  account.resetAccountId(accountId).then(success => {
+  flow.cleanAccountFlow(accountId).then(success => {
     return res.send('success');
   }).catch(err => {
     console.log(err);

@@ -451,6 +451,15 @@ const getTopFlow = groupId => {
   .whereBetween('saveFlow.time', [startTime, endTime]).where(where);
 };
 
+const cleanAccountFlow = async id => {
+  const account = await knex('account_plugin').where({ id }).then(s => s[0]);
+  if(!account) { return Promise.reject('account id not found'); }
+  await knex('saveFlow').update({ accountId: 0 }).where({ accountId: id });
+  await knex('saveFlow5min').update({ accountId: 0 }).where({ accountId: id });
+  await knex('saveFlowHour').update({ accountId: 0 }).where({ accountId: id });
+  await knex('saveFlowDay').update({ accountId: 0 }).where({ accountId: id });
+};
+
 exports.getFlow = getFlow;
 exports.getTopFlow = getTopFlow;
 exports.getServerFlow = getServerFlow;
@@ -461,3 +470,4 @@ exports.getAccountServerFlow = getAccountServerFlow;
 exports.getUserPortLastConnect = getUserPortLastConnect;
 
 exports.getFlowFromSplitTime = getFlowFromSplitTime;
+exports.cleanAccountFlow = cleanAccountFlow;
