@@ -51,15 +51,20 @@ const connect = () => {
       setExistPort(flow);
       const realFlow = compareWithLastFlow(flow, lastFlow);
 
-      for(const rf in realFlow) {
-        if(realFlow[rf]) {
-          (function(port) {
-            getIp(+port).then(ips => {
-              ips.forEach(ip => {
-                clientIp.push({ port: +port, time: Date.now(), ip });
-              });
+      const getConnectedIp = port => {
+        setTimeout(() => {
+          getIp(+port).then(ips => {
+            ips.forEach(ip => {
+              clientIp.push({ port: +port, time: Date.now(), ip });
             });
-          })(rf);
+          });
+        }, Math.ceil(Math.random() * 3 * 60 * 1000));
+      };
+      if((new Date()).getMinutes() % 3 === 0) {
+        for(const rf in realFlow) {
+          if(realFlow[rf]) {
+            getConnectedIp(rf);
+          }
         }
       }
 
