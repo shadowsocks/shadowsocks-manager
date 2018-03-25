@@ -35,7 +35,9 @@ const loginFail = ip => {
 const getIp = address => {
   let myAddress = address;
   if(address.indexOf(':') >= 0) {
-    myAddress = address.split(':')[1];
+    const hosts = address.split(':');
+    const number = Math.ceil(Math.random() * (hosts.length - 1));
+    myAddress = hosts[number];
   }
   if(net.isIP(myAddress)) {
     return Promise.resolve(myAddress);
@@ -126,16 +128,6 @@ const getAccountForUser = async (mac, ip) => {
     }
     expire = accountData.data.create + accountData.data.limit * timePeriod;
   }
-  // const isMultiServerFlow = await knex('webguiSetting')
-  // .select()
-  // .where({ key: 'account' })
-  // .then(success => {
-  //   if(!success.length) {
-  //     return Promise.reject('settings not found');
-  //   }
-  //   success[0].value = JSON.parse(success[0].value);
-  //   return success[0].value.multiServerFlow;
-  // });
   const isMultiServerFlow = account.multiServerFlow;
   const servers = await serverPlugin.list({ status: false });
   let server = servers.filter(s => {

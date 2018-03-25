@@ -141,7 +141,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account = success[0].data;
       $scope.servers = success[1].data.map(server => {
         if(server.host.indexOf(':') >= 0) {
-          server.host = server.host.split(':')[1];
+          // server.host = server.host.split(':')[1];
+          const hosts = server.host.split(':');
+          const number = Math.ceil(Math.random() * (hosts.length - 1));
+          server.host = hosts[number];
         }
         return server;
       });

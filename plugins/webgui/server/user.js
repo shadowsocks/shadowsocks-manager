@@ -78,10 +78,20 @@ exports.getOneAccount = (req, res) => {
 
 exports.getServers = (req, res) => {
   const userId = req.session.user;
+  const serverAliasFilter = servers => {
+    return servers.map(server => {
+      if(server.host.indexOf(':') >= 0) {
+        const hosts = server.host.split(':');
+        const number = Math.ceil(Math.random() * (hosts.length - 1));
+        server.host = hosts[number];
+      }
+      return server;
+    });
+  };
   let servers;
   knex('server').select(['id', 'host', 'name', 'method', 'scale', 'comment', 'shift']).orderBy('name')
     .then(success => {
-      servers = success;
+      servers = serverAliasFilter(success);
       return account.getAccount({
         userId,
       }).then(accounts => {
