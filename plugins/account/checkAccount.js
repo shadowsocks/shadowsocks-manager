@@ -64,10 +64,10 @@ const changePassword = async (id, password) => {
   return;
 };
 
-const getAccountFlow = async (serverId, port) => {
+const getAccountFlow = async (serverId, accountId) => {
   const exists = await knex('account_flow').where({
     serverId,
-    port,
+    accountId,
   }).then(success => success[0]);
   return exists;
 };
@@ -212,7 +212,20 @@ const checkServer = async () => {
             port.exist(a.port) && delPort(a, s);
             return 0;
           }
-          if(a.type >= 2 && a.type <= 5) {
+          let accountFlowData = await getAccountFlow(s.id, a.id);
+          if(!accountFlowData) {
+            await setAccountFlow(s.id, a.id, 0, a.port + s.shift, Date.now());
+            accountFlowData = await getAccountFlow(s.id, a.id);
+            return 0;
+          }
+          if(accountFlowData.status === 'ban' && Date.now() <= accountFlowData.nextCheckTime) {
+            port.exist(a.port) && delPort(a, s);
+            return 0;
+          } else if (accountFlowData.status === 'ban' && Date.now() > accountFlowData.nextCheckTime) {
+            await knex('account_flow').update({ status: 'checked' }).where({
+              serverId: s.id, accountId: a.id,
+            });
+          } else if(a.type >= 2 && a.type <= 5) {
             let timePeriod = 0;
             if(a.type === 2) { timePeriod = 7 * 86400 * 1000; }
             if(a.type === 3) { timePeriod = 30 * 86400 * 1000; }
@@ -225,7 +238,7 @@ const checkServer = async () => {
             }
             let flow = -1;
             let flow2 = -1;
-            const accountFlowData = await getAccountFlow(s.id, a.port + s.shift);
+            // const accountFlowData = await getAccountFlow(s.id, a.id);
             if(!accountFlowData || (accountFlowData && Date.now() >= accountFlowData.nextCheckTime)) {
               flow = await checkFlow(s.id, a.id, startTime, Date.now());
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow) / 200000000 * 60 * 1000;

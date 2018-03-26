@@ -357,6 +357,18 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   return;
 };
 
+const banAccount = async options => {
+  const serverId = options.serverId;
+  const accountId = options.accountId;
+  const time = options.time;
+  await knex('account_flow').update({
+    status: 'ban',
+    nextCheckTime: Date.now() + time,
+  }).where({
+    serverId, accountId,
+  });
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -368,3 +380,5 @@ exports.changePort = changePort;
 exports.addAccountLimit = addAccountLimit;
 exports.addAccountLimitToMonth = addAccountLimitToMonth;
 exports.setAccountLimit = setAccountLimit;
+
+exports.banAccount = banAccount;

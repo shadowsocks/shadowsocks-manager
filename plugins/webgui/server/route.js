@@ -66,6 +66,7 @@ app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
 app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);
 app.get('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ip', isAdmin, admin.getAccountIp);
+app.post('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ban', isSuperAdmin, adminAccount.banAccount);
 app.get('/api/admin/account/ip/:ip', isAdmin, admin.getAccountIpInfo);
 app.get('/api/admin/account/:accountId(\\d+)/ip', isAdmin, admin.getAccountIpFromAllServer);
 app.post('/api/admin/account', isAdmin, isSuperAdmin, admin.addAccount);
