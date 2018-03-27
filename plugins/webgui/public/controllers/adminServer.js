@@ -143,8 +143,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     } : null);
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia', '$interval',
-  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia, $interval) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia', '$interval', 'banDialog',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia, $interval, banDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
@@ -164,10 +164,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         accounts.forEach(account => {
           if(!$scope.currentPorts[account.port + $scope.server.shift]) {
             $scope.currentPorts[account.port + $scope.server.shift] = {
+              id: account.id,
               port: account.port + $scope.server.shift,
               password: account.password,
               exists: false,
             };
+          } else {
+            $scope.currentPorts[account.port + $scope.server.shift].id = account.id;
           }
         });
       });
@@ -180,9 +183,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       adminApi.getAccountId(port - $scope.server.shift).then(id => {
         $state.go('admin.accountPage', { accountId: id });
       });
-    };
-    $scope.editServer = () => {
-      $state.go('admin.editServer', { serverId });
     };
     $scope.deleteServer = id => {
       const confirm = $mdDialog.confirm()
@@ -334,6 +334,12 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           pie: [ 240, 240 ],
         };
       }
+    };
+    $scope.setFabButton($scope.id === 1 ? () => {
+      $state.go('admin.editServer', { serverId });
+    } : null, 'mode_edit');
+    $scope.banAccount = (accountId) => {
+      banDialog.show(serverId, accountId);
     };
   }
 ])

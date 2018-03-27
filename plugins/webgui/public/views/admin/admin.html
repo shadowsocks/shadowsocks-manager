@@ -85,6 +85,6 @@
     </div>
     </section>
     <md-button ng-show="fabButton" class="md-fab md-fab-bottom-right" ng-click="fabButtonClick()">
-        <md-icon class="material-icons">add</md-icon>
+        <md-icon class="material-icons">{{ fabButtonIcon || 'add' }}</md-icon>
     </md-button>
 </div>

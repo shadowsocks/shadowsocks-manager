@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-03-26 22:33:21 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-03-27 23:42:27 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -91,6 +91,7 @@ const onlineCacheUrl = [
   '/public/views/dialog/addAccount.html',
   '/public/views/dialog/addGiftCardBatch.html',
   '/public/views/dialog/alert.html',
+  '/public/views/dialog/ban.html',
   '/public/views/dialog/changePassword.html',
   '/public/views/dialog/confirm.html',
   '/public/views/dialog/email.html',

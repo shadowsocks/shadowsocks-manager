@@ -78,8 +78,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.title = '';
     $scope.setTitle = str => { $scope.title = str; };
     $scope.fabButton = false;
+    $scope.fabButtonIcon = '';
     $scope.fabButtonClick = () => {};
-    $scope.setFabButton = fn => {
+    $scope.setFabButton = (fn, icon = '') => {
+      $scope.fabButtonIcon = icon;
       if(!fn) {
         $scope.fabButton = false;
         $scope.fabButtonClick = () => {};
@@ -145,6 +147,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
       $scope.fabButton = false;
+      $scope.fabButtonIcon = '';
       $scope.title = '';
       $scope.menuButtonIcon = '';
       $scope.menuRightButtonIcon = '';

@@ -78,3 +78,17 @@ exports.banAccount = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getBanAccount = (req, res) => {
+  const serverId = +req.params.serverId;
+  const accountId = +req.params.accountId;
+  account.getBanAccount({
+    serverId,
+    accountId,
+  }).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

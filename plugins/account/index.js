@@ -369,6 +369,18 @@ const banAccount = async options => {
   });
 };
 
+const getBanAccount = async options => {
+  const serverId = options.serverId;
+  const accountId = options.accountId;
+  const accountInfo = await knex('account_flow').select([
+    'nextCheckTime as banTime'
+  ]).where({
+    serverId, accountId, status: 'ban'
+  });
+  if(!accountInfo.length) { return { banTime: 0 }; }
+  return accountInfo[0];
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -382,3 +394,4 @@ exports.addAccountLimitToMonth = addAccountLimitToMonth;
 exports.setAccountLimit = setAccountLimit;
 
 exports.banAccount = banAccount;
+exports.getBanAccount = getBanAccount;

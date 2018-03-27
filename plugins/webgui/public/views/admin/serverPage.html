@@ -13,11 +13,11 @@
                         </div>
                     </span>
                 </md-card-header-text>
-                <div>
+                <!-- <div>
                     <md-button class="md-primary" aria-label="edit" ng-click="editServer()">
                         {{ '修改' | translate }}
                     </md-button>
-                </div>
+                </div> -->
             </md-card-header>
             <md-card-content ng-show="server">
                 <div flex="100" style="margin: 15px 0px 25px 0px;">
@@ -75,27 +75,22 @@
         </md-card>
     </div>
 </div>
-<!-- <div layout="row" layout-wrap>
-    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="port in server.ports track by $index">
-        <md-card ng-click="toAccountPage(port.port)">
-            <md-card-content>
-                <div layout="row" layout-align="space-between center">
-                    <div flex="40">{{port.port}}</div>
-                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ port.password }}</div>
-                </div>
-            </md-card-content>
-        </md-card>
-    </div>
-</div> -->
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="(key, value) in currentPorts">
-        <md-card ng-click="toAccountPage(value.port)" md-colors="{{ value.exists ? {} : {'background': 'red-50'} }}">
-            <md-card-content>
+        <md-card md-colors="{{ value.exists ? {} : {'background': 'red-50'} }}">
+            <md-card-content style="padding-top: 5px; padding-bottom: 5px;">
                 <div layout="row" layout-align="space-between center">
-                    <div flex="40">{{ value.port }}</div>
-                    <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</div>
+                    <div flex="70" ng-click="toAccountPage(value.port)"><span>{{ value.port }}</span><br><span style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</span></div>
+                    <!-- <div flex="60" style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</div> -->
+                    <div flex="30" layout="row" layout-align="space-between center">
+                        <div></div>
+                        <md-button class="md-icon-button" aria-label="ban" ng-click="banAccount(value.id)">
+                            <md-icon class="material-icons" style="color: #bbb">schedule</md-icon>
+                        </md-button>
+                    </div>
                 </div>
             </md-card-content>
         </md-card>
     </div>
 </div>
+<div style="height: 100px;"></div>
