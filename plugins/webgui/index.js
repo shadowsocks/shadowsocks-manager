@@ -67,6 +67,10 @@ app.listen(port, host, () => {
 //   }
 // });
 
+app.use((err, req, res, next) => {
+  return res.render('error');
+});
+
 exports.app = app;
 // exports.wss = wss;
 // exports.sessionParser = sessionParser;
