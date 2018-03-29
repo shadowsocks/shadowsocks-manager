@@ -481,14 +481,14 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
   ($scope, $http, $timeout, $state, $stateParams, alertDialog) => {
     $scope.setTitle('修改群组');
     $scope.setMenuButton('arrow_back', 'admin.groupSetting');
-    const groupId = $stateParams.groupId;
+    $scope.groupId = +$stateParams.groupId;
     $scope.group = {};
-    $http.get(`/api/admin/group/${ groupId }`).then(success => {
+    $http.get(`/api/admin/group/${ $scope.groupId }`).then(success => {
       $scope.group = success.data;
     });
     $scope.confirm = () => {
       alertDialog.loading();
-      $http.put(`/api/admin/group/${ groupId }`, {
+      $http.put(`/api/admin/group/${ $scope.groupId }`, {
         name: $scope.group.name,
         comment: $scope.group.comment,
       }, {
@@ -505,7 +505,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
     $scope.delete = () => {
       alertDialog.loading();
-      $http.delete(`/api/admin/group/${ groupId }`, {
+      $http.delete(`/api/admin/group/${ $scope.groupId }`, {
         timeout: 15000,
       }).then(success => {
         alertDialog.show('删除群组成功', '确定');

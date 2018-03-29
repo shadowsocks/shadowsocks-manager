@@ -1,7 +1,7 @@
 const knex = appRequire('init/knex').knex;
 
 const getGroups = () => {
-  return knex('group').where({}).then(s => s);
+  return knex('group').where({}).orderBy('id').then(s => s);
 };
 
 const getOneGroup = id => {
@@ -24,6 +24,7 @@ const editGroup = (id, name, comment) => {
 };
 
 const deleteGroup = async id => {
+  if(id === 0) { return; }
   const users = await knex('user').where({ group: id });
   if(users.length > 0) { return Promise.reject('Can not delete group'); }
   await knex('group').delete().where({ id });

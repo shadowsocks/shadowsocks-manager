@@ -41,9 +41,10 @@
     <script src="<%= cdn%>/libs/angular-marked.min.js"></script>
     <script src="<%= cdn%>/libs/angular-translate.min.js"></script>
     <script>
-        window.ssmgrVersion = '<%= version%>'
-        window.cdn = '<%= cdn%>'
-        window.ssmgrConfig = '<%- JSON.stringify(config)%>'
+        window.cdn = '<%= cdn%>';
+        window.title = '<%= title%>';
+        window.ssmgrConfig = '<%- JSON.stringify(config)%>';
+        window.ssmgrVersion = '<%= version%>';
     </script>
     <% if (analytics) { %>
     <script>
