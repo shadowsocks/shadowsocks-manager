@@ -29,14 +29,14 @@ app.factory('banDialog', [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$state', '$http', '$mdDialog', '$mdMedia', '$q', 'bind', function($scope, $state, $http, $mdDialog, $mdMedia, $q, bind) {
+    controller: ['$scope', '$state', '$http', '$mdDialog', '$mdMedia', '$q', 'bind', '$filter', function($scope, $state, $http, $mdDialog, $mdMedia, $q, bind, $filter) {
       $scope.publicInfo = bind;
       $http.get(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ban`).then(success => {
         $scope.publicInfo.releaseTime = success.data.banTime;
       });
       $scope.publicInfo.ban = () => {
         $http.post(`/api/admin/account/${ $scope.publicInfo.serverId }/${ $scope.publicInfo.accountId }/ban`, {
-          time: +$scope.publicInfo.banTime * 60 * 1000,
+          time: $filter('ban')(+$scope.publicInfo.banTime) * 60 * 1000,
         }).then(success => {
           $scope.publicInfo.hide();
         });
