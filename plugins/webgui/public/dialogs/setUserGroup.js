@@ -5,7 +5,6 @@ const cdn = window.cdn || '';
 app.factory('setGroupDialog' , [ '$mdDialog', $mdDialog => {
   const publicInfo = {};
   const hide = () => {
-    console.log('hide');
     return $mdDialog.hide()
     .then(success => {
       dialogPromise = null;
@@ -34,7 +33,6 @@ app.factory('setGroupDialog' , [ '$mdDialog', $mdDialog => {
       $scope.publicInfo.isLoading = true;
       $http.get('/api/admin/group').then(success => {
         $scope.groups = success.data;
-        $scope.groups.unshift({ id: 0, name: '无分组', comment: '' });
         $scope.publicInfo.isLoading = false;
       });
       $scope.publicInfo.setGroup = () => {
