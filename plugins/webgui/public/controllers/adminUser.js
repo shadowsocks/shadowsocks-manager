@@ -201,7 +201,6 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $http.get('/api/admin/group').then(success => {
       $scope.groups = success.data;
-      $scope.groups.unshift({ id: 0, name: '无分组', comment: '' });
       $scope.groupInfo = {};
       $scope.groups.forEach(f => {
         $scope.groupInfo[f.id] = { name: f.name, comment: f.comment };
