@@ -271,6 +271,7 @@ const homePage = (req, res) => {
     configForFrontend.themeAccent = success.themeAccent;
     const filterColor = colors.filter(f => f.value === success.themePrimary);
     configForFrontend.browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
+    configForFrontend.skin = config.plugins.webgui.skin || 'default';
     return res.render('index', {
       title: success.title,
       version,

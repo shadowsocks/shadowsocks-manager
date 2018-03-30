@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-03-30 06:50:42 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-03-30 17:45:31 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -33,6 +33,10 @@ const onlineCacheUrl = [
   '/libs/qrcode.min.js',
   '/libs/style.css',
   
+  '/public/views/skin/bing.html',
+  '/public/views/skin/default.html',
+  '/public/views/skin/fs_bing.html',
+
   '/public/views/home/home.html',
   '/public/views/home/index.html',
   '/public/views/home/login.html',

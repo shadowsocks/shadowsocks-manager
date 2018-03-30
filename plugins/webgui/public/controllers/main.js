@@ -5,6 +5,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
     $scope.config.title = window.title;
+    $scope.config.fullscreenSkin = false;
     $scope.id = $scope.config.id;
     $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
@@ -33,6 +34,11 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     $scope.$on('$stateChangeSuccess', () => {
       $scope.currentState = $state.current.name;
       $localStorage.home.url = $location.url();
+      if($scope.config.skin.substr(0, 3) === 'fs_' && $state.current.name === 'home.index') {
+        $scope.config.fullscreenSkin = true;
+      } else {
+        $scope.config.fullscreenSkin = false;
+      }
     });
 
     const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
