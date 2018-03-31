@@ -6,8 +6,11 @@
         <md-list>
             <md-divider ng-show="notices"></md-divider>
             <md-list-item ng-repeat="notice in notices track by $index" ng-click="editNotice(notice.id)">
-                <div>
+                <div flex="80">
                     {{ notice.title }}
+                </div>
+                <div flex="20" style="text-align: right; font-size: 0.8em; color: #666">
+                    {{ notice.groupName }}
                 </div>
                 <md-divider></md-divider>
             </md-list-item>

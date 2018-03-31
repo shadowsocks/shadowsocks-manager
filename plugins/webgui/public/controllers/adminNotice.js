@@ -30,6 +30,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     $http.put('/api/admin/notice/' + $stateParams.noticeId, {
       title: $scope.notice.title,
       content: $scope.notice.content,
+      group: $scope.notice.group,
     }).then(success => {
       $state.go('admin.notice');
     });
@@ -37,9 +38,13 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
   $scope.preview = () => {
     markdownDialog.show($scope.notice.title, $scope.notice.content);
   };
+  $http.get('/api/admin/group').then(success => {
+    $scope.groups = success.data;
+  });
 }])
 .controller('AdminNewNoticeController', ['$scope', '$http', '$state', 'markdownDialog', ($scope, $http, $state, markdownDialog) => {
   $scope.setTitle('新增公告');
+  $scope.notice = { group: 0 };
   $scope.setMenuButton('arrow_back', 'admin.notice');
   $scope.cancel = () => {
     $state.go('admin.notice');
@@ -48,6 +53,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     $http.post('/api/admin/notice/', {
       title: $scope.notice.title,
       content: $scope.notice.content,
+      group: $scope.notice.group,
     }).then(success => {
       $state.go('admin.notice');
     });
@@ -55,5 +61,8 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
   $scope.preview = () => {
     markdownDialog.show($scope.notice.title, $scope.notice.content);
   };
+  $http.get('/api/admin/group').then(success => {
+    $scope.groups = success.data;
+  });
 }])
 ;

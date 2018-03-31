@@ -41,6 +41,7 @@ This plugin provide a webgui to control shadowsocks.
         site: 'http://yourwebsite.com'
         # cdn: 'http://xxx.xxx.com'
         # icon: 'icon.png'
+        # skin: 'default'
         # googleAnalytics: 'UA-xxxxxxxx-x'
         gcmSenderId: '456102641793'
         gcmAPIKey: 'AAAAGzzdqrE:XXXXXXXXXXXXXX'
