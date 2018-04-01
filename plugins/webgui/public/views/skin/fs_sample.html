@@ -1,0 +1,86 @@
+<div class="skin" layout-fill layout="column" layout-align="center center">
+  <div class="skin_logo">
+    <img flex src="/favicon.png"></img>
+  </div>
+  <div class="skin_line"></div>
+  <div class="skin_content">
+    <div class="skin_inner">{{ config.title }}</div>
+  </div>
+  <div class="skin_line"></div>
+  <div class="skin_menu">
+    <div layout="row" layout-align="center center">
+      <div flex>
+        <a href="/home/login">登录</a>
+      </div>
+      <div flex>
+        <a href="/home/signup">注册</a>
+      </div>
+    </div>
+  </div>
+  <div flex="15"></div>
+</div>
+
+<style>
+  .skin {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url('//bing.ioliu.cn/v1/rand') no-repeat center center fixed;
+    background-size: cover;
+  }
+  .skin_logo {
+    width: 4.75rem;
+    height: 4.75rem;
+    line-height: 4.75rem;
+    border: solid 1px #fff;
+    border-radius: 100%;
+    text-align: center;
+  }
+  .skin_logo > img {
+    vertical-align: middle;
+    width: 70%;
+    margin-bottom: 9px;
+  }
+  .skin_line {
+    width: 1px;
+    height: 50px;
+    background: #fff;
+  }
+  .skin_content {
+    border-style: solid;
+    border-color: #fff;
+    border-top-width: 1px;
+    border-left-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    max-width: 100%;
+  }
+  .skin_inner {
+    font-size: 1.75rem;
+    line-height: 1.4;
+    letter-spacing: .5rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 0;
+    margin-top: 5vh;
+    margin-bottom: 8vh;
+  }
+  .skin_menu_line {
+    width: 1px;
+    height: 30px;
+    background: #fff;
+  }
+  .skin_menu > div {
+    width: 125px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 5px 10px 5px 10px;
+  }
+  .skin_menu > div > div {
+    text-align: center;
+  }
+  .skin_menu a {
+    color: #FFF;
+    text-decoration: none;
+  }
+</style>
