@@ -17,6 +17,8 @@
       </div>
     </div>
   </div>
+  <div class="skin_line_short"></div>
+  <div class="skin_circle"></div>
   <div flex="15"></div>
 </div>
 
@@ -36,12 +38,25 @@
   .skin_logo > img {
     vertical-align: middle;
     width: 70%;
-    margin-bottom: 9px;
+    margin-bottom: 0.75rem;
   }
   .skin_line {
     width: 1px;
     height: 50px;
     background: #fff;
+  }
+  .skin_line_short {
+    width: 1px;
+    height: 35px;
+    background: #fff;
+  }
+  .skin_circle {
+    width: 1rem;
+    height: 1rem;
+    line-height: 4.75rem;
+    border: solid 1px #fff;
+    border-radius: 100%;
+    text-align: center;
   }
   .skin_content {
     border-style: solid;
@@ -74,13 +89,45 @@
     border-color: #fff;
     border-width: 1px;
     border-radius: 3px;
-    padding: 5px 10px 5px 10px;
+    padding: 10px;
   }
   .skin_menu > div > div {
     text-align: center;
   }
   .skin_menu a {
     color: #FFF;
+    font-size: 0.9em;
     text-decoration: none;
+  }
+
+  @media (min-width: 960px) {
+    .skin_logo {
+      width: 6.75rem;
+      height: 6.75rem;
+      line-height: 6.75rem;
+      border: solid 1px #fff;
+      border-radius: 100%;
+      text-align: center;
+    }
+    .skin_inner {
+      font-size: 2rem;
+      margin-top: 6vh;
+      margin-bottom: 9vh;
+      margin-left: 2em;
+      margin-right: 2em; 
+    }
+    .skin_menu > div {
+      width: 150px;
+      padding: 15px;
+    }
+    .skin_menu a {
+      font-size: 1.1em;
+    }
+    .skin_line {
+      height: 60px;
+    }
+    .skin_line_short {
+      height: 40px;
+    }
   }
 </style>
