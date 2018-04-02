@@ -15,6 +15,7 @@ const createTable = async () => {
     table.float('scale').defaultTo(1);
     table.string('method').defaultTo('aes-256-cfb');
     table.string('comment').defaultTo('');
+    table.integer('shift').defaultTo(0);
   });
   const hasColumnScale = await knex.schema.hasColumn(tableName, 'scale');
   if(!hasColumnScale) {
