@@ -15,6 +15,8 @@ if(typeof config === 'object') {
       collate: 'utf8_unicode_ci',
     },
     useNullAsDefault: true,
+    pool: { min: 2, max: 10 },
+    acquireConnectionTimeout: 120 * 1000,
   });
 } else {
   knex = require('knex')({
