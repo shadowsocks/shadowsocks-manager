@@ -196,6 +196,10 @@ app
         }
         account.isFlowOutOfLimit[serverId] = maxFlow ? ( account.serverPortFlow >= maxFlow ) : false;
       });
+
+      account.serverInfo = $scope.servers.filter(f => {
+        return f.id === serverId;
+      })[0];
     };
 
     $scope.$on('visibilitychange', (event, status) => {
