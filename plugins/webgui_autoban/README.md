@@ -9,6 +9,7 @@ manager:
 plugins:
   webgui_autoban:
     use: true
+    speed: 10
     data:
     - accountId: '1,2,3-10,20,50-60'
       serverId: '1,2-5,11,19'

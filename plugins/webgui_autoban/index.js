@@ -84,7 +84,10 @@ const check = async opt => {
 let position = 0;
 
 cron.second(() => {
-  if(queue.length <= position) { position = 0; }
-  check(queue[position]);
-  position += 1;
+  const speed = config.plugins.webgui_autoban.speed || 1;
+  for(let j = 0; j < speed; j++) {
+    if(queue.length <= position) { position = 0; }
+    check(queue[position]);
+    position += 1;
+  }
 }, 1);
