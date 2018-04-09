@@ -18,17 +18,20 @@ const scanLoginLog = ip => {
   }
   if(!loginLog[ip]) {
     return false;
-  } else if (loginLog[ip].number <= 5) {
+  } else if (loginLog[ip].mac.length <= 10) {
     return false;
   } else {
     return true;
   }
 };
-const loginFail = ip => {
+const loginFail = (mac, ip) => {
   if(!loginLog[ip]) {
-    loginLog[ip] = { number: 1, time: Date.now() };
+    loginLog[ip] = { mac: [ mac ], time: Date.now() };
   } else {
-    loginLog[ip] = { number: loginLog[ip].number + 1, time: Date.now() };
+    if(loginLog[ip].mac.indexOf(mac) < 0) {
+      loginLog[ip].mac.push(mac);
+      loginLog[ip].time = Date.now();
+    }
   }
 };
 
@@ -93,7 +96,7 @@ const getAccountForUser = async (mac, ip) => {
   }
   const macAccount = await knex('mac_account').where({ mac }).then(success => success[0]);
   if(!macAccount) {
-    loginFail(ip);
+    loginFail(mac, ip);
     return Promise.reject('mac account not found');
   }
   await getAccount(macAccount.userId);
@@ -211,7 +214,7 @@ const login = async (mac, ip) => {
     mac: formatMacAddress(mac)
   }).then(success => success[0]);
   if(!account) {
-    loginFail(ip);
+    loginFail(mac, ip);
     return Promise.reject('mac account not found');
   } else {
     return account;
