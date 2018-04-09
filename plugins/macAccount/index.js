@@ -90,7 +90,9 @@ const getAccount = async (userId, group) => {
   return macAccounts;
 };
 
-const getAccountForUser = async (mac, ip) => {
+const getAccountForUser = async (mac, ip, opt) => {
+  const noPassword = opt.noPassword;
+  const noFlow = opt.noFlow;
   if(scanLoginLog(ip)) {
     return Promise.reject('ip is in black list');
   }
@@ -160,7 +162,7 @@ const getAccountForUser = async (mac, ip) => {
       };
       return serverInfo;
     }).then(success => {
-      if(startTime) {
+      if(startTime && !noFlow) {
         return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
       } else {
         return -1;
@@ -189,6 +191,9 @@ const getAccountForUser = async (mac, ip) => {
     },
     servers: serverReturn,
   };
+  if(noPassword) {
+    delete data.default.password;
+  }
   if(!serverReturn.filter(f => f.name === server.name)[0]) {
     data.default.name = serverReturn[0].name;
     data.default.address = serverReturn[0].address;

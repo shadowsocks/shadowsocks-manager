@@ -135,6 +135,12 @@ const deleteCheckAccountTimeServer = serverId => {
   }).where({ serverId });
 };
 
+const sleep = time => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), time);
+  });
+};
+
 let lastCheck = 0;
 const checkServer = async () => {
   if(!lastCheck) {
@@ -174,6 +180,7 @@ const checkServer = async () => {
   server.forEach(s => {
     const checkServerAccount = async s => {
       try {
+        await sleep(Math.ceil(Math.random() * 45000));
         const port = await manager.send({ command: 'list' }, {
           host: s.host,
           port: s.port,
@@ -187,11 +194,6 @@ const checkServer = async () => {
           return !!port.list[number + s.shift];
         };
         const checkAccountStatus = async a => {
-          const sleep = time => {
-            return new Promise((resolve, reject) => {
-              setTimeout(() => resolve(), time);
-            });
-          };
           const sleepTime = Math.ceil(Math.random() * 120000);
           await sleep(sleepTime);
           const isMultiServerFlow = !!a.multiServerFlow;
@@ -363,9 +365,9 @@ exports.changePassword = changePassword;
 exports.deleteCheckAccountTimePort = deleteCheckAccountTimePort;
 exports.deleteCheckAccountTimeServer = deleteCheckAccountTimeServer;
 
-setTimeout(() => {
-  checkServer();
-}, 8 * 1000);
+// setTimeout(() => {
+//   checkServer();
+// }, 8 * 1000);
 cron.minute(() => {
   checkServer();
 }, 2);

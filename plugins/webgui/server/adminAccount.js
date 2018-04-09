@@ -55,7 +55,12 @@ exports.deleteMacAccount = (req, res) => {
 exports.getMacAccountForUser = (req, res) => {
   const mac = req.params.macAddress;
   const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
-  macAccount.getAccountForUser(mac.toLowerCase(), ip).then(success => {
+  const noPassword = !!(+req.query.noPassword);
+  const noFlow = !!(+req.query.noFlow);
+  macAccount.getAccountForUser(mac.toLowerCase(), ip, {
+    noPassword,
+    noFlow,
+  }).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
