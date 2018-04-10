@@ -4,6 +4,7 @@ const accountPlugin = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
 const dns = require('dns');
 const net = require('net');
+const config = appRequire('services/config').all();
 
 const formatMacAddress = mac => {
   return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
@@ -181,6 +182,7 @@ const getAccountForUser = async (mac, ip, opt) => {
   const serverReturn = await Promise.all(serverList);
   const data = {
     default: {
+      site: config.plugins.macAccount.site || config.plugins.webgui.site,
       id: server.id,
       name: server.name,
       address,
