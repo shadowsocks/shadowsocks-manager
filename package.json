@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.14.27",
+  "version": "0.14.28",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -43,6 +43,7 @@
     "fs-extra": "^0.30.0",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
     "inquirer": "^1.1.3",
     "js-yaml": "^3.6.1",
     "knex": "^0.12.2",

@@ -4,11 +4,13 @@ const path = require('path');
 const babel = require('gulp-babel');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
+const concat = require('gulp-concat');
 
 gulp.task('clean', () => {
   return del([
     'lib',
     'plugins/webgui/libs/bundle.js',
+    'plugins/webgui/libs/lib.js',
   ]);
 });
 
@@ -21,6 +23,33 @@ gulp.task('freeAccountCopy', ['clean'], () => {
       base: './'
     })
     .pipe(gulp.dest('lib'));
+});
+
+gulp.task('webguiLib', () => {
+  return gulp.src([
+    'plugins/webgui/libs/jquery.min.js',
+    'plugins/webgui/libs/angular.min.js',
+    'plugins/webgui/libs/angular-inview.js',
+    'plugins/webgui/libs/angular-animate.min.js',
+    'plugins/webgui/libs/angular-aria.min.js',
+    'plugins/webgui/libs/angular-messages.min.js',
+    'plugins/webgui/libs/angular-material.min.js',
+    'plugins/webgui/libs/angular-ui-router.min.js',
+    'plugins/webgui/libs/angular-translate.min.js',
+    'plugins/webgui/libs/qrcode.min.js',
+    'plugins/webgui/libs/angular-qr.min.js',
+    'plugins/webgui/libs/ngStorage.min.js',
+    'plugins/webgui/libs/Chart.min.js',
+    'plugins/webgui/libs/angular-chart.min.js',
+    'plugins/webgui/libs/moment.min.js',
+    'plugins/webgui/libs/angular-moment.min.js',
+    'plugins/webgui/libs/angular-websocket.min.js',
+    'plugins/webgui/libs/marked.min.js',
+    'plugins/webgui/libs/angular-marked.min.js',
+    'plugins/webgui/libs/angular-translate.min.js',
+  ])
+  .pipe(concat('lib.js'))
+  .pipe(gulp.dest('plugins/webgui/libs'));
 });
 
 gulp.task('webguiBuild', () => {
@@ -70,7 +99,7 @@ gulp.task('webguiBuild', () => {
   .pipe(gulp.dest('plugins/webgui/libs'));
 });
 
-gulp.task('webguiCopy', ['webguiBuild'], () => {
+gulp.task('webguiCopy', ['webguiBuild', 'webguiLib'], () => {
   return gulp
     .src([
       'plugins/webgui/libs/**',
