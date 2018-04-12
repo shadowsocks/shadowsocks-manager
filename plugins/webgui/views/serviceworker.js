@@ -1,9 +1,11 @@
-const ONLINE_CACHE_NAME = '2018-04-04 16:02:19 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-04-11 16:23:27 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
 const onlineCacheUrl = [
   '/',
+
+  '/favicon.png',
 
   '/libs/angular-animate.min.js',
   '/libs/angular-aria.min.js',
@@ -22,7 +24,7 @@ const onlineCacheUrl = [
   '/libs/angular.min.js',
   '/libs/bundle.js',
   '/libs/Chart.min.js',
-  '/favicon.png',
+  '/libs/jquery.min.js',
   '/libs/marked.min.js',
   '/libs/MaterialIcons-Regular.eot',
   '/libs/MaterialIcons-Regular.ttf',

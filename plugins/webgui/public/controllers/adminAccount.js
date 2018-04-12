@@ -374,6 +374,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         background: `linear-gradient(90deg, rgba(0,0,0,0.12) ${ percent }%, rgba(0,0,0,0) 0%)`
       };
     };
+    $scope.setFabButton($scope.id === 1 ? () => {
+      $scope.editAccount($scope.account.id);
+    } : null, 'mode_edit');
   }
 ])
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog',
