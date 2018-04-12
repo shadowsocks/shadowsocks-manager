@@ -63,6 +63,7 @@ const check = async opt => {
   const accountFlowData = await knex('account_flow').where({
     serverId, accountId,
   }).then(s => s[0]);
+  if(!accountFlowData) { return 'not exists'; }
   let checkTime;
   if(accountFlowData && accountFlowData.autobanTime >= Date.now() - time) {
     checkTime = accountFlowData.autobanTime;
@@ -83,11 +84,30 @@ const check = async opt => {
 
 let position = 0;
 
-cron.second(() => {
-  const speed = config.plugins.webgui_autoban.speed || 1;
-  for(let j = 0; j < speed; j++) {
-    if(queue.length <= position) { position = 0; }
-    check(queue[position]);
+// cron.second(() => {
+//   const speed = config.plugins.webgui_autoban.speed || 1;
+//   for(let j = 0; j < speed; j++) {
+//     if(queue.length <= position) { position = 0; }
+//     check(queue[position]);
+//     position += 1;
+//   }
+// }, 1);
+
+const promise = () => {
+  const speed = config.plugins.webgui_autoban.speed || 1000;
+  return check(queue[position]).then(success => {
     position += 1;
-  }
-}, 1);
+    if(queue.length <= position) { position = 0; }
+    if(success === 'not exists') {
+      return promise();
+    } else {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          return promise(resolve, reject);
+        }, speed);
+      });
+    }
+  });
+};
+
+promise();
