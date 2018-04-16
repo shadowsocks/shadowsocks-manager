@@ -6,7 +6,29 @@ const banConfig = config.plugins.webgui_autoban.data;
 const queue = [];
 
 const convertTimeString = str => {
+  if(!str.match) { return str; }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[sS]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[sS]$/)[1] * 1000;
+  }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[mM]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[mM]$/)[1] * 60 * 1000;
+  }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[hH]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[hH]$/)[1] * 60 * 60 * 1000;
+  }
+};
 
+const convertFlowString = str => {
+  if(!str.match) { return str; }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[kK]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[kK]$/)[1] * 1000;
+  }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[mM]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[mM]$/)[1] * 1000 * 1000;
+  }
+  if(str.match(/^(\d{1,}.{0,1}\d{0,})[hH]$/)) {
+    return +str.match(/^(\d{1,}.{0,1}\d{0,})[gG]$/)[1] * 1000 * 1000 * 1000;
+  }
 };
 
 banConfig.forEach(f => {
@@ -34,9 +56,9 @@ banConfig.forEach(f => {
       }
     }
   });
-  const time = f.time;
-  const flow = f.flow;
-  const banTime = f.banTime;
+  const time = convertTimeString(f.time);
+  const flow = convertFlowString(f.flow);
+  const banTime = convertTimeString(f.banTime);
   serverIds.forEach(serverId => {
     accountIds.forEach(accountId => {
       queue.push({
@@ -58,6 +80,7 @@ const ban = async (serverId, accountId, time) => {
 };
 
 const check = async opt => {
+  console.log(opt);
   const start = Date.now();
   const { serverId, accountId, time, flow, banTime } = opt;
   const accountFlowData = await knex('account_flow').where({

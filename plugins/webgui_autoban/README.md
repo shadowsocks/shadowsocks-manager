@@ -16,6 +16,11 @@ plugins:
       time: 1800000
       flow: 100000000
       banTime: 600000
+    - accountId: '30'
+      serverId: '40'
+      time: '30m'
+      flow: '0.5g'
+      banTime: '10m'
 
 db:
   host: '1.2.3.4'
