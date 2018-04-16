@@ -5,7 +5,10 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
                     <div flex="30">{{a.port}}</div>
-                    <div flex="70" style="text-align:right; color: #aaa; font-size: 0.8em;">{{a.user || a.password}}</div>
+                    <div flex layout="row" layout-align="end center">
+                        <span style="color: #aaa; font-size: 0.8em; text-overflow: ellipsis; overflow: hidden;">{{a.user || a.password}}</span>
+                        <div><md-icon>chevron_right</md-icon></div>
+                    </div>
                 </div>
             </md-card-content>
         </md-card>
