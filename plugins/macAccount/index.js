@@ -6,6 +6,13 @@ const dns = require('dns');
 const net = require('net');
 const config = appRequire('services/config').all();
 
+const getFlow = async (serverId, accountId) => {
+  const where = { accountId };
+  if(serverId) { where.serverId = serverId; }
+  const result = await knex('account_flow').sum('flow as sumFlow').groupBy('accountId').where(where).then(s => s[0]);
+  return result ? result.sumFlow : -1;
+};
+
 const formatMacAddress = mac => {
   return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 };
@@ -164,7 +171,8 @@ const getAccountForUser = async (mac, ip, opt) => {
       return serverInfo;
     }).then(success => {
       if(startTime && !noFlow) {
-        return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
+        return getFlow(isMultiServerFlow ? null : success.id, account.accountId);
+        // return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
       } else {
         return -1;
       }
@@ -176,6 +184,15 @@ const getAccountForUser = async (mac, ip, opt) => {
         serverInfo.flow = -1;
       }
       serverInfo.expire = expire || null;
+      return knex('account_flow').select(['status']).where({
+        serverId: serverInfo.id,
+        accountId: account.accountId,
+      }).then(s => {
+        if(!s.length) { return 'checked'; }
+        return s[0].status;
+      });
+    }).then(success => {
+      serverInfo.status = success;
       return serverInfo;
     });
   });
