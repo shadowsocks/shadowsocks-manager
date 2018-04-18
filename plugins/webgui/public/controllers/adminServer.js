@@ -421,12 +421,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
     };
+    $scope.serverInfoloaded = false;
     $http.get(`/api/admin/server/${ serverId }`, {
       params: {
         noPort: true,
       }
     })
     .then(success => {
+      $scope.serverInfoloaded = true;
       $scope.server = {
         name: success.data.name,
         comment: success.data.comment,

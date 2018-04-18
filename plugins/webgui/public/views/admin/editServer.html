@@ -1,4 +1,4 @@
-<div layout="column" ng-show="server.address">
+<div layout="column" ng-show="serverInfoloaded">
     <div flex="15"></div>
     <div flex layout="row">
         <div flex="10" flex-gt-sm="30"></div>
@@ -81,7 +81,7 @@
         <div flex="10" flex-gt-sm="30"></div>
     </div>
 </div>
-<div layout-fill layout="row" layout-align="center center" ng-show="!server.address">
+<div layout-fill layout="row" layout-align="center center" ng-show="!serverInfoloaded">
     <div flex style="height: 180px;"></div>
     <div flex layout="row" layout-align="center center">
         <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
