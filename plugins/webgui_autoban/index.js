@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('autoban');
 const cron = appRequire('init/cron');
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
@@ -69,7 +71,7 @@ banConfig.forEach(f => {
 });
 
 const ban = async (serverId, accountId, time) => {
-  console.log('ban [' + serverId + '][' + accountId + ']');
+  logger.info('ban [' + serverId + '][' + accountId + ']');
   await knex('account_flow').update({
     status: 'ban',
     nextCheckTime: Date.now() + time,
@@ -80,7 +82,6 @@ const ban = async (serverId, accountId, time) => {
 };
 
 const check = async opt => {
-  console.log(opt);
   const start = Date.now();
   const { serverId, accountId, time, flow, banTime } = opt;
   const accountFlowData = await knex('account_flow').where({
@@ -102,19 +103,9 @@ const check = async opt => {
   if(myFlow.sumFlow >= flow) {
     await ban(serverId, accountId, banTime);
   }
-  console.log(Date.now() - start + ' ms, [' + serverId + '][' + accountId + '][' + myFlow.sumFlow + ']');
 };
 
 let position = 0;
-
-// cron.second(() => {
-//   const speed = config.plugins.webgui_autoban.speed || 1;
-//   for(let j = 0; j < speed; j++) {
-//     if(queue.length <= position) { position = 0; }
-//     check(queue[position]);
-//     position += 1;
-//   }
-// }, 1);
 
 const promise = () => {
   const speed = config.plugins.webgui_autoban.speed || 1000;
