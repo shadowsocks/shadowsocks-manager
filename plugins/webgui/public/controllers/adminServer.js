@@ -5,7 +5,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setTitle('服务器');
     $scope.setMenuRightButton('timeline');
     if(!$localStorage.admin.serverChart) {
-      $localStorage.admin.serverChart = { showChart: true };
+      $localStorage.admin.serverChart = { showFlow: true, showChart: true };
     }
     $scope.serverChart = $localStorage.admin.serverChart;
     $scope.$on('RightButtonClick', () => {
