@@ -1,43 +1,45 @@
 <md-tabs md-dynamic-height md-border-bottom>
-    <md-tab ng-repeat="payType in payTypes" label="{{payType.name}}" md-on-select="selectPayType(payType.name)">
-        <div ng-show="orders.length">
-            <md-card>
-                <md-list>
-                    <md-divider></md-divider>
-                    <md-list-item ng-repeat="order in orders track by $index">
-                        <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
-                            <div flex="30" flex-xs="60">
-                                <span hide-xs hide-sm>{{order.orderId}}</span>
-                                <span hide-gt-sm>
-                                    <span style="font-size: 0.9em;">{{order.orderId | prettyOrderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
-                                </span>
-                            </div>
-                            <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
-                            <div hide-xs hide-sm flex="30" style="text-align: right;">
-                                <span style="font-size: 0.9em;">{{order.createTime | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
-                            </div>
-                            <div flex="10" flex-xs="40" style="text-align: right;">
-                                <span style="font-size: 0.9em; color: #555">{{order.amount}}</span><br><span style="font-size: 0.9em; color: #000">{{order.status | order}}</span>
-                            </div>
-                        </div>
-                        <md-divider></md-divider>
-                    </md-list-item>
-                    <md-list-item  in-view="view($inview)" ng-if="orders.length && !isOrderPageFinish">
-                        <div flex layout="row" layout-align="center center">
-                            <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
-                        </div>
-                        <md-divider></md-divider>
-                    </md-list-item>
-                </md-list>
-            </md-card>
-        </div>
-        <div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!orders.length && !isOrderPageFinish">
-            <div flex style="height: 180px;"></div>
-            <div flex layout="row" layout-align="center center">
-                <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
-            </div>
-            <div flex style="height: 180px;"></div>
-        </div>
+    <md-tab ng-repeat="payType in payTypes"
+            label="{{payType.name}}"
+            md-on-select="selectPayType(payType.name)">
     </md-tab>
 </md-tabs>
+<div ng-show="orders.length">
+    <md-card>
+        <md-list>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="order in orders track by $index">
+                <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
+                    <div flex="30" flex-xs="60">
+                        <span hide-xs hide-sm>{{order.orderId}}</span>
+                        <span hide-gt-sm>
+                            <span style="font-size: 0.9em;">{{order.orderId | prettyOrderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        </span>
+                    </div>
+                    <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
+                    <div hide-xs hide-sm flex="30" style="text-align: right;">
+                        <span style="font-size: 0.9em;">{{order.createTime | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                    </div>
+                    <div flex="10" flex-xs="40" style="text-align: right;">
+                        <span style="font-size: 0.9em; color: #555">{{order.amount}}</span><br><span style="font-size: 0.9em; color: #000">{{order.status | order}}</span>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item  in-view="view($inview)" ng-if="orders.length && !isOrderPageFinish">
+                <div flex layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-card>
+</div>
+<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!orders.length && !isOrderPageFinish">
+    <div flex style="height: 180px;"></div>
+    <div flex layout="row" layout-align="center center">
+        <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+    </div>
+    <div flex style="height: 180px;"></div>
+</div>
 

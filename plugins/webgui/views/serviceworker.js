@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-04-19 20:46:33 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-04-20 20:46:33 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -174,8 +174,8 @@ self.addEventListener('push', function (event) {
   // if (!(self.Notification && self.notification.permission === 'granted')) {
   //   return;
   // }
-  var data = event.data.json();
-  var title = data.title;
+  const data = event.data.json();
+  const title = data.title;
   event.waitUntil(
     self.registration.showNotification(title, {
       body: data.options.body,
