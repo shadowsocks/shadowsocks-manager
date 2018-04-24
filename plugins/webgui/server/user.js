@@ -286,13 +286,31 @@ exports.getPrice = (req, res) => {
   });
 };
 
-exports.getNotice = (req, res) => {
-  knex('notice').select().orderBy('time', 'desc').then(success => {
-    return res.send(success);
-  }).catch(err => {
+exports.getNotice = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const groupInfo = await knex('user').select([
+      'group.id as id',
+      'group.showNotice as showNotice',
+    ]).innerJoin('group', 'user.group', 'group.id').where({
+      'user.id': userId,
+    }).then(s => s[0]);
+    const group = [groupInfo.id];
+    if(groupInfo.showNotice) { group.push(-1); }
+    const notices = await knex('notice').select().whereIn('group', group).orderBy('time', 'desc');
+    return res.send(notices);
+  } catch (err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
+  
+  
+  // knex('notice').select().orderBy('time', 'desc').then(success => {
+  //   return res.send(success);
+  // }).catch(err => {
+  //   console.log(err);
+  //   res.status(403).end();
+  // });
 };
 
 exports.getAlipayStatus = (req, res) => {

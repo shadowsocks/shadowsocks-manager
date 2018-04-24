@@ -103,7 +103,6 @@ const editAccount = async (id, options) => {
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
   update.multiServerFlow = options.multiServerFlow;
-  // update.server = options.server ? JSON.stringify(options.server) : null;
   if(options.hasOwnProperty('server')) {
     update.server = options.server ? JSON.stringify(options.server) : null;
   }

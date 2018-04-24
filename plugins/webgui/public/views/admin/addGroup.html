@@ -20,6 +20,13 @@
                     </div>
                 </md-input-container>
             </form>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">显示公共的公告</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="group.showNotice" aria-label="showNotice" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

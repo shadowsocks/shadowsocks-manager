@@ -22,7 +22,8 @@ exports.getOneGroup = (req, res, next) => {
 exports.addGroup = (req, res, next) => {
   const name = req.body.name;
   const comment = req.body.comment;
-  group.addGroup(name, comment).then(success => {
+  const showNotice = !!req.body.showNotice;
+  group.addGroup(name, comment, showNotice).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
@@ -34,7 +35,8 @@ exports.editGroup = (req, res, next) => {
   const id = +req.params.id;
   const name = req.body.name;
   const comment = req.body.comment;
-  group.editGroup(id, name, comment).then(success => {
+  const showNotice = !!req.body.showNotice;
+  group.editGroup(id, name, comment, showNotice).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);
