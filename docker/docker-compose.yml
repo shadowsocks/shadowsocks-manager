@@ -1,0 +1,85 @@
+version: '2.3'
+
+services:
+
+  sssocket:
+    container_name: sssocket
+    build:
+      context: ./sssockets/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - 50000-50010:50000-50010
+    depends_on:
+      - db
+
+  ssmgr:
+    container_name: ssmgr
+    build:
+      context: ./ssmgr/
+      dockerfile: Dockerfile
+    environment:
+      SS_PROXY_ADDRESS: ${SS_PROXY_ADDRESS}
+      SS_PROXY_PORT: ${SS_PROXY_PORT}
+      MANAGER_ADDRESS: ${MANAGER_ADDRESS}
+      MANAGER_PORT: ${MANAGER_PORT}
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+      MANAGER_DB_PASSWORD: ${MANAGER_DB_PASSWORD}
+      MANAGER_DB_NAME: ${MANAGER_DB_NAME}
+      MANAGER_DB_HOST: ${MANAGER_DB_HOST}
+      MANAGER_DB_USER: ${MANAGER_DB_USER}
+    depends_on:
+      - sssocket
+    restart: unless-stopped
+
+  sswebgui:
+    container_name: sswebgui
+    build:
+      context: ./sswebgui/
+      dockerfile: Dockerfile
+    environment:
+      WEBGUI_EMAIL_USERNAME: ${WEBGUI_EMAIL_USERNAME}
+      WEBGUI_EMAIL_PASSWORD: ${WEBGUI_EMAIL_PASSWORD}
+      WEBGUI_EMAIL_HOST: ${WEBGUI_EMAIL_HOST}
+      WEBGUI_DB_PASSWORD: ${WEBGUI_DB_PASSWORD}
+      WEBGUI_DB_NAME: ${WEBGUI_DB_NAME}
+      WEBGUI_DB_HOST: ${WEBGUI_DB_HOST}
+      WEBGUI_DB_USER: ${WEBGUI_DB_USER}
+      WEBGUI_SITE_DOMAIN: ${WEBGUI_SITE_DOMAIN}
+      MANAGER_ADDRESS: ${MANAGER_ADDRESS}
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+      MANAGER_PORT: ${MANAGER_PORT}
+    depends_on:
+      - ssmgr
+    restart: unless-stopped
+    ports:
+      - 6003:6003
+
+  db:
+    container_name: ssmysql
+    build:
+      context: ./ssmysql/
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MANAGER_DB_PASSWORD}
+    volumes:
+      - db:/var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOSTS: db,db
+      PMA_VERBOSES: ssmgr,webgui
+      PMA_PORTS: 3306,3306
+    restart: unless-stopped
+    ports:
+      - 6004:80
+
+volumes:
+  db:
+    driver: local

@@ -1,0 +1,15 @@
+type: s
+
+shadowsocks:
+  address: SS_PROXY_ADDRESS:SS_PROXY_PORT
+
+manager:
+  address: 0.0.0.0:6002
+  password: 'MANAGER_PASSWORD'
+
+db:
+  host: MANAGER_DB_HOST
+  user: 'MANAGER_DB_USER'
+  password: 'MANAGER_DB_PASSWORD'
+  database: 'MANAGER_DB_NAME'
+  port: 3306
