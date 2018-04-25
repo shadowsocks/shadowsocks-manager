@@ -42,3 +42,6 @@ config/development.yml
 
 .vscode
 lib
+
+/.idea
+.env
