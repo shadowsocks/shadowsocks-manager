@@ -80,5 +80,3 @@ db:
   password: 'WEBGUI_DB_PASSWORD'
   database: 'WEBGUI_DB_NAME'
 
-# problem: do not know why if using mysql db, 403 error will be returned
-#db: 'webgui.sqlite'
