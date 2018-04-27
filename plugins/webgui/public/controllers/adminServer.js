@@ -341,6 +341,21 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.banAccount = (accountId) => {
       banDialog.show(serverId, accountId);
     };
+    $scope.setMenuSearchButton('search');
+    $scope.matchPort = (port, passowrd, search) => {
+      return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
+    };
+    // $scope.$on('cancelSearch', () => {
+      
+    // });
+    // let timeoutPromise;
+    // $scope.$watch('menuSearch.text', () => {
+    //   if(!$scope.menuSearch.text) { return; }
+    //   timeoutPromise && $timeout.cancel(timeoutPromise);
+    //   timeoutPromise = $timeout(() => {
+        
+    //   }, 500);
+    // });
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
