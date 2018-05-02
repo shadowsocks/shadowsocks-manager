@@ -113,6 +113,13 @@ telegram.on('message', async message => {
     const myAccount = (await account.getAccount({ userId, id: +accountId }))[0];
     const myServer = (await server.list()).filter(server => {
       return server.id === +serverId;
+    }).map(server => {
+      if(server.host.indexOf(':') >= 0) {
+        const hosts = server.host.split(':');
+        const number = Math.ceil(Math.random() * (hosts.length - 1));
+        server.host = hosts[number];
+      }
+      return server;
     })[0];
     if(!myAccount || !myServer) { return; }
     let returnMessage = '账号信息\n\n';
