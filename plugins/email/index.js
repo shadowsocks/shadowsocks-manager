@@ -55,6 +55,44 @@ if(config.plugins.email.type === 'smtp') {
       cb(err);
     });
   };
+} else if (config.plugins.email.type === 'sendgrid') {
+  emailConfig = {
+    apiKey: config.plugins.email.apiKey,
+  };
+  const uri = 'https://api.sendgrid.com/v3/mail/send';
+  transporter = {};
+  transporter.sendMail = (options, cb) => {
+    rp({
+      uri,
+      method: 'POST',
+      json: true,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${ emailConfig.apiKey }`,
+      },
+      body: {
+        personalizations: [
+          {
+            to: [{
+              email: options.to,
+            }]
+          }
+        ],
+        from: {
+          email: options.from,
+        },
+        subject: options.subject,
+        content: [{
+          type: 'text/plain',
+          value: options.text,
+        }]
+      },
+    }).then(success => {
+      cb(null);
+    }).catch(err => {
+      cb(err);
+    });
+  };
 }
 
 
