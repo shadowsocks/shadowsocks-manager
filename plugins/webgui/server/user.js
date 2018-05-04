@@ -158,16 +158,6 @@ exports.getServerPortFlow = (req, res) => {
         }
       }
       return flow.getServerPortFlow(serverId, accountId, timeArray, account.multiServerFlow);
-      // return knex('webguiSetting').select().where({ key: 'account' })
-      //   .then(success => {
-      //     if (!success.length) {
-      //       return Promise.reject('settings not found');
-      //     }
-      //     success[0].value = JSON.parse(success[0].value);
-      //     return success[0].value.multiServerFlow;
-      //   }).then(isMultiServerFlow => {
-      //     return flow.getServerPortFlow(serverId, accountId, timeArray, isMultiServerFlow);
-      //   });
     } else {
       return [0];
     }

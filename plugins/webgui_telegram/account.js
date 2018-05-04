@@ -7,6 +7,23 @@ const config = appRequire('services/config').all();
 const crypto = require('crypto');
 const moment = require('moment');
 const qr = require('qr-image');
+const flow = appRequire('plugins/flowSaver/flow');
+
+const prettyFlow = number => {
+  if(number >= 0 && number < 1000) {
+    return number + ' B';
+  } else if(number >= 1000 && number < 1000 * 1000) {
+    return (number / 1000).toFixed(1) + ' KB';
+  } else if(number >= 1000 * 1000 && number < 1000 * 1000 * 1000) {
+    return (number / (1000 * 1000)).toFixed(2) + ' MB';
+  } else if(number >= 1000 * 1000 * 1000 && number < 1000 * 1000 * 1000 * 1000) {
+    return (number / (1000 * 1000 * 1000)).toFixed(3) + ' GB';
+  } else if(number >= 1000 * 1000 * 1000 * 1000 && number < 1000 * 1000 * 1000 * 1000 * 1000) {
+    return (number / (1000 * 1000 * 1000 * 1000)).toFixed(3) + ' TB';
+  } else {
+    return number + '';
+  }
+};
 
 const sleep = time => {
   return new Promise(resolve => {
@@ -127,6 +144,7 @@ telegram.on('message', async message => {
     returnMessage += `地址：${ myServer.host }\n端口：${ myAccount.port }\n密码：${ myAccount.password }\n加密方式：${ myServer.method }\n\n`;
     tg.sendMessage(returnMessage, telegramId);
     if(myAccount.type >= 2 && myAccount.type <= 5) {
+      
       let timePeriod = 0;
       if(myAccount.type === 2) { timePeriod = 7 * 86400 * 1000; }
       if(myAccount.type === 3) { timePeriod = 30 * 86400 * 1000; }
@@ -136,6 +154,26 @@ telegram.on('message', async message => {
       const expireTime = data.create + data.limit * timePeriod;
       await sleep(250);
       const isExpired = Date.now() >= expireTime ? ' [已过期]' : '';
+
+      const time = {
+        '2': 7 * 24 * 3600000,
+        '3': 30 * 24 * 3600000,
+        '4': 24 * 3600000,
+        '5': 3600000,
+      };
+      const timeArray = [data.create, data.create + time[myAccount.type]];
+      if (data.create <= Date.now()) {
+        let i = 0;
+        while (data.create + i * time[myAccount.type] <= Date.now()) {
+          timeArray[0] = data.create + i * time[myAccount.type];
+          timeArray[1] = data.create + (i + 1) * time[myAccount.type];
+          i++;
+        }
+      }
+      const flowLimit = data.flow * (myAccount.isMultiServerFlow ? 1 : myServer.scale);
+      const currentFlow = (await flow.getServerPortFlow(myServer.id, myAccount.id, timeArray, myAccount.isMultiServerFlow))[0];
+      tg.sendMessage(`流量：${ prettyFlow(currentFlow) } / ${ prettyFlow(flowLimit) }`, telegramId);
+
       tg.sendMessage(`过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`, telegramId);
     }
     await sleep(250);
