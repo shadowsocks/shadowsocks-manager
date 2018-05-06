@@ -16,12 +16,19 @@ const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
     await addDefaultGroup();
+    const hasShowNotice = await knex.schema.hasColumn(tableName, 'showNotice');
+    if(!hasShowNotice) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('showNotice').defaultTo(1);
+      });
+    }
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');
     table.string('name');
     table.string('comment');
+    table.integer('showNotice').defaultTo(1);
   }).then(() => {
     return addDefaultGroup();
   });

@@ -33,6 +33,7 @@ setDefaultValue('account', {
 });
 setDefaultValue('base', {
   title: 'Shadowsocks-Manager',
+  shortTitle: 'ssmgr',
   themeAccent: 'pink',
   themePrimary: 'blue',
   serviceWorker: false,

@@ -11,15 +11,15 @@ const getOneGroup = id => {
   });
 };
 
-const addGroup = (name, comment) => {
+const addGroup = (name, comment, showNotice) => {
   return knex('group').insert({
-    name, comment,
+    name, comment, showNotice,
   });
 };
 
-const editGroup = (id, name, comment) => {
+const editGroup = (id, name, comment, showNotice) => {
   return knex('group').update({
-    name, comment,
+    name, comment, showNotice,
   }).where({ id });
 };
 

@@ -185,7 +185,7 @@ const getAccountForUser = async (mac, ip, opt) => {
       }
       serverInfo.expire = expire || null;
       return knex('account_flow').select(['status']).where({
-        serverId: serverInfo.id,
+        serverId: f.id,
         accountId: account.accountId,
       }).then(s => {
         if(!s.length) { return 'checked'; }

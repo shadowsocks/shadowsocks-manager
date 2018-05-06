@@ -17,6 +17,13 @@
                         </md-list-item>
                         <md-divider></md-divider>
                         <md-list-item>
+                            <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                                <label translate>网站短标题</label>
+                                <input type="text" required name="title" ng-model="baseData.shortTitle">
+                            </md-input-container>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item>
                             <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                                 <div flex="75" translate>使用Service Worker缓存静态页面</div>
                                 <div flex layout="row" layout-align="end center"><md-switch ng-model="baseData.serviceWorker" ng-change="serviceWorkerUpdate()" aria-label="serviceWorker"></md-switch></div>
@@ -33,7 +40,7 @@
                         <div style="margin: 15px;">
                             <div style="margin-top: 10px; margin-bottom: 10px;">主题颜色</div>
                             <md-grid-list
-                                md-cols-xs="4" md-cols-sm="6" md-cols-gt-sm="12"
+                                md-cols-xs="4" md-cols-sm="6" md-cols-md="12" md-cols-gt-md="16"
                                 md-row-height="1:1"
                                 md-gutter="12px">
                                 <md-grid-tile
@@ -47,7 +54,7 @@
                         <div style="margin: 15px;">
                             <div style="margin-top: 10px; margin-bottom: 10px;">主题第二颜色</div>
                             <md-grid-list
-                                md-cols-xs="4" md-cols-sm="6" md-cols-gt-sm="12"
+                            md-cols-xs="4" md-cols-sm="6" md-cols-md="12" md-cols-gt-md="16"
                                 md-row-height="1:1"
                                 md-gutter="6px">
                                 <md-grid-tile

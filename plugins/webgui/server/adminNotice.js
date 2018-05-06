@@ -10,6 +10,9 @@ exports.getNotice = (req, res) => {
   ]).orderBy('time', 'desc')
   .leftJoin('group', 'notice.group', 'group.id')
   .then(success => {
+    success.forEach(f => {
+      if(!f.groupName) { f.groupName = '所有组'; }
+    });
     return res.send(success);
   }).catch(err => {
     console.log(err);

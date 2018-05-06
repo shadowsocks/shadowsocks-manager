@@ -124,6 +124,7 @@ const sendSuccessMail = async userId => {
 };
 
 cron.minute(async () => {
+  logger.info('check alipay order');
   if(!alipay_f2f) { return; }
   const orders = await knex('alipay').select().whereNotBetween('expireTime', [0, Date.now()]);
   const scanOrder = order => {
@@ -275,7 +276,7 @@ const orderListAndPaging = async (options = {}) => {
 cron.minute(() => {
   if(!alipay_f2f) { return; }
   knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
-}, 37);
+}, 50);
 
 exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;

@@ -216,6 +216,7 @@ app.get('/manifest.json', (req, res) => {
     return success[0].value;
   }).then(success => {
     manifest.name = success.title;
+    if(success.shortTitle) { manifest.short_name = success.shortTitle; }
     return res.json(manifest);
   });
 });

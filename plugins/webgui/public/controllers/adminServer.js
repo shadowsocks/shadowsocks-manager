@@ -5,7 +5,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setTitle('服务器');
     $scope.setMenuRightButton('timeline');
     if(!$localStorage.admin.serverChart) {
-      $localStorage.admin.serverChart = { showChart: true };
+      $localStorage.admin.serverChart = { showFlow: true, showChart: true };
     }
     $scope.serverChart = $localStorage.admin.serverChart;
     $scope.$on('RightButtonClick', () => {
@@ -341,6 +341,21 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.banAccount = (accountId) => {
       banDialog.show(serverId, accountId);
     };
+    $scope.setMenuSearchButton('search');
+    $scope.matchPort = (port, passowrd, search) => {
+      return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
+    };
+    // $scope.$on('cancelSearch', () => {
+      
+    // });
+    // let timeoutPromise;
+    // $scope.$watch('menuSearch.text', () => {
+    //   if(!$scope.menuSearch.text) { return; }
+    //   timeoutPromise && $timeout.cancel(timeoutPromise);
+    //   timeoutPromise = $timeout(() => {
+        
+    //   }, 500);
+    // });
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
@@ -421,12 +436,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
     };
+    $scope.serverInfoloaded = false;
     $http.get(`/api/admin/server/${ serverId }`, {
       params: {
         noPort: true,
       }
     })
     .then(success => {
+      $scope.serverInfoloaded = true;
       $scope.server = {
         name: success.data.name,
         comment: success.data.comment,

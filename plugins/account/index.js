@@ -91,7 +91,9 @@ const delAccount = async id => {
 };
 
 const editAccount = async (id, options) => {
-  await checkAccount.deleteCheckAccountTimePort(options.port);
+  if(options.hasOwnProperty('port')) {
+    await checkAccount.deleteCheckAccountTimePort(options.port);
+  }
   const account = await knex('account_plugin').select().where({ id }).then(success => {
     if(success.length) {
       return success[0];
@@ -103,19 +105,21 @@ const editAccount = async (id, options) => {
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
   update.multiServerFlow = options.multiServerFlow;
-  // update.server = options.server ? JSON.stringify(options.server) : null;
   if(options.hasOwnProperty('server')) {
     update.server = options.server ? JSON.stringify(options.server) : null;
   }
   if(options.type === 1) {
     update.data = null;
-    update.port = +options.port;
+    // update.port = +options.port;
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
       flow: options.flow || 1 * 1000 * 1000 * 1000,
       limit: options.limit || 1,
     });
+    // update.port = +options.port;
+  }
+  if(options.hasOwnProperty('port')) {
     update.port = +options.port;
   }
   await knex('account_plugin').update(update).where({ id });

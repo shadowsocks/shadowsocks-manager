@@ -269,13 +269,13 @@ const checkServer = async () => {
               } else {
                 nextCheckTime = Date.now() + nextTime;
               }
-              if(flow2 > -1) {
-                await setAccountFlow(
-                  s.id, a.id,
-                  isMultiServerFlow ? await checkFlowFromAccountFlowTable(s.id, a.id) : flow2,
-                  a.port + s.shift, nextCheckTime
-                );
-              }
+              // if(flow2 > -1) {
+              //   await setAccountFlow(
+              //     s.id, a.id,
+              //     isMultiServerFlow ? await checkFlowFromAccountFlowTable(s.id, a.id) : flow2,
+              //     a.port + s.shift, nextCheckTime
+              //   );
+              // }
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);

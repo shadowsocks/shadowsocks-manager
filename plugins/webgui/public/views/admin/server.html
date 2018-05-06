@@ -25,7 +25,7 @@
             </div>
             <md-card-actions layout="row" layout-align="start center" ng-if="serverChart.showChart">
             </md-card-actions>
-            <md-card-content layout="column">
+            <md-card-content layout="column" ng-if="serverChart.showFlow">
                 <div layout="row" layout-align="space-between center">
                     <div translate>本日流量：</div>
                     <div>{{server.flow.today | flow}}</div>

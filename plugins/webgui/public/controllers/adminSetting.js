@@ -464,6 +464,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $http.post('/api/admin/group', {
         name: $scope.group.name,
         comment: $scope.group.comment,
+        showNotice: $scope.group.showNotice,
       }, {
         timeout: 15000,
       }).then(success => {
@@ -491,6 +492,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $http.put(`/api/admin/group/${ $scope.groupId }`, {
         name: $scope.group.name,
         comment: $scope.group.comment,
+        showNotice: $scope.group.showNotice,
       }, {
         timeout: 15000,
       }).then(success => {

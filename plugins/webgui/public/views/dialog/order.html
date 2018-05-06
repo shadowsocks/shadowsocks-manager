@@ -32,7 +32,11 @@
                 <md-divider></md-divider>
                 <md-list-item ng-click="publicInfo.toUserPage(publicInfo.order.userId)">
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30" translate>用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                        <div flex="30" translate>用户名：</div>
+                        <div flex layout="row" layout-align="end center">
+                            <div style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                            <div><md-icon>chevron_right</md-icon></div>
+                        </div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>

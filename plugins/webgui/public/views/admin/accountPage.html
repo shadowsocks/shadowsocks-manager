@@ -3,14 +3,9 @@
         <md-card>
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-title">{{account.port}}</span>
-                    <span class="md-subhead" ng-click="toUserPage(account.userId)">{{account.user}}</span>
+                    <span class="md-title">{{ account.port || '...' }}</span>
+                    <span class="md-subhead" ng-click="toUserPage(account.userId)">{{ account.user || account.password || '...' }}</span>
                 </md-card-header-text>
-                <!-- <div ng-if="id === 1">
-                    <md-button class="md-primary" aria-label="edit" ng-click="editAccount(account.id)">
-                        修改
-                    </md-button>
-                </div> -->
             </md-card-header>
         </md-card>
     </div>
@@ -32,7 +27,7 @@
                         <md-list>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{server.host}}</div>
+                                    <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{ server.host }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
