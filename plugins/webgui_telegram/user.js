@@ -120,8 +120,8 @@ const isSignupCodeMessage = message => {
 };
 
 telegram.on('message', async message => {
-  const telegramId = message.message.chat.id.toString();
   try {
+    const telegramId = message.message.chat.id.toString();
     await isNotUserOrAdmin(telegramId);
     if(isEmail(message)) {
       const setting = await knex('webguiSetting').select().where({
@@ -136,11 +136,12 @@ telegram.on('message', async message => {
       const email = message.message.text;
       // const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
       // const session = req.sessionID;
-      return emailPlugin.sendCode(email, mailSetting.title || 'ss验证码', mailSetting.content || '欢迎新用户注册，\n您的验证码是：', {
+      await emailPlugin.sendCode(email, mailSetting.title || 'ss验证码', mailSetting.content || '欢迎新用户注册，\n您的验证码是：', {
         telegramId
       });
+      await tg.sendMessage(`验证码已经发送至[ ${email} ]，输入验证码即可完成注册`, telegramId);
     } else if(isSignupCodeMessage(message)) {
-      const code = message.message.text;
+      const code = message.message.text.trim();
       const emailInfo = await emailPlugin.checkCodeFromTelegram(telegramId, code);
       const userId = (await user.add({
         username: emailInfo.to,
@@ -204,6 +205,7 @@ telegram.on('message', async message => {
         autoRemove: newUserAccount.autoRemove ? 1 : 0,
         multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
       });
+      await tg.sendMessage(`用户[ ${ emailInfo.to } ]注册完成，输入 help 查看具体指令`, telegramId);
     }
   } catch(err) {
     console.log(err);

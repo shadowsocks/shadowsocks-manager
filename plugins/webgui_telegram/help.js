@@ -1,6 +1,7 @@
 const tg = appRequire('plugins/webgui_telegram/index');
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const isUser = appRequire('plugins/webgui_telegram/index').isUser;
+const isNotUserOrAdmin = appRequire('plugins/webgui_telegram/index').isNotUserOrAdmin;
 
 const isHelp = message => {
   if(!message.message || !message.message.text) { return false; }
@@ -13,10 +14,12 @@ telegram.on('message', async message => {
   if(!isHelp(message)) { return; }
   const telegramId = message.message.chat.id.toString();
   const userId = await isUser(telegramId);
-  tg.sendMessage('该功能正在开发中，目前支持的指令：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版', telegramId);
-  // telegram.emit(
-  //   'reply',
-  //   message,
-  //   '该功能正在开发中，目前支持的指令：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版',
-  // );
+  tg.sendMessage('指令列表：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版', telegramId);
+});
+
+telegram.on('message', async message => {
+  if(!isHelp(message)) { return; }
+  const telegramId = message.message.chat.id.toString();
+  await isNotUserOrAdmin(telegramId);
+  tg.sendMessage('使用方法：\n\n输入邮箱即可注册帐号', telegramId);
 });
