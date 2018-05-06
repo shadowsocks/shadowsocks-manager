@@ -164,6 +164,14 @@ const isAdmin = async telegramId => {
   return exists.id;
 };
 
+const isNotUserOrAdmin = async telegramId => {
+  const exists = await knex('user').where({
+    telegram: telegramId,
+  }).then(success => success[0]);
+  if(exists) { return Promise.reject('is a user'); }
+  return;
+};
+
 const pull = () => {
   return getMessage()
   .then(() => {
@@ -179,6 +187,7 @@ exports.telegram = telegram;
 exports.getMe = getMe;
 exports.isUser = isUser;
 exports.isAdmin = isAdmin;
+exports.isNotUserOrAdmin = isNotUserOrAdmin;
 
 exports.sendKeyboard = sendKeyboard;
 exports.sendMarkdown = sendMarkdown;

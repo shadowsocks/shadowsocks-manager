@@ -1,8 +1,11 @@
 const tg = appRequire('plugins/webgui_telegram/index');
+const isNotUserOrAdmin = appRequire('plugins/webgui_telegram/index').isNotUserOrAdmin;
 const telegram = appRequire('plugins/webgui_telegram/index').telegram;
 const getMe = appRequire('plugins/webgui_telegram/index').getMe;
 const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
+const emailPlugin = appRequire('plugins/email/index');
+const account = appRequire('plugins/account/index');
 
 const isUserBindMessage = message => {
   if(!message.message || !message.message.text) { return false; }
@@ -99,3 +102,110 @@ exports.getCode = async (userId) => {
 };
 
 exports.unbindUser = unbindUser;
+
+
+// 用户注册功能
+const isEmail = message => {
+  if(!message.message || !message.message.text) { return false; }
+  if(!message.message || !message.message.chat || !message.message.chat.type === 'private') { return false; }
+  if(!message.message.text.trim().match(/^[\w.\-]+@(?:[a-z0-9]+(?:-[a-z0-9]+)*\.)+[a-z]{2,3}$/)) { return false; }
+  return true;
+};
+
+const isSignupCodeMessage = message => {
+  if(!message.message || !message.message.text) { return false; }
+  if(!message.message || !message.message.chat || !message.message.chat.type === 'private') { return false; }
+  if(!message.message.text.trim().match(/^\d{6}$/)) { return false; }
+  return true;
+};
+
+telegram.on('message', async message => {
+  const telegramId = message.message.chat.id.toString();
+  try {
+    await isNotUserOrAdmin(telegramId);
+    if(isEmail(message)) {
+      const setting = await knex('webguiSetting').select().where({
+        key: 'account',
+      }).then(success => JSON.parse(success[0].value));
+      if(!setting.signUp.isEnable) {
+        return Promise.reject();
+      }
+      const mailSetting = await knex('webguiSetting').select().where({
+        key: 'mail',
+      }).then(success => JSON.parse(success[0].value)).then(s => s.code);
+      const email = message.message.text;
+      // const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+      // const session = req.sessionID;
+      return emailPlugin.sendCode(email, mailSetting.title || 'ss验证码', mailSetting.content || '欢迎新用户注册，\n您的验证码是：', {
+        telegramId
+      });
+    } else if(isSignupCodeMessage(message)) {
+      const code = message.message.text;
+      const emailInfo = await emailPlugin.checkCodeFromTelegram(telegramId, code);
+      const userId = (await user.add({
+        username: emailInfo.to,
+        email: emailInfo.to,
+        password: Math.random().toString().substr(2),
+        type: 'normal',
+        telegramId,
+      }))[0];
+      const setting = await knex('webguiSetting').select().where({
+        key: 'account',
+      }).then(success => JSON.parse(success[0].value));
+      const newUserAccount = setting.accountForNewUser;
+      if(!setting.accountForNewUser.isEnable) {
+        return;
+      }
+      const getNewPort = async () => {
+        const setting = await knex('webguiSetting').select().where({
+          key: 'account',
+        }).then(success => JSON.parse(success[0].value));
+        const port = setting.port;
+        if(port.random) {
+          const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+          let retry = 0;
+          let myPort = getRandomPort();
+          const checkIfPortExists = port => {
+            let myPort = port;
+            return knex('account_plugin').select()
+            .where({ port }).then(success => {
+              if(success.length && retry <= 30) {
+                retry++;
+                myPort = getRandomPort();
+                return checkIfPortExists(myPort);
+              } else if (success.length && retry > 30) {
+                return Promise.reject('Can not get a random port');
+              } else {
+                return myPort;
+              }
+            });
+          };
+          return checkIfPortExists(myPort);
+        } else {
+          return knex('account_plugin').select()
+          .whereBetween('port', [port.start, port.end])
+          .orderBy('port', 'DESC').limit(1).then(success => {
+            if(success.length) {
+              return success[0].port + 1;
+            }
+            return port.start;
+          });
+        }
+      };
+      const port = await getNewPort();
+      await account.addAccount(newUserAccount.type || 5, {
+        user: userId,
+        port,
+        password: Math.random().toString().substr(2,10),
+        time: Date.now(),
+        limit: newUserAccount.limit || 8,
+        flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
+        server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
+        autoRemove: newUserAccount.autoRemove ? 1 : 0,
+        multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
+      });
+    }
+  } catch(err) {
+    console.log(err);
+  }
+});

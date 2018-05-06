@@ -57,10 +57,6 @@ if(config.plugins.email.type === 'smtp') {
   };
 }
 
-
-
-
-
 const sendMail = async (to, subject, text, options = {}) => {
   if(isInBlackList(to)) {
     logger.error('Email in black list: ' + to);
@@ -105,6 +101,7 @@ const sendMail = async (to, subject, text, options = {}) => {
     remark: options.remark,
     ip: options.ip,
     session: options.session,
+    telegramId: options.telegramId,
     time: Date.now(),
   });
   return;
@@ -131,6 +128,7 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
       remark: code,
       ip: options.ip,
       session: options.session,
+      telegramId: options.telegramId,
     });
     logger.info(`[${ to }] Send code: ${ code }`);
     return code;
@@ -158,6 +156,26 @@ const checkCode = async (email, code) => {
   }
 };
 
+const checkCodeFromTelegram = async (telegramId, code) => {
+  logger.info(`Telegram[${ telegramId }] Check code: ${ code }`);
+  const sendEmailTime = 10;
+  try {
+    const findEmail = await knex('email').where({
+      telegramId,
+      remark: code,
+      type: 'code',
+    }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
+    if(findEmail.length === 0) {
+      throw new Error('Email or code not found');
+    }
+    return findEmail[0];
+  } catch(err) {
+    logger.error(`Check code fail: ${ err }`);
+    return Promise.reject(err);
+  }
+};
+
+exports.checkCodeFromTelegram = checkCodeFromTelegram;
 exports.checkCode = checkCode;
 exports.sendCode = sendCode;
 exports.sendMail = sendMail;

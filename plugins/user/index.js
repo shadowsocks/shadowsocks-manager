@@ -52,6 +52,9 @@ const addUser = async (options) => {
     if(options.group) {
       Object.assign(insert, { group: options.group });
     }
+    if(options.telegramId) {
+      Object.assign(insert, { telegram: options.telegramId });
+    }
     return knex('user').insert(insert);
   } catch(err) {
     console.log(err);
