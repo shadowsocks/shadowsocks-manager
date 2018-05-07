@@ -2,34 +2,18 @@ version: '2.3'
 
 services:
 
-  sssocket:
-    container_name: sssocket
+  sssocksmgr:
+    container_name: sssocksmgr
     build:
-      context: ./sssockets/
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - 50000-50010:50000-50010
-    depends_on:
-      - db
-
-  ssmgr:
-    container_name: ssmgr
-    build:
-      context: ./ssmgr/
+      context: ./sssocksmgr/
       dockerfile: Dockerfile
     environment:
-      SS_PROXY_ADDRESS: ${SS_PROXY_ADDRESS}
-      SS_PROXY_PORT: ${SS_PROXY_PORT}
-      MANAGER_ADDRESS: ${MANAGER_ADDRESS}
-      MANAGER_PORT: ${MANAGER_PORT}
       MANAGER_PASSWORD: ${MANAGER_PASSWORD}
-      MANAGER_DB_PASSWORD: ${MANAGER_DB_PASSWORD}
-      MANAGER_DB_NAME: ${MANAGER_DB_NAME}
-      MANAGER_DB_HOST: ${MANAGER_DB_HOST}
-      MANAGER_DB_USER: ${MANAGER_DB_USER}
+    ports:
+      - 6002:6002
+      - 50000-50100:50000-50100
     depends_on:
-      - sssocket
+      - db
     restart: unless-stopped
 
   sswebgui:
@@ -50,7 +34,7 @@ services:
       MANAGER_PASSWORD: ${MANAGER_PASSWORD}
       MANAGER_PORT: ${MANAGER_PORT}
     depends_on:
-      - ssmgr
+      - sssocksmgr
     restart: unless-stopped
     ports:
       - 6003:6003
