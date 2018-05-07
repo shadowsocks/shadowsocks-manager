@@ -30,7 +30,7 @@ Thanks
 
    ```
 
-## updates for docker swarm mode
+## Updates for docker swarm mode
 
 Recently I find the way to deploy it into docker swarm. Since the manager should manage only one specific shadowsocks instance, I am going to put them into one container and using `supervisor` to ensure the process running inside the container. Here is the introduction from docker's website.
 
@@ -44,6 +44,6 @@ In order to run the docker stack after image is built to upload to registry corr
 
    `$ docker swarm init`
    
-2. deploy to swarm
+2. Deploy to swarm
    
    `$ export $(cat .env) && docker stack deploy --compose-file docker-stack.yml ss`
