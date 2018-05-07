@@ -172,6 +172,17 @@ const isNotUserOrAdmin = async telegramId => {
   return;
 };
 
+const getUserStatus = async telegramId => {
+  const user = await knex('user').where({
+    telegram: telegramId,
+  }).then(success => success[0]);
+  if(!user) {
+    return { status: 'empty' };
+  } else {
+    return { status: user.type, id: user.id };
+  }
+};
+
 const pull = () => {
   return getMessage()
   .then(() => {
@@ -188,6 +199,7 @@ exports.getMe = getMe;
 exports.isUser = isUser;
 exports.isAdmin = isAdmin;
 exports.isNotUserOrAdmin = isNotUserOrAdmin;
+exports.getUserStatus = getUserStatus;
 
 exports.sendKeyboard = sendKeyboard;
 exports.sendMarkdown = sendMarkdown;

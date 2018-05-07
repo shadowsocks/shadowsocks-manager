@@ -121,9 +121,9 @@ const isSignupCodeMessage = message => {
 
 telegram.on('message', async message => {
   try {
-    const telegramId = message.message.chat.id.toString();
-    await isNotUserOrAdmin(telegramId);
     if(isEmail(message)) {
+      const telegramId = message.message.chat.id.toString();
+      await isNotUserOrAdmin(telegramId);
       const setting = await knex('webguiSetting').select().where({
         key: 'account',
       }).then(success => JSON.parse(success[0].value));
@@ -134,13 +134,15 @@ telegram.on('message', async message => {
         key: 'mail',
       }).then(success => JSON.parse(success[0].value)).then(s => s.code);
       const email = message.message.text;
-      // const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
-      // const session = req.sessionID;
+      const isUserExists = await knex('user').where({ email }).then(s => s[0]);
+      if(isUserExists) { return; }
       await emailPlugin.sendCode(email, mailSetting.title || 'ss验证码', mailSetting.content || '欢迎新用户注册，\n您的验证码是：', {
         telegramId
       });
       await tg.sendMessage(`验证码已经发送至[ ${email} ]，输入验证码即可完成注册`, telegramId);
     } else if(isSignupCodeMessage(message)) {
+      const telegramId = message.message.chat.id.toString();
+      await isNotUserOrAdmin(telegramId);
       const code = message.message.text.trim();
       const emailInfo = await emailPlugin.checkCodeFromTelegram(telegramId, code);
       const userId = (await user.add({

@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const moment = require('moment');
 const qr = require('qr-image');
 const flow = appRequire('plugins/flowSaver/flow');
+const knex = appRequire('init/knex').knex;
 
 const prettyFlow = number => {
   if(number >= 0 && number < 1000) {
@@ -61,6 +62,21 @@ const isCallbackServer = message => {
   return true;
 };
 
+const isCallbackPay = message => {
+  if(!message.callback_query || !message.callback_query.data) { return false; }
+  if(!message.callback_query.data.match(/^alipay:accountId\[\d{1,}\]$/)) {
+    return false;
+  }
+  return true;
+};
+const isCallbackPayQrcode = message => {
+  if(!message.callback_query || !message.callback_query.data) { return false; }
+  if(!message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[[a-z]{1,}\]$/)) {
+    return false;
+  }
+  return true;
+};
+
 telegram.on('message', async message => {
   if(isGetAccount(message)) {
     const telegramId = message.message.chat.id.toString();
@@ -68,6 +84,15 @@ telegram.on('message', async message => {
     const myAccount = await account.getAccount({ userId });
     if(!myAccount.length) {
       tg.sendMessage('当前并没有分配账号', telegramId);
+      if(config.plugins.alipay && config.plugins.alipay.use) {
+        tg.sendKeyboard('续费', telegramId, {
+          inline_keyboard: [[{
+            text: '点击这里续费',
+            callback_data: `alipay:accountId[0]`,
+          }]],
+        });
+      }
+      return;
     }
     const keyboard = myAccount.map(m => {
       return {
@@ -122,6 +147,14 @@ telegram.on('message', async message => {
     tg.sendKeyboard('请选择服务器', telegramId, {
       inline_keyboard: serverArray,
     });
+    if(myAccount.type >= 2 && myAccount.type <= 5 && config.plugins.alipay && config.plugins.alipay.use) {
+      tg.sendKeyboard('续费', telegramId, {
+        inline_keyboard: [[{
+          text: '点击这里续费',
+          callback_data: `alipay:accountId[${ myAccount.id }]`,
+        }]],
+      });
+    }
   } else if(isCallbackServer(message)) {
     const telegramId = message.callback_query.from.id.toString();
     const accountId = message.callback_query.data.match(/^accountId\[(\d{1,})\]serverId\[\d{1,}\]$/)[1];
@@ -171,9 +204,8 @@ telegram.on('message', async message => {
         }
       }
       const flowLimit = data.flow * (myAccount.isMultiServerFlow ? 1 : myServer.scale);
-      const currentFlow = (await flow.getServerPortFlow(myServer.id, myAccount.id, timeArray, myAccount.isMultiServerFlow))[0];
+      const currentFlow = (await flow.getServerPortFlow(myServer.id, myAccount.id, timeArray, myAccount.multiServerFlow))[0];
       tg.sendMessage(`流量：${ prettyFlow(currentFlow) } / ${ prettyFlow(flowLimit) }`, telegramId);
-
       tg.sendMessage(`过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`, telegramId);
     }
     await sleep(250);
@@ -181,6 +213,15 @@ telegram.on('message', async message => {
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };
     tg.sendPhoto(`${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`, telegramId);
+
+    // if(myAccount.type >= 2 && myAccount.type <= 5 && config.plugins.alipay && config.plugins.alipay.use) {
+    //   tg.sendKeyboard('续费', telegramId, {
+    //     inline_keyboard: [[{
+    //       text: '点击这里续费',
+    //       callback_data: `alipay:accountId[${ myAccount.id }]`,
+    //     }]],
+    //   });
+    // }
   } else if(isLogin(message)) {
     const telegramId = message.message.chat.id.toString();
     const userId = await isUser(telegramId);
@@ -195,6 +236,51 @@ telegram.on('message', async message => {
         url: `${ config.plugins.webgui.site }/home/login/telegram/${ token }`
       }]],
     });
+  } else if(isCallbackPay(message)) {
+    const telegramId = message.callback_query.from.id.toString();
+    const accountId = +message.callback_query.data.match(/^alipay:accountId\[(\d{1,})\]$/)[1];
+    let paymentInfo = await knex('webguiSetting').select().where({
+      key: 'payment',
+    }).then(s => s[0]);
+    if(!paymentInfo) { return; }
+    paymentInfo = JSON.parse(paymentInfo.value);
+    const paymentArray = [];
+    for(let pi in paymentInfo) {
+      if(paymentInfo[pi].alipay > 0) {
+        paymentArray.push([{
+          text: `${ paymentInfo[pi].orderName } ${ paymentInfo[pi].alipay }`,
+          callback_data: `alipay:qrcode:accountId[${ accountId }]type[${ pi }]`,
+        }]);
+      }
+    }
+    tg.sendKeyboard('选择续费类型：', telegramId, {
+      inline_keyboard: paymentArray,
+    });
+  } else if(isCallbackPayQrcode(message)) {
+    const alipay = appRequire('plugins/alipay/index');
+    let paymentInfo = await knex('webguiSetting').select().where({
+      key: 'payment',
+    }).then(s => s[0]);
+    if(!paymentInfo) { return; }
+    paymentInfo = JSON.parse(paymentInfo.value);
+    const payType = {
+      hour: 5,
+      day: 4,
+      week: 2,
+      month: 3,
+      season: 6,
+      year: 7,
+    };
+    const telegramId = message.callback_query.from.id.toString();
+    const accountId = +message.callback_query.data.match(/^alipay:qrcode:accountId\[(\d{1,})\]type\[[a-z]{1,}\]$/)[1];
+    const type = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([a-z]{1,})\]$/)[1];
+    const amount = paymentInfo[type].alipay + '';
+    const userId = (await tg.getUserStatus(telegramId)).id;
+    const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, amount, payType[type]);
+    tg.sendMessage(`请用支付宝扫描下面二维码完成支付`, telegramId);
+    const qrcodeId = crypto.randomBytes(32).toString('hex');
+    qrcodeObj[qrcodeId] = { url: payInfo.qrCode, time: Date.now() };
+    tg.sendPhoto(`${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`, telegramId);
   }
 });
 

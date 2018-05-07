@@ -13,13 +13,10 @@ const isHelp = message => {
 telegram.on('message', async message => {
   if(!isHelp(message)) { return; }
   const telegramId = message.message.chat.id.toString();
-  const userId = await isUser(telegramId);
-  tg.sendMessage('指令列表：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版', telegramId);
-});
-
-telegram.on('message', async message => {
-  if(!isHelp(message)) { return; }
-  const telegramId = message.message.chat.id.toString();
-  await isNotUserOrAdmin(telegramId);
-  tg.sendMessage('使用方法：\n\n输入邮箱即可注册帐号', telegramId);
+  const userStatus = await tg.getUserStatus(telegramId);
+  if(userStatus.status === 'empty') {
+    tg.sendMessage('使用方法：\n\n输入邮箱即可注册帐号', telegramId);
+  } else if (userStatus.status === 'normal') {
+    tg.sendMessage('指令列表：\n\naccount: 显示ss账号信息\nlogin: 快捷登录网页版', telegramId);
+  }
 });
