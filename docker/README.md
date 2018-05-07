@@ -38,7 +38,7 @@ Recently I find the way to deploy it into docker swarm. Since the manager should
 
 Since the docker compose file version 3 do not support build command, I refer the image to the one I built on dockerhub, but you can build your own version based on sssocksmgr folder.
 
-In order to run the docker stack after image is built to upload to registry correctly:
+In order to run the docker stack after image is built and uploaded to registry correctly:
 
 1. Start swarm mode
 
