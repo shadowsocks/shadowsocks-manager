@@ -51,3 +51,7 @@ In order to run the docker stack after image is built and uploaded to registry c
 3. Result with visualizer
    
    ![docker swarm mode](https://github.com/damonYuan/shadowsocks-manager/blob/master/wikiImage/docker-swarm-mode.png)
+   
+## Note about using mysql for shadowsocks-manager
+   
+   DO NOT using MySQL single table For shadowsocks-manager because it will cause synchronization problems. If you have to use MySQL, using one table for each manager. The simplest way is to use sqlite for shadowsocks-manager. 

@@ -57,9 +57,9 @@ services:
     depends_on:
       - db
     environment:
-      PMA_HOSTS: db,db
-      PMA_VERBOSES: ssmgr,webgui
-      PMA_PORTS: 3306,3306
+      PMA_HOSTS: db
+      PMA_VERBOSES: webgui
+      PMA_PORTS: 3306
     restart: unless-stopped
     ports:
       - 6004:80
