@@ -26,7 +26,7 @@ Thanks
 3. Run command
 
    ```
-   docker-compose build && docker-compose up
+   $ docker-compose build && docker-compose up
 
    ```
 
