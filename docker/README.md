@@ -50,4 +50,4 @@ In order to run the docker stack after image is built and uploaded to registry c
    
 3. Result with visualizer
    
-   ![docker swarm](https://github.com/damonYuan/shadowsocks-manager/blob/master/wikiImage/docker-swarm.png | width=100)
+   ![docker swarm](https://github.com/damonYuan/shadowsocks-manager/blob/master/wikiImage/docker-swarm.png)
