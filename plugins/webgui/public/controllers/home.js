@@ -3,6 +3,7 @@ const app = angular.module('app');
 app
   .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage',
     ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage) => {
+      $scope.home = {};
       if ($localStorage.home.status === 'normal') {
         $state.go('user.index');
       } else if ($localStorage.home.status === 'admin') {
@@ -122,7 +123,7 @@ app
       };
       $scope.signup = () => {
         alertDialog.loading().then(() => {
-          return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password);
+          return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password, $scope.home.refId);
         })
         .then(userType => {
           $localStorage.home.status = userType;
@@ -201,6 +202,13 @@ app
         $localStorage.user = {};
         $state.go('home.index');
       });
+    }
+  ])
+  .controller('HomeRefController', ['$scope', '$state', '$stateParams',
+    ($scope, $state, $stateParams) => {
+      const refId = $stateParams.refId;
+      $scope.home.refId = refId;
+      $state.go('home.signup');
     }
   ])
 ;

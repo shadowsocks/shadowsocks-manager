@@ -10,6 +10,7 @@ const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
+const ref = appRequire('plugins/webgui_ref/index');
 
 const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
 let telegram;
@@ -53,6 +54,9 @@ exports.signup = (req, res) => {
   }).then(success => {
     req.session.user = success[0];
     req.session.type = type;
+    if(req.body.ref) {
+      ref.addRef(+req.body.ref, req.session.user);
+    }
     if(success[0] > 1) {
       const userId = success[0];
       // let port = 50000;
