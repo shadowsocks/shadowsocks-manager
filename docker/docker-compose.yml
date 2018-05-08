@@ -1,0 +1,69 @@
+version: '2.3'
+
+services:
+
+  sssocksmgr:
+    container_name: sssocksmgr
+    build:
+      context: ./sssocksmgr/
+      dockerfile: Dockerfile
+    environment:
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+    ports:
+      - 6002:6002
+      - 50000-50100:50000-50100
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  sswebgui:
+    container_name: sswebgui
+    build:
+      context: ./sswebgui/
+      dockerfile: Dockerfile
+    environment:
+      WEBGUI_EMAIL_USERNAME: ${WEBGUI_EMAIL_USERNAME}
+      WEBGUI_EMAIL_PASSWORD: ${WEBGUI_EMAIL_PASSWORD}
+      WEBGUI_EMAIL_HOST: ${WEBGUI_EMAIL_HOST}
+      WEBGUI_DB_PASSWORD: ${WEBGUI_DB_PASSWORD}
+      WEBGUI_DB_NAME: ${WEBGUI_DB_NAME}
+      WEBGUI_DB_HOST: ${WEBGUI_DB_HOST}
+      WEBGUI_DB_USER: ${WEBGUI_DB_USER}
+      WEBGUI_SITE_DOMAIN: ${WEBGUI_SITE_DOMAIN}
+      MANAGER_ADDRESS: ${MANAGER_ADDRESS}
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+      MANAGER_PORT: ${MANAGER_PORT}
+    depends_on:
+      - sssocksmgr
+    restart: unless-stopped
+    ports:
+      - 6003:6003
+
+  db:
+    container_name: ssmysql
+    build:
+      context: ./ssmysql/
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MANAGER_DB_PASSWORD}
+    volumes:
+      - db:/var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOSTS: db
+      PMA_VERBOSES: webgui
+      PMA_PORTS: 3306
+    restart: unless-stopped
+    ports:
+      - 6004:80
+
+volumes:
+  db:
+    driver: local

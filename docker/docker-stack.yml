@@ -1,0 +1,109 @@
+version: '3.2'
+
+services:
+
+  db:
+    image: damonyuan/ss-mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MANAGER_DB_PASSWORD}
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - target: 3306
+        published: 3306
+        protocol: tcp
+        mode: host
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOSTS: db
+      PMA_VERBOSES: webgui
+      PMA_PORTS: 3306
+    ports:
+      - target: 80
+        published: 6004
+        protocol: tcp
+        mode: ingress
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  webgui:
+    image: damonyuan/ss-webgui:latest
+    environment:
+      WEBGUI_EMAIL_USERNAME: ${WEBGUI_EMAIL_USERNAME}
+      WEBGUI_EMAIL_PASSWORD: ${WEBGUI_EMAIL_PASSWORD}
+      WEBGUI_EMAIL_HOST: ${WEBGUI_EMAIL_HOST}
+      WEBGUI_DB_PASSWORD: ${WEBGUI_DB_PASSWORD}
+      WEBGUI_DB_NAME: ${WEBGUI_DB_NAME}
+      WEBGUI_DB_HOST: ${WEBGUI_DB_HOST}
+      WEBGUI_DB_USER: ${WEBGUI_DB_USER}
+      WEBGUI_SITE_DOMAIN: ${WEBGUI_SITE_DOMAIN}
+      MANAGER_ADDRESS: ${MANAGER_ADDRESS}
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+      MANAGER_PORT: ${MANAGER_PORT}
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    ports:
+      - target: 6003
+        published: 6003
+        protocol: tcp
+        mode: ingress
+
+  ss-ssmgr:
+    image: damonyuan/ss-ss-mgr:latest
+    environment:
+      MANAGER_PASSWORD: ${MANAGER_PASSWORD}
+    ports:
+      - target: 6002
+        published: 6002
+        protocol: tcp
+        mode: host
+      - 50000-50100:50000-50100
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - 9090:8080
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+volumes:
+  db:
+    driver: local

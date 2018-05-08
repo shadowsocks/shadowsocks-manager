@@ -1,0 +1,82 @@
+type: m
+
+manager:
+  address: MANAGER_ADDRESS:MANAGER_PORT
+  password: 'MANAGER_PASSWORD'
+
+plugins:
+  flowSaver:
+    use: true
+  user:
+    use: true
+  account:
+    use: true
+    pay:
+      hour:
+        price: 0.05
+        flow: 500000000
+      day:
+        price: 0.5
+        flow: 7000000000
+      week:
+        price: 3
+        flow: 50000000000
+      month:
+        price: 10
+        flow: 200000000000
+      season:
+        price: 30
+        flow: 200000000000
+      year:
+        price: 120
+        flow: 200000000000
+  macAccount:
+    use: true
+  group:
+    use: true
+  email:
+    use: true
+    username: 'WEBGUI_EMAIL_USERNAME'
+    password: 'WEBGUI_EMAIL_PASSWORD'
+    host: 'WEBGUI_EMAIL_HOST'
+  webgui:
+    use: true
+    host: '0.0.0.0'
+    port: '6003'
+    site: 'WEBGUI_SITE_DOMAIN'
+    #icon: 'icon.png'
+    # cdn: 'http://xxx.xxx.com'
+#    skin: 'bing'
+    # googleAnalytics: 'UA-xxxxxxxx-x'
+    gcmSenderId: '456102641793'
+    gcmAPIKey: 'AAAAGzzdqrE:XXXXXXXXXXXXXX'
+  alipay:
+    use: true
+    appid: 2015012104922471
+    notifyUrl: 'http://yourwebsite.com/api/user/alipay/callback'
+    merchantPrivateKey: 'xxxxxxxxxxxx'
+    alipayPublicKey: 'xxxxxxxxxxx'
+    gatewayUrl: 'https://openapi.alipay.com/gateway.do'
+  # alipay:
+  #   use: true
+  #   appid: 2015012104922471
+  #   notifyUrl: 'http://yourwebsite.com/api/user/alipay/callback'
+  #   merchantPrivateKey: 'xxxxxxxxxxxx'
+  #   alipayPublicKey: 'xxxxxxxxxxx'
+  #   gatewayUrl: 'https://openapi.alipay.com/gateway.do'
+  # webgui_telegram:
+  #   use: true
+  #   token: '191374681:AAw6oaVPR4nnY7T4CtW78QX-Xy2Q5WD3wmZ'
+  # paypal:
+  #   use: true
+  #   mode: 'live' # sandbox or live
+  #   client_id: 'At9xcGd1t5L6OrICKNnp2g9'
+  #   client_secret: 'EP40s6pQAZmqp_G_nrU9kKY4XaZph'
+
+db:
+  host: WEBGUI_DB_HOST
+  port: 3306
+  user: 'WEBGUI_DB_USER'
+  password: 'WEBGUI_DB_PASSWORD'
+  database: 'WEBGUI_DB_NAME'
+
