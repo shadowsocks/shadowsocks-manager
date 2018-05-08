@@ -293,6 +293,9 @@ app
     $scope.toTelegram = () => {
       $state.go('user.telegram');
     };
+    $scope.toRef = () => {
+      $state.go('user.ref');
+    };
   }
 ])
 .controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
@@ -341,5 +344,12 @@ app
       $scope.isLoading = true;
       $http.post('/api/user/telegram/unbind');
     };
+  }
+])
+.controller('UserRefController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
+  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+    $scope.setTitle('邀请码');
+    $scope.setMenuButton('arrow_back', 'user.settings');
+    $http.get('/api/user/ref');
   }
 ]);

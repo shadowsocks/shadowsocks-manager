@@ -1,0 +1,50 @@
+<div>
+  <md-card>
+    <md-card-content>
+      <!-- <div flex layout="row" layout-align="center center" ng-hide="baseData.themePrimary">
+              <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+          </div> -->
+      <md-divider></md-divider>
+      <md-list layout="row">
+        <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+        <div flex>
+          <form name="refForm">
+            <md-list-item>
+              <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75" translate>启用邀请码功能</div>
+                <div flex layout="row" layout-align="end center">
+                  <md-switch ng-model="refSetting.useRef" aria-label="useRef"></md-switch>
+                </div>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+              <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75" translate>关闭注册时仍可使用邀请码</div>
+                <div flex layout="row" layout-align="end center">
+                  <md-switch ng-model="refSetting.useWhenSignupClose" aria-label="useWhenSignupClose"></md-switch>
+                </div>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+              <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                <label translate>每个用户拥有邀请码数量</label>
+                <input type="number" required name="refNumber" ng-model="refSetting.refNumber">
+              </md-input-container>
+            </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item>
+              <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                <label translate>每个邀请码可邀请的用户数</label>
+                <input type="number" required name="refUserNumber" ng-model="refSetting.refUserNumber">
+              </md-input-container>
+            </md-list-item>
+            <md-divider></md-divider>
+          </form>
+        </div>
+        <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+      </md-list>
+    </md-card-content>
+  </md-card>
+</div>

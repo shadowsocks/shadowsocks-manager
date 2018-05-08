@@ -7,6 +7,7 @@ const config = appRequire('services/config').all();
 const giftcard = appRequire('plugins/giftcard');
 const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
+const ref = appRequire('plugins/webgui_ref/index');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -428,4 +429,14 @@ exports.payByGiftCard = async (req, resp) => {
     logger.error(`使用充值码时出现错误：${err.toString()}`);
     resp.status(500).end();
   }
+};
+
+exports.getRefCode = (req, res) => {
+  const userId = +req.session.user;
+  ref.getUserRefCode(userId).then(success => {
+    res.send({ code: success });
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
 };

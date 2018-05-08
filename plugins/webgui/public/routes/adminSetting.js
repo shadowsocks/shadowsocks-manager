@@ -89,6 +89,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminEditGroupController',
       templateUrl: `${ cdn }/public/views/admin/editGroup.html`
     })
+    .state('admin.refSetting', {
+      url: '/settings/ref',
+      controller: 'AdminRefSettingController',
+      templateUrl: `${ cdn }/public/views/admin/refSetting.html`
+    })
     ;
   }
 ]);

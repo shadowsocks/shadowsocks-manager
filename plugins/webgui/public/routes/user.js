@@ -33,6 +33,11 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/telegram',
       controller: 'UserTelegramController',
       templateUrl: `${ cdn }/public/views/user/telegram.html`,
+    })
+    .state('user.ref', {
+      url: '/ref',
+      controller: 'UserRefController',
+      templateUrl: `${ cdn }/public/views/user/ref.html`,
     });
   }])
 ;

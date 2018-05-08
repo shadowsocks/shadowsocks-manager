@@ -1,29 +1,40 @@
 <div>
-  <md-card>
-      <md-card-content>
-          <md-divider></md-divider>
-          <md-list>
-              <md-list-item ng-click="toPassword()">
-                  <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
-                      <div flex="75" translate>修改密码</div>
-                      <div flex layout="row" layout-align="end center">
-                          <md-button class="md-primary" ng-click="toPassword()">点击进入&gt;&gt;</md-button>
-                      </div>
-                  </div>
-              </md-list-item>
-          </md-list>
-          <md-divider></md-divider>
-          <md-list ng-if="config.telegram">
-              <md-list-item ng-click="toTelegram()">
-                  <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
-                      <div flex="75" translate>绑定Telegram</div>
-                      <div flex layout="row" layout-align="end center">
-                          <md-button class="md-primary" ng-click="toTelegram()">点击进入&gt;&gt;</md-button>
-                      </div>
-                  </div>
-              </md-list-item>
-          </md-list>
-          <md-divider ng-if="config.telegram"></md-divider>
-      </md-card-content>
-  </md-card>
+    <md-card>
+        <md-card-content>
+            <md-divider></md-divider>
+            <md-list>
+                <md-list-item ng-click="toPassword()">
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>修改密码</div>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button class="md-primary" ng-click="toPassword()">点击进入&gt;&gt;</md-button>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+            <md-list ng-if="config.telegram">
+                <md-list-item ng-click="toTelegram()">
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>绑定Telegram</div>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button class="md-primary" ng-click="toTelegram()">点击进入&gt;&gt;</md-button>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ng-if="config.telegram"></md-divider>
+            <md-list>
+                <md-list-item ng-click="toRef()">
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>邀请码</div>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button class="md-primary" ng-click="toRef()">点击进入&gt;&gt;</md-button>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider></md-divider>
+        </md-card-content>
+    </md-card>
 </div>

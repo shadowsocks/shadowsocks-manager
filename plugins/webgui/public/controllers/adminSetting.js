@@ -34,6 +34,10 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
           name: '修改密码',
           to: 'admin.passwordSetting',
         },
+        {
+          name: '邀请码',
+          to: 'admin.refSetting',
+        },
       ];
       if($scope.config.telegram) {
         $scope.settingList.push({
@@ -517,5 +521,13 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       });
     };
   }
+]).controller('AdminRefSettingController', ['$scope', '$http', '$timeout', '$state',
+($scope, $http, $timeout, $state) => {
+  $scope.setTitle('邀请码管理');
+  $scope.setMenuButton('arrow_back', function() {
+    $state.go('admin.settings');
+  });
+  $scope.refSetting = {};
+}
 ])
 ;
