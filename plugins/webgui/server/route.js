@@ -47,6 +47,7 @@ const isSuperAdmin = (req, res, next) => {
 
 app.get('/api/home/login', home.status);
 app.post('/api/home/code', home.sendCode);
+app.post('/api/home/ref/:refCode', home.visitRef);
 app.post('/api/home/signup', home.signup);
 app.post('/api/home/login', home.login);
 app.post('/api/home/macLogin', home.macLogin);

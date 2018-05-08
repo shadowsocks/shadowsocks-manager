@@ -204,10 +204,11 @@ app
       });
     }
   ])
-  .controller('HomeRefController', ['$scope', '$state', '$stateParams',
-    ($scope, $state, $stateParams) => {
+  .controller('HomeRefController', ['$scope', '$state', '$stateParams', '$http',
+    ($scope, $state, $stateParams, $http) => {
       const refId = $stateParams.refId;
       $scope.home.refId = refId;
+      $http.post(`/api/home/ref/${ refId }`);
       $state.go('home.signup');
     }
   ])

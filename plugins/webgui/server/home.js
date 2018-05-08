@@ -55,7 +55,7 @@ exports.signup = (req, res) => {
     req.session.user = success[0];
     req.session.type = type;
     if(req.body.ref) {
-      ref.addRef(+req.body.ref, req.session.user);
+      ref.addRefUser(req.body.ref, req.session.user);
     }
     if(success[0] > 1) {
       const userId = success[0];
@@ -341,4 +341,10 @@ exports.resetPassword = (req, res) => {
     logger.error(err);
     res.status(403).end();
   });
+};
+
+exports.visitRef = (req, res) => {
+  const code = req.params.refCode;
+  ref.visitRefCode(code);
+  res.send('success');
 };
