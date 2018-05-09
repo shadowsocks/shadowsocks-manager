@@ -1,5 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
+const ref = appRequire('plugins/webgui_ref/index');
+const refAdmin = appRequire('plugins/webgui_ref/admin');
 
 const setDefaultValue = (key, value) => {
   knex('webguiSetting').select().where({
@@ -286,6 +288,24 @@ exports.modifyRef = (req, res) => {
     key: 'webgui_ref',
   }).then(success => {
     return res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getRefCode = (req, res) => {
+  refAdmin.getRefCode().then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getRefUser = (req, res) => {
+  refAdmin.getRefUser().then(success => {
+    return res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();

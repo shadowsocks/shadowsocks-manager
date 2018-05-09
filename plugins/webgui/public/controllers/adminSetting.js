@@ -554,4 +554,26 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     });
 }
 ])
+.controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state',
+  ($scope, $http, $timeout, $state) => {
+    $scope.setTitle('邀请码列表');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.refSetting');
+    });
+    $http.get('/api/admin/setting/ref/code').then(success => {
+      $scope.code = success.data;
+    });
+  }
+])
+.controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state',
+  ($scope, $http, $timeout, $state) => {
+    $scope.setTitle('邀请用户列表');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.refSetting');
+    });
+    $http.get('/api/admin/setting/ref/user').then(success => {
+      $scope.user = success.data;
+    });
+  }
+])
 ;

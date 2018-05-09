@@ -94,6 +94,16 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminRefSettingController',
       templateUrl: `${ cdn }/public/views/admin/refSetting.html`
     })
+    .state('admin.refCodeList', {
+      url: '/settings/refCodeList',
+      controller: 'AdminRefCodeListController',
+      templateUrl: `${ cdn }/public/views/admin/refCodeList.html`
+    })
+    .state('admin.refUserList', {
+      url: '/settings/refUserList',
+      controller: 'AdminRefUserListController',
+      templateUrl: `${ cdn }/public/views/admin/refUserList.html`
+    })
     ;
   }
 ]);
