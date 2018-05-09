@@ -1,7 +1,20 @@
 <div>
-  <md-card>
-      <md-card-content>
-          该功能正在开发中
-      </md-card-content>
-  </md-card>
+    <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-title">
+                    邀请码
+                </span>
+            </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+            <md-divider ng-repeat-start="c in code"></md-divider>
+            <md-list layout="row">
+                <div flex>{{ getRefUrl(c.code) }}</div>
+            </md-list>
+            <md-divider ng-repeat-end ng-if="$last"></md-divider>
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+        </md-card-content>
+    </md-card>
 </div>

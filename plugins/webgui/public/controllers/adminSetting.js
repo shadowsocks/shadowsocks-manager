@@ -165,7 +165,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.baseData = {};
     let lastSave = 0;
     let lastSavePromise = null;
-    const saveTime = 3500;
+    const saveTime = 2000;
     $scope.saveSetting = () => {
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);
@@ -527,7 +527,31 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
   $scope.setMenuButton('arrow_back', function() {
     $state.go('admin.settings');
   });
+  $scope.loading = true;
   $scope.refSetting = {};
+
+  let lastSave = 0;
+    let lastSavePromise = null;
+    const saveTime = 2000;
+    $scope.saveSetting = () => {
+      if(Date.now() - lastSave <= saveTime) {
+        lastSavePromise && $timeout.cancel(lastSavePromise);
+      }
+      const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+      lastSave = Date.now();
+      lastSavePromise = $timeout(() => {
+        $http.put('/api/admin/setting/ref', {
+          data: $scope.refSetting,
+        });
+      }, timeout);
+    };
+    $http.get('/api/admin/setting/ref').then(success => {
+      $scope.refSetting = success.data;
+      $scope.loading = false;
+      $scope.$watch('refSetting', () => {
+        $scope.saveSetting();
+      }, true);
+    });
 }
 ])
 ;

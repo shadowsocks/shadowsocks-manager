@@ -127,6 +127,8 @@ app.get('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.getBase);
 app.put('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.modifyBase);
 app.get('/api/admin/setting/mail', isAdmin, isSuperAdmin, adminSetting.getMail);
 app.put('/api/admin/setting/mail', isAdmin, isSuperAdmin, adminSetting.modifyMail);
+app.get('/api/admin/setting/ref', isAdmin, isSuperAdmin, adminSetting.getRef);
+app.put('/api/admin/setting/ref', isAdmin, isSuperAdmin, adminSetting.modifyRef);
 
 app.get('/api/admin/giftcard', isAdmin, adminGiftCard.getOrders);
 app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);

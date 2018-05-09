@@ -350,6 +350,9 @@ app
   ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
     $scope.setTitle('邀请码');
     $scope.setMenuButton('arrow_back', 'user.settings');
-    $http.get('/api/user/ref');
+    $http.get('/api/user/ref').then(success => { $scope.code = success.data.code; });
+    $scope.getRefUrl = code => {
+      return `${ $scope.config.site }/home/ref/${ code }`;
+    };
   }
 ]);

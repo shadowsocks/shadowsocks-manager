@@ -434,7 +434,12 @@ exports.payByGiftCard = async (req, resp) => {
 exports.getRefCode = (req, res) => {
   const userId = +req.session.user;
   ref.getUserRefCode(userId).then(success => {
-    res.send({ code: success });
+    const result = success.filter(f => {
+      return f.count < f.maxUser;
+    }).map(m => {
+      return { code: m.code };
+    });
+    res.send({ code: result });
   }).catch(err => {
     console.log(err);
     res.status(403).end();
