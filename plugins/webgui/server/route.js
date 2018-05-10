@@ -172,7 +172,8 @@ app.post('/api/user/paypal/callback', user.paypalCallback);
 
 app.post('/api/user/changePassword', isUser, user.changePassword);
 
-app.get('/api/user/ref', isUser, user.getRefCode);
+app.get('/api/user/ref/code', isUser, user.getRefCode);
+app.get('/api/user/ref/user', isUser, user.getRefUser);
 
 if (config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   const telegram = appRequire('plugins/webgui_telegram/account');

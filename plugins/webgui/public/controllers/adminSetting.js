@@ -552,7 +552,13 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
-}
+    $scope.toRefCodeList = () => {
+      $state.go('admin.refCodeList');
+    };
+    $scope.toRefUserList = () => {
+      $state.go('admin.refUserList');
+    };
+  }
 ])
 .controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {

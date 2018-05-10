@@ -8,6 +8,7 @@ const giftcard = appRequire('plugins/giftcard');
 const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
 const ref = appRequire('plugins/webgui_ref/index');
+const refUser = appRequire('plugins/webgui_ref/user');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -433,13 +434,21 @@ exports.payByGiftCard = async (req, resp) => {
 
 exports.getRefCode = (req, res) => {
   const userId = +req.session.user;
-  ref.getUserRefCode(userId).then(success => {
+  refUser.getRefCode(userId).then(success => {
     const result = success.filter(f => {
       return f.count < f.maxUser;
-    }).map(m => {
-      return { code: m.code };
     });
-    res.send({ code: result });
+    res.send(result);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getRefUser = (req, res) => {
+  const userId = +req.session.user;
+  refUser.getRefUser(userId).then(success => {
+    res.send(success);
   }).catch(err => {
     console.log(err);
     res.status(403).end();

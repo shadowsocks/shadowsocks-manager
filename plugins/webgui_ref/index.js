@@ -52,28 +52,9 @@ const addRefUser = async (code, userId) => {
   }
 };
 
-const getUserRefCode = async userId => {
-  const setting = await getRefSetting();
-  const exists = await knex('webgui_ref_code').where({ sourceUserId: userId });
-  if(exists.length < setting.refNumber) {
-    for(let i = 0; i < setting.refNumber - exists.length; i++) {
-      await addRefCode(userId, setting.refUserNumber);
-    }
-  }
-  const code = await knex('webgui_ref_code').select([
-    'webgui_ref_code.code as code',
-    'webgui_ref_code.maxUser as maxUser',
-    knex.raw('count(webgui_ref.codeId) as count'),
-  ]).where({ sourceUserId: userId })
-  .leftJoin('webgui_ref', 'webgui_ref_code.id', 'webgui_ref.codeId')
-  .groupBy('webgui_ref_code.id');
-  return code;
-};
-
 exports.addRefCode = addRefCode;
 exports.visitRefCode = visitRefCode;
 exports.addRefUser = addRefUser;
-exports.getUserRefCode = getUserRefCode;
 
 const setDefaultValue = (key, value) => {
   knex('webguiSetting').select().where({
