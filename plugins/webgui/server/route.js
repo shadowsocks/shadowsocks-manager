@@ -28,6 +28,7 @@ const isUser = (req, res, next) => {
     return res.status(401).end();
   }
 };
+
 const isAdmin = (req, res, next) => {
   if (req.session.type === 'admin') {
     knex('user').where({ id: req.session.user, type: 'admin' }).then(s => s[0]).then(user => {
@@ -41,7 +42,7 @@ const isAdmin = (req, res, next) => {
 };
 
 const isSuperAdmin = (req, res, next) => {
-  if(req.session.user !== 1) { return res.status(403).end(); }
+  if(req.session.user !== 1) { return res.status(401).end(); }
   next();
 };
 

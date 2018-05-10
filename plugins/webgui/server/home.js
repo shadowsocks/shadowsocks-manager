@@ -192,7 +192,12 @@ exports.logout = (req, res) => {
 };
 
 exports.status = (req, res) => {
-  res.send({ status: req.session.type });
+  const status = req.session.type; // admin/normal/undefined
+  const userId = req.session.user;
+  res.send({
+    status,
+    userId,
+  });
 };
 
 exports.sendCode = (req, res) => {

@@ -2,6 +2,7 @@ const app = angular.module('app');
 
 app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state',
   ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
+    // $http.get('/api/home/login');
     $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
     $scope.config.title = window.title;
