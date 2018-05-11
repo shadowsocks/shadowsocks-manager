@@ -109,8 +109,8 @@
                     </div>
                     <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                         <div hide-xs></div>
-                        <qr ng-click="showQrcodeDialog(a.serverInfo.method, a.password , a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)" size="getQrCodeSize()"
-                            layout-margin text="createQrCode(a.serverInfo.method, a.password , a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)"
+                        <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)" size="getQrCodeSize()"
+                            layout-margin text="createQrCode(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)"
                             image="true"></qr>
                         <div hide-xs></div>
                     </div>

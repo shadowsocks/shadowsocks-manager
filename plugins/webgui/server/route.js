@@ -233,12 +233,12 @@ app.get('/manifest.json', (req, res) => {
 const version = appRequire('package').version;
 const configForFrontend = {
   site: config.plugins.webgui.site,
-  alipay: config.plugins.alipay && config.plugins.alipay.use,
-  paypal: config.plugins.paypal && config.plugins.paypal.use,
-  paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
+  // alipay: config.plugins.alipay && config.plugins.alipay.use,
+  // paypal: config.plugins.paypal && config.plugins.paypal.use,
+  // paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
   macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
-  telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
-  giftcard: config.plugins.giftcard && config.plugins.giftcard.use,
+  // telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
+  // giftcard: config.plugins.giftcard && config.plugins.giftcard.use,
 };
 
 const cdn = config.plugins.webgui.cdn;
@@ -265,8 +265,6 @@ const colors = [
   { value: 'grey', color: '#9E9E9E' },
 ];
 const homePage = (req, res) => {
-  let id = -1;
-  if(req.session && req.session.user) { id = req.session.user; }
   return knex('webguiSetting').select().where({
     key: 'base',
   }).then(success => {
@@ -276,7 +274,6 @@ const homePage = (req, res) => {
     success[0].value = JSON.parse(success[0].value);
     return success[0].value;
   }).then(success => {
-    configForFrontend.id = id;
     configForFrontend.themePrimary = success.themePrimary;
     configForFrontend.themeAccent = success.themeAccent;
     const filterColor = colors.filter(f => f.value === success.themePrimary);
@@ -284,7 +281,6 @@ const homePage = (req, res) => {
     configForFrontend.skin = config.plugins.webgui.skin || 'default';
     return res.render('index', {
       title: success.title,
-      version,
       cdn,
       analytics,
       config: configForFrontend,

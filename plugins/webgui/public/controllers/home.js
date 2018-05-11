@@ -1,8 +1,11 @@
 const app = angular.module('app');
 
 app
-  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage) => {
+  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage', 'configManager',
+    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {
+      const config = configManager.getConfig();
+      console.log(config);
+      $scope.config.version = config.version;
       $scope.home = {};
       if ($localStorage.home.status === 'normal') {
         $state.go('user.index');

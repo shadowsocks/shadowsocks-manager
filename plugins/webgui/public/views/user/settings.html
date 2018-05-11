@@ -24,7 +24,7 @@
                 </md-list-item>
             </md-list>
             <md-divider ng-if="config.telegram"></md-divider>
-            <md-list>
+            <md-list ng-if="config.refCode">
                 <md-list-item ng-click="toRef()">
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>邀请码</div>
@@ -34,7 +34,7 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider></md-divider>
+            <md-divider ng-if="config.refCode"></md-divider>
         </md-card-content>
     </md-card>
 </div>

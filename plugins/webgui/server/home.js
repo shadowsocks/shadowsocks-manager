@@ -191,13 +191,45 @@ exports.logout = (req, res) => {
   res.send('success');
 };
 
-exports.status = (req, res) => {
-  const status = req.session.type; // admin/normal/undefined
-  const userId = req.session.user;
-  res.send({
-    status,
-    userId,
-  });
+exports.status = async (req, res) => {
+  try {
+    const status = req.session.type; // admin/normal/undefined
+    const id = req.session.user;
+    const version = appRequire('package').version;
+    let alipay;
+    let paypal;
+    let paypalMode;
+    let telegram;
+    let giftcard;
+    let refCode;
+    if(status) {
+      alipay = config.plugins.alipay && config.plugins.alipay.use;
+      paypal = config.plugins.paypal && config.plugins.paypal.use;
+      paypalMode = config.plugins.paypal && config.plugins.paypal.mode;
+      telegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
+      giftcard = config.plugins.giftcard && config.plugins.giftcard.use;
+      refCode = (await knex('webguiSetting').select().where({
+        key: 'webgui_ref',
+      }).then(success => {
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value;
+      })).useRef;
+    }
+    res.send({
+      status,
+      id,
+      version,
+      alipay,
+      paypal,
+      paypalMode,
+      telegram,
+      giftcard,
+      refCode,
+    });
+  } catch(err) {
+    console.log(err);
+    return res.status(403).end();
+  }
 };
 
 exports.sendCode = (req, res) => {

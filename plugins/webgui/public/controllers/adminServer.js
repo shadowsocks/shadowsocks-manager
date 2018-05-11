@@ -343,6 +343,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.setMenuSearchButton('search');
     $scope.matchPort = (port, passowrd, search) => {
+      if(!search) { return true; }
       return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
     };
     // $scope.$on('cancelSearch', () => {

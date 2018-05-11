@@ -1,7 +1,18 @@
 const app = angular.module('app');
 
-app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$timeout', '$localStorage',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage) => {
+app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$timeout', '$localStorage', 'configManager',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage, configManager) => {
+    const config = configManager.getConfig();
+    console.log(config);
+    $scope.config.id = config.id;
+    $scope.config.version = config.version;
+    $scope.config.alipay = config.alipay;
+    $scope.config.paypal = config.paypal;
+    $scope.config.paypalMode = config.paypalMode;
+    $scope.config.telegram = config.telegram;
+    $scope.config.giftcard = config.giftcard;
+    $scope.config.refCode = config.refCode;
+    $scope.setId(config.id);
     if ($localStorage.home.status !== 'admin') {
       $state.go('home.index');
     } else {

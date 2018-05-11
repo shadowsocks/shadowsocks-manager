@@ -1,8 +1,18 @@
 const app = angular.module('app');
 
 app
-.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi) => {
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager) => {
+    const config = configManager.getConfig();
+    console.log(config);
+    $scope.config.id = config.id;
+    $scope.config.version = config.version;
+    $scope.config.alipay = config.alipay;
+    $scope.config.paypal = config.paypal;
+    $scope.config.paypalMode = config.paypalMode;
+    $scope.config.telegram = config.telegram;
+    $scope.config.giftcard = config.giftcard;
+    $scope.config.refCode = config.refCode;
     if ($localStorage.home.status !== 'normal') {
       $state.go('home.index');
     } else {

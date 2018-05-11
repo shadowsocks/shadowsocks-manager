@@ -2,12 +2,10 @@ const app = angular.module('app');
 
 app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state',
   ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
-    // $http.get('/api/home/login');
-    $scope.version = window.ssmgrVersion;
     $scope.config = JSON.parse(window.ssmgrConfig);
     $scope.config.title = window.title;
     $scope.config.fullscreenSkin = false;
-    $scope.id = $scope.config.id;
+    // $scope.id = $scope.config.id;
     $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
       admin: {},
