@@ -64,6 +64,7 @@ app
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.user = {};
+          configManager.deleteConfig();
           $state.go('home.index');
         });
       },

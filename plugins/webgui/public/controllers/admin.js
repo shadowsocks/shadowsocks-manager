@@ -67,6 +67,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.admin = {};
+          configManager.deleteConfig();
           $state.go('home.index');
         });
       },

@@ -50,8 +50,8 @@ app
       $scope.signup = () => { $state.go('home.signup'); };
     }
   ])
-  .controller('HomeLoginController', ['$scope', '$state', 'homeApi', 'alertDialog', '$localStorage',
-    ($scope, $state, homeApi, alertDialog, $localStorage) => {
+  .controller('HomeLoginController', ['$scope', '$state', 'homeApi', 'alertDialog', '$localStorage', 'configManager',
+    ($scope, $state, homeApi, alertDialog, $localStorage, configManager) => {
       $scope.user = {};
       $scope.login = () => {
         alertDialog.loading().then(() => {
@@ -63,6 +63,7 @@ app
             return success;
           });
         }).then(success => {
+          configManager.deleteConfig();
           if (success.type === 'normal') {
             $state.go('user.index');
           } else if (success.type === 'admin') {
@@ -89,8 +90,8 @@ app
       };
     }
   ])
-  .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', '$localStorage',
-    ($scope, $state, $interval, $timeout, homeApi, alertDialog, $localStorage) => {
+  .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', '$localStorage', 'configManager',
+    ($scope, $state, $interval, $timeout, homeApi, alertDialog, $localStorage, configManager) => {
       $scope.user = {};
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
@@ -117,8 +118,8 @@ app
           return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password, $scope.home.refId);
         })
         .then(userType => {
-          $localStorage.home.status = userType;
           alertDialog.show('用户注册成功', '确定').then(success => {
+            configManager.deleteConfig();
             if(userType === 'admin') {
               $state.go('admin.index');
             } else {
@@ -163,14 +164,14 @@ app
       };
     }
   ])
-  .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage',
-    ($scope, $http, $state, $stateParams, $localStorage) => {
+  .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager',
+    ($scope, $http, $state, $stateParams, $localStorage, configManager) => {
       const mac = $stateParams.mac;
+      configManager.deleteConfig();
       $http.post('/api/home/macLogin', {
         mac,
       }).then(() => {
         $localStorage.user = {};
-        // $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
         $localStorage.home = {};
@@ -179,14 +180,14 @@ app
       });
     }
   ])
-  .controller('HomeTelegramLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage',
-    ($scope, $http, $state, $stateParams, $localStorage) => {
+  .controller('HomeTelegramLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager',
+    ($scope, $http, $state, $stateParams, $localStorage, configManager) => {
       const token = $stateParams.token;
+      configManager.deleteConfig();
       $http.post('/api/user/telegram/login', {
         token,
       }).then(() => {
         $localStorage.user = {};
-        // $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
         $localStorage.home = {};

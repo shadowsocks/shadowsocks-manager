@@ -98,6 +98,28 @@ const getAccount = async (userId, group) => {
   return macAccounts;
 };
 
+const getNoticeForUser = async (mac, ip) => {
+  if(scanLoginLog(ip)) {
+    return Promise.reject('ip is in black list');
+  }
+  const macAccount = await knex('mac_account').where({ mac }).then(success => success[0]);
+  if(!macAccount) {
+    loginFail(mac, ip);
+    return Promise.reject('mac account not found');
+  }
+  const userId = macAccount.userId;
+  const groupInfo = await knex('user').select([
+    'group.id as id',
+    'group.showNotice as showNotice',
+  ]).innerJoin('group', 'user.group', 'group.id').where({
+    'user.id': userId,
+  }).then(s => s[0]);
+  const group = [groupInfo.id];
+  if(groupInfo.showNotice) { group.push(-1); }
+  const notices = await knex('notice').select().whereIn('group', group).orderBy('time', 'desc');
+  return notices;
+};
+
 const getAccountForUser = async (mac, ip, opt) => {
   const noPassword = opt.noPassword;
   const noFlow = opt.noFlow;
@@ -298,6 +320,7 @@ exports.newAccount = newAccount;
 exports.getAccount = getAccount;
 exports.deleteAccount = deleteAccount;
 exports.getAccountForUser = getAccountForUser;
+exports.getNoticeForUser = getNoticeForUser;
 exports.login = login;
 exports.getAccountByAccountId = getAccountByAccountId;
 exports.getAllAccount = getAllAccount;

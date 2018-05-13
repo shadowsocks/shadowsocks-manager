@@ -10,6 +10,7 @@ app.config(['$stateProvider', $stateProvider => {
       templateUrl: `${ cdn }/public/views/user/user.html`,
       resolve: {
         myConfig: ['$http', 'configManager', ($http, configManager) => {
+          if(configManager.getConfig().version) { return; }
           return $http.get('/api/home/login').then(success => {
             configManager.setConfig(success.data);
           });

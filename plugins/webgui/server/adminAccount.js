@@ -68,6 +68,19 @@ exports.getMacAccountForUser = (req, res) => {
   });
 };
 
+exports.getNoticeForUser = (req, res) => {
+  const mac = req.params.macAddress;
+  const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+  macAccount
+  .getNoticeForUser(mac.toLowerCase(), ip)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.banAccount = (req, res) => {
   const serverId = +req.params.serverId;
   const accountId = +req.params.accountId;
