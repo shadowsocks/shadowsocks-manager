@@ -10,4 +10,5 @@ angular.module('app', [
   'angular-inview',
   'hc.marked',
   'pascalprecht.translate',
+  'ngclipboard',
 ]);

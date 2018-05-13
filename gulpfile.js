@@ -38,6 +38,8 @@ gulp.task('webguiLib', () => {
     'plugins/webgui/libs/angular-translate.min.js',
     'plugins/webgui/libs/qrcode.min.js',
     'plugins/webgui/libs/angular-qr.min.js',
+    'plugins/webgui/libs/clipboard.min.js',
+    'plugins/webgui/libs/ngclipboard.min.js',
     'plugins/webgui/libs/ngStorage.min.js',
     'plugins/webgui/libs/Chart.min.js',
     'plugins/webgui/libs/angular-chart.min.js',
