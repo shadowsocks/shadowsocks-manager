@@ -4,6 +4,13 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage, configManager) => {
     const config = configManager.getConfig();
     console.log(config);
+    if(config.status === 'normal') {
+      $state.go('user.index');
+    } else if(!config.status) {
+      $state.go('home.index');
+    } else {
+      $scope.setMainLoading(false);
+    }
     $scope.config.id = config.id;
     $scope.config.version = config.version;
     $scope.config.alipay = config.alipay;
@@ -13,11 +20,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.config.giftcard = config.giftcard;
     $scope.config.refCode = config.refCode;
     $scope.setId(config.id);
-    if ($localStorage.home.status !== 'admin') {
-      $state.go('home.index');
-    } else {
-      $scope.setMainLoading(false);
-    }
+
     $scope.innerSideNav = true;
     $scope.sideNavWidth = () => {
       if($scope.innerSideNav) {

@@ -5,17 +5,18 @@ app
     ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {
       const config = configManager.getConfig();
       console.log(config);
-      $scope.config.version = config.version;
-      $scope.home = {};
-      if ($localStorage.home.status === 'normal') {
+      if (config.status === 'normal') {
         $state.go('user.index');
-      } else if ($localStorage.home.status === 'admin') {
+      } else if (config.status === 'admin') {
         $state.go('admin.index');
       } else {
         $localStorage.admin = {};
         $localStorage.user = {};
         $scope.setMainLoading(false);
       }
+      $scope.config.version = config.version;
+      $scope.home = {};
+
       $scope.innerSideNav = true;
       $scope.menuButton = function() {
         if ($mdMedia('gt-sm')) {
@@ -45,19 +46,6 @@ app
   ])
   .controller('HomeIndexController', ['$scope', '$state',
     ($scope, $state) => {
-      $scope.icons = [{
-        icon: 'flash_on',
-        title: '快速搭建',
-        content: '仅依赖Node.js，无需安装数据库（可选MySQL）',
-      }, {
-        icon: 'build',
-        title: '易于配置',
-        content: '带有插件系统，仅需修改配置文件即可运行',
-      }, {
-        icon: 'vpn_key',
-        title: '官方标准',
-        content: '支持libev和python版本的标准manager API',
-      }];
       $scope.login = () => { $state.go('home.login'); };
       $scope.signup = () => { $state.go('home.signup'); };
     }
@@ -70,7 +58,7 @@ app
           return homeApi.userLogin($scope.user.email, $scope.user.password);
         }).then(success => {
           $scope.setId(success.id);
-          $localStorage.home.status = success.type;
+          // $localStorage.home.status = success.type;
           return alertDialog.close().then(() => {
             return success;
           });
@@ -182,7 +170,7 @@ app
         mac,
       }).then(() => {
         $localStorage.user = {};
-        $localStorage.home.status = 'normal';
+        // $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
         $localStorage.home = {};
@@ -198,7 +186,7 @@ app
         token,
       }).then(() => {
         $localStorage.user = {};
-        $localStorage.home.status = 'normal';
+        // $localStorage.home.status = 'normal';
         $state.go('user.index');
       }).catch(() => {
         $localStorage.home = {};

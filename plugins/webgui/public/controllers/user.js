@@ -5,6 +5,13 @@ app
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager) => {
     const config = configManager.getConfig();
     console.log(config);
+    if(config.status === 'admin') {
+      $state.go('admin.index');
+    } else if(!config.status) {
+      $state.go('home.index');
+    } else {
+      $scope.setMainLoading(false);
+    }
     $scope.config.id = config.id;
     $scope.config.version = config.version;
     $scope.config.alipay = config.alipay;
@@ -13,11 +20,7 @@ app
     $scope.config.telegram = config.telegram;
     $scope.config.giftcard = config.giftcard;
     $scope.config.refCode = config.refCode;
-    if ($localStorage.home.status !== 'normal') {
-      $state.go('home.index');
-    } else {
-      $scope.setMainLoading(false);
-    }
+    
     $scope.innerSideNav = true;
     $scope.sideNavWidth = () => {
       if($scope.innerSideNav) {
