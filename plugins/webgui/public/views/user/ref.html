@@ -8,7 +8,6 @@
             </md-card-header-text>
         </md-card-header>
         <md-card-content ng-if="code.length === 0">
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
             <md-list>
                 <md-divider></md-divider>
                 <md-list-item>
@@ -16,10 +15,8 @@
                 </md-list-item>
                 <md-divider></md-divider>
             </md-list>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
         </md-card-content>
-        <md-card-content>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
+        <md-card-content ng-if="code.length > 0">
             <md-list>
                 <md-divider ng-repeat-start="c in code"></md-divider>
                 <md-list-item>
@@ -34,7 +31,6 @@
                 </md-list-item>
                 <md-divider ng-repeat-end ng-if="$last"></md-divider>
             </md-list>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
         </md-card-content>
     </md-card>
 </div>
@@ -48,7 +44,6 @@
             </md-card-header-text>
         </md-card-header>
         <md-card-content ng-if="user.length === 0">
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
             <md-list>
                 <md-divider></md-divider>
                 <md-list-item>
@@ -56,22 +51,20 @@
                 </md-list-item>
                 <md-divider></md-divider>
             </md-list>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
         </md-card-content>
-        <md-card-content>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
+        <md-card-content ng-if="user.length > 0">
             <md-list>
                 <md-divider ng-repeat-start="u in user"></md-divider>
                 <md-list-item>
                     <div layout="row" flex layout-align="space-between center">
                         <div>{{ u.email }}</div>
                         <div hide-xs hide-sm>{{ u.code }}</div>
-                        <div style="text-align: center;"><span style="font-size: 0.9em;">{{ u.time | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ u.time | timeago | translateTime }}</span></div>
+                        <div hide-xs style="text-align: center;"><span style="font-size: 0.9em;">{{ u.time | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ u.time | timeago | translateTime }}</span></div>
+                        <div hide-gt-xs style="text-align: center;"><span style="font-size: 0.8em;">{{ u.time | date : 'yyyy-MM-dd'}}</span><br><span style="font-size: 0.8em;">{{ u.time | date : 'HH:mm'}}</span></div>
                     </div>
                 </md-list-item>
                 <md-divider ng-repeat-end ng-if="$last"></md-divider>
             </md-list>
-            <div hide-xs flex-sm="10" flex-gt-sm="10"></div>
         </md-card-content>
     </md-card>
 </div>
