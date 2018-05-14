@@ -74,5 +74,6 @@ app.use((err, req, res, next) => {
 exports.app = app;
 // exports.wss = wss;
 // exports.sessionParser = sessionParser;
+exports.dependence = ['webgui_ref', 'group', 'macAccount'];
 
 appRequire('plugins/webgui/server/route');

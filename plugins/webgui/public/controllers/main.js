@@ -27,7 +27,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
       return iOSSafari && standalone;
     };
-    if(isSafari() && $location.url() === '/home/index' && $localStorage.home.url !== '/home/index') {
+    if(isSafari() && $location.url() === '/' && $localStorage.home.url !== '/home/index') {
       location.href = $localStorage.home.url || '/';
     }
     $scope.$on('$stateChangeSuccess', () => {

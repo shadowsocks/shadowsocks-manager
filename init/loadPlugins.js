@@ -5,6 +5,38 @@ const config = appRequire('services/config').all();
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
+const pluginLists = [];
+
+const loadOnePlugin = name => {
+  const promises = [];
+  logger.info(`Load plugin: ${ name }`);
+  try {
+    const files = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }`));
+    if(files.indexOf('db') >= 0) {
+      const dbFiles = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }/db`));
+      dbFiles.forEach(f => {
+        logger.info(`Load plugin db: ${ name }/db/${ f }`);
+        promises.push(appRequire(`plugins/${ name }/db/${ f }`).createTable());
+      });
+    }
+  } catch(err) {
+    logger.error(err);
+  }
+  return Promise.all(promises).then(() => {
+    logger.info(`Load plugin index: ${ name }/index`);
+    const dependence = appRequire(`plugins/${ name }/index`).dependence;
+    if(dependence) {
+      dependence.forEach(pluginName => {
+        if(pluginLists.indexOf(pluginName) < 0) {
+          pluginLists.push(pluginName);
+        }
+      });
+    }
+  }).catch(err => {
+    logger.error(err);
+  });
+};
+
 const loadPlugins = () => {
   if(!config.plugins) {
     return;
@@ -14,28 +46,13 @@ const loadPlugins = () => {
   }
   for(const name in config.plugins) {
     if(config.plugins[name].use) {
-      const promises = [];
-      logger.info(`Load plugin: ${ name }`);
-      try {
-        const files = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }`));
-
-        if(files.indexOf('db') >= 0) {
-          const dbFiles = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }/db`));
-          dbFiles.forEach(f => {
-            logger.info(`Load plugin db: ${ name }/db/${ f }`);
-            promises.push(appRequire(`plugins/${ name }/db/${ f }`).createTable());
-          });
-        }
-      } catch(err) {
-        logger.error(err);
-      }
-      Promise.all(promises).then(() => {
-        logger.info(`Load plugin index: ${ name }/index`);
-        appRequire(`plugins/${ name }/index`);
-      }).catch(err => {
-        logger.error(err);
-      });
+      pluginLists.push(name);
     }
   }
+  (async () => {
+    for(let pl of pluginLists) {
+      await loadOnePlugin(pl);
+    }
+  })();
 };
 loadPlugins();
