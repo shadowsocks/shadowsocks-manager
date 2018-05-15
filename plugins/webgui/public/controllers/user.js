@@ -116,7 +116,6 @@ app
 .controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog',
   ($scope, $state, userApi, markdownDialog) => {
     $scope.setTitle('首页');
-    // $scope.notices = [];
     userApi.getNotice().then(success => {
       $scope.notices = success;
     });
@@ -128,6 +127,9 @@ app
     };
     $scope.toTelegram = () => {
       $state.go('user.telegram');
+    };
+    $scope.toRef = () => {
+      $state.go('user.ref');
     };
   }
 ])

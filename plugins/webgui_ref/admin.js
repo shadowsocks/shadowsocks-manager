@@ -14,6 +14,32 @@ const getRefCode = async () => {
   return code;
 };
 
+const getRefCodeAndPaging = async (opt) => {
+  const page = opt.page || 1;
+  const pageSize = opt.pageSize || 20;
+  let count = knex('webgui_ref_code').select();
+  let code = knex('webgui_ref_code').select([
+    'webgui_ref_code.code as code',
+    'user.email as email',
+    'webgui_ref_code.maxUser as maxUser',
+    knex.raw('count(webgui_ref.codeId) as count'),
+  ])
+  .leftJoin('webgui_ref', 'webgui_ref_code.id', 'webgui_ref.codeId')
+  .leftJoin('user', 'webgui_ref_code.sourceUserId', 'user.id')
+  .groupBy('webgui_ref_code.id');
+  
+  count = await count.count('id as count').then(success => success[0].count);
+  code = await code.orderBy('webgui_ref_code.time', 'DESC').limit(pageSize).offset((page - 1) * pageSize);
+  const maxPage = Math.ceil(count / pageSize);
+  return {
+    total: count,
+    page,
+    maxPage,
+    pageSize,
+    code,
+  };
+};
+
 const getRefUser = async () => {
   const user = await knex('webgui_ref').select([
     'webgui_ref_code.code as code',
@@ -29,3 +55,4 @@ const getRefUser = async () => {
 
 exports.getRefCode = getRefCode;
 exports.getRefUser = getRefUser;
+exports.getRefCodeAndPaging = getRefCodeAndPaging;

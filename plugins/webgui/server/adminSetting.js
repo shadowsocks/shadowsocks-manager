@@ -295,7 +295,12 @@ exports.modifyRef = (req, res) => {
 };
 
 exports.getRefCode = (req, res) => {
-  refAdmin.getRefCode().then(success => {
+  const page = +req.query.page || 1;
+  const pageSize = +req.query.pageSize || 20;
+  refAdmin.getRefCodeAndPaging({
+    page,
+    pageSize,
+  }).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);

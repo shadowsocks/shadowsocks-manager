@@ -560,15 +560,59 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
   }
 ])
-.controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state',
-  ($scope, $http, $timeout, $state) => {
+.controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
+  ($scope, $http, $timeout, $state, $mdMedia) => {
     $scope.setTitle('邀请码列表');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.refSetting');
     });
-    $http.get('/api/admin/setting/ref/code').then(success => {
-      $scope.code = success.data;
-    });
+    $scope.currentPage = 1;
+    $scope.isCodeLoading = false;
+    $scope.isCodePageFinish = false;
+    $scope.code = [];
+    const getPageSize = () => {
+      if($mdMedia('xs')) { return 30; }
+      if($mdMedia('sm')) { return 30; }
+      if($mdMedia('md')) { return 60; }
+      if($mdMedia('gt-md')) { return 80; }
+    };
+    $scope.getCode = () => {
+      $scope.isCodeLoading = true;
+      $http.get('/api/admin/setting/ref/code', { params: {
+        page: $scope.currentPage,
+        pageSize: getPageSize(),
+      } }).then(success => success.data).then(success => {
+        $scope.total = success.total;
+        success.code.forEach(f => {
+          $scope.code.push(f);
+        });
+        if(success.maxPage > $scope.currentPage) {
+          $scope.currentPage++;
+        } else {
+          $scope.isCodePageFinish = true;
+        }
+        $scope.isCodeLoading = false;
+      }).catch(err => {
+        if($state.current.name !== 'admin.refCodeList') { return; }
+        $timeout(() => {
+          $scope.getCode();
+        }, 5000);
+      });
+    };
+
+    $scope.view = inview => {
+      if(!inview || $scope.isCodeLoading || $scope.isCodePageFinish) { return; }
+      $scope.getCode();
+    };
+
+    $scope.codeColor = code => {
+      if(code.count >= code.maxUser) {
+        return {
+          background: 'red-50', 'border-color': 'blue-300',
+        };
+      }
+      return {};
+    };
   }
 ])
 .controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state',
