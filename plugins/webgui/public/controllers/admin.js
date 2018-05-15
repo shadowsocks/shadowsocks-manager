@@ -12,6 +12,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       $scope.setMainLoading(false);
     }
     $scope.config.id = config.id;
+    $scope.config.email = config.email;
     $scope.config.version = config.version;
     $scope.config.alipay = config.alipay;
     $scope.config.paypal = config.paypal;

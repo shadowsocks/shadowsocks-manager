@@ -202,7 +202,9 @@ exports.status = async (req, res) => {
     let telegram;
     let giftcard;
     let refCode;
+    let email;
     if(status) {
+      email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
       alipay = config.plugins.alipay && config.plugins.alipay.use;
       paypal = config.plugins.paypal && config.plugins.paypal.use;
       paypalMode = config.plugins.paypal && config.plugins.paypal.mode;
@@ -218,6 +220,7 @@ exports.status = async (req, res) => {
     res.send({
       status,
       id,
+      email,
       version,
       alipay,
       paypal,

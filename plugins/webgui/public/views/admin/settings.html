@@ -1,5 +1,12 @@
 <div>
     <md-card>
+        <md-card-header>
+            <md-card-header-text>
+                <span class="md-title">
+                    {{ config.email }}
+                </span>
+            </md-card-header-text>
+        </md-card-header>
         <md-card-content>
             <md-divider ng-repeat-start="setting in settingList"></md-divider>
             <md-list>
