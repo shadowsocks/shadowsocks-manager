@@ -615,15 +615,49 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
   }
 ])
-.controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state',
-  ($scope, $http, $timeout, $state) => {
+.controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
+  ($scope, $http, $timeout, $state, $mdMedia) => {
     $scope.setTitle('邀请用户列表');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.refSetting');
     });
-    $http.get('/api/admin/setting/ref/user').then(success => {
-      $scope.user = success.data;
-    });
+    $scope.currentPage = 1;
+    $scope.isUserLoading = false;
+    $scope.isUserPageFinish = false;
+    $scope.user = [];
+    const getPageSize = () => {
+      if($mdMedia('xs')) { return 30; }
+      if($mdMedia('sm')) { return 30; }
+      if($mdMedia('md')) { return 60; }
+      if($mdMedia('gt-md')) { return 80; }
+    };
+    $scope.getUser = () => {
+      $scope.isUserLoading = true;
+      $http.get('/api/admin/setting/ref/user', { params: {
+        page: $scope.currentPage,
+        pageSize: getPageSize(),
+      } }).then(success => success.data).then(success => {
+        $scope.total = success.total;
+        success.user.forEach(f => {
+          $scope.user.push(f);
+        });
+        if(success.maxPage > $scope.currentPage) {
+          $scope.currentPage++;
+        } else {
+          $scope.isUserPageFinish = true;
+        }
+        $scope.isUserLoading = false;
+      }).catch(err => {
+        if($state.current.name !== 'admin.refUserList') { return; }
+        $timeout(() => {
+          $scope.getUser();
+        }, 5000);
+      });
+    };
+    $scope.view = inview => {
+      if(!inview || $scope.isUserLoading || $scope.isUserPageFinish) { return; }
+      $scope.getUser();
+    };
   }
 ])
 ;

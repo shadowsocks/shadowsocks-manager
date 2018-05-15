@@ -309,7 +309,12 @@ exports.getRefCode = (req, res) => {
 };
 
 exports.getRefUser = (req, res) => {
-  refAdmin.getRefUser().then(success => {
+  const page = +req.query.page || 1;
+  const pageSize = +req.query.pageSize || 20;
+  refAdmin.getRefUserAndPaging({
+    page,
+    pageSize,
+  }).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
