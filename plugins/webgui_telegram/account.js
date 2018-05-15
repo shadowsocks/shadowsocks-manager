@@ -277,9 +277,9 @@ telegram.on('message', async message => {
     const amount = paymentInfo[type].alipay + '';
     const userId = (await tg.getUserStatus(telegramId)).id;
     const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, amount, payType[type]);
-    tg.sendMessage(`请用支付宝扫描下面二维码完成支付`, telegramId);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: payInfo.qrCode, time: Date.now() };
+    tg.sendMarkdown(`请用支付宝扫描下面二维码完成支付\n\n或者点击[此链接](${ payInfo.qrCode })跳转到支付宝支付`, telegramId);
     tg.sendPhoto(`${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`, telegramId);
   }
 });
