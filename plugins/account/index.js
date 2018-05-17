@@ -91,7 +91,7 @@ const delAccount = async id => {
 };
 
 const editAccount = async (id, options) => {
-  if(options.hasOwnProperty('port')) {
+  if(options.port) {
     await checkAccount.deleteCheckAccountTimePort(options.port);
   }
   const account = await knex('account_plugin').select().where({ id }).then(success => {
@@ -119,7 +119,7 @@ const editAccount = async (id, options) => {
     });
     // update.port = +options.port;
   }
-  if(options.hasOwnProperty('port')) {
+  if(options.port) {
     update.port = +options.port;
   }
   await knex('account_plugin').update(update).where({ id });

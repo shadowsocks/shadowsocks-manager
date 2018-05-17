@@ -150,7 +150,7 @@ exports.changeAccountData = (req, res) => {
   const accountId = req.params.accountId;
   account.editAccount(accountId, {
     type: req.body.type,
-    port: +req.body.port,
+    port: req.body.port,
     password: req.body.password,
     time: req.body.time,
     limit: +req.body.limit,
