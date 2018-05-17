@@ -169,6 +169,18 @@ exports.changeAccountData = (req, res) => {
   });
 };
 
+exports.changeAccountTime = (req, res) => {
+  const accountId = req.params.accountId;
+  const time = req.body.time;
+  const check = req.body.check;
+  account.editAccountTime(accountId, time, check).then(success => {
+    res.send('success');
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getRecentSignUpUsers = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
   user.getRecentSignUp(5, group).then(success => {

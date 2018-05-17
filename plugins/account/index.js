@@ -127,6 +127,30 @@ const editAccount = async (id, options) => {
   return;
 };
 
+const editAccountTime = async (id, timeString, check) => {
+  const time = +timeString;
+  let accountInfo = await knex('account_plugin').where({ id }).then(s => s[0]);
+  accountInfo.data = JSON.parse(accountInfo.data);
+  if(accountInfo.type < 2 || accountInfo.type > 5) { return; }
+  const timePeriod = {
+    '2': 7 * 86400 * 1000,
+    '3': 30 * 86400 * 1000,
+    '4': 1 * 86400 * 1000,
+    '5': 3600 * 1000,
+  };
+  accountInfo.data.create += time;
+  while(accountInfo.data.create >= Date.now()) {
+    accountInfo.data.limit += 1;
+    accountInfo.data.create -= timePeriod[accountInfo.type];
+  }
+  await knex('account_plugin').update({
+    data: JSON.stringify(accountInfo.data)
+  }).where({ id });
+  if(check) {
+    await checkAccount.deleteCheckAccountTimePort(accountInfo.port);
+  }
+};
+
 const changePassword = async (id, password) => {
   const account = await knex('account_plugin').select().where({ id }).then(success => {
     if(success.length) {
@@ -389,6 +413,7 @@ exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
 exports.editAccount = editAccount;
+exports.editAccountTime = editAccountTime;
 
 exports.changePassword = changePassword;
 exports.changePort = changePort;

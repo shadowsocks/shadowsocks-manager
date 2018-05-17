@@ -75,6 +75,7 @@ app.get('/api/admin/account/:accountId(\\d+)/ip', isAdmin, admin.getAccountIpFro
 app.post('/api/admin/account', isAdmin, isSuperAdmin, admin.addAccount);
 app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, isSuperAdmin, admin.changeAccountPort);
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, isSuperAdmin, admin.changeAccountData);
+app.put('/api/admin/account/:accountId(\\d+)/time', isAdmin, isSuperAdmin, admin.changeAccountTime);
 app.delete('/api/admin/account/:accountId(\\d+)', isAdmin, isSuperAdmin, admin.deleteAccount);
 app.post('/api/admin/account/:accountId(\\d+)/resetFlow', isAdmin, isSuperAdmin, admin.resetAccountFlow);
 
