@@ -60,7 +60,9 @@ const getRefUserAndPaging = async opt => {
   let count = knex('webgui_ref').select();
   let user = knex('webgui_ref').select([
     'webgui_ref_code.code as code',
+    'u1.id as sourceUserId',
     'u1.email as sourceUser',
+    'u2.id as userId',
     'u2.email as user',
     'webgui_ref.time as time',
   ]).leftJoin('webgui_ref_code', 'webgui_ref.codeId', 'webgui_ref_code.id')

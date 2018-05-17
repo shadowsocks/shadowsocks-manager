@@ -658,6 +658,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       if(!inview || $scope.isUserLoading || $scope.isUserPageFinish) { return; }
       $scope.getUser();
     };
+    $scope.toUser = userId => {
+      $state.go('admin.userPage', { userId });
+    };
   }
 ])
 ;
