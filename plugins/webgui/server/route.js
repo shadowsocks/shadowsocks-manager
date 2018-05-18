@@ -233,15 +233,7 @@ app.get('/manifest.json', (req, res) => {
 });
 
 const version = appRequire('package').version;
-const configForFrontend = {
-  site: config.plugins.webgui.site,
-  // alipay: config.plugins.alipay && config.plugins.alipay.use,
-  // paypal: config.plugins.paypal && config.plugins.paypal.use,
-  // paypalMode: config.plugins.paypal && config.plugins.paypal.mode,
-  macAccount: config.plugins.macAccount && config.plugins.macAccount.use,
-  // telegram: config.plugins.webgui_telegram && config.plugins.webgui_telegram.use,
-  // giftcard: config.plugins.giftcard && config.plugins.giftcard.use,
-};
+const configForFrontend = {};
 
 const cdn = config.plugins.webgui.cdn;
 const analytics = config.plugins.webgui.googleAnalytics || '';
@@ -280,7 +272,6 @@ const homePage = (req, res) => {
     configForFrontend.themeAccent = success.themeAccent;
     const filterColor = colors.filter(f => f.value === success.themePrimary);
     configForFrontend.browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
-    configForFrontend.skin = config.plugins.webgui.skin || 'default';
     return res.render('index', {
       title: success.title,
       cdn,

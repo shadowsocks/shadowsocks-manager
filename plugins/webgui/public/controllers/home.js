@@ -2,7 +2,7 @@ const app = angular.module('app');
 
 app
   .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage', 'configManager',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {
+    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {    
       const config = configManager.getConfig();
       console.log(config);
       if(config.status === 'normal') {
@@ -14,7 +14,7 @@ app
         $localStorage.user = {};
         $scope.setMainLoading(false);
       }
-      $scope.config.version = config.version;
+      $scope.setConfig(config);
       $scope.home = {};
 
       $scope.innerSideNav = true;

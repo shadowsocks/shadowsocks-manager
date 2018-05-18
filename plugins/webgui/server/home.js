@@ -196,6 +196,8 @@ exports.status = async (req, res) => {
     const status = req.session.type; // admin/normal/undefined
     const id = req.session.user;
     const version = appRequire('package').version;
+    const site = config.plugins.webgui.site;
+    const skin = config.plugins.webgui.skin || 'default';
     let alipay;
     let paypal;
     let paypalMode;
@@ -222,6 +224,8 @@ exports.status = async (req, res) => {
       id,
       email,
       version,
+      site,
+      skin,
       alipay,
       paypal,
       paypalMode,

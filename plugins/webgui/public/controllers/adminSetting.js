@@ -85,7 +85,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     }];
     let lastSave = 0;
     let lastSavePromise = null;
-    const saveTime = 3500;
+    const saveTime = 2000;
     $scope.saveSetting = () => {
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);
@@ -396,7 +396,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
     let lastSave = 0;
     let lastSavePromise = null;
-    const saveTime = 3500;
+    const saveTime = 2000;
     $scope.saveSetting = () => {
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);

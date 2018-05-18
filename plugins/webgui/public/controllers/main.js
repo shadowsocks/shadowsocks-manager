@@ -2,10 +2,19 @@ const app = angular.module('app');
 
 app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state',
   ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
+    $scope.setConfig = (key, value) => {
+      if(angular.isObject(key)) {
+        for(const k in key) {
+          $scope.config[k] = key[k];
+        }
+      } else {
+        $scope.config[key] = value;
+      }
+    };
     $scope.config = JSON.parse(window.ssmgrConfig);
     $scope.config.title = window.title;
+    $scope.config.skin = 'default';
     $scope.config.fullscreenSkin = false;
-    // $scope.id = $scope.config.id;
     $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
       admin: {},
@@ -30,14 +39,20 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     if(isSafari() && $location.url() === '/' && $localStorage.home.url !== '/home/index') {
       location.href = $localStorage.home.url || '/';
     }
-    $scope.$on('$stateChangeSuccess', () => {
-      $scope.currentState = $state.current.name;
-      $localStorage.home.url = $location.url();
+    const setFs = () => {
       if($scope.config.skin.substr(0, 3) === 'fs_' && $state.current.name === 'home.index') {
         $scope.config.fullscreenSkin = true;
       } else {
         $scope.config.fullscreenSkin = false;
       }
+    };
+    $scope.$on('$stateChangeSuccess', () => {
+      $scope.currentState = $state.current.name;
+      $localStorage.home.url = $location.url();
+      setFs();
+    });
+    $scope.$watch('config.skin', () => {
+      setFs();
     });
 
     const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());

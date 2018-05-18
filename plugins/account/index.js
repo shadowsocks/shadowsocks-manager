@@ -139,7 +139,7 @@ const editAccountTime = async (id, timeString, check) => {
     '5': 3600 * 1000,
   };
   accountInfo.data.create += time;
-  while(accountInfo.data.create >= Date.now()) {
+  while(time > 0 && accountInfo.data.create >= Date.now()) {
     accountInfo.data.limit += 1;
     accountInfo.data.create -= timePeriod[accountInfo.type];
   }

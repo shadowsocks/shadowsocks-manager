@@ -11,15 +11,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     } else {
       $scope.setMainLoading(false);
     }
-    $scope.config.id = config.id;
-    $scope.config.email = config.email;
-    $scope.config.version = config.version;
-    $scope.config.alipay = config.alipay;
-    $scope.config.paypal = config.paypal;
-    $scope.config.paypalMode = config.paypalMode;
-    $scope.config.telegram = config.telegram;
-    $scope.config.giftcard = config.giftcard;
-    $scope.config.refCode = config.refCode;
+    $scope.setConfig(config);
     $scope.setId(config.id);
 
     $scope.innerSideNav = true;
