@@ -25,19 +25,15 @@
             </div>
             <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;" translate>请选择续费周期：</div>
-                <md-radio-group ng-model="publicInfo.orderType" flex>
-                    <md-radio-button ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-if="(publicInfo.alipay[t.type] && publicInfo.config.alipay && publicInfo.myPayType === 'alipay') || (publicInfo.paypal[t.type] && publicInfo.config.paypal && publicInfo.myPayType === 'paypal')">
-                        <span layout="row" layout-align="space-between center" style="min-width: 325px; max-width: 390px;">
-                            <span flex="5"></span>
-                            <span flex="30" translate>{{ t.name }}</span>
-                            <span flex="5"></span>
-                            <span flex="55" style="text-align:right; color: #888">
+                <md-radio-group ng-model="publicInfo.orderType" flex style="width: 100%;">
+                    <md-radio-button layout="row" layout-align="center center" style="width: 100%;" ng-repeat="t in publicInfo.time" value="{{t.type}}" ng-if="(publicInfo.alipay[t.type] && publicInfo.config.alipay && publicInfo.myPayType === 'alipay') || (publicInfo.paypal[t.type] && publicInfo.config.paypal && publicInfo.myPayType === 'paypal')">
+                        <div layout="row" layout-align="space-between center" style="min-width: 200px; max-width: 390px;">
+                            <span flex="50" translate>{{ t.name }}</span>
+                            <span flex="50" style="text-align:right; color: #888">
                                 <span ng-show="publicInfo.alipay[t.type] && publicInfo.config.alipay && publicInfo.myPayType === 'alipay'">¥{{publicInfo.alipay[t.type]}}</span>
-                                <!-- <span ng-show="publicInfo.alipay[t.type] && publicInfo.config.alipay && publicInfo.paypal[t.type] && publicInfo.config.paypal">/</span> -->
                                 <span ng-show="publicInfo.paypal[t.type] && publicInfo.config.paypal && publicInfo.myPayType === 'paypal'">${{publicInfo.paypal[t.type]}}</span>
                             </span>
-                            <span flex="5"></span>
-                        </span>
+                        </div>
                     </md-radio-button>
                 </md-radio-group>
             </div>

@@ -103,7 +103,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    fullscreen: true,
+    fullscreen: false,
     controller: ['$scope', '$mdDialog', '$mdMedia', 'bind', function($scope, $mdDialog, $mdMedia, bind) {
       $scope.publicInfo = bind;
       $scope.setDialogWidth = () => {
