@@ -54,6 +54,10 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     } else {
       $scope.settingList = [
         {
+          name: '邀请码',
+          to: 'admin.refSetting',
+        },
+        {
           name: '修改密码',
           to: 'admin.passwordSetting',
         },
@@ -522,18 +526,19 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
   }
 ]).controller('AdminRefSettingController', ['$scope', '$http', '$timeout', '$state',
-($scope, $http, $timeout, $state) => {
-  $scope.setTitle('邀请码管理');
-  $scope.setMenuButton('arrow_back', function() {
-    $state.go('admin.settings');
-  });
-  $scope.loading = true;
-  $scope.refSetting = {};
+  ($scope, $http, $timeout, $state) => {
+    $scope.setTitle('邀请码管理');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.settings');
+    });
+    $scope.loading = true;
+    $scope.refSetting = {};
 
-  let lastSave = 0;
+    let lastSave = 0;
     let lastSavePromise = null;
     const saveTime = 2000;
     $scope.saveSetting = () => {
+      if($scope.id !== 1) { return; }
       if(Date.now() - lastSave <= saveTime) {
         lastSavePromise && $timeout.cancel(lastSavePromise);
       }
@@ -557,6 +562,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
     $scope.toRefUserList = () => {
       $state.go('admin.refUserList');
+    };
+    $scope.toMyRefCode = () => {
+      $state.go('admin.myRefCode');
     };
   }
 ])
@@ -663,4 +671,17 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
   }
 ])
+.controller('AdminMyRefCodeController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
+  ($scope, $http, $timeout, $state, $mdMedia) => {
+    $scope.setTitle('我的邀请码');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.refSetting');
+    });
+    $http.get('/api/admin/ref/code').then(success => { $scope.code = success.data; });
+    $http.get('/api/admin/ref/user').then(success => { $scope.user = success.data; });
+    $scope.getRefUrl = code => {
+      return `${ $scope.config.site }/home/ref/${ code }`;
+    };
+  }
+]);
 ;

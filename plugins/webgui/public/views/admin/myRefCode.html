@@ -1,0 +1,70 @@
+<div>
+  <md-card>
+      <md-card-header>
+          <md-card-header-text>
+              <span class="md-title">
+                  邀请码
+              </span>
+          </md-card-header-text>
+      </md-card-header>
+      <md-card-content ng-if="code.length === 0">
+          <md-list>
+              <md-divider></md-divider>
+              <md-list-item>
+                  <div flex>没有可用的邀请码</div>
+              </md-list-item>
+              <md-divider></md-divider>
+          </md-list>
+      </md-card-content>
+      <md-card-content ng-if="code.length > 0">
+          <md-list>
+              <md-divider ng-repeat-start="c in code"></md-divider>
+              <md-list-item>
+                  <div layout="row" flex layout-align="space-between center">
+                      <div>
+                          <span hide-xs style="font-size: 0.8em; color: #666">{{ getRefUrl(c.code) }}</span>
+                          <span hide-gt-xs>{{ c.code }}</span>
+                          <md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(c.code) }}">复制链接</md-button>
+                      </div>
+                      <div>{{ c.count }}/{{ c.maxUser }}</div>
+                  </div>
+              </md-list-item>
+              <md-divider ng-repeat-end ng-if="$last"></md-divider>
+          </md-list>
+      </md-card-content>
+  </md-card>
+</div>
+<div>
+  <md-card>
+      <md-card-header>
+          <md-card-header-text>
+              <span class="md-title">
+                  已邀请用户
+              </span>
+          </md-card-header-text>
+      </md-card-header>
+      <md-card-content ng-if="user.length === 0">
+          <md-list>
+              <md-divider></md-divider>
+              <md-list-item>
+                  <div flex>当前没有邀请用户</div>
+              </md-list-item>
+              <md-divider></md-divider>
+          </md-list>
+      </md-card-content>
+      <md-card-content ng-if="user.length > 0">
+          <md-list>
+              <md-divider ng-repeat-start="u in user"></md-divider>
+              <md-list-item>
+                  <div layout="row" flex layout-align="space-between center">
+                      <div>{{ u.email }}</div>
+                      <div hide-xs hide-sm>{{ u.code }}</div>
+                      <div hide-xs style="text-align: center;"><span style="font-size: 0.9em;">{{ u.time | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ u.time | timeago | translateTime }}</span></div>
+                      <div hide-gt-xs style="text-align: center;"><span style="font-size: 0.8em;">{{ u.time | date : 'yyyy-MM-dd'}}</span><br><span style="font-size: 0.8em;">{{ u.time | date : 'HH:mm'}}</span></div>
+                  </div>
+              </md-list-item>
+              <md-divider ng-repeat-end ng-if="$last"></md-divider>
+          </md-list>
+      </md-card-content>
+  </md-card>
+</div>
