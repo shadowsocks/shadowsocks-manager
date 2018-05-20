@@ -12,3 +12,7 @@ angular.module('app', [
   'pascalprecht.translate',
   'ngclipboard',
 ]);
+
+angular.element(() => {
+  angular.bootstrap(document, ['app']);
+});
