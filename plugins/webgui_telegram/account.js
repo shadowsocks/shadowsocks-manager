@@ -213,15 +213,6 @@ telegram.on('message', async message => {
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: ssurl, time: Date.now() };
     tg.sendPhoto(`${ config.plugins.webgui.site }/api/user/telegram/qrcode/${ qrcodeId }`, telegramId);
-
-    // if(myAccount.type >= 2 && myAccount.type <= 5 && config.plugins.alipay && config.plugins.alipay.use) {
-    //   tg.sendKeyboard('续费', telegramId, {
-    //     inline_keyboard: [[{
-    //       text: '点击这里续费',
-    //       callback_data: `alipay:accountId[${ myAccount.id }]`,
-    //     }]],
-    //   });
-    // }
   } else if(isLogin(message)) {
     const telegramId = message.message.chat.id.toString();
     const userId = await isUser(telegramId);
