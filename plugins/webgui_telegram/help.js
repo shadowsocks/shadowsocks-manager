@@ -25,8 +25,7 @@ telegram.on('message', async message => {
   })).title;
   const site = config.plugins.webgui.site;
   if(userStatus.status === 'empty') {
-    tg.sendMarkdown(`欢迎使用 ${ title }，\n\n请在这里输入您的邮箱以接收验证码来注册账号`, telegramId);
-    tg.sendKeyboard('或者点击以下按钮访问网页版', telegramId, {
+    tg.sendKeyboard(`欢迎使用 ${ title }，\n\n请在这里输入您的邮箱以接收验证码来注册账号\n\n或者点击以下按钮访问网页版`, telegramId, {
       inline_keyboard: [[{
         text: '登录网页版',
         url: site,

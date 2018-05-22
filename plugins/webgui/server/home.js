@@ -192,7 +192,39 @@ exports.logout = (req, res) => {
 };
 
 exports.status = async (req, res) => {
+  const colors = [
+    { value: 'red', color: '#F44336' },
+    { value: 'pink', color: '#E91E63' },
+    { value: 'purple', color: '#9C27B0' },
+    { value: 'deep-purple', color: '#673AB7' },
+    { value: 'indigo', color: '#3F51B5' },
+    { value: 'blue', color: '#2196F3' },
+    { value: 'light-blue', color: '#03A9F4' },
+    { value: 'cyan', color: '#00BCD4' },
+    { value: 'teal', color: '#009688' },
+    { value: 'green', color: '#4CAF50' },
+    { value: 'light-green', color: '#8BC34A' },
+    { value: 'lime', color: '#CDDC39' },
+    { value: 'yellow', color: '#FFEB3B' },
+    { value: 'amber', color: '#FFC107' },
+    { value: 'orange', color: '#FF9800' },
+    { value: 'deep-orange', color: '#FF5722' },
+    { value: 'brown', color: '#795548' },
+    { value: 'blue-grey', color: '#607D8B' },
+    { value: 'grey', color: '#9E9E9E' },
+  ];
   try {
+    const base = (await knex('webguiSetting').select().where({
+      key: 'base',
+    }).then(success => {
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value;
+    }));
+    const themePrimary = base.themePrimary;
+    const themeAccent = base.themeAccent;
+    const filterColor = colors.filter(f => f.value === base.themePrimary);
+    const browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
+
     const status = req.session.type; // admin/normal/undefined
     const id = req.session.user;
     const version = appRequire('package').version;
@@ -224,6 +256,9 @@ exports.status = async (req, res) => {
       id,
       email,
       version,
+      themePrimary,
+      themeAccent,
+      browserColor,
       site,
       skin,
       alipay,
