@@ -144,7 +144,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
   };
 
   const getUserData = userId => {
-    const macAccount = JSON.parse(window.ssmgrConfig).macAccount;
+    const macAccount = window.ssmgrConfig.macAccount;
     const promises = [
       $http.get('/api/admin/user/' + userId),
       $http.get('/api/admin/alipay/' + userId),

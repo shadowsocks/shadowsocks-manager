@@ -11,7 +11,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
         $scope.config[key] = value;
       }
     };
-    $scope.config = JSON.parse(window.ssmgrConfig);
+    $scope.config = window.ssmgrConfig;
     $scope.config.title = window.title;
     $scope.config.skin = 'default';
     $scope.config.fullscreenSkin = false;

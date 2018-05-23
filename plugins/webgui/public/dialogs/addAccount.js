@@ -3,7 +3,7 @@ const window = require('window');
 const cdn = window.cdn || '';
 
 app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state, $http) => {
-  const macAccount = JSON.parse(window.ssmgrConfig).macAccount;
+  const macAccount = window.ssmgrConfig.macAccount;
   const publicInfo = {};
   publicInfo.isMacAddress = mac => {
     if(!mac) { return false; }

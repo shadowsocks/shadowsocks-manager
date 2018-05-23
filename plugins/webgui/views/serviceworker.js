@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-05-22 17:05:17 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-05-23 10:07:21 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -6,34 +6,14 @@ const onlineCacheUrl = [
   '/',
 
   '/favicon.png',
-
-  // '/libs/angular-animate.min.js',
-  // '/libs/angular-aria.min.js',
-  // '/libs/angular-chart.min.js',
-  // '/libs/angular-inview.js',
-  // '/libs/angular-marked.min.js',
   '/libs/angular-material.min.css',
-  // '/libs/angular-material.min.js',
-  // '/libs/angular-messages.min.js',
-  // '/libs/angular-moment.min.js',
-  // '/libs/angular-qr.min.js',
-  // '/libs/angular-sanitize.min.js',
-  // '/libs/angular-translate.min.js',
-  // '/libs/angular-ui-router.min.js',
-  // '/libs/angular-websocket.min.js',
-  // '/libs/angular.min.js',
   '/libs/bundle.js',
-  // '/libs/Chart.min.js',
-  // '/libs/jquery.min.js',
   '/libs/lib.js',
-  // '/libs/marked.min.js',
   '/libs/MaterialIcons-Regular.eot',
   '/libs/MaterialIcons-Regular.ttf',
   '/libs/MaterialIcons-Regular.woff',
   '/libs/MaterialIcons-Regular.woff2',
-  // '/libs/moment.min.js',
-  // '/libs/ngStorage.min.js',
-  // '/libs/qrcode.min.js',
+
   '/libs/style.css',
   
   '/public/views/skin/bing.html',
