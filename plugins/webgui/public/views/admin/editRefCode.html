@@ -1,0 +1,31 @@
+<md-card>
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">{{ refCode.code }}<md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(refCode.code) }}">复制链接</md-button></span>
+        </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+        <md-divider></md-divider>
+        <md-list layout="row">
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+            <div flex>
+                <form name="refCodeForm">
+                    <md-list-item>
+                        <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                            <label translate>最大邀请次数</label>
+                            <input type="number" required name="maxUser" ng-model="refCode.maxUser">
+                        </md-input-container>
+                    </md-list-item>
+                    <md-list-item>
+                        <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                            <label translate>访问次数</label>
+                            <input type="number" required name="visit" ng-model="refCode.visit" ng-disabled="1">
+                        </md-input-container>
+                    </md-list-item>
+                </form>
+            </div>
+            <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+        </md-list>
+        <md-divider></md-divider>
+    </md-card-content>
+</md-card>

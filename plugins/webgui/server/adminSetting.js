@@ -308,6 +308,27 @@ exports.getRefCode = (req, res) => {
   });
 };
 
+exports.getOneRefCode = (req, res) => {
+  const id = req.params.id;
+  refAdmin.getOneRefCode(id).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.editOneRefCode = (req, res) => {
+  const id = +req.params.id;
+  const maxUser = +req.body.maxUser;
+  refAdmin.editOneRefCode(id, maxUser).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getRefUser = (req, res) => {
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 20;

@@ -361,8 +361,6 @@ app
     $scope.setMenuButton('arrow_back', 'user.settings');
     $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });
     $http.get('/api/user/ref/user').then(success => { $scope.user = success.data; });
-    $scope.getRefUrl = code => {
-      return `${ $scope.config.site }/home/ref/${ code }`;
-    };
+    $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
   }
 ]);

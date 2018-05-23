@@ -567,8 +567,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $state.go('admin.myRefCode');
     };
   }
-])
-.controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
+]).controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
   ($scope, $http, $timeout, $state, $mdMedia) => {
     $scope.setTitle('邀请码列表');
     $scope.setMenuButton('arrow_back', function() {
@@ -621,9 +620,45 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       }
       return {};
     };
+    $scope.editRefCode = id => {
+      $state.go('admin.editRefCode', { id });
+    };
   }
-])
-.controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
+]).controller('AdminEditRefCodeController', ['$scope', '$http', '$timeout', '$state', '$mdMedia', '$stateParams',
+($scope, $http, $timeout, $state, $mdMedia, $stateParams) => {
+  $scope.setTitle('编辑邀请码');
+  $scope.setMenuButton('arrow_back', function() {
+    $state.go('admin.refCodeList');
+  });
+  $scope.refCodeId = $stateParams.id;
+  $scope.refCode = {};
+  let lastSave = 0;
+  let lastSavePromise = null;
+  const saveTime = 2000;
+  $scope.saveSetting = () => {
+    if(!$scope.refCode.maxUser) { return; }
+    if(Date.now() - lastSave <= saveTime) {
+      lastSavePromise && $timeout.cancel(lastSavePromise);
+    }
+    const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
+    lastSave = Date.now();
+    lastSavePromise = $timeout(() => {
+      $http.put(`/api/admin/setting/ref/code/${ $scope.refCodeId }`, {
+        maxUser: $scope.refCode.maxUser,
+      });
+    }, timeout);
+  };
+  $http.get(`/api/admin/setting/ref/code/${ $scope.refCodeId }`).then(success => {
+    $scope.refCode = success.data;
+    $scope.$watch('refCode', () => {
+      $scope.saveSetting();
+    }, true);
+  }).catch(err => {
+    $state.go('admin.refCodeList');
+  });
+  $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
+}
+]).controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
   ($scope, $http, $timeout, $state, $mdMedia) => {
     $scope.setTitle('邀请用户列表');
     $scope.setMenuButton('arrow_back', function() {

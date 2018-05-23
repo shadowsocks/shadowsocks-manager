@@ -19,6 +19,7 @@ const getRefCodeAndPaging = async (opt) => {
   const pageSize = opt.pageSize || 20;
   let count = knex('webgui_ref_code').select();
   let code = knex('webgui_ref_code').select([
+    'webgui_ref_code.id as id',
     'webgui_ref_code.code as code',
     'user.email as email',
     'webgui_ref_code.visit as visit',
@@ -81,7 +82,31 @@ const getRefUserAndPaging = async opt => {
   };
 };
 
+const getOneRefCode = async id => {
+  const code = await knex('webgui_ref_code').select([
+    'webgui_ref_code.id as id',
+    'webgui_ref_code.code as code',
+    'user.email as email',
+    'webgui_ref_code.visit as visit',
+    'webgui_ref_code.maxUser as maxUser',
+    knex.raw('count(webgui_ref.codeId) as count'),
+  ])
+  .leftJoin('webgui_ref', 'webgui_ref_code.id', 'webgui_ref.codeId')
+  .leftJoin('user', 'webgui_ref_code.sourceUserId', 'user.id')
+  .groupBy('webgui_ref_code.id')
+  .where({ 'webgui_ref_code.id': id }).then(s => s[0]);
+  if(!code) { return Promise.reject('refCode not found'); }
+  return code;
+};
+
+const editOneRefCode = async (id, maxUser) => {
+  await knex('webgui_ref_code').update({ maxUser }).where({ 'webgui_ref_code.id': id });
+  return 'success';
+};
+
 exports.getRefCode = getRefCode;
+exports.getOneRefCode = getOneRefCode;
+exports.editOneRefCode = editOneRefCode;
 exports.getRefUser = getRefUser;
 exports.getRefCodeAndPaging = getRefCodeAndPaging;
 exports.getRefUserAndPaging = getRefUserAndPaging;
