@@ -96,7 +96,7 @@ app
       $scope.sendCodeTime = 0;
       $scope.sendCode = () => {
         alertDialog.loading().then(() => {
-          return homeApi.sendCode($scope.user.email);
+          return homeApi.sendCode($scope.user.email, $scope.home.refId);
         })
         .then(success => {
           alertDialog.show('验证码已发至邮箱', '确定');
@@ -200,8 +200,11 @@ app
     ($scope, $state, $stateParams, $http) => {
       const refId = $stateParams.refId;
       $scope.home.refId = refId;
-      $http.post(`/api/home/ref/${ refId }`);
-      $state.go('home.signup');
+      $scope.home.refIdValid = false;
+      $http.post(`/api/home/ref/${ refId }`).then(success => {
+        $scope.home.refIdValid = success.data.valid;
+        $state.go('home.signup');
+      });
     }
   ])
 ;

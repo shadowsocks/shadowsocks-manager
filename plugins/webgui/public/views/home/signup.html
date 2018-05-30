@@ -46,6 +46,15 @@
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
+    <div layout="row" layout-align="center center" ng-if="home.refId && !home.refIdValid">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex>
+            <div layout="row" layout-align="center center">
+                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+            </div>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
 </div>
 <div layout="column" hide-xs hide-sm>
     <div flex="20" style="min-height: 120px; height: 120px;"></div>
@@ -107,6 +116,15 @@
                 </div>
             </md-card-content>
             <div flex="5"></div>
+        </md-card>
+        <div flex="25"></div>
+    </div>
+    <div layout="row" layout-align="center center" ng-if="home.refId && !home.refIdValid">
+        <div flex="25"></div>
+        <md-card flex="50">
+            <md-card-content layout="row" layout-align="center center">
+                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+            </md-card-content>
         </md-card>
         <div flex="25"></div>
     </div>

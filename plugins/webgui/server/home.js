@@ -275,6 +275,7 @@ exports.status = async (req, res) => {
 };
 
 exports.sendCode = (req, res) => {
+  const refCode = req.body.refCode;
   req.checkBody('email', 'Invalid email').isEmail();
   req.getValidationResult().then(result => {
     if(result.isEmpty) { return; }
@@ -286,6 +287,12 @@ exports.sendCode = (req, res) => {
     .then(success => JSON.parse(success[0].value))
     .then(success => {
       if(success.signUp.isEnable) { return; }
+      if(refCode) {
+        return ref.checkRefCodeForSignup(refCode).then(success => {
+          if(success) { return; }
+          return Promise.reject('invalid ref code');
+        });
+      }
       return Promise.reject('signup close');
     });
   }).then(() => {
@@ -310,7 +317,7 @@ exports.sendCode = (req, res) => {
     res.send('success');
   }).catch(err => {
     logger.error(err);
-    const errorData = ['email in black list', 'send email out of limit', 'signup close'];
+    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'invalid ref code'];
     if(errorData.indexOf(err) < 0) {
       return res.status(403).end();
     } else {

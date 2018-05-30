@@ -35,14 +35,16 @@ app.factory('homeApi', ['$http', $http => {
       }
     });
   };
-  const sendCode = email => {
+  const sendCode = (email, refCode) => {
     return $http.post('/api/home/code', {
       email,
+      refCode,
     }).then(success => {
       return 'success';
     }).catch(err => {
       if(err.status === 403) {
         let errData = '验证码发送错误';
+        if(err.data === 'invalid ref code') { errData = '发送错误，无效的邀请码'; }
         if(err.data === 'email in black list') { errData = '发送错误，请更换邮箱尝试'; }
         if(err.data === 'send email out of limit') { errData = '请求过于频繁，请稍后再试'; }
         if(err.data === 'signup close') { errData = '当前时段尚未开放注册'; }
