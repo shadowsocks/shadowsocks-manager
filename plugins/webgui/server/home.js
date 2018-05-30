@@ -424,6 +424,10 @@ exports.resetPassword = (req, res) => {
 
 exports.visitRef = (req, res) => {
   const code = req.params.refCode;
-  ref.visitRefCode(code);
-  res.send('success');
+  ref.visitRefCode(code).then(success => {
+    res.send({ valid: success });
+  }).catch(err => {
+    logger.error(err);
+    res.status(403).end();
+  });
 };

@@ -25,8 +25,15 @@ const addRefCode = async (userId, max = 3) => {
 
 const visitRefCode = async code => {
   const setting = await getRefSetting();
-  if(!setting.useRef) { return; }
+  if(!setting.useRef) { return false; }
+  const codeInfo = (await knex('webgui_ref_code').where({ code }))[0];
+  if(!codeInfo) { return false; }
+  const sourceUserInfo = (await knex('user').where({ id: codeInfo.sourceUserId }))[0];
+  if(!sourceUserInfo) { return; }
+  const currentRefUser = await knex('webgui_ref').where({ codeId: codeInfo.id });
+  if(currentRefUser.length >= codeInfo.maxUser) { return false; }
   await knex('webgui_ref_code').where({ code }).increment('visit', 1);
+  return true;
 };
 
 const addRefUser = async (code, userId) => {
