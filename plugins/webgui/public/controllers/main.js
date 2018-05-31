@@ -37,7 +37,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       return iOSSafari && standalone;
     };
     if(isSafari() && $location.url() === '/' && $localStorage.home.url !== '/home/index') {
-      location.href = $localStorage.home.url || '/';
+      location.href = $localStorage.home.url || '/home/index';
     }
     const setFs = () => {
       if($scope.config.skin.substr(0, 3) === 'fs_' && $state.current.name === 'home.index') {
