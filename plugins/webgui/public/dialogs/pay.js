@@ -173,6 +173,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       if (data.success) {
         publicInfo.status = 'success';
         publicInfo.message = `充值码[ ${ publicInfo.giftCardPassword } ]使用成功`;
+        publicInfo.giftCardPassword = '';
       } else {
         publicInfo.status = 'error';
         publicInfo.message = data.message;
