@@ -7,6 +7,7 @@ app.filter('order', function () {
       WAIT_BUYER_PAY: '等待',
       TRADE_SUCCESS: '付款',
       FINISH: '完成',
+      USED: '完成',
       TRADE_CLOSED: '关闭',
       created: '创建',
       approved: '付款',
