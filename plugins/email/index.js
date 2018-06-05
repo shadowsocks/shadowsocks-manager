@@ -17,7 +17,7 @@ if(config.plugins.email.type === 'smtp') {
   emailConfig = {
     host: config.plugins.email.host,
     port: config.plugins.email.port || 465,
-    secure: (config.plugins.email.port === 465 || !config.plugins.email.port) ? true : false,
+    secure: config.plugins.email.hasOwnProperty('secure') ? config.plugins.email.secure : true,
     auth: {
       user: config.plugins.email.username,
       pass: config.plugins.email.password,
