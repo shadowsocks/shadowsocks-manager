@@ -72,7 +72,7 @@
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item>
-                                <div flex layout="row" layout-align="space-between center">
+                                <div flex layout="row" layout-align="space-between center" ng-click="expireTimeSheet(account.type === 1 ? 0 : account.data.expire)">
                                   <div flex="40" translate>到期时间：</div>
                                   <div flex="60" style="text-align:right">
                                       <span ng-if="account.type === 1" translate>不限时</span>

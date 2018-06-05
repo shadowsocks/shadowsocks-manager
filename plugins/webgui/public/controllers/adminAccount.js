@@ -127,8 +127,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog', 'ipDialog',
-  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog', 'ipDialog', '$mdBottomSheet',
+  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog, $mdBottomSheet) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.accountId = +$stateParams.accountId;
@@ -377,6 +377,27 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setFabButton($scope.id === 1 ? () => {
       $scope.editAccount($scope.account.id);
     } : null, 'mode_edit');
+    $scope.setExpireTime = number => {
+      $scope.expireTimeShift += number;
+    };
+    $scope.expireTimeSheet = time => {
+      if(!time) { return; }
+      $scope.expireTimeShift = 0;
+      $mdBottomSheet.show({
+        templateUrl: '/public/views/admin/setExpireTime.html',
+        preserveScope: true,
+        scope: $scope,
+      }).catch(() => {
+        $http.put(`/api/admin/account/${ $scope.accountId }/time`, {
+          time: $scope.expireTimeShift,
+          check: true,
+        }).then(success => {
+          $http.get(`/api/admin/account/${ $scope.accountId }`).then(success => {
+            $scope.account = success.data;
+          });
+        });
+      });
+    };
   }
 ])
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog',
