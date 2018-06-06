@@ -169,7 +169,7 @@ const getUserAndPaging = async (opt = {}) => {
   const page = opt.page || 1;
   const pageSize = opt.pageSize || 20;
   const type = opt.type || ['normal'];
-  const group = opt.group || -1;
+  const group = opt.hasOwnProperty('group') ? opt.group : -1;
 
   let count = knex('user').select()
   .where('id', '>', 1)

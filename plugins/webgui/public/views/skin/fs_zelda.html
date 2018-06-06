@@ -1,0 +1,38 @@
+<div layout-fill layout="column" class="zelda-background">
+  <div flex="60"></div>
+  <div layout="row">
+    <div flex-xs="5" flex-sm="10" flex-md="15" flex-gt-md="20"></div>
+    <div flex layout="column">
+      <div layout="row" layout-align="space-between start">
+        <div></div>
+        <md-button href="/home/login" translate>
+          <div style="font-size: 24px; color: #eee; opacity: 0.8;">→ 登录</div>
+        </md-button>
+      </div>
+      <div layout="row" layout-align="space-between start">
+        <div></div>
+        <md-button href="/home/signup" translate>
+          <div style="font-size: 24px; color: #eee; opacity: 0.8;">→ 注册</div>
+        </md-button>
+      </div>
+    </div>
+    <div flex-xs="5" flex-sm="10" flex-md="15" flex-gt-md="20"></div>
+  </div>
+</div>
+<style>
+  .zelda-background {
+    background: url('/public/views/skin/fs_zelda/zelda.jpg') no-repeat center center fixed;
+    background-size: cover;
+    animation-duration: 1.25s;
+    animation-name: scrollbg;
+    animation-iteration-count: 1;
+  }
+  @keyframes scrollbg {
+    from {
+      opacity : 0;
+    }
+    to {
+      opacity : 1;
+    }
+  }
+</style>
