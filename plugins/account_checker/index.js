@@ -1,8 +1,15 @@
-import { createContext } from "vm";
-
 const knex = appRequire('init/knex').knex;
 const cron = appRequire('init/cron');
+const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
+const config = appRequire('services/config').all();
+const sleepTime = config.plugins.account_checker.time || 500;
+
+const sleep = time => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(), time);
+  });
+};
 
 const isPortExists = async (server, account) => {
   const ports = (await manager.send({ command: 'list' }, {
@@ -47,8 +54,30 @@ const isExpired = (server, account) => {
   }
 };
 
-const isOverFlow = () => {
+const isOverFlow = async (server, account) => {
+  if(account.type >= 2 && account.type <= 5) {
+    let timePeriod = 0;
+    if(account.type === 2) { timePeriod = 7 * 86400 * 1000; }
+    if(account.type === 3) { timePeriod = 30 * 86400 * 1000; }
+    if(account.type === 4) { timePeriod = 1 * 86400 * 1000; }
+    if(account.type === 5) { timePeriod = 3600 * 1000; }
+    const data = JSON.parse(account.data);
+    let startTime = data.create;
+    while(startTime + timePeriod <= Date.now()) {
+      startTime += timePeriod;
+    }
+    const endTime = Date.now();
 
+    const isMultiServerFlow = !!account.multiServerFlow;
+    const scale = isMultiServerFlow ? 1 : server.scale;
+
+    const serverId = isMultiServerFlow ? null : server.id;
+    const currentFlow = await flow.getFlowFromSplitTime(serverId, account.id, startTime, endTime);
+
+    return currentFlow >= data.flow * scale;
+  } else {
+    return false;
+  }
 };
 
 const deletePort = (server, account) => {
@@ -92,28 +121,36 @@ const checkAccount = async (serverId, accountId) => {
       return;
     }
 
-    // // 检查账号是否过期
-    // if(isExpired(serverInfo, accountInfo)) {
-    //   exists && deletePort(serverInfo, accountInfo);
-    //   return;
-    // }
+    // 检查账号是否过期
+    if(isExpired(serverInfo, accountInfo)) {
+      exists && deletePort(serverInfo, accountInfo);
+      return;
+    }
 
-    // // 检查账号是否超流量
-    // if(isOverFlow) {
-    //   exists && deletePort(serverInfo, accountInfo);
-    //   return;
-    // }
+    // 检查账号是否超流量
+    if(await isOverFlow(serverInfo, accountInfo)) {
+      exists && deletePort(serverInfo, accountInfo);
+      return;
+    }
 
-    // !exists && addPort();
+    !exists && addPort();
   } catch(err) {
     console.log(err);
   }
 };
 
-cron.second(async () => {
-  const start = Date.now();
-  const test = await checkAccount(6, 5);
-  const end = Date.now();
-  console.log(test);
-  console.log(end - start + ' ms');
-}, 30);
+(async () => {
+  while(true) {
+    const servers = await knex('server').where({});
+    const accounts = await knex('account_plugin').where({});
+    for(let server of servers) {
+      for(let account of accounts) {
+        const start = Date.now();
+        await checkAccount(server.id, account.id);
+        const end = Date.now();
+        console.log(`server: ${server.id}, account: ${ account.id }, time: ${ end - start } ms`);
+        await sleep(sleepTime);
+      }
+    }
+  }
+})();
