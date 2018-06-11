@@ -36,7 +36,14 @@ const getPaymentInfo = async type => {
 };
 
 const convertRefTime = timeString => {
-
+  let time = 0;
+  const timeArray = timeString.split(/(\d{1,}d)|(\d{1,}h)|(\d{1,}m)/).filter(f => f);
+  timeArray.forEach(f => {
+    if(f[f.length - 1] === 'd') { time += (+f.substr(0, f.length - 1)) * 24 * 60 * 60 * 1000; }
+    if(f[f.length - 1] === 'h') { time += (+f.substr(0, f.length - 1)) * 60 * 60 * 1000; }
+    if(f[f.length - 1] === 'm') { time += (+f.substr(0, f.length - 1)) * 60 * 1000; }
+  });
+  return time;
 };
 
 const payWithRef = async (userId, orderType) => {
@@ -44,7 +51,6 @@ const payWithRef = async (userId, orderType) => {
   if(!setting.useRef) { return; }
   const hasRef = await getRef(userId);
   if(!hasRef) { return; }
-  console.log('hasRef: ' + hasRef + ' orderType: ' + orderType);
   const paymentType = {
     '2': 'week',
     '3': 'month',
@@ -54,18 +60,10 @@ const payWithRef = async (userId, orderType) => {
     '7': 'year',
   };
   const paymentInfo = await getPaymentInfo(paymentType[orderType]);
-  console.log(paymentInfo);
   const refTime = paymentInfo.refTime || '0h';
-  let time = 0;
-  if(refTime.match(/^(\d{1,})d(\d{1,})h$/)) {
-    time = (+refTime.match(/^(\d{1,})d(\d{1,})h$/)[1]) * 86400 * 1000 + (+refTime.match(/^(\d{1,})d(\d{1,})h$/)[2]) * 3600 * 1000;
-  } else if(refTime.match(/^(\d{1,})h$/)) {
-    time =(+refTime.match(/^(\d{1,})h$/)[1]) * 3600 * 1000;
-  }
-  console.log(time);
+  const time = convertRefTime(refTime);
   const accounts = await knex('account_plugin').where({ userId: hasRef });
   if(!accounts.length) { return; }
-  console.log(accounts[0].id, time);
   account.editAccountTime(accounts[0].id, time, true);
 };
 
