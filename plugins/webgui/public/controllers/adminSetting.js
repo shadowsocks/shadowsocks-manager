@@ -428,6 +428,7 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $http.get('/api/admin/setting/payment').then(success => {
       $scope.payment = success.data;
       $scope.paymentData = $scope.payment[$scope.paymentType];
+      if(!$scope.paymentData.refTime) { $scope.paymentData.refTime = '0h'; }
       if($scope.paymentData.server) {
         $scope.setServerForPayment = true;
         $scope.paymentData.server.forEach(f => {

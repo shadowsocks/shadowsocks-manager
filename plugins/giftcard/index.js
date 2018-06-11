@@ -3,6 +3,7 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('giftcard');
 const uuidv4 = require('uuid/v4');
 const account = appRequire('plugins/account/index');
+const ref = appRequire('plugins/webgui_ref/time');
 
 const dbTableName = require('./db/giftcard').tableName;
 
@@ -73,13 +74,13 @@ const sendSuccessMail = async userId => {
 
 const processOrder = async (userId, accountId, password) => {
   const cardResult = await knex(dbTableName).where({ password }).select();
-  if (cardResult.length === 0)
+  if (cardResult.length === 0) {
     return { success: false, message: '充值码不存在' };
-
+  }
   const card = cardResult[0];
-  if (card.status !== cardStatusEnum.available)
+  if (card.status !== cardStatusEnum.available) {
     return { success: false, message: '无法使用这个充值码' };
-
+  }
   await knex(dbTableName).where({ id: card.id }).update({
     user: userId,
     account: accountId,
@@ -87,6 +88,7 @@ const processOrder = async (userId, accountId, password) => {
     usedTime: Date.now()
   });
   await account.setAccountLimit(userId, accountId, card.orderType);
+  await ref.payWithRef(userId, card.orderType);
   return { success: true, type: card.orderType, cardId: card.id };
 };
 
