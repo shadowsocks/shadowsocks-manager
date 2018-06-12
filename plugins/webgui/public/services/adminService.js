@@ -33,6 +33,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     if(payType === '支付宝') { url = '/api/admin/alipay'; }
     if(payType === 'Paypal') { url = '/api/admin/paypal'; }
     if(payType === '充值码') { url = '/api/admin/giftcard'; }
+    if(payType === '邀请码') { url = '/api/admin/refOrder'; }
     const search = opt.search || '';
     const filter = opt.filter || '';
     // const sort = opt.sort || 'alipay.createTime_desc';

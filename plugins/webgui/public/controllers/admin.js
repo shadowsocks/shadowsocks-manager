@@ -240,6 +240,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     if($scope.config.alipay) { $scope.payTypes.push({ name: '支付宝' }); }
     if($scope.config.paypal) { $scope.payTypes.push({ name: 'Paypal' }); }
     if($scope.config.giftcard) { $scope.payTypes.push({ name: '充值码' }); }
+    if($scope.config.refCode) { $scope.payTypes.push({ name: '邀请码' }); }
     if($scope.payTypes.length) { $scope.myPayType = $scope.payTypes[0].name; }
     $scope.selectPayType = type => {
       tabSwitchTime = Date.now();

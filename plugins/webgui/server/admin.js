@@ -13,6 +13,7 @@ const isAlipayUse = config.plugins.alipay && config.plugins.alipay.use;
 const isPaypalUse = config.plugins.paypal && config.plugins.paypal.use;
 const rp = require('request-promise');
 const macAccount = appRequire('plugins/macAccount/index');
+const refOrder = appRequire('plugins/webgui_ref/order');
 
 exports.getAccount = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
@@ -364,6 +365,28 @@ exports.getOrders = (req, res) => {
   
   options.filter = req.query.filter || '';
   alipay.orderListAndPaging(options)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getRefOrders = (req, res) => {
+  const options = {};
+  if(req.adminInfo.id === 1) {
+    options.group = +req.query.group;
+  } else {
+    options.group = req.adminInfo.group;
+  }
+  options.page = +req.query.page || 1;
+  options.pageSize = +req.query.pageSize || 20;
+  options.search = req.query.search || '';
+  options.sort = req.query.sort || 'webgui_ref_time.createTime_desc';
+  
+  options.filter = req.query.filter || '';
+  refOrder.orderListAndPaging(options)
   .then(success => {
     res.send(success);
   }).catch(err => {

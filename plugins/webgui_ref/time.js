@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
+const order = appRequire('plugins/webgui_ref/order');
 
 const getRefSetting = async () => {
   const setting = await knex('webguiSetting').select().where({
@@ -65,6 +66,12 @@ const payWithRef = async (userId, orderType) => {
   const accounts = await knex('account_plugin').where({ userId: hasRef });
   if(!accounts.length) { return; }
   account.editAccountTime(accounts[0].id, time, true);
+  await order.newOrder({
+    user: hasRef,
+    refUser: userId,
+    account: accounts[0].id,
+    refTime: time,
+  });
 };
 
 exports.payWithRef = payWithRef;

@@ -110,6 +110,7 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
+app.get('/api/admin/refOrder', isAdmin, admin.getRefOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
 app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
