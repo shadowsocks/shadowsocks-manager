@@ -87,12 +87,10 @@
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <!--<div flex="70" style="font-size: 0.9em;">{{order.orderId}}</div>-->
                     <div flex="70" style="font-size: 0.9em;">
                         <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
                     </div>
                     </span>
-                    <!--<div flex="30" style="text-align: right;">{{order.status | order}}</div>-->
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
                     </div>
@@ -107,16 +105,27 @@
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <!--<div flex="70" style="font-size: 0.9em;">{{order.orderId}}</div>-->
                     <div flex="70" style="font-size: 0.9em;">
                         <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
                     </div>
                     </span>
-                    <!--<div flex="30" style="text-align: right;">{{order.status | order}}</div>-->
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
                     </div>
                     
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in giftCardOrders track by $index">
+        <md-card ng-click="showOrderInfo(order)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="70" style="font-size: 0.9em;">
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                    </div>
                 </div>
             </md-card-content>
         </md-card>

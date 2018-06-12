@@ -121,6 +121,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.server = success.server;
         $scope.alipayOrders = success.alipayOrders;
         $scope.paypalOrders = success.paypalOrders;
+        $scope.giftCardOrders = success.giftCardOrders;
+        $scope.refOrders = success.refOrders;
         $scope.user.account.forEach(f => {
           adminApi.getUserPortLastConnect(f.id).then(success => {
             f.lastConnect = success.lastConnect;
