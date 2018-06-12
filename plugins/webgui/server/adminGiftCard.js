@@ -77,3 +77,14 @@ exports.getOrders = async (req, resp) => {
     resp.status(500).end();
   }
 };
+
+exports.getUserOrders = async (req, res) => {
+  try {
+    const userId = +req.params.userId;
+    const details = await giftcard.getUserOrders(userId);
+    res.send(details);
+  } catch (err) {
+    logger.error(err);
+    res.status(500).end();
+  }
+};

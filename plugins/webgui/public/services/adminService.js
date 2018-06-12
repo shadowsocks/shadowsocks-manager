@@ -145,31 +145,24 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
   };
 
   const getUserData = userId => {
-    const macAccount = window.ssmgrConfig.macAccount;
     const promises = [
       $http.get('/api/admin/user/' + userId),
       $http.get('/api/admin/alipay/' + userId),
       $http.get('/api/admin/paypal/' + userId),
+      $http.get('/api/admin/refOrder/' + userId),
+      $http.get('/api/admin/giftcard/' + userId),
       $http.get('/api/admin/server'),
+      $http.get('/api/admin/account/mac', { params: { userId } }),
     ];
-    if(macAccount) {
-      promises.push($http.get('/api/admin/account/mac', {
-        params: {
-          userId,
-        }
-      }));
-    } else {
-      promises.push($q.resolve({
-        data: [],
-      }));
-    }
     return $q.all(promises).then(success => {
       return {
         user: success[0].data,
         alipayOrders: success[1].data,
         paypalOrders: success[2].data,
-        server: success[3].data,
-        macAccount: success[4].data,
+        refOrders: success[3].data,
+        giftCardOrders: success[4].data,
+        server: success[5].data,
+        macAccount: success[6].data,
       };
     });
   };

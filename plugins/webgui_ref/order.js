@@ -18,6 +18,22 @@ const newOrder = async data => {
   return;
 };
 
+const getUserOrders = async userId => {
+  const orders = await knex('webgui_ref_time').select([
+    'webgui_ref_time.orderId',
+    'user.id as userId',
+    'user.group as group',
+    'user.username',
+    'account_plugin.port',
+    'webgui_ref_time.status',
+    'webgui_ref_time.createTime',
+  ])
+  .leftJoin('user', 'user.id', 'webgui_ref_time.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'webgui_ref_time.account')
+  .where({ 'user.id': userId });
+  return orders;
+};
+
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
   const group = options.group;
@@ -57,9 +73,6 @@ const orderListAndPaging = async (options = {}) => {
     sort.split('_').slice(0, sort.split('_').length - 1).join('_'),
     sort.split('_')[sort.split('_').length - 1]
   ).limit(pageSize).offset((page - 1) * pageSize);
-  // orders.forEach(f => {
-  //   f.alipayData = JSON.parse(f.alipayData);
-  // });
   const maxPage = Math.ceil(count / pageSize);
   return {
     total: count,
@@ -71,4 +84,5 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 exports.newOrder = newOrder;
+exports.getUserOrders = getUserOrders;
 exports.orderListAndPaging = orderListAndPaging;

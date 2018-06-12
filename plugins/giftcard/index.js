@@ -248,6 +248,23 @@ const revokeBatch = async batchNumber => {
   }).update({ status: cardStatusEnum.revoked });
 };
 
+const getUserOrders = async userId => {
+  const orders = await knex(dbTableName).select([
+    `${dbTableName}.password as orderId`,
+    `${dbTableName}.orderType`,
+    'user.id as userId',
+    'user.username',
+    'account_plugin.port',
+    `${dbTableName}.status`,
+    `${dbTableName}.usedTime as createTime`,
+  ])
+  .where({ 'user.id': userId })
+  .orderBy(`${dbTableName}.usedTime`, 'DESC')
+  .leftJoin('user', 'user.id', `${dbTableName}.user`)
+  .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`);
+  return orders;
+};
+
 exports.generateGiftCard = generateGiftCard;
 exports.orderListAndPaging = orderListAndPaging;
 // exports.orderList = orderList;
@@ -256,3 +273,4 @@ exports.processOrder = processOrder;
 exports.revokeBatch = revokeBatch;
 exports.listBatch = listBatch;
 exports.getBatchDetails = getBatchDetails;
+exports.getUserOrders = getUserOrders;

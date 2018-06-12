@@ -326,6 +326,17 @@ exports.getUserOrders = (req, res) => {
   });
 };
 
+exports.getUserRefOrders = (req, res) => {
+  const userId = +req.params.userId;
+  refOrder.getUserOrders(userId)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getPaypalUserOrders = (req, res) => {
   if(!isPaypalUse) {
     return res.send([]);

@@ -110,12 +110,14 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
-app.get('/api/admin/refOrder', isAdmin, admin.getRefOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
 app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
+
+app.get('/api/admin/refOrder', isAdmin, admin.getRefOrders);
+app.get('/api/admin/refOrder/:userId(\\d+)', isAdmin, admin.getUserRefOrders);
 
 app.get('/api/admin/notice', isAdmin, isSuperAdmin, adminNotice.getNotice);
 app.get('/api/admin/notice/:noticeId(\\d+)', isAdmin, isSuperAdmin, adminNotice.getOneNotice);
@@ -141,6 +143,7 @@ app.get('/api/admin/ref/code', isAdmin, user.getRefCode);
 app.get('/api/admin/ref/user', isAdmin, user.getRefUser);
 
 app.get('/api/admin/giftcard', isAdmin, adminGiftCard.getOrders);
+app.get('/api/admin/giftcard/:userId(\\d+)', isAdmin, adminGiftCard.getUserOrders);
 app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);
 app.get('/api/admin/giftcard/details/:batchNumber(\\d+)', isAdmin, adminGiftCard.getBatchDetails);
 app.post('/api/admin/giftcard/revoke', isAdmin, adminGiftCard.revokeBatch);
