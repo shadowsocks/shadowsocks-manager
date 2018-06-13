@@ -24,11 +24,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminNewNoticeController',
       templateUrl: `${ cdn }/public/views/admin/newNotice.html`,
     })
-    .state('admin.paymentSetting', {
-      url: '/settings/payment',
-      controller: 'AdminPaymentSettingController',
-      templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
-    })
+    // .state('admin.paymentSetting', {
+    //   url: '/settings/payment',
+    //   controller: 'AdminPaymentSettingController',
+    //   templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
+    // })
     .state('admin.paymentList', {
       url: '/settings/paymentList',
       controller: 'AdminPaymentListController',
