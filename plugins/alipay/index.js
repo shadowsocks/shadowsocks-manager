@@ -4,6 +4,8 @@ const cron = appRequire('init/cron');
 const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
 const fs = require('fs');
+const ref = appRequire('plugins/webgui_ref/time');
+
 let alipay_f2f;
 if(config.plugins.alipay && config.plugins.alipay.use) {
   try {
@@ -155,6 +157,7 @@ cron.minute(async () => {
         });
       }).then(() => {
         logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+        ref.payWithRef(userId, order.orderType);
         sendSuccessMail(userId);
       }).catch(err => {
         logger.error(`订单支付失败: [${ order.orderId }]`, err);

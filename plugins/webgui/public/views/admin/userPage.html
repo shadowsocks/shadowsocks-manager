@@ -44,6 +44,7 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.account.length">账号 [{{ user.account.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in user.account track by $index">
         <md-card>
@@ -63,6 +64,7 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.macAccount.length">mac账号 [{{ user.macAccount.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in user.macAccount track by $index">
         <md-card>
@@ -82,6 +84,7 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="alipayOrders.length">支付宝订单 [{{ alipayOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in alipayOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
@@ -100,6 +103,7 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="paypalOrders.length">Paypal订单 [{{ paypalOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in paypalOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
@@ -118,8 +122,23 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="giftCardOrders.length">充值码订单 [{{ giftCardOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in giftCardOrders track by $index">
+        <md-card ng-click="showOrderInfo(order)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="70" style="font-size: 0.9em;">
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refOrders.length">Ref订单 [{{ refOrders.length }}]</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in refOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">

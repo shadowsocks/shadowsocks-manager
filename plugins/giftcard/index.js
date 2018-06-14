@@ -166,14 +166,12 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 const checkOrder = async (id) => {
-  const order = await knex(dbTableName).select().where({
-    id,
-  });
-
-  if (order.length > 0)
+  const order = await knex(dbTableName).select().where({ id });
+  if (order.length > 0) {
     return success[0].status;
-  else
+  } else {
     return null;
+  }
 };
 
 const generateBatchInfo = (x) => {

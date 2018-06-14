@@ -7,6 +7,7 @@ const account = appRequire('plugins/account/index');
 const moment = require('moment');
 const push = appRequire('plugins/webgui/server/push');
 const config = appRequire('services/config').all();
+const ref = appRequire('plugins/webgui_ref/time');
 
 if(config.plugins.paypal && config.plugins.paypal.use) {
   paypal.configure({
@@ -172,6 +173,7 @@ cron.minute(async () => {
         });
       }).then(() => {
         logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+        ref.payWithRef(userId, order.orderType);
         sendSuccessMail(userId);
       }).catch(err => {
         logger.error(`订单支付失败: [${ order.orderId }]`, err);
