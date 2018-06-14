@@ -4,7 +4,6 @@ app
 .controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager) => {
     const config = configManager.getConfig();
-    console.log(config);
     if(config.status === 'admin') {
       $state.go('admin.index');
     } else if(!config.status) {

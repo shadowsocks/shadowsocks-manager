@@ -1,9 +1,7 @@
 const app = angular.module('app');
-const window = require('window');
 const cdn = window.cdn || '';
 
 app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $state, $http) => {
-  const macAccount = window.ssmgrConfig.macAccount;
   const publicInfo = {};
   publicInfo.isMacAddress = mac => {
     if(!mac) { return false; }
@@ -60,7 +58,6 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', ($mdDialog, $s
         });
       }
     ],
-    fullscreen: true,
     clickOutsideToClose: true,
   };
   const getAccountPort = () => {

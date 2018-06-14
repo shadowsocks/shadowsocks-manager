@@ -66,12 +66,14 @@ const payWithRef = async (userId, orderType) => {
   const accounts = await knex('account_plugin').where({ userId: hasRef });
   if(!accounts.length) { return; }
   account.editAccountTime(accounts[0].id, time, true);
-  await order.newOrder({
-    user: hasRef,
-    refUser: userId,
-    account: accounts[0].id,
-    refTime: time,
-  });
+  for(let account of accounts) {
+    await order.newOrder({
+      user: hasRef,
+      refUser: userId,
+      account: account.id,
+      refTime: time,
+    });
+  }
 };
 
 exports.payWithRef = payWithRef;

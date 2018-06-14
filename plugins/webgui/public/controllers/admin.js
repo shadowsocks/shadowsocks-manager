@@ -3,7 +3,6 @@ const app = angular.module('app');
 app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$document', '$interval', '$timeout', '$localStorage', 'configManager',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage, configManager) => {
     const config = configManager.getConfig();
-    console.log(config);
     if(config.status === 'normal') {
       $state.go('user.index');
     } else if(!config.status) {

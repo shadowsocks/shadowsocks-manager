@@ -4,7 +4,6 @@ app
   .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage', 'configManager',
     ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {    
       const config = configManager.getConfig();
-      console.log(config);
       if(config.status === 'normal') {
         $state.go('user.index');
       } else if (config.status === 'admin') {
