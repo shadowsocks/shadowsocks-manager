@@ -148,6 +148,7 @@ app.get('/api/admin/giftcard/list', isAdmin, adminGiftCard.listBatch);
 app.get('/api/admin/giftcard/details/:batchNumber(\\d+)', isAdmin, adminGiftCard.getBatchDetails);
 app.post('/api/admin/giftcard/revoke', isAdmin, adminGiftCard.revokeBatch);
 app.post('/api/admin/giftcard/add', isAdmin, adminGiftCard.addGiftCard);
+app.post('/api/admin/giftcard/use', isAdmin, isSuperAdmin, adminGiftCard.useGiftCardForUser);
 
 app.get('/api/admin/group', isAdmin, adminGroup.getGroups);
 app.get('/api/admin/group/:id(\\d+)', isAdmin, adminGroup.getOneGroup);

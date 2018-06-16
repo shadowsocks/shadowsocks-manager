@@ -13,6 +13,9 @@
                     <md-radio-button value="mac">
                         MAC地址
                     </md-radio-button>
+                    <md-radio-button value="giftcard">
+                        充值码
+                    </md-radio-button>
                 </md-radio-group>
             </div>
         </md-dialog-content>
@@ -75,6 +78,47 @@
                 关闭
             </md-button>
             <md-button class="md-primary" ng-click="publicInfo.setMac()" ng-disabled="!publicInfo.isMacAddress(publicInfo.mac.macAddress)">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    <form ng-cloak ng-show="publicInfo.status === 'giftcard' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div style="margin-bottom: 20px;">请选择充值的端口：</div>
+                <md-radio-group ng-model="publicInfo.giftcardAccountId">
+                    <md-radio-button value="{{account.id}}" ng-repeat="account in publicInfo.userAccount">
+                        {{ account.port }}
+                    </md-radio-button>
+                    <md-radio-button value="0">
+                        新建端口
+                    </md-radio-button>
+                </md-radio-group>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
+            <md-button class="md-primary" ng-click="publicInfo.status = 'giftcardCode'" ng-disabled="!publicInfo.giftcardAccountId">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    <form ng-cloak ng-show="publicInfo.status === 'giftcardCode' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block">
+                    <label>充值码</label>
+                    <input type="text" required name="code" ng-model="publicInfo.giftcardCode">
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
+            <md-button class="md-primary" ng-click="publicInfo.checkGiftCard()" ng-disabled="!publicInfo.giftcardCode">
                 确定
             </md-button>
         </md-dialog-actions>

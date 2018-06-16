@@ -62,7 +62,7 @@ exports.getBatchDetails = async (req, resp) => {
   }
 };
 
-exports.getOrders = async (req, resp) => {
+exports.getOrders = async (req, res) => {
   try {
     const options = {};
     if(req.adminInfo.id === 1) {
@@ -71,10 +71,10 @@ exports.getOrders = async (req, resp) => {
       options.group = req.adminInfo.group;
     }
     const details = await giftcard.orderListAndPaging(options);
-    resp.send(details);
+    res.send(details);
   } catch (err) {
     logger.error(err);
-    resp.status(500).end();
+    res.status(500).end();
   }
 };
 
@@ -83,6 +83,19 @@ exports.getUserOrders = async (req, res) => {
     const userId = +req.params.userId;
     const details = await giftcard.getUserOrders(userId);
     res.send(details);
+  } catch (err) {
+    logger.error(err);
+    res.status(500).end();
+  }
+};
+
+exports.useGiftCardForUser = async (req, res) => {
+  try {
+    const password = req.body.password;
+    const userId = +req.body.userId;
+    const accountId = req.body.accountId ? +req.body.accountId : null;
+    const result = await giftcard.processOrder(userId, accountId, password);
+    res.send(result);
   } catch (err) {
     logger.error(err);
     res.status(500).end();
