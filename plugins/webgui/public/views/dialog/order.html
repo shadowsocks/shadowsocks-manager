@@ -30,6 +30,12 @@
                     </div>
                 </md-list-item>
                 <md-divider ng-if="publicInfo.order.amount"></md-divider>
+                <md-list-item ng-if="publicInfo.order.refTime">
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30" translate>时长：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.refTime | timePeriod }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider ng-if="publicInfo.order.refTime"></md-divider>
                 <md-list-item ng-click="publicInfo.toUserPage(publicInfo.order.userId)">
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="30" translate>用户名：</div>

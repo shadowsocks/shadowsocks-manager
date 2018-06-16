@@ -49,6 +49,7 @@ const orderListAndPaging = async (options = {}) => {
     'user.group as group',
     'user.username',
     'account_plugin.port',
+    'webgui_ref_time.refTime',
     'webgui_ref_time.status',
     'webgui_ref_time.createTime',
   ])
