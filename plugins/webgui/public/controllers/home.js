@@ -133,6 +133,10 @@ app
   ])
   .controller('HomeResetPasswordController', ['$scope', '$http', '$state', '$stateParams', 'alertDialog',
     ($scope, $http, $state, $stateParams, alertDialog) => {
+      if($scope.config.status) {
+        alertDialog.show('请先退出登录再访问重置密码链接', '确定');
+        return; 
+      }
       $scope.user = {};
       const token = $stateParams.token;
       alertDialog.loading().then(() => {
@@ -163,8 +167,12 @@ app
       };
     }
   ])
-  .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager',
-    ($scope, $http, $state, $stateParams, $localStorage, configManager) => {
+  .controller('HomeMacLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager', 'alertDialog',
+    ($scope, $http, $state, $stateParams, $localStorage, configManager, alertDialog) => {
+      if($scope.config.status) {
+        alertDialog.show('请先退出登录再访问mac登录链接', '确定');
+        return; 
+      }
       const mac = $stateParams.mac;
       configManager.deleteConfig();
       $http.post('/api/home/macLogin', {
@@ -179,8 +187,12 @@ app
       });
     }
   ])
-  .controller('HomeTelegramLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager',
-    ($scope, $http, $state, $stateParams, $localStorage, configManager) => {
+  .controller('HomeTelegramLoginController', ['$scope', '$http', '$state', '$stateParams', '$localStorage', 'configManager', 'alertDialog',
+    ($scope, $http, $state, $stateParams, $localStorage, configManager, alertDialog) => {
+      if($scope.config.status) {
+        alertDialog.show('请先退出登录再访问telegram登录链接', '确定');
+        return; 
+      }
       const token = $stateParams.token;
       configManager.deleteConfig();
       $http.post('/api/user/telegram/login', {
@@ -195,8 +207,12 @@ app
       });
     }
   ])
-  .controller('HomeRefController', ['$scope', '$state', '$stateParams', '$http',
-    ($scope, $state, $stateParams, $http) => {
+  .controller('HomeRefController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
+    ($scope, $state, $stateParams, $http, alertDialog) => {
+      if($scope.config.status) {
+        alertDialog.show('请先退出登录再访问邀请链接', '确定');
+        return; 
+      }
       const refId = $stateParams.refId;
       $scope.home.refId = refId;
       $scope.home.refIdValid = false;

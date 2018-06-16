@@ -71,7 +71,7 @@ const payWithRef = async (userId, orderType) => {
       user: hasRef,
       refUser: userId,
       account: account.id,
-      refTime: time,
+      refTime: Math.ceil(time / accounts.length),
     });
   }
 };
