@@ -1,7 +1,7 @@
 const app = angular.module('app');
 const cdn = window.cdn || '';
 
-app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', 'configManager', ($mdDialog, $state, $http, configManager) => {
+app.factory('addAccountDialog', [ '$mdDialog', '$http', 'configManager', 'alertDialog', ($mdDialog, $http, configManager, alertDialog) => {
   const config = configManager.getConfig();
   const publicInfo = {
     isGiftCardUse: config.giftcard,
@@ -135,10 +135,12 @@ app.factory('addAccountDialog', [ '$mdDialog', '$state', '$http', 'configManager
       password: publicInfo.giftcardCode,
       userId: publicInfo.userId,
       accountId: publicInfo.giftcardAccountId === '0' ? null : +publicInfo.giftcardAccountId,
-    }).then(success => {
-      hide();
-    }).catch(err => {
-      
+    }).then(result => {
+      if(!result.data.success) {
+        alertDialog.show(result.data.message, '确定');
+      } else {
+        alertDialog.show('充值成功', '确定');
+      }
     });
   };
   publicInfo.checkGiftCard = checkGiftCard;
