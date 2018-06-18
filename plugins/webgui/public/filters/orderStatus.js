@@ -25,12 +25,14 @@ app.filter('order', function () {
   // TODO: 将此处的类型和其他地方的类型代码全部集中到一处
   return function (type) {
     const cardType = {
-      5: "小时",
-      4: "日",
-      2: "周",
-      3: "月",
-      6: "季度",
-      7: "年"
+      5: '小时',
+      4: '日',
+      2: '周',
+      3: '月',
+      6: '季度',
+      7: '年',
+      8: '两周',
+      9: '半年',
     };
     return cardType[type];
   };

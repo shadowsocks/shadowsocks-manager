@@ -87,33 +87,19 @@ const processOrder = async (userId, accountId, password) => {
     status: cardStatusEnum.used,
     usedTime: Date.now()
   });
-  await account.setAccountLimit(userId, accountId, card.orderType);
-  await ref.payWithRef(userId, card.orderType);
+  if(card.orderType <= 7) {
+    await account.setAccountLimit(userId, accountId, card.orderType);
+    await ref.payWithRef(userId, card.orderType);
+  } else {
+    if(card.orderType === 8) {
+      await account.addAccountTime(userId, accountId, 2, 2);
+    }
+    if(card.orderType === 9) {
+      await account.addAccountTime(userId, accountId, 3, 6);
+    }
+  }
   return { success: true, type: card.orderType, cardId: card.id };
 };
-
-
-// const orderList = async (options = {}) => {
-//     const where = {};
-//     if (options.userId) {
-//         where['user.id'] = options.userId;
-//     }
-//     const orders = await knex(dbTableName).select([
-//         `${dbTableName}.id`,
-//         `${dbTableName}.orderType`,
-//         'user.id as userId',
-//         'user.username',
-//         'account_plugin.port',
-//         `${dbTableName}.status`,
-//         `${dbTableName}.createTime`,
-//     ])
-//         .leftJoin('user', 'user.id', `${dbTableName}.user`)
-//         .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
-//         .where(where)
-//         .orderBy(`${dbTableName}.createTime`, 'DESC');
-//     return orders;
-// };
-
 
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
@@ -265,7 +251,6 @@ const getUserOrders = async userId => {
 
 exports.generateGiftCard = generateGiftCard;
 exports.orderListAndPaging = orderListAndPaging;
-// exports.orderList = orderList;
 exports.checkOrder = checkOrder;
 exports.processOrder = processOrder;
 exports.revokeBatch = revokeBatch;
