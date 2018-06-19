@@ -85,6 +85,7 @@ app.put('/api/admin/account/mac', isAdmin, adminAccount.editMacAccount);
 app.delete('/api/admin/account/mac', isAdmin, adminAccount.deleteMacAccount);
 
 app.get('/api/user/account/mac/:macAddress', adminAccount.getMacAccountForUser);
+app.get('/api/user/account/subscribe/:macAddress', adminAccount.getSubscribeAccountForUser);
 app.get('/api/user/notice/mac/:macAddress', adminAccount.getNoticeForUser);
 
 app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);

@@ -110,3 +110,20 @@ exports.getBanAccount = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getSubscribeAccountForUser = (req, res) => {
+  const mac = req.params.macAddress;
+  const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+  macAccount.getAccountForUser(mac.toLowerCase(), ip, {
+    noPassword: 0,
+    noFlow: 1,
+  }).then(success => {
+    const result = success.servers.map(server => {
+      return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port + '#' + server.name).toString('base64');
+    }).join('\n');
+    res.send(result);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
