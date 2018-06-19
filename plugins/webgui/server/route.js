@@ -127,7 +127,7 @@ app.delete('/api/admin/notice/:noticeId(\\d+)', isAdmin, isSuperAdmin, adminNoti
 
 app.get('/api/admin/setting/payment', isAdmin, isSuperAdmin, adminSetting.getPayment);
 app.put('/api/admin/setting/payment', isAdmin, isSuperAdmin, adminSetting.modifyPayment);
-app.get('/api/admin/setting/account', isAdmin, isSuperAdmin, adminSetting.getAccount);
+app.get('/api/admin/setting/account', isAdmin, adminSetting.getAccount);
 app.put('/api/admin/setting/account', isAdmin, isSuperAdmin, adminSetting.modifyAccount);
 app.get('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.getBase);
 app.put('/api/admin/setting/base', isAdmin, isSuperAdmin, adminSetting.modifyBase);

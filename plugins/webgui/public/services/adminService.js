@@ -1,6 +1,7 @@
 const app = angular.module('app');
 
-app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http, $q, moment, preload, $timeout) => {
+app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'configManager', ($http, $q, moment, preload, $timeout, configManager) => {
+  const config = configManager.getConfig();
   const getUser = (opt = {}) => {
     const search = opt.search || '';
     // const filter = opt.filter || 'all';
@@ -150,7 +151,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
       $http.get('/api/admin/alipay/' + userId),
       $http.get('/api/admin/paypal/' + userId),
       $http.get('/api/admin/refOrder/' + userId),
-      $http.get('/api/admin/giftcard/' + userId),
+      config.giftcard ? $http.get('/api/admin/giftcard/' + userId) : $q.resolve({ data: [] }),
       $http.get('/api/admin/server'),
       $http.get('/api/admin/account/mac', { params: { userId } }),
     ];

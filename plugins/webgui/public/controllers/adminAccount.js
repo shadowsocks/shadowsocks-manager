@@ -381,6 +381,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.expireTimeShift += number;
     };
     $scope.expireTimeSheet = time => {
+      if($scope.id !== 1) { return; }
       if(!time) { return; }
       $scope.expireTimeShift = 0;
       $mdBottomSheet.show({
