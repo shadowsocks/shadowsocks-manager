@@ -270,6 +270,8 @@ exports.status = async (req, res) => {
     });
   } catch(err) {
     console.log(err);
+    delete req.session.user;
+    delete req.session.type;
     return res.status(403).end();
   }
 };

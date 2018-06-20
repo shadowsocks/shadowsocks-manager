@@ -35,5 +35,9 @@ angular.element(() => {
     require('./routes/index.js');
     
     angular.bootstrap(document, ['app']);
+  }).catch(err => {
+    if(err.status === 403) {
+      setTimeout(() => { location.reload(); }, 3000);
+    }
   });
 });
