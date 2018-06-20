@@ -22,12 +22,24 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const expressValidator = require('express-validator');
 const app = express();
+const cors = require('cors');
 
 app.set('trust proxy', 'loopback');
 app.use(log4js.connectLogger(expressLogger, {
   level: 'auto',
   format: '[:req[x-real-ip]] :method :status :response-timems :url',
 }));
+
+if(config.plugins.webgui.cors) {
+  const whitelist = config.plugins.webgui.cors;
+  const corsOptions = {
+    origin: whitelist,
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+}
 
 app.use(bodyParser.json());
 app.use(expressValidator());

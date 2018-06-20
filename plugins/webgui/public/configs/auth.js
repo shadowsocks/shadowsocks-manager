@@ -1,4 +1,5 @@
 const app = angular.module('app');
+const window = require('window');
 
 app
 // .service('authInterceptor', ['$q', '$localStorage', function($q, $localStorage) {
@@ -16,5 +17,16 @@ app
 .config(['$httpProvider', '$compileProvider', ($httpProvider, $compileProvider) => {
   // $httpProvider.interceptors.push('authInterceptor');
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss|blob):/);
+  $httpProvider.interceptors.push(['$q', $q => {
+    return {
+      request: function (config) {
+        if(config.url.match(/^\/api\//)) {
+          config.url = window.api + config.url;
+          config.withCredentials = true;
+        }
+        return config || $q.when(config);
+      }
+    };
+  }]);
 }])
 ;

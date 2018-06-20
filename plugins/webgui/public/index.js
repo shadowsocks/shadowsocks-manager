@@ -15,7 +15,7 @@ angular.module('app', [
 
 const window = require('window');
 angular.element(() => {
-  $.get('/api/home/login').then(success => {
+  $.get(window.api + '/api/home/login').then(success => {
     window.ssmgrConfig = success;
 
     require('./directives/focusMe');
