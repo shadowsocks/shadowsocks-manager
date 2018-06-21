@@ -4,9 +4,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $document, $interval, $timeout, $localStorage, configManager) => {
     const config = configManager.getConfig();
     if(config.status === 'normal') {
-      $state.go('user.index');
+      return $state.go('user.index');
     } else if(!config.status) {
-      $state.go('home.index');
+      return $state.go('home.index');
     } else {
       $scope.setMainLoading(false);
     }

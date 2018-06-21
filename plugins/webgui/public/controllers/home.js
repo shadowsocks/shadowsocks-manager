@@ -5,9 +5,9 @@ app
     ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {    
       const config = configManager.getConfig();
       if(config.status === 'normal') {
-        $state.go('user.index');
+        return $state.go('user.index');
       } else if (config.status === 'admin') {
-        $state.go('admin.index');
+        return $state.go('admin.index');
       } else {
         $localStorage.admin = {};
         $localStorage.user = {};

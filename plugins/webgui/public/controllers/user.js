@@ -5,9 +5,9 @@ app
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager) => {
     const config = configManager.getConfig();
     if(config.status === 'admin') {
-      $state.go('admin.index');
+      return $state.go('admin.index');
     } else if(!config.status) {
-      $state.go('home.index');
+      return $state.go('home.index');
     } else {
       $scope.setMainLoading(false);
     }

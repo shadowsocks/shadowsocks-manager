@@ -269,7 +269,7 @@ const colors = [
   { value: 'grey', color: '#9E9E9E' },
 ];
 const homePage = (req, res) => {
-  return knex('webguiSetting').select().where({
+  return knex('webguiSetting').where({
     key: 'base',
   }).then(success => {
     if (!success.length) {
@@ -296,22 +296,23 @@ app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);
 app.get(/^\/user\//, homePage);
 
-app.get('/serviceworker.js', (req, res) => {
-  return knex('webguiSetting').select().where({
-    key: 'base',
-  }).then(success => {
-    if (!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  }).then(success => {
+app.get('/serviceworker.js', async (req, res) => {
+  try {
+    const setting = await knex('webguiSetting').select().where({
+      key: 'base',
+    }).then(success => {
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value;
+    });
     res.header('Content-Type', 'text/javascript');
     res.render('serviceworker.js', {
-      serviceWorker: !!success.serviceWorker,
-      serviceWorkerTime: success.serviceWorkerTime,
+      serviceWorker: !!setting.serviceWorker,
+      serviceWorkerTime: setting.serviceWorkerTime,
     });
-  });
+  } catch(err) {
+    console.log(err);
+    res.status(500).end();
+  }
 });
 
 app.get('*', (req, res) => {
