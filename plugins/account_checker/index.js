@@ -105,6 +105,28 @@ const addPort = (server, account) => {
   });
 };
 
+const deleteExtraPorts = async serverId => {
+  try {
+    const serverInfo = await knex('server').where({ id: serverId }).then(s => s[0]);
+    if(!serverInfo) { return Promise.reject(`Server[${ serverId }] not exists`); }
+    const currentPorts = await manager.send({ command: 'list' }, {
+      host: serverInfo.host,
+      port: serverInfo.port,
+      password: serverInfo.password,
+    });
+    for(let p of currentPorts) {
+      const accountInfo = await knex('account_plugin').where({ port: p.port - serverInfo.shift }).then(s => s[0]);
+      if(!accountInfo) {
+        deletePort(serverInfo, accountInfo);
+      } else if(accountInfo.server && JSON.parse(accountInfo.server).indexOf(serverInfo.id) < 0) {
+        deletePort(serverInfo, accountInfo);
+      }
+    }
+  } catch(err) {
+    console.log(err);
+  }
+};
+
 const checkAccount = async (serverId, accountId) => {
   try {
     const serverInfo = await knex('server').where({ id: serverId }).then(s => s[0]);
@@ -144,6 +166,7 @@ const checkAccount = async (serverId, accountId) => {
     const servers = await knex('server').where({});
     const accounts = await knex('account_plugin').where({});
     for(let server of servers) {
+      await deleteExtraPorts(server.id);
       for(let account of accounts) {
         const start = Date.now();
         await checkAccount(server.id, account.id);

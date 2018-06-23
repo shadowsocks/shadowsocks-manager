@@ -258,7 +258,7 @@ const checkServer = async () => {
                 a.port + s.shift, nextCheckTime
               );
             }
-            if(flow === -1 && accountFlowData.updateTime && Date.now() - 15 * 60 * 1000 >= accountFlowData.checkTime) {
+            if(flow === -1 && accountFlowData.updateTime && Date.now() - accountFlowData.updateTime <= 10 * 60 * 1000 && Date.now() - 15 * 60 * 1000 >= accountFlowData.checkTime) {
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow2) / 200000000 * 60 * 1000;
               let nextCheckTime;
@@ -269,13 +269,6 @@ const checkServer = async () => {
               } else {
                 nextCheckTime = Date.now() + nextTime;
               }
-              // if(flow2 > -1) {
-              //   await setAccountFlow(
-              //     s.id, a.id,
-              //     isMultiServerFlow ? await checkFlowFromAccountFlowTable(s.id, a.id) : flow2,
-              //     a.port + s.shift, nextCheckTime
-              //   );
-              // }
             }
             if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
