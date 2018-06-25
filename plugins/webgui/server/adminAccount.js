@@ -119,9 +119,9 @@ exports.getSubscribeAccountForUser = (req, res) => {
     noFlow: 1,
   }).then(success => {
     const result = success.servers.map(server => {
-      return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port + '#' + server.name).toString('base64');
-    }).join('\n');
-    res.send(result);
+      return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port).toString('base64') + '#' + Buffer.from(server.name).toString('base64');
+    }).join('\r\n');
+    res.send(Buffer.from(result).toString('base64'));
   }).catch(err => {
     console.log(err);
     res.status(403).end();
