@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== 'production') {
+if(process.env.NODE_ENV !== 'production' && +process.versions.node[0] < 8) {
   console.log('use babel-core/register');
   require('babel-core/register');
 }
