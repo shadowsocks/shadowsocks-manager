@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
-app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state',
-  ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
+app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state', '$mdToast',
+  ($scope, $localStorage, $location, $http, $translate, languageDialog, $state, $mdToast) => {
     $scope.setConfig = (key, value) => {
       if(angular.isObject(key)) {
         for(const k in key) {
@@ -69,5 +69,13 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       languageDialog.show();
     };
     $translate.use($localStorage.language || navigator.language || 'zh-CN');
+    $scope.toast = (content, delay = 3000) => {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(content)
+          .position('top right')
+          .hideDelay(delay)
+      );
+    };
   }
 ]);

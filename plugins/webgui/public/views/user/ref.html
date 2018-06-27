@@ -24,7 +24,7 @@
                         <div>
                             <span hide-xs style="font-size: 0.8em; color: #666">{{ getRefUrl(c.code) }}</span>
                             <span hide-gt-xs>{{ c.code }}</span>
-                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(c.code) }}">复制链接</md-button>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(c.code) }}" ngclipboard-success="clipboardSuccess(e);">复制链接</md-button>
                         </div>
                         <div>{{ c.count }} / {{ c.maxUser }}</div>
                     </div>

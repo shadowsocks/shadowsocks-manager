@@ -361,5 +361,9 @@ app
     $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });
     $http.get('/api/user/ref/user').then(success => { $scope.user = success.data; });
     $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
+    $scope.clipboardSuccess = event => {
+      console.log(event);
+      $scope.toast('邀请链接已复制到剪贴板');
+    };
   }
 ]);
