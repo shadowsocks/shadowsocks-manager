@@ -135,7 +135,13 @@ exports.signup = (req, res) => {
     res.send(type);
   }).catch(err => {
     logger.error(`[${ req.body.email }] signup fail: ${ err }`);
-    res.status(403).end();
+    // res.status(403).end();
+    const errorData = ['user exists'];
+    if(errorData.indexOf(err) < 0) {
+      return res.status(403).end();
+    } else {
+      return res.status(403).end(err);
+    }
   });
 };
 

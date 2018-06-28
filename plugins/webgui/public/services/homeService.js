@@ -11,7 +11,9 @@ app.factory('homeApi', ['$http', $http => {
     .then(success => success.data)
     .catch(err => {
       if(err.status === 403) {
-        return Promise.reject('用户注册失败');
+        let errData = '用户注册失败';
+        if(err.data === 'user exists') { errData = '该用户已存在'; }
+        return Promise.reject(errData);
       } else {
         return Promise.reject('网络异常，请稍后再试');
       }

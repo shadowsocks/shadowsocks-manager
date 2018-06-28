@@ -13,7 +13,7 @@ const checkExist = async (obj) => {
   if(user.length === 0) {
     return;
   } else {
-    return Promise.reject();
+    return Promise.reject('user exists');
   }
 };
 
@@ -55,7 +55,8 @@ const addUser = async (options) => {
     if(options.telegramId) {
       Object.assign(insert, { telegram: options.telegramId });
     }
-    return knex('user').insert(insert);
+    const user = await knex('user').insert(insert);
+    return user;
   } catch(err) {
     console.log(err);
     return Promise.reject(err);
