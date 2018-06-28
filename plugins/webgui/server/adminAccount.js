@@ -1,9 +1,7 @@
 const macAccount = appRequire('plugins/macAccount/index');
 const account = appRequire('plugins/account/index');
 
-const formatMacAddress = mac => {
-  return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
-};
+const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
 exports.getMacAccount = (req, res) => {
   const userId = +req.query.userId;
