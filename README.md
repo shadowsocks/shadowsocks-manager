@@ -55,15 +55,15 @@ docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [s
 here is the `Dockerfile`
 
 ```
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER gyteng <igyteng@gmail.com>
 RUN apt-get update && \
-    apt-get install tzdata net-tools curl git sudo software-properties-common python-pip -y && \
+    export DEBIAN_FRONTEND=noninteractive && \
+    apt-get install tzdata iproute2 curl git sudo software-properties-common python-pip -y && \
     pip install git+https://github.com/shadowsocks/shadowsocks.git@master && \
-    add-apt-repository ppa:max-c-lv/shadowsocks-libev -y && \
-    curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs shadowsocks-libev && \
-    npm i -g shadowsocks-manager && \
+    npm i -g shadowsocks-manager --unsafe-perm && \
     echo "Asia/Shanghai" > /etc/timezone && \
     rm /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
