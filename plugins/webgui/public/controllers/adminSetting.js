@@ -649,6 +649,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $state.go('admin.refCodeList');
   });
   $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
+  $scope.clipboardSuccess = event => {
+    $scope.toast('邀请链接已复制到剪贴板');
+  };
 }
 ]).controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
   ($scope, $http, $timeout, $state, $mdMedia) => {
@@ -708,6 +711,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $http.get('/api/admin/ref/user').then(success => { $scope.user = success.data; });
     $scope.getRefUrl = code => {
       return `${ $scope.config.site }/home/ref/${ code }`;
+    };
+    $scope.clipboardSuccess = event => {
+      $scope.toast('邀请链接已复制到剪贴板');
     };
   }
 ]);
