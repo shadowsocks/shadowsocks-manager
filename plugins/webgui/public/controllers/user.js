@@ -125,8 +125,8 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog',
-  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog', 'subscribeDialog',
+  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog, subscribeDialog) => {
     $scope.setTitle('账号');
     $scope.flexGtSm = 100;
     if(!$localStorage.user.serverInfo) {
@@ -247,6 +247,9 @@ app
       changePasswordDialog.show(accountId, password).then(() => {
         getUserAccountInfo();
       });
+    };
+    $scope.subscribe = accountId => {
+      subscribeDialog.show(accountId);
     };
     $scope.createOrder = accountId => {
       payDialog.choosePayType(accountId).then(success => {

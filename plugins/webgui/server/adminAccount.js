@@ -109,19 +109,37 @@ exports.getBanAccount = (req, res) => {
   });
 };
 
-exports.getSubscribeAccountForUser = (req, res) => {
-  const mac = req.params.macAddress;
-  const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
-  macAccount.getAccountForUser(mac.toLowerCase(), ip, {
-    noPassword: 0,
-    noFlow: 1,
-  }).then(success => {
-    const result = success.servers.map(server => {
-      return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port).toString('base64') + '#' + Buffer.from(server.name).toString('base64');
-    }).join('\r\n');
-    res.send(Buffer.from(result).toString('base64'));
-  }).catch(err => {
+const isMacAddress = str => {
+  return str.match(/^([A-Fa-f0-9]{2}[:-]?){5}[A-Fa-f0-9]{2}$/);
+};
+
+exports.getSubscribeAccountForUser = async (req, res) => {
+  try {
+    const ssr = req.query.ssr;
+    const token = req.params.token;
+    const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
+    if(isMacAddress(token)) {
+      await macAccount.getAccountForUser(token.toLowerCase(), ip, {
+        noPassword: 0,
+        noFlow: 1,
+      }).then(success => {
+        const result = success.servers.map(server => {
+          return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port).toString('base64') + '#' + Buffer.from(server.name).toString('base64');
+        }).join('\r\n');
+        return res.send(Buffer.from(result).toString('base64'));
+      });
+    } else {
+      const subscribeAccount = await account.getAccountForSubscribe(token, ip);
+      const result = subscribeAccount.server.map(s => {
+        if(ssr === '1') {
+          return 'ssr://' + Buffer.from(s.host + ':' + s.port + ':origin:' + s.method + ':plain:' + Buffer.from(subscribeAccount.account.password).toString('base64') +  '/?obfsparam=&group=' + Buffer.from(s.port.toString()).toString('base64')).toString('base64');
+        }
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + s.port).toString('base64') + '#' + Buffer.from(s.name).toString('base64');
+      }).join('\r\n');
+      return res.send(Buffer.from(result).toString('base64'));
+    }
+  } catch (err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };

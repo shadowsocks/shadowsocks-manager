@@ -567,6 +567,56 @@ const getBanAccount = async options => {
   return accountInfo[0];
 };
 
+const loginLog = {};
+const scanLoginLog = ip => {
+  for(let i in loginLog) {
+    if(Date.now() - loginLog[i].time >= 10 * 60 * 1000) {
+      delete loginLog[i];
+    }
+  }
+  if(!loginLog[ip]) {
+    return false;
+  } else if (loginLog[ip].mac.length <= 10) {
+    return false;
+  } else {
+    return true;
+  }
+};
+const loginFail = (mac, ip) => {
+  if(!loginLog[ip]) {
+    loginLog[ip] = { mac: [ mac ], time: Date.now() };
+  } else {
+    if(loginLog[ip].mac.indexOf(mac) < 0) {
+      loginLog[ip].mac.push(mac);
+      loginLog[ip].time = Date.now();
+    }
+  }
+};
+
+const getAccountForSubscribe = async (token, ip) => {
+  if(scanLoginLog(ip)) {
+    return Promise.reject('ip is in black list');
+  }
+  const account = await knex('account_plugin').where({
+    subscribe: token
+  }).then(s => s[0]);
+  if(!account) {
+    loginFail(token, ip);
+    return Promise.reject('can not find account');
+  }
+  if(account.data) {
+    account.data = JSON.parse(account.data);
+  } else {
+    account.data = {};
+  }
+  const servers = await serverManager.list({ status: false });
+  const validServers = servers.filter(server => {
+    if(!account.data.server) { return true; }
+    return account.data.server.indexOf(server.id) >= 0;
+  });
+  return { server: validServers, account };
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -583,3 +633,5 @@ exports.addAccountTime = addAccountTime;
 
 exports.banAccount = banAccount;
 exports.getBanAccount = getBanAccount;
+
+exports.getAccountForSubscribe = getAccountForSubscribe;

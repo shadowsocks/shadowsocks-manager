@@ -9,6 +9,7 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
 const ref = appRequire('plugins/webgui_ref/index');
 const refUser = appRequire('plugins/webgui_ref/user');
+const crypto = require('crypto');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -75,7 +76,7 @@ exports.getOneAccount = (req, res) => {
   }).catch(err => {
     console.log(err);
     res.status(500).end();
-  });;
+  });
 };
 
 exports.getServers = (req, res) => {
@@ -453,4 +454,59 @@ exports.getRefUser = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+};
+
+exports.getAccountSubscribe = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accountId = +req.params.accountId;
+    const account = await knex('account_plugin').select([
+      'id',
+      'subscribe'
+    ]).where({
+      id: accountId,
+      userId,
+    }).then(s => s[0]);
+    if(!account.subscribe) {
+      const subscribeToken = crypto.randomBytes(16).toString('hex');;
+      await await knex('account_plugin').update({
+        subscribe: subscribeToken
+      }).where({
+        id: accountId,
+        userId,
+      });
+      account.subscribe = subscribeToken;
+    }
+    res.send(account);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.updateAccountSubscribe = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accountId = +req.params.accountId;
+    const account = await knex('account_plugin').select([
+      'id',
+      'subscribe'
+    ]).where({
+      id: accountId,
+      userId,
+    }).then(s => s[0]);
+    if(!account) { return Promise.reject('account not found'); }
+    const subscribeToken = crypto.randomBytes(16).toString('hex');;
+    await await knex('account_plugin').update({
+      subscribe: subscribeToken
+    }).where({
+      id: accountId,
+      userId,
+    });
+    account.subscribe = subscribeToken;
+    res.send(account);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
 };

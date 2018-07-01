@@ -85,7 +85,7 @@ app.put('/api/admin/account/mac', isAdmin, adminAccount.editMacAccount);
 app.delete('/api/admin/account/mac', isAdmin, adminAccount.deleteMacAccount);
 
 app.get('/api/user/account/mac/:macAddress', adminAccount.getMacAccountForUser);
-app.get('/api/user/account/subscribe/:macAddress', adminAccount.getSubscribeAccountForUser);
+app.get('/api/user/account/subscribe/:token', adminAccount.getSubscribeAccountForUser);
 app.get('/api/user/notice/mac/:macAddress', adminAccount.getNoticeForUser);
 
 app.get('/api/admin/flow/:serverId(\\d+)', isAdmin, adminFlow.getServerFlow);
@@ -163,6 +163,8 @@ app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePasswo
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
+app.get('/api/user/account/:accountId(\\d+)/subscribe', isUser, user.getAccountSubscribe);
+app.put('/api/user/account/:accountId(\\d+)/subscribe', isUser, user.updateAccountSubscribe);
 app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId(\\d+)/:accountId(\\d+)', isUser, user.getServerPortFlow);
 app.get('/api/user/flow/:serverId(\\d+)/:accountId(\\d+)/lastConnect', isUser, user.getServerPortLastConnect);
