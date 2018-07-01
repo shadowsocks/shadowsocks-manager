@@ -3,7 +3,7 @@ const window = require('window');
 const cdn = window.cdn || '';
 
 app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
-  const publicInfo = { linkType: 'ss' };
+  const publicInfo = { linkType: 'ss', ip: '0' };
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -39,17 +39,16 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
       $scope.publicInfo = bind;
       const config = configManager.getConfig();
       $scope.changeLinkType = () => {
-        console.log('GG');
-        $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1': '' }`;
+        $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1' : '?ssr=0' }&ip=${ $scope.publicInfo.ip}`;
       };
       $scope.publicInfo.getSubscribe().then(success => {
         $scope.publicInfo.token = success.data.subscribe;
-        $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1': '' }`;
+        $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1': '?ssr=0' }&ip=${ $scope.publicInfo.ip}`;
       });
       $scope.publicInfo.updateLink = () => {
         $scope.publicInfo.updateSubscribe().then(success => {
           $scope.publicInfo.token = success.data.subscribe;
-          $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1': '' }`;
+          $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }${ $scope.publicInfo.linkType === 'ssr' ? '?ssr=1': '?ssr=0' }&ip=${ $scope.publicInfo.ip}`;
         });
       };
       $scope.toast = () => {

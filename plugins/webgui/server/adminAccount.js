@@ -1,5 +1,7 @@
 const macAccount = appRequire('plugins/macAccount/index');
 const account = appRequire('plugins/account/index');
+const dns = require('dns');
+const net = require('net');
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -113,9 +115,37 @@ const isMacAddress = str => {
   return str.match(/^([A-Fa-f0-9]{2}[:-]?){5}[A-Fa-f0-9]{2}$/);
 };
 
+const getAddress = (address, ip) => {
+  let myAddress = address;
+  if(address.indexOf(':') >= 0) {
+    const hosts = address.split(':');
+    const number = Math.ceil(Math.random() * (hosts.length - 1));
+    myAddress = hosts[number];
+  }
+  if(!ip) {
+    return Promise.resolve(myAddress);
+  }
+  if(net.isIP(myAddress)) {
+    return Promise.resolve(myAddress);
+  }
+  return new Promise((resolve, reject) => {
+    dns.lookup(myAddress, (err, myAddress, family) => {
+      if(err) {
+        return reject(err);
+      }
+      return resolve(myAddress);
+    });
+  });
+};
+
+const urlsafeBase64 = str => {
+  return Buffer.from(str).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+};
+
 exports.getSubscribeAccountForUser = async (req, res) => {
   try {
     const ssr = req.query.ssr;
+    const resolveIp = req.query.ip;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     if(isMacAddress(token)) {
@@ -130,11 +160,14 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       });
     } else {
       const subscribeAccount = await account.getAccountForSubscribe(token, ip);
+      for(let s of subscribeAccount.server) {
+        s.host = await getAddress(s.host, +resolveIp);
+      }
       const result = subscribeAccount.server.map(s => {
         if(ssr === '1') {
-          return 'ssr://' + Buffer.from(s.host + ':' + s.port + ':origin:' + s.method + ':plain:' + Buffer.from(subscribeAccount.account.password).toString('base64') +  '/?obfsparam=&group=' + Buffer.from(s.port.toString()).toString('base64')).toString('base64');
+          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.name) + '&group=' + urlsafeBase64(subscribeAccount.account.port.toString()));
         }
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + s.port).toString('base64') + '#' + Buffer.from(s.name).toString('base64');
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.name).toString('base64');
       }).join('\r\n');
       return res.send(Buffer.from(result).toString('base64'));
     }
