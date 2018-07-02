@@ -51,7 +51,8 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/ref/:refId',
       controller: 'HomeRefController',
       templateUrl: `${ cdn }/public/views/home/ref.html`,
-    });
+    })
+    ;
   }
 ]);
 

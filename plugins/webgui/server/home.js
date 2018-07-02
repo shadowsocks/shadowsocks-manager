@@ -256,6 +256,12 @@ exports.status = async (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value;
       })).useRef;
+      subscribe =  (await knex('webguiSetting').select().where({
+        key: 'account',
+      }).then(success => {
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value;
+      })).subscribe;
     }
     res.send({
       status,
@@ -273,6 +279,7 @@ exports.status = async (req, res) => {
       telegram,
       giftcard,
       refCode,
+      subscribe,
     });
   } catch(err) {
     console.log(err);

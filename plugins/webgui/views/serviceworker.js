@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2018-07-01 18:34:25 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2018-07-02 23:17:36 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -93,6 +93,8 @@ const onlineCacheUrl = [
   '/public/views/dialog/payByGiftCard.html',
   '/public/views/dialog/serverChart.html',
   '/public/views/dialog/setEmail.html',
+  '/public/views/dialog/setUserGroup.html',
+  '/public/views/dialog/subscribe.html',
 ];
 
 self.addEventListener('activate', function(event) {
