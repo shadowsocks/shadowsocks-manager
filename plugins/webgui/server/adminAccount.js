@@ -160,16 +160,20 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         return res.send(Buffer.from(result).toString('base64'));
       });
     } else {
+      const isSubscribeOn = await knex('webguiSetting').where({
+        key: 'account'
+      }).then(s => s[0]).then(s => JSON.parse(s.value).subscribe);
+      if(!isSubscribeOn) { return res.status(404).end(); }
       const subscribeAccount = await account.getAccountForSubscribe(token, ip);
       for(let s of subscribeAccount.server) {
         s.host = await getAddress(s.host, +resolveIp);
       }
-      const setting = await knex('webguiSetting').where({
+      const baseSetting = await knex('webguiSetting').where({
         key: 'base'
       }).then(s => s[0]).then(s => JSON.parse(s.value));
       const result = subscribeAccount.server.map(s => {
         if(ssr === '1') {
-          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.name) + '&group=' + urlsafeBase64(setting.title));
+          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.name) + '&group=' + urlsafeBase64(baseSetting.title));
         }
         return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.name).toString('base64');
       }).join('\r\n');
