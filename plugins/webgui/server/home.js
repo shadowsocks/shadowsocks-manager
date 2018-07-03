@@ -243,6 +243,7 @@ exports.status = async (req, res) => {
     let giftcard;
     let refCode;
     let email;
+    let subscribe;
     if(status) {
       email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
       alipay = config.plugins.alipay && config.plugins.alipay.use;
@@ -256,7 +257,7 @@ exports.status = async (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value;
       })).useRef;
-      subscribe =  (await knex('webguiSetting').select().where({
+      subscribe = (await knex('webguiSetting').select().where({
         key: 'account',
       }).then(success => {
         success[0].value = JSON.parse(success[0].value);
