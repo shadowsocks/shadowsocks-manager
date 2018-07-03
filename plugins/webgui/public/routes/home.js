@@ -47,6 +47,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'HomeResetPasswordController',
       templateUrl: `${ cdn }/public/views/home/resetPassword.html`,
     })
+    .state('home.refInput', {
+      url: '/ref',
+      controller: 'HomeRefInputController',
+      templateUrl: `${ cdn }/public/views/home/refInput.html`,
+    })
     .state('home.ref', {
       url: '/ref/:refId',
       controller: 'HomeRefController',

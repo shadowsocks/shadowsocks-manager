@@ -114,7 +114,7 @@ app
       };
       $scope.signup = () => {
         alertDialog.loading().then(() => {
-          return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password, $scope.home.refId);
+          return homeApi.userSignup($scope.user.email, $scope.user.code, $scope.user.password, $scope.home.refInputCode || $scope.home.refId);
         })
         .then(userType => {
           alertDialog.show('用户注册成功', '确定').then(success => {
@@ -220,6 +220,16 @@ app
         $scope.home.refIdValid = success.data.valid;
         $state.go('home.signup');
       });
+    }
+  ])
+  .controller('HomeRefInputController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
+    ($scope, $state, $stateParams, $http, alertDialog) => {
+      if($scope.config.status) {
+        alertDialog.show('请先退出登录再访问此链接', '确定');
+        return; 
+      }
+      $scope.home.refInput = true;
+      $state.go('home.signup');
     }
   ])
 ;
