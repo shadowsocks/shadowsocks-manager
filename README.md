@@ -67,7 +67,7 @@ RUN apt-get update && \
     echo "Asia/Shanghai" > /etc/timezone && \
     rm /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
-ENTRYPOINT ["/usr/bin/ssmgr"]
+CMD ["/usr/bin/ssmgr"]
 ```
 
 ### Usage

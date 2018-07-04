@@ -12,4 +12,4 @@ RUN apt-get update && \
     rm /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
     
-ENTRYPOINT ["/usr/bin/ssmgr"]
+CMD ["/usr/bin/ssmgr"]
