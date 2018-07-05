@@ -24,10 +24,10 @@
     background: url('/public/views/skin/fs_zelda/zelda.jpg') no-repeat center center fixed;
     background-size: cover;
     animation-duration: 1.25s;
-    animation-name: scrollbg;
+    animation-name: background-opacity;
     animation-iteration-count: 1;
   }
-  @keyframes scrollbg {
+  @keyframes background-opacity {
     from {
       opacity : 0;
     }
@@ -36,13 +36,13 @@
     }
   }
   .menu {
-    animation-duration: 1s;
+    animation-duration: 2.5s;
     animation-name: menuFrames;
     animation-iteration-count: 1;
   }
   @keyframes menuFrames {
     from {
-      margin-top: 50px;
+      margin-top: 75px;
     }
     to {
       margin-top: 0px;
@@ -53,15 +53,18 @@
     color: #eee;
     opacity: 0.85;
     text-shadow: 1px 0 0 #333, 0 1px 0 #333, -1px 0 0 #333, 0 -1px 0 #333, 0 0 12px #ffff99;
-    animation-duration: 1.25s;
+    animation-duration: 2.5s;
     animation-name: menuTextFrames;
     animation-iteration-count: 1;
   }
   @keyframes menuTextFrames {
-    from {
+    0% {
       opacity : 0;
     }
-    to {
+    50% {
+      opacity : 0;
+    }
+    100% {
       opacity : 0.85;
     }
   }

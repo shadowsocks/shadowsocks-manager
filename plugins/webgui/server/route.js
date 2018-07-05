@@ -12,6 +12,7 @@ const adminNotice = appRequire('plugins/webgui/server/adminNotice');
 const adminAccount = appRequire('plugins/webgui/server/adminAccount');
 const adminGiftCard = appRequire('plugins/webgui/server/adminGiftCard');
 const adminGroup = appRequire('plugins/webgui/server/adminGroup');
+const adminOrder = appRequire('plugins/webgui/server/adminOrder');
 const push = appRequire('plugins/webgui/server/push');
 const os = require('os');
 const path = require('path');
@@ -159,6 +160,12 @@ app.delete('/api/admin/group/:id(\\d+)', isAdmin, isSuperAdmin, adminGroup.delet
 app.post('/api/admin/group/:groupId(\\d+)/:userId(\\d+)', isAdmin, isSuperAdmin, adminGroup.setUserGroup);
 
 app.post('/api/admin/setting/changePassword', isAdmin, adminSetting.changePassword);
+
+app.get('/api/admin/order', isAdmin, isSuperAdmin, adminOrder.getOrders);
+app.get('/api/admin/order/:orderId(\\d+)', isAdmin, isSuperAdmin, adminOrder.getOneOrder);
+app.post('/api/admin/order', isAdmin, isSuperAdmin, adminOrder.newOrder);
+app.put('/api/admin/order/:orderId(\\d+)', isAdmin, isSuperAdmin, adminOrder.editOrder);
+app.delete('/api/admin/order/:orderId(\\d+)', isAdmin, isSuperAdmin, adminOrder.deleteOrder);
 
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
