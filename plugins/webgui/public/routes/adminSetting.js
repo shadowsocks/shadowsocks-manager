@@ -24,11 +24,6 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminNewNoticeController',
       templateUrl: `${ cdn }/public/views/admin/newNotice.html`,
     })
-    // .state('admin.paymentSetting', {
-    //   url: '/settings/payment',
-    //   controller: 'AdminPaymentSettingController',
-    //   templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
-    // })
     .state('admin.paymentList', {
       url: '/settings/paymentList',
       controller: 'AdminPaymentListController',
@@ -113,6 +108,22 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/myRefCode',
       controller: 'AdminMyRefCodeController',
       templateUrl: `${ cdn }/public/views/admin/myRefCode.html`
+    })
+
+    .state('admin.order', {
+      url: '/settings/order',
+      controller: 'AdminOrderSettingController',
+      templateUrl: `${ cdn }/public/views/admin/orderSetting.html`
+    })
+    .state('admin.newOrder', {
+      url: '/settings/newOrder',
+      controller: 'AdminNewOrderController',
+      templateUrl: `${ cdn }/public/views/admin/newOrder.html`
+    })
+    .state('admin.editOrder', {
+      url: '/settings/editOrder/:id',
+      controller: 'AdminEditOrderController',
+      templateUrl: `${ cdn }/public/views/admin/editOrder.html`
     })
     ;
   }

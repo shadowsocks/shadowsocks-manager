@@ -1,0 +1,31 @@
+<div layout="column">
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <div style="height: 30px;"></div>
+            <form name="orderForm">
+                <md-input-container class="md-block">
+                    <label>名称</label>
+                    <input type="text" required name="name" ng-model="order.name">
+                    <div ng-messages="orderForm.name.$error">
+                        <div ng-message="required">名称不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>备注</label>
+                    <input type="text" name="comment" ng-model="order.comment">
+                </md-input-container>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>
