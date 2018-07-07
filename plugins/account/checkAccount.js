@@ -84,6 +84,7 @@ const setAccountFlow = async (serverId, accountId, flow, port, nextCheckTime) =>
       accountId,
       port,
       flow,
+      updateTime: Date.now(),
       checkTime: Date.now(),
       nextCheckTime,
     });
@@ -91,6 +92,7 @@ const setAccountFlow = async (serverId, accountId, flow, port, nextCheckTime) =>
     await knex('account_flow').update({
       port,
       flow,
+      updateTime: Date.now(),
       checkTime: Date.now(),
       nextCheckTime,
     }).where({
@@ -122,7 +124,7 @@ const deleteCheckAccountTimePort = async port => {
   const servers = await knex('server').select();
   servers.forEach(async server => {
     await knex('account_flow').update({
-      nextCheckTime: Date.now(),
+      nextCheckTime: Date.now() + 90000,
     }).where({
       serverId: server.id,
       port: port + server.shift,
@@ -132,7 +134,7 @@ const deleteCheckAccountTimePort = async port => {
 };
 const deleteCheckAccountTimeServer = serverId => {
   return knex('account_flow').update({
-    nextCheckTime: Date.now(),
+    nextCheckTime: Date.now() + 90000,
   }).where({ serverId });
 };
 
@@ -181,7 +183,7 @@ const checkServer = async () => {
   server.forEach(s => {
     const checkServerAccount = async s => {
       try {
-        await sleep(Math.ceil(Math.random() * 45000));
+        await sleep(Math.ceil(Math.random() * 100000));
         const port = await manager.send({ command: 'list' }, {
           host: s.host,
           port: s.port,
@@ -195,7 +197,7 @@ const checkServer = async () => {
           return !!port.list[number + s.shift];
         };
         const checkAccountStatus = async a => {
-          const sleepTime = Math.ceil(Math.random() * 120000);
+          const sleepTime = Math.ceil(Math.random() * 75000);
           await sleep(sleepTime);
           const isMultiServerFlow = !!a.multiServerFlow;
           const accountServer = a.server ? JSON.parse(a.server) : a.server;
@@ -258,7 +260,7 @@ const checkServer = async () => {
                 a.port + s.shift, nextCheckTime
               );
             }
-            if(flow === -1 && accountFlowData.updateTime && Date.now() - accountFlowData.updateTime <= 10 * 60 * 1000 && Date.now() - 15 * 60 * 1000 >= accountFlowData.checkTime) {
+            if(flow === -1 && accountFlowData.updateTime && Date.now() - accountFlowData.updateTime <= 10 * 60 * 1000) {
               flow2 = await checkFlowFromAccountFlowTable(isMultiServerFlow ? null : s.id, a.id);
               const nextTime = (data.flow * (isMultiServerFlow ? 1 : s.scale) - flow2) / 200000000 * 60 * 1000;
               let nextCheckTime;
