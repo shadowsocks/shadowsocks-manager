@@ -12,7 +12,7 @@ const addDefaultGroup = async () => {
   return;
 };
 
-const createTable = async() => {
+const createTable = async () => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
     await addDefaultGroup();

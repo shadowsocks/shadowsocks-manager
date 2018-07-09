@@ -1,1 +1,106 @@
-2
+<div layout="column">
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <div style="height: 30px;"></div>
+            <form name="orderForm">
+                <md-input-container class="md-block">
+                    <label>名称</label>
+                    <input type="text" required name="name" ng-model="order.name">
+                    <div ng-messages="orderForm.name.$error">
+                        <div ng-message="required">名称不能为空</div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>备注</label>
+                    <input type="text" name="comment" ng-model="order.comment">
+                </md-input-container>
+                <div layout="row" layout-align="space-between start">
+                    <md-input-container class="md-block" flex="45">
+                        <label translate>类型</label>
+                        <div layout="row">
+                            <md-select ng-model="order.type" style="width: 100%;">
+                                <md-option ng-repeat="type in typeList" value="{{type.value}}" translate>{{type.key}}</md-option>
+                            </md-select>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block" flex="45">
+                        <label>周期</label>
+                        <input type="number" name="cycle" ng-model="order.cycle" style="margin: 20px 0 20px 0;">
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="space-between center">
+                    <md-input-container class="md-block" flex="45">
+                        <label>支付宝</label>
+                        <input type="number" name="alipay" ng-model="order.alipay">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex="45">
+                        <label>Paypal</label>
+                        <input type="number" name="paypal" ng-model="order.paypal">
+                    </md-input-container>
+                </div>
+                <div layout="row" layout-align="space-between center">
+                    <md-input-container class="md-block" flex="45">
+                        <label>流量</label>
+                        <input type="number" name="flow" ng-model="order.flow">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex="45">
+                        <label>邀请获得时长</label>
+                        <input type="number" name="refTime" ng-model="order.refTime">
+                    </md-input-container>
+                </div>
+            </form>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">到期自动删除</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="order.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">合并多服务器流量统计</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="order.multiServerFlow" aria-label="multiServerFlow" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">续费允许更换套餐</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="order.changeOrderType" aria-label="changeOrderType" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">自定义可用服务器</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="orderServer" aria-label="orderServer">
+                    </md-switch>
+                </div>
+            </div>
+            <div layout="column" layout-wrap flex ng-if="orderServer">
+                <div layout="column" layout-wrap flex ng-repeat="server in servers">
+                    <div flex="100">
+                        <md-checkbox ng-model="orderServerObj[server.id]">
+                            <div layout="row" layout-align="space-between center">
+                                <span flex>{{ server.name }}</span>
+                                <span flex style="color: #777">{{ server.host }}</span>
+                            </div>
+                        </md-checkbox>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+            <md-button class="md-warn" ng-click="delete()" ng-disabled="orderId <= 5">删除</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>
