@@ -22,6 +22,12 @@ const createTable = async () => {
         table.integer('showNotice').defaultTo(1);
       });
     }
+    const hasOrder = await knex.schema.hasColumn(tableName, 'order');
+    if(!hasOrder) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('order');
+      });
+    }
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
@@ -29,6 +35,7 @@ const createTable = async () => {
     table.string('name');
     table.string('comment');
     table.integer('showNotice').defaultTo(1);
+    table.string('order');
   }).then(() => {
     return addDefaultGroup();
   });

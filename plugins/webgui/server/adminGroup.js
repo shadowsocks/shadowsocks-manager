@@ -36,7 +36,8 @@ exports.editGroup = (req, res, next) => {
   const name = req.body.name;
   const comment = req.body.comment;
   const showNotice = !!req.body.showNotice;
-  group.editGroup(id, name, comment, showNotice).then(success => {
+  const order = req.body.order ? JSON.stringify(req.body.order) : null;
+  group.editGroup(id, name, comment, showNotice, order).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);

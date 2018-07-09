@@ -65,41 +65,6 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     }
   }
 ])
-// .controller('AdminPaymentSettingController', ['$scope', '$http', '$timeout', '$state',
-//   ($scope, $http, $timeout, $state) => {
-//     $scope.setTitle('支付设置');
-//     $scope.setMenuButton('arrow_back', 'admin.settings');
-//     $scope.time = [
-//       { id: 'hour',   name: '小时' },
-//       { id: 'day',    name: '天' },
-//       { id: 'week',   name: '周' },
-//       { id: 'month',  name: '月' },
-//       { id: 'season', name: '季' },
-//       { id: 'year',   name: '年' },
-//     ];
-//     let lastSave = 0;
-//     let lastSavePromise = null;
-//     const saveTime = 2000;
-//     $scope.saveSetting = () => {
-//       if(Date.now() - lastSave <= saveTime) {
-//         lastSavePromise && $timeout.cancel(lastSavePromise);
-//       }
-//       const timeout = Date.now() - lastSave >= saveTime ? 0 : saveTime - Date.now() + lastSave;
-//       lastSave = Date.now();
-//       lastSavePromise = $timeout(() => {
-//         $http.put('/api/admin/setting/payment', {
-//           data: $scope.paymentData,
-//         });
-//       }, timeout);
-//     };
-//     $http.get('/api/admin/setting/payment').then(success => {
-//       $scope.paymentData = success.data;
-//       $scope.$watch('paymentData', () => {
-//         $scope.saveSetting();
-//       }, true);
-//     });
-//   }
-// ])
 .controller('AdminAccountSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {
     $scope.setTitle('账号设置');
@@ -439,83 +404,6 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
         $scope.saveSetting();
       }, true);
     });
-  }
-]).controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$state',
-  ($scope, $http, $timeout, $state) => {
-    $scope.setTitle('群组管理');
-    $scope.setMenuButton('arrow_back', function() {
-      $state.go('admin.settings');
-    });
-    $scope.setFabButton(() => {
-      $state.go('admin.addGroup');
-    });
-    $http.get('/api/admin/group').then(success => {
-      $scope.groups = success.data;
-    });
-    $scope.editGroup = id => { $state.go('admin.editGroup', { groupId: id }); };
-  }
-]).controller('AdminAddGroupController', ['$scope', '$http', '$timeout', '$state', 'alertDialog',
-  ($scope, $http, $timeout, $state, alertDialog) => {
-    $scope.setTitle('新增群组');
-    $scope.setMenuButton('arrow_back', 'admin.groupSetting');
-    $scope.group = {};
-    $scope.confirm = () => {
-      alertDialog.loading();
-      $http.post('/api/admin/group', {
-        name: $scope.group.name,
-        comment: $scope.group.comment,
-        showNotice: $scope.group.showNotice,
-      }, {
-        timeout: 15000,
-      }).then(success => {
-        alertDialog.show('添加群组成功', '确定');
-        $state.go('admin.groupSetting');
-      }).catch(() => {
-        alertDialog.show('添加群组失败', '确定');
-      });
-    };
-    $scope.cancel = () => {
-      $state.go('admin.groupSetting');
-    };
-  }
-]).controller('AdminEditGroupController', ['$scope', '$http', '$timeout', '$state', '$stateParams', 'alertDialog',
-  ($scope, $http, $timeout, $state, $stateParams, alertDialog) => {
-    $scope.setTitle('修改群组');
-    $scope.setMenuButton('arrow_back', 'admin.groupSetting');
-    $scope.groupId = +$stateParams.groupId;
-    $scope.group = {};
-    $http.get(`/api/admin/group/${ $scope.groupId }`).then(success => {
-      $scope.group = success.data;
-    });
-    $scope.confirm = () => {
-      alertDialog.loading();
-      $http.put(`/api/admin/group/${ $scope.groupId }`, {
-        name: $scope.group.name,
-        comment: $scope.group.comment,
-        showNotice: $scope.group.showNotice,
-      }, {
-        timeout: 15000,
-      }).then(success => {
-        alertDialog.show('修改群组成功', '确定');
-        $state.go('admin.groupSetting');
-      }).catch(() => {
-        alertDialog.show('修改群组失败', '确定');
-      });
-    };
-    $scope.cancel = () => {
-      $state.go('admin.groupSetting');
-    };
-    $scope.delete = () => {
-      alertDialog.loading();
-      $http.delete(`/api/admin/group/${ $scope.groupId }`, {
-        timeout: 15000,
-      }).then(success => {
-        alertDialog.show('删除群组成功', '确定');
-        $state.go('admin.groupSetting');
-      }).catch(() => {
-        alertDialog.show('删除群组失败', '确定');
-      });
-    };
   }
 ]).controller('AdminRefSettingController', ['$scope', '$http', '$timeout', '$state',
   ($scope, $http, $timeout, $state) => {

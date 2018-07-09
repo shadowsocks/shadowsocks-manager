@@ -17,9 +17,12 @@ const addGroup = (name, comment, showNotice) => {
   });
 };
 
-const editGroup = (id, name, comment, showNotice) => {
+const editGroup = (id, name, comment, showNotice, order) => {
   return knex('group').update({
-    name, comment, showNotice,
+    name,
+    comment,
+    showNotice,
+    order,
   }).where({ id });
 };
 
