@@ -3,6 +3,8 @@ const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
+const orderPlugin = appRequire('plugins/webgui_order');
+const groupPlugin = appRequire('plugins/group');
 const config = appRequire('services/config').all();
 const giftcard = appRequire('plugins/giftcard');
 const log4js = require('log4js');
@@ -206,36 +208,44 @@ exports.changeShadowsocksPassword = (req, res) => {
   });
 };
 
-exports.createOrder = (req, res) => {
-  const userId = req.session.user;
-  const accountId = req.body.accountId;
-  const orderType = req.body.orderType;
-  let type;
-  let amount;
-  if (orderType === 'week') { type = 2; }
-  else if (orderType === 'month') { type = 3; }
-  else if (orderType === 'day') { type = 4; }
-  else if (orderType === 'hour') { type = 5; }
-  else if (orderType === 'season') { type = 6; }
-  else if (orderType === 'year') { type = 7; }
-  else { return res.status(403).end(); }
-  knex('webguiSetting').select().where({
-    key: 'payment',
-  }).then(success => {
-    if (!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  }).then(success => {
-    amount = success[orderType].alipay;
-    return alipay.createOrder(userId, accountId, amount, type);
-  }).then(success => {
-    return res.send(success);
-  }).catch(err => {
+exports.createOrder = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accountId = req.body.accountId;
+    const orderId = req.body.orderId;
+
+    const alipayOrder = await alipay.createOrder(userId, accountId, orderId);
+    return res.send(alipayOrder);
+    // let type;
+    // let amount;
+    // if (orderType === 'week') { type = 2; }
+    // else if (orderType === 'month') { type = 3; }
+    // else if (orderType === 'day') { type = 4; }
+    // else if (orderType === 'hour') { type = 5; }
+    // else if (orderType === 'season') { type = 6; }
+    // else if (orderType === 'year') { type = 7; }
+    // else { return res.status(403).end(); }
+    // knex('webguiSetting').select().where({
+    //   key: 'payment',
+    // }).then(success => {
+    //   if (!success.length) {
+    //     return Promise.reject('settings not found');
+    //   }
+    //   success[0].value = JSON.parse(success[0].value);
+    //   return success[0].value;
+    // }).then(success => {
+    //   amount = success[orderType].alipay;
+    //   return alipay.createOrder(userId, accountId, amount, type);
+    // }).then(success => {
+    //   return res.send(success);
+    // }).catch(err => {
+    //   console.log(err);
+    //   res.status(403).end();
+    // });
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.checkOrder = (req, res) => {
@@ -255,28 +265,42 @@ exports.alipayCallback = (req, res) => {
   return res.send('success');
 };
 
-exports.getPrice = (req, res) => {
-  const price = {
-    alipay: {},
-    paypal: {},
-  };
-  knex('webguiSetting').select().where({
-    key: 'payment',
-  }).then(success => {
-    if (!success.length) {
-      return Promise.reject('settings not found');
+exports.getPrice = async (req, res) => {
+  try {
+    const groupId = req.userInfo.group;
+    let orders = await orderPlugin.getOrders();
+    const groupSetting = await groupPlugin.getOneGroup(groupId);
+    if(groupSetting.order) {
+      orders = orders.filter(f => {
+        return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
+      });
     }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  }).then(success => {
-    for (const s in success) {
-      price.alipay[s] = success[s].alipay;
-      price.paypal[s] = success[s].paypal;
-    }
-    return res.send(price);
-  }).catch(() => {
+    return res.send(orders);
+    // const price = {
+    //   alipay: {},
+    //   paypal: {},
+    // };
+    // knex('webguiSetting').select().where({
+    //   key: 'payment',
+    // }).then(success => {
+    //   if (!success.length) {
+    //     return Promise.reject('settings not found');
+    //   }
+    //   success[0].value = JSON.parse(success[0].value);
+    //   return success[0].value;
+    // }).then(success => {
+    //   for (const s in success) {
+    //     price.alipay[s] = success[s].alipay;
+    //     price.paypal[s] = success[s].paypal;
+    //   }
+    //   return res.send(price);
+    // }).catch(() => {
+    //   res.status(403).end();
+    // });
+  } catch(err) {
+    console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.getNotice = async (req, res) => {
@@ -331,37 +355,47 @@ exports.getMultiServerFlowStatus = (req, res) => {
 
 const paypal = appRequire('plugins/paypal/index');
 
-exports.createPaypalOrder = (req, res) => {
-  const userId = req.session.user;
-  const accountId = req.body.accountId;
-  const orderType = req.body.orderType;
-  let type;
-  let amount;
-  if (orderType === 'week') { type = 2; }
-  else if (orderType === 'month') { type = 3; }
-  else if (orderType === 'day') { type = 4; }
-  else if (orderType === 'hour') { type = 5; }
-  else if (orderType === 'season') { type = 6; }
-  else if (orderType === 'year') { type = 7; }
-  else { return res.status(403).end(); }
-  // amount = config.plugins.account.pay[orderType].price;
-  knex('webguiSetting').select().where({
-    key: 'payment',
-  }).then(success => {
-    if (!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  }).then(success => {
-    amount = success[orderType].paypal;
-    return paypal.createOrder(userId, accountId, amount, type);
-  }).then(success => {
-    res.send(success);
-  })
-    .catch(error => {
-      res.status(403).end();
-    });
+exports.createPaypalOrder = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accountId = req.body.accountId;
+    const orderId = req.body.orderId;
+    // const orderInfo = await orderPlugin.getOneOrder(orderId);
+    // const type = orderInfo.type;
+    // const amount = orderInfo.paypal;
+    const paypalOrder = await paypal.createOrder(userId, accountId, orderId);
+    return res.send(paypalOrder);
+    // let type;
+    // let amount;
+    // if (orderType === 'week') { type = 2; }
+    // else if (orderType === 'month') { type = 3; }
+    // else if (orderType === 'day') { type = 4; }
+    // else if (orderType === 'hour') { type = 5; }
+    // else if (orderType === 'season') { type = 6; }
+    // else if (orderType === 'year') { type = 7; }
+    // else { return res.status(403).end(); }
+    // amount = config.plugins.account.pay[orderType].price;
+    // knex('webguiSetting').select().where({
+    //   key: 'payment',
+    // }).then(success => {
+    //   if (!success.length) {
+    //     return Promise.reject('settings not found');
+    //   }
+    //   success[0].value = JSON.parse(success[0].value);
+    //   return success[0].value;
+    // }).then(success => {
+    //   amount = success[orderType].paypal;
+    //   return paypal.createOrder(userId, accountId, amount, type);
+    // }).then(success => {
+    //   res.send(success);
+    // })
+    // .catch(error => {
+    //   res.status(403).end();
+    // });
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
 };
 
 exports.executePaypalOrder = (req, res) => {

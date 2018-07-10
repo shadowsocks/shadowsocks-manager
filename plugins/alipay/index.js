@@ -5,6 +5,7 @@ const config = appRequire('services/config').all();
 const alipayf2f = require('alipay-ftof');
 const fs = require('fs');
 const ref = appRequire('plugins/webgui_ref/time');
+const orderPlugin = appRequire('plugins/webgui_order');
 
 let alipay_f2f;
 if(config.plugins.alipay && config.plugins.alipay.use) {
@@ -42,62 +43,64 @@ const account = appRequire('plugins/account/index');
 const moment = require('moment');
 const push = appRequire('plugins/webgui/server/push');
 
-const createOrder = async (user, account, amount, orderType = 3) => {
-  const oldOrder = await knex('alipay').select().where({
-    user,
-    account: account ? account : null,
-    amount: amount + '',
-    orderType,
-  }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
-    status: 'CREATE',
-  }).then(success => {
-    return success[0];
-  });
-  if(oldOrder) {
-    return {
-      orderId: oldOrder.orderId,
-      qrCode: oldOrder.qrcode,
-    };
-  }
-  const orderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
+const createOrder = async (user, account, orderId) => {
+  // const oldOrder = await knex('alipay').select().where({
+  //   user,
+  //   account: account ? account : null,
+  //   amount: amount + '',
+  //   orderType,
+  // }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
+  //   status: 'CREATE',
+  // }).then(success => {
+  //   return success[0];
+  // });
+  // if(oldOrder) {
+  //   return {
+  //     orderId: oldOrder.orderId,
+  //     qrCode: oldOrder.qrcode,
+  //   };
+  // }
+  const orderInfo = await orderPlugin.getOneOrder(orderId);
+  const myOrderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
   const time = 60;
-  const orderSetting = await knex('webguiSetting').select().where({
-    key: 'payment',
-  }).then(success => {
-    if(!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  }).then(success => {
-    if(orderType === 5) { return success.hour; }
-    else if(orderType === 4) { return success.day; }
-    else if(orderType === 2) { return success.week; }
-    else if(orderType === 3) { return success.month; }
-    else if(orderType === 6) { return success.season; }
-    else if(orderType === 7) { return success.year; }    
-  });
+  // const orderSetting = await knex('webguiSetting').select().where({
+  //   key: 'payment',
+  // }).then(success => {
+  //   if(!success.length) {
+  //     return Promise.reject('settings not found');
+  //   }
+  //   success[0].value = JSON.parse(success[0].value);
+  //   return success[0].value;
+  // }).then(success => {
+  //   if(orderType === 5) { return success.hour; }
+  //   else if(orderType === 4) { return success.day; }
+  //   else if(orderType === 2) { return success.week; }
+  //   else if(orderType === 3) { return success.month; }
+  //   else if(orderType === 6) { return success.season; }
+  //   else if(orderType === 7) { return success.year; }    
+  // });
   const qrCode = await alipay_f2f.createQRPay({
-    tradeNo: orderId,
-    subject: orderSetting.orderName || 'ss续费',
-    totalAmount: +amount,
+    tradeNo: myOrderId,
+    subject: orderInfo.name || 'ss续费',
+    totalAmount: +orderInfo.alipay,
     body: 'ss',
     timeExpress: 10,
   });
   await knex('alipay').insert({
-    orderId,
-    orderType,
+    orderId: myOrderId,
+    orderType: orderInfo.type,
+    cycle: orderInfo.cycle,
     qrcode: qrCode.qr_code,
-    amount: amount + '',
+    amount: orderInfo.alipay + '',
     user,
     account: account ? account : null,
     status: 'CREATE',
     createTime: Date.now(),
     expireTime: Date.now() + time * 60 * 1000,
   });
-  logger.info(`创建订单: [${ orderId }][${ amount }][account: ${ account }]`);
+  logger.info(`创建订单: [${ myOrderId }][${ orderInfo.alipay }][account: ${ account }]`);
   return {
-    orderId,
+    orderId: myOrderId,
     qrCode: qrCode.qr_code,
   };
 };
@@ -148,7 +151,7 @@ cron.minute(async () => {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
       isTelegram && telegram.push(`订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`);
-      return account.setAccountLimit(userId, accountId, order.orderType)
+      return account.setAccountLimit(userId, accountId, order.orderType, order.cycle)
       .then(() => {
         return knex('alipay').update({
           status: 'FINISH',

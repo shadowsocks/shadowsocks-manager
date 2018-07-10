@@ -258,12 +258,12 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
   return;
 };
 
-const setAccountLimit = async (userId, accountId, orderType) => {
+const setAccountLimit = async (userId, accountId, orderType, cycle = 1) => {
   const payType = {
     week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
   };
   let paymentType;
-  let limit = 1;
+  let limit = cycle;
   if(orderType === 6) { limit = 3; }
   if(orderType === 7) { limit = 12; }
   const flow = {};
@@ -360,9 +360,9 @@ const setAccountLimit = async (userId, accountId, orderType) => {
   };
   let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
   if(expireTime <= Date.now()) {
-    expireTime = timePeriod[orderType] + Date.now();
+    expireTime = timePeriod[orderType] * limit + Date.now();
   } else {
-    expireTime += timePeriod[orderType];
+    expireTime += timePeriod[orderType] * limit;
   }
   let countTime = timePeriod[orderType];
   if(orderType === 6) { countTime = timePeriod[3]; }

@@ -27,18 +27,18 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
   let dialogPromise = null;
   const createOrder = () => {
     publicInfo.status = 'loading';
-    if(publicInfo.alipay[publicInfo.orderType] && publicInfo.config.alipay && publicInfo.myPayType === 'alipay') {
+    if(publicInfo.config.alipay && publicInfo.myPayType === 'alipay') {
       $http.post('/api/user/order/qrcode', {
         accountId: publicInfo.accountId,
-        orderType: publicInfo.orderType,
+        orderId: publicInfo.orderId,
       }).then(success => {
-        publicInfo.orderId = success.data.orderId;
+        publicInfo.myOrderId = success.data.orderId;
         publicInfo.qrCode = success.data.qrCode;
         publicInfo.status = 'pay';
 
         interval = $interval(() => {
           $http.post('/api/user/order/status', {
-            orderId: publicInfo.orderId,
+            orderId: publicInfo.myOrderId,
           }).then(success => {
             const orderStatus = success.data.status;
             if(orderStatus === 'TRADE_SUCCESS' || orderStatus === 'FINISH') {
@@ -55,7 +55,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       publicInfo.status = 'pay';
     }
     const env = publicInfo.config.paypalMode === 'sandbox' ? 'sandbox' : 'production';
-    if(publicInfo.paypal[publicInfo.orderType] && publicInfo.myPayType === 'paypal') {
+    if(publicInfo.myPayType === 'paypal') {
       paypal.Button.render({
         locale: $localStorage.language ? $localStorage.language.replace('-', '_') : 'zh_CN',
         style: {
@@ -70,7 +70,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
           var CREATE_URL = '/api/user/paypal/create';
           return paypal.request.post(CREATE_URL, {
             accountId: publicInfo.accountId,
-            orderType: publicInfo.orderType,
+            orderId: publicInfo.orderId,
           })
           .then(function(res) {
             return res.paymentID;
@@ -137,22 +137,23 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
   const chooseOrderType = () => {
     publicInfo.status = 'loading';
     $http.get('/api/user/order/price').then(success => {
-      publicInfo.alipay = success.data.alipay;
-      publicInfo.paypal = success.data.paypal;
-      if(publicInfo.myPayType === 'alipay') {
-        if(success.data.alipay.month) {
-          publicInfo.orderType = 'month';
-        } else {
-          publicInfo.orderType = Object.keys(success.data.alipay)[0];
-        }
-      }
-      if(publicInfo.myPayType === 'paypal') {
-        if(success.data.paypal.month) {
-          publicInfo.orderType = 'month';
-        } else {
-          publicInfo.orderType = Object.keys(success.data.paypal)[0];
-        }
-      }
+      publicInfo.orders = success.data;
+      // publicInfo.alipay = success.data.alipay;
+      // publicInfo.paypal = success.data.paypal;
+      // if(publicInfo.myPayType === 'alipay') {
+      //   if(success.data.alipay.month) {
+      //     publicInfo.orderType = 'month';
+      //   } else {
+      //     publicInfo.orderType = Object.keys(success.data.alipay)[0];
+      //   }
+      // }
+      // if(publicInfo.myPayType === 'paypal') {
+      //   if(success.data.paypal.month) {
+      //     publicInfo.orderType = 'month';
+      //   } else {
+      //     publicInfo.orderType = Object.keys(success.data.paypal)[0];
+      //   }
+      // }
       $timeout(() => {
         publicInfo.status = 'choose';
       }, 125);

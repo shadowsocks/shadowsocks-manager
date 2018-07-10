@@ -21,10 +21,17 @@ const config = appRequire('services/config').all();
 
 const isUser = (req, res, next) => {
   if (req.session.type === 'normal') {
-    knex('user').update({
-      lastLogin: Date.now(),
-    }).where({ id: req.session.user }).then();
-    return next();
+    // knex('user').update({
+    //   lastLogin: Date.now(),
+    // }).where({ id: req.session.user }).then();
+    // return next();
+    knex('user').where({ id: req.session.user, type: 'normal' }).then(s => s[0]).then(user => {
+      if(!user) { return res.status(401).end(); }
+      req.userInfo = user;
+      return next();
+    }).catch(err => {
+      return res.status(401).end();
+    });
   } else {
     return res.status(401).end();
   }
@@ -35,7 +42,9 @@ const isAdmin = (req, res, next) => {
     knex('user').where({ id: req.session.user, type: 'admin' }).then(s => s[0]).then(user => {
       if(!user) { return res.status(401).end(); }
       req.adminInfo = user;
-      next();
+      return next();
+    }).catch(err => {
+      return res.status(401).end();
     });
   } else {
     return res.status(401).end();

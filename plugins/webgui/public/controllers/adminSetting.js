@@ -19,8 +19,8 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
           to: 'admin.groupSetting',
         },
         {
-          name: '支付设置',
-          to: 'admin.paymentList',
+          name: '订单设置',
+          to: 'admin.order',
         },
         {
           name: '邮件设置',
