@@ -9,6 +9,7 @@ const push = appRequire('plugins/webgui/server/push');
 const config = appRequire('services/config').all();
 const ref = appRequire('plugins/webgui_ref/time');
 const orderPlugin = appRequire('plugins/webgui_order');
+const groupPlugin = appRequire('plugins/group');
 
 if(config.plugins.paypal && config.plugins.paypal.use) {
   paypal.configure({
@@ -21,22 +22,13 @@ if(config.plugins.paypal && config.plugins.paypal.use) {
 const createOrder = async (user, account, orderId) => {
   try {
     const orderInfo = await orderPlugin.getOneOrder(orderId);
-    // const orderSetting = await knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(success => {
-    //   if(!success.length) {
-    //     return Promise.reject('settings not found');
-    //   }
-    //   success[0].value = JSON.parse(success[0].value);
-    //   return success[0].value;
-    // }).then(success => {
-    //   if(type === 5) { return success.hour; }
-    //   else if(type === 4) { return success.day; }
-    //   else if(type === 2) { return success.week; }
-    //   else if(type === 3) { return success.month; }
-    //   else if(type === 6) { return success.season; }
-    //   else if(type === 7) { return success.year; }    
-    // });
+    const userInfo = await knex('user').where({ id: user }).then(s => s[0]);
+    const groupInfo = await groupPlugin.getOneGroup(userInfo.group);
+    if(groupInfo.order) {
+      if(JSON.parse(groupInfo.order).indexOf(orderInfo.id) < 0) {
+        return Promise.reject('invalid order');
+      }
+    }
     const create_payment_json = {
       intent: 'sale',
       payer: {

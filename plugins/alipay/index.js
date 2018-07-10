@@ -6,6 +6,7 @@ const alipayf2f = require('alipay-ftof');
 const fs = require('fs');
 const ref = appRequire('plugins/webgui_ref/time');
 const orderPlugin = appRequire('plugins/webgui_order');
+const groupPlugin = appRequire('plugins/group');
 
 let alipay_f2f;
 if(config.plugins.alipay && config.plugins.alipay.use) {
@@ -61,24 +62,15 @@ const createOrder = async (user, account, orderId) => {
   //   };
   // }
   const orderInfo = await orderPlugin.getOneOrder(orderId);
+  const userInfo = await knex('user').where({ id: user }).then(s => s[0]);
+  const groupInfo = await groupPlugin.getOneGroup(userInfo.group);
+  if(groupInfo.order) {
+    if(JSON.parse(groupInfo.order).indexOf(orderInfo.id) < 0) {
+      return Promise.reject('invalid order');
+    }
+  }
   const myOrderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
   const time = 60;
-  // const orderSetting = await knex('webguiSetting').select().where({
-  //   key: 'payment',
-  // }).then(success => {
-  //   if(!success.length) {
-  //     return Promise.reject('settings not found');
-  //   }
-  //   success[0].value = JSON.parse(success[0].value);
-  //   return success[0].value;
-  // }).then(success => {
-  //   if(orderType === 5) { return success.hour; }
-  //   else if(orderType === 4) { return success.day; }
-  //   else if(orderType === 2) { return success.week; }
-  //   else if(orderType === 3) { return success.month; }
-  //   else if(orderType === 6) { return success.season; }
-  //   else if(orderType === 7) { return success.year; }    
-  // });
   const qrCode = await alipay_f2f.createQRPay({
     tradeNo: myOrderId,
     subject: orderInfo.name || 'ss续费',
