@@ -30,7 +30,7 @@
                         <div layout="row" layout-align="space-between center" style="min-width: 200px; max-width: 390px;">
                             <span flex="50" translate>{{order.name}}</span>
                             <span flex="50" style="text-align:right; color: #888">
-                                <span>{{order[publicInfo.myPayType]}}</span>
+                                <span>{{ publicInfo.myPayType === 'alipay' ? '￥' : '$' }}</span><span>{{ order[publicInfo.myPayType] }}</span>
                             </span>
                         </div>
                     </md-radio-button>
