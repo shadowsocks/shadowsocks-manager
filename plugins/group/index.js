@@ -11,9 +11,9 @@ const getOneGroup = id => {
   });
 };
 
-const addGroup = (name, comment, showNotice) => {
+const addGroup = (name, comment, showNotice, order) => {
   return knex('group').insert({
-    name, comment, showNotice,
+    name, comment, showNotice, order,
   });
 };
 

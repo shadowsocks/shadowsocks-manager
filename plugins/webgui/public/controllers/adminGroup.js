@@ -19,12 +19,35 @@ app.controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$
   $scope.setTitle('新增群组');
   $scope.setMenuButton('arrow_back', 'admin.groupSetting');
   $scope.group = {};
+  $http.get('/api/admin/order').then(success => {
+    $scope.orders = success.data;
+    $scope.groupOrder = !!$scope.group.order;
+      $scope.groupOrderObj = {};
+      if($scope.group.order) {
+        $scope.orders.forEach(order => {
+          if($scope.group.order.indexOf(order.id) >= 0) {
+            $scope.groupOrderObj[order.id] = true;
+          } else {
+            $scope.groupOrderObj[order.id] = false;
+          }
+        });
+      }
+  });
   $scope.confirm = () => {
     alertDialog.loading();
+    const order = Object.keys($scope.groupOrderObj)
+    .map(m => {
+      if($scope.groupOrderObj[m]) {
+        return +m;
+      }
+    })
+    .filter(f => f);
+    $scope.group.order = $scope.groupOrder ? order : null;
     $http.post('/api/admin/group', {
       name: $scope.group.name,
       comment: $scope.group.comment,
       showNotice: $scope.group.showNotice,
+      order: $scope.group.order,
     }, {
       timeout: 15000,
     }).then(success => {
