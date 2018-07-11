@@ -186,7 +186,9 @@ app
           });
         } else {
           $scope.account = success.account;
-          $state.reload();
+          $scope.account.forEach(f => {
+            $scope.getServerPortData(f, $scope.servers[0].id);
+          });
         }
         setAccountServerList($scope.account, $scope.servers);
         $localStorage.user.serverInfo.data = success.servers;
