@@ -244,6 +244,7 @@ exports.status = async (req, res) => {
     let refCode;
     let email;
     let subscribe;
+    let multiAccount;
     if(status) {
       email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
       alipay = config.plugins.alipay && config.plugins.alipay.use;
@@ -264,6 +265,10 @@ exports.status = async (req, res) => {
         return success[0].value;
       })).subscribe;
     }
+    if(status === 'normal') {
+      const groupId = (await knex('user').select(['group']).where({ id }).then(s => s[0])).group;
+      multiAccount = (await knex('group').where({ id: groupId }).then(s => s[0])).multiAccount;
+    }
     res.send({
       status,
       id,
@@ -281,6 +286,7 @@ exports.status = async (req, res) => {
       giftcard,
       refCode,
       subscribe,
+      multiAccount,
     });
   } catch(err) {
     console.log(err);

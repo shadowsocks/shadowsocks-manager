@@ -48,6 +48,7 @@ app.controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$
       comment: $scope.group.comment,
       showNotice: $scope.group.showNotice,
       order: $scope.group.order,
+      multiAccount: $scope.group.multiAccount,
     }, {
       timeout: 15000,
     }).then(success => {
@@ -99,6 +100,7 @@ app.controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$
       comment: $scope.group.comment,
       showNotice: $scope.group.showNotice,
       order: $scope.group.order,
+      multiAccount: $scope.group.multiAccount,
     }, {
       timeout: 15000,
     }).then(success => {

@@ -45,8 +45,8 @@ const createTable = async () => {
     table.string('comment').defaultTo('');
     table.integer('type');
     table.integer('cycle');
-    table.integer('alipay');
-    table.integer('paypal');
+    table.float('alipay');
+    table.float('paypal');
     table.bigInteger('flow');
     table.integer('refTime');
     table.string('server');

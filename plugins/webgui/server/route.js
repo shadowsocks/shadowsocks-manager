@@ -260,7 +260,6 @@ app.get('/manifest.json', (req, res) => {
   });
 });
 
-const version = appRequire('package').version;
 const configForFrontend = {};
 
 const cdn = config.plugins.webgui.cdn;

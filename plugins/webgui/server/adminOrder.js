@@ -21,7 +21,6 @@ exports.getOneOrder = async (req, res) => {
   }
 };
 
-
 exports.newOrder = async (req, res) => {
   try {
     const data = {};

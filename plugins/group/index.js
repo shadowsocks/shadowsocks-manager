@@ -11,18 +11,19 @@ const getOneGroup = id => {
   });
 };
 
-const addGroup = (name, comment, showNotice, order) => {
+const addGroup = (name, comment, showNotice, order, multiAccount) => {
   return knex('group').insert({
-    name, comment, showNotice, order,
+    name, comment, showNotice, order, multiAccount
   });
 };
 
-const editGroup = (id, name, comment, showNotice, order) => {
+const editGroup = (id, name, comment, showNotice, order, multiAccount) => {
   return knex('group').update({
     name,
     comment,
     showNotice,
     order,
+    multiAccount,
   }).where({ id });
 };
 

@@ -81,11 +81,26 @@ app
 
     $scope.title = '';
     $scope.setTitle = str => { $scope.title = str; };
+    $scope.fabButton = false;
+    $scope.fabButtonIcon = '';
+    $scope.fabButtonClick = () => {};
+    $scope.setFabButton = (fn, icon = '') => {
+      $scope.fabButtonIcon = icon;
+      if(!fn) {
+        $scope.fabButton = false;
+        $scope.fabButtonClick = () => {};
+        return;
+      }
+      $scope.fabButton = true;
+      $scope.fabButtonClick = fn;
+    };
     $scope.interval = null;
     $scope.setInterval = interval => {
       $scope.interval = interval;
     };
     $scope.$on('$stateChangeStart', function(event, toUrl, fromUrl) {
+      $scope.fabButton = false;
+      $scope.fabButtonIcon = '';
       $scope.title = '';
       $scope.interval && $interval.cancel($scope.interval);
       $scope.menuButtonIcon = '';
@@ -125,9 +140,12 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog', 'subscribeDialog',
-  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog, subscribeDialog) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog', 'subscribeDialog', '$q', '$state',
+  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog, subscribeDialog, $q, $state) => {
     $scope.setTitle('账号');
+    $scope.setFabButton($scope.config.multiAccount ? () => {
+      $scope.createOrder();
+    } : null);
     $scope.flexGtSm = 100;
     if(!$localStorage.user.serverInfo) {
       $localStorage.user.serverInfo = {
@@ -168,6 +186,7 @@ app
           });
         } else {
           $scope.account = success.account;
+          $state.reload();
         }
         setAccountServerList($scope.account, $scope.servers);
         $localStorage.user.serverInfo.data = success.servers;
@@ -204,25 +223,24 @@ app
         }
         account.isFlowOutOfLimit[serverId] = maxFlow ? ( account.serverPortFlow >= maxFlow ) : false;
       });
-
       account.serverInfo = $scope.servers.filter(f => {
         return f.id === serverId;
       })[0];
     };
 
-    $scope.$on('visibilitychange', (event, status) => {
-      if(status === 'visible') {
-        if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
-          $scope.account.forEach(a => {
-            $scope.getServerPortData(a, a.currentServerId);
-          });
-        }
-      }
-    });
+    // $scope.$on('visibilitychange', (event, status) => {
+    //   if(status === 'visible') {
+    //     if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
+    //       $q.all($scope.account.map(a => {
+    //         return $scope.getServerPortData(a, a.currentServerId);
+    //       }));
+    //     }
+    //   }
+    // });
     $scope.setInterval($interval(() => {
-      if(!$scope.account.length) {
+      // if(!$scope.account.length) {
         getUserAccountInfo();
-      }
+      // }
       userApi.updateAccount($scope.account)
       .then(() => {
         setAccountServerList($scope.account, $scope.servers);

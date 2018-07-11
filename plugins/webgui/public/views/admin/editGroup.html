@@ -28,6 +28,13 @@
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">允许购买多个账号</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="group.multiAccount" aria-label="multiAccount" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">自定义分组订单</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="groupOrder" aria-label="groupOrder">

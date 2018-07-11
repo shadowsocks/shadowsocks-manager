@@ -28,17 +28,24 @@ const createTable = async () => {
         table.string('order');
       });
     }
+    const hasMultiAccount = await knex.schema.hasColumn(tableName, 'multiAccount');
+    if(!hasMultiAccount) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('multiAccount').defaultTo(0);
+      });
+    }
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');
     table.string('name');
     table.string('comment');
     table.integer('showNotice').defaultTo(1);
     table.string('order');
-  }).then(() => {
-    return addDefaultGroup();
+    table.integer('multiAccount').defaultTo(0);
   });
+  await addDefaultGroup();
+  return;
 };
 
 exports.createTable = createTable;

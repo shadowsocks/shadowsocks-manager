@@ -24,7 +24,8 @@ exports.addGroup = (req, res, next) => {
   const comment = req.body.comment;
   const showNotice = !!req.body.showNotice;
   const order = req.body.order ? JSON.stringify(req.body.order) : null;
-  group.addGroup(name, comment, showNotice, order).then(success => {
+  const multiAccount = !!req.body.multiAccount;
+  group.addGroup(name, comment, showNotice, order, multiAccount).then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);
@@ -38,7 +39,8 @@ exports.editGroup = (req, res, next) => {
   const comment = req.body.comment;
   const showNotice = !!req.body.showNotice;
   const order = req.body.order ? JSON.stringify(req.body.order) : null;
-  group.editGroup(id, name, comment, showNotice, order).then(success => {
+  const multiAccount = !!req.body.multiAccount;
+  group.editGroup(id, name, comment, showNotice, order, multiAccount).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);
