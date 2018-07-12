@@ -2,7 +2,7 @@
     <md-card flex>
         <md-card-header>
             <md-card-header-text ng-show="batch">
-                <span class="md-title">{{ batch.type | prettyOrderType }}卡</span>
+                <span class="md-title">{{ batch.orderName }}</span>
                 <span class="md-subhead">创建于 {{ batch.createTime | timeago }}，目前状态 {{ batch.status | prettyPrintBatchStatus}}</span>
             </md-card-header-text>
             <md-card-header-text ng-hide="batch">

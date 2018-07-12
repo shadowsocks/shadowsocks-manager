@@ -6,8 +6,12 @@ app.factory('addGiftCardBatchDialog', ['$mdDialog', '$http', ($mdDialog, $http) 
   const publicInfo = {
     status: 'show',
     count: 20,
-    type: 3
+    orderId: 3,
   };
+
+  $http.get('/api/admin/order').then(success => {
+    publicInfo.orderList = success.data;
+  });
 
   let dialogPromise = null;
   const isDialogShow = () => dialogPromise && !dialogPromise.$$state.status;
@@ -30,11 +34,11 @@ app.factory('addGiftCardBatchDialog', ['$mdDialog', '$http', ($mdDialog, $http) 
     publicInfo.status = 'loading';
     $http.post('/api/admin/giftcard/add', {
       count: publicInfo.count,
-      type: publicInfo.type,
+      orderId: publicInfo.orderId,
       comment: publicInfo.comment,
     })
-      .then(() => close())
-      .catch((err) => { publicInfo.status = 'error'; });
+    .then(() => close())
+    .catch(err => { publicInfo.status = 'error'; });
   };
   publicInfo.close = close;
   publicInfo.submit = submit;

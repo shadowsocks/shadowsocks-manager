@@ -3,6 +3,7 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('giftcard');
 const uuidv4 = require('uuid/v4');
 const account = appRequire('plugins/account/index');
+const orderPlugin = appRequire('plugins/webgui_order');
 const ref = appRequire('plugins/webgui_ref/time');
 
 const dbTableName = require('./db/giftcard').tableName;
@@ -28,7 +29,7 @@ const batchStatusEnum = {
   revoked: 'REVOKED'
 };
 
-const generateGiftCard = async (count, orderType, comment = '') => {
+const generateGiftCard = async (count, orderId, comment = '') => {
   const currentCount = (await knex(dbTableName).count('* as cnt'))[0].cnt;
   const batchNumber = currentCount === 0 ? 1 :
     ((await knex(dbTableName).max('batchNumber as mx'))[0].mx + 1);
@@ -36,7 +37,7 @@ const generateGiftCard = async (count, orderType, comment = '') => {
   for (let i = 0; i < count; i++) {
     const password = uuidv4().replace(/\-/g, '').substr(0, 18);
     cards.push({
-      orderType,
+      orderId,
       status: cardStatusEnum.available,
       batchNumber,
       password,
@@ -87,17 +88,19 @@ const processOrder = async (userId, accountId, password) => {
     status: cardStatusEnum.used,
     usedTime: Date.now()
   });
-  if(card.orderType <= 7) {
-    await account.setAccountLimit(userId, accountId, card.orderType);
-    await ref.payWithRef(userId, card.orderType);
-  } else {
-    if(card.orderType === 8) {
-      await account.addAccountTime(userId, accountId, 2, 2);
-    }
-    if(card.orderType === 9) {
-      await account.addAccountTime(userId, accountId, 3, 6);
-    }
-  }
+  const orderInfo = await orderPlugin.getOneOrder(card.orderId);
+  await account.setAccountLimit(userId, accountId, orderInfo.type, orderInfo.cycle);
+  // if(card.orderType <= 7) {
+  //   await account.setAccountLimit(userId, accountId, card.orderType);
+  //   await ref.payWithRef(userId, card.orderType);
+  // } else {
+  //   if(card.orderType === 8) {
+  //     await account.addAccountTime(userId, accountId, 2, 2);
+  //   }
+  //   if(card.orderType === 9) {
+  //     await account.addAccountTime(userId, accountId, 3, 6);
+  //   }
+  // }
   return { success: true, type: card.orderType, cardId: card.id };
 };
 
@@ -171,6 +174,7 @@ const generateBatchInfo = (x) => {
       status = batchStatusEnum.usedup;
   }
   return {
+    orderName: x.orderName,
     batchNumber: x.batchNumber,
     status: status,
     type: x.orderType,
@@ -183,31 +187,36 @@ const generateBatchInfo = (x) => {
 
 const listBatch = async () => {
   const sqlResult = await knex(dbTableName).select([
-    'batchNumber',
-    'status',
-    'orderType',
-    'createTime',
-    'comment',
+    'webgui_order.name as orderName',
+    `${ dbTableName }.batchNumber`,
+    `${ dbTableName }.status as status`,
+    `${ dbTableName }.orderType as orderType`,
+    `${ dbTableName }.createTime as createTime`,
+    `${ dbTableName }.comment as comment`,
     knex.raw('COUNT(*) as totalCount'),
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
-  ]).groupBy('batchNumber');
+  ])
+  .groupBy('batchNumber')
+  .leftJoin('webgui_order', `${dbTableName}.orderId`, 'webgui_order.id');
   const finalResult = sqlResult.map(generateBatchInfo);
   return finalResult;
 };
 
 const getBatchDetails = async (batchNumber) => {
   const sqlBatchResult = await knex(dbTableName).select([
-    'batchNumber',
-    'status',
-    'orderType',
-    'createTime',
-    'comment',
+    'webgui_order.name as orderName',
+    `${ dbTableName }.batchNumber`,
+    `${ dbTableName }.status as status`,
+    `${ dbTableName }.orderType as orderType`,
+    `${ dbTableName }.createTime as createTime`,
+    `${ dbTableName }.comment as comment`,
     knex.raw('COUNT(*) as totalCount'),
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
-  ]).where({ batchNumber });
-  if (sqlBatchResult.length == 0)
-    return null;
-
+  ])
+  .where({ batchNumber })
+  .leftJoin('webgui_order', `${dbTableName}.orderId`, 'webgui_order.id');
+  if (sqlBatchResult.length == 0) { return null; }
+    
   const batchInfo = generateBatchInfo(sqlBatchResult[0]);
 
   const sqlCardsResult = await knex(dbTableName).select([

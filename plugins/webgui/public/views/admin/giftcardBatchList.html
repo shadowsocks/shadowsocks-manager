@@ -4,7 +4,7 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
                     <div flex="30">
-                        <span>{{ batch.type | prettyOrderType }}卡</span>
+                        <span>{{ batch.orderName }}</span>
                         <span>
                             <span ng-if="batch.status === 'AVAILABLE'">
                                 ({{batch.availableCount}} / {{batch.totalCount}})

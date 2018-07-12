@@ -12,15 +12,16 @@
                     </md-input-container>
                     <md-input-container class="md-block" style="height: 54px;">
                         <label>类型</label>
-                        <md-select ng-model="publicInfo.type">
-                            <md-option ng-value="7">年</md-option>
+                        <md-select ng-model="publicInfo.orderId">
+                            <md-option ng-repeat="order in publicInfo.orderList" ng-value="{{order.id}}">{{ order.name }}</md-option>
+                            <!-- <md-option ng-value="7">年</md-option>
                             <md-option ng-value="9">半年</md-option>
                             <md-option ng-value="6">季度</md-option>
                             <md-option ng-value="3">月</md-option>
                             <md-option ng-value="2">周</md-option>
                             <md-option ng-value="8">两周</md-option>
                             <md-option ng-value="4">天</md-option>
-                            <md-option ng-value="5">小时</md-option>
+                            <md-option ng-value="5">小时</md-option> -->
                         </md-select>
                     </md-input-container>
                     <md-input-container class="md-block">
