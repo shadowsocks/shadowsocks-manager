@@ -60,8 +60,7 @@ const createOrder = async (user, account, orderId) => {
     await knex('paypal').insert({
       orderId: myOrderId,
       paypalId: payment.id,
-      orderType: orderInfo.type,
-      cycle: orderInfo.cycle,
+      orderType: orderId,
       amount: orderInfo.paypal + '',
       user,
       account: (account !== 'undefined' && account) ? account : null,
@@ -159,7 +158,7 @@ cron.minute(async () => {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
       return checkOrder(order.paypalId).then(() => {
-        return account.setAccountLimit(userId, accountId, order.orderType, order.cycle);
+        return account.setAccountLimit(userId, accountId, order.orderType);
       }).then(() => {
         return knex('paypal').update({
           status: 'finish',

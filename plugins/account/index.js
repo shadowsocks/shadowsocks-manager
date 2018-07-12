@@ -4,6 +4,7 @@ const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
 const macAccount = appRequire('plugins/macAccount/index');
+const orderPlugin = appRequire('plugins/webgui_order');
 
 const addAccount = async (type, options) => {
   await checkAccount.deleteCheckAccountTimePort(options.port);
@@ -13,6 +14,7 @@ const addAccount = async (type, options) => {
   if(type === 1) {
     await knex('account_plugin').insert({
       type,
+      orderId: 0,
       userId: options.user,
       port: options.port,
       password: options.password,
@@ -25,6 +27,7 @@ const addAccount = async (type, options) => {
   } else if (type >= 2 && type <= 5) {
     await knex('account_plugin').insert({
       type,
+      orderId: options.orderId,
       userId: options.user,
       port: options.port,
       password: options.password,
@@ -258,32 +261,32 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
   return;
 };
 
-const setAccountLimit = async (userId, accountId, orderType, cycle = 1) => {
+const setAccountLimit = async (userId, accountId, orderId) => {
+  const orderInfo = await orderPlugin.getOneOrder(orderId);
   const payType = {
     week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
   };
   let paymentType;
-  let limit = cycle;
-  if(orderType === 6) { limit = 3; }
-  if(orderType === 7) { limit = 12; }
+  const limit = orderInfo.cycle;
+  const orderType = orderInfo.type;
   const flow = {};
-  const paymentInfo = await knex('webguiSetting').select().where({
-    key: 'payment',
-  }).then(success => {
-    if(!success.length) {
-      return Promise.reject('settings not found');
-    }
-    success[0].value = JSON.parse(success[0].value);
-    return success[0].value;
-  });
-  for (const p in payType) {
-    if(payType[p] === orderType) {
-      paymentType = p;
-    }
-    // if(paymentInfo[p].alipay) {
-    flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
-    // }
-  };
+  // const paymentInfo = await knex('webguiSetting').select().where({
+  //   key: 'payment',
+  // }).then(success => {
+  //   if(!success.length) {
+  //     return Promise.reject('settings not found');
+  //   }
+  //   success[0].value = JSON.parse(success[0].value);
+  //   return success[0].value;
+  // });
+  // for (const p in payType) {
+  //   if(payType[p] === orderType) {
+  //     paymentType = p;
+  //   }
+  //   // if(paymentInfo[p].alipay) {
+  //   flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
+  //   // }
+  // };
   let account;
   if(accountId) {
     account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
@@ -336,20 +339,21 @@ const setAccountLimit = async (userId, accountId, orderType, cycle = 1) => {
     };
     const port = await getNewPort();
     await addAccount(orderType, {
+      orderId,
       user: userId,
       port,
       password: Math.random().toString().substr(2,10),
       time: Date.now(),
       limit,
-      flow: flow[orderType],
-      server: paymentInfo[paymentType].server ? JSON.stringify(paymentInfo[paymentType].server) : null,
-      autoRemove: paymentInfo[paymentType].autoRemove ? 1 : 0,
-      multiServerFlow: paymentInfo[paymentType].multiServerFlow ? 1 : 0,
+      flow: orderInfo.flow,
+      server: orderInfo.server,
+      autoRemove: orderInfo.autoRemove ? 1 : 0,
+      multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
     });
     return;
   }
   const accountData = JSON.parse(account.data);
-  accountData.flow = flow[orderType];
+  accountData.flow = orderInfo.flow;
   const timePeriod = {
     '2': 7 * 86400 * 1000,
     '3': 30 * 86400 * 1000,
@@ -376,10 +380,11 @@ const setAccountLimit = async (userId, accountId, orderType, cycle = 1) => {
   let port = await getAccount({ id: accountId }).then(success => success[0].port);
   await knex('account_plugin').update({
     type: orderType >= 6 ? 3 : orderType,
+    orderId,
     data: JSON.stringify(accountData),
-    server: paymentInfo[paymentType].server ? JSON.stringify(paymentInfo[paymentType].server) : null,
-    autoRemove: paymentInfo[paymentType].autoRemove ? 1 : 0,
-    multiServerFlow: paymentInfo[paymentType].multiServerFlow ? 1 : 0,
+    server: orderInfo.server,
+    autoRemove: orderInfo.autoRemove ? 1 : 0,
+    multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
   }).where({ id: accountId });
   await checkAccount.deleteCheckAccountTimePort(port);
   return;

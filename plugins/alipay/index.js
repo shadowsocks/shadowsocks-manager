@@ -80,8 +80,7 @@ const createOrder = async (user, account, orderId) => {
   });
   await knex('alipay').insert({
     orderId: myOrderId,
-    orderType: orderInfo.type,
-    cycle: orderInfo.cycle,
+    orderType: orderId,
     qrcode: qrCode.qr_code,
     amount: orderInfo.alipay + '',
     user,
@@ -143,7 +142,7 @@ cron.minute(async () => {
         body: `订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`,
       });
       isTelegram && telegram.push(`订单[ ${ order.orderId } ][ ${ order.amount } ]支付成功`);
-      return account.setAccountLimit(userId, accountId, order.orderType, order.cycle)
+      return account.setAccountLimit(userId, accountId, order.orderType)
       .then(() => {
         return knex('alipay').update({
           status: 'FINISH',

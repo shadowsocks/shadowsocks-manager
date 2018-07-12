@@ -29,7 +29,7 @@ const batchStatusEnum = {
   revoked: 'REVOKED'
 };
 
-const generateGiftCard = async (count, orderId, comment = '') => {
+const generateGiftCard = async (count, orderType, comment = '') => {
   const currentCount = (await knex(dbTableName).count('* as cnt'))[0].cnt;
   const batchNumber = currentCount === 0 ? 1 :
     ((await knex(dbTableName).max('batchNumber as mx'))[0].mx + 1);
@@ -37,7 +37,7 @@ const generateGiftCard = async (count, orderId, comment = '') => {
   for (let i = 0; i < count; i++) {
     const password = uuidv4().replace(/\-/g, '').substr(0, 18);
     cards.push({
-      orderId,
+      orderType,
       status: cardStatusEnum.available,
       batchNumber,
       password,
@@ -88,8 +88,8 @@ const processOrder = async (userId, accountId, password) => {
     status: cardStatusEnum.used,
     usedTime: Date.now()
   });
-  const orderInfo = await orderPlugin.getOneOrder(card.orderId);
-  await account.setAccountLimit(userId, accountId, orderInfo.type, orderInfo.cycle);
+  const orderInfo = await orderPlugin.getOneOrder(card.orderType);
+  await account.setAccountLimit(userId, accountId, card.orderType);
   // if(card.orderType <= 7) {
   //   await account.setAccountLimit(userId, accountId, card.orderType);
   //   await ref.payWithRef(userId, card.orderType);
@@ -197,7 +197,7 @@ const listBatch = async () => {
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
   ])
   .groupBy('batchNumber')
-  .leftJoin('webgui_order', `${dbTableName}.orderId`, 'webgui_order.id');
+  .leftJoin('webgui_order', `${dbTableName}.orderType`, 'webgui_order.id');
   const finalResult = sqlResult.map(generateBatchInfo);
   return finalResult;
 };
@@ -214,7 +214,7 @@ const getBatchDetails = async (batchNumber) => {
     knex.raw(`COUNT(case status when '${cardStatusEnum.available}' then 1 else null end) as availableCount`)
   ])
   .where({ batchNumber })
-  .leftJoin('webgui_order', `${dbTableName}.orderId`, 'webgui_order.id');
+  .leftJoin('webgui_order', `${dbTableName}.orderType`, 'webgui_order.id');
   if (sqlBatchResult.length == 0) { return null; }
     
   const batchInfo = generateBatchInfo(sqlBatchResult[0]);

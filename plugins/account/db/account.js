@@ -10,11 +10,22 @@ const createTable = async() => {
         table.string('subscribe');
       });
     }
+    const hasOrderId = await knex.schema.hasColumn(tableName, 'orderId');
+    if(!hasOrderId) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('orderId');
+      });
+    }
+    const results = await knex(tableName).whereNull('orderId');
+    for(const result of results) {
+      await knex(tableName).update({ orderId: result.type === 1 ? 0 : result.type }).where({ id: result.id });
+    }
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id');
     table.integer('type');
+    table.integer('orderId');
     table.integer('userId');
     table.string('server');
     table.integer('port').unique();
