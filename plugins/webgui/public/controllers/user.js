@@ -230,18 +230,20 @@ app
       })[0];
     };
 
-    // $scope.$on('visibilitychange', (event, status) => {
-    //   if(status === 'visible') {
-    //     if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
-    //       $q.all($scope.account.map(a => {
-    //         return $scope.getServerPortData(a, a.currentServerId);
-    //       }));
-    //     }
-    //   }
-    // });
+    $scope.$on('visibilitychange', (event, status) => {
+      if(status === 'visible') {
+        if($localStorage.user.accountInfo && Date.now() - $localStorage.user.accountInfo.time >= 10 * 1000) {
+          // $q.all($scope.account.map(a => {
+          //   return $scope.getServerPortData(a, a.currentServerId);
+          // }));
+          getUserAccountInfo();
+        }
+      }
+    });
     $scope.setInterval($interval(() => {
+      if(Date.now() - $localStorage.user.accountInfo.time <= 15 * 1000) { return; }
       // if(!$scope.account.length) {
-        getUserAccountInfo();
+      getUserAccountInfo();
       // }
       userApi.updateAccount($scope.account)
       .then(() => {

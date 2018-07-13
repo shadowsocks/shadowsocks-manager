@@ -10,20 +10,25 @@ const addDefaultOrder = async () => {
       3: 'month',
       4: 'day',
       5: 'hour',
+      6: 'season',
+      7: 'year',
     };
     const insertData = [];
     for(const type in types) {
+      let cycle = 1;
+      if(type === 6) { cycle = 3; }
+      if(type === 7) { cycle = 12; }
       insertData.push({
         id: type,
-        name: oldData[types[type]].orderName,
-        type,
-        cycle: 1,
-        alipay: oldData[types[type]].alipay,
-        paypal: oldData[types[type]].paypal,
+        name: oldData[types[type]].orderName || types[type],
+        type: type <= 5 ? type : 3,
+        cycle,
+        alipay: oldData[types[type]].alipay || 99,
+        paypal: oldData[types[type]].paypal || 99,
         autoRemove: oldData[types[type]].autoRemove ? 1 : 0,
         multiServerFlow: oldData[types[type]].multiServerFlow ? 1 : 0,
         changeOrderType: 1,
-        flow: oldData[types[type]].flow * 1000 * 1000,
+        flow: oldData[types[type]].flow * 1000 * 1000 || 1000 * 1000 * 1000,
         server: oldData[types[type]].server ? JSON.stringify(oldData[types[type]].server) : null,
         refTime: 0,
       });
