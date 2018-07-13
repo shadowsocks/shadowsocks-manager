@@ -68,6 +68,7 @@ const getAccount = async (options = {}) => {
   const account = await knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.type',
+    'account_plugin.orderId',
     'account_plugin.userId',
     'account_plugin.server',
     'account_plugin.port',
@@ -105,6 +106,7 @@ const editAccount = async (id, options) => {
   });
   const update = {};
   update.type = options.type;
+  update.orderId = options.orderId;
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
   update.multiServerFlow = options.multiServerFlow;

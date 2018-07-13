@@ -99,6 +99,7 @@ exports.addAccount = (req, res) => {
   req.getValidationResult().then(result => {
     if(result.isEmpty()) {
       const type = +req.body.type;
+      const orderId = +req.body.orderId;
       const port = +req.body.port;
       const password = req.body.password;
       const time = req.body.time;
@@ -108,7 +109,7 @@ exports.addAccount = (req, res) => {
       const multiServerFlow = +req.body.multiServerFlow || 0;
       const server = req.body.server ? JSON.stringify(req.body.server) : null;
       return account.addAccount(type, {
-        port, password, time, limit, flow, autoRemove, server, multiServerFlow,
+        port, password, time, limit, flow, autoRemove, server, multiServerFlow, orderId,
       });
     }
     result.throw();
@@ -151,6 +152,7 @@ exports.changeAccountData = (req, res) => {
   const accountId = req.params.accountId;
   account.editAccount(accountId, {
     type: req.body.type,
+    orderId: req.body.orderId,
     port: req.body.port,
     password: req.body.password,
     time: req.body.time,

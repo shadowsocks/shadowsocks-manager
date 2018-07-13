@@ -16,8 +16,8 @@ const addDefaultOrder = async () => {
     const insertData = [];
     for(const type in types) {
       let cycle = 1;
-      if(type === 6) { cycle = 3; }
-      if(type === 7) { cycle = 12; }
+      if(+type === 6) { cycle = 3; }
+      if(+type === 7) { cycle = 12; }
       insertData.push({
         id: type,
         name: oldData[types[type]].orderName || types[type],

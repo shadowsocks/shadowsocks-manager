@@ -60,7 +60,7 @@
             </div>
         </md-list-item>
         <md-divider></md-divider>
-        <md-list-item layout="row">
+        <md-list-item layout="row" ng-hide="account.fromOrder === 1">
             <div flex hide-xs></div>
             <md-button flex class="md-raised" ng-click="setLimit(10)">+10</md-button>
             <md-button flex hide-xs class="md-raised" ng-click="setLimit(5)">+5</md-button>
@@ -70,7 +70,7 @@
             <md-button flex class="md-raised" ng-click="setLimit(-10)">-10</md-button>
             <div flex hide-xs></div>
         </md-list-item>
-        <md-divider></md-divider>
+        <md-divider ng-hide="account.fromOrder === 1"></md-divider>
     </md-list>
     <div flex-md="20" flex-gt-md="25"></div>
 </md-bottom-sheet>

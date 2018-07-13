@@ -405,6 +405,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
   ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog) => {
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
+    $http.get('/api/admin/order').then(success => {
+      $scope.orders = success.data;
+      $scope.account.orderId = success.data[0].id;
+    });
     $scope.accountServer = false;
     $scope.accountServerObj = {};
     $scope.typeList = [
@@ -421,11 +425,35 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       '5': 3600000,
     };
     $scope.account = {
+      type: 1,
+      fromOrder: 0,
       time: Date.now(),
       limit: 1,
       flow: 100,
       autoRemove: 0,
+      multiServerFlow: 0,
     };
+    const selectOrder = () => {
+      if(!$scope.account.fromOrder) { return; }
+      const orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
+      $scope.account.type = orderInfo.type;
+      $scope.account.flow = orderInfo.flow;
+      $scope.account.limit = orderInfo.cycle;
+      $scope.account.autoRemove = orderInfo.autoRemove;
+      $scope.account.multiServerFlow = orderInfo.multiServerFlow;
+      $scope.accountServer = !!orderInfo.server;
+      if(orderInfo.server) {
+        $scope.servers.forEach(server => {
+          if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
+            $scope.accountServerObj[server.id] = true;
+          } else {
+            $scope.accountServerObj[server.id] = false;
+          }
+        });
+      }
+    };
+    $scope.$watch('account.orderId', selectOrder);
+    $scope.$watch('account.fromOrder', selectOrder);
     $scope.cancel = () => {
       $state.go('admin.account');
     };
@@ -443,11 +471,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       const server = Object.keys($scope.accountServerObj).map(m => +m);
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
+        orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
         port: +$scope.account.port,
         password: $scope.account.password,
         time: $scope.account.time,
         limit: +$scope.account.limit,
-        flow: +$scope.account.flow * 1000 * 1000,
+        flow: +$scope.account.flow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.accountServer ? server : null,
@@ -485,6 +514,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     });
+    $http.get('/api/admin/order').then(success => {
+      $scope.orders = success.data;
+      $scope.account.orderId = success.data[0].id;
+    });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -499,17 +532,43 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       '5': 3600000,
     };
     $scope.account = {
+      fromOrder: 0,
       time: Date.now(),
       limit: 1,
       flow: 100,
       autoRemove: 0,
     };
+    const selectOrder = () => {
+      if(!$scope.account.fromOrder) { return; }
+      const orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
+      $scope.account.type = orderInfo.type;
+      $scope.account.flow = orderInfo.flow;
+      $scope.account.limit = orderInfo.cycle;
+      $scope.account.autoRemove = orderInfo.autoRemove;
+      $scope.account.multiServerFlow = orderInfo.multiServerFlow;
+      $scope.accountServer = !!orderInfo.server;
+      if(orderInfo.server) {
+        $scope.servers.forEach(server => {
+          if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
+            $scope.accountServerObj[server.id] = true;
+          } else {
+            $scope.accountServerObj[server.id] = false;
+          }
+        });
+      }
+    };
+    $scope.$watch('account.orderId', selectOrder);
+    $scope.$watch('account.fromOrder', selectOrder);
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
       return $http.get(`/api/admin/account/${ accountId }`);
     }).then(success => {
       $scope.account.type = success.data.type;
+      if(success.data.orderId) {
+        $scope.account.fromOrder = 1;
+      }
+      $scope.account.orderId = success.data.orderId;
       $scope.account.port = success.data.port;
       $scope.account.password = success.data.password;
       $scope.account.cleanFlow = false;
@@ -518,7 +577,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       if(success.data.type >= 2 && success.data.type <= 5) {
         $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;
-        $scope.account.flow = success.data.data.flow / 1000000;
+        $scope.account.flow = success.data.data.flow;
       }
       $scope.account.server = success.data.server;
       $scope.accountServer = !!$scope.account.server;
@@ -547,11 +606,12 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       .filter(f => f);
       $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
+        orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
         port: +$scope.account.port,
         password: $scope.account.password,
         time: $scope.account.time,
         limit: +$scope.account.limit,
-        flow: +$scope.account.flow * 1000 * 1000,
+        flow: +$scope.account.flow,
         cleanFlow: $scope.account.cleanFlow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
