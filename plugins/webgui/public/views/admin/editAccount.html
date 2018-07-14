@@ -81,7 +81,7 @@
                     </md-switch>
                 </div>
             </div>
-            <div style="width: 100%;" layout="row" layout-align="space-between center">
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="accountServer" aria-label="accountServer" ng-disabled="account.fromOrder === 1">
