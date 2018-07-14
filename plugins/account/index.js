@@ -27,7 +27,7 @@ const addAccount = async (type, options) => {
   } else if (type >= 2 && type <= 5) {
     await knex('account_plugin').insert({
       type,
-      orderId: options.orderId,
+      orderId: options.orderId || 0,
       userId: options.user,
       port: options.port,
       password: options.password,

@@ -112,6 +112,7 @@ exports.signup = (req, res) => {
         getNewPort().then(port => {
           return account.addAccount(newUserAccount.type || 5, {
             user: userId,
+            orderId: 0,
             port,
             password: Math.random().toString().substr(2,10),
             time: Date.now(),
