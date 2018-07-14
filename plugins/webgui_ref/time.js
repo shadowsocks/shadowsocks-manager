@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const account = appRequire('plugins/account/index');
 const order = appRequire('plugins/webgui_ref/order');
+const orderPlugin = appRequire('plugins/webgui_order');
 
 const getRefSetting = async () => {
   const setting = await knex('webguiSetting').select().where({
@@ -52,26 +53,27 @@ const payWithRef = async (userId, orderType) => {
   if(!setting.useRef) { return; }
   const hasRef = await getRef(userId);
   if(!hasRef) { return; }
-  const paymentType = {
-    '2': 'week',
-    '3': 'month',
-    '4': 'day',
-    '5': 'hour',
-    '6': 'season',
-    '7': 'year',
-  };
-  const paymentInfo = await getPaymentInfo(paymentType[orderType]);
-  const refTime = paymentInfo.refTime || '0h';
-  const time = convertRefTime(refTime);
+  // const paymentType = {
+  //   '2': 'week',
+  //   '3': 'month',
+  //   '4': 'day',
+  //   '5': 'hour',
+  //   '6': 'season',
+  //   '7': 'year',
+  // };
+  // const paymentInfo = await getPaymentInfo(paymentType[orderType]);
+  // const refTime = paymentInfo.refTime || '0h';
+  // const time = convertRefTime(refTime);
+  const orderInfo = await orderPlugin.getOneOrder(orderType);
   const accounts = await knex('account_plugin').where({ userId: hasRef });
   if(!accounts.length) { return; }
-  account.editAccountTime(accounts[0].id, time, true);
-  for(let account of accounts) {
+  for(let a of accounts) {
+    account.editAccountTimeForRef(a.id, Math.ceil(orderInfo.refTime / accounts.length), true);
     await order.newOrder({
       user: hasRef,
       refUser: userId,
-      account: account.id,
-      refTime: Math.ceil(time / accounts.length),
+      account: a.id,
+      refTime: Math.ceil(orderInfo.refTime / accounts.length),
     });
   }
 };

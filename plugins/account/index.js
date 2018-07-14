@@ -135,8 +135,8 @@ const editAccount = async (id, options) => {
 const editAccountTime = async (id, timeString, check) => {
   const time = +timeString;
   let accountInfo = await knex('account_plugin').where({ id }).then(s => s[0]);
-  accountInfo.data = JSON.parse(accountInfo.data);
   if(accountInfo.type < 2 || accountInfo.type > 5) { return; }
+  accountInfo.data = JSON.parse(accountInfo.data);
   const timePeriod = {
     '2': 7 * 86400 * 1000,
     '3': 30 * 86400 * 1000,
@@ -144,6 +144,35 @@ const editAccountTime = async (id, timeString, check) => {
     '5': 3600 * 1000,
   };
   accountInfo.data.create += time;
+  while(time > 0 && accountInfo.data.create >= Date.now()) {
+    accountInfo.data.limit += 1;
+    accountInfo.data.create -= timePeriod[accountInfo.type];
+  }
+  await knex('account_plugin').update({
+    data: JSON.stringify(accountInfo.data)
+  }).where({ id });
+  if(check) {
+    await checkAccount.deleteCheckAccountTimePort(accountInfo.port);
+  }
+};
+
+const editAccountTimeForRef = async (id, timeString, check) => {
+  const time = +timeString;
+  let accountInfo = await knex('account_plugin').where({ id }).then(s => s[0]);
+  if(accountInfo.type < 2 || accountInfo.type > 5) { return; }
+  accountInfo.data = JSON.parse(accountInfo.data);
+  const timePeriod = {
+    '2': 7 * 86400 * 1000,
+    '3': 30 * 86400 * 1000,
+    '4': 1 * 86400 * 1000,
+    '5': 3600 * 1000,
+  };
+  if(accountInfo.data.create + timePeriod[accountInfo.type] * accountInfo.data.limit <= Date.now()) {
+    accountInfo.data.limit = 1;
+    accountInfo.data.create = Date.now() + time - timePeriod[accountInfo.type];
+  } else {
+    accountInfo.data.create += time;
+  }
   while(time > 0 && accountInfo.data.create >= Date.now()) {
     accountInfo.data.limit += 1;
     accountInfo.data.create -= timePeriod[accountInfo.type];
@@ -629,6 +658,7 @@ exports.getAccount = getAccount;
 exports.delAccount = delAccount;
 exports.editAccount = editAccount;
 exports.editAccountTime = editAccountTime;
+exports.editAccountTimeForRef = editAccountTimeForRef;
 
 exports.changePassword = changePassword;
 exports.changePort = changePort;
