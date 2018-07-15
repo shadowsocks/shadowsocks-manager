@@ -38,13 +38,20 @@ app
       paypal: 0,
       flow: 100000000,
       refTime: 0,
+      autoRemove: false,
+      multiServerFlow: false,
+      changeOrderType: true,
+      server: null,
     };
     $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
+    $scope.order.refTimeStr = $filter('timeNum2Str')($scope.order.refTime);
     $scope.orderServer = !!$scope.order.server;
     $scope.orderServerObj = {};
     $scope.cancel = () => { $state.go('admin.order'); };
     $scope.confirm = () => {
       $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
+      $scope.order.refTime = $filter('timeStr2Num')($scope.order.refTimeStr);
+      console.log($scope.order);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {
@@ -91,6 +98,7 @@ app
     $http.get(`/api/admin/order/${ $scope.orderId }`).then(success => {
       $scope.order = success.data;
       $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
+      $scope.order.refTimeStr = $filter('timeNum2Str')($scope.order.refTime);
       $scope.orderServer = !!$scope.order.server;
       $scope.orderServerObj = {};
       if($scope.order.server) {
@@ -117,6 +125,7 @@ app
     };
     $scope.confirm = () => {
       $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
+      $scope.order.refTime = $filter('timeStr2Num')($scope.order.refTimeStr);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {

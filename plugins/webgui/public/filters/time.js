@@ -122,3 +122,45 @@ app.filter('timePeriod', [() => {
   };
   return timeago;
 }]);
+
+app.filter('timeStr2Num', function() {
+  const s = 1000;
+  const m = 60 * 1000;
+  const h = 60 * 60 * 1000;
+  const d = 24 * 60 * 60 * 1000;
+  return function(input) {
+    if(Number.isInteger(+input)) {
+      return +input;
+    } else if(input.match(/^\d{1,}.?\d{0,}s$/)) {
+      return +input.substr(0, input.length - 1) * s;
+    } else if(input.match(/^\d{1,}.?\d{0,}m$/)) {
+      return +input.substr(0, input.length - 1) * m;
+    } else if(input.match(/^\d{1,}.?\d{0,}h$/)) {
+      return +input.substr(0, input.length - 1) * h;
+    } else if(input.match(/^\d{1,}.?\d{0,}d$/)) {
+      return +input.substr(0, input.length - 1) * d;
+    } else  {
+      return 1;
+    }
+  };
+});
+
+app.filter('timeNum2Str', function() {
+  const s = 1000;
+  const m = 60 * 1000;
+  const h = 60 * 60 * 1000;
+  const d = 24 * 60 * 60 * 1000;
+  return function(input) {
+    if (input < s) {
+      return input;
+    } else if (input < m) {
+      return (input / s).toFixed(1) + 's'; 
+    } else if (input < h) {
+      return (input / m).toFixed(1) + 'm';
+    } else if (input < d) {
+      return (input / h).toFixed(1) + 'h';
+    } else {
+      return (input / d).toFixed(1) + 'd';
+    }
+  };
+});
