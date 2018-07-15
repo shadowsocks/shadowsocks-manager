@@ -401,8 +401,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
   }
 ])
-.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog) => {
+.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog', '$filter',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog, $filter) => {
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $http.get('/api/admin/order').then(success => {
@@ -429,10 +429,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       fromOrder: 0,
       time: Date.now(),
       limit: 1,
-      flow: 100,
+      flow: 100000000,
       autoRemove: 0,
       multiServerFlow: 0,
     };
+    $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
     const selectOrder = () => {
       if(!$scope.account.fromOrder) { return; }
       const orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
@@ -442,6 +443,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.autoRemove = orderInfo.autoRemove;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.accountServer = !!orderInfo.server;
+      $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
@@ -459,6 +461,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.confirm = () => {
       alertDialog.loading();
+      $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
       if($scope.account.server) {
         $scope.servers.forEach(server => {
           if($scope.account.server.indexOf(server.id) >= 0) {
@@ -508,8 +511,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
   }
 ])
-.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog, alertDialog) => {
+.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog', '$filter',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog, alertDialog, $filter) => {
     $scope.setTitle('编辑账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
@@ -547,6 +550,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.autoRemove = orderInfo.autoRemove;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.accountServer = !!orderInfo.server;
+      $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
@@ -578,6 +582,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.account.time = success.data.data.create;
         $scope.account.limit = success.data.data.limit;
         $scope.account.flow = success.data.data.flow;
+        $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       }
       $scope.account.server = success.data.server;
       $scope.accountServer = !!$scope.account.server;
@@ -597,6 +602,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.confirm = () => {
       alertDialog.loading();
+      $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
       const server = Object.keys($scope.accountServerObj)
       .map(m => {
         if($scope.accountServerObj[m]) {

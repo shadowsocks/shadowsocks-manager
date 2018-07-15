@@ -54,7 +54,7 @@
                 </md-input-container>
                 <md-input-container class="md-block" ng-if="account.fromOrder === 1 || +account.type !== 1">
                     <label translate>流量</label>
-                    <input type="number" required name="flow" ng-model="account.flow" ng-disabled="account.fromOrder === 1">
+                    <input type="text" required name="flow" ng-model="account.flowStr" ng-disabled="account.fromOrder === 1">
                     <div ng-messages="accountForm.flow.$error">
                         <div ng-message="required">流量不能为空</div>
                     </div>
