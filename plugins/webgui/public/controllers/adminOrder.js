@@ -2,7 +2,7 @@ const app = angular.module('app');
 
 app
 .controller('AdminOrderSettingController', ['$scope', '$state', '$http',
-  ($scope, $state, $http) => {
+  ($scope, $state, $http, $filter) => {
     $scope.setTitle('订单设置');
     $scope.setMenuButton('arrow_back', 'admin.settings');
     $http.get('/api/admin/order').then(success => {
@@ -16,8 +16,8 @@ app
     });
   }
 ])
-.controller('AdminNewOrderController', ['$scope', '$state', '$http',
-  ($scope, $state, $http) => {
+.controller('AdminNewOrderController', ['$scope', '$state', '$http', '$filter',
+  ($scope, $state, $http, $filter) => {
     $scope.setTitle('新增订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
 
@@ -37,11 +37,14 @@ app
       alipay: 0,
       paypal: 0,
       flow: 100000000,
+      refTime: 0,
     };
+    $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
     $scope.orderServer = !!$scope.order.server;
     $scope.orderServerObj = {};
     $scope.cancel = () => { $state.go('admin.order'); };
     $scope.confirm = () => {
+      $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {
@@ -50,14 +53,27 @@ app
       })
       .filter(f => f);
       $scope.order.server = $scope.orderServer ? server : null;
-      $http.post('/api/admin/order', $scope.order).then(success => {
+      $http.post('/api/admin/order', {
+        name: $scope.order.name,
+        comment: $scope.order.comment,
+        type: $scope.order.type,
+        cycle: $scope.order.cycle,
+        alipay: $scope.order.alipay,
+        paypal: $scope.order.paypal,
+        flow: $scope.order.flow,
+        refTime: $scope.order.refTime,
+        autoRemove: $scope.order.autoRemove,
+        multiServerFlow: $scope.order.multiServerFlow,
+        changeOrderType: $scope.order.changeOrderType,
+        server: $scope.order.server,
+      }).then(success => {
         $state.go('admin.order');
       });
     };
   }
 ])
-.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog',
-  ($scope, $state, $http, $stateParams, confirmDialog) => {
+.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter',
+  ($scope, $state, $http, $stateParams, confirmDialog, $filter) => {
     $scope.setTitle('编辑订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
 
@@ -74,6 +90,7 @@ app
     });
     $http.get(`/api/admin/order/${ $scope.orderId }`).then(success => {
       $scope.order = success.data;
+      $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
       $scope.orderServer = !!$scope.order.server;
       $scope.orderServerObj = {};
       if($scope.order.server) {
@@ -99,6 +116,7 @@ app
       });
     };
     $scope.confirm = () => {
+      $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {
@@ -107,7 +125,20 @@ app
       })
       .filter(f => f);
       $scope.order.server = $scope.orderServer ? server : null;
-      $http.put(`/api/admin/order/${ $scope.orderId }`, $scope.order).then(success => {
+      $http.put(`/api/admin/order/${ $scope.orderId }`, {
+        name: $scope.order.name,
+        comment: $scope.order.comment,
+        type: $scope.order.type,
+        cycle: $scope.order.cycle,
+        alipay: $scope.order.alipay,
+        paypal: $scope.order.paypal,
+        flow: $scope.order.flow,
+        refTime: $scope.order.refTime,
+        autoRemove: $scope.order.autoRemove,
+        multiServerFlow: $scope.order.multiServerFlow,
+        changeOrderType: $scope.order.changeOrderType,
+        server: $scope.order.server,
+      }).then(success => {
         $state.go('admin.order');
       });
     };
