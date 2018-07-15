@@ -409,8 +409,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.orders = success.data;
       $scope.account.orderId = success.data[0].id;
     });
-    $scope.accountServer = false;
-    $scope.accountServerObj = {};
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '按周', value: 2},
@@ -432,6 +430,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       flow: 100000000,
       autoRemove: 0,
       multiServerFlow: 0,
+      accountServer: false,
+      accountServerObj: {},
     };
     $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
     const selectOrder = () => {
@@ -442,14 +442,14 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.limit = orderInfo.cycle;
       $scope.account.autoRemove = orderInfo.autoRemove;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
-      $scope.accountServer = !!orderInfo.server;
+      $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
-            $scope.accountServerObj[server.id] = true;
+            $scope.account.accountServerObj[server.id] = true;
           } else {
-            $scope.accountServerObj[server.id] = false;
+            $scope.account.accountServerObj[server.id] = false;
           }
         });
       }
@@ -465,13 +465,13 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       if($scope.account.server) {
         $scope.servers.forEach(server => {
           if($scope.account.server.indexOf(server.id) >= 0) {
-            $scope.accountServerObj[server.id] = true;
+            $scope.account.accountServerObj[server.id] = true;
           } else {
-            $scope.accountServerObj[server.id] = false;
+            $scope.account.accountServerObj[server.id] = false;
           }
         });
       }
-      const server = Object.keys($scope.accountServerObj).map(m => +m);
+      const server = Object.keys($scope.account.accountServerObj).map(m => +m);
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
         orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
@@ -482,7 +482,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         flow: +$scope.account.flow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: $scope.accountServer ? server : null,
+        server: $scope.account.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
         $state.go('admin.account');
@@ -549,14 +549,14 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.limit = orderInfo.cycle;
       $scope.account.autoRemove = orderInfo.autoRemove;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
-      $scope.accountServer = !!orderInfo.server;
+      $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
-            $scope.accountServerObj[server.id] = true;
+            $scope.account.accountServerObj[server.id] = true;
           } else {
-            $scope.accountServerObj[server.id] = false;
+            $scope.account.accountServerObj[server.id] = false;
           }
         });
       }
@@ -585,14 +585,14 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
       }
       $scope.account.server = success.data.server;
-      $scope.accountServer = !!$scope.account.server;
-      $scope.accountServerObj = {};
+      $scope.account.accountServer = !!$scope.account.server;
+      $scope.account.accountServerObj = {};
       if($scope.account.server) {
         $scope.servers.forEach(server => {
           if($scope.account.server.indexOf(server.id) >= 0) {
-            $scope.accountServerObj[server.id] = true;
+            $scope.account.accountServerObj[server.id] = true;
           } else {
-            $scope.accountServerObj[server.id] = false;
+            $scope.account.accountServerObj[server.id] = false;
           }
         });
       }
@@ -603,9 +603,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.confirm = () => {
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
-      const server = Object.keys($scope.accountServerObj)
+      const server = Object.keys($scope.account.accountServerObj)
       .map(m => {
-        if($scope.accountServerObj[m]) {
+        if($scope.account.accountServerObj[m]) {
           return +m;
         }
       })
@@ -621,7 +621,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         cleanFlow: $scope.account.cleanFlow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: $scope.accountServer ? server : null,
+        server: $scope.account.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });

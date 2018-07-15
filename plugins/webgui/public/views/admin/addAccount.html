@@ -77,14 +77,14 @@
             <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">
-                    <md-switch ng-model="accountServer" aria-label="accountServer" ng-disabled="account.fromOrder === 1">
+                    <md-switch ng-model="account.accountServer" aria-label="account.accountServer" ng-disabled="account.fromOrder === 1">
                     </md-switch>
                 </div>
             </div>
-            <div layout="column" layout-wrap flex ng-if="accountServer">
+            <div layout="column" layout-wrap flex ng-if="account.accountServer">
                 <div layout="column" layout-wrap flex ng-repeat="server in servers">
                     <div flex="100">
-                        <md-checkbox ng-model="accountServerObj[server.id]" ng-disabled="account.fromOrder === 1">
+                        <md-checkbox ng-model="account.accountServerObj[server.id]" ng-disabled="account.fromOrder === 1">
                             <div layout="row" layout-align="space-between center">
                                 <span flex>{{ server.name }}</span>
                                 <span flex style="color: #777">{{ server.host }}</span>
