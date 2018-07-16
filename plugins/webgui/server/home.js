@@ -98,13 +98,29 @@ exports.signup = (req, res) => {
               };
               return checkIfPortExists(myPort);
             } else {
+              // return knex('account_plugin').select()
+              // .whereBetween('port', [port.start, port.end])
+              // .orderBy('port', 'DESC').limit(1).then(success => {
+              //   if(success.length) {
+              //     return success[0].port + 1;
+              //   }
+              //   return port.start;
+              // });
               return knex('account_plugin').select()
               .whereBetween('port', [port.start, port.end])
-              .orderBy('port', 'DESC').limit(1).then(success => {
-                if(success.length) {
-                  return success[0].port + 1;
+              .orderBy('port', 'ASC').then(success => {
+                const portArray = success.map(m => m.port);
+                let myPort;
+                for(let p = port.start; p <= port.end; p++) {
+                  if(portArray.indexOf(p) < 0) {
+                    myPort = p; break;
+                  }
                 }
-                return port.start;
+                if(myPort) {
+                  return myPort;
+                } else {
+                  return Promise.reject('no port');
+                }
               });
             }
           });

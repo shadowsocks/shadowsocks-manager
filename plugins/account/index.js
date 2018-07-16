@@ -301,23 +301,6 @@ const setAccountLimit = async (userId, accountId, orderId) => {
   const limit = orderInfo.cycle;
   const orderType = orderInfo.type;
   const flow = {};
-  // const paymentInfo = await knex('webguiSetting').select().where({
-  //   key: 'payment',
-  // }).then(success => {
-  //   if(!success.length) {
-  //     return Promise.reject('settings not found');
-  //   }
-  //   success[0].value = JSON.parse(success[0].value);
-  //   return success[0].value;
-  // });
-  // for (const p in payType) {
-  //   if(payType[p] === orderType) {
-  //     paymentType = p;
-  //   }
-  //   // if(paymentInfo[p].alipay) {
-  //   flow[payType[p]] = paymentInfo[p].flow * 1000 * 1000;
-  //   // }
-  // };
   let account;
   if(accountId) {
     account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
@@ -357,13 +340,29 @@ const setAccountLimit = async (userId, accountId, orderId) => {
           };
           return checkIfPortExists(myPort);
         } else {
+          // return knex('account_plugin').select()
+          // .whereBetween('port', [port.start, port.end])
+          // .orderBy('port', 'DESC').limit(1).then(success => {
+          //   if(success.length) {
+          //     return success[0].port + 1;
+          //   }
+          //   return port.start;
+          // });
           return knex('account_plugin').select()
           .whereBetween('port', [port.start, port.end])
-          .orderBy('port', 'DESC').limit(1).then(success => {
-            if(success.length) {
-              return success[0].port + 1;
+          .orderBy('port', 'ASC').then(success => {
+            const portArray = success.map(m => m.port);
+            let myPort;
+            for(let p = port.start; p <= port.end; p++) {
+              if(portArray.indexOf(p) < 0) {
+                myPort = p; break;
+              }
             }
-            return port.start;
+            if(myPort) {
+              return myPort;
+            } else {
+              return Promise.reject('no port');
+            }
           });
         }
       });
