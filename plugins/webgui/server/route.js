@@ -83,6 +83,7 @@ app.post('/api/admin/account/:serverId(\\d+)/:accountId(\\d+)/ban', isSuperAdmin
 app.get('/api/admin/account/ip/:ip', isAdmin, admin.getAccountIpInfo);
 app.get('/api/admin/account/:accountId(\\d+)/ip', isAdmin, admin.getAccountIpFromAllServer);
 app.post('/api/admin/account', isAdmin, isSuperAdmin, admin.addAccount);
+app.get('/api/admin/account/newPort', isAdmin, isSuperAdmin, admin.newPortForAddAccount);
 app.put('/api/admin/account/:accountId(\\d+)/port', isAdmin, isSuperAdmin, admin.changeAccountPort);
 app.put('/api/admin/account/:accountId(\\d+)/data', isAdmin, isSuperAdmin, admin.changeAccountData);
 app.put('/api/admin/account/:accountId(\\d+)/time', isAdmin, isSuperAdmin, admin.changeAccountTime);

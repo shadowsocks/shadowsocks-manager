@@ -616,3 +616,58 @@ exports.resetAccountFlow = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.newPortForAddAccount = async (req, res) => {
+  try {
+    let newPort;
+    const port = await knex('webguiSetting').select().where({
+      key: 'account',
+    }).then(success => {
+      if(!success.length) { return Promise.reject('settings not found'); }
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value.port;
+    });
+    if(port.random) {
+      const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+      let retry = 0;
+      let myPort = getRandomPort();
+      const checkIfPortExists = port => {
+        let myPort = port;
+        return knex('account_plugin').select()
+        .where({ port }).then(success => {
+          if(success.length && retry <= 30) {
+            retry++;
+            myPort = getRandomPort();
+            return checkIfPortExists(myPort);
+          } else if (success.length && retry > 30) {
+            return Promise.reject('Can not get a random port');
+          } else {
+            return myPort;
+          }
+        });
+      };
+      newPort = await checkIfPortExists(myPort);
+    } else {
+      newPort = await knex('account_plugin').select()
+      .whereBetween('port', [port.start, port.end])
+      .orderBy('port', 'ASC').then(success => {
+        const portArray = success.map(m => m.port);
+        let myPort;
+        for(let p = port.start; p <= port.end; p++) {
+          if(portArray.indexOf(p) < 0) {
+            myPort = p; break;
+          }
+        }
+        if(myPort) {
+          return myPort;
+        } else {
+          return Promise.reject('no port');
+        }
+      });
+    }
+    res.send({ port: newPort });
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};

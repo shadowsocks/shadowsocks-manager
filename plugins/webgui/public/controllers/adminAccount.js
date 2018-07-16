@@ -409,14 +409,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.orders = success.data;
       $scope.account.orderId = success.data[0].id;
     });
-    $http.get('/api/admin/setting/account').then(success => {
-      const isRandom = success.data.port.random;
-      const start = success.data.port.start;
-      const end = success.data.port.end;
+    $http.get('/api/admin/account/newPort').then(success => {
+      $scope.account.port = success.data.port;
       $scope.account.password = Math.random().toString().substr(2, 8);
-      if(isRandom) {
-        $scope.account.port = start + Math.ceil(Math.random() * (end - start));
-      }
     });
     $scope.typeList = [
       {key: '不限量', value: 1},
