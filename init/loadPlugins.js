@@ -7,15 +7,15 @@ const logger = log4js.getLogger('system');
 
 const pluginLists = [];
 
-const loadOnePlugin = name => {
+const loadOnePluginDb = name => {
   const promises = [];
-  logger.info(`Load plugin: ${ name }`);
+  logger.info(`Load plugin db: [ ${ name } ]`);
   try {
     const files = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }`));
     if(files.indexOf('db') >= 0) {
       const dbFiles = fs.readdirSync(path.resolve(__dirname, `../plugins/${ name }/db`));
       dbFiles.forEach(f => {
-        logger.info(`Load plugin db: ${ name }/db/${ f }`);
+        logger.info(`Load plugin db: [ ${ name }/db/${ f } ]`);
         promises.push(appRequire(`plugins/${ name }/db/${ f }`).createTable());
       });
     }
@@ -23,18 +23,21 @@ const loadOnePlugin = name => {
     logger.error(err);
   }
   return Promise.all(promises).then(() => {
-    logger.info(`Load plugin index: ${ name }/index`);
-    const dependence = appRequire(`plugins/${ name }/index`).dependence;
-    if(dependence) {
-      dependence.forEach(pluginName => {
-        if(pluginLists.indexOf(pluginName) < 0) {
-          pluginLists.push(pluginName);
-        }
-      });
-    }
+    const dependence = appRequire(`plugins/${ name }/dependence`);
+    logger.info(`Load plugin dependence: [ ${ name } ]`);
+    dependence.forEach(pluginName => {
+      if(pluginLists.indexOf(pluginName) < 0) {
+        pluginLists.push(pluginName);
+      }
+    });
   }).catch(err => {
-    logger.error(err);
+    // logger.error(err);
   });
+};
+
+const loadOnePlugin = name => {
+  logger.info(`Load plugin: [ ${ name } ]`);
+  appRequire(`plugins/${ name }/index`);
 };
 
 const loadPlugins = () => {
@@ -51,7 +54,10 @@ const loadPlugins = () => {
   }
   (async () => {
     for(let pl of pluginLists) {
-      await loadOnePlugin(pl);
+      await loadOnePluginDb(pl);
+    }
+    for(let pl of pluginLists) {
+      loadOnePlugin(pl);
     }
   })();
 };
