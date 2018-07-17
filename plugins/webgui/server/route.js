@@ -21,9 +21,9 @@ const config = appRequire('services/config').all();
 
 const isUser = (req, res, next) => {
   if (req.session.type === 'normal') {
-    // knex('user').update({
-    //   lastLogin: Date.now(),
-    // }).where({ id: req.session.user }).then();
+    knex('user').update({
+      lastLogin: Date.now(),
+    }).where({ id: req.session.user }).then();
     // return next();
     knex('user').where({ id: req.session.user, type: 'normal' }).then(s => s[0]).then(user => {
       if(!user) { return res.status(401).end(); }
