@@ -72,7 +72,7 @@ const isCallbackPay = message => {
 };
 const isCallbackPayQrcode = message => {
   if(!message.callback_query || !message.callback_query.data) { return false; }
-  if(!message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[[a-z]{1,}\]$/)) {
+  if(!message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[[0-9]{1,}\]$/)) {
     return false;
   }
   return true;
@@ -236,7 +236,17 @@ telegram.on('message', async message => {
     // }).then(s => s[0]);
     // if(!paymentInfo) { return; }
     // paymentInfo = JSON.parse(paymentInfo.value);
-    const orders = await orderPlugin.getOrders();
+    const groupInfo = await knex('group').select([
+      'group.order as order'
+    ])
+    .leftJoin('user', 'user.group', 'group.id')
+    .leftJoin('account_plugin', 'account_plugin.userId', 'user.id')
+    .where({ 'account_plugin.id': accountId });
+    const groupOrderInfo = groupInfo[0].order ? JSON.parse(groupInfo[0].order) : null;
+    let orders = await orderPlugin.getOrders();
+    orders = groupOrderInfo ? orders.filter(order => {
+      return groupOrderInfo.indexOf(order.id) > 0;
+    }) : orders;
     const paymentArray = [];
     for(const order of orders) {
       if(order.alipay > 0) {
@@ -264,13 +274,13 @@ telegram.on('message', async message => {
     //   season: 6,
     //   year: 7,
     // };
-    const orders = await orderPlugin.getOrders();
+    // const orders = await orderPlugin.getOrders();
     const telegramId = message.callback_query.from.id.toString();
-    const accountId = +message.callback_query.data.match(/^alipay:qrcode:accountId\[(\d{1,})\]type\[[a-z]{1,}\]$/)[1];
-    const orderId = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([a-z]{1,})\]$/)[1];
-    const amount = orders.filter(f => {
-      f.id === +orderId;
-    })[0].alipay;
+    const accountId = +message.callback_query.data.match(/^alipay:qrcode:accountId\[(\d{1,})\]type\[[0-9]{1,}\]$/)[1];
+    const orderId = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([0-9]{1,})\]$/)[1];
+    // const amount = orders.filter(f => {
+    //   f.id === +orderId;
+    // })[0].alipay;
     const userId = (await tg.getUserStatus(telegramId)).id;
     const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, +orderId);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
