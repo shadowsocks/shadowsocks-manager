@@ -547,7 +547,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     const selectOrder = () => {
       if(!$scope.account.fromOrder) { return; }
-      const orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
+      let orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
+      if(!orderInfo) {
+        orderInfo = $scope.orders[0];
+        $scope.account.orderId = orderInfo.id;
+      }
       $scope.account.type = orderInfo.type;
       $scope.account.flow = orderInfo.flow;
       $scope.account.limit = orderInfo.cycle;
