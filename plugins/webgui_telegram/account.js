@@ -9,6 +9,7 @@ const moment = require('moment');
 const qr = require('qr-image');
 const flow = appRequire('plugins/flowSaver/flow');
 const knex = appRequire('init/knex').knex;
+const orderPlugin = appRequire('plugins/webgui_order');
 
 const prettyFlow = number => {
   if(number >= 0 && number < 1000) {
@@ -230,17 +231,18 @@ telegram.on('message', async message => {
   } else if(isCallbackPay(message)) {
     const telegramId = message.callback_query.from.id.toString();
     const accountId = +message.callback_query.data.match(/^alipay:accountId\[(\d{1,})\]$/)[1];
-    let paymentInfo = await knex('webguiSetting').select().where({
-      key: 'payment',
-    }).then(s => s[0]);
-    if(!paymentInfo) { return; }
-    paymentInfo = JSON.parse(paymentInfo.value);
+    // let paymentInfo = await knex('webguiSetting').select().where({
+    //   key: 'payment',
+    // }).then(s => s[0]);
+    // if(!paymentInfo) { return; }
+    // paymentInfo = JSON.parse(paymentInfo.value);
+    const orders = await orderPlugin.getOrders();
     const paymentArray = [];
-    for(let pi in paymentInfo) {
-      if(paymentInfo[pi].alipay > 0) {
+    for(const order of orders) {
+      if(order.alipay > 0) {
         paymentArray.push([{
-          text: `${ paymentInfo[pi].orderName } ${ paymentInfo[pi].alipay }`,
-          callback_data: `alipay:qrcode:accountId[${ accountId }]type[${ pi }]`,
+          text: `${ order.name } ${ order.alipay }`,
+          callback_data: `alipay:qrcode:accountId[${ accountId }]type[${ order.id }]`,
         }]);
       }
     }
@@ -249,25 +251,28 @@ telegram.on('message', async message => {
     });
   } else if(isCallbackPayQrcode(message)) {
     const alipay = appRequire('plugins/alipay/index');
-    let paymentInfo = await knex('webguiSetting').select().where({
-      key: 'payment',
-    }).then(s => s[0]);
-    if(!paymentInfo) { return; }
-    paymentInfo = JSON.parse(paymentInfo.value);
-    const payType = {
-      hour: 5,
-      day: 4,
-      week: 2,
-      month: 3,
-      season: 6,
-      year: 7,
-    };
+    // let paymentInfo = await knex('webguiSetting').select().where({
+    //   key: 'payment',
+    // }).then(s => s[0]);
+    // if(!paymentInfo) { return; }
+    // paymentInfo = JSON.parse(paymentInfo.value);
+    // const payType = {
+    //   hour: 5,
+    //   day: 4,
+    //   week: 2,
+    //   month: 3,
+    //   season: 6,
+    //   year: 7,
+    // };
+    const orders = await orderPlugin.getOrders();
     const telegramId = message.callback_query.from.id.toString();
     const accountId = +message.callback_query.data.match(/^alipay:qrcode:accountId\[(\d{1,})\]type\[[a-z]{1,}\]$/)[1];
-    const type = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([a-z]{1,})\]$/)[1];
-    const amount = paymentInfo[type].alipay + '';
+    const orderId = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([a-z]{1,})\]$/)[1];
+    const amount = orders.filter(f => {
+      f.id === +orderId;
+    })[0].alipay;
     const userId = (await tg.getUserStatus(telegramId)).id;
-    const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, amount, payType[type]);
+    const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, +orderId);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
     qrcodeObj[qrcodeId] = { url: payInfo.qrCode, time: Date.now() };
     tg.sendMarkdown(`请用支付宝扫描下面二维码完成支付\n\n或者 [点击此链接](${ payInfo.qrCode }) 跳转到支付宝支付`, telegramId);
