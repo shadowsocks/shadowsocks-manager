@@ -552,6 +552,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         orderInfo = $scope.orders[0];
         $scope.account.orderId = orderInfo.id;
       }
+      let expire;
+      if($scope.account.fixedExpire) {
+        expire = $scope.account.time + $scope.timeLimit[$scope.account.type] * $scope.account.limit;
+      }
       $scope.account.type = orderInfo.type;
       $scope.account.flow = orderInfo.flow;
       $scope.account.limit = orderInfo.cycle;
@@ -559,6 +563,13 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
+      if($scope.account.fixedExpire) {
+        $scope.account.time = expire - $scope.timeLimit[$scope.account.type] * $scope.account.limit;
+        while($scope.account.time >= Date.now()) {
+          $scope.account.time -= $scope.timeLimit[$scope.account.type];
+          $scope.account.limit++;
+        }
+      }
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {

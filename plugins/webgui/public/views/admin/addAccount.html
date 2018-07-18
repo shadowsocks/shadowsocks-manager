@@ -81,7 +81,7 @@
                     </md-switch>
                 </div>
             </div>
-            <div layout="column" layout-wrap flex ng-if="account.accountServer">
+            <div layout="column" layout-wrap flex ng-if="account.accountServer && +account.type !== 1">
                 <div layout="column" layout-wrap flex ng-repeat="server in servers">
                     <div flex="100">
                         <md-checkbox ng-model="account.accountServerObj[server.id]">

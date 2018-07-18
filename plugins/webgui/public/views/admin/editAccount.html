@@ -18,6 +18,13 @@
                     </md-switch>
                 </div>
             </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center" ng-if="account.fromOrder === 1">
+                <div flex="75">更改订单类型时保持过期时间不变</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.fixedExpire" aria-label="fixedExpire">
+                    </md-switch>
+                </div>
+            </div>
             <form name="accountForm">
                 <md-input-container class="md-block" ng-show="account.fromOrder === 0">
                     <label translate>类型</label>
@@ -88,7 +95,7 @@
                     </md-switch>
                 </div>
             </div>
-            <div layout="column" layout-wrap flex ng-if="account.accountServer">
+            <div layout="column" layout-wrap flex ng-if="account.accountServer && +account.type !== 1">
                 <div layout="column" layout-wrap flex ng-repeat="server in servers">
                     <div flex="100">
                         <md-checkbox ng-model="account.accountServerObj[server.id]">
