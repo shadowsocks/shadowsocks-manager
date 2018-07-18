@@ -136,7 +136,9 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
   };
   const chooseOrderType = () => {
     publicInfo.status = 'loading';
-    $http.get('/api/user/order/price').then(success => {
+    $http.get('/api/user/order/price', {
+      params: { accountId: publicInfo.accountId }
+    }).then(success => {
       publicInfo.orders = success.data;
       // publicInfo.alipay = success.data.alipay;
       // publicInfo.paypal = success.data.paypal;

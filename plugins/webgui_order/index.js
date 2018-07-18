@@ -10,6 +10,15 @@ const getOneOrder = async orderId => {
   return order;
 };
 
+const getOneOrderByAccountId = async accountId => {
+  const order = await knex('webgui_order').select([
+    'webgui_order.id as id',
+    'webgui_order.changeOrderType as changeOrderType',
+  ]).leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
+  .where({ 'account_plugin.id': accountId }).then(s => s[0]);
+  return order;
+};
+
 const newOrder = async data => {
   await knex('webgui_order').insert({
     name: data.name,
@@ -58,3 +67,4 @@ exports.getOneOrder = getOneOrder;
 exports.newOrder = newOrder;
 exports.editOrder = editOrder;
 exports.deleteOrder = deleteOrder;
+exports.getOneOrderByAccountId = getOneOrderByAccountId;

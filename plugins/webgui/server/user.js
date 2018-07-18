@@ -267,6 +267,14 @@ exports.alipayCallback = (req, res) => {
 
 exports.getPrice = async (req, res) => {
   try {
+    const accountId = +req.query.accountId;
+    let changeOrderTypeId = 0;
+    if(accountId) {
+      const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      if(orderInfo && !orderInfo.changeOrderType) {
+        changeOrderTypeId = orderInfo.id;
+      }
+    }
     const groupId = req.userInfo.group;
     let orders = await orderPlugin.getOrders();
     const groupSetting = await groupPlugin.getOneGroup(groupId);
@@ -275,28 +283,12 @@ exports.getPrice = async (req, res) => {
         return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
       });
     }
+    // if(changeOrderTypeId) {
+    //   orders = orders.filter(f => {
+    //     return f.id === changeOrderTypeId;
+    //   });
+    // }
     return res.send(orders);
-    // const price = {
-    //   alipay: {},
-    //   paypal: {},
-    // };
-    // knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(success => {
-    //   if (!success.length) {
-    //     return Promise.reject('settings not found');
-    //   }
-    //   success[0].value = JSON.parse(success[0].value);
-    //   return success[0].value;
-    // }).then(success => {
-    //   for (const s in success) {
-    //     price.alipay[s] = success[s].alipay;
-    //     price.paypal[s] = success[s].paypal;
-    //   }
-    //   return res.send(price);
-    // }).catch(() => {
-    //   res.status(403).end();
-    // });
   } catch(err) {
     console.log(err);
     res.status(403).end();
