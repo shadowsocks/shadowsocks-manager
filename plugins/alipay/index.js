@@ -45,23 +45,23 @@ const moment = require('moment');
 const push = appRequire('plugins/webgui/server/push');
 
 const createOrder = async (user, account, orderId) => {
-  // const oldOrder = await knex('alipay').select().where({
-  //   user,
-  //   account: account ? account : null,
-  //   amount: amount + '',
-  //   orderType,
-  // }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
-  //   status: 'CREATE',
-  // }).then(success => {
-  //   return success[0];
-  // });
-  // if(oldOrder) {
-  //   return {
-  //     orderId: oldOrder.orderId,
-  //     qrCode: oldOrder.qrcode,
-  //   };
-  // }
+  const oldOrder = await knex('alipay').where({
+    user,
+    account: account ? account : null,
+    orderType: orderId
+  }).where('expireTime', '>', Date.now() + 15 * 60 * 1000).where({
+    status: 'CREATE',
+  }).then(success => {
+    return success[0];
+  });
+  if(oldOrder) {
+    return {
+      orderId: oldOrder.orderId,
+      qrCode: oldOrder.qrcode,
+    };
+  }
   const orderInfo = await orderPlugin.getOneOrder(orderId);
+  if(+orderInfo.alipay <= 0) { return Promise.reject('amount error'); }
   const userInfo = await knex('user').where({ id: user }).then(s => s[0]);
   const groupInfo = await groupPlugin.getOneGroup(userInfo.group);
   if(groupInfo.order) {
@@ -75,7 +75,7 @@ const createOrder = async (user, account, orderId) => {
     tradeNo: myOrderId,
     subject: orderInfo.name || 'ss续费',
     totalAmount: +orderInfo.alipay,
-    body: 'ss',
+    body: orderInfo.name || 'ss续费',
     timeExpress: 10,
   });
   await knex('alipay').insert({

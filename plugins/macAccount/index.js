@@ -215,13 +215,14 @@ const getAccountForUser = async (mac, ip, opt) => {
       });
     }).then(success => {
       serverInfo.status = success;
+      serverInfo.base64 = 'ss://' + Buffer.from(server.method + ':' + server.password + '@' + serverInfo.address + ':' + account.port).toString('base64');
       return serverInfo;
     });
   });
   const serverReturn = await Promise.all(serverList);
   const data = {
     default: {
-      site: config.plugins.macAccount.site || config.plugins.webgui.site,
+      site: (config.plugins.macAccount ? config.plugins.macAccount.site : null) || config.plugins.webgui.site,
       id: server.id,
       name: server.name,
       address,

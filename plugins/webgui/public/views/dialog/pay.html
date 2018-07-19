@@ -26,7 +26,7 @@
             <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;" translate>请选择续费周期：</div>
                 <md-radio-group ng-model="publicInfo.orderId" flex style="width: 100%;">
-                    <md-radio-button layout="row" layout-align="center center" style="width: 100%;" ng-repeat="order in publicInfo.orders" value="{{order.id}}"  ng-hide="order[publicInfo.myPayType] === 0">
+                    <md-radio-button layout="row" layout-align="center center" style="width: 100%;" ng-repeat="order in publicInfo.orders" value="{{order.id}}" ng-hide="order[publicInfo.myPayType] === 0">
                         <div layout="row" layout-align="space-between center" style="min-width: 200px; max-width: 390px;">
                             <span flex="50" translate>{{order.name}}</span>
                             <span flex="50" style="text-align:right; color: #888">

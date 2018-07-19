@@ -22,6 +22,7 @@ if(config.plugins.paypal && config.plugins.paypal.use) {
 const createOrder = async (user, account, orderId) => {
   try {
     const orderInfo = await orderPlugin.getOneOrder(orderId);
+    if(+orderInfo.paypal <= 0) { return Promise.reject('amount error'); }
     const userInfo = await knex('user').where({ id: user }).then(s => s[0]);
     const groupInfo = await groupPlugin.getOneGroup(userInfo.group);
     if(groupInfo.order) {
