@@ -283,6 +283,7 @@ exports.status = async (req, res) => {
       })).subscribe;
     }
     if(status === 'normal') {
+      knex('user').update({ lastLogin: Date.now() }).where({ id }).then();
       const groupId = (await knex('user').select(['group']).where({ id }).then(s => s[0])).group;
       multiAccount = (await knex('group').where({ id: groupId }).then(s => s[0])).multiAccount;
     }
