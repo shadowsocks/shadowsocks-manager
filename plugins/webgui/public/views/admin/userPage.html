@@ -51,7 +51,7 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="50" ng-click="toAccountPage(a.port)">
-                        <span>{{a.port}}</span><br><span ng-show="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | timeago | translateTime}}</span>
+                        <span>{{a.port}}</span><br><span ng-show="a.lastConnect" style="font-size: 0.9em; color: #555;">{{ a.lastConnect | timeago | translateTime }}</span><span ng-show="!a.lastConnect" style="font-size: 0.9em; color: #555;">...</span>
                     </div>
                     <div flex="50" layout="row" layout-align="space-between center" ng-if="id === 1">
                         <div></div>

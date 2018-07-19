@@ -13,11 +13,12 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
   };
   const show = (options = {}) => {
     publicInfo.status = 'show';
-    const { text, cancel, confirm, error, fn } = options;
+    const { text, cancel, confirm, error, fn, useFnErrorMessage } = options;
     publicInfo.text = text;
     publicInfo.cancel = cancel;
     publicInfo.confirm = confirm;
     publicInfo.error = error;
+    publicInfo.useFnErrorMessage = useFnErrorMessage;
     publicInfo.fn = fn;
     if(isDialogShow()) {
       return dialogPromise;
@@ -48,8 +49,11 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
     publicInfo.status = 'loading';
     publicInfo.fn().then(success => {
       hideFn();
-    }).catch(() => {
+    }).catch(err => {
       publicInfo.status = 'error';
+      if(publicInfo.useFnErrorMessage) {
+        publicInfo.error = err;
+      }
     });
   };
   publicInfo.confirmFn = confirmFn;
@@ -58,7 +62,7 @@ app.factory('confirmDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', 'bind', function($scope, $mdDialog, bind) {
+    controller: ['$scope', 'bind', function($scope, bind) {
       $scope.publicInfo = bind;
     }],
     clickOutsideToClose: false,

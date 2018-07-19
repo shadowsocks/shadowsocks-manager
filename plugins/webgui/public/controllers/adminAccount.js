@@ -411,7 +411,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
     $http.get('/api/admin/account/newPort').then(success => {
       $scope.account.port = success.data.port;
-      $scope.account.password = Math.random().toString().substr(2, 8);
+      $scope.account.password = Math.random().toString().substr(2, 10);
     });
     $scope.typeList = [
       {key: '不限量', value: 1},

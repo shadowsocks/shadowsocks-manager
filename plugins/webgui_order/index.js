@@ -58,6 +58,10 @@ const editOrder = async data => {
 };
 
 const deleteOrder = async orderId => {
+  const hasAccount = await knex('account_plugin').where({ orderId });
+  if(hasAccount.length) { return Promise.reject('account with this order exists'); }
+  const hasGiftcard = await knex('giftcard').where({ orderType: orderId, status: 'AVAILABLE' });
+  if(hasGiftcard.length) { return Promise.reject('giftcard with this order exists'); }
   await knex('webgui_order').delete().where({ id: orderId });
   return;
 };

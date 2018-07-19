@@ -38,10 +38,18 @@ const addDefaultOrder = async () => {
   return;
 };
 
+const fixRefTime = async () => {
+  await knex.schema.alterTable(tableName, function(table) {
+    table.bigInteger('refTime').alter();
+  });
+};
+
+
 const createTable = async () => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
     await addDefaultOrder();
+    await fixRefTime();
     return;
   }
   await knex.schema.createTableIfNotExists(tableName, function(table) {
@@ -53,7 +61,7 @@ const createTable = async () => {
     table.float('alipay');
     table.float('paypal');
     table.bigInteger('flow');
-    table.integer('refTime');
+    table.bigInteger('refTime');
     table.string('server');
     table.integer('autoRemove').defaultTo(0);
     table.integer('multiServerFlow').defaultTo(0);

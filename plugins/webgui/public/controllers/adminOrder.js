@@ -118,7 +118,19 @@ app
         cancel: '取消',
         confirm: '删除',
         error: '删除订单失败',
-        fn: function () { return $http.delete(`/api/admin/order/${ $scope.orderId }`); },
+        useFnErrorMessage: true,
+        fn: function () {
+          return $http.delete(`/api/admin/order/${ $scope.orderId }`).catch(err => {
+            if(err.status === 403) {
+              let errData = '删除订单失败';
+              if(err.data === 'account with this order exists') { errData = '无法删除订单，请先删除订单对应的账号'; }
+              if(err.data === 'giftcard with this order exists') { errData = '无法删除订单，请先删除订单对应的充值码'; }
+              return Promise.reject(errData);
+            } else {
+              return Promise.reject('网络异常，请稍后再试');
+            }
+          });
+        },
       }).then(() => {
         $state.go('admin.order');
       });

@@ -75,6 +75,11 @@ exports.deleteOrder = async (req, res) => {
     res.send('success');
   } catch(err) {
     console.log(err);
-    res.status(403).end();
+    const errorData = ['account with this order exists', 'giftcard with this order exists'];
+    if(errorData.indexOf(err) < 0) {
+      return res.status(403).end();
+    } else {
+      return res.status(403).end(err);
+    }
   }
 };
