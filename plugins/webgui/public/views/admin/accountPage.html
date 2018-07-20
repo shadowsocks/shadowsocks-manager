@@ -33,19 +33,19 @@
                             <md-divider></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{account.port + server.shift}}</div>
+                                    <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{ account.port + server.shift }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{account.password}}</div>
+                                    <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{ account.password }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>加密方式：</div><div flex="60" style="text-align:right">{{server.method}}</div>
+                                    <div flex="40" translate>加密方式：</div><div flex="60" style="text-align:right">{{ server.method }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
@@ -54,7 +54,7 @@
                                     <div flex="40" translate>流量：</div>
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="account.type === 1" translate>不限量</span>
-                                        <span ng-if="account.type >=2 && account.type <= 5"><span ng-style="server.isFlowOutOfLimit ? {color: '#a33'} : {color: '#333'}">{{serverPortFlow | flow}}</span> / {{account.data.flow * (isMultiServerFlow ? 1 : server.scale) | flow}}</span>
+                                        <span ng-if="account.type >=2 && account.type <= 5"><span ng-style="server.isFlowOutOfLimit ? {color: '#a33'} : {color: '#333'}">{{serverPortFlow | flow}}</span> / {{account.data.flow | flow}}</span>
                                     </div>
                                 </div>
                             </md-list-item>

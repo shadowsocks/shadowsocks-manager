@@ -308,7 +308,6 @@ const getServerFlow = async (serverId, timeArray) => {
     }
     const startTime = +time;
     const endTime = +timeArray[index + 1];
-    let getFlow;
     result.push(getFlowFromSplitTime(serverId, 0, startTime, endTime));
   });
   return Promise.all(result);
@@ -322,10 +321,51 @@ const getServerPortFlow = async (serverId, accountId, timeArray, isMultiServerFl
     }
     const startTime = +time;
     const endTime = +timeArray[index + 1];
-    let getFlow;
     result.push(getFlowFromSplitTime(isMultiServerFlow ? 0 : serverId, accountId, startTime, endTime));
   });
   return Promise.all(result);
+};
+
+/**
+ * 为流量倍率而增加
+ */
+const getServerPortFlowWithScale = async (serverId, accountId, timeArray, isMultiServerFlow) => {
+  const serverIdFilter = {};
+  if(!isMultiServerFlow) {
+    serverIdFilter.id = serverId;
+  }
+  const servers = await knex('server').where(serverIdFilter);
+  
+  const getOneServerFlow = async (serverId, accountId, timeArray) => {
+    const result = [];
+    timeArray.forEach((time, index) => {
+      if(index === timeArray.length - 1) {
+        return;
+      }
+      const startTime = +time;
+      const endTime = +timeArray[index + 1];
+      result.push(getFlowFromSplitTime(serverId, accountId, startTime, endTime));
+    });
+    return Promise.all(result);
+  };
+  
+  const flows = await Promise.all(servers.map(server => {
+    return getOneServerFlow(server.id, accountId, timeArray).then(success => {
+      return success.map(m => Math.ceil(m * server.scale));
+    });
+  }));
+
+  const result = [];
+  flows.forEach(flow => {
+    flow.forEach((f, index) => {
+      if(!result[index]) {
+        result[index] = f;
+      } else {
+        result[index] += f;
+      }
+    });
+  });
+  return result;
 };
 
 const getlastConnectTime = async (serverId, accountId) => {
@@ -464,6 +504,7 @@ exports.getFlow = getFlow;
 exports.getTopFlow = getTopFlow;
 exports.getServerFlow = getServerFlow;
 exports.getServerPortFlow = getServerPortFlow;
+exports.getServerPortFlowWithScale = getServerPortFlowWithScale;
 exports.getServerUserFlow = getServerUserFlow;
 exports.getlastConnectTime = getlastConnectTime;
 exports.getAccountServerFlow = getAccountServerFlow;

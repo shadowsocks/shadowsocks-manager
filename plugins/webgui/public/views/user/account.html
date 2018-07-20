@@ -60,8 +60,7 @@
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="a.type === 1">{{ '不限量' | translate }}</span>
                                         <span ng-if="a.type >=2 && a.type <= 5">
-                                            <span ng-style="a.isFlowOutOfLimit[a.serverInfo.id] ? {color: '#a33'} : {color: '#333'}">{{a.serverPortFlow | flow}}</span> / {{a.data.flow * (isMultiServerFlow
-                                            ? 1 : a.serverInfo.scale) | flow}}</span>
+                                            <span ng-style="a.isFlowOutOfLimit[a.serverInfo.id] ? {color: '#a33'} : {color: '#333'}">{{ a.serverPortFlow | flow }}</span> / {{ a.data.flow | flow }}</span>
                                     </div>
                                 </div>
                             </md-list-item>
