@@ -56,13 +56,13 @@ app.filter('flowNum2Str', function() {
     if (input < K) {
       return input;
     } else if (input < M) {
-      return (input / K).toFixed(1) + 'K';
+      return +(input / K).toFixed(1) + 'K';
     } else if (input < G) {
-      return (input / M).toFixed(1) + 'M';
+      return +(input / M).toFixed(1) + 'M';
     } else if (input < T) {
-      return (input / G).toFixed(2) + 'G';
+      return +(input / G).toFixed(2) + 'G';
     } else if (input < P) {
-      return (input / T).toFixed(3) + 'T';
+      return +(input / T).toFixed(3) + 'T';
     } else {
       return input;
     }

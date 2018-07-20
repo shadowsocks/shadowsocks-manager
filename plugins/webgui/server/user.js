@@ -268,11 +268,25 @@ exports.alipayCallback = (req, res) => {
 exports.getPrice = async (req, res) => {
   try {
     const accountId = +req.query.accountId;
+    let accountInfo;
     let changeOrderTypeId = 0;
+    const isExpired = account => {
+      if(!account) { return true; }
+      const accountData = JSON.parse(account.data);
+      const time = {
+        '2': 7 * 24 * 3600000,
+        '3': 30 * 24 * 3600000,
+        '4': 24 * 3600000,
+        '5': 3600000,
+      };
+      const expire = accountData.create + time[account.type] * accountData.limit;
+      return expire <= Date.now();
+    };
     if(accountId) {
       const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
       if(orderInfo && !orderInfo.changeOrderType) {
         changeOrderTypeId = orderInfo.id;
+        accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
       }
     }
     const groupId = req.userInfo.group;
@@ -283,12 +297,13 @@ exports.getPrice = async (req, res) => {
         return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
       });
     }
-    // if(changeOrderTypeId) {
-    //   orders = orders.filter(f => {
-    //     return f.id === changeOrderTypeId;
-    //   });
-    // }
-    return res.send(orders);
+    let currentOrder = [];
+    if(changeOrderTypeId && !isExpired(accountInfo)) {
+      currentOrder = orders.filter(f => {
+        return f.id === changeOrderTypeId;
+      });
+    }
+    return res.send(currentOrder.length ? currentOrder : orders);
   } catch(err) {
     console.log(err);
     res.status(403).end();
@@ -442,20 +457,64 @@ exports.unbindTelegram = (req, res) => {
   });
 };
 
-exports.payByGiftCard = async (req, resp) => {
+exports.payByGiftCard = async (req, res) => {
   const password = req.body.password;
   const userId = +req.session.user;
   const accountId = req.body.accountId ? +req.body.accountId : null;
   if (!userId) {
-    resp.status(400).end();
+    res.status(400).end();
     return;
   }
   try {
+    const checkGiftcardType = async () => {
+      if(!accountId) { return false; }
+      const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      if(!orderInfo || orderInfo.changeOrderType) { return false; }
+      const changeOrderTypeId = orderInfo.id;
+      const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+      const groupId = req.userInfo.group;
+      let orders = await orderPlugin.getOrders();
+      const groupSetting = await groupPlugin.getOneGroup(groupId);
+      if(groupSetting.order) {
+        orders = orders.filter(f => {
+          return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
+        });
+      }
+      let currentOrder = [];
+      const isExpired = account => {
+        if(!account) { return true; }
+        const accountData = JSON.parse(account.data);
+        const time = {
+          '2': 7 * 24 * 3600000,
+          '3': 30 * 24 * 3600000,
+          '4': 24 * 3600000,
+          '5': 3600000,
+        };
+        const expire = accountData.create + time[account.type] * accountData.limit;
+        return expire <= Date.now();
+      };
+      if(changeOrderTypeId && !isExpired(accountInfo)) {
+        currentOrder = orders.filter(f => {
+          return f.id === changeOrderTypeId;
+        });
+      }
+      const giftCardInfo = await knex('giftcard').where({ password }).then(s => s[0]);
+      if(currentOrder.length && giftCardInfo) {
+        if(giftCardInfo.orderType !== currentOrder[0].id) {
+          return true;
+        }
+      }
+      return false;
+    };
+    
+    if(await checkGiftcardType()) {
+      return res.send({ success: false, message: '充值码类型错误' });
+    };
     const result = await giftcard.processOrder(userId, accountId, password);
-    resp.send(result);
+    res.send(result);
   } catch (err) {
     logger.error(`使用充值码时出现错误：${err.toString()}`);
-    resp.status(500).end();
+    res.status(500).end();
   }
 };
 

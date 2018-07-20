@@ -38,9 +38,9 @@ app
       paypal: 0,
       flow: 100000000,
       refTime: 0,
-      autoRemove: false,
-      multiServerFlow: false,
-      changeOrderType: true,
+      autoRemove: 0,
+      multiServerFlow: 0,
+      changeOrderType: 1,
       server: null,
     };
     $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);

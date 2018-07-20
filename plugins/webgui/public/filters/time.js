@@ -154,13 +154,13 @@ app.filter('timeNum2Str', function() {
     if (input < s) {
       return input;
     } else if (input < m) {
-      return (input / s).toFixed(1) + 's'; 
+      return +(input / s).toFixed(1) + 's'; 
     } else if (input < h) {
-      return (input / m).toFixed(1) + 'm';
+      return +(input / m).toFixed(1) + 'm';
     } else if (input < d) {
-      return (input / h).toFixed(1) + 'h';
+      return +(input / h).toFixed(1) + 'h';
     } else {
-      return (input / d).toFixed(1) + 'd';
+      return +(input / d).toFixed(1) + 'd';
     }
   };
 });
