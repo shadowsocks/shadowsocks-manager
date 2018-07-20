@@ -545,7 +545,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       flow: 100,
       autoRemove: 0,
     };
-    const selectOrder = () => {
+    const selectOrder = (newValue, oldValue) => {
+      if(newValue === oldValue) { return; }
       if(!$scope.account.fromOrder) { return; }
       let orderInfo = $scope.orders.filter(f => +f.id === +$scope.account.orderId)[0];
       if(!orderInfo) {
@@ -580,8 +581,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         });
       }
     };
-    $scope.$watch('account.orderId', selectOrder);
-    $scope.$watch('account.fromOrder', selectOrder);
+    // $scope.$watch('account.orderId', selectOrder);
+    // $scope.$watch('account.fromOrder', selectOrder);
     const accountId = $stateParams.accountId;
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
@@ -615,6 +616,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
           }
         });
       }
+      $scope.$watch('account.orderId', selectOrder);
+      $scope.$watch('account.fromOrder', selectOrder);
     });
     $scope.cancel = () => {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
