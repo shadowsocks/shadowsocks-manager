@@ -108,16 +108,57 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
     isMultiServerFlow = !!accountInfo.multiServerFlow;
   } catch (err) {}
-  const serverId = isMultiServerFlow ? null : server;
-  const userFlow = await flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
-  return userFlow;
+
+  const serverIdFilter = {};
+  if(!isMultiServerFlow) {
+    serverIdFilter.id = server;
+  }
+  const servers = await knex('server').where(serverIdFilter);
+
+  const getOneServerFlow = async (serverId, accountId, startTime, endTime) => {
+    return flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
+  };
+
+  const flows = await Promise.all(servers.map(server => {
+    return getOneServerFlow(server.id, accountId, startTime, endTime).then(success => {
+      return Math.ceil(success * server.scale);
+    });
+  }));
+  return flows.reduce((a, b) => a + b);
+
+
+  // const serverId = isMultiServerFlow ? null : server;
+  // const userFlow = await flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
+  // return userFlow;
 };
 
 const checkFlowFromAccountFlowTable = async (serverId, accountId) => {
-  const where = { accountId };
-  if(serverId) { where.serverId = serverId; }
-  const result = await knex('account_flow').sum('flow as sumFlow').groupBy('accountId').where(where).then(s => s[0]);
-  return result ? result.sumFlow : -1;
+  const serverIdFilter = {};
+  if(serverId) {
+    serverIdFilter.id = serverId;
+  }
+  const servers = await knex('server').where(serverIdFilter);
+
+  const getOneServerFlow = async (serverId, accountId) => {
+    const result = await knex('account_flow').sum('flow as sumFlow').groupBy('accountId').where({
+      serverId, accountId
+    }).then(s => s[0]);
+    return result ? result.sumFlow : -1;
+  };
+
+  const flows = await Promise.all(servers.map(server => {
+    return getOneServerFlow(server.id, accountId).then(success => {
+      return success === -1 ? success : Math.ceil(success * server.scale);
+    });
+  }));
+
+  if(flows.indexOf(-1) >= 0) { return -1; }
+  return flows.reduce((a, b) => a + b);
+
+  // const where = { accountId };
+  // if(serverId) { where.serverId = serverId; }
+  // const result = await knex('account_flow').sum('flow as sumFlow').groupBy('accountId').where(where).then(s => s[0]);
+  // return result ? result.sumFlow : -1;
 };
 
 const deleteCheckAccountTimePort = async port => {
@@ -256,7 +297,8 @@ const checkServer = async () => {
               }
               await setAccountFlow(
                 s.id, a.id,
-                isMultiServerFlow ? await flowSaver.getFlowFromSplitTime(s.id, a.id, startTime, Date.now()) : flow,
+                await flowSaver.getFlowFromSplitTime(s.id, a.id, startTime, Date.now()),
+                // isMultiServerFlow ? await flowSaver.getFlowFromSplitTime(s.id, a.id, startTime, Date.now()) : flow,
                 a.port + s.shift, nextCheckTime
               );
             }
@@ -272,16 +314,10 @@ const checkServer = async () => {
                 nextCheckTime = Date.now() + nextTime;
               }
             }
-            if(flow >= 0 && isMultiServerFlow && flow >= data.flow) {
+            if(flow >= 0 && flow >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return 1;
-            } else if (flow >= 0 && !isMultiServerFlow && flow >= data.flow * s.scale) {
-              port.exist(a.port) && delPort(a, s);
-              return 1;
-            } else if (flow2 >= 0 && isMultiServerFlow && flow2 >= data.flow) {
-              port.exist(a.port) && delPort(a, s);
-              return 0;
-            } else if (flow2 >= 0 && !isMultiServerFlow && flow2 >= data.flow * s.scale) {
+            } else if (flow2 >= 0 && flow2 >= data.flow) {
               port.exist(a.port) && delPort(a, s);
               return 0;
             } else if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
