@@ -672,3 +672,13 @@ exports.newPortForAddAccount = async (req, res) => {
     res.status(403).end();
   }
 };
+
+exports.getRefUserById = (req, res) => {
+  const userId = +req.params.userId;
+  refUser.getRefUser(userId).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

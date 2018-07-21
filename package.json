@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "gulp",
-    "prepublish": "gulp"
+    "prepublishOnly": "gulp"
   },
   "author": "Gu Yuteng <igyteng@gmail.com>",
   "license": "GPL-3.0",

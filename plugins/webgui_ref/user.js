@@ -44,6 +44,7 @@ const getRefCode = async userId => {
 const getRefUser = async userId => {
   const user = await knex('webgui_ref').select([
     'webgui_ref_code.code as code',
+    'user.id as id',
     'user.email as email',
     'webgui_ref.time as time',
   ])

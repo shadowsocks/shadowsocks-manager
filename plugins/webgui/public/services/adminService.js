@@ -154,6 +154,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
       config.giftcard ? $http.get('/api/admin/giftcard/' + userId) : $q.resolve({ data: [] }),
       $http.get('/api/admin/server'),
       $http.get('/api/admin/account/mac', { params: { userId } }),
+      $http.get('/api/admin/ref/user/' + userId),
     ];
     return $q.all(promises).then(success => {
       return {
@@ -164,6 +165,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
         giftCardOrders: success[4].data,
         server: success[5].data,
         macAccount: success[6].data,
+        refUsers: success[7].data,
       };
     });
   };
