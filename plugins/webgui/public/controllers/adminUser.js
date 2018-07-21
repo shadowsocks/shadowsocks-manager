@@ -208,6 +208,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.groupInfo[f.id] = { name: f.name, comment: f.comment };
       });
     });
+    $scope.toRefUser = id => {
+      $state.go('admin.user', { id });
+    };
   }
 ])
 .controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',

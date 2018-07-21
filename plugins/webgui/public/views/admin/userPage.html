@@ -27,6 +27,13 @@
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
+                    <md-list-item ng-if="user.ref" ng-click="toRefUser(user.ref.id)">
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="30">邀请人</div>
+                            <div flex="70" style="text-align: right;">{{ user.ref.email }}</div>
+                        </div>
+                    </md-list-item>
+                    <md-divider ng-if="user.ref"></md-divider>
                     <md-list-item ng-if="id === 1">
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="30">分组</div>
