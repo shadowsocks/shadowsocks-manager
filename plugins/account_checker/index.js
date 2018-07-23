@@ -3,7 +3,7 @@ const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
-const sleepTime = config.plugins.account_checker.time || 500;
+const sleepTime = config.plugins.account_checker.time || 100;
 
 const sleep = time => {
   return new Promise((resolve, reject) => {
@@ -55,6 +55,17 @@ const isExpired = (server, account) => {
 };
 
 const isOverFlow = async (server, account) => {
+  let realFlow = 0;
+  const writeFlow = async (serverId, accountId, flow, time) => {
+    const exists = await knex('account_flow').where({ serverId, accountId }).then(s => s[0]);
+    if(exists) {
+      await knex('account_flow').update({
+        flow,
+        checkTime: Date.now(),
+        nextCheckTime: Date.now() + time,
+      }).where({ id: exists.id });
+    }
+  };
   if(account.type >= 2 && account.type <= 5) {
     let timePeriod = 0;
     if(account.type === 2) { timePeriod = 7 * 86400 * 1000; }
@@ -69,18 +80,39 @@ const isOverFlow = async (server, account) => {
     const endTime = Date.now();
 
     const isMultiServerFlow = !!account.multiServerFlow;
-    const scale = isMultiServerFlow ? 1 : server.scale;
 
-    const serverId = isMultiServerFlow ? null : server.id;
-    const currentFlow = await flow.getFlowFromSplitTime(serverId, account.id, startTime, endTime);
+    let servers = [];
+    if(isMultiServerFlow) {
+      servers = await knex('server').where({});
+    } else {
+      servers = await knex('server').where({ id: server.id });
+    }
 
-    return currentFlow >= data.flow * scale;
+    const flows = await Promise.all(servers.map(currentServer => {
+      return flow.getFlowFromSplitTime(currentServer.id, account.id, startTime, endTime).then(flow => {
+        if(currentServer.id === server.id) { realFlow = flow; }
+        return Math.ceil(flow * currentServer.scale);
+      });
+    }));
+
+    const sumFlow = flows.reduce((a, b) => a + b);
+    const nextCheckTime = (data.flow - sumFlow) / 200000000 * 60 * 1000;
+    await writeFlow(server.id, account.id, realFlow, nextCheckTime <= 0 ? 600 * 1000 : nextCheckTime);
+    return sumFlow >= data.flow;
+
+    // const scale = isMultiServerFlow ? 1 : server.scale;
+
+    // const serverId = isMultiServerFlow ? null : server.id;
+    // const currentFlow = await flow.getFlowFromSplitTime(serverId, account.id, startTime, endTime);
+
+    // return currentFlow >= data.flow * scale;
   } else {
     return false;
   }
 };
 
 const deletePort = (server, account) => {
+  console.log(`del: ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'del',
@@ -93,6 +125,7 @@ const deletePort = (server, account) => {
 };
 
 const addPort = (server, account) => {
+  console.log(`add: ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'add',
@@ -155,7 +188,7 @@ const checkAccount = async (serverId, accountId) => {
       return;
     }
 
-    !exists && addPort();
+    !exists && addPort(serverInfo, accountInfo);
   } catch(err) {
     console.log(err);
   }
@@ -166,7 +199,7 @@ const checkAccount = async (serverId, accountId) => {
     const servers = await knex('server').where({});
     const accounts = await knex('account_plugin').where({});
     for(let server of servers) {
-      await deleteExtraPorts(server.id);
+      // await deleteExtraPorts(server.id);
       for(let account of accounts) {
         const start = Date.now();
         await checkAccount(server.id, account.id);
@@ -175,5 +208,14 @@ const checkAccount = async (serverId, accountId) => {
         await sleep(sleepTime);
       }
     }
+
+    // const data = await knex('account_flow').where({}).orderBy('checkTime', 'asc').limit(30).then(s => s[s.length - 1]);
+    // if(data) {
+    //   const start = Date.now();
+    //   await checkAccount(data.serverId, data.accountId);
+    //   const end = Date.now();
+    //   console.log(`server: ${data.serverId}, account: ${ data.serverId }, time: ${ end - start } ms`);
+    // }
+    // await sleep(sleepTime);
   }
 })();

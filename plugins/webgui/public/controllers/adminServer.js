@@ -448,7 +448,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.serverInfoloaded = true;
       $scope.server.name = success.data.name;
       $scope.server.comment = success.data.comment;
-      $scope.server.address = success.data.address;
+      $scope.server.address = success.data.host;
       $scope.server.port = +success.data.port;
       $scope.server.password = success.data.password;
       $scope.server.method = success.data.method;

@@ -26,7 +26,7 @@ const del = (id) => {
 };
 
 const edit = async options => {
-  const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0, check = 1 } = options;
+  const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0, check } = options;
   if(check) { await checkAccount.deleteCheckAccountTimeServer(id); }
   return knex('server').where({ id }).update({
     name,

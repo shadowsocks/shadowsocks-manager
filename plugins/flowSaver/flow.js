@@ -265,7 +265,6 @@ const getFlowFromSplitTime = async (serverId, accountId, start, end) => {
       });
     };
   } else {
-    const servers = await knex('server').select();
     getFlow = (tableName, startTime, endTime) => {
       const where = {};
       where[`${ tableName }.accountId`] = accountId;
