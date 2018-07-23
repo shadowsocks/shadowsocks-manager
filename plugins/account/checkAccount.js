@@ -115,16 +115,40 @@ const checkFlow = async (server, accountId, startTime, endTime) => {
   }
   const servers = await knex('server').where(serverIdFilter);
 
-  const getOneServerFlow = async (serverId, accountId, startTime, endTime) => {
-    return flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
-  };
+  const flows = await flow.getFlowFromSplitTimeWithScale(servers.map(m => m.id), accountId, startTime, endTime);
 
-  const flows = await Promise.all(servers.map(server => {
-    return getOneServerFlow(server.id, accountId, startTime, endTime).then(success => {
-      return Math.ceil(success * server.scale);
+  const serverObj = {};
+  servers.forEach(server => {
+    serverObj[server.id] = server;
+  });
+  flows.forEach(flo => {
+    flo.forEach(f => {
+      if(serverObj[f.id]) {
+        if(!serverObj[f.id].flow) {
+          serverObj[f.id].flow = f.sumFlow;
+        } else {
+          serverObj[f.id].flow += f.sumFlow;
+        }
+      }
     });
-  }));
-  return flows.reduce((a, b) => a + b);
+  });
+  let sumFlow = 0;
+  for(const s in serverObj) {
+    const flow = serverObj[s].flow || 0;
+    sumFlow += Math.ceil(flow * serverObj[s].scale);
+  }
+  return sumFlow;
+
+  // const getOneServerFlow = async (serverId, accountId, startTime, endTime) => {
+  //   return flow.getFlowFromSplitTime(serverId, accountId, startTime, endTime);
+  // };
+
+  // const flows = await Promise.all(servers.map(server => {
+  //   return getOneServerFlow(server.id, accountId, startTime, endTime).then(success => {
+  //     return Math.ceil(success * server.scale);
+  //   });
+  // }));
+  // return flows.reduce((a, b) => a + b);
 
 
   // const serverId = isMultiServerFlow ? null : server;

@@ -88,31 +88,47 @@ const isOverFlow = async (server, account) => {
       servers = await knex('server').where({ id: server.id });
     }
 
-    const flows = await Promise.all(servers.map(currentServer => {
-      return flow.getFlowFromSplitTime(currentServer.id, account.id, startTime, endTime).then(flow => {
-        if(currentServer.id === server.id) { realFlow = flow; }
-        return Math.ceil(flow * currentServer.scale);
-      });
-    }));
+    // const flows0 = await Promise.all(servers.map(currentServer => {
+    //   return flow.getFlowFromSplitTime(currentServer.id, account.id, startTime, endTime).then(flow => {
+    //     if(currentServer.id === server.id) { realFlow = flow; }
+    //     return Math.ceil(flow * currentServer.scale);
+    //   });
+    // }));
 
-    const sumFlow = flows.reduce((a, b) => a + b);
+    const flows = await flow.getFlowFromSplitTimeWithScale(servers.map(m => m.id), account.id, startTime, endTime);
+
+    const serverObj = {};
+    servers.forEach(server => {
+      serverObj[server.id] = server;
+    });
+    flows.forEach(flo => {
+      flo.forEach(f => {
+        if(serverObj[f.id]) {
+          if(!serverObj[f.id].flow) {
+            serverObj[f.id].flow = f.sumFlow;
+          } else {
+            serverObj[f.id].flow += f.sumFlow;
+          }
+        }
+      });
+    });
+    let sumFlow = 0;
+    for(const s in serverObj) {
+      const flow = serverObj[s].flow || 0;
+      sumFlow += Math.ceil(flow * serverObj[s].scale);
+    }
+    // console.log(sumFlow, flows0.reduce((a, b) => a + b));
+    // const sumFlow = flows.reduce((a, b) => a + b);
     const nextCheckTime = (data.flow - sumFlow) / 200000000 * 60 * 1000;
     await writeFlow(server.id, account.id, realFlow, nextCheckTime <= 0 ? 600 * 1000 : nextCheckTime);
+
     return sumFlow >= data.flow;
-
-    // const scale = isMultiServerFlow ? 1 : server.scale;
-
-    // const serverId = isMultiServerFlow ? null : server.id;
-    // const currentFlow = await flow.getFlowFromSplitTime(serverId, account.id, startTime, endTime);
-
-    // return currentFlow >= data.flow * scale;
   } else {
     return false;
   }
 };
 
 const deletePort = (server, account) => {
-  console.log(`del: ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'del',
@@ -125,7 +141,6 @@ const deletePort = (server, account) => {
 };
 
 const addPort = (server, account) => {
-  console.log(`add: ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'add',
@@ -194,6 +209,7 @@ const checkAccount = async (serverId, accountId) => {
   }
 };
 
+
 (async () => {
   while(true) {
     // await sleep(sleepTime);
@@ -230,20 +246,22 @@ const checkAccount = async (serverId, accountId) => {
     .whereIn('account_flow.serverId', servers)
     .whereIn('account_flow.accountId', accounts)
     .where('account_plugin.type', '>', 1)
-    .orderBy('account_flow.nextCheckTime', 'asc').limit(30);
+    .orderBy('account_flow.nextCheckTime', 'asc').limit(20);
 
-    console.log(datas.length);
+    // console.log(datas.length);
     for(const data of datas) {
       const start = Date.now();
       const accountFlowData = await knex('account_flow').where({ id: data.id }).then(s => s[0]);
+      // console.log(accountFlowData);
       if(accountFlowData && Date.now() - accountFlowData.nextCheckTime > 0) {
-        console.log('continue');
+        // console.log('continue');
         continue;
       }
-      await checkAccount(data.serverId, data.accountId);
+      await checkAccount(accountFlowData.serverId, accountFlowData.accountId);
       const end = Date.now();
-      console.log(`next: ${ accountFlowData.nextCheckTime - Date.now() }, server: ${data.serverId}, account: ${ data.accountId }, time: ${ end - start } ms`);
+      console.log(`next: ${ accountFlowData.nextCheckTime - Date.now() }, server: ${accountFlowData.serverId}, account: ${ accountFlowData.accountId }, time: ${ end - start } ms`);
       await sleep(sleepTime);
     }
+    await sleep(sleepTime);
   }
 })();
