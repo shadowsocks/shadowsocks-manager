@@ -196,26 +196,54 @@ const checkAccount = async (serverId, accountId) => {
 
 (async () => {
   while(true) {
-    const servers = await knex('server').where({});
-    const accounts = await knex('account_plugin').where({});
-    for(let server of servers) {
-      // await deleteExtraPorts(server.id);
-      for(let account of accounts) {
-        const start = Date.now();
-        await checkAccount(server.id, account.id);
-        const end = Date.now();
-        console.log(`server: ${server.id}, account: ${ account.id }, time: ${ end - start } ms`);
-        await sleep(sleepTime);
-      }
-    }
-
-    // const data = await knex('account_flow').where({}).orderBy('checkTime', 'asc').limit(30).then(s => s[s.length - 1]);
-    // if(data) {
-    //   const start = Date.now();
-    //   await checkAccount(data.serverId, data.accountId);
-    //   const end = Date.now();
-    //   console.log(`server: ${data.serverId}, account: ${ data.serverId }, time: ${ end - start } ms`);
-    // }
     // await sleep(sleepTime);
+
+    // const servers = await knex('server').where({});
+    // const accounts = await knex('account_plugin').where({});
+    // for(let server of servers) {
+    //   // await deleteExtraPorts(server.id);
+    //   for(let account of accounts) {
+    //     const start = Date.now();
+    //     const accountFlowData = await knex('account_flow').where({ serverId: server.id, accountId: account.id }).then(s => s[0]);
+    //     if(accountFlowData && Date.now() - accountFlowData.nextCheckTime > 0) {
+    //       console.log('continue');
+    //       continue;
+    //     }
+    //     await checkAccount(server.id, account.id);
+    //     const end = Date.now();
+    //     console.log(`server: ${server.name}, account: ${ account.port }, time: ${ end - start } ms`);
+    //     await sleep(sleepTime);
+    //   }
+    // }
+
+    const servers = await knex('server').where({}).then(s => s.map(m => m.id));
+    const accounts = await knex('account_plugin').where({}).then(s => s.map(m => m.id));
+
+    const datas = await knex('account_flow')
+    .select([
+      'account_flow.id as id',
+      'account_flow.serverId as serverId',
+      'account_flow.accountId as accountId',
+      'account_flow.nextCheckTime as nextCheckTime',
+    ])
+    .leftJoin('account_plugin', 'account_plugin.id', 'account_flow.accountId')
+    .whereIn('account_flow.serverId', servers)
+    .whereIn('account_flow.accountId', accounts)
+    .where('account_plugin.type', '>', 1)
+    .orderBy('account_flow.nextCheckTime', 'asc').limit(30);
+
+    console.log(datas.length);
+    for(const data of datas) {
+      const start = Date.now();
+      const accountFlowData = await knex('account_flow').where({ id: data.id }).then(s => s[0]);
+      if(accountFlowData && Date.now() - accountFlowData.nextCheckTime > 0) {
+        console.log('continue');
+        continue;
+      }
+      await checkAccount(data.serverId, data.accountId);
+      const end = Date.now();
+      console.log(`next: ${ accountFlowData.nextCheckTime - Date.now() }, server: ${data.serverId}, account: ${ data.accountId }, time: ${ end - start } ms`);
+      await sleep(sleepTime);
+    }
   }
 })();
