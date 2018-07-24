@@ -57,6 +57,7 @@ const isExpired = (server, account) => {
 const isOverFlow = async (server, account) => {
   let realFlow = 0;
   const writeFlow = async (serverId, accountId, flow, time) => {
+    // console.log(`write: ${ serverId } ${ accountId } ${ flow }`);
     const exists = await knex('account_flow').where({ serverId, accountId }).then(s => s[0]);
     if(exists) {
       await knex('account_flow').update({
@@ -115,6 +116,7 @@ const isOverFlow = async (server, account) => {
     let sumFlow = 0;
     for(const s in serverObj) {
       const flow = serverObj[s].flow || 0;
+      if(+s === server.id) { realFlow = flow; }
       sumFlow += Math.ceil(flow * serverObj[s].scale);
     }
     // console.log(sumFlow, flows0.reduce((a, b) => a + b));
@@ -246,7 +248,7 @@ const checkAccount = async (serverId, accountId) => {
     .whereIn('account_flow.serverId', servers)
     .whereIn('account_flow.accountId', accounts)
     .where('account_plugin.type', '>', 1)
-    .orderBy('account_flow.nextCheckTime', 'asc').limit(20);
+    .orderBy('account_flow.nextCheckTime', 'asc').limit(35);
 
     // console.log(datas.length);
     for(const data of datas) {
