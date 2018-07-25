@@ -189,7 +189,7 @@ const deleteCheckAccountTimePort = async port => {
   const servers = await knex('server').select();
   servers.forEach(async server => {
     await knex('account_flow').update({
-      nextCheckTime: Date.now() + 90000,
+      nextCheckTime: Date.now(),
     }).where({
       serverId: server.id,
       port: port + server.shift,
@@ -199,7 +199,7 @@ const deleteCheckAccountTimePort = async port => {
 };
 const deleteCheckAccountTimeServer = serverId => {
   return knex('account_flow').update({
-    nextCheckTime: Date.now() + 90000,
+    nextCheckTime: Date.now(),
   }).where({ serverId });
 };
 
@@ -288,10 +288,13 @@ const checkServer = async () => {
             accountFlowData = await getAccountFlow(s.id, a.id);
             return 0;
           }
-          if(accountFlowData.status === 'ban' && Date.now() <= accountFlowData.nextCheckTime) {
+          if(accountFlowData.status === 'ban' && Date.now() <= accountFlowData.autobanTime) {
+            await knex('account_flow').update({ nextCheckTime: accountFlowData.autobanTime }).where({
+              serverId: s.id, accountId: a.id,
+            });
             port.exist(a.port) && delPort(a, s);
             return 0;
-          } else if (accountFlowData.status === 'ban' && Date.now() > accountFlowData.nextCheckTime) {
+          } else if (accountFlowData.status === 'ban' && Date.now() > accountFlowData.autobanTime) {
             await knex('account_flow').update({ status: 'checked' }).where({
               serverId: s.id, accountId: a.id,
             });

@@ -3,7 +3,7 @@ const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
-const sleepTime = config.plugins.account_checker.time || 100;
+const sleepTime = 100;
 
 const sleep = time => {
   return new Promise((resolve, reject) => {
@@ -54,10 +54,23 @@ const isExpired = (server, account) => {
   }
 };
 
+const isBaned = async (server, account) => {
+  const accountFlowInfo = await knex('account_flow').where({
+    serverId: server.id,
+    accountId: account.id,
+    status: 'ban',
+  }).then(s => s[0]);
+  if(!accountFlowInfo) { return false; }
+  if(!accountFlowInfo.autobanTime || Date.now() > accountFlowInfo.autobanTime) {
+    await knex('account_flow').update({ status: 'checked' }).where({ id: accountFlowInfo.id });
+    return false;
+  }
+  return true;
+};
+
 const isOverFlow = async (server, account) => {
   let realFlow = 0;
   const writeFlow = async (serverId, accountId, flow, time) => {
-    // console.log(`write: ${ serverId } ${ accountId } ${ flow }`);
     const exists = await knex('account_flow').where({ serverId, accountId }).then(s => s[0]);
     if(exists) {
       await knex('account_flow').update({
@@ -89,13 +102,6 @@ const isOverFlow = async (server, account) => {
       servers = await knex('server').where({ id: server.id });
     }
 
-    // const flows0 = await Promise.all(servers.map(currentServer => {
-    //   return flow.getFlowFromSplitTime(currentServer.id, account.id, startTime, endTime).then(flow => {
-    //     if(currentServer.id === server.id) { realFlow = flow; }
-    //     return Math.ceil(flow * currentServer.scale);
-    //   });
-    // }));
-
     const flows = await flow.getFlowFromSplitTimeWithScale(servers.map(m => m.id), account.id, startTime, endTime);
 
     const serverObj = {};
@@ -119,8 +125,6 @@ const isOverFlow = async (server, account) => {
       if(+s === server.id) { realFlow = flow; }
       sumFlow += Math.ceil(flow * serverObj[s].scale);
     }
-    // console.log(sumFlow, flows0.reduce((a, b) => a + b));
-    // const sumFlow = flows.reduce((a, b) => a + b);
     const nextCheckTime = (data.flow - sumFlow) / 200000000 * 60 * 1000;
     await writeFlow(server.id, account.id, realFlow, nextCheckTime <= 0 ? 600 * 1000 : nextCheckTime);
 
@@ -131,6 +135,7 @@ const isOverFlow = async (server, account) => {
 };
 
 const deletePort = (server, account) => {
+  console.log(`del ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'del',
@@ -143,6 +148,7 @@ const deletePort = (server, account) => {
 };
 
 const addPort = (server, account) => {
+  console.log(`add ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
   manager.send({
     command: 'add',
@@ -167,8 +173,9 @@ const deleteExtraPorts = async serverId => {
     for(let p of currentPorts) {
       const accountInfo = await knex('account_plugin').where({ port: p.port - serverInfo.shift }).then(s => s[0]);
       if(!accountInfo) {
-        deletePort(serverInfo, accountInfo);
+        deletePort(serverInfo, { port: p.port });
       } else if(accountInfo.server && JSON.parse(accountInfo.server).indexOf(serverInfo.id) < 0) {
+        await knex('account_plugin').delete().where({ port: p.port - serverInfo.shift });
         deletePort(serverInfo, accountInfo);
       }
     }
@@ -199,6 +206,12 @@ const checkAccount = async (serverId, accountId) => {
       return;
     }
 
+    // 检查账号是否被ban
+    if(await isBaned(serverInfo, accountInfo)) {
+      exists && deletePort(serverInfo, accountInfo);
+      return;
+    }
+
     // 检查账号是否超流量
     if(await isOverFlow(serverInfo, accountInfo)) {
       exists && deletePort(serverInfo, accountInfo);
@@ -214,7 +227,34 @@ const checkAccount = async (serverId, accountId) => {
 
 (async () => {
   while(true) {
-    // await sleep(sleepTime);
+    (async () => {
+      const addAccountFlow = async (server, account) => {
+        const accountFlowData = await knex('account_flow').where({
+          serverId: server.id,
+          accountId: account.id,
+        }).then(s => s[0]);
+        if(!accountFlowData) {
+          await knex('account_flow').insert({
+            serverId: server.id,
+            accountId: account.id,
+            port: account.port,
+            nextCheckTime: Date.now(),
+            flow: 0,
+            status: 'checked',
+          });
+        }
+      };
+
+      const servers = await knex('server').where({});
+      const accounts = await knex('account_plugin').where({});
+      for(let server of servers) {
+        await deleteExtraPorts(server.id);
+        for(let account of accounts) {
+          await addAccountFlow(server, account);
+        }
+      }
+    })();
+    
 
     // const servers = await knex('server').where({});
     // const accounts = await knex('account_plugin').where({});
@@ -242,6 +282,7 @@ const checkAccount = async (serverId, accountId) => {
       'account_flow.id as id',
       'account_flow.serverId as serverId',
       'account_flow.accountId as accountId',
+      'account_flow.checkTime as checkTime',
       'account_flow.nextCheckTime as nextCheckTime',
     ])
     .leftJoin('account_plugin', 'account_plugin.id', 'account_flow.accountId')
@@ -255,10 +296,10 @@ const checkAccount = async (serverId, accountId) => {
       const start = Date.now();
       const accountFlowData = await knex('account_flow').where({ id: data.id }).then(s => s[0]);
       // console.log(accountFlowData);
-      if(accountFlowData && Date.now() - accountFlowData.nextCheckTime > 0) {
-        // console.log('continue');
-        continue;
-      }
+      // if(accountFlowData && Date.now() - accountFlowData.nextCheckTime > 0) {
+      //   console.log('continue');
+      //   continue;
+      // }
       await checkAccount(accountFlowData.serverId, accountFlowData.accountId);
       const end = Date.now();
       console.log(`next: ${ accountFlowData.nextCheckTime - Date.now() }, server: ${accountFlowData.serverId}, account: ${ accountFlowData.accountId }, time: ${ end - start } ms`);
