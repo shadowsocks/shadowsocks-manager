@@ -197,10 +197,25 @@ const deleteCheckAccountTimePort = async port => {
   });
   return;
 };
+
 const deleteCheckAccountTimeServer = serverId => {
   return knex('account_flow').update({
     nextCheckTime: Date.now(),
   }).where({ serverId });
+};
+
+const addAccountFlowInfo = async accountId => {
+  const servers = await knex('server').select();
+  const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+  servers.forEach(async server => {
+    await knex('account_flow').insert({
+      serverId: server.id,
+      accountId,
+      port: accountInfo.port + server.shift,
+      nextCheckTime: Date.now(),
+    });
+  });
+  return;
 };
 
 const sleep = time => {
@@ -430,10 +445,11 @@ exports.delPort = delPort;
 exports.changePassword = changePassword;
 exports.deleteCheckAccountTimePort = deleteCheckAccountTimePort;
 exports.deleteCheckAccountTimeServer = deleteCheckAccountTimeServer;
+exports.addAccountFlowInfo = addAccountFlowInfo;
 
 // setTimeout(() => {
 //   checkServer();
 // }, 8 * 1000);
-cron.minute(() => {
-  checkServer();
-}, 2);
+// cron.minute(() => {
+//   checkServer();
+// }, 2);

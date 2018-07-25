@@ -4,6 +4,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
 const sleepTime = 100;
+const accountFlow = appRequire('plugins/account/accountFlow');
 
 const sleep = time => {
   return new Promise((resolve, reject) => {
@@ -175,7 +176,7 @@ const deleteExtraPorts = async serverId => {
       if(!accountInfo) {
         deletePort(serverInfo, { port: p.port });
       } else if(accountInfo.server && JSON.parse(accountInfo.server).indexOf(serverInfo.id) < 0) {
-        await knex('account_plugin').delete().where({ port: p.port - serverInfo.shift });
+        await knex('account_plugin').delete().where({ serverId, port: p.port - serverInfo.shift });
         deletePort(serverInfo, accountInfo);
       }
     }
@@ -224,37 +225,35 @@ const checkAccount = async (serverId, accountId) => {
   }
 };
 
+cron.minute(async () => {
+  const addAccountFlow = async (server, account) => {
+    const accountFlowData = await knex('account_flow').where({
+      serverId: server.id,
+      accountId: account.id,
+    }).then(s => s[0]);
+    if(accountFlowData) { return; }
+    await knex('account_flow').insert({
+      serverId: server.id,
+      accountId: account.id,
+      port: account.port,
+      nextCheckTime: Date.now(),
+      flow: 0,
+      status: 'checked',
+    });
+  };
+  const servers = await knex('server').where({});
+  const accounts = await knex('account_plugin').where({});
+  for(let server of servers) {
+    await deleteExtraPorts(server.id);
+  }
+  for(let account of accounts) {
+    await accountFlow.add(account.id);
+  }
+}, 5);
 
 (async () => {
   while(true) {
-    (async () => {
-      const addAccountFlow = async (server, account) => {
-        const accountFlowData = await knex('account_flow').where({
-          serverId: server.id,
-          accountId: account.id,
-        }).then(s => s[0]);
-        if(!accountFlowData) {
-          await knex('account_flow').insert({
-            serverId: server.id,
-            accountId: account.id,
-            port: account.port,
-            nextCheckTime: Date.now(),
-            flow: 0,
-            status: 'checked',
-          });
-        }
-      };
-
-      const servers = await knex('server').where({});
-      const accounts = await knex('account_plugin').where({});
-      for(let server of servers) {
-        await deleteExtraPorts(server.id);
-        for(let account of accounts) {
-          await addAccountFlow(server, account);
-        }
-      }
-    })();
-    
+    console.log('GG');
 
     // const servers = await knex('server').where({});
     // const accounts = await knex('account_plugin').where({});
