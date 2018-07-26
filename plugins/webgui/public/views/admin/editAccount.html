@@ -61,7 +61,7 @@
                 </md-input-container>
                 <md-input-container class="md-block">
                     <label translate>密码</label>
-                    <input type="text" required name="password" ng-model="account.password">
+                    <input type="text" required disabled name="password" ng-model="account.password">
                     <div ng-messages="accountForm.password.$error">
                         <div ng-message="required">密码不能为空</div>
                     </div>

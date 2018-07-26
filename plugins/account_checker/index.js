@@ -271,10 +271,7 @@ const checkAccount = async (serverId, accountId) => {
       .orderBy('nextCheckTime', 'asc').limit(30);
       number += datas.length;
       for(const data of datas) {
-        const start = Date.now();
         await checkAccount(data.serverId, data.accountId).catch();
-        const end = Date.now();
-        // console.log(`next: ${ data.nextCheckTime - Date.now() }, server: ${data.serverId}, account: ${ data.accountId }, time: ${ end - start } ms`);
         await sleep(sleepTime);
       }
     } catch(err) {
@@ -283,19 +280,36 @@ const checkAccount = async (serverId, accountId) => {
 
     try {
       const datas = await knex('account_flow').select()
-      .orderByRaw('rand()').limit(5);
+      .orderBy('updateTime', 'desc').limit(15);
       number += datas.length;
       for(const data of datas) {
-        const start = Date.now();
         await checkAccount(data.serverId, data.accountId).catch();
-        const end = Date.now();
-        // console.log(`rand: ${ data.nextCheckTime - Date.now() }, server: ${data.serverId}, account: ${ data.accountId }, time: ${ end - start } ms`);
+        await sleep(sleepTime);
+      }
+    } catch(err) {
+      console.log(err);
+    }
+
+    try {
+      let datas;
+      try {
+        datas = await knex('account_flow').select()
+        .orderByRaw('rand()').limit(5);
+      } catch(err) {
+        datas = await knex('account_flow').select()
+        .orderByRaw('random()').limit(5);
+      }
+      number += datas.length;
+      for(const data of datas) {
+        await checkAccount(data.serverId, data.accountId).catch();
         await sleep(sleepTime);
       }
     } catch(err) {
       console.log(err);
     }
     await sleep(sleepTime);
-    logger.info(`check ${ number } accounts, ${ Date.now() - start } ms`);
+    if(number) {
+      logger.info(`check ${ number } accounts, ${ Date.now() - start } ms`);
+    }
   }
 })();
