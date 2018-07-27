@@ -115,7 +115,7 @@ const editAccount = async (id, options) => {
   if(options.port) {
     await checkAccount.deleteCheckAccountTimePort(options.port);
   }
-  const account = await knex('account_plugin').select().where({ id }).then(success => {
+  const account = await knex('account_plugin').where({ id }).then(success => {
     if(success.length) {
       return success[0];
     }
@@ -143,6 +143,19 @@ const editAccount = async (id, options) => {
   }
   if(options.port) {
     update.port = +options.port;
+    if(+options.port !== account.port) {
+      const servers = await knex('server').where({});
+      servers.forEach(server => {
+        manager.send({
+          command: 'del',
+          port: account.port + server.shift,
+        }, {
+          host: server.host,
+          port: server.port,
+          password: server.password,
+        });
+      });
+    }
   }
   await knex('account_plugin').update(update).where({ id });
   await await accountFlow.edit(id);

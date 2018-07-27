@@ -39,6 +39,35 @@ const edit = async accountId => {
   return;
 };
 
+const server = async serverId => {
+  const server = await knex('server').where({ id: serverId }).then(s => s[0]);
+  const accounts = await knex('account_plugin').where({});
+  for(account of accounts) {
+    const exists = await knex('account_flow').where({
+      serverId,
+      accountId: account.id
+    }).then(s => s[0]);
+    if(!exists) {
+      await knex('account_flow').insert({
+        serverId: server.id,
+        accountId: account.id,
+        port: account.port + server.shift,
+        nextCheckTime: Date.now(),
+      });
+    } else {
+      await knex('account_flow').update({
+        port: account.port + server.shift,
+        nextCheckTime: Date.now(),
+      }).where({
+        serverId: server.id,
+        accountId: account.id,
+      });
+    }
+  }
+};
+
 exports.add = add;
 exports.del = del;
 exports.edit = edit;
+exports.addServer = server;
+exports.editServer = server;

@@ -210,6 +210,7 @@ const checkAccount = async (serverId, accountId) => {
       await knex('account_flow').delete().where({ serverId, accountId });
       return;
     }
+    // logger.info('check', serverInfo.name, accountInfo.port);
 
     // 检查当前端口是否存在
     const exists = await isPortExists(serverInfo, accountInfo);
