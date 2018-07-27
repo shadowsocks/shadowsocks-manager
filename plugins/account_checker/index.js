@@ -208,7 +208,7 @@ const checkAccount = async (serverId, accountId) => {
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
     if(!accountInfo) {
       await knex('account_flow').delete().where({ serverId, accountId });
-      return Promise.reject(`Account[${ accountId }] not exists`);
+      return;
     }
 
     // 检查当前端口是否存在

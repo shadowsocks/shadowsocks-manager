@@ -90,10 +90,22 @@ const getAccount = async (options = {}) => {
 };
 
 const delAccount = async id => {
-  const result = await knex('account_plugin').delete().where({ id });
-  if(!result) {
+  const accountInfo = await knex('account_plugin').where({ id }).then(s => s[0]);
+  if(!accountInfo) {
     return Promise.reject('Account id[' + id + '] not found');
   }
+  const result = await knex('account_plugin').delete().where({ id });
+  const servers = await knex('server').where({});
+  servers.forEach(server => {
+    manager.send({
+      command: 'del',
+      port: accountInfo.port + server.shift,
+    }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    });
+  });
   await accountFlow.del(id);
   // await checkAccount.checkServer();
   return result;
