@@ -204,7 +204,11 @@ const deleteExtraPorts = async serverInfo => {
 const checkAccount = async (serverId, accountId) => {
   try {
     const serverInfo = await knex('server').where({ id: serverId }).then(s => s[0]);
-    if(!serverInfo) { return Promise.reject(`Server[${ serverId }] not exists`); }
+    if(!serverInfo) {
+      await knex('account_flow').delete().where({ serverId });
+      return;
+      // return Promise.reject(`Server[${ serverId }] not exists`);
+    }
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
     if(!accountInfo) {
       await knex('account_flow').delete().where({ serverId, accountId });

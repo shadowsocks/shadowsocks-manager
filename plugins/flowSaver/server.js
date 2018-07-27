@@ -30,9 +30,24 @@ const del = (id) => {
 
 const edit = async options => {
   const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0, check } = options;
+  const serverInfo = await knex('server').where({ id }).then(s => s[0]);
+  if(serverInfo.shift !== shift) {
+    const accounts = await knex('account_plugin').where({});
+    (async server => {
+      for(account of accounts) {
+        await manager.send({
+          command: 'del',
+          port: account.port + server.shift,
+        }, {
+          host: server.host,
+          port: server.port,
+          password: server.password,
+        }).catch();
+      }
+    })(serverInfo);
+  }
   if(check) {
     accountFlow.editServer(id);
-    // await checkAccount.deleteCheckAccountTimeServer(id);
   }
   return knex('server').where({ id }).update({
     name,
