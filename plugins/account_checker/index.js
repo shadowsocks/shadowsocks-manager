@@ -252,6 +252,7 @@ const checkAccount = async (serverId, accountId) => {
 (async () => {
   while(true) {
     try {
+      const start = Date.now();
       await sleep(sleepTime);
       const servers = await knex('server').where({});
       for(let server of servers) {
@@ -259,13 +260,26 @@ const checkAccount = async (serverId, accountId) => {
         await sleep(sleepTime);
         await deleteExtraPorts(server);
       }
-      const accounts = await knex('account_plugin').where({});
+      await sleep(sleepTime);
+      const accounts = await knex('account_plugin').select([
+        'account_plugin.id as id'
+      ]).crossJoin('server')
+      .leftJoin('account_flow', function () {
+        this
+        .on('account_flow.serverId', 'server.id')
+        .on('account_flow.accountId', 'account_plugin.id');
+      }).whereNull('account_flow.id');
       for(let account of accounts) {
-        const start = Date.now();
         await sleep(sleepTime);
         await accountFlow.add(account.id);
       }
-    } catch(err) {}
+      const end = Date.now();
+      if(end - start <= 60 * 1000) {
+        await sleep(60 * 1000 - (end - start));
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }
 })();
 
