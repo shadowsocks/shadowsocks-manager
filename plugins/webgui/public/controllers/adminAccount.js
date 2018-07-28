@@ -624,7 +624,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     };
     $scope.confirm = () => {
       alertDialog.loading();
-      $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
+      var flowStr = $scope.account.flowStr;
+      if(flowStr)
+        $scope.account.flow = $filter('flowStr2Num')(flowStr);
       const server = Object.keys($scope.account.accountServerObj)
       .map(m => {
         if($scope.account.accountServerObj[m]) {
