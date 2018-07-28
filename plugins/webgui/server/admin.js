@@ -14,6 +14,7 @@ const isPaypalUse = config.plugins.paypal && config.plugins.paypal.use;
 const rp = require('request-promise');
 const macAccount = appRequire('plugins/macAccount/index');
 const refOrder = appRequire('plugins/webgui_ref/order');
+const refUser = appRequire('plugins/webgui_ref/user');
 
 exports.getAccount = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
@@ -236,21 +237,21 @@ exports.getPaypalRecentOrders = (req, res) => {
   });
 };
 
-exports.getOneUser = (req, res) => {
-  const userId = req.params.userId;
-  let userInfo = null;
-  user.getOne(userId).then(success => {
-    userInfo = success;
-    return account.getAccount();
-  }).then(success => {
-    userInfo.account = success.filter(f => {
+exports.getOneUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const userInfo = await user.getOne(userId);
+    const userAccount = await account.getAccount();
+    userInfo.account = userAccount.filter(f => {
       return f.userId === +userId;
     });
+    const ref = await refUser.getRefSourceUser(userId);
+    userInfo.ref = ref;
     return res.send(userInfo);
-  }).catch(err => {
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.getOneAdmin = (req, res) => {
@@ -670,4 +671,14 @@ exports.newPortForAddAccount = async (req, res) => {
     console.log(err);
     res.status(403).end();
   }
+};
+
+exports.getRefUserById = (req, res) => {
+  const userId = +req.params.userId;
+  refUser.getRefUser(userId).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
 };

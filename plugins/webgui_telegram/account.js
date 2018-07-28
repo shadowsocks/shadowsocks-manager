@@ -205,7 +205,7 @@ telegram.on('message', async message => {
         }
       }
       const flowLimit = data.flow * (myAccount.isMultiServerFlow ? 1 : myServer.scale);
-      const currentFlow = (await flow.getServerPortFlow(myServer.id, myAccount.id, timeArray, myAccount.multiServerFlow))[0];
+      const currentFlow = (await flow.getServerPortFlowWithScale(myServer.id, myAccount.id, timeArray, myAccount.multiServerFlow))[0];
       tg.sendMessage(`流量：${ prettyFlow(currentFlow) } / ${ prettyFlow(flowLimit) }`, telegramId);
       tg.sendMessage(`过期时间：${ moment(expireTime).format('YYYY-MM-DD HH:mm') }${ isExpired }`, telegramId);
     }

@@ -5,6 +5,7 @@ const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
 const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
+const accountFlow = appRequire('plugins/account/accountFlow');
 
 const addAccount = async (type, options) => {
   await checkAccount.deleteCheckAccountTimePort(options.port);
@@ -12,7 +13,7 @@ const addAccount = async (type, options) => {
     type = 3;
   }
   if(type === 1) {
-    await knex('account_plugin').insert({
+    const [ accountId ] = await knex('account_plugin').insert({
       type,
       orderId: 0,
       userId: options.user,
@@ -22,10 +23,11 @@ const addAccount = async (type, options) => {
       server: options.server ? options.server : null,
       autoRemove: 0,
     });
-    await checkAccount.checkServer();
+    await accountFlow.add(accountId);
+    // await checkAccount.checkServer();
     return;
   } else if (type >= 2 && type <= 5) {
-    await knex('account_plugin').insert({
+    const [ accountId ] = await knex('account_plugin').insert({
       type,
       orderId: options.orderId || 0,
       userId: options.user,
@@ -41,14 +43,16 @@ const addAccount = async (type, options) => {
       autoRemove: options.autoRemove || 0,
       multiServerFlow: options.multiServerFlow || 0,
     });
-    await checkAccount.checkServer();
+    await accountFlow.add(accountId);
+    // await checkAccount.checkServer();
     return;
   }
 };
 
 const changePort = async (id, port) => {
   const result = await knex('account_plugin').update({ port }).where({ id });
-  await checkAccount.checkServer();
+  await accountFlow.edit(id);
+  // await checkAccount.checkServer();
 };
 
 const getAccount = async (options = {}) => {
@@ -86,11 +90,24 @@ const getAccount = async (options = {}) => {
 };
 
 const delAccount = async id => {
-  const result = await knex('account_plugin').delete().where({ id });
-  if(!result) {
+  const accountInfo = await knex('account_plugin').where({ id }).then(s => s[0]);
+  if(!accountInfo) {
     return Promise.reject('Account id[' + id + '] not found');
   }
-  await checkAccount.checkServer();
+  const result = await knex('account_plugin').delete().where({ id });
+  const servers = await knex('server').where({});
+  servers.forEach(server => {
+    manager.send({
+      command: 'del',
+      port: accountInfo.port + server.shift,
+    }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    });
+  });
+  await accountFlow.del(id);
+  // await checkAccount.checkServer();
   return result;
 };
 
@@ -98,7 +115,7 @@ const editAccount = async (id, options) => {
   if(options.port) {
     await checkAccount.deleteCheckAccountTimePort(options.port);
   }
-  const account = await knex('account_plugin').select().where({ id }).then(success => {
+  const account = await knex('account_plugin').where({ id }).then(success => {
     if(success.length) {
       return success[0];
     }
@@ -126,9 +143,23 @@ const editAccount = async (id, options) => {
   }
   if(options.port) {
     update.port = +options.port;
+    if(+options.port !== account.port) {
+      const servers = await knex('server').where({});
+      servers.forEach(server => {
+        manager.send({
+          command: 'del',
+          port: account.port + server.shift,
+        }, {
+          host: server.host,
+          port: server.port,
+          password: server.password,
+        });
+      });
+    }
   }
   await knex('account_plugin').update(update).where({ id });
-  await checkAccount.checkServer();
+  await await accountFlow.edit(id);
+  // await checkAccount.checkServer();
   return;
 };
 
@@ -584,7 +615,8 @@ const banAccount = async options => {
   const time = options.time;
   await knex('account_flow').update({
     status: 'ban',
-    nextCheckTime: Date.now() + time,
+    nextCheckTime: Date.now(),
+    autobanTime: Date.now() + time,
   }).where({
     serverId, accountId,
   });
@@ -594,7 +626,7 @@ const getBanAccount = async options => {
   const serverId = options.serverId;
   const accountId = options.accountId;
   const accountInfo = await knex('account_flow').select([
-    'nextCheckTime as banTime'
+    'autobanTime as banTime'
   ]).where({
     serverId, accountId, status: 'ban'
   });

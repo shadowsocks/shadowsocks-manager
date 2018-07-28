@@ -27,6 +27,13 @@
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
+                    <md-list-item ng-if="user.ref" ng-click="toRefUser(user.ref.id)">
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="30">邀请人</div>
+                            <div flex="70" style="text-align: right;">{{ user.ref.email }}</div>
+                        </div>
+                    </md-list-item>
+                    <md-divider ng-if="user.ref"></md-divider>
                     <md-list-item ng-if="id === 1">
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="30">分组</div>
@@ -84,6 +91,20 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refUsers.length">邀请用户 [{{ refUsers.length }}]</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="user in refUsers track by $index">
+        <md-card ng-click="toRefUser(user.id)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="100">
+                        <span>{{ user.email }}</span>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
 <div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="alipayOrders.length">支付宝订单 [{{ alipayOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in alipayOrders track by $index">
@@ -91,13 +112,11 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                     </div>
-                    </span>
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
                     </div>
-                    
                 </div>
             </md-card-content>
         </md-card>
@@ -110,13 +129,11 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                     </div>
-                    </span>
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
                     </div>
-                    
                 </div>
             </md-card-content>
         </md-card>
@@ -129,7 +146,7 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                     </div>
                 </div>
             </md-card-content>
@@ -143,7 +160,7 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                     </div>
                 </div>
             </md-card-content>

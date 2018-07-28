@@ -418,6 +418,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
     });
+    $scope.server = { check: 1 };
     $scope.methods = [
       'aes-256-cfb',
       'aes-192-cfb',
@@ -445,16 +446,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     })
     .then(success => {
       $scope.serverInfoloaded = true;
-      $scope.server = {
-        name: success.data.name,
-        comment: success.data.comment,
-        address: success.data.host,
-        port: +success.data.port,
-        password: success.data.password,
-        method: success.data.method,
-        scale: success.data.scale,
-        shift: success.data.shift,
-      };
+      $scope.server.name = success.data.name;
+      $scope.server.comment = success.data.comment;
+      $scope.server.address = success.data.host;
+      $scope.server.port = +success.data.port;
+      $scope.server.password = success.data.password;
+      $scope.server.method = success.data.method;
+      $scope.server.scale = success.data.scale;
+      $scope.server.shift = success.data.shift;
     });
     $scope.confirm = () => {
       alertDialog.loading();
@@ -467,6 +466,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         method: $scope.server.method,
         scale: $scope.server.scale,
         shift: $scope.server.shift,
+        check: $scope.server.check,
       }).then(success => {
         alertDialog.show('修改服务器成功', '确定');
         $state.go('admin.serverPage', { serverId: $stateParams.serverId });

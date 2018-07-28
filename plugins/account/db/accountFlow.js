@@ -27,7 +27,7 @@ const createTable = async() => {
     table.bigInteger('checkTime');
     table.bigInteger('nextCheckTime');
     table.bigInteger('autobanTime');
-    table.bigInteger('flow');
+    table.bigInteger('flow').defaultTo(0);
     table.string('status').defaultTo('checked');
   });
 };

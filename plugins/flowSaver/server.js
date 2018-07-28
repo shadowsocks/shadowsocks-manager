@@ -1,10 +1,11 @@
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
 const checkAccount = appRequire('plugins/account/checkAccount');
+const accountFlow = appRequire('plugins/account/accountFlow');
 
-const add = options => {
+const add = async options => {
   const { name, host, port, password, method, scale = 1, comment = '', shift = 0 } = options;
-  return knex('server').insert({
+  const [ serverId ] = await knex('server').insert({
     name,
     comment,
     host,
@@ -14,6 +15,8 @@ const add = options => {
     scale,
     shift,
   });
+  accountFlow.addServer(serverId);
+  return [ serverId ];
 };
 
 const del = (id) => {
@@ -26,8 +29,26 @@ const del = (id) => {
 };
 
 const edit = async options => {
-  const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0 } = options;
-  await checkAccount.deleteCheckAccountTimeServer(id);
+  const { id, name, host, port, password, method, scale = 1, comment = '', shift = 0, check } = options;
+  const serverInfo = await knex('server').where({ id }).then(s => s[0]);
+  if(serverInfo.shift !== shift) {
+    const accounts = await knex('account_plugin').where({});
+    (async server => {
+      for(account of accounts) {
+        await manager.send({
+          command: 'del',
+          port: account.port + server.shift,
+        }, {
+          host: server.host,
+          port: server.port,
+          password: server.password,
+        }).catch();
+      }
+    })(serverInfo);
+  }
+  if(check) {
+    accountFlow.editServer(id);
+  }
   return knex('server').where({ id }).update({
     name,
     comment,

@@ -162,7 +162,7 @@ exports.getServerPortFlow = (req, res) => {
           i++;
         }
       }
-      return flow.getServerPortFlow(serverId, accountId, timeArray, account.multiServerFlow);
+      return flow.getServerPortFlowWithScale(serverId, accountId, timeArray, account.multiServerFlow);
     } else {
       return [0];
     }

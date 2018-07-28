@@ -44,6 +44,7 @@ const getRefCode = async userId => {
 const getRefUser = async userId => {
   const user = await knex('webgui_ref').select([
     'webgui_ref_code.code as code',
+    'user.id as id',
     'user.email as email',
     'webgui_ref.time as time',
   ])
@@ -54,5 +55,17 @@ const getRefUser = async userId => {
   return user;
 };
 
+const getRefSourceUser = async userId => {
+  const user = await knex('webgui_ref_code').select([
+    'user.id as id',
+    'user.email as email',
+  ])
+  .where({ 'webgui_ref.userId': userId })
+  .leftJoin('webgui_ref', 'webgui_ref.codeId', 'webgui_ref_code.id')
+  .leftJoin('user', 'webgui_ref_code.sourceUserId', 'user.id');
+  return user[0];
+};
+
 exports.getRefCode = getRefCode;
 exports.getRefUser = getRefUser;
+exports.getRefSourceUser = getRefSourceUser;

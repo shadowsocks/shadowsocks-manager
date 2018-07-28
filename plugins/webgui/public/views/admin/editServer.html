@@ -54,10 +54,10 @@
                     </md-autocomplete>
                 </div>
                 <md-input-container class="md-block">
-                    <label>流量比例</label>
+                    <label>流量倍率</label>
                     <input type="text" required name="scale" ng-model="server.scale">
                     <div ng-messages="serverForm.scale.$error">
-                        <div ng-message="required">流量比例不能为空</div>
+                        <div ng-message="required">流量倍率不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
@@ -67,6 +67,12 @@
                         <div ng-message="required">端口偏移量不能为空</div>
                     </div>
                 </md-input-container>
+                <div style="width: 100%;" layout="row" layout-align="space-between center">
+                    <div flex="75">立即同步所有端口</div>
+                    <div flex layout="row" layout-align="end center">
+                        <md-switch ng-model="server.check" aria-label="check" ng-true-value="1" ng-false-value="0"></md-switch>
+                    </div>
+                </div>
             </form>
         </div>
         <div flex="10" flex-gt-sm="30"></div>

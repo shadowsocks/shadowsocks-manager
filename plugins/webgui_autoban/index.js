@@ -74,7 +74,7 @@ const ban = async (serverId, accountId, time) => {
   logger.info('ban [' + serverId + '][' + accountId + ']');
   await knex('account_flow').update({
     status: 'ban',
-    nextCheckTime: Date.now() + time,
+    nextCheckTime: Date.now(),
     autobanTime: Date.now() + time,
   }).where({
     serverId, accountId,

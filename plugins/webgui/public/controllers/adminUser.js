@@ -123,6 +123,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.paypalOrders = success.paypalOrders;
         $scope.giftCardOrders = success.giftCardOrders;
         $scope.refOrders = success.refOrders;
+        $scope.refUsers = success.refUsers;
         $scope.user.account.forEach(f => {
           adminApi.getUserPortLastConnect(f.id).then(success => {
             f.lastConnect = success.lastConnect;
@@ -208,6 +209,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.groupInfo[f.id] = { name: f.name, comment: f.comment };
       });
     });
+    $scope.toRefUser = userId => {
+      $state.go('admin.userPage', { userId });
+    };
   }
 ])
 .controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
