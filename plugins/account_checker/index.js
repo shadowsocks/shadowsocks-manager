@@ -5,7 +5,7 @@ const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
-const sleepTime = 150;
+const sleepTime = 120;
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const sleep = time => {
@@ -160,7 +160,7 @@ const deletePort = (server, account) => {
     host: server.host,
     port: server.port,
     password: server.password,
-  });
+  }).catch();
 };
 
 const addPort = (server, account) => {
@@ -174,7 +174,7 @@ const addPort = (server, account) => {
     host: server.host,
     port: server.port,
     password: server.password,
-  });
+  }).catch();
 };
 
 const deleteExtraPorts = async serverInfo => {
@@ -184,17 +184,15 @@ const deleteExtraPorts = async serverInfo => {
       port: serverInfo.port,
       password: serverInfo.password,
     });
+    const accounts = await knex('account_plugin').where({});
+    const accountObj = {};
+    accounts.forEach(account => {
+      accountObj[account.port] = account;
+    });
     for(let p of currentPorts) {
+      if(accountObj[p.port - serverInfo.shift]) { continue; }
       await sleep(sleepTime);
-      const accountInfo = await knex('account_plugin').where({
-        port: p.port - serverInfo.shift
-      }).then(s => s[0]);
-      if(!accountInfo) {
-        deletePort(serverInfo, { port: p.port });
-      } else if(accountInfo.server && JSON.parse(accountInfo.server).indexOf(serverInfo.id) < 0) {
-        await knex('account_plugin').delete().where({ serverId, port: p.port - serverInfo.shift });
-        deletePort(serverInfo, accountInfo);
-      }
+      deletePort(serverInfo, { port: p.port - serverInfo.shift });
     }
   } catch(err) {
     console.log(err);
@@ -251,21 +249,25 @@ const checkAccount = async (serverId, accountId) => {
   }
 };
 
-// cron.minute(async () => {
 (async () => {
-  await sleep(sleepTime);
-  const servers = await knex('server').where({});
-  for(let server of servers) {
-    await sleep(sleepTime);
-    await deleteExtraPorts(server);
-  }
-  const accounts = await knex('account_plugin').where({});
-  for(let account of accounts) {
-    await sleep(sleepTime);
-    await accountFlow.add(account.id);
+  while(true) {
+    try {
+      await sleep(sleepTime);
+      const servers = await knex('server').where({});
+      for(let server of servers) {
+        const start = Date.now();
+        await sleep(sleepTime);
+        await deleteExtraPorts(server);
+      }
+      const accounts = await knex('account_plugin').where({});
+      for(let account of accounts) {
+        const start = Date.now();
+        await sleep(sleepTime);
+        await accountFlow.add(account.id);
+      }
+    } catch(err) {}
   }
 })();
-// }, 5);
 
 (async () => {
   while(true) {
