@@ -187,7 +187,11 @@ app
         } else {
           $scope.account = success.account;
           $scope.account.forEach(f => {
-            $scope.getServerPortData(f, $scope.servers[0].id);
+            const serverId = $scope.servers.filter((server, index) => {
+              if(!f.server) { return index === 0; }
+              return f.server.indexOf(server.id) >= 0;
+            })[0].id;
+            $scope.getServerPortData(f, serverId);
           });
         }
         setAccountServerList($scope.account, $scope.servers);
