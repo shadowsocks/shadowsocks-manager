@@ -256,7 +256,6 @@ const checkAccount = async (serverId, accountId) => {
       await sleep(sleepTime);
       const servers = await knex('server').where({});
       for(let server of servers) {
-        const start = Date.now();
         await sleep(sleepTime);
         await deleteExtraPorts(server);
       }

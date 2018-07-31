@@ -1,14 +1,12 @@
 const knex = appRequire('init/knex').knex;
 const serverManager = appRequire('plugins/flowSaver/server');
 const manager = appRequire('services/manager');
-const checkAccount = appRequire('plugins/account/checkAccount');
 const config = appRequire('services/config').all();
 const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const addAccount = async (type, options) => {
-  await checkAccount.deleteCheckAccountTimePort(options.port);
   if(type === 6 || type === 7) {
     type = 3;
   }
@@ -24,7 +22,6 @@ const addAccount = async (type, options) => {
       autoRemove: 0,
     });
     await accountFlow.add(accountId);
-    // await checkAccount.checkServer();
     return;
   } else if (type >= 2 && type <= 5) {
     const [ accountId ] = await knex('account_plugin').insert({
@@ -44,7 +41,6 @@ const addAccount = async (type, options) => {
       multiServerFlow: options.multiServerFlow || 0,
     });
     await accountFlow.add(accountId);
-    // await checkAccount.checkServer();
     return;
   }
 };
@@ -52,7 +48,6 @@ const addAccount = async (type, options) => {
 const changePort = async (id, port) => {
   const result = await knex('account_plugin').update({ port }).where({ id });
   await accountFlow.edit(id);
-  // await checkAccount.checkServer();
 };
 
 const getAccount = async (options = {}) => {
@@ -107,14 +102,10 @@ const delAccount = async id => {
     });
   });
   await accountFlow.del(id);
-  // await checkAccount.checkServer();
   return result;
 };
 
 const editAccount = async (id, options) => {
-  if(options.port) {
-    await checkAccount.deleteCheckAccountTimePort(options.port);
-  }
   const account = await knex('account_plugin').where({ id }).then(success => {
     if(success.length) {
       return success[0];
@@ -159,7 +150,6 @@ const editAccount = async (id, options) => {
   }
   await knex('account_plugin').update(update).where({ id });
   await await accountFlow.edit(id);
-  // await checkAccount.checkServer();
   return;
 };
 
@@ -182,9 +172,7 @@ const editAccountTime = async (id, timeString, check) => {
   await knex('account_plugin').update({
     data: JSON.stringify(accountInfo.data)
   }).where({ id });
-  if(check) {
-    await checkAccount.deleteCheckAccountTimePort(accountInfo.port);
-  }
+  await accountFlow.edit(id);
 };
 
 const editAccountTimeForRef = async (id, timeString, check) => {
@@ -211,9 +199,7 @@ const editAccountTimeForRef = async (id, timeString, check) => {
   await knex('account_plugin').update({
     data: JSON.stringify(accountInfo.data)
   }).where({ id });
-  if(check) {
-    await checkAccount.deleteCheckAccountTimePort(accountInfo.port);
-  }
+  await accountFlow.edit(id);
 };
 
 const changePassword = async (id, password) => {
@@ -226,7 +212,7 @@ const changePassword = async (id, password) => {
   await knex('account_plugin').update({
     password,
   }).where({ id });
-  await checkAccount.changePassword(id, password);
+  await accountFlow.pwd(id, password);
   return;
 };
 
@@ -447,7 +433,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
     autoRemove: orderInfo.autoRemove ? 1 : 0,
     multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
   }).where({ id: accountId });
-  await checkAccount.deleteCheckAccountTimePort(port);
+  await accountFlow.edit(accountId);
   return;
 };
 

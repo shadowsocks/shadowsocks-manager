@@ -1,6 +1,5 @@
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
-const checkAccount = appRequire('plugins/account/checkAccount');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const add = async options => {
