@@ -59,6 +59,10 @@
                         <div ng-message="required">流量不能为空</div>
                     </div>
                 </md-input-container>
+                <md-input-container class="md-block" ng-if="account.autoRemove">
+                    <label translate>自动删除延迟</label>
+                    <input type="text" required name="autoRemoveDelay" ng-model="account.autoRemoveDelayStr">
+                </md-input-container>
             </form>
             <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">到期自动删除</div>

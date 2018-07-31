@@ -53,13 +53,14 @@ const isExpired = (server, account) => {
     if(account.type === 4) { timePeriod = 1 * 86400 * 1000; }
     if(account.type === 5) { timePeriod = 3600 * 1000; }
     const data = JSON.parse(account.data);
-    let startTime = data.create;
-    while(startTime + timePeriod <= Date.now()) {
-      startTime += timePeriod;
-    }
-    if(data.create + data.limit * timePeriod <= Date.now() || data.create >= Date.now()) {
-      if(account.autoRemove) {
+    const expireTime = data.create + data.limit * timePeriod;
+    if(expireTime <= Date.now() || data.create >= Date.now()) {
+      const nextCheckTime = 10 * 60 * 1000 + randomInt(30000);
+      if(account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
+        modifyAccountFlow(server.id, account.id, nextCheckTime > account.autoRemoveDelay ? account.autoRemoveDelay : nextCheckTime);
         knex('account_plugin').delete().where({ id: account.id }).then();
+      } else {
+        modifyAccountFlow(server.id, account.id, nextCheckTime);
       }
       return true;
     }
@@ -205,14 +206,12 @@ const checkAccount = async (serverId, accountId) => {
     if(!serverInfo) {
       await knex('account_flow').delete().where({ serverId });
       return;
-      // return Promise.reject(`Server[${ serverId }] not exists`);
     }
     const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
     if(!accountInfo) {
       await knex('account_flow').delete().where({ serverId, accountId });
       return;
     }
-    // logger.info('check', serverInfo.name, accountInfo.port);
 
     // 检查当前端口是否存在
     const exists = await isPortExists(serverInfo, accountInfo);
@@ -226,7 +225,6 @@ const checkAccount = async (serverId, accountId) => {
 
     // 检查账号是否过期
     if(isExpired(serverInfo, accountInfo)) {
-      await modifyAccountFlow(serverInfo.id, accountInfo.id, 10 * 60 * 1000 + randomInt(30000));
       exists && deletePort(serverInfo, accountInfo);
       return;
     }

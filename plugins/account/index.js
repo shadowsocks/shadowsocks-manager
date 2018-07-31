@@ -38,6 +38,7 @@ const addAccount = async (type, options) => {
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: options.autoRemove || 0,
+      autoRemoveDelay: options.autoRemoveDelay || 0,
       multiServerFlow: options.multiServerFlow || 0,
     });
     await accountFlow.add(accountId);
@@ -75,6 +76,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.data',
     'account_plugin.status',
     'account_plugin.autoRemove',
+    'account_plugin.autoRemoveDelay',
     'account_plugin.multiServerFlow',
     'user.id as userId',
     'user.email as user',
@@ -117,6 +119,7 @@ const editAccount = async (id, options) => {
   update.orderId = options.orderId;
   update.userId = options.userId;
   update.autoRemove = options.autoRemove;
+  update.autoRemoveDelay = options.autoRemoveDelay;
   update.multiServerFlow = options.multiServerFlow;
   if(options.hasOwnProperty('server')) {
     update.server = options.server ? JSON.stringify(options.server) : null;
@@ -395,6 +398,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       flow: orderInfo.flow,
       server: orderInfo.server,
       autoRemove: orderInfo.autoRemove ? 1 : 0,
+      autoRemoveDelay: orderInfo.autoRemoveDelay,
       multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
     });
     return;

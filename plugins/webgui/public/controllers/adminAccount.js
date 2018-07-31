@@ -433,6 +433,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       limit: 1,
       flow: 100000000,
       autoRemove: 0,
+      autoRemoveDelay: 0,
+      autoRemoveDelayStr: '0',
       multiServerFlow: 0,
       accountServer: false,
       accountServerObj: {},
@@ -445,9 +447,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.flow = orderInfo.flow;
       $scope.account.limit = orderInfo.cycle;
       $scope.account.autoRemove = orderInfo.autoRemove;
+      $scope.account.autoRemoveDelay = orderInfo.autoRemoveDelay;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
+      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')($scope.account.autoRemoveDelay);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
@@ -464,6 +468,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $state.go('admin.account');
     };
     $scope.confirm = () => {
+      $scope.account.autoRemoveDelay = $filter('timeStr2Num')($scope.account.autoRemoveDelayStr);
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
       if($scope.account.server) {
@@ -485,6 +490,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         limit: +$scope.account.limit,
         flow: +$scope.account.flow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.account.accountServer ? server : null,
       }).then(success => {
@@ -561,9 +567,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.flow = orderInfo.flow;
       $scope.account.limit = orderInfo.cycle;
       $scope.account.autoRemove = orderInfo.autoRemove;
+      $scope.account.autoRemoveDelay = orderInfo.autoRemoveDelay;
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
+      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')($scope.account.autoRemoveDelay);
       if($scope.account.fixedExpire) {
         $scope.account.time = expire - $scope.timeLimit[$scope.account.type] * $scope.account.limit;
         while($scope.account.time >= Date.now()) {
@@ -597,6 +605,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.password = success.data.password;
       $scope.account.cleanFlow = false;
       $scope.account.autoRemove = success.data.autoRemove;
+      $scope.account.autoRemoveDelay = success.data.autoRemoveDelay;
+      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')($scope.account.autoRemoveDelay);;
       $scope.account.multiServerFlow = success.data.multiServerFlow;
       if(success.data.type >= 2 && success.data.type <= 5) {
         $scope.account.time = success.data.data.create;
@@ -623,6 +633,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     };
     $scope.confirm = () => {
+      $scope.account.autoRemoveDelay = $filter('timeStr2Num')($scope.account.autoRemoveDelayStr);
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
       const server = Object.keys($scope.account.accountServerObj)
@@ -642,6 +653,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         flow: +$scope.account.flow,
         cleanFlow: $scope.account.cleanFlow,
         autoRemove: $scope.account.autoRemove ? 1 : 0,
+        autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: $scope.account.accountServer ? server : null,
       }).then(success => {

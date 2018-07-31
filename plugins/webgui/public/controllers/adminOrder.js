@@ -41,6 +41,8 @@ app
       flow: 100000000,
       refTime: 0,
       autoRemove: 0,
+      autoRemoveDelay: 0,
+      autoRemoveDelayStr: '0',
       multiServerFlow: 0,
       changeOrderType: 1,
       server: null,
@@ -53,7 +55,7 @@ app
     $scope.confirm = () => {
       $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
       $scope.order.refTime = $filter('timeStr2Num')($scope.order.refTimeStr);
-      console.log($scope.order);
+      $scope.order.autoRemoveDelay = $filter('timeStr2Num')($scope.order.autoRemoveDelayStr);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {
@@ -72,6 +74,7 @@ app
         flow: $scope.order.flow,
         refTime: $scope.order.refTime,
         autoRemove: $scope.order.autoRemove,
+        autoRemoveDelay: $scope.order.autoRemoveDelay,
         multiServerFlow: $scope.order.multiServerFlow,
         changeOrderType: $scope.order.changeOrderType,
         server: $scope.order.server,
@@ -101,6 +104,7 @@ app
       $scope.order = success.data;
       $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
       $scope.order.refTimeStr = $filter('timeNum2Str')($scope.order.refTime);
+      $scope.order.autoRemoveDelayStr = $filter('timeNum2Str')($scope.order.autoRemoveDelay);
       $scope.orderServer = !!$scope.order.server;
       $scope.orderServerObj = {};
       if($scope.order.server) {
@@ -140,6 +144,7 @@ app
     $scope.confirm = () => {
       $scope.order.flow = $filter('flowStr2Num')($scope.order.flowStr);
       $scope.order.refTime = $filter('timeStr2Num')($scope.order.refTimeStr);
+      $scope.order.autoRemoveDelay = $filter('timeStr2Num')($scope.order.autoRemoveDelayStr);
       const server = Object.keys($scope.orderServerObj)
       .map(m => {
         if($scope.orderServerObj[m]) {
@@ -158,6 +163,7 @@ app
         flow: $scope.order.flow,
         refTime: $scope.order.refTime,
         autoRemove: $scope.order.autoRemove,
+        autoRemoveDelay: $scope.order.autoRemoveDelay,
         multiServerFlow: $scope.order.multiServerFlow,
         changeOrderType: $scope.order.changeOrderType,
         server: $scope.order.server,

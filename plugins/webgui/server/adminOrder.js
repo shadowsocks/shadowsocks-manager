@@ -34,6 +34,7 @@ exports.newOrder = async (req, res) => {
     data.refTime = req.body.refTime;
     data.server = req.body.server;
     data.autoRemove = req.body.autoRemove;
+    data.autoRemoveDelay = req.body.autoRemoveDelay;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
     await orderPlugin.newOrder(data);
@@ -58,6 +59,7 @@ exports.editOrder = async (req, res) => {
     data.refTime = req.body.refTime;
     data.server = req.body.server;
     data.autoRemove = req.body.autoRemove;
+    data.autoRemoveDelay = req.body.autoRemoveDelay;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
     await orderPlugin.editOrder(data);

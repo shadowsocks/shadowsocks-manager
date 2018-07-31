@@ -44,10 +44,15 @@ const fixRefTime = async () => {
   });
 };
 
-
 const createTable = async () => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
+    const hasAutoRemoveDelay = await knex.schema.hasColumn(tableName, 'autoRemoveDelay');
+    if(!hasAutoRemoveDelay) {
+      await knex.schema.table(tableName, function(table) {
+        table.bigInteger('autoRemoveDelay').defaultTo(0);
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
@@ -64,6 +69,7 @@ const createTable = async () => {
     table.bigInteger('refTime');
     table.string('server');
     table.integer('autoRemove').defaultTo(0);
+    table.bigInteger('autoRemoveDelay').defaultTo(0);
     table.integer('multiServerFlow').defaultTo(0);
     table.integer('changeOrderType').defaultTo(0);
   });
