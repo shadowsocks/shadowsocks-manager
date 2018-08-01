@@ -1,11 +1,10 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('account');
 const knex = appRequire('init/knex').knex;
-const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
-const sleepTime = 120;
+const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const sleep = time => {
@@ -271,8 +270,8 @@ const checkAccount = async (serverId, accountId) => {
         await accountFlow.add(account.id);
       }
       const end = Date.now();
-      if(end - start <= 60 * 1000) {
-        await sleep(60 * 1000 - (end - start));
+      if(end - start <= 61 * 1000) {
+        await sleep(61 * 1000 - (end - start));
       }
     } catch(err) {
       console.log(err);
@@ -283,51 +282,92 @@ const checkAccount = async (serverId, accountId) => {
 (async () => {
   while(true) {
     const start = Date.now();
-    let number = 0;
+    let accounts = [];
     try {
       const datas = await knex('account_flow').select()
-      .orderBy('nextCheckTime', 'asc').limit(30);
-      number += datas.length;
-      for(const data of datas) {
-        await checkAccount(data.serverId, data.accountId).catch();
-        await sleep(sleepTime);
+      .where('nextCheckTime', '<', Date.now())
+      .orderBy('nextCheckTime', 'asc').limit(100);
+      accounts = [...accounts, ...datas];
+      if(datas.length < 30) {
+        accounts = [...accounts, ...(await knex('account_flow').select()
+        .where('nextCheckTime', '>', Date.now())
+        .orderBy('nextCheckTime', 'asc').limit(30 - datas.length))];
       }
-    } catch(err) {
-      console.log(err);
-    }
-
+    } catch(err) { console.log(err); }
     try {
       const datas = await knex('account_flow').select()
       .orderBy('updateTime', 'desc').limit(15);
-      number += datas.length;
-      for(const data of datas) {
-        await checkAccount(data.serverId, data.accountId).catch();
-        await sleep(sleepTime);
-      }
-    } catch(err) {
-      console.log(err);
+      accounts = [...accounts, ...datas];
+    } catch(err) { console.log(err); }
+    try {
+      datas = await knex('account_flow').select()
+      .orderByRaw('rand()').limit(5);
+      accounts = [...accounts, ...datas];
+    } catch(err) { }
+    try {
+      datas = await knex('account_flow').select()
+      .orderByRaw('random()').limit(5);
+      accounts = [...accounts, ...datas];
+    } catch(err) { }
+
+    for(const account of accounts) {
+      const start = Date.now();
+      await checkAccount(account.serverId, account.accountId).catch();
+      const time = 60 * 1000 / accounts.length - (Date.now() - start);
+      await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
+    }
+    if(accounts.length) {
+      logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
+    } else {
+      await sleep(30 * 1000);
     }
 
-    try {
-      let datas;
-      try {
-        datas = await knex('account_flow').select()
-        .orderByRaw('rand()').limit(5);
-      } catch(err) {
-        datas = await knex('account_flow').select()
-        .orderByRaw('random()').limit(5);
-      }
-      number += datas.length;
-      for(const data of datas) {
-        await checkAccount(data.serverId, data.accountId).catch();
-        await sleep(sleepTime);
-      }
-    } catch(err) {
-      console.log(err);
-    }
-    await sleep(sleepTime);
-    if(number) {
-      logger.info(`check ${ number } accounts, ${ Date.now() - start } ms`);
-    }
+    // const start = Date.now();
+    // let number = 0;
+    // try {
+    //   const datas = await knex('account_flow').select()
+    //   .orderBy('nextCheckTime', 'asc').limit(30);
+    //   number += datas.length;
+    //   for(const data of datas) {
+    //     await checkAccount(data.serverId, data.accountId).catch();
+    //     await sleep(sleepTime);
+    //   }
+    // } catch(err) {
+    //   console.log(err);
+    // }
+
+    // try {
+    //   const datas = await knex('account_flow').select()
+    //   .orderBy('updateTime', 'desc').limit(15);
+    //   number += datas.length;
+    //   for(const data of datas) {
+    //     await checkAccount(data.serverId, data.accountId).catch();
+    //     await sleep(sleepTime);
+    //   }
+    // } catch(err) {
+    //   console.log(err);
+    // }
+
+    // try {
+    //   let datas;
+    //   try {
+    //     datas = await knex('account_flow').select()
+    //     .orderByRaw('rand()').limit(5);
+    //   } catch(err) {
+    //     datas = await knex('account_flow').select()
+    //     .orderByRaw('random()').limit(5);
+    //   }
+    //   number += datas.length;
+    //   for(const data of datas) {
+    //     await checkAccount(data.serverId, data.accountId).catch();
+    //     await sleep(sleepTime);
+    //   }
+    // } catch(err) {
+    //   console.log(err);
+    // }
+    // await sleep(sleepTime);
+    // if(number) {
+    //   logger.info(`check ${ number } accounts, ${ Date.now() - start } ms`);
+    // }
   }
 })();

@@ -265,6 +265,8 @@ app.get('/manifest.json', (req, res) => {
 const configForFrontend = {};
 
 const cdn = config.plugins.webgui.cdn;
+const keywords = config.plugins.webgui.keywords || ' ';
+const description = config.plugins.webgui.description || ' ';
 const analytics = config.plugins.webgui.googleAnalytics || '';
 const colors = [
   { value: 'red', color: '#F44336' },
@@ -304,6 +306,8 @@ const homePage = (req, res) => {
     return res.render('index', {
       title: success.title,
       cdn,
+      keywords,
+      description,
       analytics,
       config: configForFrontend,
       paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
