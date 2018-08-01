@@ -60,6 +60,7 @@ const getRefUserAndPaging = async opt => {
   const pageSize = opt.pageSize || 20;
   let count = knex('webgui_ref').select();
   let user = knex('webgui_ref').select([
+    'webgui_ref.id as id',
     'webgui_ref_code.code as code',
     'u1.id as sourceUserId',
     'u1.email as sourceUser',
@@ -72,6 +73,11 @@ const getRefUserAndPaging = async opt => {
   
   count = await count.count('id as count').then(success => success[0].count);
   user = await user.orderBy('webgui_ref.time', 'DESC').limit(pageSize).offset((page - 1) * pageSize);
+  user.forEach(u => {
+    if(!u.userId || !u.sourceUserId) {
+      knex('webgui_ref').delete().where({ id: u.id }).then();
+    }
+  });
   const maxPage = Math.ceil(count / pageSize);
   return {
     total: count,
