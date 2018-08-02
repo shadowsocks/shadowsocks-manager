@@ -48,7 +48,6 @@ gulp.task('webguiLib', () => {
     'plugins/webgui/libs/angular-websocket.min.js',
     'plugins/webgui/libs/marked.min.js',
     'plugins/webgui/libs/angular-marked.min.js',
-    'plugins/webgui/libs/angular-translate.min.js',
   ])
   .pipe(concat('lib.js'))
   .pipe(gulp.dest('plugins/webgui/libs'));

@@ -53,6 +53,12 @@ const createTable = async () => {
         table.bigInteger('autoRemoveDelay').defaultTo(0);
       });
     }
+    const hasPortRange = await knex.schema.hasColumn(tableName, 'portRange');
+    if(!hasPortRange) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('portRange').defaultTo('0');
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
@@ -70,6 +76,7 @@ const createTable = async () => {
     table.string('server');
     table.integer('autoRemove').defaultTo(0);
     table.bigInteger('autoRemoveDelay').defaultTo(0);
+    table.string('portRange').defaultTo('0');
     table.integer('multiServerFlow').defaultTo(0);
     table.integer('changeOrderType').defaultTo(0);
   });

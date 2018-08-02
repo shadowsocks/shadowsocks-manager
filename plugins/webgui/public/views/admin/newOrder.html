@@ -50,10 +50,16 @@
                         <input type="text" name="refTime" ng-model="order.refTimeStr">
                     </md-input-container>
                 </div>
-                <md-input-container class="md-block" ng-if="order.autoRemove">
-                    <label>自动删除延迟</label>
-                    <input type="text" name="autoRemoveDelay" ng-model="order.autoRemoveDelayStr">
-                </md-input-container>
+                <div layout="row" layout-align="space-between center">
+                    <md-input-container class="md-block" flex="45">
+                        <label>自动删除延迟</label>
+                        <input type="text" name="autoRemoveDelay" ng-model="order.autoRemoveDelayStr" ng-disabled="!order.autoRemove">
+                    </md-input-container>
+                    <md-input-container class="md-block" flex="45">
+                        <label>端口分配范围</label>
+                        <input type="text" name="portRange" ng-model="order.portRange">
+                    </md-input-container>
+                </div>
             </form>
             <div style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">到期自动删除</div>

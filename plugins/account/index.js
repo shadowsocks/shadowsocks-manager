@@ -314,13 +314,13 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
 
 const setAccountLimit = async (userId, accountId, orderId) => {
   const orderInfo = await orderPlugin.getOneOrder(orderId);
-  const payType = {
-    week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
-  };
-  let paymentType;
+  // const payType = {
+  //   week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
+  // };
+  // let paymentType;
   const limit = orderInfo.cycle;
   const orderType = orderInfo.type;
-  const flow = {};
+  // const flow = {};
   let account;
   if(accountId) {
     account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
@@ -332,6 +332,25 @@ const setAccountLimit = async (userId, accountId, orderId) => {
   }
   if(!accountId || !account) {
     const getNewPort = () => {
+      let orderPorts = [];
+      if(orderInfo.portRange !== '0') {
+        try {
+          orderInfo.portRange.split(',').filter(f => f.trim()).forEach(f => {
+            if(f.indexOf('-')) {
+              const start = f.split('-').filter(f => f.trim())[0];
+              const end = f.split('-').filter(f => f.trim())[1];
+              if(start >= end) { return; }
+              for(let p = start; p <= end; p++) {
+                orderPorts.indexOf(p) >= 0 || orderPorts.push(p);
+              }
+            } else {
+              orderPorts.indexOf(+f) >= 0 || orderPorts.push(+f);
+            }
+          });
+        } catch(err) {
+          console.log(err);
+        }
+      }
       return knex('webguiSetting').select().where({
         key: 'account',
       }).then(success => {
@@ -340,7 +359,13 @@ const setAccountLimit = async (userId, accountId, orderId) => {
         return success[0].value.port;
       }).then(port => {
         if(port.random) {
-          const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+          const getRandomPort = () => {
+            if(orderPorts.length) {
+              return orderPorts[Math.floor(Math.random() * orderPorts.length)];
+            } else {
+              return Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+            }
+          };
           let retry = 0;
           let myPort = getRandomPort();
           const checkIfPortExists = port => {
@@ -360,22 +385,30 @@ const setAccountLimit = async (userId, accountId, orderId) => {
           };
           return checkIfPortExists(myPort);
         } else {
-          // return knex('account_plugin').select()
-          // .whereBetween('port', [port.start, port.end])
-          // .orderBy('port', 'DESC').limit(1).then(success => {
-          //   if(success.length) {
-          //     return success[0].port + 1;
-          //   }
-          //   return port.start;
-          // });
-          return knex('account_plugin').select()
-          .whereBetween('port', [port.start, port.end])
-          .orderBy('port', 'ASC').then(success => {
+          let query;
+          if(orderPorts.length) {
+            query = knex('account_plugin').select()
+            .whereIn('port', orderPorts)
+            .orderBy('port', 'ASC');
+          } else {
+            query = knex('account_plugin').select()
+            .whereBetween('port', [port.start, port.end])
+            .orderBy('port', 'ASC');
+          }
+          return query.then(success => {
             const portArray = success.map(m => m.port);
             let myPort;
-            for(let p = port.start; p <= port.end; p++) {
-              if(portArray.indexOf(p) < 0) {
-                myPort = p; break;
+            if(orderPorts.length) {
+              for(p of orderPorts) {
+                if(portArray.indexOf(p) < 0) {
+                  myPort = p; break;
+                }
+              }
+            } else {
+              for(let p = port.start; p <= port.end; p++) {
+                if(portArray.indexOf(p) < 0) {
+                  myPort = p; break;
+                }
               }
             }
             if(myPort) {
@@ -428,7 +461,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
     accountData.limit += 1;
     accountData.create -= countTime;
   }
-  let port = await getAccount({ id: accountId }).then(success => success[0].port);
+  // let port = await getAccount({ id: accountId }).then(success => success[0].port);
   await knex('account_plugin').update({
     type: orderType >= 6 ? 3 : orderType,
     orderId,

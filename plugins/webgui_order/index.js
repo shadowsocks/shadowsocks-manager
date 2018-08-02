@@ -33,6 +33,7 @@ const newOrder = async data => {
     server: data.server ? JSON.stringify(data.server) : null,
     autoRemove: data.autoRemove,
     autoRemoveDelay: data.autoRemoveDelay,
+    portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
   });
@@ -52,6 +53,7 @@ const editOrder = async data => {
     server: data.server ? JSON.stringify(data.server) : null,
     autoRemove: data.autoRemove,
     autoRemoveDelay: data.autoRemoveDelay,
+    portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
   }).where({
