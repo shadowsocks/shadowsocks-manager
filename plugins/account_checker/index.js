@@ -286,7 +286,7 @@ const checkAccount = async (serverId, accountId) => {
     try {
       const datas = await knex('account_flow').select()
       .where('nextCheckTime', '<', Date.now())
-      .orderBy('nextCheckTime', 'asc').limit(200);
+      .orderBy('nextCheckTime', 'asc').limit(600);
       accounts = [...accounts, ...datas];
       if(datas.length < 30) {
         accounts = [...accounts, ...(await knex('account_flow').select()

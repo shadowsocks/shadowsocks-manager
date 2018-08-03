@@ -129,9 +129,11 @@ app.filter('timeStr2Num', function() {
   const h = 60 * 60 * 1000;
   const d = 24 * 60 * 60 * 1000;
   return function(input) {
-    if(Number.isInteger(+input)) {
+    if(!input) {
+      return 0;
+    } else if(Number.isInteger(+input)) {
       return +input;
-    } else if(input.match(/^\d{1,}.?\d{0,}s$/)) {
+    }else if(input.match(/^\d{1,}.?\d{0,}s$/)) {
       return +input.substr(0, input.length - 1) * s;
     } else if(input.match(/^\d{1,}.?\d{0,}m$/)) {
       return +input.substr(0, input.length - 1) * m;
