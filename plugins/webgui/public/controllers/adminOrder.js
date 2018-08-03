@@ -86,8 +86,8 @@ app
     };
   }
 ])
-.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter',
-  ($scope, $state, $http, $stateParams, confirmDialog, $filter) => {
+.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter', '$q',
+  ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q) => {
     $scope.setTitle('编辑订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
 
@@ -99,11 +99,12 @@ app
     ];
 
     $scope.orderId = $stateParams.id;
-    $http.get('/api/admin/server').then(success => {
-      $scope.servers = success.data;
-    });
-    $http.get(`/api/admin/order/${ $scope.orderId }`).then(success => {
-      $scope.order = success.data;
+    $q.all([
+      $http.get('/api/admin/server'),
+      $http.get(`/api/admin/order/${ $scope.orderId }`),
+    ]).then(success => {
+      $scope.servers = success[0].data;
+      $scope.order = success[1].data;
       $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
       $scope.order.refTimeStr = $filter('timeNum2Str')($scope.order.refTime);
       $scope.order.autoRemoveDelayStr = $filter('timeNum2Str')($scope.order.autoRemoveDelay);
