@@ -174,6 +174,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
       $http.get('/api/admin/server'),
       $http.get('/api/admin/account/mac', { params: { userId } }),
       $http.get('/api/admin/ref/user/' + userId),
+      $http.get('/api/admin/ref/code/' + userId),
     ];
     return $q.all(promises).then(success => {
       return {
@@ -185,6 +186,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
         server: success[5].data,
         macAccount: success[6].data,
         refUsers: success[7].data,
+        refCodes: success[8].data,
       };
     });
   };

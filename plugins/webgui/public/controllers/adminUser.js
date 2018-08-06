@@ -124,6 +124,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.giftCardOrders = success.giftCardOrders;
         $scope.refOrders = success.refOrders;
         $scope.refUsers = success.refUsers;
+        $scope.refCodes = success.refCodes;
         $scope.user.account.forEach(f => {
           adminApi.getUserPortLastConnect(f.id).then(success => {
             f.lastConnect = success.lastConnect;

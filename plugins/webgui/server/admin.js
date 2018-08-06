@@ -721,3 +721,14 @@ exports.getRefUserById = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.getRefCodeById = (req, res) => {
+  const userId = +req.params.userId;
+  refUser.getRefCode(userId)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};

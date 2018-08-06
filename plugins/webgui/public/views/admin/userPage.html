@@ -167,4 +167,18 @@
         </md-card>
     </div>
 </div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refCodes.length">邀请码 [{{ refCodes.length }}]</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="code in refCodes track by $index">
+        <md-card>
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="100">
+                        <span>{{ code.code }}</span>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
 <div style="height: 100px;"></div>
