@@ -273,6 +273,48 @@ const orderListAndPaging = async (options = {}) => {
   };
 };
 
+const getCsvOrder = async (options = {}) => {
+  const search = options.search || '';
+  const group = options.group;
+  const filter = options.filter || [];
+  const sort = options.sort || 'alipay.createTime_desc';
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
+
+  let orders = knex('alipay').select([
+    'alipay.orderId',
+    'alipay.orderType',
+    'user.id as userId',
+    'user.group as group',
+    'user.username',
+    'account_plugin.port',
+    'alipay.amount',
+    'alipay.status',
+    'alipay.alipayData',
+    'alipay.createTime',
+    'alipay.expireTime',
+  ])
+  .leftJoin('user', 'user.id', 'alipay.user')
+  .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account')
+  .whereBetween('alipay.createTime', [start, end]);
+
+  if(filter.length) {
+    orders = orders.whereIn('alipay.status', filter);
+  }
+  if(group >= 0) {
+    orders = orders.where({ 'user.group': group });
+  }
+  if(search) {
+    orders = orders.where('alipay.orderId', 'like', `%${ search }%`);
+  }
+
+  orders = await orders.orderBy(sort.split('_')[0], sort.split('_')[1]);
+  orders.forEach(f => {
+    f.alipayData = JSON.parse(f.alipayData);
+  });
+  return orders;
+};
+
 cron.minute(() => {
   if(!alipay_f2f) { return; }
   knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
@@ -283,3 +325,4 @@ exports.orderList = orderList;
 exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
 exports.verifyCallback = verifyCallback;
+exports.getCsvOrder = getCsvOrder;

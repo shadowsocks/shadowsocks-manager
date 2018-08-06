@@ -391,6 +391,32 @@ exports.getOrders = (req, res) => {
   });
 };
 
+exports.getCsvOrders = async (req, res) => {
+  const options = {};
+  if(req.adminInfo.id === 1) {
+    options.group = +req.query.group;
+  } else {
+    options.group = req.adminInfo.group;
+  }
+  options.search = req.query.search || '';
+  options.sort = req.query.sort || 'alipay.createTime_desc';
+  options.start = req.query.start;
+  options.end = req.query.end;
+  
+  options.filter = req.query.filter || '';
+  alipay.getCsvOrder(options)
+  .then(success => {
+    res.setHeader('Content-disposition', 'attachment; filename=download.csv');
+    res.setHeader('Content-type', 'text/csv');
+    res.send(success.map(m => {
+      return `${ m.orderId }, ${ m.amount }, ${ m.username }`;
+    }).join('\r\n'));
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getRefOrders = (req, res) => {
   const options = {};
   if(req.adminInfo.id === 1) {
@@ -446,6 +472,10 @@ exports.getPaypalOrders = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+};
+
+exports.getPaypalCsvOrders = async (req, res) => {
+  res.send('PP');
 };
 
 exports.getUserPortLastConnect = (req, res) => {

@@ -42,6 +42,25 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
     const pageSize = opt.pageSize || 20;
     return $http.get(url, { params: opt }).then(success => success.data);
   };
+
+  const getCsvOrder = (payType, opt = {}) => {
+    let url;
+    if(payType === '支付宝') { url = '/api/admin/alipay/csv'; }
+    if(payType === 'Paypal') { url = '/api/admin/paypal/csv'; }
+    if(payType === '充值码') { url = '/api/admin/giftcard/csv'; }
+    if(payType === '邀请码') { url = '/api/admin/refOrder/csv'; }
+    let downloadUrl = url + '?';
+    for(const o in opt) {
+      if(Array.isArray(opt[o])) {
+        opt[o].forEach(f => {
+          downloadUrl += (o + '=' + f + '&');
+        });
+      } else if (opt[o] || opt[o] >= 0) {
+        downloadUrl += (o + '=' + opt[o] + '&');
+      }
+    }
+    window.open(downloadUrl, '_blank');
+  };
   
   const getServer = status => {
     return $http.get('/api/admin/server', {
@@ -298,6 +317,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'config
   return {
     getUser,
     getOrder,
+    getCsvOrder,
     getServer,
     getAccount,
     getMacAccount,

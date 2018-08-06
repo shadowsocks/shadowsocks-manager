@@ -122,9 +122,11 @@ app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.dele
 app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
+app.get('/api/admin/alipay/csv', isAdmin, isSuperAdmin, admin.getCsvOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
 app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
+app.get('/api/admin/paypal/csv', isAdmin, isSuperAdmin, admin.getPaypalCsvOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
