@@ -378,6 +378,8 @@ exports.getOrders = (req, res) => {
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
   options.sort = req.query.sort || 'alipay.createTime_desc';
+  options.start = req.query.start;
+  options.end = req.query.end;
   
   options.filter = req.query.filter || '';
   alipay.orderListAndPaging(options)
@@ -400,6 +402,8 @@ exports.getRefOrders = (req, res) => {
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
   options.sort = req.query.sort || 'webgui_ref_time.createTime_desc';
+  options.start = req.query.start;
+  options.end = req.query.end;
   
   options.filter = req.query.filter || '';
   refOrder.orderListAndPaging(options)
@@ -431,6 +435,9 @@ exports.getPaypalOrders = (req, res) => {
   options.pageSize = +req.query.pageSize || 20;
   options.search = req.query.search || '';
   options.sort = req.query.sort || 'paypal.createTime_desc';
+  options.start = req.query.start;
+  options.end = req.query.end;
+
   options.filter = req.query.filter || '';
   paypal.orderListAndPaging(options)
   .then(success => {

@@ -214,8 +214,10 @@ const orderListAndPaging = async (options = {}) => {
   const sort = options.sort || 'paypal.createTime_desc';
   const page = options.page || 1;
   const pageSize = options.pageSize || 20;
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
 
-  let count = knex('paypal').select();
+  let count = knex('paypal').select().whereBetween('paypal.createTime', [start, end]);
   let orders = knex('paypal').select([
     'paypal.orderId',
     'paypal.orderType',
@@ -229,7 +231,8 @@ const orderListAndPaging = async (options = {}) => {
     'paypal.expireTime',
   ])
   .leftJoin('user', 'user.id', 'paypal.user')
-  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account');
+  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account')
+  .whereBetween('paypal.createTime', [start, end]);
 
   if(filter.length) {
     count = count.whereIn('paypal.status', filter);

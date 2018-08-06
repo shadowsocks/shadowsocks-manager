@@ -277,6 +277,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       const oldTabSwitchTime = tabSwitchTime;
       $scope.isOrderLoading = true;
       adminApi.getOrder($scope.myPayType, {
+        start: $scope.orderFilter.start,
+        end: $scope.orderFilter.end,
         page: $scope.currentPage,
         pageSize: getPageSize(),
         search,

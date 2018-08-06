@@ -224,8 +224,10 @@ const orderListAndPaging = async (options = {}) => {
   const sort = options.sort || 'alipay.createTime_desc';
   const page = options.page || 1;
   const pageSize = options.pageSize || 20;
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
 
-  let count = knex('alipay').select();
+  let count = knex('alipay').select().whereBetween('alipay.createTime', [start, end]);
   let orders = knex('alipay').select([
     'alipay.orderId',
     'alipay.orderType',
@@ -240,7 +242,8 @@ const orderListAndPaging = async (options = {}) => {
     'alipay.expireTime',
   ])
   .leftJoin('user', 'user.id', 'alipay.user')
-  .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account');
+  .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account')
+  .whereBetween('alipay.createTime', [start, end]);
 
   if(filter.length) {
     count = count.whereIn('alipay.status', filter);
