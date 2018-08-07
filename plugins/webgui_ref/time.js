@@ -53,17 +53,6 @@ const payWithRef = async (userId, orderType) => {
   if(!setting.useRef) { return; }
   const hasRef = await getRef(userId);
   if(!hasRef) { return; }
-  // const paymentType = {
-  //   '2': 'week',
-  //   '3': 'month',
-  //   '4': 'day',
-  //   '5': 'hour',
-  //   '6': 'season',
-  //   '7': 'year',
-  // };
-  // const paymentInfo = await getPaymentInfo(paymentType[orderType]);
-  // const refTime = paymentInfo.refTime || '0h';
-  // const time = convertRefTime(refTime);
   const orderInfo = await orderPlugin.getOneOrder(orderType);
   const accounts = await knex('account_plugin').where({ userId: hasRef });
   if(!accounts.length) { return; }

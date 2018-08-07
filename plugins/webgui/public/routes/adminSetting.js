@@ -109,6 +109,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminMyRefCodeController',
       templateUrl: `${ cdn }/public/views/admin/myRefCode.html`
     })
+    .state('admin.addRefUser', {
+      url: '/settings/addRefUser',
+      controller: 'AdminAddRefUserController',
+      templateUrl: `${ cdn }/public/views/admin/addRefUser.html`
+    })
 
     .state('admin.order', {
       url: '/settings/order',

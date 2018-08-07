@@ -153,6 +153,9 @@ app.get('/api/admin/setting/ref/code', isAdmin, isSuperAdmin, adminSetting.getRe
 app.get('/api/admin/setting/ref/code/:id(\\d+)', isAdmin, isSuperAdmin, adminSetting.getOneRefCode);
 app.put('/api/admin/setting/ref/code/:id(\\d+)', isAdmin, isSuperAdmin, adminSetting.editOneRefCode);
 app.get('/api/admin/setting/ref/user', isAdmin, isSuperAdmin, adminSetting.getRefUser);
+app.post('/api/admin/setting/ref/searchSourceUser', isAdmin, isSuperAdmin, adminSetting.searchSourceUser);
+app.post('/api/admin/setting/ref/searchRefUser', isAdmin, isSuperAdmin, adminSetting.searchRefUser);
+app.post('/api/admin/setting/ref/:sourceUserId(\\d+)/:refUserId(\\d+)/:code', isAdmin, isSuperAdmin, adminSetting.setRefForUser);
 app.get('/api/admin/ref/code', isAdmin, user.getRefCode);
 app.get('/api/admin/ref/user', isAdmin, user.getRefUser);
 app.get('/api/admin/ref/user/:userId(\\d+)', isAdmin, admin.getRefUserById);

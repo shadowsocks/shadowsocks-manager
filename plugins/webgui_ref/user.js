@@ -66,6 +66,22 @@ const getRefSourceUser = async userId => {
   return user[0];
 };
 
+const setRefForUser = async (sourceUserId, refUserId, code) => {
+  if(sourceUserId === refUserId) { return Promise.reject('id can not be same'); }
+  const my = await knex('webgui_ref_code').select([
+    'webgui_ref_code.id as id',
+  ]).where({
+    'webgui_ref_code.code': code,
+    'webgui_ref_code.sourceUserId': sourceUserId,
+  }).then(s => s[0]);
+  await knex('webgui_ref').insert({
+    codeId: my.id,
+    userId: refUserId,
+    time: Date.now(),
+  });
+};
+
+exports.setRefForUser = setRefForUser;
 exports.addRefCode = addRefCode;
 exports.getRefCode = getRefCode;
 exports.getRefUser = getRefUser;
