@@ -66,6 +66,7 @@ const getRefSourceUser = async userId => {
   return user[0];
 };
 
+exports.addRefCode = addRefCode;
 exports.getRefCode = getRefCode;
 exports.getRefUser = getRefUser;
 exports.getRefSourceUser = getRefSourceUser;

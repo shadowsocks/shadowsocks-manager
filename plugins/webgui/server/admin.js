@@ -732,3 +732,18 @@ exports.getRefCodeById = (req, res) => {
     res.status(403).end();
   });
 };
+
+exports.addRefCodeForUser = async (req, res) => {
+  try {
+    const userId = +req.params.userId;
+    const number = req.body.number;
+    const max = req.body.max;
+    for(let i = 0; i < number; i++) {
+      await refUser.addRefCode(userId, max);
+    }
+    res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};

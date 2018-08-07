@@ -16,6 +16,9 @@
                     <md-radio-button value="giftcard" ng-if="publicInfo.isGiftCardUse">
                         充值码
                     </md-radio-button>
+                    <md-radio-button value="refCode" ng-if="publicInfo.isRefCodeUse">
+                        邀请码
+                    </md-radio-button>
                 </md-radio-group>
             </div>
         </md-dialog-content>
@@ -119,6 +122,28 @@
                 关闭
             </md-button>
             <md-button class="md-primary" ng-click="publicInfo.checkGiftCard()" ng-disabled="!publicInfo.giftcardCode">
+                确定
+            </md-button>
+        </md-dialog-actions>
+    </form>
+    <form ng-cloak ng-show="publicInfo.status === 'refCode' && !publicInfo.isLoading">
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block">
+                    <label>邀请码数量</label>
+                    <input type="text" required name="code" ng-model="publicInfo.refCodeNumber">
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <label>单个邀请码可邀请用户数</label>
+                    <input type="text" required name="code" ng-model="publicInfo.refUserNumber">
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button ng-click="publicInfo.hide()">
+                关闭
+            </md-button>
+            <md-button class="md-primary" ng-click="publicInfo.addRefCodeForUser()" ng-disabled="!publicInfo.refCodeNumber || !publicInfo.refUserNumber">
                 确定
             </md-button>
         </md-dialog-actions>
