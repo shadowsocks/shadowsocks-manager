@@ -608,8 +608,8 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     };
   }
 ])
-.controller('AdminAddRefUserController', ['$scope', '$http', '$timeout', '$state', '$mdMedia', '$q',
-  ($scope, $http, $timeout, $state, $mdMedia, $q) => {
+.controller('AdminAddRefUserController', ['$scope', '$http', '$timeout', '$state', '$mdMedia', 'alertDialog',
+  ($scope, $http, $timeout, $state, $mdMedia, alertDialog) => {
     $scope.setTitle('添加邀请关系');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.refUserList');
@@ -649,6 +649,8 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $http.post(`/api/admin/setting/ref/${ $scope.sourceUser.selectedItem.id }/${ $scope.refUser.selectedItem.id }/${ $scope.sourceUserCode }`)
       .then(success => {
         $state.go('admin.refUserList');
+      }).catch(err => {
+        alertDialog.show('添加失败', '确定');
       });
     };
     $scope.cancel = () => {
