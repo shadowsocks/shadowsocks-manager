@@ -4,11 +4,13 @@
             <div style="margin-bottom: 20px;">过滤条件：</div>
             <md-input-container class="md-block">
                 <label translate>开始日期</label>
-                <input type="text" required name="start" ng-model="orderFilter.start">
+                <!-- <input type="text" required name="start" ng-model="orderFilter.start"> -->
+                <md-datepicker ng-model="orderFilter.start" md-hide-icons="calendar"></md-datepicker>
             </md-input-container>
             <md-input-container class="md-block">
                 <label translate>结束日期</label>
-                <input type="text" required name="end" ng-model="orderFilter.end">
+                <!-- <input type="text" required name="end" ng-model="orderFilter.end"> -->
+                <md-datepicker ng-model="orderFilter.end" md-hide-icons="calendar"></md-datepicker>
             </md-input-container>
             <div layout="column" layout-align="center stretch">
                 <div flex>
