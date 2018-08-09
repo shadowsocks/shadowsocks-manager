@@ -81,8 +81,28 @@ const setRefForUser = async (sourceUserId, refUserId, code) => {
   });
 };
 
+const deleteRefCode = async code => {
+  const codeInfo = await knex('webgui_ref_code').where({ code }).then(s => s[0]);
+  await knex('webgui_ref_code').delete().where({ id: codeInfo.id });
+  await knex('webgui_ref').delete().where({ codeId: codeInfo.id });
+};
+
+const deleteRefUser = async (sourceUserId, refUserId) => {
+  const refInfo = await knex('webgui_ref').select([
+    'webgui_ref.id as id',
+  ])
+  .leftJoin('webgui_ref_code', 'webgui_ref_code.id', 'webgui_ref.codeId')
+  .where({
+    'webgui_ref_code.sourceUserId': sourceUserId,
+    'webgui_ref.userId': refUserId,
+  }).then(s => s[0]);
+  await knex('webgui_ref').delete().where({ id: refInfo.id });
+};
+
 exports.setRefForUser = setRefForUser;
 exports.addRefCode = addRefCode;
 exports.getRefCode = getRefCode;
 exports.getRefUser = getRefUser;
 exports.getRefSourceUser = getRefSourceUser;
+exports.deleteRefCode = deleteRefCode;
+exports.deleteRefUser = deleteRefUser;

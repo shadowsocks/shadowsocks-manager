@@ -161,6 +161,9 @@ app.get('/api/admin/ref/user', isAdmin, user.getRefUser);
 app.get('/api/admin/ref/user/:userId(\\d+)', isAdmin, admin.getRefUserById);
 app.get('/api/admin/ref/code/:userId(\\d+)', isAdmin, admin.getRefCodeById);
 app.post('/api/admin/ref/code/:userId(\\d+)', isAdmin, admin.addRefCodeForUser);
+app.delete('/api/admin/ref/:sourceUserId(\\d+)/:refUserId(\\d+)', isAdmin, admin.deleteRefUser);
+app.delete('/api/admin/ref/:code', isAdmin, isSuperAdmin, admin.deleteRefCode);
+
 
 app.get('/api/admin/giftcard', isAdmin, adminGiftCard.getOrders);
 app.get('/api/admin/giftcard/:userId(\\d+)', isAdmin, adminGiftCard.getUserOrders);

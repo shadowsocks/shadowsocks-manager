@@ -747,3 +747,26 @@ exports.addRefCodeForUser = async (req, res) => {
     res.status(403).end();
   }
 };
+
+exports.deleteRefCode = async (req ,res) => {
+  try {
+    const code = req.params.code;
+    await refUser.deleteRefCode(code);
+    res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.deleteRefUser = async (req ,res) => {
+  try {
+    const sourceUserId = +req.params.sourceUserId;
+    const refUserId = +req.params.refUserId;
+    await refUser.deleteRefUser(sourceUserId, refUserId);
+    res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};

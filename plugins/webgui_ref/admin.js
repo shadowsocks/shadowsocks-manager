@@ -17,6 +17,13 @@ const getRefCode = async () => {
 const getRefCodeAndPaging = async (opt) => {
   const page = opt.page || 1;
   const pageSize = opt.pageSize || 20;
+  const invalidCode = await knex('webgui_ref_code').select([
+    'webgui_ref_code.id as id',
+  ])
+  .leftJoin('webgui_ref', 'webgui_ref_code.id', 'webgui_ref.codeId')
+  .leftJoin('user', 'webgui_ref_code.sourceUserId', 'user.id')
+  .whereNull('user.id');
+  await knex('webgui_ref_code').delete().whereIn('id', invalidCode.map(m => m.id));
   let count = knex('webgui_ref_code').select();
   let code = knex('webgui_ref_code').select([
     'webgui_ref_code.id as id',
@@ -28,6 +35,7 @@ const getRefCodeAndPaging = async (opt) => {
   ])
   .leftJoin('webgui_ref', 'webgui_ref_code.id', 'webgui_ref.codeId')
   .leftJoin('user', 'webgui_ref_code.sourceUserId', 'user.id')
+  .whereNotNull('user.id')
   .groupBy('webgui_ref_code.id');
   
   count = await count.count('id as count').then(success => success[0].count);

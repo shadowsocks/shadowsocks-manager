@@ -213,6 +213,32 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     $scope.toRefUser = userId => {
       $state.go('admin.userPage', { userId });
     };
+    $scope.deleteRefUser = refUserId => {
+      confirmDialog.show({
+        text: '删除该邀请关系？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除邀请关系失败',
+        fn: function () { return $http.delete(`/api/admin/ref/${ userId }/${ refUserId }`); },
+      }).then(() => {
+        getUserData();
+      }).catch(() => {
+
+      });
+    };
+    $scope.deleteRefCode = code => {
+      confirmDialog.show({
+        text: '删除该邀请码？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除邀请码失败',
+        fn: function () { return $http.delete(`/api/admin/ref/${ code }`); },
+      }).then(() => {
+        getUserData();
+      }).catch(() => {
+
+      });
+    };
   }
 ])
 .controller('AdminAddUserController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
