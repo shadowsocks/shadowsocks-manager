@@ -67,6 +67,7 @@ app
       $scope.order.server = $scope.orderServer ? server : null;
       $http.post('/api/admin/order', {
         name: $scope.order.name,
+        shortComment: $scope.order.shortComment,
         comment: $scope.order.comment,
         type: $scope.order.type,
         cycle: $scope.order.cycle,
@@ -156,8 +157,10 @@ app
       })
       .filter(f => f);
       $scope.order.server = $scope.orderServer ? server : null;
+      console.log($scope.order);
       $http.put(`/api/admin/order/${ $scope.orderId }`, {
         name: $scope.order.name,
+        shortComment: $scope.order.shortComment,
         comment: $scope.order.comment,
         type: $scope.order.type,
         cycle: $scope.order.cycle,

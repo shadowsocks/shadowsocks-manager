@@ -25,6 +25,7 @@ exports.newOrder = async (req, res) => {
   try {
     const data = {};
     data.name = req.body.name;
+    data.shortComment = req.body.shortComment;
     data.comment = req.body.comment;
     data.type = req.body.type;
     data.cycle = req.body.cycle;
@@ -51,6 +52,7 @@ exports.editOrder = async (req, res) => {
     const data = {};
     data.id = +req.params.orderId;
     data.name = req.body.name;
+    data.shortComment = req.body.shortComment;
     data.comment = req.body.comment;
     data.type = req.body.type;
     data.cycle = req.body.cycle;

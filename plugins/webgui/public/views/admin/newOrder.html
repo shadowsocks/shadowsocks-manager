@@ -13,8 +13,12 @@
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
+                    <label>短备注</label>
+                    <input type="text" name="shortComment" ng-model="order.shortComment">
+                </md-input-container>
+                <md-input-container class="md-block">
                     <label>备注</label>
-                    <input type="text" name="comment" ng-model="order.comment">
+                    <textarea ng-model="order.comment" rows="3" md-no-autogrow md-select-on-focus></textarea>
                 </md-input-container>
                 <div layout="row" layout-align="space-between start">
                     <md-input-container class="md-block" flex="45">

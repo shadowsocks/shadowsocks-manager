@@ -139,23 +139,9 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     $http.get('/api/user/order/price', {
       params: { accountId: publicInfo.accountId }
     }).then(success => {
-      publicInfo.orders = success.data;
-      // publicInfo.alipay = success.data.alipay;
-      // publicInfo.paypal = success.data.paypal;
-      // if(publicInfo.myPayType === 'alipay') {
-      //   if(success.data.alipay.month) {
-      //     publicInfo.orderType = 'month';
-      //   } else {
-      //     publicInfo.orderType = Object.keys(success.data.alipay)[0];
-      //   }
-      // }
-      // if(publicInfo.myPayType === 'paypal') {
-      //   if(success.data.paypal.month) {
-      //     publicInfo.orderType = 'month';
-      //   } else {
-      //     publicInfo.orderType = Object.keys(success.data.paypal)[0];
-      //   }
-      // }
+      publicInfo.orders = success.data.sort((a, b) => {
+        return a[publicInfo.myPayType] >= b[publicInfo.myPayType];
+      });
       $timeout(() => {
         publicInfo.status = 'choose';
       }, 125);
@@ -193,8 +179,25 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       chooseOrderType();
     }
   };
+  const showComment = () => {
+    publicInfo.comment = publicInfo.orders.filter(f => {
+      return f.id === +publicInfo.orderId;
+    })[0].comment;
+    if(!publicInfo.comment) {
+      publicInfo.createOrder();
+    } else {
+      publicInfo.status = 'comment';
+      publicInfo.time = 5;
+      $interval(() => {
+        if(publicInfo.time >= 1) {
+          publicInfo.time--;
+        }
+      }, 1000, 5);
+    }
+  };
   publicInfo.jumpToPayPage = jumpToPayPage;
   publicInfo.payByGiftCard = payByGiftCard;
+  publicInfo.showComment = showComment;
   return {
     choosePayType,
     chooseOrderType,

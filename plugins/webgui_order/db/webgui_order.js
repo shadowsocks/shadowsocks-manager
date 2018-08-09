@@ -59,6 +59,12 @@ const createTable = async () => {
         table.string('portRange').defaultTo('0');
       });
     }
+    const hasShortComment = await knex.schema.hasColumn(tableName, 'shortComment');
+    if(!hasShortComment) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('shortComment').defaultTo('');
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
@@ -66,6 +72,7 @@ const createTable = async () => {
   await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
     table.string('name');
+    table.string('shortComment').defaultTo('');
     table.string('comment').defaultTo('');
     table.integer('type');
     table.integer('cycle');
