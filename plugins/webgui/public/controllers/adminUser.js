@@ -228,7 +228,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteRefCode = code => {
       confirmDialog.show({
-        text: '删除该邀请码？',
+        text: '删除该邀请码？\n注意，邀请码对应的邀请关系也会一并删除',
         cancel: '取消',
         confirm: '删除',
         error: '删除邀请码失败',
