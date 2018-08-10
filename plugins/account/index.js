@@ -126,14 +126,12 @@ const editAccount = async (id, options) => {
   }
   if(options.type === 1) {
     update.data = null;
-    // update.port = +options.port;
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
       flow: options.flow || 1 * 1000 * 1000 * 1000,
       limit: options.limit || 1,
     });
-    // update.port = +options.port;
   }
   if(options.port) {
     update.port = +options.port;
@@ -707,6 +705,27 @@ const getAccountForSubscribe = async (token, ip) => {
   return { server: validServers, account };
 };
 
+const editMultiAccounts = async (orderId, update) => {
+  const accounts = await knex('account_plugin').where({ orderId });
+  const updateData = {};
+  for(const account of accounts) {
+    if(update.hasOwnProperty('flow')) {
+      const accountData = JSON.parse(account.data);
+      accountData.flow = update.flow;
+      updateData.data = JSON.stringify(accountData);
+    }
+    if(update.hasOwnProperty('server')) {
+      updateData.server = JSON.stringify(update.server);
+    }
+    if(update.hasOwnProperty('autoRemove')) {
+      updateData.autoRemove = update.autoRemove;
+    }
+    if(Object.keys(updateData).length === 0) { break; }
+    await knex('account_plugin').update(updateData).where({ id: account.id });
+    await await accountFlow.edit(account.id);
+  }
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -726,3 +745,5 @@ exports.banAccount = banAccount;
 exports.getBanAccount = getBanAccount;
 
 exports.getAccountForSubscribe = getAccountForSubscribe;
+
+exports.editMultiAccounts = editMultiAccounts;

@@ -91,7 +91,11 @@ app
   ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q) => {
     $scope.setTitle('编辑订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
-
+    $scope.changeCurrentAccount = {
+      flow: false,
+      server: false,
+      autoRemove: false,
+    };
     $scope.typeList = [
       {key: '周', value: 2},
       {key: '月', value: 3},
@@ -157,7 +161,6 @@ app
       })
       .filter(f => f);
       $scope.order.server = $scope.orderServer ? server : null;
-      console.log($scope.order);
       $http.put(`/api/admin/order/${ $scope.orderId }`, {
         name: $scope.order.name,
         shortComment: $scope.order.shortComment,
@@ -174,6 +177,7 @@ app
         multiServerFlow: $scope.order.multiServerFlow,
         changeOrderType: $scope.order.changeOrderType,
         server: $scope.order.server,
+        changeCurrentAccount: $scope.changeCurrentAccount,
       }).then(success => {
         $state.go('admin.order');
       });

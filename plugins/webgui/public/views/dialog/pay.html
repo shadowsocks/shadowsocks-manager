@@ -80,8 +80,8 @@
         <md-button class="md-primary" ng-show="publicInfo.status === 'pay' || publicInfo.status === 'success' || publicInfo.status === 'error'" ng-click="publicInfo.close()">
             {{ '关闭' | translate }}
         </md-button>
-        <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.close()">
-            {{ '取消' | translate }}
+        <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.jumpToPayPage()">
+            {{ '返回' | translate }}
         </md-button>
         <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.createOrder()" ng-disabled="publicInfo.time > 0">
             支付<span ng-show="publicInfo.time">({{ publicInfo.time }})</span>

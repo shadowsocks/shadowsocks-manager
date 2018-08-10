@@ -105,6 +105,20 @@
                     </div>
                 </div>
             </div>
+            <div style="width: 100%;" layout="column" layout-align="center none">
+                <div style="width: 100%;">将改动变更到已有的账号</div>
+                <div layout="row" layout-align="start center" layout-margin>
+                    <md-checkbox ng-model="changeCurrentAccount.flow" aria-label="flow">
+                        流量
+                    </md-checkbox>
+                    <md-checkbox ng-model="changeCurrentAccount.server" aria-label="server">
+                        服务器
+                    </md-checkbox>
+                    <md-checkbox ng-model="changeCurrentAccount.autoRemove" aria-label="autoRemove">
+                        到期自动删除
+                    </md-checkbox>
+                </div>
+            </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

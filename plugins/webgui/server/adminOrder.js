@@ -1,4 +1,5 @@
 const orderPlugin = appRequire('plugins/webgui_order');
+const accountPlugin = appRequire('plugins/account');
 
 exports.getOrders = async (req, res) => {
   try {
@@ -67,6 +68,12 @@ exports.editOrder = async (req, res) => {
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
     await orderPlugin.editOrder(data);
+    const changeCurrentAccount = req.body.changeCurrentAccount;
+    const update = {};
+    if(changeCurrentAccount.flow) { update.flow = data.flow; }
+    if(changeCurrentAccount.server) { update.server = data.server; }
+    if(changeCurrentAccount.autoRemove) { update.autoRemove = data.autoRemove; }
+    accountPlugin.editMultiAccounts(data.id, update);
     res.send('success');
   } catch(err) {
     console.log(err);
