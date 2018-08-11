@@ -180,24 +180,28 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }
   };
   const showComment = () => {
-    publicInfo.comment = publicInfo.orders.filter(f => {
-      return f.id === +publicInfo.orderId;
-    })[0].comment;
+    publicInfo.comment = publicInfo.selectedOrder.comment;
     if(!publicInfo.comment) {
       publicInfo.createOrder();
     } else {
       publicInfo.status = 'comment';
-      publicInfo.time = 5;
+      publicInfo.time = 3;
       $interval(() => {
         if(publicInfo.time >= 1) {
           publicInfo.time--;
         }
-      }, 1000, 5);
+      }, 1000, 3);
     }
   };
   publicInfo.jumpToPayPage = jumpToPayPage;
   publicInfo.payByGiftCard = payByGiftCard;
   publicInfo.showComment = showComment;
+  const setOrder = orderId => {
+    publicInfo.selectedOrder = publicInfo.orders.filter(f => {
+      return f.id === +orderId;
+    })[0];
+  };
+  publicInfo.setOrder = setOrder;
   return {
     choosePayType,
     chooseOrderType,
