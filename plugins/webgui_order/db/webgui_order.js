@@ -73,7 +73,7 @@ const createTable = async () => {
     table.increments('id').primary();
     table.string('name');
     table.string('shortComment').defaultTo('');
-    table.string('comment').defaultTo('');
+    table.string('comment', 16384).defaultTo('');
     table.integer('type');
     table.integer('cycle');
     table.float('alipay');
