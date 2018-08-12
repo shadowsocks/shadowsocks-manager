@@ -3,7 +3,7 @@ const accountPlugin = appRequire('plugins/account');
 
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await orderPlugin.getOrders();
+    const orders = await orderPlugin.getOrdersAndAccountNumber();
     res.send(orders);
   } catch(err) {
     console.log(err);

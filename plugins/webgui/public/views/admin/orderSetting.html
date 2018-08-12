@@ -3,7 +3,8 @@
         <md-card ng-click="editOrder(order.id)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
-                    <div flex="100">{{ order.name }}</div>
+                    <div flex="80">{{ order.name }}</div>
+                    <div flex="20" style="color: #666; font-size: 0.9em; text-align: right;">{{ order.accountNumber }}</div>
                 </div>
             </md-card-content>
         </md-card>
