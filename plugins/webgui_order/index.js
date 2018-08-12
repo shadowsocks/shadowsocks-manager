@@ -5,6 +5,17 @@ const getOrders = async () => {
   return knex('webgui_order').where({});
 };
 
+const getOrdersAndAccountNumber = async () => {
+  const orders = await knex('webgui_order').select([
+    'webgui_order.id as id',
+    'webgui_order.name as name',
+    knex.raw('count(account_plugin.id) as accountNumber'),
+  ])
+  .leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
+  .groupBy('webgui_order.id');
+  return orders;
+};
+
 const getOneOrder = async orderId => {
   const order = await knex('webgui_order').where({ id: orderId }).then(s => s[0]);
   if(!order) { return Promise.reject('order not found'); }
@@ -75,6 +86,7 @@ const deleteOrder = async orderId => {
 };
 
 exports.getOrders = getOrders;
+exports.getOrdersAndAccountNumber = getOrdersAndAccountNumber;
 exports.getOneOrder = getOneOrder;
 exports.newOrder = newOrder;
 exports.editOrder = editOrder;
