@@ -715,7 +715,7 @@ const editMultiAccounts = async (orderId, update) => {
       updateData.data = JSON.stringify(accountData);
     }
     if(update.hasOwnProperty('server')) {
-      updateData.server = JSON.stringify(update.server);
+      updateData.server = update.server ? JSON.stringify(update.server): null;
     }
     if(update.hasOwnProperty('autoRemove')) {
       updateData.autoRemove = update.autoRemove;
