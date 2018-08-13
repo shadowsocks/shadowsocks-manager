@@ -13,6 +13,7 @@ const getGroupsAndUserNumber = async () => {
   ])
   .leftJoin('user', 'user.group', 'group.id')
   .where('user.id', '>', 1)
+  .orWhereNull('user.id')
   .groupBy('group.id');
   return groups;
 };
