@@ -1,7 +1,7 @@
 const group = appRequire('plugins/group/index');
 
 exports.getGroups = (req, res, next) => {
-  group.getGroups().then(success => {
+  group.getGroupsAndUserNumber().then(success => {
     res.send(success);
   }).catch(err => {
     console.log(err);

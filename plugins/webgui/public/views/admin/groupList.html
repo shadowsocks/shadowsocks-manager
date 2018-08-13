@@ -3,8 +3,11 @@
         <md-card ng-click="editGroup(group.id)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <div flex="50">
+                    <div flex="80">
                         <span>{{ group.name }}</span><br><span style="font-size: 0.9em; color: #666;">{{ group.comment }}</span>
+                    </div>
+                    <div flex="20">
+                        <div style="font-size: 0.9em; color: #666; text-align: right;">{{ group.userNumber }}</div>
                     </div>
                 </div>
             </md-card-content>
