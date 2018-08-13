@@ -451,7 +451,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
-      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')($scope.account.autoRemoveDelay);
+      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')(orderInfo.autoRemoveDelay);
       if(orderInfo.server) {
         $scope.servers.forEach(server => {
           if(JSON.parse(orderInfo.server).indexOf(server.id) >= 0) {
@@ -571,7 +571,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.multiServerFlow = orderInfo.multiServerFlow;
       $scope.account.accountServer = !!orderInfo.server;
       $scope.account.flowStr = $filter('flowNum2Str')($scope.account.flow);
-      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')($scope.account.autoRemoveDelay);
+      $scope.account.autoRemoveDelayStr = $filter('timeNum2Str')(orderInfo.autoRemoveDelay);
       if($scope.account.fixedExpire) {
         $scope.account.time = expire - $scope.timeLimit[$scope.account.type] * $scope.account.limit;
         while($scope.account.time >= Date.now()) {
