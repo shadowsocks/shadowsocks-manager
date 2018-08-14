@@ -277,8 +277,8 @@ app
     $scope.subscribe = accountId => {
       subscribeDialog.show(accountId);
     };
-    $scope.createOrder = accountId => {
-      payDialog.choosePayType(accountId).then(success => {
+    $scope.createOrder = account => {
+      payDialog.choosePayType(account).then(success => {
         getUserAccountInfo();
       });
     };

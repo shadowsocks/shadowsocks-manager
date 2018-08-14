@@ -122,7 +122,7 @@
                     </div>
                 </div>
                 <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{ '修改密码' | translate }}</md-button>
-                <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a.id)">{{ '续费' | translate }}</md-button>
+                <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
                 <md-button class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
             </md-card-content>
         </md-card>

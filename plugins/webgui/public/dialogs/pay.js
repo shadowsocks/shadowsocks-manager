@@ -125,9 +125,12 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }],
     clickOutsideToClose: false,
   };
-  const choosePayType = accountId => {
+  const choosePayType = account => {
     publicInfo.status = 'type';
-    publicInfo.accountId = accountId;
+    publicInfo.accountId = account ? account.id : null;
+    if(account) {
+      publicInfo.orderId = account.orderId;
+    }
     dialogPromise = $mdDialog.show(dialog);
     if(publicInfo.payType.length === 1) {
       publicInfo.jumpToPayPage();
