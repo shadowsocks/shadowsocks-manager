@@ -145,6 +145,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       publicInfo.orders = success.data.sort((a, b) => {
         return a[publicInfo.myPayType] >= b[publicInfo.myPayType];
       });
+      if(publicInfo.orderId) { publicInfo.setOrder(publicInfo.orderId); }
       $timeout(() => {
         publicInfo.status = 'choose';
       }, 125);
