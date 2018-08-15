@@ -25,6 +25,7 @@ exports.getOneOrder = async (req, res) => {
 exports.newOrder = async (req, res) => {
   try {
     const data = {};
+    data.baseId = req.body.baseId || 0;
     data.name = req.body.name;
     data.shortComment = req.body.shortComment;
     data.comment = req.body.comment;
@@ -51,6 +52,7 @@ exports.newOrder = async (req, res) => {
 exports.editOrder = async (req, res) => {
   try {
     const data = {};
+    data.baseId = +req.body.baseId || 0;
     data.id = +req.params.orderId;
     data.name = req.body.name;
     data.shortComment = req.body.shortComment;

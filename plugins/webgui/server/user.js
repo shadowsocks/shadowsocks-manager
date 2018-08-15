@@ -270,6 +270,7 @@ exports.getPrice = async (req, res) => {
     const accountId = +req.query.accountId;
     let accountInfo;
     let changeOrderTypeId = 0;
+    let orderInfo;
     const isExpired = account => {
       if(!account) { return true; }
       const accountData = JSON.parse(account.data);
@@ -283,10 +284,10 @@ exports.getPrice = async (req, res) => {
       return expire <= Date.now();
     };
     if(accountId) {
-      const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
       if(orderInfo && !orderInfo.changeOrderType) {
         changeOrderTypeId = orderInfo.id;
-        accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
       }
     }
     const groupId = req.userInfo.group;
@@ -296,11 +297,20 @@ exports.getPrice = async (req, res) => {
       orders = orders.filter(f => {
         return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
       });
+      if(orderInfo) {
+        orders = orders.filter(f => {
+          if(!f.baseId) { return true; }
+          if(f.baseId === orderInfo.id && !isExpired(accountInfo)) { return true; }
+          return false;
+        });
+      } else {
+        orders = orders.filter(f => !f.baseId);
+      }
     }
     let currentOrder = [];
     if(changeOrderTypeId && !isExpired(accountInfo)) {
       currentOrder = orders.filter(f => {
-        return f.id === changeOrderTypeId;
+        return (f.id === changeOrderTypeId || f.baseId === changeOrderTypeId);
       });
     }
     return res.send(currentOrder.length ? currentOrder : orders);

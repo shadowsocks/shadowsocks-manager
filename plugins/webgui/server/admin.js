@@ -15,6 +15,7 @@ const rp = require('request-promise');
 const macAccount = appRequire('plugins/macAccount/index');
 const refOrder = appRequire('plugins/webgui_ref/order');
 const refUser = appRequire('plugins/webgui_ref/user');
+const flowPack = appRequire('plugins/webgui_order/flowPack');
 
 exports.getAccount = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
@@ -47,50 +48,51 @@ exports.getAccount = (req, res) => {
   });
 };
 
-exports.getAccountByPort = (req, res) => {
-  const port = +req.params.port;
-  account.getAccount({ port }).then(success => {
-    if(success.length) {
-      return success[0];
+exports.getAccountByPort = async (req, res) => {
+  try {
+    const port = +req.params.port;
+    const accountInfo = await account.getAccount({ port }).then(s => s[0]);
+    if(!accountInfo) { return Promise.reject('account not found'); }
+    if(accountInfo.data) {
+      accountInfo.data = JSON.parse(accountInfo.data);
     }
-    return Promise.reject('account not found');
-  }).then(success => {
-    res.send(success);
-  }).catch(err => {
+    res.send(accountInfo);
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
-exports.getOneAccount = (req, res) => {
-  const accountId = +req.params.accountId;
-  account.getAccount({ id: accountId }).then(success => {
-    const accountInfo = success[0];
-    if(accountInfo) {
-      accountInfo.data = JSON.parse(accountInfo.data);
-      if(accountInfo.type >= 2 && accountInfo.type <= 5) {
-        const time = {
-          '2': 7 * 24 * 3600000,
-          '3': 30 * 24 * 3600000,
-          '4': 24 * 3600000,
-          '5': 3600000,
-        };
-        accountInfo.data.expire = accountInfo.data.create + accountInfo.data.limit * time[accountInfo.type];
-        accountInfo.data.from = accountInfo.data.create;
-        accountInfo.data.to = accountInfo.data.create + time[accountInfo.type];
-        while(accountInfo.data.to <= Date.now()) {
-          accountInfo.data.from = accountInfo.data.to;
-          accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
-        }
-      }
-      accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
-      return res.send(accountInfo);
+exports.getOneAccount = async (req, res) => {
+  try {
+    const accountId = +req.params.accountId;
+    const accountInfo = await account.getAccount({ id: accountId }).then(s => s[0]);
+    if(!accountInfo) {
+      return Promise.reject('account not found');
     }
-    return res.status(403).end();
-  }).catch(err => {
+    accountInfo.data = JSON.parse(accountInfo.data);
+    if(accountInfo.type >= 2 && accountInfo.type <= 5) {
+      const time = {
+        '2': 7 * 24 * 3600000,
+        '3': 30 * 24 * 3600000,
+        '4': 24 * 3600000,
+        '5': 3600000,
+      };
+      accountInfo.data.expire = accountInfo.data.create + accountInfo.data.limit * time[accountInfo.type];
+      accountInfo.data.from = accountInfo.data.create;
+      accountInfo.data.to = accountInfo.data.create + time[accountInfo.type];
+      while(accountInfo.data.to <= Date.now()) {
+        accountInfo.data.from = accountInfo.data.to;
+        accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
+      }
+    }
+    accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
+    accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
+    return res.send(accountInfo);
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  };
 };
 
 exports.addAccount = (req, res) => {

@@ -312,13 +312,17 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
 
 const setAccountLimit = async (userId, accountId, orderId) => {
   const orderInfo = await orderPlugin.getOneOrder(orderId);
-  // const payType = {
-  //   week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
-  // };
-  // let paymentType;
+  if(orderInfo.baseId) {
+    await knex('webgui_flow_pack').insert({
+      accountId,
+      flow: orderInfo.flow,
+      createTime: Date.now(),
+    });
+    await accountFlow.edit(accountId);
+    return;
+  }
   const limit = orderInfo.cycle;
   const orderType = orderInfo.type;
-  // const flow = {};
   let account;
   if(accountId) {
     account = await knex('account_plugin').select().where({ id: accountId }).then(success => {

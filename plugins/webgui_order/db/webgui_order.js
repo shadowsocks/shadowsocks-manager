@@ -65,12 +65,19 @@ const createTable = async () => {
         table.string('shortComment').defaultTo('');
       });
     }
+    const hasBaseId = await knex.schema.hasColumn(tableName, 'baseId');
+    if(!hasBaseId) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('baseId').defaultTo(0);
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
   }
   await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
+    table.integer('baseId').defaultTo(0);
     table.string('name');
     table.string('shortComment').defaultTo('');
     table.string('comment', 16384).defaultTo('');
