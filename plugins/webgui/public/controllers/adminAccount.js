@@ -406,8 +406,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $http.get('/api/admin/order').then(success => {
-      $scope.orders = success.data;
-      $scope.account.orderId = success.data[0].id;
+      $scope.orders = success.data.filter(f => !f.baseId);
+      $scope.account.orderId = $scope.orders[0].id;
     });
     $http.get('/api/admin/account/newPort').then(success => {
       $scope.account.port = success.data.port;
