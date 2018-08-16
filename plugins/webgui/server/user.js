@@ -36,43 +36,15 @@ exports.getAccount = async (req, res) => {
           account.data.from = account.data.to;
           account.data.to = account.data.from + time[account.type];
         }
+        account.data.flowPack = await flowPack.getFlowPack(account.id, account.data.from, account.data.to);
       }
       account.server = account.server ? JSON.parse(account.server) : account.server;
-      account.data.flowPack = await flowPack.getFlowPack(account.id, account.data.from, account.data.to);
     }
     res.send(accounts);
   } catch (err) {
     console.log(err);
     res.status(403).end();
   }
-  
-  // account.getAccount({
-  //   userId,
-  // }).then(success => {
-  //   success.forEach(f => {
-  //     f.data = JSON.parse(f.data);
-  //     if (f.type >= 2 && f.type <= 5) {
-  //       const time = {
-  //         '2': 7 * 24 * 3600000,
-  //         '3': 30 * 24 * 3600000,
-  //         '4': 24 * 3600000,
-  //         '5': 3600000,
-  //       };
-  //       f.data.expire = f.data.create + f.data.limit * time[f.type];
-  //       f.data.from = f.data.create;
-  //       f.data.to = f.data.create + time[f.type];
-  //       while (f.data.to <= Date.now()) {
-  //         f.data.from = f.data.to;
-  //         f.data.to = f.data.from + time[f.type];
-  //       }
-  //     }
-  //     f.server = f.server ? JSON.parse(f.server) : f.server;
-  //   });
-  //   res.send(success);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(500).end();
-  // });
 };
 
 exports.getOneAccount = async (req, res) => {
@@ -104,38 +76,6 @@ exports.getOneAccount = async (req, res) => {
     console.log(err);
     res.status(403).end();
   }
-  // const userId = req.session.user;
-  // const accountId = +req.params.accountId;
-  // account.getAccount({
-  //   id: accountId,
-  //   userId,
-  // }).then(success => {
-  //   if (!success.length) {
-  //     res.send({});
-  //     return;
-  //   }
-  //   const accountInfo = success[0];
-  //   accountInfo.data = JSON.parse(accountInfo.data);
-  //   if (accountInfo.type >= 2 && accountInfo.type <= 5) {
-  //     const time = {
-  //       '2': 7 * 24 * 3600000,
-  //       '3': 30 * 24 * 3600000,
-  //       '4': 24 * 3600000,
-  //       '5': 3600000,
-  //     };
-  //     accountInfo.data.expire = accountInfo.data.create + accountInfo.data.limit * time[accountInfo.type];
-  //     accountInfo.data.from = accountInfo.data.create;
-  //     accountInfo.data.to = accountInfo.data.create + time[accountInfo.type];
-  //     while (accountInfo.data.to <= Date.now()) {
-  //       accountInfo.data.from = accountInfo.data.to;
-  //       accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
-  //     }
-  //   }
-  //   res.send(accountInfo);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(500).end();
-  // });
 };
 
 exports.getServers = (req, res) => {

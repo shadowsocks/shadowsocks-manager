@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
-app.controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$state',
-($scope, $http, $timeout, $state) => {
+app.controller('AdminGroupSettingController', ['$scope', '$http', '$state',
+($scope, $http, $state) => {
   $scope.setTitle('群组管理');
   $scope.setMenuButton('arrow_back', function() {
     $state.go('admin.settings');
@@ -62,29 +62,48 @@ app.controller('AdminGroupSettingController', ['$scope', '$http', '$timeout', '$
     $state.go('admin.groupSetting');
   };
 }
-]).controller('AdminEditGroupController', ['$scope', '$http', '$timeout', '$state', '$stateParams', 'alertDialog',
-($scope, $http, $timeout, $state, $stateParams, alertDialog) => {
+]).controller('AdminEditGroupController', ['$scope', '$http', '$q', '$state', '$stateParams', 'alertDialog',
+($scope, $http, $q, $state, $stateParams, alertDialog) => {
   $scope.setTitle('修改群组');
   $scope.setMenuButton('arrow_back', 'admin.groupSetting');
   $scope.groupId = +$stateParams.groupId;
   $scope.group = {};
-  $http.get(`/api/admin/group/${ $scope.groupId }`).then(success => {
-    $scope.group = success.data;
-  });
-  $http.get('/api/admin/order').then(success => {
-    $scope.orders = success.data;
+  $q.all([
+    $http.get(`/api/admin/group/${ $scope.groupId }`),
+    $http.get('/api/admin/order'),
+  ]).then(success => {
+    $scope.group = success[0].data;
+    $scope.orders = success[1].data;
     $scope.groupOrder = !!$scope.group.order;
-      $scope.groupOrderObj = {};
-      if($scope.group.order) {
-        $scope.orders.forEach(order => {
-          if($scope.group.order.indexOf(order.id) >= 0) {
-            $scope.groupOrderObj[order.id] = true;
-          } else {
-            $scope.groupOrderObj[order.id] = false;
-          }
-        });
-      }
+    $scope.groupOrderObj = {};
+    if($scope.group.order) {
+      $scope.group.order = JSON.parse($scope.group.order);
+      $scope.orders.forEach(order => {
+        if($scope.group.order.indexOf(order.id) >= 0) {
+          $scope.groupOrderObj[order.id] = true;
+        } else {
+          $scope.groupOrderObj[order.id] = false;
+        }
+      });
+    }
   });
+  // $http.get(`/api/admin/group/${ $scope.groupId }`).then(success => {
+  //   $scope.group = success.data;
+  // });
+  // $http.get('/api/admin/order').then(success => {
+  //   $scope.orders = success.data;
+  //   $scope.groupOrder = !!$scope.group.order;
+  //   $scope.groupOrderObj = {};
+  //   if($scope.group.order) {
+  //     $scope.orders.forEach(order => {
+  //       if($scope.group.order.indexOf(order.id) >= 0) {
+  //         $scope.groupOrderObj[order.id] = true;
+  //       } else {
+  //         $scope.groupOrderObj[order.id] = false;
+  //       }
+  //     });
+  //   }
+  // });
   $scope.confirm = () => {
     alertDialog.loading();
     const order = Object.keys($scope.groupOrderObj)
