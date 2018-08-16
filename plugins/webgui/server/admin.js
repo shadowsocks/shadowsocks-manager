@@ -85,9 +85,9 @@ exports.getOneAccount = async (req, res) => {
         accountInfo.data.from = accountInfo.data.to;
         accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
       }
+      accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
+      accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
     }
-    accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
-    accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
     return res.send(accountInfo);
   } catch(err) {
     console.log(err);
