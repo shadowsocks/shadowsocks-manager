@@ -87,23 +87,6 @@ app.controller('AdminGroupSettingController', ['$scope', '$http', '$state',
       });
     }
   });
-  // $http.get(`/api/admin/group/${ $scope.groupId }`).then(success => {
-  //   $scope.group = success.data;
-  // });
-  // $http.get('/api/admin/order').then(success => {
-  //   $scope.orders = success.data;
-  //   $scope.groupOrder = !!$scope.group.order;
-  //   $scope.groupOrderObj = {};
-  //   if($scope.group.order) {
-  //     $scope.orders.forEach(order => {
-  //       if($scope.group.order.indexOf(order.id) >= 0) {
-  //         $scope.groupOrderObj[order.id] = true;
-  //       } else {
-  //         $scope.groupOrderObj[order.id] = false;
-  //       }
-  //     });
-  //   }
-  // });
   $scope.confirm = () => {
     alertDialog.loading();
     const order = Object.keys($scope.groupOrderObj)

@@ -164,9 +164,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.lastConnect = success.lastConnect;
         let maxFlow = 0;
         if($scope.account.data) {
-          maxFlow = $scope.account.data.flow * ($scope.isMultiServerFlow ? 1 : server.scale);
+          server.isFlowOutOfLimit = (($scope.account.data.flow + $scope.account.data.flowPack) <= $scope.serverPortFlow);
         }
-        server.isFlowOutOfLimit = maxFlow ? ($scope.serverPortFlow >= maxFlow) : false;
       });
       $scope.getChartData(serverId);
       $scope.servers.forEach((server, index) => {
