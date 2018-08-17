@@ -527,7 +527,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     });
     $http.get('/api/admin/order').then(success => {
-      $scope.orders = success.data;
+      $scope.orders = success.data.filter(f => !f.baseId);
       $scope.account.orderId = success.data[0].id;
     });
     $scope.typeList = [
