@@ -34,7 +34,8 @@
                             </span>
                         </div>
                     </md-radio-button>
-                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-repeat-end ng-show="+publicInfo.orderId === +order.id && order.shortComment">{{ order.shortComment }}</div>
+                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-show="+publicInfo.orderId === +order.id && order.shortComment">{{ order.shortComment }}</div>
+                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-if="publicInfo.selectedOrder.baseId" ng-show="+publicInfo.orderId === +order.id" ng-repeat-end>有效期：{{ publicInfo.account.data.to | date : 'yyyy-MM-dd HH:mm' }}</div>
                 </md-radio-group>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'giftcard'">
