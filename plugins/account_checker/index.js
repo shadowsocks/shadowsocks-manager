@@ -91,7 +91,7 @@ const isOverFlow = async (server, account) => {
       await knex('account_flow').update({
         flow,
         checkTime: Date.now(),
-        nextCheckTime: Date.now() + time,
+        nextCheckTime: Date.now() + Math.ceil(time),
       }).where({ id: exists.id });
     }
   };
@@ -146,10 +146,11 @@ const isOverFlow = async (server, account) => {
       return { flow: a.flow + b.flow };
     }, { flow: data.flow }).flow;
   
-    const nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000;
-    await writeFlow(server.id, account.id, realFlow, nextCheckTime <= 0 ? 600 * 1000 : nextCheckTime);
+    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000 / server.scale;
+    if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
+    if(nextCheckTime >= 3 * 60 * 60 * 1000) { nextCheckTime = 3 * 60 * 60 * 1000; }
+    await writeFlow(server.id, account.id, realFlow, nextCheckTime);
 
-    // return sumFlow >= data.flow;
     return sumFlow >= flowWithFlowPacks;
   } else {
     await writeFlow(server.id, account.id, 0, 30 * 60 * 1000 + Number(Math.random().toString().substr(2, 7)));

@@ -144,6 +144,8 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       params: { accountId: publicInfo.accountId }
     }).then(success => {
       publicInfo.orders = success.data.sort((a, b) => {
+        if(a.baseId > 0 && b.baseId === 0) { return 1; }
+        if(a.baseId === 0 && b.baseId > 0) { return -1; }
         return a[publicInfo.myPayType] >= b[publicInfo.myPayType];
       });
       if(publicInfo.orderId) { publicInfo.setOrder(publicInfo.orderId); }
