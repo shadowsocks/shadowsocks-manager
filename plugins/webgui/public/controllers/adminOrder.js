@@ -126,11 +126,13 @@ app
     ];
 
     $scope.orderId = $stateParams.id;
+    $scope.orderInfoLoaded = false;
     $q.all([
       $http.get('/api/admin/server'),
       $http.get(`/api/admin/order/${ $scope.orderId }`),
       $http.get('/api/admin/order'),
     ]).then(success => {
+      $scope.orderInfoLoaded = true;
       $scope.servers = success[0].data;
       $scope.order = success[1].data;
       $scope.orders = success[2].data.filter(f => {
