@@ -13,7 +13,7 @@
                     <div flex="30" flex-xs="60">
                         <span hide-xs hide-sm>{{order.orderId}}</span>
                         <span hide-gt-sm>
-                            <span style="font-size: 0.9em;">{{order.orderId | prettyOrderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                            <span style="font-size: 0.9em;">{{ order.orderId }}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                         </span>
                     </div>
                     <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
