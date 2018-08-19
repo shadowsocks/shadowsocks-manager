@@ -217,8 +217,8 @@ app
 
     $scope.getServerPortData = (account, serverId) => {
       account.currentServerId = serverId;
-      const server = $scope.servers.filter(f => f.id === serverId);
-      const scale = server[0] ? server[0].scale : 1;
+      // const server = $scope.servers.filter(f => f.id === serverId);
+      // const scale = server[0] ? server[0].scale : 1;
       if(!account.isFlowOutOfLimit) { account.isFlowOutOfLimit = {}; }
       userApi.getServerPortData(account, serverId).then(success => {
         account.lastConnect = success.lastConnect;
@@ -244,13 +244,11 @@ app
     });
     $scope.setInterval($interval(() => {
       if(Date.now() - $localStorage.user.accountInfo.time <= 15 * 1000) { return; }
-      // if(!$scope.account.length) {
       getUserAccountInfo();
-      // }
-      userApi.updateAccount($scope.account)
-      .then(() => {
-        setAccountServerList($scope.account, $scope.servers);
-      });
+      // userApi.updateAccount($scope.account)
+      // .then(() => {
+      //   setAccountServerList($scope.account, $scope.servers);
+      // });
       $scope.account.forEach(a => {
         const currentServerId = a.currentServerId;
         userApi.getServerPortData(a, a.currentServerId, a.port).then(success => {
