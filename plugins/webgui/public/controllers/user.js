@@ -317,8 +317,8 @@ app
     };
   }
 ])
-.controller('UserSettingsController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+.controller('UserSettingsController', ['$scope', '$state',
+  ($scope, $state) => {
     $scope.setTitle('设置');
     $scope.toPassword = () => {
       $state.go('user.changePassword');
@@ -357,8 +357,8 @@ app
     };
   }
 ])
-.controller('UserTelegramController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+.controller('UserTelegramController', ['$scope', '$http', '$interval',
+  ($scope, $http, $interval) => {
     $scope.setTitle('绑定Telegram');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $scope.isLoading = true;
@@ -379,8 +379,8 @@ app
     };
   }
 ])
-.controller('UserRefController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+.controller('UserRefController', ['$scope', '$http',
+  ($scope, $http) => {
     $scope.setTitle('邀请码');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });

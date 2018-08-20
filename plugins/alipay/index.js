@@ -231,6 +231,7 @@ const orderListAndPaging = async (options = {}) => {
   let orders = knex('alipay').select([
     'alipay.orderId',
     'alipay.orderType',
+    'webgui_order.name as orderName',
     'user.id as userId',
     'user.group as group',
     'user.username',
@@ -243,6 +244,7 @@ const orderListAndPaging = async (options = {}) => {
   ])
   .leftJoin('user', 'user.id', 'alipay.user')
   .leftJoin('account_plugin', 'account_plugin.id', 'alipay.account')
+  .leftJoin('webgui_order', 'webgui_order.id', 'alipay.orderType')
   .whereBetween('alipay.createTime', [start, end]);
 
   if(filter.length) {

@@ -1,4 +1,7 @@
 const blackList = [
+  'itoup.com',
+  'bnuis.com',
+  'urltc.com',
   '@deyom.com',
   '@raiasu.ml',
   '@cool.fr.nf',
