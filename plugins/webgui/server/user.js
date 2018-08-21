@@ -185,8 +185,9 @@ exports.getServerPortLastConnect = (req, res) => {
 
 exports.changeShadowsocksPassword = (req, res) => {
   const accountId = +req.params.accountId;
-  const password = req.body.password;
+  let password = req.body.password;
   if (!password) { return res.status(403).end(); }
+  if (password.length > 20) { password = password.substr(0, 20); }
   const isUserHasTheAccount = (accountId) => {
     return account.getAccount({ userId: req.session.user, id: accountId }).then(success => {
       if (success.length) {
