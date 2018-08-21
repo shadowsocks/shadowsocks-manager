@@ -53,6 +53,7 @@ const isExpired = (server, account) => {
     if(account.type === 5) { timePeriod = 3600 * 1000; }
     const data = JSON.parse(account.data);
     const expireTime = data.create + data.limit * timePeriod;
+    account.expireTime = expireTime;
     if(expireTime <= Date.now() || data.create >= Date.now()) {
       const nextCheckTime = 10 * 60 * 1000 + randomInt(30000);
       if(account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
@@ -62,6 +63,8 @@ const isExpired = (server, account) => {
         modifyAccountFlow(server.id, account.id, nextCheckTime);
       }
       return true;
+    } else {
+      return false;
     }
   } else {
     return false;
@@ -147,6 +150,7 @@ const isOverFlow = async (server, account) => {
     }, { flow: data.flow }).flow;
   
     let nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000 / server.scale;
+    if(nextCheckTime >= account.expireTime - Date.now() && account.expireTime - Date.now() > 0) { nextCheckTime = account.expireTime - Date.now() }
     if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
     if(nextCheckTime >= 3 * 60 * 60 * 1000) { nextCheckTime = 3 * 60 * 60 * 1000; }
     await writeFlow(server.id, account.id, realFlow, nextCheckTime);

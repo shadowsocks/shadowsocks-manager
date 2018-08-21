@@ -1,4 +1,8 @@
 const blackList = [
+  '1shivom.com',
+  'nwytg.net',
+  'awsoo.com',
+  'molms.com',
   'auoie.com',
   'itoup.com',
   'bnuis.com',
