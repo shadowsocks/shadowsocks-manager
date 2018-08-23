@@ -13,7 +13,7 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   exports.pushMessage = async (title, options) => {
     const users = await knex('push').select();
     const arr = [];
-    users.forEach(user => {
+    users.filter(f => f.userId === 1).forEach(user => {
       const promise = webpush.sendNotification({
         endpoint: user.endpoint,
         keys: {
@@ -29,17 +29,19 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
     return;
   };
 
-  const insertPushList = async data => {
+  const insertPushList = async (userId, data) => {
     const push = await knex('push').select().where({
       endpoint: data.endpoint,
     }).then(success => success[0]);
     if(push) {
       await knex('push').update({
+        userId,
         auth: data.keys.auth,
         p256dh: data.keys.p256dh,
       }).where({ endpoint: data.endpoint });
     } else {
       await knex('push').insert({
+        userId,
         endpoint: data.endpoint,
         auth: data.keys.auth,
         p256dh: data.keys.p256dh,
@@ -56,7 +58,8 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
         res.send('success');
       });
     }
-    insertPushList(data).then(success => {
+    const userId = req.session.user;
+    insertPushList(userId, data).then(success => {
       res.send('success');
     }).catch(err => {
       console.log(err);
@@ -77,7 +80,9 @@ if(config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
       res.status(403).end();
     });
   };
+
 } else {
+
   exports.pushMessage = () => Promise.resolve();
   exports.client = () => {};
 }
