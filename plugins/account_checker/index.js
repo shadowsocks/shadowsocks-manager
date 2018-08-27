@@ -308,7 +308,7 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { console.log(err); }
     try {
       const datas = await knex('account_flow').select()
-      .orderBy('updateTime', 'desc').limit(15);
+      .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000).limit(15);
       accounts = [...accounts, ...datas];
     } catch(err) { console.log(err); }
     try {
