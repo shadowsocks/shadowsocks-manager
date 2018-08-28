@@ -264,8 +264,8 @@ const checkAccount = async (serverId, accountId) => {
       const start = Date.now();
       await sleep(sleepTime);
       const servers = await knex('server').where({});
-      for(let server of servers) {
-        await sleep(sleepTime);
+      for(const server of servers) {
+        await sleep(1000);
         await deleteExtraPorts(server);
       }
       await sleep(sleepTime);
@@ -282,8 +282,8 @@ const checkAccount = async (serverId, accountId) => {
         await accountFlow.add(account.id);
       }
       const end = Date.now();
-      if(end - start <= 61 * 1000) {
-        await sleep(61 * 1000 - (end - start));
+      if(end - start <= 67 * 1000) {
+        await sleep(67 * 1000 - (end - start));
       }
     } catch(err) {
       console.log(err);
