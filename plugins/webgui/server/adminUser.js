@@ -1,4 +1,23 @@
 const user = appRequire('plugins/user/index');
+const refUser = appRequire('plugins/webgui_ref/user');
+const account = appRequire('plugins/account/index');
+
+exports.getOneUser = async (req, res) => {
+  try {
+    const userId = +req.params.userId;
+    const userInfo = await user.getOne(userId);
+    const userAccount = await account.getAccount();
+    userInfo.account = userAccount.filter(f => {
+      return f.userId === +userId;
+    });
+    const ref = await refUser.getRefSourceUser(userId);
+    userInfo.ref = ref;
+    return res.send(userInfo);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
 
 exports.getUsers = (req, res) => {
   const page = +req.query.page || 1;
@@ -53,6 +72,17 @@ exports.addUser = (req, res) => {
     result.throw();
   }).then(success => {
     return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.editUserComment = (req, res) => {
+  const userId = +req.params.userId;
+  const comment = req.body.comment;
+  user.editUser({ id: userId }, { comment }).then(success => {
+    res.send('success');
   }).catch(err => {
     console.log(err);
     res.status(403).end();

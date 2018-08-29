@@ -109,13 +109,14 @@ app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
 app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 
 app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
-app.get('/api/admin/user/:userId(\\d+)', isAdmin, admin.getOneUser);
+app.get('/api/admin/user/:userId(\\d+)', isAdmin, adminUser.getOneUser);
 app.get('/api/admin/admin/:userId(\\d+)', isAdmin, admin.getOneAdmin);
 app.post('/api/admin/user/:userId(\\d+)/sendEmail', isAdmin, admin.sendUserEmail);
 app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUserAccount);
 app.delete('/api/admin/user/:userId(\\d+)', isAdmin, admin.deleteUser);
 app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.deleteUserAccount);
 app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
+app.put('/api/admin/user/:userId(\\d+)/comment', isAdmin, isSuperAdmin, adminUser.editUserComment);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
 app.get('/api/admin/alipay/csv', isAdmin, isSuperAdmin, admin.getCsvOrders);
