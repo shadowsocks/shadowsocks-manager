@@ -109,8 +109,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog', 'setGroupDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog, setGroupDialog) => {
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', 'editUserCommentDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog', 'setGroupDialog',
+  ($scope, $state, $stateParams, $http, editUserCommentDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog, setGroupDialog) => {
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
@@ -238,6 +238,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       }).catch(() => {
 
       });
+    };
+    $scope.editComment = () => {
+      editUserCommentDialog.show($scope.user.id, $scope.user.comment);
     };
   }
 ])

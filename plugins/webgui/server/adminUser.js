@@ -81,7 +81,7 @@ exports.addUser = (req, res) => {
 exports.editUserComment = (req, res) => {
   const userId = +req.params.userId;
   const comment = req.body.comment;
-  user.editUser({ id: userId }, { comment }).then(success => {
+  user.edit({ id: userId }, { comment }).then(success => {
     res.send('success');
   }).catch(err => {
     console.log(err);

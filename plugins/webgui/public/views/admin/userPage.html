@@ -41,10 +41,10 @@
                         </div>
                     </md-list-item>
                     <md-divider ng-if="id === 1"></md-divider>
-                    <md-list-item>
+                    <md-list-item ng-click="editComment()">
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="30">备注</div>
-                            <div flex="70" style="text-align: right;">{{ user.comment }}</div>
+                            <div flex="70" style="text-align: right;">{{ user.comment || '（空）' }}</div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
