@@ -401,7 +401,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
             const portArray = success.map(m => m.port);
             let myPort;
             if(orderPorts.length) {
-              for(p of orderPorts) {
+              for(const p of orderPorts) {
                 if(portArray.indexOf(p) < 0) {
                   myPort = p; break;
                 }
