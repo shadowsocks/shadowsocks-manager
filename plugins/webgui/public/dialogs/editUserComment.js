@@ -38,7 +38,7 @@ app.factory('editUserCommentDialog', [ '$mdDialog', '$http', ($mdDialog, $http) 
     $http.put(`/api/admin/user/${ publicInfo.userId }/comment`, {
       comment: publicInfo.comment
     }).then(() => {
-      publicInfo.status = 'success';
+      close();
     }).catch(() => {
       publicInfo.status = 'error';
     });

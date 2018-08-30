@@ -12,9 +12,6 @@
                   </md-input-container>
               </form>
           </div>
-          <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'success'">
-              <div style="margin-bottom: 20px;" translate>修改备注成功</div>
-          </div>
           <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'error'">
               <div style="margin-bottom: 20px;" translate>修改备注失败</div>
           </div>
@@ -25,9 +22,9 @@
           {{ '取消' | translate }}
       </md-button>
       <md-button class="md-primary" ng-click="publicInfo.editComment()" ng-if="publicInfo.status === 'show'">
-          {{ '确定' | translate }}
+          {{ '保存' | translate }}
       </md-button>
-      <md-button class="md-primary" ng-click="publicInfo.close()" ng-if="publicInfo.status === 'success' || publicInfo.status === 'error'">
+      <md-button class="md-primary" ng-click="publicInfo.close()" ng-if="publicInfo.status === 'error'">
           {{ '确定' | translate }}
       </md-button>
   </md-dialog-actions>

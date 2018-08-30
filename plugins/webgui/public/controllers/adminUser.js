@@ -240,7 +240,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       });
     };
     $scope.editComment = () => {
-      editUserCommentDialog.show($scope.user.id, $scope.user.comment);
+      editUserCommentDialog.show($scope.user.id, $scope.user.comment).then(() => {
+        getUserData();
+      });
     };
   }
 ])
