@@ -110,7 +110,7 @@ app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 
 app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
 app.get('/api/admin/user/:userId(\\d+)', isAdmin, adminUser.getOneUser);
-app.get('/api/admin/admin/:userId(\\d+)', isAdmin, admin.getOneAdmin);
+app.get('/api/admin/admin/:userId(\\d+)', isAdmin, adminUser.getOneAdmin);
 app.post('/api/admin/user/:userId(\\d+)/sendEmail', isAdmin, admin.sendUserEmail);
 app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUserAccount);
 app.delete('/api/admin/user/:userId(\\d+)', isAdmin, admin.deleteUser);

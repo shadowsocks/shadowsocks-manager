@@ -19,6 +19,16 @@ exports.getOneUser = async (req, res) => {
   }
 };
 
+exports.getOneAdmin = (req, res) => {
+  const userId = req.params.userId;
+  user.getOneAdmin(userId).then(success => {
+    return res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getUsers = (req, res) => {
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 20;
