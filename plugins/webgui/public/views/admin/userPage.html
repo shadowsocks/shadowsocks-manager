@@ -41,6 +41,13 @@
                         </div>
                     </md-list-item>
                     <md-divider ng-if="id === 1"></md-divider>
+                    <md-list-item ng-click="editComment()">
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="30">备注</div>
+                            <div flex="70" style="text-align: right;">{{ user.comment || '（空）' }}</div>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
               </md-list>
             <div flex layout="row" ng-if="id === 1">
                 <md-button class="md-primary" ng-click="sendEmail()">发送邮件</md-button>
@@ -94,11 +101,17 @@
 <div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refUsers.length">邀请用户 [{{ refUsers.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="user in refUsers track by $index">
-        <md-card ng-click="toRefUser(user.id)">
+        <md-card>
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <div flex="100">
+                    <div flex="70" ng-click="toRefUser(user.id)">
                         <span>{{ user.email }}</span>
+                    </div>
+                    <div flex="30" layout="row" layout-align="space-between center">
+                        <div></div>
+                        <md-button class="md-icon-button" aria-label="delete" ng-click="deleteRefUser(user.id)">
+                            <md-icon class="material-icons">close</md-icon>
+                        </md-button>
                     </div>
                 </div>
             </md-card-content>
@@ -161,6 +174,26 @@
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
                         <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refCodes.length">邀请码 [{{ refCodes.length }}]</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="code in refCodes track by $index">
+        <md-card>
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="70" style="font-size: 0.9em;">
+                        <span>{{ code.code }}</span><br><span style="font-size: 0.9em; color: #666;">{{ code.count }} / {{ code.maxUser }}</span>
+                    </div>
+                    <div flex="30" layout="row" layout-align="space-between center">
+                        <div></div>
+                        <md-button class="md-icon-button" aria-label="delete" ng-click="deleteRefCode(code.code)">
+                            <md-icon class="material-icons">close</md-icon>
+                        </md-button>
                     </div>
                 </div>
             </md-card-content>

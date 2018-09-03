@@ -17,7 +17,7 @@
                 </md-button>
             </div>
             <div ng-if="batch.status === 'AVAILABLE'">
-                <md-button class="md-primary" aria-label="export txt" download="batch{{ batch.batchNumber }}.txt" ng-href="{{ exportUrl }}"> {{ '导出 TXT' | translate }}
+                <md-button class="md-primary" aria-label="export csv" download="batch{{ batch.batchNumber }}.csv" ng-href="{{ exportUrl }}"> {{ '导出 CSV' | translate }}
                 </md-button>
             </div>
         </md-card-header>

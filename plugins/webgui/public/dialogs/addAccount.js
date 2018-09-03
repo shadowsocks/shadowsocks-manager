@@ -5,6 +5,7 @@ app.factory('addAccountDialog', [ '$mdDialog', '$http', 'configManager', 'alertD
   const config = configManager.getConfig();
   const publicInfo = {
     isGiftCardUse: config.giftcard,
+    isRefCodeUse: config.refCode,
   };
   publicInfo.isMacAddress = mac => {
     if(!mac) { return false; }
@@ -86,6 +87,22 @@ app.factory('addAccountDialog', [ '$mdDialog', '$http', 'configManager', 'alertD
       publicInfo.userAccount = success.data.account;
     });
   };
+  const addRefCode = () => {
+    publicInfo.status = 'refCode';
+    publicInfo.refCodeNumber = 1;
+    publicInfo.refUserNumber = 1;
+    publicInfo.addRefCodeForUser = () => {
+      publicInfo.isLoading = true;
+      $http.post(`/api/admin/ref/code/${ publicInfo.userId }`, {
+        number: publicInfo.refCodeNumber,
+        max: publicInfo.refUserNumber,
+      }).then(success => {
+        hide();
+      }).catch(err => {
+        alertDialog.show('添加失败', '确定');
+      });
+    };
+  };
   const next = () => {
     if(publicInfo.accountType === 'port') {
       getAccountPort();
@@ -93,6 +110,8 @@ app.factory('addAccountDialog', [ '$mdDialog', '$http', 'configManager', 'alertD
       macAddress();
     } else if(publicInfo.accountType === 'giftcard') {
       getUserAccount();
+    } else if(publicInfo.accountType === 'refCode') {
+      addRefCode();
     }
   };
   publicInfo.next = next;

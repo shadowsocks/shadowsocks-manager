@@ -2,6 +2,7 @@ const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
 const ref = appRequire('plugins/webgui_ref/index');
 const refAdmin = appRequire('plugins/webgui_ref/admin');
+const refUser = appRequire('plugins/webgui_ref/user');
 
 const setDefaultValue = (key, value) => {
   knex('webguiSetting').select().where({
@@ -341,4 +342,46 @@ exports.getRefUser = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+};
+
+exports.searchSourceUser = async (req, res) => {
+  try {
+    const search = req.body.search;
+    const users = await knex('user').select(['id', 'username']).where('username', 'like', `%${ search }%`).andWhere('id', '>', 1);
+    res.send(users);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.searchRefUser = async (req, res) => {
+  try {
+    const search = req.body.search;
+    const users = await knex('user').select([
+      'user.id as id',
+      'user.username as username',
+    ])
+    .leftJoin('webgui_ref', 'webgui_ref.userId', 'user.id')
+    .where('user.username', 'like', `%${ search }%`)
+    .where({ 'user.type': 'normal' })
+    .whereNull('webgui_ref.id');
+    res.send(users);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.setRefForUser = async (req, res) => {
+  try {
+    const sourceUserId = +req.params.sourceUserId;
+    const refUserId = +req.params.refUserId;
+    const code = req.params.code;
+    await refUser.setRefForUser(sourceUserId, refUserId, code);
+    res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
 };

@@ -5,6 +5,7 @@ const uuidv4 = require('uuid/v4');
 const account = appRequire('plugins/account/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const ref = appRequire('plugins/webgui_ref/time');
+const moment = require('moment');
 
 const dbTableName = require('./db/giftcard').tableName;
 
@@ -112,10 +113,12 @@ const orderListAndPaging = async (options = {}) => {
   const sort = options.sort || `${dbTableName}.createTime_desc`;
   const page = options.page || 1;
   const pageSize = options.pageSize || 20;
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
 
   const where = {};
   where[dbTableName + '.status'] = cardStatusEnum.used;
-  let count = knex(dbTableName).select([]).where(where);
+  let count = knex(dbTableName).select([]).where(where).whereBetween(`${dbTableName}.usedTime`, [start, end]);
   let orders = knex(dbTableName).select([
     `${dbTableName}.password as orderId`,
     `${dbTableName}.orderType`,
@@ -128,7 +131,8 @@ const orderListAndPaging = async (options = {}) => {
   .where(where)
   .orderBy(`${dbTableName}.usedTime`, 'DESC')
   .leftJoin('user', 'user.id', `${dbTableName}.user`)
-  .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`);
+  .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
+  .whereBetween(`${dbTableName}.usedTime`, [start, end]);
 
   if (filter.length) {
     count = count.whereIn(`${dbTableName}.status`, filter);

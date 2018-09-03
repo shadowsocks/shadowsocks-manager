@@ -43,6 +43,10 @@ use `node server.js` to run this program.
 ```
 npm i -g shadowsocks-manager
 ```
+You may need to use the `--unsafe-perm` flag if you receive an permission error
+```
+npm i -g shadowsocks-manager --unsafe-perm
+```
 use `ssmgr` to run this program.
 
 ### From docker:

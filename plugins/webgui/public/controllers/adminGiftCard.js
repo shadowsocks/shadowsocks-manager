@@ -35,9 +35,9 @@ app.controller('AdminGiftCardController', ['$scope', '$http', 'addGiftCardBatchD
         $scope.batch = result.data;
         const content = $scope.batch.cards
           .filter(x => x.status === 'AVAILABLE')
-          .map(x => `${x.id} ${x.password}\n`)
+          .map(x => `${x.id},${x.password}\r\n`)
           .reduce((a, b) => a + b, '');
-        const blob = new Blob([content], { type: 'text/plain' });
+        const blob = new Blob([content], { type: 'text/csv' });
         $scope.exportUrl = (window.URL || window.webkitURL).createObjectURL(blob);
       });
     };

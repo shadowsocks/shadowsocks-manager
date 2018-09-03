@@ -109,8 +109,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
   }
 ])
-.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', '$mdDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog', 'setGroupDialog',
-  ($scope, $state, $stateParams, $http, $mdDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog, setGroupDialog) => {
+.controller('AdminUserPageController', ['$scope', '$state', '$stateParams', '$http', 'editUserCommentDialog', 'adminApi', 'orderDialog', 'confirmDialog', 'emailDialog', 'addAccountDialog', 'setGroupDialog',
+  ($scope, $state, $stateParams, $http, editUserCommentDialog, adminApi, orderDialog, confirmDialog, emailDialog, addAccountDialog, setGroupDialog) => {
     $scope.setTitle('用户信息');
     $scope.setMenuButton('arrow_back', 'admin.user');
     const userId = $stateParams.userId;
@@ -124,6 +124,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         $scope.giftCardOrders = success.giftCardOrders;
         $scope.refOrders = success.refOrders;
         $scope.refUsers = success.refUsers;
+        $scope.refCodes = success.refCodes;
         $scope.user.account.forEach(f => {
           adminApi.getUserPortLastConnect(f.id).then(success => {
             f.lastConnect = success.lastConnect;
@@ -211,6 +212,37 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     });
     $scope.toRefUser = userId => {
       $state.go('admin.userPage', { userId });
+    };
+    $scope.deleteRefUser = refUserId => {
+      confirmDialog.show({
+        text: '删除该邀请关系？',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除邀请关系失败',
+        fn: function () { return $http.delete(`/api/admin/ref/${ userId }/${ refUserId }`); },
+      }).then(() => {
+        getUserData();
+      }).catch(() => {
+
+      });
+    };
+    $scope.deleteRefCode = code => {
+      confirmDialog.show({
+        text: '删除该邀请码？\n注意，邀请码对应的邀请关系也会一并删除',
+        cancel: '取消',
+        confirm: '删除',
+        error: '删除邀请码失败',
+        fn: function () { return $http.delete(`/api/admin/ref/${ code }`); },
+      }).then(() => {
+        getUserData();
+      }).catch(() => {
+
+      });
+    };
+    $scope.editComment = () => {
+      editUserCommentDialog.show($scope.user.id, $scope.user.comment).then(() => {
+        getUserData();
+      });
     };
   }
 ])

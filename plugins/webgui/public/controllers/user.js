@@ -217,17 +217,15 @@ app
 
     $scope.getServerPortData = (account, serverId) => {
       account.currentServerId = serverId;
-      const server = $scope.servers.filter(f => f.id === serverId);
-      const scale = server[0] ? server[0].scale : 1;
+      // const server = $scope.servers.filter(f => f.id === serverId);
+      // const scale = server[0] ? server[0].scale : 1;
       if(!account.isFlowOutOfLimit) { account.isFlowOutOfLimit = {}; }
       userApi.getServerPortData(account, serverId).then(success => {
         account.lastConnect = success.lastConnect;
         account.serverPortFlow = success.flow;
-        let maxFlow = 0;
         if(account.data) {
-          maxFlow = account.data.flow * (account.multiServerFlow ? 1 : scale);
+          account.isFlowOutOfLimit[serverId] = ((account.data.flow + account.data.flowPack) <= account.serverPortFlow);
         }
-        account.isFlowOutOfLimit[serverId] = maxFlow ? ( account.serverPortFlow >= maxFlow ) : false;
       });
       account.serverInfo = $scope.servers.filter(f => {
         return f.id === serverId;
@@ -246,13 +244,11 @@ app
     });
     $scope.setInterval($interval(() => {
       if(Date.now() - $localStorage.user.accountInfo.time <= 15 * 1000) { return; }
-      // if(!$scope.account.length) {
       getUserAccountInfo();
-      // }
-      userApi.updateAccount($scope.account)
-      .then(() => {
-        setAccountServerList($scope.account, $scope.servers);
-      });
+      // userApi.updateAccount($scope.account)
+      // .then(() => {
+      //   setAccountServerList($scope.account, $scope.servers);
+      // });
       $scope.account.forEach(a => {
         const currentServerId = a.currentServerId;
         userApi.getServerPortData(a, a.currentServerId, a.port).then(success => {
@@ -277,8 +273,8 @@ app
     $scope.subscribe = accountId => {
       subscribeDialog.show(accountId);
     };
-    $scope.createOrder = accountId => {
-      payDialog.choosePayType(accountId).then(success => {
+    $scope.createOrder = account => {
+      payDialog.choosePayType(account).then(success => {
         getUserAccountInfo();
       });
     };
@@ -321,8 +317,8 @@ app
     };
   }
 ])
-.controller('UserSettingsController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+.controller('UserSettingsController', ['$scope', '$state',
+  ($scope, $state) => {
     $scope.setTitle('设置');
     $scope.toPassword = () => {
       $state.go('user.changePassword');
@@ -361,8 +357,8 @@ app
     };
   }
 ])
-.controller('UserTelegramController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+.controller('UserTelegramController', ['$scope', '$http', '$interval',
+  ($scope, $http, $interval) => {
     $scope.setTitle('绑定Telegram');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $scope.isLoading = true;
@@ -383,8 +379,8 @@ app
     };
   }
 ])
-.controller('UserRefController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage', '$interval',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage, $interval) => {
+.controller('UserRefController', ['$scope', '$http',
+  ($scope, $http) => {
     $scope.setTitle('邀请码');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });

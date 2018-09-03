@@ -57,8 +57,9 @@
                 <md-divider ng-repeat-start="u in user"></md-divider>
                 <md-list-item>
                     <div layout="row" flex layout-align="space-between center">
-                        <div>{{ u.email }}</div>
-                        <div hide-xs hide-sm>{{ u.code }}</div>
+                        <div flex="30"hide-gt-sm style="font-size: 0.9em;">{{ u.email }}</div>
+                        <div flex="30" hide-xs hide-sm>{{ u.email }}</div>
+                        <div flex="15" hide-xs hide-sm>{{ u.code }}</div>
                         <div hide-xs style="text-align: center;"><span style="font-size: 0.9em;">{{ u.time | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ u.time | timeago | translateTime }}</span></div>
                         <div hide-gt-xs style="text-align: center;"><span style="font-size: 0.8em;">{{ u.time | date : 'yyyy-MM-dd'}}</span><br><span style="font-size: 0.8em;">{{ u.time | date : 'HH:mm'}}</span></div>
                     </div>

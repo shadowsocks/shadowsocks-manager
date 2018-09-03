@@ -37,6 +37,7 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
       };
       $scope.languages = [
         { id: 'zh-CN', name: '中文' },
+        { id: 'ja-JP', name: '日本語' },
         { id: 'en-US', name: 'English' },
         { id: 'ru-RU', name: 'Русский' },
       ];

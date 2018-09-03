@@ -12,54 +12,49 @@ const logger = log4js.getLogger('webgui');
 const ref = appRequire('plugins/webgui_ref/index');
 const refUser = appRequire('plugins/webgui_ref/user');
 const crypto = require('crypto');
+const flowPack = appRequire('plugins/webgui_order/flowPack');
 
 const alipay = appRequire('plugins/alipay/index');
 
-exports.getAccount = (req, res) => {
-  const userId = req.session.user;
-  account.getAccount({
-    userId,
-  }).then(success => {
-    success.forEach(f => {
-      f.data = JSON.parse(f.data);
-      if (f.type >= 2 && f.type <= 5) {
+exports.getAccount = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accounts = await account.getAccount({ userId });
+    for(let account of accounts) {
+      account.data = JSON.parse(account.data);
+      if (account.type >= 2 && account.type <= 5) {
         const time = {
           '2': 7 * 24 * 3600000,
           '3': 30 * 24 * 3600000,
           '4': 24 * 3600000,
           '5': 3600000,
         };
-        f.data.expire = f.data.create + f.data.limit * time[f.type];
-        f.data.from = f.data.create;
-        f.data.to = f.data.create + time[f.type];
-        while (f.data.to <= Date.now()) {
-          f.data.from = f.data.to;
-          f.data.to = f.data.from + time[f.type];
+        account.data.expire = account.data.create + account.data.limit * time[account.type];
+        account.data.from = account.data.create;
+        account.data.to = account.data.create + time[account.type];
+        while (account.data.to <= Date.now()) {
+          account.data.from = account.data.to;
+          account.data.to = account.data.from + time[account.type];
         }
+        account.data.flowPack = await flowPack.getFlowPack(account.id, account.data.from, account.data.to);
       }
-      f.server = f.server ? JSON.parse(f.server) : f.server;
-    });
-    res.send(success);
-  }).catch(err => {
+      account.server = account.server ? JSON.parse(account.server) : account.server;
+    }
+    res.send(accounts);
+  } catch (err) {
     console.log(err);
-    res.status(500).end();
-  });
+    res.status(403).end();
+  }
 };
 
-exports.getOneAccount = (req, res) => {
-  const userId = req.session.user;
-  const accountId = +req.params.accountId;
-  account.getAccount({
-    id: accountId,
-    userId,
-  }).then(success => {
-    if (!success.length) {
-      res.send({});
-      return;
-    }
-    const accountInfo = success[0];
-    accountInfo.data = JSON.parse(accountInfo.data);
+exports.getOneAccount = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accountId = +req.params.accountId;
+    const accountInfo = account.getAccount({ id: accountId, userId }).then(s => s[0]);
+    if(!accountInfo) { return Promise.reject('account not found'); }
     if (accountInfo.type >= 2 && accountInfo.type <= 5) {
+      accountInfo.data = JSON.parse(accountInfo.data);
       const time = {
         '2': 7 * 24 * 3600000,
         '3': 30 * 24 * 3600000,
@@ -73,12 +68,14 @@ exports.getOneAccount = (req, res) => {
         accountInfo.data.from = accountInfo.data.to;
         accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
       }
+      accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
+      accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
     }
     res.send(accountInfo);
-  }).catch(err => {
+  } catch(err) {
     console.log(err);
-    res.status(500).end();
-  });
+    res.status(403).end();
+  }
 };
 
 exports.getServers = (req, res) => {
@@ -188,8 +185,9 @@ exports.getServerPortLastConnect = (req, res) => {
 
 exports.changeShadowsocksPassword = (req, res) => {
   const accountId = +req.params.accountId;
-  const password = req.body.password;
+  let password = req.body.password;
   if (!password) { return res.status(403).end(); }
+  if (password.length > 20) { password = password.substr(0, 20); }
   const isUserHasTheAccount = (accountId) => {
     return account.getAccount({ userId: req.session.user, id: accountId }).then(success => {
       if (success.length) {
@@ -216,32 +214,6 @@ exports.createOrder = async (req, res) => {
 
     const alipayOrder = await alipay.createOrder(userId, accountId, orderId);
     return res.send(alipayOrder);
-    // let type;
-    // let amount;
-    // if (orderType === 'week') { type = 2; }
-    // else if (orderType === 'month') { type = 3; }
-    // else if (orderType === 'day') { type = 4; }
-    // else if (orderType === 'hour') { type = 5; }
-    // else if (orderType === 'season') { type = 6; }
-    // else if (orderType === 'year') { type = 7; }
-    // else { return res.status(403).end(); }
-    // knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(success => {
-    //   if (!success.length) {
-    //     return Promise.reject('settings not found');
-    //   }
-    //   success[0].value = JSON.parse(success[0].value);
-    //   return success[0].value;
-    // }).then(success => {
-    //   amount = success[orderType].alipay;
-    //   return alipay.createOrder(userId, accountId, amount, type);
-    // }).then(success => {
-    //   return res.send(success);
-    // }).catch(err => {
-    //   console.log(err);
-    //   res.status(403).end();
-    // });
   } catch(err) {
     console.log(err);
     res.status(403).end();
@@ -270,6 +242,7 @@ exports.getPrice = async (req, res) => {
     const accountId = +req.query.accountId;
     let accountInfo;
     let changeOrderTypeId = 0;
+    let orderInfo;
     const isExpired = account => {
       if(!account) { return true; }
       const accountData = JSON.parse(account.data);
@@ -283,10 +256,10 @@ exports.getPrice = async (req, res) => {
       return expire <= Date.now();
     };
     if(accountId) {
-      const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
       if(orderInfo && !orderInfo.changeOrderType) {
         changeOrderTypeId = orderInfo.id;
-        accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
       }
     }
     const groupId = req.userInfo.group;
@@ -296,11 +269,20 @@ exports.getPrice = async (req, res) => {
       orders = orders.filter(f => {
         return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
       });
+      if(orderInfo) {
+        orders = orders.filter(f => {
+          if(!f.baseId) { return true; }
+          if(f.baseId === orderInfo.id && !isExpired(accountInfo)) { return true; }
+          return false;
+        });
+      } else {
+        orders = orders.filter(f => !f.baseId);
+      }
     }
     let currentOrder = [];
     if(changeOrderTypeId && !isExpired(accountInfo)) {
       currentOrder = orders.filter(f => {
-        return f.id === changeOrderTypeId;
+        return (f.id === changeOrderTypeId || f.baseId === changeOrderTypeId);
       });
     }
     return res.send(currentOrder.length ? currentOrder : orders);
@@ -327,14 +309,6 @@ exports.getNotice = async (req, res) => {
     console.log(err);
     res.status(403).end();
   }
-  
-  
-  // knex('notice').select().orderBy('time', 'desc').then(success => {
-  //   return res.send(success);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(403).end();
-  // });
 };
 
 exports.getAlipayStatus = (req, res) => {
@@ -367,38 +341,8 @@ exports.createPaypalOrder = async (req, res) => {
     const userId = req.session.user;
     const accountId = req.body.accountId;
     const orderId = req.body.orderId;
-    // const orderInfo = await orderPlugin.getOneOrder(orderId);
-    // const type = orderInfo.type;
-    // const amount = orderInfo.paypal;
     const paypalOrder = await paypal.createOrder(userId, accountId, orderId);
     return res.send(paypalOrder);
-    // let type;
-    // let amount;
-    // if (orderType === 'week') { type = 2; }
-    // else if (orderType === 'month') { type = 3; }
-    // else if (orderType === 'day') { type = 4; }
-    // else if (orderType === 'hour') { type = 5; }
-    // else if (orderType === 'season') { type = 6; }
-    // else if (orderType === 'year') { type = 7; }
-    // else { return res.status(403).end(); }
-    // amount = config.plugins.account.pay[orderType].price;
-    // knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(success => {
-    //   if (!success.length) {
-    //     return Promise.reject('settings not found');
-    //   }
-    //   success[0].value = JSON.parse(success[0].value);
-    //   return success[0].value;
-    // }).then(success => {
-    //   amount = success[orderType].paypal;
-    //   return paypal.createOrder(userId, accountId, amount, type);
-    // }).then(success => {
-    //   res.send(success);
-    // })
-    // .catch(error => {
-    //   res.status(403).end();
-    // });
   } catch(err) {
     console.log(err);
     res.status(403).end();
@@ -467,20 +411,9 @@ exports.payByGiftCard = async (req, res) => {
   }
   try {
     const checkGiftcardType = async () => {
-      if(!accountId) { return false; }
-      const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
-      if(!orderInfo || orderInfo.changeOrderType) { return false; }
-      const changeOrderTypeId = orderInfo.id;
-      const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
-      const groupId = req.userInfo.group;
-      let orders = await orderPlugin.getOrders();
-      const groupSetting = await groupPlugin.getOneGroup(groupId);
-      if(groupSetting.order) {
-        orders = orders.filter(f => {
-          return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
-        });
-      }
-      let currentOrder = [];
+      let accountInfo;
+      let changeOrderTypeId = 0;
+      let orderInfo;
       const isExpired = account => {
         if(!account) { return true; }
         const accountData = JSON.parse(account.data);
@@ -493,18 +426,79 @@ exports.payByGiftCard = async (req, res) => {
         const expire = accountData.create + time[account.type] * accountData.limit;
         return expire <= Date.now();
       };
-      if(changeOrderTypeId && !isExpired(accountInfo)) {
-        currentOrder = orders.filter(f => {
-          return f.id === changeOrderTypeId;
-        });
-      }
-      const giftCardInfo = await knex('giftcard').where({ password }).then(s => s[0]);
-      if(currentOrder.length && giftCardInfo) {
-        if(giftCardInfo.orderType !== currentOrder[0].id) {
-          return true;
+      if(accountId) {
+        orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+        accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+        if(orderInfo && !orderInfo.changeOrderType) {
+          changeOrderTypeId = orderInfo.id;
         }
       }
-      return false;
+      const groupId = req.userInfo.group;
+      let orders = await orderPlugin.getOrders();
+      const groupSetting = await groupPlugin.getOneGroup(groupId);
+      if(groupSetting.order) {
+        orders = orders.filter(f => {
+          return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
+        });
+        if(orderInfo) {
+          orders = orders.filter(f => {
+            if(!f.baseId) { return true; }
+            if(f.baseId === orderInfo.id && !isExpired(accountInfo)) { return true; }
+            return false;
+          });
+        } else {
+          orders = orders.filter(f => !f.baseId);
+        }
+      }
+      let currentOrder = [];
+      if(changeOrderTypeId && !isExpired(accountInfo)) {
+        currentOrder = orders.filter(f => {
+          return (f.id === changeOrderTypeId || f.baseId === changeOrderTypeId);
+        });
+      }
+      // return res.send(currentOrder.length ? currentOrder : orders);
+      const giftCardInfo = await knex('giftcard').where({ password }).then(s => s[0]);
+      const validTypes = currentOrder.length ? currentOrder.map(m => m.id) : orders.map(m => m.id);
+      return validTypes.indexOf(giftCardInfo.orderType) < 0;
+
+      // if(!accountId) { return false; }
+      // const orderInfo = await orderPlugin.getOneOrderByAccountId(accountId);
+      // if(!orderInfo || orderInfo.changeOrderType) { return false; }
+      // const changeOrderTypeId = orderInfo.id;
+      // const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+      // const groupId = req.userInfo.group;
+      // let orders = await orderPlugin.getOrders();
+      // const groupSetting = await groupPlugin.getOneGroup(groupId);
+      // if(groupSetting.order) {
+      //   orders = orders.filter(f => {
+      //     return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
+      //   });
+      // }
+      // let currentOrder = [];
+      // const isExpired = account => {
+      //   if(!account) { return true; }
+      //   const accountData = JSON.parse(account.data);
+      //   const time = {
+      //     '2': 7 * 24 * 3600000,
+      //     '3': 30 * 24 * 3600000,
+      //     '4': 24 * 3600000,
+      //     '5': 3600000,
+      //   };
+      //   const expire = accountData.create + time[account.type] * accountData.limit;
+      //   return expire <= Date.now();
+      // };
+      // if(changeOrderTypeId && !isExpired(accountInfo)) {
+      //   currentOrder = orders.filter(f => {
+      //     return f.id === changeOrderTypeId;
+      //   });
+      // }
+      // const giftCardInfo = await knex('giftcard').where({ password }).then(s => s[0]);
+      // if(currentOrder.length && giftCardInfo) {
+      //   if(giftCardInfo.orderType !== currentOrder[0].id) {
+      //     return true;
+      //   }
+      // }
+      // return false;
     };
     
     if(await checkGiftcardType()) {

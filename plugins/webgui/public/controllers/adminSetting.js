@@ -587,6 +587,9 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
     $scope.toUser = userId => {
       $state.go('admin.userPage', { userId });
     };
+    $scope.setFabButton(() => {
+      $state.go('admin.addRefUser');
+    });
   }
 ])
 .controller('AdminMyRefCodeController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
@@ -604,5 +607,54 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $scope.toast('邀请链接已复制到剪贴板');
     };
   }
+])
+.controller('AdminAddRefUserController', ['$scope', '$http', '$timeout', '$state', '$mdMedia', 'alertDialog',
+  ($scope, $http, $timeout, $state, $mdMedia, alertDialog) => {
+    $scope.setTitle('添加邀请关系');
+    $scope.setMenuButton('arrow_back', function() {
+      $state.go('admin.refUserList');
+    });
+    $scope.refCode = [];
+    $scope.sourceUserCode = '';
+    const getRefCode = userId => {
+      $http.get(`/api/admin/ref/code/${ userId }`).then(success => {
+        $scope.refCode = success.data;
+        if($scope.refCode.length) { $scope.sourceUserCode = $scope.refCode[0].code; }
+      });
+    };
+    $scope.sourceUser = {
+      search: '',
+      searchChange: function(search) {
+      },
+      selectedItemChange: function(item) {
+        $scope.sourceUser.selectedItem = item;
+        if(item && item.id) { getRefCode(item.id); };
+      },
+      querySearch: function(search) {
+        return $http.post('/api/admin/setting/ref/searchSourceUser', { search }).then(success => success.data);
+      }
+    };
+    $scope.refUser = {
+      search: '',
+      searchChange: function(search) {
+      },
+      selectedItemChange: function(item) {
+        $scope.refUser.selectedItem = item;
+      },
+      querySearch: function(search) {
+        return $http.post('/api/admin/setting/ref/searchRefUser', { search }).then(success => success.data);
+      }
+    };
+    $scope.confirm = () => {
+      $http.post(`/api/admin/setting/ref/${ $scope.sourceUser.selectedItem.id }/${ $scope.refUser.selectedItem.id }/${ $scope.sourceUserCode }`)
+      .then(success => {
+        $state.go('admin.refUserList');
+      }).catch(err => {
+        alertDialog.show('添加失败', '确定');
+      });
+    };
+    $scope.cancel = () => {
+      $state.go('admin.refUserList');
+    };
+  }
 ]);
-;

@@ -45,9 +45,7 @@ const edit = async options => {
       }
     })(serverInfo);
   }
-  if(check) {
-    accountFlow.editServer(id);
-  }
+  if(check) { accountFlow.editServer(id); }
   return knex('server').where({ id }).update({
     name,
     comment,

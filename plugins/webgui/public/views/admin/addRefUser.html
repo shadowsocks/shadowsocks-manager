@@ -1,0 +1,63 @@
+<div layout="column">
+    <div flex="15"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <div style="height: 30px;"></div>
+            <form name="accountForm">
+                <md-autocomplete
+                    md-selected-item="sourceUser.selectedItem"
+                    md-search-text-change="sourceUser.searchChange(sourceUser.search)"
+                    md-search-text="sourceUser.search"
+                    md-selected-item-change="sourceUser.selectedItemChange(item)"
+                    md-items="item in sourceUser.querySearch(sourceUser.search)"
+                    md-item-text="item.username"
+                    md-delay="750"
+                    md-require-match="true"
+                    placeholder="邀请人邮箱">
+                    <md-item-template>
+                        <span md-highlight-text="sourceUser.search" md-highlight-flags="^i">{{ item.username }}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        没有匹配的用户
+                    </md-not-found>
+                </md-autocomplete>
+                <div style="height: 30px;"></div>
+                <md-input-container class="md-block">
+                    <label translate>邀请码</label>
+                    <md-select ng-model="sourceUserCode" flex="100">
+                        <md-option ng-repeat="code in refCode" value="{{code.code}}" translate>{{ code.code }}</md-option>
+                    </md-select>
+                </md-input-container>
+                <div style="height: 30px;"></div>
+                <md-autocomplete
+                    md-selected-item="refUser.selectedItem"
+                    md-search-text-change="refUser.searchChange(refUser.search)"
+                    md-search-text="refUser.search"
+                    md-selected-item-change="refUser.selectedItemChange(item)"
+                    md-items="item in refUser.querySearch(refUser.search)"
+                    md-item-text="item.username"
+                    md-delay="750"
+                    md-require-match="true"
+                    placeholder="被邀请用户邮箱">
+                    <md-item-template>
+                        <span md-highlight-text="refUser.search" md-highlight-flags="^i">{{ item.username }}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        没有匹配的用户
+                    </md-not-found>
+                </md-autocomplete>
+                <div style="height: 30px;"></div>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!sourceUser.selectedItem || !refUser.selectedItem || !sourceUserCode">确认</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+</div>

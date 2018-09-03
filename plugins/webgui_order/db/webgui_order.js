@@ -59,14 +59,28 @@ const createTable = async () => {
         table.string('portRange').defaultTo('0');
       });
     }
+    const hasShortComment = await knex.schema.hasColumn(tableName, 'shortComment');
+    if(!hasShortComment) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('shortComment').defaultTo('');
+      });
+    }
+    const hasBaseId = await knex.schema.hasColumn(tableName, 'baseId');
+    if(!hasBaseId) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('baseId').defaultTo(0);
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
   }
   await knex.schema.createTableIfNotExists(tableName, function(table) {
     table.increments('id').primary();
+    table.integer('baseId').defaultTo(0);
     table.string('name');
-    table.string('comment').defaultTo('');
+    table.string('shortComment').defaultTo('');
+    table.string('comment', 16384).defaultTo('');
     table.integer('type');
     table.integer('cycle');
     table.float('alipay');

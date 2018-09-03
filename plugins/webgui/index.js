@@ -55,6 +55,14 @@ app.set('views', path.resolve('./plugins/webgui/views'));
 app.use('/libs', express.static(path.resolve('./plugins/webgui/libs')));
 app.use('/public', express.static(path.resolve('./plugins/webgui/public')));
 
+app.use('/api/*', (req, res, next) => {
+  res.setHeader('Surrogate-Control', 'no-store');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
 const port = config.plugins.webgui.port || 8080;
 const host = config.plugins.webgui.host || '0.0.0.0';
 app.listen(port, host, () => {

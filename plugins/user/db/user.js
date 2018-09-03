@@ -10,6 +10,12 @@ const createTable = async() => {
         table.integer('group').defaultTo(0);
       });
     }
+    const hasComment = await knex.schema.hasColumn(tableName, 'comment');
+    if(!hasComment) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('comment').defaultTo('');
+      });
+    }
     return;
   }
   return knex.schema.createTableIfNotExists(tableName, function(table) {
@@ -24,6 +30,7 @@ const createTable = async() => {
     table.string('resetPasswordId');
     table.bigInteger('resetPasswordTime');
     table.integer('group').defaultTo(0);
+    table.string('comment').defaultTo('');
   });
 };
 

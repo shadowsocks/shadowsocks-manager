@@ -5,6 +5,33 @@ const getOrders = async () => {
   return knex('webgui_order').where({});
 };
 
+const getOrdersAndAccountNumber = async () => {
+  const orders = await knex('webgui_order').select([
+    'webgui_order.id as id',
+    'webgui_order.baseId as baseId',
+    'webgui_order.name as name',
+    'webgui_order.shortComment as shortComment',
+    'webgui_order.comment as comment',
+    'webgui_order.type as type',
+    'webgui_order.cycle as cycle',
+    'webgui_order.alipay as alipay',
+    'webgui_order.paypal as paypal',
+    'webgui_order.flow as flow',
+    'webgui_order.refTime as refTime',
+    'webgui_order.server as server',
+    'webgui_order.autoRemove as autoRemove',
+    'webgui_order.autoRemoveDelay as autoRemoveDelay',
+    'webgui_order.portRange as portRange',
+    'webgui_order.multiServerFlow as multiServerFlow',
+    'webgui_order.changeOrderType as changeOrderType',
+    'webgui_order.autoRemove as autoRemove',
+    knex.raw('count(account_plugin.id) as accountNumber'),
+  ])
+  .leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
+  .groupBy('webgui_order.id');
+  return orders;
+};
+
 const getOneOrder = async orderId => {
   const order = await knex('webgui_order').where({ id: orderId }).then(s => s[0]);
   if(!order) { return Promise.reject('order not found'); }
@@ -22,7 +49,9 @@ const getOneOrderByAccountId = async accountId => {
 
 const newOrder = async data => {
   await knex('webgui_order').insert({
+    baseId: data.baseId,
     name: data.name,
+    shortComment: data.shortComment,
     comment: data.comment,
     type: data.type,
     cycle: data.cycle,
@@ -42,7 +71,9 @@ const newOrder = async data => {
 
 const editOrder = async data => {
   await knex('webgui_order').update({
+    baseId: data.baseId,
     name: data.name,
+    shortComment: data.shortComment,
     comment: data.comment,
     type: data.type,
     cycle: data.cycle,
@@ -73,6 +104,7 @@ const deleteOrder = async orderId => {
 };
 
 exports.getOrders = getOrders;
+exports.getOrdersAndAccountNumber = getOrdersAndAccountNumber;
 exports.getOneOrder = getOneOrder;
 exports.newOrder = newOrder;
 exports.editOrder = editOrder;

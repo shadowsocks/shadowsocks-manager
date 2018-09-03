@@ -125,9 +125,13 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }],
     clickOutsideToClose: false,
   };
-  const choosePayType = accountId => {
+  const choosePayType = account => {
     publicInfo.status = 'type';
-    publicInfo.accountId = accountId;
+    publicInfo.account = account;
+    publicInfo.accountId = account ? account.id : null;
+    if(account) {
+      publicInfo.orderId = account.orderId;
+    }
     dialogPromise = $mdDialog.show(dialog);
     if(publicInfo.payType.length === 1) {
       publicInfo.jumpToPayPage();
@@ -139,23 +143,12 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     $http.get('/api/user/order/price', {
       params: { accountId: publicInfo.accountId }
     }).then(success => {
-      publicInfo.orders = success.data;
-      // publicInfo.alipay = success.data.alipay;
-      // publicInfo.paypal = success.data.paypal;
-      // if(publicInfo.myPayType === 'alipay') {
-      //   if(success.data.alipay.month) {
-      //     publicInfo.orderType = 'month';
-      //   } else {
-      //     publicInfo.orderType = Object.keys(success.data.alipay)[0];
-      //   }
-      // }
-      // if(publicInfo.myPayType === 'paypal') {
-      //   if(success.data.paypal.month) {
-      //     publicInfo.orderType = 'month';
-      //   } else {
-      //     publicInfo.orderType = Object.keys(success.data.paypal)[0];
-      //   }
-      // }
+      publicInfo.orders = success.data.sort((a, b) => {
+        if(a.baseId > 0 && b.baseId === 0) { return 1; }
+        if(a.baseId === 0 && b.baseId > 0) { return -1; }
+        return a[publicInfo.myPayType] >= b[publicInfo.myPayType];
+      });
+      if(publicInfo.orderId) { publicInfo.setOrder(publicInfo.orderId); }
       $timeout(() => {
         publicInfo.status = 'choose';
       }, 125);
@@ -193,8 +186,29 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
       chooseOrderType();
     }
   };
+  const showComment = () => {
+    publicInfo.comment = publicInfo.selectedOrder.comment;
+    if(!publicInfo.comment) {
+      publicInfo.createOrder();
+    } else {
+      publicInfo.status = 'comment';
+      publicInfo.time = 3;
+      $interval(() => {
+        if(publicInfo.time >= 1) {
+          publicInfo.time--;
+        }
+      }, 1000, 3);
+    }
+  };
   publicInfo.jumpToPayPage = jumpToPayPage;
   publicInfo.payByGiftCard = payByGiftCard;
+  publicInfo.showComment = showComment;
+  const setOrder = orderId => {
+    publicInfo.selectedOrder = publicInfo.orders.filter(f => {
+      return f.id === +orderId;
+    })[0];
+  };
+  publicInfo.setOrder = setOrder;
   return {
     choosePayType,
     chooseOrderType,

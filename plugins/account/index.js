@@ -126,14 +126,12 @@ const editAccount = async (id, options) => {
   }
   if(options.type === 1) {
     update.data = null;
-    // update.port = +options.port;
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
       flow: options.flow || 1 * 1000 * 1000 * 1000,
       limit: options.limit || 1,
     });
-    // update.port = +options.port;
   }
   if(options.port) {
     update.port = +options.port;
@@ -314,13 +312,17 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
 
 const setAccountLimit = async (userId, accountId, orderId) => {
   const orderInfo = await orderPlugin.getOneOrder(orderId);
-  // const payType = {
-  //   week: 2, month: 3, day: 4, hour: 5, season: 6, year: 7,
-  // };
-  // let paymentType;
+  if(orderInfo.baseId) {
+    await knex('webgui_flow_pack').insert({
+      accountId,
+      flow: orderInfo.flow,
+      createTime: Date.now(),
+    });
+    await accountFlow.edit(accountId);
+    return;
+  }
   const limit = orderInfo.cycle;
   const orderType = orderInfo.type;
-  // const flow = {};
   let account;
   if(accountId) {
     account = await knex('account_plugin').select().where({ id: accountId }).then(success => {
@@ -399,7 +401,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
             const portArray = success.map(m => m.port);
             let myPort;
             if(orderPorts.length) {
-              for(p of orderPorts) {
+              for(const p of orderPorts) {
                 if(portArray.indexOf(p) < 0) {
                   myPort = p; break;
                 }
@@ -707,6 +709,27 @@ const getAccountForSubscribe = async (token, ip) => {
   return { server: validServers, account };
 };
 
+const editMultiAccounts = async (orderId, update) => {
+  const accounts = await knex('account_plugin').where({ orderId });
+  const updateData = {};
+  for(const account of accounts) {
+    if(update.hasOwnProperty('flow')) {
+      const accountData = JSON.parse(account.data);
+      accountData.flow = update.flow;
+      updateData.data = JSON.stringify(accountData);
+    }
+    if(update.hasOwnProperty('server')) {
+      updateData.server = update.server ? JSON.stringify(update.server): null;
+    }
+    if(update.hasOwnProperty('autoRemove')) {
+      updateData.autoRemove = update.autoRemove;
+    }
+    if(Object.keys(updateData).length === 0) { break; }
+    await knex('account_plugin').update(updateData).where({ id: account.id });
+    await await accountFlow.edit(account.id);
+  }
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -726,3 +749,5 @@ exports.banAccount = banAccount;
 exports.getBanAccount = getBanAccount;
 
 exports.getAccountForSubscribe = getAccountForSubscribe;
+
+exports.editMultiAccounts = editMultiAccounts;

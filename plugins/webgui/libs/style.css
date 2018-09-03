@@ -72,3 +72,12 @@ md-sidenav.md-closed.md-locked-open-add-active {
 .search-input > .md-errors-spacer {
   min-height: 0px;
 }
+
+.markdown-table table {
+  border-collapse: collapse;
+}
+
+.markdown-table table, .markdown-table th, .markdown-table td {
+  padding: 5px;
+  border: 1px solid #999999;
+}

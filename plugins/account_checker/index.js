@@ -53,6 +53,7 @@ const isExpired = (server, account) => {
     if(account.type === 5) { timePeriod = 3600 * 1000; }
     const data = JSON.parse(account.data);
     const expireTime = data.create + data.limit * timePeriod;
+    account.expireTime = expireTime;
     if(expireTime <= Date.now() || data.create >= Date.now()) {
       const nextCheckTime = 10 * 60 * 1000 + randomInt(30000);
       if(account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
@@ -62,6 +63,8 @@ const isExpired = (server, account) => {
         modifyAccountFlow(server.id, account.id, nextCheckTime);
       }
       return true;
+    } else {
+      return false;
     }
   } else {
     return false;
@@ -91,7 +94,7 @@ const isOverFlow = async (server, account) => {
       await knex('account_flow').update({
         flow,
         checkTime: Date.now(),
-        nextCheckTime: Date.now() + time,
+        nextCheckTime: Date.now() + Math.ceil(time),
       }).where({ id: exists.id });
     }
   };
@@ -140,10 +143,19 @@ const isOverFlow = async (server, account) => {
       if(+s === server.id) { realFlow = flow; }
       sumFlow += Math.ceil(flow * serverObj[s].scale);
     }
-    const nextCheckTime = (data.flow - sumFlow) / 200000000 * 60 * 1000;
-    await writeFlow(server.id, account.id, realFlow, nextCheckTime <= 0 ? 600 * 1000 : nextCheckTime);
+    
+    const flowPacks = await knex('webgui_flow_pack').where({ accountId: account.id }).whereBetween('createTime', [startTime, endTime]);
+    const flowWithFlowPacks = flowPacks.reduce((a, b) => {
+      return { flow: a.flow + b.flow };
+    }, { flow: data.flow }).flow;
+  
+    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000 / server.scale;
+    if(nextCheckTime >= account.expireTime - Date.now() && account.expireTime - Date.now() > 0) { nextCheckTime = account.expireTime - Date.now() }
+    if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
+    if(nextCheckTime >= 3 * 60 * 60 * 1000) { nextCheckTime = 3 * 60 * 60 * 1000; }
+    await writeFlow(server.id, account.id, realFlow, nextCheckTime);
 
-    return sumFlow >= data.flow;
+    return sumFlow >= flowWithFlowPacks;
   } else {
     await writeFlow(server.id, account.id, 0, 30 * 60 * 1000 + Number(Math.random().toString().substr(2, 7)));
     return false;
@@ -252,8 +264,8 @@ const checkAccount = async (serverId, accountId) => {
       const start = Date.now();
       await sleep(sleepTime);
       const servers = await knex('server').where({});
-      for(let server of servers) {
-        await sleep(sleepTime);
+      for(const server of servers) {
+        await sleep(1000);
         await deleteExtraPorts(server);
       }
       await sleep(sleepTime);
@@ -270,8 +282,8 @@ const checkAccount = async (serverId, accountId) => {
         await accountFlow.add(account.id);
       }
       const end = Date.now();
-      if(end - start <= 61 * 1000) {
-        await sleep(61 * 1000 - (end - start));
+      if(end - start <= 67 * 1000) {
+        await sleep(67 * 1000 - (end - start));
       }
     } catch(err) {
       console.log(err);
@@ -296,7 +308,7 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { console.log(err); }
     try {
       const datas = await knex('account_flow').select()
-      .orderBy('updateTime', 'desc').limit(15);
+      .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000).limit(15);
       accounts = [...accounts, ...datas];
     } catch(err) { console.log(err); }
     try {

@@ -42,8 +42,10 @@ const orderListAndPaging = async (options = {}) => {
   const sort = options.sort || 'webgui_ref_time.createTime_desc';
   const page = options.page || 1;
   const pageSize = options.pageSize || 20;
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
 
-  let count = knex('webgui_ref_time').select();
+  let count = knex('webgui_ref_time').select().whereBetween('webgui_ref_time.createTime', [start, end]);
   let orders = knex('webgui_ref_time').select([
     'webgui_ref_time.orderId',
     'user.id as userId',
@@ -55,7 +57,8 @@ const orderListAndPaging = async (options = {}) => {
     'webgui_ref_time.createTime',
   ])
   .leftJoin('user', 'user.id', 'webgui_ref_time.user')
-  .leftJoin('account_plugin', 'account_plugin.id', 'webgui_ref_time.account');
+  .leftJoin('account_plugin', 'account_plugin.id', 'webgui_ref_time.account')
+  .whereBetween('webgui_ref_time.createTime', [start, end]);
 
   if(filter.length) {
     count = count.whereIn('webgui_ref_time.status', filter);

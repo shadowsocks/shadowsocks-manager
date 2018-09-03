@@ -172,3 +172,10 @@ self.addEventListener('push', function (event) {
       icon: '/favicon.png',
     }));
 });
+
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  event.waitUntil(
+    clients.openWindow(self.registration.scope)
+  );
+});

@@ -25,15 +25,17 @@
             </div>
             <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'choose'">
                 <div style="margin-bottom: 20px;" translate>请选择续费周期：</div>
-                <md-radio-group ng-model="publicInfo.orderId" flex style="width: 100%;">
-                    <md-radio-button layout="row" layout-align="center center" style="width: 100%;" ng-repeat="order in publicInfo.orders" value="{{order.id}}" ng-hide="order[publicInfo.myPayType] === 0">
-                        <div layout="row" layout-align="space-between center" style="min-width: 200px; max-width: 390px;">
-                            <span flex="50" translate>{{order.name}}</span>
-                            <span flex="50" style="text-align:right; color: #888">
+                <md-radio-group ng-model="publicInfo.orderId" ng-change="publicInfo.setOrder(publicInfo.orderId)" flex>
+                    <md-radio-button style="margin-top: 15px; margin-bottom: 5px; width: 100%;" layout="row" layout-align="center center" ng-repeat-start="order in publicInfo.orders" value="{{order.id}}" ng-hide="order[publicInfo.myPayType] === 0">
+                        <div layout="row" layout-align="space-between center" style="min-width: 210px; max-width: 390px;">
+                            <span flex="80" translate>{{order.name}}</span>
+                            <span flex="20" style="text-align:right; color: #888">
                                 <span>{{ publicInfo.myPayType === 'alipay' ? '￥' : '$' }}</span><span>{{ order[publicInfo.myPayType] }}</span>
                             </span>
                         </div>
                     </md-radio-button>
+                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-show="+publicInfo.orderId === +order.id && order.shortComment">{{ order.shortComment }}</div>
+                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-if="publicInfo.selectedOrder.baseId" ng-show="+publicInfo.orderId === +order.id" ng-repeat-end>有效期：{{ publicInfo.account.data.to | date : 'yyyy-MM-dd HH:mm' }}</div>
                 </md-radio-group>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'giftcard'">
@@ -51,6 +53,9 @@
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'error'">
                 <div style="margin-bottom: 20px;">支付失败</div>
                 <div style="margin-bottom: 20px;">{{ publicInfo.message }}</div>
+            </div>
+            <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'comment'">
+                <div class="markdown-table" marked="publicInfo.comment"></div>
             </div>
         </div>
     </md-dialog-content>
@@ -70,11 +75,17 @@
         <md-button class="md-primary" ng-show="publicInfo.status === 'choose'" ng-click="publicInfo.close()">
             {{ '取消' | translate }}
         </md-button>
-        <md-button class="md-primary" ng-show="publicInfo.status === 'choose'" ng-click="publicInfo.createOrder()" ng-disabled="!publicInfo.orderId">
-            {{ '下一步' | translate }}
+        <md-button class="md-primary" ng-show="publicInfo.status === 'choose'" ng-click="publicInfo.showComment()" ng-disabled="!publicInfo.orderId">
+            {{ publicInfo.selectedOrder.comment ? '详情' : '支付' | translate }}
         </md-button>
         <md-button class="md-primary" ng-show="publicInfo.status === 'pay' || publicInfo.status === 'success' || publicInfo.status === 'error'" ng-click="publicInfo.close()">
             {{ '关闭' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.jumpToPayPage()">
+            {{ '返回' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.createOrder()" ng-disabled="publicInfo.time > 0">
+            支付<span ng-show="publicInfo.time">({{ publicInfo.time }})</span>
         </md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -41,7 +41,7 @@ const saveFlow = async () => {
   try {
     const servers = await knex('server').select(['id', 'name', 'host', 'port', 'password', 'shift']);
     await updateAccountInfo();
-    const promises = [];
+    // const promises = [];
     const saveServerFlow = async server => {
       const lastestFlow = await knex('saveFlow').select(['time']).where({
         id: server.id,
@@ -83,10 +83,13 @@ const saveFlow = async () => {
         await Promise.all(insertPromises);
       }
     };
-    servers.forEach(server => {
-      promises.push(saveServerFlow(server));
-    });
-    await Promise.all(promises);
+    // servers.forEach(server => {
+    //   promises.push(saveServerFlow(server));
+    // });
+    // await Promise.all(promises);
+    for(const server of servers) {
+      await saveServerFlow(server);
+    }
   } catch(err) {
     logger.error(err);
     return;

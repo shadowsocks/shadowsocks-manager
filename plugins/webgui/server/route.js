@@ -21,10 +21,6 @@ const config = appRequire('services/config').all();
 
 const isUser = (req, res, next) => {
   if (req.session.type === 'normal') {
-    // knex('user').update({
-    //   lastLogin: Date.now(),
-    // }).where({ id: req.session.user }).then();
-    // return next();
     knex('user').where({ id: req.session.user, type: 'normal' }).then(s => s[0]).then(user => {
       if(!user) { return res.status(401).end(); }
       req.userInfo = user;
@@ -113,18 +109,21 @@ app.get('/api/admin/user/recentSignUp', isAdmin, admin.getRecentSignUpUsers);
 app.get('/api/admin/user/recentLogin', isAdmin, admin.getRecentLoginUsers);
 
 app.get('/api/admin/user/account', isAdmin, admin.getUserAccount);
-app.get('/api/admin/user/:userId(\\d+)', isAdmin, admin.getOneUser);
-app.get('/api/admin/admin/:userId(\\d+)', isAdmin, admin.getOneAdmin);
+app.get('/api/admin/user/:userId(\\d+)', isAdmin, adminUser.getOneUser);
+app.get('/api/admin/admin/:userId(\\d+)', isAdmin, adminUser.getOneAdmin);
 app.post('/api/admin/user/:userId(\\d+)/sendEmail', isAdmin, admin.sendUserEmail);
 app.put('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.setUserAccount);
 app.delete('/api/admin/user/:userId(\\d+)', isAdmin, admin.deleteUser);
 app.delete('/api/admin/user/:userId(\\d+)/:accountId(\\d+)', isAdmin, admin.deleteUserAccount);
 app.get('/api/admin/user/:accountId(\\d+)/lastConnect', isAdmin, admin.getUserPortLastConnect);
+app.put('/api/admin/user/:userId(\\d+)/comment', isAdmin, isSuperAdmin, adminUser.editUserComment);
 
 app.get('/api/admin/alipay', isAdmin, admin.getOrders);
+app.get('/api/admin/alipay/csv', isAdmin, isSuperAdmin, admin.getCsvOrders);
 app.get('/api/admin/alipay/recentOrder', isAdmin, admin.getRecentOrders);
 app.get('/api/admin/alipay/:userId(\\d+)', isAdmin, admin.getUserOrders);
 app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
+app.get('/api/admin/paypal/csv', isAdmin, isSuperAdmin, admin.getPaypalCsvOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
@@ -151,9 +150,17 @@ app.get('/api/admin/setting/ref/code', isAdmin, isSuperAdmin, adminSetting.getRe
 app.get('/api/admin/setting/ref/code/:id(\\d+)', isAdmin, isSuperAdmin, adminSetting.getOneRefCode);
 app.put('/api/admin/setting/ref/code/:id(\\d+)', isAdmin, isSuperAdmin, adminSetting.editOneRefCode);
 app.get('/api/admin/setting/ref/user', isAdmin, isSuperAdmin, adminSetting.getRefUser);
+app.post('/api/admin/setting/ref/searchSourceUser', isAdmin, isSuperAdmin, adminSetting.searchSourceUser);
+app.post('/api/admin/setting/ref/searchRefUser', isAdmin, isSuperAdmin, adminSetting.searchRefUser);
+app.post('/api/admin/setting/ref/:sourceUserId(\\d+)/:refUserId(\\d+)/:code', isAdmin, isSuperAdmin, adminSetting.setRefForUser);
 app.get('/api/admin/ref/code', isAdmin, user.getRefCode);
 app.get('/api/admin/ref/user', isAdmin, user.getRefUser);
 app.get('/api/admin/ref/user/:userId(\\d+)', isAdmin, admin.getRefUserById);
+app.get('/api/admin/ref/code/:userId(\\d+)', isAdmin, admin.getRefCodeById);
+app.post('/api/admin/ref/code/:userId(\\d+)', isAdmin, admin.addRefCodeForUser);
+app.delete('/api/admin/ref/:sourceUserId(\\d+)/:refUserId(\\d+)', isAdmin, admin.deleteRefUser);
+app.delete('/api/admin/ref/:code', isAdmin, isSuperAdmin, admin.deleteRefCode);
+
 
 app.get('/api/admin/giftcard', isAdmin, adminGiftCard.getOrders);
 app.get('/api/admin/giftcard/:userId(\\d+)', isAdmin, adminGiftCard.getUserOrders);

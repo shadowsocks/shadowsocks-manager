@@ -4,6 +4,20 @@ const getGroups = () => {
   return knex('group').where({}).orderBy('id').then(s => s);
 };
 
+const getGroupsAndUserNumber = async () => {
+  const groups = await knex('group').select([
+    'group.id as id',
+    'group.name as name',
+    'group.comment as comment',
+    knex.raw('count(user.id) as userNumber'),
+  ])
+  .leftJoin('user', 'user.group', 'group.id')
+  .where('user.id', '>', 1)
+  .orWhereNull('user.id')
+  .groupBy('group.id');
+  return groups;
+};
+
 const getOneGroup = id => {
   return knex('group').select().where({ id }).then(success => {
     if(!success.length) { return Promise.reject('group not found'); }
@@ -40,6 +54,7 @@ const setUserGroup = (groupId, userId) => {
 };
 
 exports.getGroups = getGroups;
+exports.getGroupsAndUserNumber = getGroupsAndUserNumber;
 exports.getOneGroup = getOneGroup;
 exports.addGroup = addGroup;
 exports.editGroup = editGroup;

@@ -70,6 +70,10 @@ exports.getOrders = async (req, res) => {
     } else {
       options.group = req.adminInfo.group;
     }
+    options.page = +req.query.page;
+    options.pageSize = +req.query.pageSize;
+    options.start = req.query.start;
+    options.end = req.query.end;
     const details = await giftcard.orderListAndPaging(options);
     res.send(details);
   } catch (err) {

@@ -65,7 +65,7 @@ const edit = async accountId => {
 const server = async serverId => {
   const server = await knex('server').where({ id: serverId }).then(s => s[0]);
   const accounts = await knex('account_plugin').where({});
-  for(account of accounts) {
+  for(const account of accounts) {
     const exists = await knex('account_flow').where({
       serverId,
       accountId: account.id
