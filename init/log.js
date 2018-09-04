@@ -67,5 +67,4 @@ const setFileAppenders = (filename) => {
   });
 };
 
-exports.setConsoleLevel = setConsoleLevel;
-exports.setFileAppenders = setFileAppenders;
+
