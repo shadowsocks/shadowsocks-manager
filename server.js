@@ -3,7 +3,7 @@ if(process.env.NODE_ENV !== 'production' && +process.versions.node[0] < 8) {
   require('babel-core/register');
 }
 
-require('./init/log');
+// require('./init/log');
 
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
