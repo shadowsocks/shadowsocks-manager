@@ -183,6 +183,7 @@ app
             $scope.account[index].password = a.password;
             $scope.account[index].port = a.port;
             $scope.account[index].type = a.type;
+            $scope.account[index].active = a.active;
           });
         } else {
           $scope.account = success.account;
@@ -314,6 +315,12 @@ app
       return {
         background: `linear-gradient(90deg, rgba(0,0,0,0.12) ${ percent }%, rgba(0,0,0,0) 0%)`
       };
+    };
+    $scope.activeAccount = account => {
+      $http.put(`/api/user/account/${ account.id }/active`).then(success => {
+        // account.active = 1;
+        getUserAccountInfo();
+      });
     };
   }
 ])

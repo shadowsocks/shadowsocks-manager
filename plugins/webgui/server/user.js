@@ -594,9 +594,9 @@ exports.activeAccount = async (req, res) => {
   try {
     const userId = req.session.user;
     const accountId = +req.params.accountId;
-    const accountInfo = account.getAccount({ id: accountId, userId }).then(s => s[0]);
+    const accountInfo = await account.getAccount({ id: accountId, userId }).then(s => s[0]);
     if(!accountInfo) { return Promise.reject('account not found'); }
-    await knex('account_plugin').update({ active: 1 }).where({ id: accountInfo.id });
+    await account.activeAccount(accountInfo.id);
     res.send('success');
   } catch(err) {
     console.log(err);

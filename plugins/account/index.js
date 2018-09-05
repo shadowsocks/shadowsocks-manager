@@ -731,6 +731,16 @@ const editMultiAccounts = async (orderId, update) => {
   }
 };
 
+const activeAccount = async accountId => {
+  const accountInfo = await getAccount({ id: accountId }).then(s => s[0]);
+  await knex('account_plugin').update({ active: 1 }).where({ id: accountInfo.id });
+  if(accountInfo.type > 1) {
+    const accountData = JSON.parse(accountInfo.data);
+    accountData.create = Date.now();
+    await knex('account_plugin').update({ data: JSON.stringify(accountData) }).where({ id: accountInfo.id });
+  }
+}
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -752,3 +762,5 @@ exports.getBanAccount = getBanAccount;
 exports.getAccountForSubscribe = getAccountForSubscribe;
 
 exports.editMultiAccounts = editMultiAccounts;
+
+exports.activeAccount = activeAccount;
