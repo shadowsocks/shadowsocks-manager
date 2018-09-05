@@ -727,13 +727,14 @@ const editMultiAccounts = async (orderId, update) => {
     }
     if(Object.keys(updateData).length === 0) { break; }
     await knex('account_plugin').update(updateData).where({ id: account.id });
-    await await accountFlow.edit(account.id);
+    await accountFlow.edit(account.id);
   }
 };
 
 const activeAccount = async accountId => {
   const accountInfo = await getAccount({ id: accountId }).then(s => s[0]);
   await knex('account_plugin').update({ active: 1 }).where({ id: accountInfo.id });
+  await accountFlow.edit(accountInfo.id);
   if(accountInfo.type > 1) {
     const accountData = JSON.parse(accountInfo.data);
     accountData.create = Date.now();

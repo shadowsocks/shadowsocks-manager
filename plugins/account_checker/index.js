@@ -37,6 +37,10 @@ const isPortExists = async (server, account) => {
   }
 };
 
+const isAccountActive = (server, account) => {
+  return !!account.active;
+};
+
 const hasServer = (server, account) => {
   if(!account.server) { return true; }
   const serverList = JSON.parse(account.server);
@@ -226,6 +230,12 @@ const checkAccount = async (serverId, accountId) => {
 
     // 检查当前端口是否存在
     const exists = await isPortExists(serverInfo, accountInfo);
+
+    // 检查账号是否激活
+    if(!isAccountActive(serverInfo, accountInfo)) {
+      exists && deletePort(serverInfo, accountInfo);
+      return;
+    }
 
     // 检查账号是否包含该服务器
     if(!hasServer(serverInfo, accountInfo)) {
