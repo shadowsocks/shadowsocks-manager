@@ -78,6 +78,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.autoRemove',
     'account_plugin.autoRemoveDelay',
     'account_plugin.multiServerFlow',
+    'account_plugin.active',
     'user.id as userId',
     'user.email as user',
   ])
