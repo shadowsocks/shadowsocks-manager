@@ -11,9 +11,9 @@
     </div>
     <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by a.id">
         <md-card ng-click="toAccount(a.id)" style="position: relative;">
-            <div style="position: absolute; background: rgba(255, 255, 255, 0.85); width: 100%; height: 100%; z-index: 100;" ng-if="a.active === 0">
+            <div style="position: absolute; background: rgba(255, 255, 255, 0.9); width: 100%; height: 100%; z-index: 100;" ng-if="a.active === 0">
                 <div style="width: 100%; height: 100%;" layout="row" layout-align="center center" ng-click="activeAccount(a)">
-                    <md-button class="md-raised md-warn">激活</md-button>
+                    <md-button class="md-raised md-warn"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
                 </div>
             </div>
             <md-card-header>
