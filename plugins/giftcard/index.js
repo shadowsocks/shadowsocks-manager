@@ -92,17 +92,6 @@ const processOrder = async (userId, accountId, password) => {
   const orderInfo = await orderPlugin.getOneOrder(card.orderType);
   await account.setAccountLimit(userId, accountId, card.orderType);
   await ref.payWithRef(userId, card.orderType);
-  // if(card.orderType <= 7) {
-  //   await account.setAccountLimit(userId, accountId, card.orderType);
-  //   await ref.payWithRef(userId, card.orderType);
-  // } else {
-  //   if(card.orderType === 8) {
-  //     await account.addAccountTime(userId, accountId, 2, 2);
-  //   }
-  //   if(card.orderType === 9) {
-  //     await account.addAccountTime(userId, accountId, 3, 6);
-  //   }
-  // }
   return { success: true, type: card.orderType, cardId: card.id };
 };
 

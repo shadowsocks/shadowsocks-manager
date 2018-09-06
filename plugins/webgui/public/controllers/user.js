@@ -283,8 +283,8 @@ app
       payByGiftCardDialog.show(accountId).then(() => getUserAccountInfo());
     };
 
-    $scope.fontColor = (time) => {
-      if(time >= Date.now()) {
+    $scope.fontColor = account => {
+      if(account.data.expire >= Date.now()) {
         return {
           color: '#333',
         };
@@ -321,6 +321,12 @@ app
         // account.active = 1;
         getUserAccountInfo();
       });
+    };
+    $scope.isBlur = account => {
+      if(account.active) { return {}; }
+      return {
+        filter: 'blur(4px)'
+      };
     };
   }
 ])

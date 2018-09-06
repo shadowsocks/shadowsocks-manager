@@ -11,19 +11,19 @@
     </div>
     <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by a.id">
         <md-card ng-click="toAccount(a.id)" style="position: relative;">
-            <div style="position: absolute; background: rgba(255, 255, 255, 0.9); width: 100%; height: 100%; z-index: 100;" ng-if="a.active === 0">
-                <div style="width: 100%; height: 100%;" layout="row" layout-align="center center" ng-click="activeAccount(a)">
-                    <md-button class="md-raised md-warn"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
+            <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 100;" ng-if="a.active === 0">
+                <div style="width: 100%; height: 100%;" layout="row" layout-align="center center">
+                    <md-button class="md-raised md-warn" ng-click="activeAccount(a)"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
                 </div>
             </div>
-            <md-card-header>
+            <md-card-header ng-style="isBlur(a)">
                 <md-card-header-text>
                     <span class="md-title">{{a.port}}
                         <span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
                     </span>
                 </md-card-header-text>
             </md-card-header>
-            <md-card-content>
+            <md-card-content ng-style="isBlur(a)">
                 <md-tabs md-selected="0" md-border-bottom md-autoselect md-dynamic-height>
                     <md-tab ng-repeat="server in a.serverList track by server.id" label="{{server.name}}" md-on-select="getServerPortData(a, server.id)">
                     </md-tab>
@@ -94,7 +94,7 @@
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="a.type === 1" translate>不限时</span>
                                         <span ng-if="a.type >=2 && a.type <= 5">
-                                            <span style="font-size: 0.9em;">{{a.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="{{fontColor(a.data.expire)}}">{{ a.data.expire | timeago | translateTime }}</span>
+                                            <span style="font-size: 0.9em;">{{ a.data.expire | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;" ng-style="fontColor(a)">{{ a.data.expire | timeago | translateTime }}</span>
                                         </span>
                                     </div>
                                 </div>

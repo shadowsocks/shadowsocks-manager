@@ -7,6 +7,7 @@ const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const addAccount = async (type, options) => {
+  if(!options.hasOwnProperty('active')) { options.active = 1; }
   if(type === 6 || type === 7) {
     type = 3;
   }
@@ -40,6 +41,7 @@ const addAccount = async (type, options) => {
       autoRemove: options.autoRemove || 0,
       autoRemoveDelay: options.autoRemoveDelay || 0,
       multiServerFlow: options.multiServerFlow || 0,
+      active: options.active,
     });
     await accountFlow.add(accountId);
     return;
@@ -436,6 +438,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       autoRemove: orderInfo.autoRemove ? 1 : 0,
       autoRemoveDelay: orderInfo.autoRemoveDelay,
       multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
+      active: 0,
     });
     return;
   }
