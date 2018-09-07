@@ -118,6 +118,7 @@ const editAccount = async (id, options) => {
     return Promise.reject('account not found');
   });
   const update = {};
+  if(options.hasOwnProperty('active')) { update.active = options.active; }
   update.type = options.type;
   update.orderId = options.orderId;
   update.userId = options.userId;
