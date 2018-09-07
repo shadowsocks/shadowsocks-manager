@@ -344,8 +344,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         };
       }
     };
-    $scope.fontColor = (time) => {
-      if(time >= Date.now()) {
+    $scope.fontColor = account => {
+      if(account.data.expire >= Date.now()) {
         return {
           color: '#333',
         };
