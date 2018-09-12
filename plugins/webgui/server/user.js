@@ -11,8 +11,10 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('webgui');
 const ref = appRequire('plugins/webgui_ref/index');
 const refUser = appRequire('plugins/webgui_ref/user');
+const refOrder = appRequire('plugins/webgui_ref/order');
 const crypto = require('crypto');
 const flowPack = appRequire('plugins/webgui_order/flowPack');
+const alipayPlugin = appRequire('plugins/alipay/index');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -607,7 +609,17 @@ exports.activeAccount = async (req, res) => {
 exports.getOrder = async (req, res) => {
   try {
     const userId = req.session.user;
-    res.send([]);
+    let orders = [];
+    if(config.plugins.alipay && config.plugins.alipay.use) {
+      const alipayOrders = await alipayPlugin.getUserFinishOrder(userId);
+      orders = [...orders, ...alipayOrders];
+    }
+    const refOrders = await refOrder.getUserFinishOrder(userId);
+    orders = [...orders, ...refOrders];
+    orders = orders.sort((a, b) => {
+      return b.createTime - a.createTime;
+    });
+    res.send(orders);
   } catch(err) {
     console.log(err);
     res.status(403).end();

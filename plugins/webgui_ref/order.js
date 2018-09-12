@@ -88,6 +88,17 @@ const orderListAndPaging = async (options = {}) => {
   };
 };
 
+const getUserFinishOrder = async userId => {
+  const orders = await knex('webgui_ref_time').select([
+    'orderId',
+    'createTime',
+  ]).where({
+    user: userId
+  }).orderBy('createTime', 'DESC');
+  return orders;
+};
+
 exports.newOrder = newOrder;
 exports.getUserOrders = getUserOrders;
 exports.orderListAndPaging = orderListAndPaging;
+exports.getUserFinishOrder = getUserFinishOrder;
