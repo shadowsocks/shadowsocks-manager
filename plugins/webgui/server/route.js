@@ -216,6 +216,8 @@ app.post('/api/user/changePassword', isUser, user.changePassword);
 app.get('/api/user/ref/code', isUser, user.getRefCode);
 app.get('/api/user/ref/user', isUser, user.getRefUser);
 
+app.get('/api/user/order', isUser, user.getOrder);
+
 if (config.plugins.webgui_telegram && config.plugins.webgui_telegram.use) {
   const telegram = appRequire('plugins/webgui_telegram/account');
   app.get('/api/user/telegram/code', isUser, user.getTelegramCode);

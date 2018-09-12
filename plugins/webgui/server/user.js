@@ -603,3 +603,13 @@ exports.activeAccount = async (req, res) => {
     res.status(403).end();
   }
 };
+
+exports.getOrder = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    res.send([]);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
