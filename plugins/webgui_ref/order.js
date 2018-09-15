@@ -89,12 +89,21 @@ const orderListAndPaging = async (options = {}) => {
 };
 
 const getUserFinishOrder = async userId => {
-  const orders = await knex('webgui_ref_time').select([
+  let orders = await knex('webgui_ref_time').select([
     'orderId',
+    'refTime',
     'createTime',
   ]).where({
     user: userId
   }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: '邀请奖励',
+      refTime: order.refTime,
+      createTime: order.createTime,
+    };
+  });
   return orders;
 };
 

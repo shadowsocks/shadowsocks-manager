@@ -77,7 +77,7 @@ app
 
     $http.get('/api/user/order').then(success => {
       if(success.data.length) {
-        // $scope.menus[2].hide = false;
+        $scope.menus[2].hide = false;
       };
     });
 
