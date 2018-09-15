@@ -418,6 +418,9 @@ app
 .controller('UserOrderController', ['$scope', '$http',
   ($scope, $http) => {
     $scope.setTitle('我的订单');
+    $http.get('/api/user/order').then(success => {
+      $scope.orders = success.data;
+    });
   }
 ])
 ;

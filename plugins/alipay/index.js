@@ -318,12 +318,21 @@ const getCsvOrder = async (options = {}) => {
 };
 
 const getUserFinishOrder = async userId => {
-  const orders = await knex('alipay').select([
+  let orders = await knex('alipay').select([
     'orderId',
+    'amount',
     'createTime',
   ]).where({
     user: userId,
   }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: '支付宝',
+      data: order.amount,
+      createTime: order.createTime,
+    };
+  });
   return orders;
 };
 
