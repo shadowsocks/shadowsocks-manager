@@ -46,6 +46,12 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/ref',
       controller: 'UserRefController',
       templateUrl: `${ cdn }/public/views/user/ref.html`,
-    });
+    })
+    .state('user.order', {
+      url: '/order',
+      controller: 'UserOrderController',
+      templateUrl: `${ cdn }/public/views/user/order.html`,
+    })
+    ;
   }])
 ;
