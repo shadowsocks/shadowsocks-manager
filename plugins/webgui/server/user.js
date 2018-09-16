@@ -610,12 +610,18 @@ exports.getOrder = async (req, res) => {
   try {
     const userId = req.session.user;
     let orders = [];
+
     if(config.plugins.alipay && config.plugins.alipay.use) {
       const alipayOrders = await alipayPlugin.getUserFinishOrder(userId);
       orders = [...orders, ...alipayOrders];
     }
+
     const refOrders = await refOrder.getUserFinishOrder(userId);
     orders = [...orders, ...refOrders];
+
+    const giftCardOrders = await giftcard.getUserFinishOrder(userId);
+    orders = [...orders, ...giftCardOrders];
+
     orders = orders.sort((a, b) => {
       return b.createTime - a.createTime;
     });
