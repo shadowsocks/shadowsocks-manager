@@ -616,6 +616,11 @@ exports.getOrder = async (req, res) => {
       orders = [...orders, ...alipayOrders];
     }
 
+    if(config.plugins.paypal && config.plugins.paypal.use) {
+      const paypalOrders = await paypal.getUserFinishOrder(userId);
+      orders = [...orders, ...paypalOrders];
+    }
+
     const refOrders = await refOrder.getUserFinishOrder(userId);
     orders = [...orders, ...refOrders];
 

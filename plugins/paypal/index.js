@@ -262,8 +262,28 @@ const orderListAndPaging = async (options = {}) => {
   };
 };
 
+const getUserFinishOrder = async userId => {
+  let orders = await knex('paypal').select([
+    'orderId',
+    'amount',
+    'createTime',
+  ]).where({
+    user: userId,
+  }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: 'Paypal',
+      amount: order.amount,
+      createTime: order.createTime,
+    };
+  });
+  return orders;
+};
+
 exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;
+exports.getUserFinishOrder = getUserFinishOrder;
 
 cron.minute(() => {
   if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }
