@@ -4,16 +4,10 @@ const tableName = 'account_plugin';
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
-    const hasAutoRemoveDelay = await knex.schema.hasColumn(tableName, 'autoRemoveDelay');
-    if(!hasAutoRemoveDelay) {
+    const hasActive = await knex.schema.hasColumn(tableName, 'active');
+    if(!hasActive) {
       await knex.schema.table(tableName, function(table) {
-        table.bigInteger('autoRemoveDelay').defaultTo(0);
-      });
-    }
-    const hasOrderId = await knex.schema.hasColumn(tableName, 'orderId');
-    if(!hasOrderId) {
-      await knex.schema.table(tableName, function(table) {
-        table.integer('orderId');
+        table.integer('active').defaultTo(1);
       });
     }
     const results = await knex(tableName).whereNull('orderId');
@@ -36,6 +30,7 @@ const createTable = async() => {
     table.integer('autoRemove').defaultTo(0);
     table.bigInteger('autoRemoveDelay').defaultTo(0);
     table.integer('multiServerFlow').defaultTo(0);
+    table.integer('active').defaultTo(1);
   });
 };
 

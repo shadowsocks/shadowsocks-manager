@@ -344,8 +344,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         };
       }
     };
-    $scope.fontColor = (time) => {
-      if(time >= Date.now()) {
+    $scope.fontColor = account => {
+      if(account.data.expire >= Date.now()) {
         return {
           color: '#333',
         };
@@ -479,7 +479,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
           }
         });
       }
-      const server = Object.keys($scope.account.accountServerObj).map(m => +m);
+      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
         orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
@@ -634,13 +634,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       $scope.account.autoRemoveDelay = $filter('timeStr2Num')($scope.account.autoRemoveDelayStr);
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
-      const server = Object.keys($scope.account.accountServerObj)
-      .map(m => {
-        if($scope.account.accountServerObj[m]) {
-          return +m;
-        }
-      })
-      .filter(f => f);
+      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
       $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
         orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,

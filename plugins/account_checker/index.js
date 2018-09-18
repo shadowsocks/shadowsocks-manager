@@ -37,6 +37,10 @@ const isPortExists = async (server, account) => {
   }
 };
 
+const isAccountActive = (server, account) => {
+  return !!account.active;
+};
+
 const hasServer = (server, account) => {
   if(!account.server) { return true; }
   const serverList = JSON.parse(account.server);
@@ -56,7 +60,7 @@ const isExpired = (server, account) => {
     account.expireTime = expireTime;
     if(expireTime <= Date.now() || data.create >= Date.now()) {
       const nextCheckTime = 10 * 60 * 1000 + randomInt(30000);
-      if(account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
+      if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
         modifyAccountFlow(server.id, account.id, nextCheckTime > account.autoRemoveDelay ? account.autoRemoveDelay : nextCheckTime);
         knex('account_plugin').delete().where({ id: account.id }).then();
       } else {
@@ -226,6 +230,12 @@ const checkAccount = async (serverId, accountId) => {
 
     // 检查当前端口是否存在
     const exists = await isPortExists(serverInfo, accountInfo);
+
+    // 检查账号是否激活
+    if(!isAccountActive(serverInfo, accountInfo)) {
+      exists && deletePort(serverInfo, accountInfo);
+      return;
+    }
 
     // 检查账号是否包含该服务器
     if(!hasServer(serverInfo, accountInfo)) {

@@ -7,6 +7,7 @@ const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
 const addAccount = async (type, options) => {
+  if(!options.hasOwnProperty('active')) { options.active = 1; }
   if(type === 6 || type === 7) {
     type = 3;
   }
@@ -40,6 +41,7 @@ const addAccount = async (type, options) => {
       autoRemove: options.autoRemove || 0,
       autoRemoveDelay: options.autoRemoveDelay || 0,
       multiServerFlow: options.multiServerFlow || 0,
+      active: options.active,
     });
     await accountFlow.add(accountId);
     return;
@@ -78,6 +80,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.autoRemove',
     'account_plugin.autoRemoveDelay',
     'account_plugin.multiServerFlow',
+    'account_plugin.active',
     'user.id as userId',
     'user.email as user',
   ])
@@ -115,6 +118,7 @@ const editAccount = async (id, options) => {
     return Promise.reject('account not found');
   });
   const update = {};
+  if(options.hasOwnProperty('active')) { update.active = options.active; }
   update.type = options.type;
   update.orderId = options.orderId;
   update.userId = options.userId;
@@ -435,6 +439,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       autoRemove: orderInfo.autoRemove ? 1 : 0,
       autoRemoveDelay: orderInfo.autoRemoveDelay,
       multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
+      active: 0,
     });
     return;
   }
@@ -726,9 +731,20 @@ const editMultiAccounts = async (orderId, update) => {
     }
     if(Object.keys(updateData).length === 0) { break; }
     await knex('account_plugin').update(updateData).where({ id: account.id });
-    await await accountFlow.edit(account.id);
+    await accountFlow.edit(account.id);
   }
 };
+
+const activeAccount = async accountId => {
+  const accountInfo = await getAccount({ id: accountId }).then(s => s[0]);
+  await knex('account_plugin').update({ active: 1 }).where({ id: accountInfo.id });
+  await accountFlow.edit(accountInfo.id);
+  if(accountInfo.type > 1) {
+    const accountData = JSON.parse(accountInfo.data);
+    accountData.create = Date.now();
+    await knex('account_plugin').update({ data: JSON.stringify(accountData) }).where({ id: accountInfo.id });
+  }
+}
 
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
@@ -751,3 +767,5 @@ exports.getBanAccount = getBanAccount;
 exports.getAccountForSubscribe = getAccountForSubscribe;
 
 exports.editMultiAccounts = editMultiAccounts;
+
+exports.activeAccount = activeAccount;

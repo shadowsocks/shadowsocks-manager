@@ -317,6 +317,25 @@ const getCsvOrder = async (options = {}) => {
   return orders;
 };
 
+const getUserFinishOrder = async userId => {
+  let orders = await knex('alipay').select([
+    'orderId',
+    'amount',
+    'createTime',
+  ]).where({
+    user: userId,
+  }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: '支付宝',
+      amount: order.amount,
+      createTime: order.createTime,
+    };
+  });
+  return orders;
+};
+
 cron.minute(() => {
   if(!alipay_f2f) { return; }
   knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
@@ -328,3 +347,4 @@ exports.createOrder = createOrder;
 exports.checkOrder = checkOrder;
 exports.verifyCallback = verifyCallback;
 exports.getCsvOrder = getCsvOrder;
+exports.getUserFinishOrder = getUserFinishOrder;

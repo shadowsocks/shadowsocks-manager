@@ -92,17 +92,6 @@ const processOrder = async (userId, accountId, password) => {
   const orderInfo = await orderPlugin.getOneOrder(card.orderType);
   await account.setAccountLimit(userId, accountId, card.orderType);
   await ref.payWithRef(userId, card.orderType);
-  // if(card.orderType <= 7) {
-  //   await account.setAccountLimit(userId, accountId, card.orderType);
-  //   await ref.payWithRef(userId, card.orderType);
-  // } else {
-  //   if(card.orderType === 8) {
-  //     await account.addAccountTime(userId, accountId, 2, 2);
-  //   }
-  //   if(card.orderType === 9) {
-  //     await account.addAccountTime(userId, accountId, 3, 6);
-  //   }
-  // }
   return { success: true, type: card.orderType, cardId: card.id };
 };
 
@@ -263,6 +252,23 @@ const getUserOrders = async userId => {
   return orders;
 };
 
+const getUserFinishOrder = async userId => {
+  let orders = await knex('giftcard').select([
+    'password as orderId',
+    'createTime',
+  ]).where({
+    user: userId,
+  }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: '充值码',
+      createTime: order.createTime,
+    };
+  });
+  return orders;
+};
+
 exports.generateGiftCard = generateGiftCard;
 exports.orderListAndPaging = orderListAndPaging;
 exports.checkOrder = checkOrder;
@@ -271,3 +277,4 @@ exports.revokeBatch = revokeBatch;
 exports.listBatch = listBatch;
 exports.getBatchDetails = getBatchDetails;
 exports.getUserOrders = getUserOrders;
+exports.getUserFinishOrder = getUserFinishOrder;
