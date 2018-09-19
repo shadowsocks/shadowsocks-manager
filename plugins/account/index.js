@@ -406,13 +406,13 @@ const setAccountLimit = async (userId, accountId, orderId) => {
             let myPort;
             if(orderPorts.length) {
               for(const p of orderPorts) {
-                if(portArray.indexOf(p) < 0) {
+                if(portArray.indexOf(+p) < 0) {
                   myPort = p; break;
                 }
               }
             } else {
               for(let p = port.start; p <= port.end; p++) {
-                if(portArray.indexOf(p) < 0) {
+                if(portArray.indexOf(+p) < 0) {
                   myPort = p; break;
                 }
               }
