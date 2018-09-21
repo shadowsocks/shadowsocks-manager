@@ -173,6 +173,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             $scope.currentPorts[account.port + $scope.server.shift].id = account.id;
           }
         });
+        $scope.portNumber = Object.keys($scope.currentPorts).filter(f => {
+          return $scope.currentPorts[f].exists;
+        }).length;
       });
     };
     getServerInfo();
