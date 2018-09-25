@@ -541,10 +541,11 @@ const getTopFlow = groupId => {
   return knex('saveFlow').sum('saveFlow.flow as sumFlow')
   .groupBy('user.id')
   .orderBy('sumFlow', 'desc')
-  .limit(5)
+  .limit(10)
   .select([
     'user.id as userId',
     'user.username as email',
+    'user.comment as comment',
     'account_plugin.port as port',
     'account_plugin.id as accountId',
   ])

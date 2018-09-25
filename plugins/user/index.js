@@ -188,6 +188,7 @@ const getUserAndPaging = async (opt = {}) => {
     'user.resetPasswordId as resetPasswordId',
     'user.resetPasswordTime as resetPasswordTime',
     'account_plugin.port as port',
+    'user.comment as comment'
   ]).leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
   .where('user.id', '>', 1)
   .whereIn('user.type', type).groupBy('user.id');
