@@ -15,6 +15,7 @@ const refOrder = appRequire('plugins/webgui_ref/order');
 const crypto = require('crypto');
 const flowPack = appRequire('plugins/webgui_order/flowPack');
 const alipayPlugin = appRequire('plugins/alipay/index');
+const macAccountPlugin = appRequire('plugins/macAccount/index');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -631,6 +632,17 @@ exports.getOrder = async (req, res) => {
       return b.createTime - a.createTime;
     });
     res.send(orders);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.getMacAccount = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accounts = await macAccountPlugin.getAccountByUserId(userId);
+    res.send(accounts);
   } catch(err) {
     console.log(err);
     res.status(403).end();
