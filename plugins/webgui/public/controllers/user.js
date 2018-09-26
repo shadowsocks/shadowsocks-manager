@@ -224,7 +224,7 @@ app
       }));
     };
     $scope.createQrCode = (method, password, host, port, serverName) => {
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + base64Encode(serverName);
     };
 
     $scope.getServerPortData = (account, serverId) => {
