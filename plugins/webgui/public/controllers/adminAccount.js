@@ -194,7 +194,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         }));
       };
       $scope.createQrCode = (method, password, host, port, serverName) => {
-        return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + serverName;
+        return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port) + '#' + base64Encode(serverName);
       };
       $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
         const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
