@@ -353,6 +353,9 @@ app
     $scope.toRef = () => {
       $state.go('user.ref');
     };
+    $scope.toMac = () => {
+      $state.go('user.macAddress');
+    };
   }
 ])
 .controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
@@ -420,6 +423,20 @@ app
     $scope.setTitle('我的订单');
     $http.get('/api/user/order').then(success => {
       $scope.orders = success.data;
+    });
+  }
+])
+.controller('UserMacAddressController', ['$scope', '$state', '$http',
+  ($scope, $state, $http) => {
+    $scope.setTitle('MAC地址');
+    $scope.setMenuButton('arrow_back', 'user.settings');
+    $http.get('/api/user/account/mac').then(success => {
+      $scope.macAccounts = success.data;
+      if(!$scope.macAccounts.length) {
+        $scope.setFabButton(() => {
+
+        });
+      }
     });
   }
 ])
