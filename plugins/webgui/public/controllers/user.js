@@ -426,15 +426,15 @@ app
     });
   }
 ])
-.controller('UserMacAddressController', ['$scope', '$state', '$http',
-  ($scope, $state, $http) => {
+.controller('UserMacAddressController', ['$scope', '$state', '$http', 'addMacAccountDialog',
+  ($scope, $state, $http, addMacAccountDialog) => {
     $scope.setTitle('MAC地址');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $http.get('/api/user/account/mac').then(success => {
       $scope.macAccounts = success.data;
       if(!$scope.macAccounts.length) {
         $scope.setFabButton(() => {
-
+          addMacAccountDialog.show();
         });
       }
     });

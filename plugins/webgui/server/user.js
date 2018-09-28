@@ -648,3 +648,13 @@ exports.getMacAccount = async (req, res) => {
     res.status(403).end();
   }
 };
+
+exports.addMacAccount = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    res.send({});
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
