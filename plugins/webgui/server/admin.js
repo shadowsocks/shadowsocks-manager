@@ -539,6 +539,7 @@ exports.getAccountIpFromAllServer = (req, res) => {
     });
     return Promise.all(promiseArray);
   }).then(ips => {
+    console.log('server/admin.js',ips);
     const result = [];
     ips.forEach(ip => {
       ip.forEach(i => {

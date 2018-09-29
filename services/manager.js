@@ -46,10 +46,10 @@ const checkData = async (receive) => {
 };
 
 const sendMessage = (data, options) => {
-  if(options && options.host) {
+  if (options && options.host) {
     options.host = options.host.split(':')[0];
   }
-  if(!options) {
+  if (!options) {
     options = { host, port, password };
   }
   const promise = new Promise((resolve, reject) => {
@@ -57,7 +57,7 @@ const sendMessage = (data, options) => {
       host,
       port,
     }, () => {
-      client.write(pack(data, (options? options.password: null) || password));
+      client.write(pack(data, (options ? options.password : null) || password));
     });
     client.setTimeout(10 * 1000);
     const receive = {
@@ -66,13 +66,13 @@ const sendMessage = (data, options) => {
     };
     client.on('data', data => {
       receiveData(receive, data).then(message => {
-        if(!message) {
+        if (!message) {
           // reject(new Error(`empty message from ssmgr[s] [${ options.host || host }:${ options.port || port }]`));
-        } else if(message.code === 0) {
+        } else if (message.code === 0) {
           resolve(message.data);
         } else {
           logger.error(message);
-          reject(new Error(`ssmgr[s] return an error code [${ options.host || host }:${ options.port || port }]`));
+          reject(new Error(`ssmgr[s] return an error code [${options.host || host}:${options.port || port}]`));
         }
         client.end();
       }).catch(err => {
@@ -81,15 +81,15 @@ const sendMessage = (data, options) => {
       });
     });
     client.on('close', () => {
-      reject(new Error(`ssmgr[s] connection close [${ options.host || host }:${ options.port || port }]`));
+      reject(new Error(`ssmgr[s] connection close [${options.host || host}:${options.port || port}]`));
     });
     client.on('error', err => {
       logger.error(err);
-      reject(new Error(`connect to ssmgr[s] fail [${ options.host || host }:${ options.port || port }]`));
+      reject(new Error(`connect to ssmgr[s] fail [${options.host || host}:${options.port || port}]`));
     });
     client.on('timeout', () => {
       logger.error('timeout');
-      reject(new Error(`connect to ssmgr[s] timeout [${ options.host || host }:${ options.port || port }]`));
+      reject(new Error(`connect to ssmgr[s] timeout [${options.host || host}:${options.port || port}]`));
       client.end();
     });
   });
@@ -97,15 +97,15 @@ const sendMessage = (data, options) => {
 };
 
 const getIps = async address => {
-  if(net.isIP(address)) {
-    return Promise.resolve([ address ]);
+  if (net.isIP(address)) {
+    return Promise.resolve([address]);
   }
   return new Promise((resolve, reject) => {
     dns.resolve4(address, (err, ips) => {
-      if(err) {
+      if (err) {
         return reject(err);
       }
-      if(ips.sort) {
+      if (ips.sort) {
         ips = ips.sort();
       }
       return resolve(ips);
@@ -114,16 +114,16 @@ const getIps = async address => {
 };
 
 const send = async (data, options) => {
-  if(options && options.host) {
+  if (options && options.host) {
     options.host = options.host.split(':')[0];
   }
-  if(!options) {
+  if (!options) {
     options = { host, port, password };
   }
   const ips = await getIps(options.host);
-  if(ips.length === 0) {
+  if (ips.length === 0) {
     return Promise.reject('invalid ip');
-  } else if(ips.length === 1) {
+  } else if (ips.length === 1) {
     return sendMessage(data, options);
   } else {
     const results = await Promise.all(ips.map(ip => {
@@ -135,28 +135,28 @@ const send = async (data, options) => {
         return null;
       });
     }));
-    if(data.command === 'version') {
+    if (data.command === 'version') {
       let successMark = true;
       const versions = [];
       const ret = { version: '', isGfw: false };
       results.forEach(result => {
-        if(result) {
+        if (result) {
           versions.push(result.version);
-          if(result.isGfw) { ret.isGfw = true; }
+          if (result.isGfw) { ret.isGfw = true; }
         } else {
           successMark = false;
         }
       });
       ret.version = versions.join(',');
       return successMark ? ret : Promise.reject();
-    } else if(data.command === 'flow') {
+    } else if (data.command === 'flow') {
       let successMark = false;
       const flows = {};
       results.forEach(result => {
-        if(result) {
+        if (result) {
           successMark = true;
           result.forEach(f => {
-            if(!flows[f.port]) {
+            if (!flows[f.port]) {
               flows[f.port] = f.sumFlow;
             } else {
               flows[f.port] += f.sumFlow;
@@ -168,14 +168,14 @@ const send = async (data, options) => {
         return { port: +m, sumFlow: flows[m] };
       });
       return successMark ? ret : Promise.reject();
-    } else if(data.command === 'list') {
+    } else if (data.command === 'list') {
       let successMark = false;
       const ports = {};
       results.forEach(result => {
-        if(result) {
+        if (result) {
           successMark = true;
           result.forEach(f => {
-            if(!ports[f.port]) {
+            if (!ports[f.port]) {
               ports[f.port] = { password: f.password, number: 1 };
             } else {
               ports[f.port].number += 1;
