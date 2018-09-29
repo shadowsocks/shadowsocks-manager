@@ -28,6 +28,7 @@ const getRefCodeAndPaging = async (opt) => {
     'webgui_ref_code.id as id',
     'webgui_ref_code.code as code',
     'user.email as email',
+    'user.comment as comment',
     'webgui_ref_code.visit as visit',
     'webgui_ref_code.maxUser as maxUser',
     knex.raw('count(webgui_ref.codeId) as count'),
