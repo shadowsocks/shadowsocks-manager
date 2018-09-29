@@ -6,7 +6,7 @@
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70"><span>{{ c.code }}</span><br><span style="color: #aaa; font-size: 0.75em;">{{
-                            c.email+c.comment?`(${c.comment})`:'' }}</span></div>
+                            c.email+(c.comment?`(${c.comment})`:'') }}</span></div>
                     <div flex layout="row" layout-align="end center">
                         <span style="font-size: 0.9em; text-overflow: ellipsis; overflow: hidden;">{{ c.visit }} / {{
                             c.count }} / {{ c.maxUser }}</span>

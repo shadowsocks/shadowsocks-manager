@@ -198,6 +198,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       const flowInfo = await flow.getServerPortFlowWithScale(0, accountInfo.id, [accountInfo.data.from, accountInfo.data.to], 1);
       console.log('flowInfo', flowInfo)
 
+      //可以统一只设置ss,因为节点不用连接
       let tip = '';
       if (ssr == 0) {
         let tip_time = '';
