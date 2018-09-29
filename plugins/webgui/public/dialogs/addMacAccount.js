@@ -40,7 +40,7 @@ app.factory('addMacAccountDialog' , [ '$q', '$mdDialog', '$http', ($q, $mdDialog
       return alertDialogPromise;
     }
     alertDialogPromise = $mdDialog.show(dialog);
-    return $q.resolve();
+    return alertDialogPromise;
   };
   const loading = () => {
     publicInfo.isLoading = true;

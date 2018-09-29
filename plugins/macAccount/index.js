@@ -316,6 +316,16 @@ const removeInvalidMacAccount = async () => {
 };
 removeInvalidMacAccount();
 
+const userAddMacAccount = async (userId, mac) => {
+  const currentMacAccount = await knex('mac_account').where({ userId });
+  if(currentMacAccount.length) { return Promise.reject(); }
+  await knex('mac_account').insert({
+    mac: formatMacAddress(mac),
+    userId,
+  });
+  return;
+};
+
 exports.editAccount = editAccount;
 exports.newAccount = newAccount;
 exports.getAccount = getAccount;
@@ -326,3 +336,5 @@ exports.login = login;
 exports.getAccountByAccountId = getAccountByAccountId;
 exports.getAllAccount = getAllAccount;
 exports.getAccountByUserId = getAccountByUserId;
+
+exports.userAddMacAccount = userAddMacAccount;

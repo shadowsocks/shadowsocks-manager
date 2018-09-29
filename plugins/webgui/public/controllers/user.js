@@ -430,14 +430,23 @@ app
   ($scope, $state, $http, addMacAccountDialog) => {
     $scope.setTitle('MAC地址');
     $scope.setMenuButton('arrow_back', 'user.settings');
-    $http.get('/api/user/account/mac').then(success => {
-      $scope.macAccounts = success.data;
-      if(!$scope.macAccounts.length) {
-        $scope.setFabButton(() => {
-          addMacAccountDialog.show();
-        });
-      }
-    });
+    const getMacAccount = () => {
+      $http.get('/api/user/account/mac').then(success => {
+        $scope.macAccounts = success.data;
+        if(!$scope.macAccounts.length) {
+          $scope.setFabButton(() => {
+            addMacAccountDialog.show().then(() => {
+              getMacAccount();
+            }).catch(err => {
+              getMacAccount();
+            });
+          });
+        } else {
+          $scope.setFabButton();
+        }
+      });
+    };
+    getMacAccount();
   }
 ])
 ;

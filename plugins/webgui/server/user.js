@@ -652,7 +652,9 @@ exports.getMacAccount = async (req, res) => {
 exports.addMacAccount = async (req, res) => {
   try {
     const userId = req.session.user;
-    res.send({});
+    const { mac } = req.body;
+    await macAccountPlugin.userAddMacAccount(userId, mac);
+    res.send('success');
   } catch(err) {
     console.log(err);
     res.status(403).end();
