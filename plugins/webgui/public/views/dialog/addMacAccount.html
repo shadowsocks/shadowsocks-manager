@@ -1,0 +1,22 @@
+<md-dialog aria-label="mac account dialog">
+  <div ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+  </div>
+  <md-dialog-content ng-hide="publicInfo.isLoading">
+    <div class="md-dialog-content">
+      <div layout="row" layout-align="center center">
+        <form name="macForm">
+          <md-input-container class="md-block">
+            <label translate>MAC地址</label>
+            <input type="text" required name="mac" ng-model="publicInfo.mac">
+          </md-input-container>
+        </form>
+      </div>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
+    <md-button class="md-primary" ng-click="publicInfo.addMac()">
+      确认
+    </md-button>
+  </md-dialog-actions>
+</md-dialog>

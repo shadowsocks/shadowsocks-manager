@@ -13,9 +13,7 @@ const getFlow = async (serverId, accountId) => {
   return result ? result.sumFlow : -1;
 };
 
-const formatMacAddress = mac => {
-  return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
-};
+const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
 const loginLog = {};
 const scanLoginLog = ip => {
@@ -316,6 +314,20 @@ const removeInvalidMacAccount = async () => {
 };
 removeInvalidMacAccount();
 
+const isMacAddress = mac => mac.match(/^[0-9,a-f]{12}$/);
+
+const userAddMacAccount = async (userId, mac) => {
+  const macAddress = formatMacAddress(mac);
+  if(!isMacAddress(macAddress)) { return Promise.reject(); }
+  const currentMacAccount = await knex('mac_account').where({ userId });
+  if(currentMacAccount.length) { return Promise.reject(); }
+  await knex('mac_account').insert({
+    mac: macAddress,
+    userId,
+  });
+  return;
+};
+
 exports.editAccount = editAccount;
 exports.newAccount = newAccount;
 exports.getAccount = getAccount;
@@ -326,3 +338,5 @@ exports.login = login;
 exports.getAccountByAccountId = getAccountByAccountId;
 exports.getAllAccount = getAllAccount;
 exports.getAccountByUserId = getAccountByUserId;
+
+exports.userAddMacAccount = userAddMacAccount;
