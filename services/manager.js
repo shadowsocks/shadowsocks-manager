@@ -52,6 +52,7 @@ const sendMessage = (data, options) => {
   if (!options) {
     options = { host, port, password };
   }
+  console.log('options',options);
   const promise = new Promise((resolve, reject) => {
     const client = net.connect(options || {
       host,
@@ -190,6 +191,7 @@ const send = async (data, options) => {
       });
       return successMark ? ret : Promise.reject();
     } else {
+      console.log('ip',10101);
       const random = (+Math.random().toString().substr(2, 8)) % results.length;
       return results[random];
     }
