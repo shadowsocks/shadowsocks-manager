@@ -313,80 +313,11 @@ app
           return false;
         }
       };
-<<<<<<< HEAD
-      $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
-        const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
-        qrcodeDialog.show(serverName, ssAddress);
-      };
-      $scope.cycleStyle = account => {
-        let percent = 0;
-        if (account.type !== 1) {
-          percent = ((Date.now() - account.data.from) / (account.data.to - account.data.from) * 100).toFixed(0);
-        }
-        if (percent > 100) {
-          percent = 100;
-        }
-        return {
-          background: `linear-gradient(90deg, rgba(0,0,0,0.12) ${percent}%, rgba(0,0,0,0) 0%)`
-        };
-      };
+
       $scope.activeAccount = account => {
         $http.put(`/api/user/account/${account.id}/active`).then(success => {
           // account.active = 1;
           getUserAccountInfo();
-=======
-    };
-    $scope.activeAccount = account => {
-      $http.put(`/api/user/account/${ account.id }/active`).then(success => {
-        // account.active = 1;
-        getUserAccountInfo();
-      });
-    };
-    $scope.isBlur = account => {
-      if(account.active) { return {}; }
-      return {
-        filter: 'blur(4px)'
-      };
-    };
-  }
-])
-.controller('UserSettingsController', ['$scope', '$state',
-  ($scope, $state) => {
-    $scope.setTitle('设置');
-    $scope.toPassword = () => {
-      $state.go('user.changePassword');
-    };
-    $scope.toTelegram = () => {
-      $state.go('user.telegram');
-    };
-    $scope.toRef = () => {
-      $state.go('user.ref');
-    };
-    $scope.toMac = () => {
-      $state.go('user.macAddress');
-    };
-  }
-])
-.controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
-  ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
-    $scope.setTitle('修改密码');
-    $scope.setMenuButton('arrow_back', 'user.settings');
-    $scope.data = {
-      password: '',
-      newPassword: '',
-      newPasswordAgain: '',
-    };
-    $scope.confirm = () => {
-      alertDialog.loading();
-      userApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
-        alertDialog.show('修改密码成功，请重新登录', '确定')
-        .then(() => {
-          return $http.post('/api/home/logout');
-        }).then(() => {
-          $localStorage.home = {};
-          $localStorage.user = {};
-          $state.go('home.index');
->>>>>>> upstream/master
         });
       };
       $scope.isBlur = account => {
@@ -395,6 +326,53 @@ app
           filter: 'blur(4px)'
         };
       };
+    }
+  ])
+  .controller('UserSettingsController', ['$scope', '$state',
+    ($scope, $state) => {
+      $scope.setTitle('设置');
+      $scope.toPassword = () => {
+        $state.go('user.changePassword');
+      };
+      $scope.toTelegram = () => {
+        $state.go('user.telegram');
+      };
+      $scope.toRef = () => {
+        $state.go('user.ref');
+      };
+      $scope.toMac = () => {
+        $state.go('user.macAddress');
+      };
+    }
+  ])
+  .controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
+    ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
+      $scope.setTitle('修改密码');
+      $scope.setMenuButton('arrow_back', 'user.settings');
+      $scope.data = {
+        password: '',
+        newPassword: '',
+        newPasswordAgain: '',
+      };
+      $scope.confirm = () => {
+        alertDialog.loading();
+        userApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
+          alertDialog.show('修改密码成功，请重新登录', '确定')
+            .then(() => {
+              return $http.post('/api/home/logout');
+            }).then(() => {
+              $localStorage.home = {};
+              $localStorage.user = {};
+              $state.go('home.index');
+            });
+        });
+        $scope.isBlur = account => {
+          if (account.active) { return {}; }
+          return {
+            filter: 'blur(4px)'
+          };
+        };
+      }
     }
   ])
   .controller('UserSettingsController', ['$scope', '$state',
@@ -442,22 +420,7 @@ app
       $scope.setTitle('绑定Telegram');
       $scope.setMenuButton('arrow_back', 'user.settings');
       $scope.isLoading = true;
-<<<<<<< HEAD
-      $scope.code = {};
-      const getCode = () => {
-        $http.get('/api/user/telegram/code').then(success => {
-          $scope.code = success.data;
-          $scope.isLoading = false;
-        });
-      };
-      $scope.setInterval($interval(() => {
-        getCode();
-      }, 5 * 1000));
-      getCode();
-      $scope.unbind = () => {
-        $scope.isLoading = true;
-        $http.post('/api/user/telegram/unbind');
-      };
+      $http.post('/api/user/telegram/unbind');
     }
   ])
   .controller('UserRefController', ['$scope', '$http',
@@ -480,54 +443,27 @@ app
       });
     }
   ])
-  ;
-=======
-      $http.post('/api/user/telegram/unbind');
-    };
-  }
-])
-.controller('UserRefController', ['$scope', '$http',
-  ($scope, $http) => {
-    $scope.setTitle('邀请码');
-    $scope.setMenuButton('arrow_back', 'user.settings');
-    $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });
-    $http.get('/api/user/ref/user').then(success => { $scope.user = success.data; });
-    $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
-    $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已复制到剪贴板');
-    };
-  }
-])
-.controller('UserOrderController', ['$scope', '$http',
-  ($scope, $http) => {
-    $scope.setTitle('我的订单');
-    $http.get('/api/user/order').then(success => {
-      $scope.orders = success.data;
-    });
-  }
-])
-.controller('UserMacAddressController', ['$scope', '$state', '$http', 'addMacAccountDialog',
-  ($scope, $state, $http, addMacAccountDialog) => {
-    $scope.setTitle('MAC地址');
-    $scope.setMenuButton('arrow_back', 'user.settings');
-    const getMacAccount = () => {
-      $http.get('/api/user/account/mac').then(success => {
-        $scope.macAccounts = success.data;
-        if(!$scope.macAccounts.length) {
-          $scope.setFabButton(() => {
-            addMacAccountDialog.show().then(() => {
-              getMacAccount();
-            }).catch(err => {
-              getMacAccount();
+  .controller('UserMacAddressController', ['$scope', '$state', '$http', 'addMacAccountDialog',
+    ($scope, $state, $http, addMacAccountDialog) => {
+      $scope.setTitle('MAC地址');
+      $scope.setMenuButton('arrow_back', 'user.settings');
+      const getMacAccount = () => {
+        $http.get('/api/user/account/mac').then(success => {
+          $scope.macAccounts = success.data;
+          if (!$scope.macAccounts.length) {
+            $scope.setFabButton(() => {
+              addMacAccountDialog.show().then(() => {
+                getMacAccount();
+              }).catch(err => {
+                getMacAccount();
+              });
             });
-          });
-        } else {
-          $scope.setFabButton();
-        }
-      });
-    };
-    getMacAccount();
-  }
-])
-;
->>>>>>> upstream/master
+          } else {
+            $scope.setFabButton();
+          }
+        });
+      };
+      getMacAccount();
+    }
+  ])
+  ;
