@@ -225,7 +225,6 @@ app
       };
       $scope.createQrCode = (method, password, host, port, serverName) => {
         let str = 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
-        console.log('str', str);
         return str;
       };
 
@@ -313,7 +312,22 @@ app
           return false;
         }
       };
-
+      $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
+        const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
+        qrcodeDialog.show(serverName, ssAddress);
+      };
+      $scope.cycleStyle = account => {
+        let percent = 0;
+        if (account.type !== 1) {
+          percent = ((Date.now() - account.data.from) / (account.data.to - account.data.from) * 100).toFixed(0);
+        }
+        if (percent > 100) {
+          percent = 100;
+        }
+        return {
+          background: `linear-gradient(90deg, rgba(0,0,0,0.12) ${percent}%, rgba(0,0,0,0) 0%)`
+        };
+      };
       $scope.activeAccount = account => {
         $http.put(`/api/user/account/${account.id}/active`).then(success => {
           // account.active = 1;
@@ -365,50 +379,6 @@ app
               $localStorage.user = {};
               $state.go('home.index');
             });
-        });
-        $scope.isBlur = account => {
-          if (account.active) { return {}; }
-          return {
-            filter: 'blur(4px)'
-          };
-        };
-      }
-    }
-  ])
-  .controller('UserSettingsController', ['$scope', '$state',
-    ($scope, $state) => {
-      $scope.setTitle('设置');
-      $scope.toPassword = () => {
-        $state.go('user.changePassword');
-      };
-      $scope.toTelegram = () => {
-        $state.go('user.telegram');
-      };
-      $scope.toRef = () => {
-        $state.go('user.ref');
-      };
-    }
-  ])
-  .controller('UserChangePasswordController', ['$scope', '$state', 'userApi', 'alertDialog', '$http', '$localStorage',
-    ($scope, $state, userApi, alertDialog, $http, $localStorage) => {
-      $scope.setTitle('修改密码');
-      $scope.setMenuButton('arrow_back', 'user.settings');
-      $scope.data = {
-        password: '',
-        newPassword: '',
-        newPasswordAgain: '',
-      };
-      $scope.confirm = () => {
-        alertDialog.loading();
-        userApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
-          alertDialog.show('修改密码成功，请重新登录', '确定')
-            .then(() => {
-              return $http.post('/api/home/logout');
-            }).then(() => {
-              $localStorage.home = {};
-              $localStorage.user = {};
-              $state.go('home.index');
-            });
         }).catch(err => {
           alertDialog.show('修改密码失败', '确定');
         });
@@ -420,7 +390,21 @@ app
       $scope.setTitle('绑定Telegram');
       $scope.setMenuButton('arrow_back', 'user.settings');
       $scope.isLoading = true;
-      $http.post('/api/user/telegram/unbind');
+      $scope.code = {};
+      const getCode = () => {
+        $http.get('/api/user/telegram/code').then(success => {
+          $scope.code = success.data;
+          $scope.isLoading = false;
+        });
+      };
+      $scope.setInterval($interval(() => {
+        getCode();
+      }, 5 * 1000));
+      getCode();
+      $scope.unbind = () => {
+        $scope.isLoading = true;
+        $http.post('/api/user/telegram/unbind');
+      };
     }
   ])
   .controller('UserRefController', ['$scope', '$http',
