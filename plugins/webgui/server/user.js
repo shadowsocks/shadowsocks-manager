@@ -625,8 +625,10 @@ exports.getOrder = async (req, res) => {
     const refOrders = await refOrder.getUserFinishOrder(userId);
     orders = [...orders, ...refOrders];
 
-    const giftCardOrders = await giftcard.getUserFinishOrder(userId);
-    orders = [...orders, ...giftCardOrders];
+    if(config.plugins.giftcard && config.plugins.giftcard.use) {
+      const giftCardOrders = await giftcard.getUserFinishOrder(userId);
+      orders = [...orders, ...giftCardOrders];
+    }
 
     orders = orders.sort((a, b) => {
       return b.createTime - a.createTime;

@@ -320,11 +320,16 @@ const userAddMacAccount = async (userId, mac) => {
   const macAddress = formatMacAddress(mac);
   if(!isMacAddress(macAddress)) { return Promise.reject(); }
   const currentMacAccount = await knex('mac_account').where({ userId });
-  if(currentMacAccount.length) { return Promise.reject(); }
-  await knex('mac_account').insert({
+  const insertData = {
     mac: macAddress,
     userId,
-  });
+  };
+  if(currentMacAccount.length) { return Promise.reject(); }
+  const userAccount = await knex('account_plugin').where({ userId });
+  if(userAccount.length) {
+    insertData.accountId = userAccount[0].id;
+  }
+  await knex('mac_account').insert(insertData);
   return;
 };
 
