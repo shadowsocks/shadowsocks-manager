@@ -208,7 +208,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           tip += 'ss://' + Buffer.from('aes-256-cfb:123456@114.114.114.114:50000').toString('base64') + '#使用流量：' + flowNumber(flowInfo[0]) + '/' + flowNumber(accountInfo.data.flow + accountInfo.data.flowPack) + '\r\n';
           tip_time = accountInfo.data.expire <= new Date() ? '已过期' : new Date(accountInfo.data.expire).Format('yyyy-MM-dd hh:mm:ss');
         }
-        tip += 'ss://' + Buffer.from('aes-256-cfb:123456@114.114.114.114:50000').toString('base64') + '#过期时间：' + tip_time + '\r\n';
+        tip += 'ss://' + Buffer.from('aes-256-cfb:123456@115.115.115.115:50000').toString('base64') + '#过期时间：' + tip_time + '\r\n';
       } else {
         let tip_time = '';
         if (accountInfo.type == 1) {
@@ -217,7 +217,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           tip += 'ssr://' + urlsafeBase64('114.114.114.114:8080:origin:aes-256-cfb:plain:' + urlsafeBase64('123456') + '/?obfsparam=&remarks=' + urlsafeBase64('使用流量：' + flowNumber(flowInfo[0]) + '/' + flowNumber(accountInfo.data.flow + accountInfo.data.flowPack)) + '&group=' + urlsafeBase64(baseSetting.title)) + '\r\n';
           tip_time = accountInfo.data.expire <= new Date() ? '已过期' : new Date(accountInfo.data.expire).Format('yyyy-MM-dd hh:mm:ss');
         }
-        tip += 'ssr://' + urlsafeBase64('114.114.114.114:8080:origin:aes-256-cfb:plain:' + urlsafeBase64('123456') + '/?obfsparam=&remarks=' + urlsafeBase64('过期时间：' + tip_time) + '&group=' + urlsafeBase64(baseSetting.title)) + '\r\n';
+        tip += 'ssr://' + urlsafeBase64('115.115.115.115:8080:origin:aes-256-cfb:plain:' + urlsafeBase64('123456') + '/?obfsparam=&remarks=' + urlsafeBase64('过期时间：' + tip_time) + '&group=' + urlsafeBase64(baseSetting.title)) + '\r\n';
       }
 
       let result = subscribeAccount.server.map(s => {
