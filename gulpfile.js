@@ -2,9 +2,9 @@ const del = require('del');
 const gulp = require('gulp');
 const path = require('path');
 const babel = require('gulp-babel');
-const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const concat = require('gulp-concat');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 gulp.task('clean', () => {
   return del([
@@ -14,7 +14,7 @@ gulp.task('clean', () => {
   ]);
 });
 
-gulp.task('freeAccountCopy', ['clean'], () => {
+gulp.task('freeAccountCopy', () => {
   return gulp
     .src([
       'plugins/freeAccount/libs/**',
@@ -69,38 +69,44 @@ gulp.task('webguiBuild', () => {
       }
     ],
     module: {
-      loaders: [{
+      rules: [{
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            [
-              'env', {
-                targets: {
-                  browsers: [
-                    'Chrome >= 57',
-                    'FireFox >= 50',
-                    'Safari >= 7',
-                    'ie >= 9',
-                    'last 4 Edge versions'
-                  ]
+        use: [{
+          loader: 'babel-loader',
+          query: {
+            presets: [
+              [
+                '@babel/env', {
+                  targets: {
+                    browsers: [
+                      'Chrome >= 57',
+                      'FireFox >= 50',
+                      'Safari >= 7',
+                      'ie >= 9',
+                      'last 4 Edge versions'
+                    ]
+                  }
                 }
-              }
+              ]
             ]
-          ]
-        }
+          }
+        }]
       }]
     },
-    plugins: [ new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }) ]
+    optimization: {
+      minimizer: [
+        new UglifyJsPlugin({
+          uglifyOptions: {
+            compress: {warnings: false},
+          }
+        })
+      ]
+    }
   }))
   .pipe(gulp.dest('plugins/webgui/libs'));
 });
 
-gulp.task('webguiCopy', ['webguiBuild', 'webguiLib'], () => {
+gulp.task('webguiCopy', gulp.parallel('webguiBuild', 'webguiLib', () => {
   return gulp
     .src([
       'plugins/webgui/libs/**',
@@ -110,9 +116,9 @@ gulp.task('webguiCopy', ['webguiBuild', 'webguiLib'], () => {
       base: './'
     })
     .pipe(gulp.dest('lib'));
-});
+}));
 
-gulp.task('babelCopy', ['clean'], () => {
+gulp.task('babelCopy', () => {
   return gulp
     .src([
       'config/*.yml',
@@ -123,7 +129,7 @@ gulp.task('babelCopy', ['clean'], () => {
     .pipe(gulp.dest('lib'));
 });
 
-gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
+gulp.task('babel', gulp.parallel('webguiCopy', 'freeAccountCopy', 'babelCopy', () => {
   return gulp.src([
     '**/*.js',
     '!node_modules/**',
@@ -135,7 +141,7 @@ gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
   .pipe(babel({
     presets: [
       [
-        'env', {
+        '@babel/env', {
           targets: {
             node: '6.0'
           },
@@ -144,12 +150,10 @@ gulp.task('babel', ['webguiCopy', 'freeAccountCopy', 'babelCopy'], () => {
     ],
   }))
   .pipe(gulp.dest('lib'));
-});
+}));
 
 gulp.task('webguiWatch', function () {
   gulp.watch('plugins/webgui/public/**', ['webguiBuild']);
 });
 
-gulp.task('default', ['clean', 'babel'], () => {
-
-});
+gulp.task('default', gulp.series('clean', 'babel'));
