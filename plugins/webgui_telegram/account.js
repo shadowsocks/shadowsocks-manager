@@ -84,11 +84,11 @@ telegram.on('message', async message => {
     const userId = await isUser(telegramId);
     const myAccount = await account.getAccount({ userId });
     if(!myAccount.length) {
-      tg.sendMessage('当前并没有分配账号', telegramId);
+      tg.sendMessage('当前用户没有分配账号', telegramId);
       if(config.plugins.alipay && config.plugins.alipay.use) {
-        tg.sendKeyboard('续费', telegramId, {
+        tg.sendKeyboard('购买新账号', telegramId, {
           inline_keyboard: [[{
-            text: '点击这里续费',
+            text: '点击这里购买',
             callback_data: `alipay:accountId[0]`,
           }]],
         });
@@ -106,6 +106,22 @@ telegram.on('message', async message => {
         keyboard
       ],
     });
+    const groupInfo = await knex('group').select([
+      'group.multiAccount as multiAccount'
+    ])
+    .leftJoin('user', 'user.group', 'group.id')
+    .leftJoin('account_plugin', 'account_plugin.userId', 'user.id')
+    .where({ 'user.id': userId }).then(s => s[0]);
+    if(groupInfo && groupInfo.multiAccount) {
+      if(config.plugins.alipay && config.plugins.alipay.use) {
+        tg.sendKeyboard('购买新账号', telegramId, {
+          inline_keyboard: [[{
+            text: '点击这里购买',
+            callback_data: `alipay:accountId[0]`,
+          }]],
+        });
+      }
+    }
   } else if(isCallbackAccount(message)) {
     const telegramId = message.callback_query.from.id.toString();
     const accountId = message.callback_query.data.match(/^accountId\[(\d{1,})\]$/)[1];
@@ -151,7 +167,7 @@ telegram.on('message', async message => {
     if(myAccount.type >= 2 && myAccount.type <= 5 && config.plugins.alipay && config.plugins.alipay.use) {
       tg.sendKeyboard('续费', telegramId, {
         inline_keyboard: [[{
-          text: '点击这里续费',
+          text: '点击这里续费 ' + myAccount.port,
           callback_data: `alipay:accountId[${ myAccount.id }]`,
         }]],
       });
@@ -231,22 +247,39 @@ telegram.on('message', async message => {
   } else if(isCallbackPay(message)) {
     const telegramId = message.callback_query.from.id.toString();
     const accountId = +message.callback_query.data.match(/^alipay:accountId\[(\d{1,})\]$/)[1];
-    // let paymentInfo = await knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(s => s[0]);
-    // if(!paymentInfo) { return; }
-    // paymentInfo = JSON.parse(paymentInfo.value);
+    const userId = await isUser(telegramId);
     const groupInfo = await knex('group').select([
       'group.order as order'
     ])
     .leftJoin('user', 'user.group', 'group.id')
     .leftJoin('account_plugin', 'account_plugin.userId', 'user.id')
-    .where({ 'account_plugin.id': accountId });
+    .where({ 'user.id': userId });
+    let accountInfo;
+    if(accountId) {
+      accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
+      if(accountInfo && accountInfo.data) { accountInfo.data = JSON.parse(accountInfo.data); }
+    }
     const groupOrderInfo = groupInfo[0].order ? JSON.parse(groupInfo[0].order) : null;
     let orders = await orderPlugin.getOrders();
-    orders = groupOrderInfo ? orders.filter(order => {
-      return groupOrderInfo.indexOf(order.id) > 0;
-    }) : orders;
+    if(groupOrderInfo) {
+      orders = orders.filter(order => {
+        return groupOrderInfo.indexOf(order.id) > 0;
+      });
+    }
+    if(!accountId) {
+      orders = orders.filter(order => {
+        return !order.baseId;
+      });
+    } else if(accountInfo && accountInfo.orderId) {
+      orders = orders.filter(order => {
+        return order.id === accountInfo.orderId || order.baseId === accountInfo.orderId;
+      });
+    } else if(accountInfo && !accountInfo.orderId) {
+      orders = orders.filter(order => {
+        return !order.baseId;
+      });
+    }
+    
     const paymentArray = [];
     for(const order of orders) {
       if(order.alipay > 0) {
@@ -261,26 +294,9 @@ telegram.on('message', async message => {
     });
   } else if(isCallbackPayQrcode(message)) {
     const alipay = appRequire('plugins/alipay/index');
-    // let paymentInfo = await knex('webguiSetting').select().where({
-    //   key: 'payment',
-    // }).then(s => s[0]);
-    // if(!paymentInfo) { return; }
-    // paymentInfo = JSON.parse(paymentInfo.value);
-    // const payType = {
-    //   hour: 5,
-    //   day: 4,
-    //   week: 2,
-    //   month: 3,
-    //   season: 6,
-    //   year: 7,
-    // };
-    // const orders = await orderPlugin.getOrders();
     const telegramId = message.callback_query.from.id.toString();
     const accountId = +message.callback_query.data.match(/^alipay:qrcode:accountId\[(\d{1,})\]type\[[0-9]{1,}\]$/)[1];
     const orderId = message.callback_query.data.match(/^alipay:qrcode:accountId\[\d{1,}\]type\[([0-9]{1,})\]$/)[1];
-    // const amount = orders.filter(f => {
-    //   f.id === +orderId;
-    // })[0].alipay;
     const userId = (await tg.getUserStatus(telegramId)).id;
     const payInfo = await alipay.createOrder(userId, accountId > 0 ? accountId : null, +orderId);
     const qrcodeId = crypto.randomBytes(32).toString('hex');
