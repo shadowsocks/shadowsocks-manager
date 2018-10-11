@@ -33,7 +33,9 @@
     "gulp-babel": "^8.0.0",
     "gulp-concat": "^2.6.1",
     "semver": "^5.6.0",
-    "uglifyjs-webpack-plugin": "^2.0.1"
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-stream": "^5.1.1"
   },
   "dependencies": {
     "alipay-ftof": "0.1.4",
@@ -64,8 +66,6 @@
     "sqlite3": "^4.0.2",
     "uuid": "^3.2.1",
     "web-push": "^3.2.2",
-    "webpack": "^4.20.2",
-    "webpack-stream": "^3.2.0",
     "ws": "^2.0.2"
   },
   "repository": {
