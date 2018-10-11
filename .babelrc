@@ -1,15 +1,21 @@
 {
   "presets": [
-    ["@babel/env", {
-      "targets": {
-        "node": "6.0"
+    [
+      "@babel/env",
+      {
+        "targets": {
+          "node": "6.0"
+        }
       }
-    }]
+    ]
   ],
   "plugins": [
-    ["@babel/plugin-transform-runtime", {
-      "helpers": false,
-      "regenerator": true
-    }]
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "helpers": false,
+        "regenerator": true
+      }
+    ]
   ]
 }
