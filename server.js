@@ -1,6 +1,6 @@
 if(process.env.NODE_ENV !== 'production' && +process.versions.node[0] < 8) {
-  console.log('use babel-core/register');
-  require('babel-core/register');
+  console.log('use @babel/register');
+  require('@babel/register');
 }
 
 require('./init/log');

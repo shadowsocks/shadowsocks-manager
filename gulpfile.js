@@ -2,9 +2,9 @@ const del = require('del');
 const gulp = require('gulp');
 const path = require('path');
 const babel = require('gulp-babel');
-const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const concat = require('gulp-concat');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 gulp.task('clean', () => {
   return del([
@@ -69,33 +69,35 @@ gulp.task('webguiBuild', () => {
       }
     ],
     module: {
-      loaders: [{
+      rules: [{
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          presets: [
-            [
-              'env', {
-                targets: {
-                  browsers: [
-                    'Chrome >= 57',
-                    'FireFox >= 50',
-                    'Safari >= 7',
-                    'ie >= 9',
-                    'last 4 Edge versions'
-                  ]
+        use: [{
+          loader: 'babel-loader',
+          query: {
+            presets: [
+              [
+                '@babel/env', {
+                  targets: {
+                    browsers: [
+                      'Chrome >= 57',
+                      'FireFox >= 50',
+                      'Safari >= 7',
+                      'ie >= 9',
+                      'last 4 Edge versions'
+                    ]
+                  }
                 }
-              }
+              ]
             ]
-          ]
-        }
+          }
+        }]
+        
       }]
     },
-    plugins: [ new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      }
-    }) ]
+    optimization: {
+      minimizer: [new UglifyJsPlugin()],
+    },
+    mode: 'production',
   }))
   .pipe(gulp.dest('plugins/webgui/libs'));
 });
