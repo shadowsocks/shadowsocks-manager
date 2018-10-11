@@ -139,7 +139,7 @@ gulp.task('babel', gulp.parallel('webguiCopy', 'freeAccountCopy', 'babelCopy', (
       [
         '@babel/env', {
           targets: {
-            node: '6.0'
+            node: '8.0'
           },
         }
       ]
