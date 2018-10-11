@@ -1,4 +1,4 @@
-if(process.env.NODE_ENV !== 'production' && +process.versions.node[0] < 8) {
+if(process.env.NODE_ENV !== 'production' && require('semver').lt(process.versions.node, '8.0.0')) {
   console.log('use @babel/register');
   require('@babel/register');
 }
