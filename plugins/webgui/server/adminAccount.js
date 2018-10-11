@@ -222,9 +222,9 @@ exports.getSubscribeAccountForUser = async (req, res) => {
 
       let result = subscribeAccount.server.map(s => {
         if (ssr === '1') {
-          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) + '/?obfsparam=&remarks=' + urlsafeBase64(s.comment) + '&group=' + urlsafeBase64(baseSetting.title));
+          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) + '/?obfsparam=&remarks=' + urlsafeBase64(s.comment || '这里显示备注') + '&group=' + urlsafeBase64(baseSetting.title));
         }
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + + s.shift)).toString('base64') + '#' + s.comment;
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + + s.shift)).toString('base64') + '#' + (s.comment || '这里显示备注');
       }).join('\r\n');
       return res.send(Buffer.from(tip + result).toString('base64'));
     }

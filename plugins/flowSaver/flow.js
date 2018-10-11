@@ -500,6 +500,7 @@ const getServerUserFlow = (serverId, timeArray) => {
     `${ tableName }.port`,
     `${ tableName }.accountId`,
     'user.userName',
+    'user.comment',
   ])
   .groupBy(`${ tableName }.accountId`)
   .leftJoin('account_plugin', 'account_plugin.id', `${ tableName }.accountId`)
