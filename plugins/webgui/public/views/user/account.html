@@ -147,7 +147,7 @@
                 <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5"
                     ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
                 <md-button class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{ '订阅' | translate
-                    }}</md-button>
+                    }}(推荐)</md-button>
             </md-card-content>
         </md-card>
     </div>
