@@ -22,8 +22,10 @@
             </div>
             <md-card-header ng-style="isBlur(a)">
                 <md-card-header-text>
-                    <span class="md-title">{{a.port}}&nbsp;(共{{a.serverList.length}}个节点)
-                        <span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
+                    <span class="md-title">{{a.port}}
+                        <span ng-if='!isAccountOutOfDate(a)' style="color:green">&nbsp;(共{{a.serverList.length}}个节点可用)</span>
+                        <span ng-if='isAccountOutOfDate(a)' style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
+                        <!-- ng-show="isAccountOutOfDate(a)" -->
                     </span>
                 </md-card-header-text>
             </md-card-header>
