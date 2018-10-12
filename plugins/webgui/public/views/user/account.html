@@ -22,7 +22,7 @@
             </div>
             <md-card-header ng-style="isBlur(a)">
                 <md-card-header-text>
-                    <span class="md-title">{{a.port}}
+                    <span class="md-title">{{a.port}}&nbsp;(共{{a.serverList.length}}个节点)
                         <span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
                     </span>
                 </md-card-header-text>
@@ -136,8 +136,9 @@
                             size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)"
                             image="true"></qr>
                         <div hide-xs></div>
-                        <div style="text-align:center;color:#c3c3c3;font-size: 14px;">提示：推荐使用订阅，否则请<span style='color:red'>点击</span>二维码<br>不同地域，节点速度各不相同，每个节点都试试吧。</div>
                     </div>
+                    <div style="text-align:center;color:#c3c3c3;font-size: 14px;">提示：推荐<span style='color:green'>使用订阅</span>，否则请<span
+                            style='color:red'>点击二维码</span><br>不同地域，节点速度各不相同，每个节点都试试吧。</div>
                 </div>
                 <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{ '修改密码' |
                     translate }}</md-button>
