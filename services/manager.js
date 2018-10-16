@@ -57,7 +57,7 @@ const sendMessage = (data, options) => {
       host,
       port,
     }, () => {
-      client.write(pack(data, (options? options.password: null) || password));
+      client.write(pack(data, (options? options.password: null) || password), ()=>client.end);
     });
     client.setTimeout(10 * 1000);
     const receive = {
@@ -74,10 +74,10 @@ const sendMessage = (data, options) => {
           logger.error(message);
           reject(new Error(`ssmgr[s] return an error code [${ options.host || host }:${ options.port || port }]`));
         }
-        client.end();
+        // client.end();
       }).catch(err => {
         logger.error(err);
-        client.end();
+        // client.end();
       });
     });
     client.on('close', () => {
@@ -90,7 +90,7 @@ const sendMessage = (data, options) => {
     client.on('timeout', () => {
       logger.error('timeout');
       reject(new Error(`connect to ssmgr[s] timeout [${ options.host || host }:${ options.port || port }]`));
-      client.end();
+      // client.end();
     });
   });
   return promise;
