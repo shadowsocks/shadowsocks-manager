@@ -57,7 +57,7 @@ const sendMessage = (data, options) => {
       host,
       port,
     }, () => {
-      client.write(pack(data, (options? options.password: null) || password), ()=>client.end());
+      client.write(pack(data, (options? options.password: null) || password));
     });
     client.setTimeout(10 * 1000);
     const receive = {
@@ -77,7 +77,7 @@ const sendMessage = (data, options) => {
         // client.end();
       }).catch(err => {
         logger.error(err);
-        // client.end();
+        client.end();
       });
     });
     client.on('close', () => {
@@ -90,7 +90,7 @@ const sendMessage = (data, options) => {
     client.on('timeout', () => {
       logger.error('timeout');
       reject(new Error(`connect to ssmgr[s] timeout [${ options.host || host }:${ options.port || port }]`));
-      // client.end();
+      client.end();
     });
   });
   return promise;

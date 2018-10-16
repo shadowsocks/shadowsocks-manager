@@ -174,7 +174,7 @@ const getUserAndPaging = async (opt = {}) => {
 
   let count = knex('user').select()
   .where('id', '>', 1)
-  .whereIn('type', type);
+  .where('type', '=', type);
 
   let users = knex('user').select([
     'user.id as id',
@@ -190,7 +190,7 @@ const getUserAndPaging = async (opt = {}) => {
     'account_plugin.port as port',
   ]).leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
   .where('user.id', '>', 1)
-  .whereIn('user.type', type).groupBy('user.id');
+  .where('user.type', '=', type).groupBy('user.id');
 
   if(group >= 0) {
     count = count.where({ 'user.group': group });
