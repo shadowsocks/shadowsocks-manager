@@ -57,7 +57,7 @@ const sendMessage = (data, options) => {
       host,
       port,
     }, () => {
-      client.write(pack(data, (options? options.password: null) || password), ()=>client.end);
+      client.write(pack(data, (options? options.password: null) || password), ()=>client.end());
     });
     client.setTimeout(10 * 1000);
     const receive = {
