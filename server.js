@@ -1,8 +1,3 @@
-// if(process.env.NODE_ENV !== 'production' && require('semver').lt(process.versions.node, '8.0.0')) {
-//   console.log('use @babel/register');
-//   require('@babel/register');
-// }
-
 require('./init/log');
 
 const log4js = require('log4js');
