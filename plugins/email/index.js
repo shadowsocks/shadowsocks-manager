@@ -10,10 +10,10 @@ const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
 let emailConfig;
 let transporter;
 
-if(!config.plugins.email.type) {
+if (!config.plugins.email.type) {
   config.plugins.email.type = 'smtp';
 }
-if(config.plugins.email.type === 'smtp') {
+if (config.plugins.email.type === 'smtp') {
   emailConfig = {
     host: config.plugins.email.host,
     port: config.plugins.email.port || 465,
@@ -28,7 +28,7 @@ if(config.plugins.email.type === 'smtp') {
     proxy: config.plugins.email.proxy || '',
   };
   transporter = nodemailer.createTransport(emailConfig);
-  if(config.plugins.email.proxy && config.plugins.email.proxy.indexOf('socks') >= 0) {
+  if (config.plugins.email.proxy && config.plugins.email.proxy.indexOf('socks') >= 0) {
     transporter.set('proxy_socks_module', require('socks'));
   }
 } else if (config.plugins.email.type === 'mailgun') {
@@ -68,7 +68,7 @@ if(config.plugins.email.type === 'smtp') {
       json: true,
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ emailConfig.apiKey }`,
+        'Authorization': `Bearer ${emailConfig.apiKey}`,
       },
       body: {
         personalizations: [
@@ -96,19 +96,21 @@ if(config.plugins.email.type === 'smtp') {
 }
 
 const sendMail = async (to, subject, text, options = {}) => {
-  if(isInBlackList(to)) {
+  if (isInBlackList(to)) {
     logger.error('Email in black list: ' + to);
     return Promise.reject('email in black list');
   }
+
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
-        from: `"${ config.plugins.email.name || '' }" <${ config.plugins.email.email || config.plugins.email.username }>`,
+        from: `"${config.plugins.email.name || ''}" <${config.plugins.email.email || config.plugins.email.username}>`,
         to,
         subject,
         text,
+        replyTo: config.plugins.email.replyto
       }, (error, info) => {
-        if(error) {
+        if (error) {
           return reject(error);
         }
         return resolve(info);
@@ -117,19 +119,19 @@ const sendMail = async (to, subject, text, options = {}) => {
   };
   const checkLimit = async (ip = '', session = '') => {
     let ipNumber = await knex('email')
-    .where({ ip })
-    .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
-    .count('time as count').then(success => success[0].count);
+      .where({ ip })
+      .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
+      .count('time as count').then(success => success[0].count);
     let sessionNumber = await knex('email')
-    .where({ session })
-    .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
-    .count('time as count').then(success => success[0].count);
-    if(ip === '127.0.0.1' || !ip) { ipNumber = 0; }
-    if(!session) { sessionNumber = 0; }
+      .where({ session })
+      .whereBetween('time', [Date.now() - 3600 * 1000, Date.now()])
+      .count('time as count').then(success => success[0].count);
+    if (ip === '127.0.0.1' || !ip) { ipNumber = 0; }
+    if (!session) { sessionNumber = 0; }
     return ipNumber + sessionNumber;
   };
   const number = await checkLimit(options.ip, options.session);
-  if(number >= 40) { return Promise.reject('send email out of limit'); }
+  if (number >= 40) { return Promise.reject('send email out of limit'); }
   await send(to, subject, text);
   await knex('email').insert({
     to,
@@ -152,11 +154,11 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
       to,
       type: 'code',
     }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
-    if(findEmail.length > 0) {
+    if (findEmail.length > 0) {
       return findEmail[0].remark;
     }
     const code = Math.random().toString().substr(2, 6);
-    if(text.indexOf('${code}') >= 0) {
+    if (text.indexOf('${code}') >= 0) {
       text = text.replace(/\$\{code\}/g, '[ ' + code + ' ]');
     } else {
       text += '\n[ ' + code + ' ]';
@@ -168,16 +170,16 @@ const sendCode = async (to, subject = 'subject', text, options = {}) => {
       session: options.session,
       telegramId: options.telegramId,
     });
-    logger.info(`[${ to }] Send code: ${ code }`);
+    logger.info(`[${to}] Send code: ${code}`);
     return code;
   } catch (err) {
-    logger.error(`Send code fail: ${ err }`);
+    logger.error(`Send code fail: ${err}`);
     return Promise.reject(err);
   }
 };
 
 const checkCode = async (email, code) => {
-  logger.info(`[${ email }] Check code: ${ code }`);
+  logger.info(`[${email}] Check code: ${code}`);
   const sendEmailTime = 10;
   try {
     const findEmail = await knex('email').select(['remark']).where({
@@ -185,17 +187,17 @@ const checkCode = async (email, code) => {
       remark: code,
       type: 'code',
     }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
-    if(findEmail.length === 0) {
+    if (findEmail.length === 0) {
       throw new Error('Email or code not found');
     }
-  } catch(err) {
-    logger.error(`Check code fail: ${ err }`);
+  } catch (err) {
+    logger.error(`Check code fail: ${err}`);
     return Promise.reject(err);
   }
 };
 
 const checkCodeFromTelegram = async (telegramId, code) => {
-  logger.info(`Telegram[${ telegramId }] Check code: ${ code }`);
+  logger.info(`Telegram[${telegramId}] Check code: ${code}`);
   const sendEmailTime = 10;
   try {
     const findEmail = await knex('email').where({
@@ -203,12 +205,12 @@ const checkCodeFromTelegram = async (telegramId, code) => {
       remark: code,
       type: 'code',
     }).whereBetween('time', [Date.now() - sendEmailTime * 60 * 1000, Date.now()]);
-    if(findEmail.length === 0) {
+    if (findEmail.length === 0) {
       throw new Error('Email or code not found');
     }
     return findEmail[0];
-  } catch(err) {
-    logger.error(`Check code fail: ${ err }`);
+  } catch (err) {
+    logger.error(`Check code fail: ${err}`);
     return Promise.reject(err);
   }
 };

@@ -13,7 +13,7 @@ exports.getOneUser = async (req, res) => {
     const ref = await refUser.getRefSourceUser(userId);
     userInfo.ref = ref;
     return res.send(userInfo);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.status(403).end();
   }
@@ -52,6 +52,7 @@ exports.getUsers = (req, res) => {
         lastLogin: m.lastLogin,
         username: m.username,
         port: m.port,
+        comment: m.comment
       };
     });
     return res.send(success);
@@ -66,11 +67,11 @@ exports.addUser = (req, res) => {
   req.checkBody('password', 'Invalid password').notEmpty();
   req.checkBody('type', 'Invalid type').isIn(['normal', 'admin']);
   req.getValidationResult().then(result => {
-    if(result.isEmpty()) {
+    if (result.isEmpty()) {
       const email = req.body.email;
       const password = req.body.password;
       const group = req.adminInfo.id === 1 ? 0 : req.adminInfo.group;
-      const type = req.adminInfo.id === 1 ? req.body.type: 'normal' ;
+      const type = req.adminInfo.id === 1 ? req.body.type : 'normal';
       return user.add({
         username: email,
         email,

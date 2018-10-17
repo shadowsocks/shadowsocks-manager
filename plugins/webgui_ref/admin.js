@@ -28,6 +28,7 @@ const getRefCodeAndPaging = async (opt) => {
     'webgui_ref_code.id as id',
     'webgui_ref_code.code as code',
     'user.email as email',
+    'user.comment as comment',
     'webgui_ref_code.visit as visit',
     'webgui_ref_code.maxUser as maxUser',
     knex.raw('count(webgui_ref.codeId) as count'),
@@ -80,8 +81,10 @@ const getRefUserAndPaging = async opt => {
     'webgui_ref_code.code as code',
     'u1.id as sourceUserId',
     'u1.email as sourceUser',
+    'u1.comment as sourceComment',
     'u2.id as userId',
     'u2.email as user',
+    'u2.comment as comment',
     'webgui_ref.time as time',
   ])
   .leftJoin('webgui_ref_code', 'webgui_ref.codeId', 'webgui_ref_code.id')
