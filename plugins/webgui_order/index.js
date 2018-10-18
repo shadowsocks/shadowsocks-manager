@@ -29,12 +29,18 @@ const getOrdersAndAccountNumber = async () => {
   ])
   .leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
   .groupBy('webgui_order.id');
+  orders.forEach(order => {
+    if(order.server) {
+      order.server = JSON.parse(order.server);
+    }
+  });
   return orders;
 };
 
 const getOneOrder = async orderId => {
   const order = await knex('webgui_order').where({ id: orderId }).then(s => s[0]);
   if(!order) { return Promise.reject('order not found'); }
+  if(order.server) { order.server = JSON.parse(order.server); }
   return order;
 };
 

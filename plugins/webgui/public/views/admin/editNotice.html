@@ -20,6 +20,13 @@
                     <label>内容</label>
                     <textarea ng-model="notice.content" rows="7" md-no-autogrow md-select-on-focus></textarea>
                 </md-input-container>
+                <div style="width: 100%;" layout="row" layout-align="space-between center">
+                    <div flex="75">自动弹出</div>
+                    <div flex layout="row" layout-align="end center">
+                        <md-switch ng-model="notice.autopop" aria-label="autopop" ng-true-value="1" ng-false-value="0">
+                        </md-switch>
+                    </div>
+                </div>
             </form>
         </div>
     </md-card-content>

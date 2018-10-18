@@ -7,6 +7,7 @@ exports.getNotice = (req, res) => {
     'notice.content as content',
     'notice.time as time',
     'group.name as groupName',
+    'notice.autopop as autopop',
   ]).orderBy('time', 'desc')
   .leftJoin('group', 'notice.group', 'group.id')
   .then(success => {
@@ -39,11 +40,13 @@ exports.addNotice = (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
   const group = +req.body.group;
+  const autopop = req.body.autopop;
   knex('notice').insert({
     title,
     content,
     time: Date.now(),
     group,
+    autopop,
   }).then(success => {
     return res.send('success');
   }).catch(err => {
@@ -57,11 +60,13 @@ exports.editNotice = (req, res) => {
   const title = req.body.title;
   const content = req.body.content;
   const group = +req.body.group;
+  const autopop = req.body.autopop;
   knex('notice').update({
     title,
     content,
     time: Date.now(),
     group,
+    autopop
   }).where({
     id,
   }).then(success => {
