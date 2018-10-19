@@ -131,11 +131,13 @@ app
     };
   }
 ])
-.controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog',
-  ($scope, $state, userApi, markdownDialog) => {
+.controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog', '$sessionStorage',
+  ($scope, $state, userApi, markdownDialog, $sessionStorage) => {
     $scope.setTitle('首页');
     userApi.getNotice().then(success => {
       $scope.notices = success;
+      console.log($sessionStorage.showNotice);
+      $sessionStorage.showNotice = true;
     });
     $scope.toMyAccount = () => {
       $state.go('user.account');

@@ -135,6 +135,9 @@ app
       $scope.orderInfoLoaded = true;
       $scope.servers = success[0].data;
       $scope.order = success[1].data;
+      if($scope.order.server) {
+        $scope.order.server = JSON.parse($scope.order.server);
+      } 
       $scope.orders = success[2].data.filter(f => {
         return !f.baseId;
       });
