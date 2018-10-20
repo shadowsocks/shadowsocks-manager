@@ -131,13 +131,18 @@ app
     };
   }
 ])
-.controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog', '$sessionStorage',
-  ($scope, $state, userApi, markdownDialog, $sessionStorage) => {
+.controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog', '$sessionStorage', 'autopopDialog',
+  ($scope, $state, userApi, markdownDialog, $sessionStorage, autopopDialog) => {
     $scope.setTitle('首页');
     userApi.getNotice().then(success => {
       $scope.notices = success;
-      console.log($sessionStorage.showNotice);
-      $sessionStorage.showNotice = true;
+      if(!$sessionStorage.showNotice) {
+        $sessionStorage.showNotice = true;
+        const autopopNotice = $scope.notices.filter(notice => notice.autopop);
+        if(autopopNotice.length) {
+          autopopDialog.show(autopopNotice);
+        }
+      }
     });
     $scope.toMyAccount = () => {
       $state.go('user.account');
