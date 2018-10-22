@@ -270,8 +270,8 @@ const checkAccount = async (serverId, accountId) => {
 
 (async () => {
   while(true) {
+    const start = Date.now();
     try {
-      const start = Date.now();
       await sleep(sleepTime);
       const servers = await knex('server').where({});
       for(const server of servers) {
@@ -297,6 +297,10 @@ const checkAccount = async (serverId, accountId) => {
       }
     } catch(err) {
       console.log(err);
+      const end = Date.now();
+      if(end - start <= 67 * 1000) {
+        await sleep(67 * 1000 - (end - start));
+      }
     }
   }
 })();
@@ -332,27 +336,34 @@ const checkAccount = async (serverId, accountId) => {
       accounts = [...accounts, ...datas];
     } catch(err) { }
 
-    if(accounts.length <= 120) {
-      for(const account of accounts) {
-        const start = Date.now();
-        await checkAccount(account.serverId, account.accountId).catch();
-        const time = 60 * 1000 / accounts.length - (Date.now() - start);
-        await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
+    try {
+      if(accounts.length <= 120) {
+        for(const account of accounts) {
+          const start = Date.now();
+          await checkAccount(account.serverId, account.accountId).catch();
+          const time = 60 * 1000 / accounts.length - (Date.now() - start);
+          await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
+        }
+      } else {
+        await Promise.all(accounts.map((account, index) => {
+          return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
+            return checkAccount(account.serverId, account.accountId);
+          });
+        }));
       }
-    } else {
-      await Promise.all(accounts.map((account, index) => {
-        return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
-          return checkAccount(account.serverId, account.accountId);
-        });
-      }));
-    }
-    if(accounts.length) {
-      logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
-      if(accounts.length < 30) {
-        await sleep((30 - accounts.length) * 1000);
+      if(accounts.length) {
+        logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
+        if(accounts.length < 30) {
+          await sleep((30 - accounts.length) * 1000);
+        }
+      } else {
+        await sleep(30 * 1000);
       }
-    } else {
-      await sleep(30 * 1000);
+    } catch (err) {
+      const end = Date.now();
+      if(end - start <= 60 * 1000) {
+        await sleep(60 * 1000 - (end - start));
+      }
     }
   }
 })();
