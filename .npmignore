@@ -41,3 +41,17 @@ jspm_packages
 config/development.yml
 
 .vscode
+.github
+docker
+docs
+wikiImage
+.eslintrc.json
+*.yml
+*.sqlite
+gulpfile.js
+plugins/webgui/libs/*.min.js
+plugins/webgui/libs/*.min.map
+plugins/webgui/libs/*.min.js.map
+plugins/webgui/libs/angular-inview.js
+plugins/webgui/public
+plugins/*/screenshot
