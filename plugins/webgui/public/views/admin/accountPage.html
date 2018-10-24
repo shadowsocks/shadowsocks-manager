@@ -123,7 +123,7 @@
                                 </md-radio-group>
                             </div>
                             <div>
-                                {{time}}，{{sumFlow | flow}}
+                                {{ time }}，{{ sumFlow | flow }}, {{ sumFlowForAllServer.flow | flow }}
                             </div>
                             <div>
                                 <md-button md-no-ink class="md-primary" ng-click="changeFlowTime(server.id, -1)">prev</md-button>
@@ -155,7 +155,7 @@
                         <div layout="row" layout-align="center center">
                             <div>
                                 <canvas class="chart chart-pie"
-                                    width="{{getChartSize().pie[0]}} + 200"
+                                    width="{{getChartSize().pie[0] + 200}}"
                                     height="{{getChartSize().pie[1]}}"
                                     chart-data="pieChart.data"
                                     chart-labels="pieChart.labels"

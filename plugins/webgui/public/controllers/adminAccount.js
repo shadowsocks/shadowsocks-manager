@@ -254,7 +254,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
               label: function(tooltipItem, data) {
                 const label = data.labels[tooltipItem.index];
                 const datasetLabel = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                return label + ': ' + scaleLabel(datasetLabel);
+                return [label, scaleLabel(datasetLabel)];
               }
             }
           },
@@ -296,6 +296,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         $scope.sumFlow = success[0].data.reduce((a, b) => {
           return a + b;
         }, 0);
+        $scope.sumFlowForAllServer = success[1].data.reduce((a, b) => {
+          return { flow: a.flow + b.flow };
+        }, { flow: 0 });
         setChart(success[0].data, success[1].data);
       });
       if($scope.flowType.value === 'hour') {
