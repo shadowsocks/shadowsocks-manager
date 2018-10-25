@@ -328,22 +328,22 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
       if($mdMedia('xs')) {
         return {
           line: [ 320, 170 ],
-          pie: [ 170, 170 ],
+          pie: [ 180, 170 ],
         };
       } else if($mdMedia('sm')) {
         return {
           line: [ 360, 190 ],
-          pie: [ 190, 190 ],
+          pie: [ 205, 190 ],
         };
       } else if($mdMedia('md')) {
         return {
           line: [ 360, 180 ],
-          pie: [ 180, 180 ],
+          pie: [ 360, 180 ],
         };
       } else if($mdMedia('gt-md')) {
         return {
           line: [ 540, 240 ],
-          pie: [ 240, 240 ],
+          pie: [ 450, 240 ],
         };
       }
     };
