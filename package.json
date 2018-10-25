@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.27.1",
+  "version": "0.27.2",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -35,7 +35,7 @@
     "webpack-stream": "^5.1.1"
   },
   "dependencies": {
-    "alipay-ftof": "^0.1.5",
+    "alipay-ftof": "0.1.4",
     "body-parser": "^1.15.2",
     "commander": "^2.19.0",
     "compression": "^1.7.3",
