@@ -341,10 +341,10 @@ const getIp = port => {
   let cmd = '';
   let shell = '';
   if (process.platform === 'win32') {
-    cmd = `netstat -an | sls -Pattern ":${ port } " | sls -Pattern "ESTABLISHED" | %{$_.Line.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries)[2]} | %{$_.Split(":")[0]} | sls -Pattern "127\.0\.0\.1" -NotMatch | unique | %{$_.Line}`;
+    cmd = `netstat -an | sls -Pattern ':${ port } ' | sls -Pattern 'ESTABLISHED' | %{$_.Line.Split(' ',[System.StringSplitOptions]::RemoveEmptyEntries)[2]} | %{$_.Split(':')[0]} | sls -Pattern '127\\.0\\.0\\.1' -NotMatch | unique | %{$_.Line}`;
     shell = 'powershell';
   } else {
-    cmd = `ss -an | grep ":${ port } " | grep ESTAB | awk '{print $6}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
+    cmd = `ss -an | grep ':${ port } ' | grep ESTAB | awk '{print $6}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
     shell = '/bin/sh';
   }
   return new Promise((resolve, reject) => {
