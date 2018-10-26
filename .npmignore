@@ -47,6 +47,7 @@ docs
 wikiImage
 .eslintrc.json
 *.yml
+!default.yml
 *.sqlite
 gulpfile.js
 plugins/webgui/libs/*.min.js
