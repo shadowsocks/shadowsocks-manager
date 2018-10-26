@@ -36,6 +36,13 @@ const run = async () => {
     }
   }
 
+  if (config.ssFastOpen) {
+    moreArgs.push('--fast-open');
+  }
+  if (config.ssNoDelay) {
+    moreArgs.push('--no-delay');
+  }
+
   let shadowsocks;
   if (runParams.indexOf('python') >= 0) {
     type = 'python';
@@ -65,11 +72,11 @@ const run = async () => {
   }
 
   shadowsocks.stdout.on('data', data => {
-    // console.log(`stdout: ${data}`);
+    console.log(`stdout: ${data}`);
   });
 
   shadowsocks.stderr.on('data', data => {
-    // console.error(`stderr: ${data}`);
+    console.error(`stderr: ${data}`);
   });
 
   shadowsocks.on('close', code => {

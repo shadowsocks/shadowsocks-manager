@@ -29,6 +29,8 @@ program
     '--plugin-opts [options]',
     'Set SIP003 plugin options. (Experimental)',
   )
+  .option('--fast-open', 'Enable TCP fast open.')
+  .option('--no-delay', 'Enable TCP_NODELAY.')
   .option('--debug', 'show debug message')
   .parse(process.argv);
 
@@ -78,5 +80,11 @@ if (program.run) {
     if (program.pluginOpts) {
       config.set('ssPluginOpts', program.pluginOpts);
     }
+  }
+  if (program.fastOpen) {
+    config.set('ssFastOpen', true);
+  }
+  if (program.noDelay) {
+    config.set('ssNoDelay', true);
   }
 }
