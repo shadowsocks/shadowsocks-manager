@@ -84,7 +84,7 @@ if (program.run) {
   if (program.fastOpen) {
     config.set('ssFastOpen', true);
   }
-  if (program.noDelay) {
+  if (!program.delay) {
     config.set('ssNoDelay', true);
   }
 }

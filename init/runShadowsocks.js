@@ -72,11 +72,11 @@ const run = async () => {
   }
 
   shadowsocks.stdout.on('data', data => {
-    console.log(`stdout: ${data}`);
+    // console.log(`stdout: ${data}`);
   });
 
   shadowsocks.stderr.on('data', data => {
-    console.error(`stderr: ${data}`);
+    // console.error(`stderr: ${data}`);
   });
 
   shadowsocks.on('close', code => {
