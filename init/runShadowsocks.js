@@ -9,22 +9,40 @@ const run = async () => {
   let runParams = config.runShadowsocks;
   let type = 'libev';
   let method = 'aes-256-cfb';
+  let plugin = config.ssPlugin;
+  let pluginOpts = config.ssPluginOpts;
+
   if(!runParams) {
     return;
   }
-  if(typeof runParams === 'boolean' && runParams) {
+  if(runParams === true) {
     runParams = '';
   }
   if(runParams.indexOf(':') >= 0) {
     method = runParams.split(':')[1];
   }
+
+  let moreArgs = [];
+  if (plugin) {
+    moreArgs.push('--plugin');
+    if (plugin !== true) {
+      moreArgs.push(plugin);
+    }
+    if (pluginOpts) {
+      moreArgs.push('--plugin-opts');
+      if (pluginOpts !== true) {
+        moreArgs.push(pluginOpts);
+      }
+    }
+  }
+
   let shadowsocks;
   if(runParams.indexOf('python') >= 0) {
     type = 'python';
-    const tempPassword = 'qwerASDF' + Math.random().toString().substr(2, 8);
-    shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address]);
+    const tempPassword = Math.random().toString(36).slice(2); //better random password generator
+    shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address, ...moreArgs]);
   } else {
-    shadowsocks = spawn('ss-manager', [ '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
+    shadowsocks = spawn('ss-manager', [ '-m', method, '-u', '--manager-address', config.shadowsocks.address, ...moreArgs]);
   }
 
   shadowsocks.stdout.on('data', (data) => {
