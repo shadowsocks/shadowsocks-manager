@@ -356,7 +356,7 @@ exports.getOrders = (req, res) => {
   options.start = req.query.start;
   options.end = req.query.end;
   
-  options.filter = req.query.filter || '';
+  options.filter = ( Array.isArray(req.query.filter) ? req.query.filter : [req.query.filter] ) || [];
   alipay.orderListAndPaging(options)
   .then(success => {
     res.send(success);
