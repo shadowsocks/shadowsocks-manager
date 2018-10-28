@@ -5,7 +5,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setTitle('服务器');
     $scope.setMenuRightButton('timeline');
     if(!$localStorage.admin.serverChart) {
-      $localStorage.admin.serverChart = { showChart: true };
+      $localStorage.admin.serverChart = { showFlow: true, showChart: true };
     }
     $scope.serverChart = $localStorage.admin.serverChart;
     $scope.$on('RightButtonClick', () => {
@@ -68,6 +68,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             server.name = servers[index].name;
             server.port = servers[index].port;
             server.status = servers[index].status;
+            server.isGfw = servers[index].isGfw;
             adminApi.getServerFlow(server.id).then(flow => {
               if(!server.flow) {
                 server.flow = {};
@@ -98,7 +99,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             data: servers,
           };
           $scope.servers = servers;
-          $scope.servers.forEach(server => {
+          $scope.servers.forEach((server, index) => {
             adminApi.getServerFlow(server.id).then(flow => {
               server.flow = flow;
             });
@@ -137,28 +138,54 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.toServerPage = (serverId) => {
       $state.go('admin.serverPage', { serverId });
     };
-    $scope.setFabButton(() => {
+    $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addServer');
-    });
+    } : null);
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia',
-  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia', '$interval', 'banDialog',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia, $interval, banDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
-    $http.get(`/api/admin/server/${ serverId }`).then(success => {
-      $scope.server = success.data;
-    }).catch(() => {
-      // $state.go('admin.server');
-    });
+    const getServerInfo = () => {
+      $http.get(`/api/admin/server/${ serverId }`).then(success => {
+        $scope.server = success.data;
+        $scope.currentPorts = {};
+        $scope.server.ports.forEach(f => {
+          $scope.currentPorts[f.port] = {
+            port: f.port,
+            password: f.password,
+            exists: true,
+          };
+        });
+        return adminApi.getAccount();
+      }).then(accounts => {
+        accounts.forEach(account => {
+          if(!$scope.currentPorts[account.port + $scope.server.shift]) {
+            $scope.currentPorts[account.port + $scope.server.shift] = {
+              id: account.id,
+              port: account.port + $scope.server.shift,
+              password: account.password,
+              exists: false,
+            };
+          } else {
+            $scope.currentPorts[account.port + $scope.server.shift].id = account.id;
+          }
+        });
+        $scope.portNumber = Object.keys($scope.currentPorts).filter(f => {
+          return $scope.currentPorts[f].exists;
+        }).length;
+      });
+    };
+    getServerInfo();
+    $scope.setInterval($interval(() => {
+      getServerInfo();
+    }, 60 * 1000));
     $scope.toAccountPage = port => {
       adminApi.getAccountId(port - $scope.server.shift).then(id => {
         $state.go('admin.accountPage', { accountId: id });
       });
-    };
-    $scope.editServer = () => {
-      $state.go('admin.editServer', { serverId });
     };
     $scope.deleteServer = id => {
       const confirm = $mdDialog.confirm()
@@ -311,6 +338,28 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         };
       }
     };
+    $scope.setFabButton($scope.id === 1 ? () => {
+      $state.go('admin.editServer', { serverId });
+    } : null, 'mode_edit');
+    $scope.banAccount = (accountId) => {
+      banDialog.show(serverId, accountId);
+    };
+    $scope.setMenuSearchButton('search');
+    $scope.matchPort = (port, passowrd, search) => {
+      if(!search) { return true; }
+      return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
+    };
+    // $scope.$on('cancelSearch', () => {
+      
+    // });
+    // let timeoutPromise;
+    // $scope.$watch('menuSearch.text', () => {
+    //   if(!$scope.menuSearch.text) { return; }
+    //   timeoutPromise && $timeout.cancel(timeoutPromise);
+    //   timeoutPromise = $timeout(() => {
+        
+    //   }, 500);
+    // });
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
@@ -372,6 +421,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
     });
+    $scope.server = { check: 1 };
     $scope.methods = [
       'aes-256-cfb',
       'aes-192-cfb',
@@ -391,22 +441,22 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
     };
+    $scope.serverInfoloaded = false;
     $http.get(`/api/admin/server/${ serverId }`, {
       params: {
         noPort: true,
       }
     })
     .then(success => {
-      $scope.server = {
-        name: success.data.name,
-        comment: success.data.comment,
-        address: success.data.host,
-        port: +success.data.port,
-        password: success.data.password,
-        method: success.data.method,
-        scale: success.data.scale,
-        shift: success.data.shift,
-      };
+      $scope.serverInfoloaded = true;
+      $scope.server.name = success.data.name;
+      $scope.server.comment = success.data.comment;
+      $scope.server.address = success.data.host;
+      $scope.server.port = +success.data.port;
+      $scope.server.password = success.data.password;
+      $scope.server.method = success.data.method;
+      $scope.server.scale = success.data.scale;
+      $scope.server.shift = success.data.shift;
     });
     $scope.confirm = () => {
       alertDialog.loading();
@@ -419,6 +469,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         method: $scope.server.method,
         scale: $scope.server.scale,
         shift: $scope.server.shift,
+        check: $scope.server.check,
       }).then(success => {
         alertDialog.show('修改服务器成功', '确定');
         $state.go('admin.serverPage', { serverId: $stateParams.serverId });

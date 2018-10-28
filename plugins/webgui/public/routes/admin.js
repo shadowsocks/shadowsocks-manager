@@ -8,6 +8,14 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/admin',
       abstract: true,
       templateUrl: `${ cdn }/public/views/admin/admin.html`,
+      resolve: {
+        myConfig: ['$http', 'configManager', ($http, configManager) => {
+          if(configManager.getConfig().version) { return; }
+          return $http.get('/api/home/login').then(success => {
+            configManager.setConfig(success.data);
+          });
+        }]
+      },
     })
     .state('admin.index', {
       url: '/index',

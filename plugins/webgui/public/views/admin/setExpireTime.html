@@ -1,0 +1,41 @@
+<md-bottom-sheet class="md-list" layout="row" layout-align="center center">
+  <div flex-md="20" flex-gt-md="25"></div>
+  <md-list flex>
+      <md-divider></md-divider>
+      <md-list-item layout="row">
+          <div flex layout="row" layout-align="space-between center">
+              <div flex="40">到期时间：</div>
+              <div flex="60" style="text-align:right">
+                  <span style="font-size: 0.9em;">{{ account.data.expire + expireTimeShift | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ account.data.expire + expireTimeShift | timeago }}</span>
+              </div>
+          </div>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item layout="row">
+          <div flex hide-xs></div>
+          <md-button flex class="md-raised" ng-click="setExpireTime(60000)">+1 min</md-button>
+          <md-button flex hide-xs class="md-raised" ng-click="setExpireTime(10 * 60000)">+10 min</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(3600000)">+1 h</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(6 * 3600000)">+6 h</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(24 * 3600000)">+1 d</md-button>
+          <md-button flex hide-xs class="md-raised" ng-click="setExpireTime(7 * 24 * 3600000)">+7 d</md-button>
+          <md-button flex hide-xs hide-sm class="md-raised" ng-click="setExpireTime(30 * 24 * 3600000)">+1 M</md-button>
+          <md-button flex hide-xs hide-sm class="md-raised" ng-click="setExpireTime(3 * 30 * 24 * 3600000)">+3 M</md-button>
+          <div flex hide-xs></div>
+      </md-list-item>
+      <md-list-item layout="row">
+          <div flex hide-xs></div>
+          <md-button flex class="md-raised" ng-click="setExpireTime(-60000)">-1 min</md-button>
+          <md-button flex hide-xs class="md-raised" ng-click="setExpireTime(-10 * 60000)">-10 min</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(-3600000)">-1 h</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(-6 * 3600000)">-6 h</md-button>
+          <md-button flex class="md-raised" ng-click="setExpireTime(-24 * 3600000)">-1 d</md-button>
+          <md-button flex hide-xs class="md-raised" ng-click="setExpireTime(-7 * 24 * 3600000)">-7 d</md-button>
+          <md-button flex hide-xs hide-sm class="md-raised" ng-click="setExpireTime(-30 * 24 * 3600000)">-1 M</md-button>
+          <md-button flex hide-xs hide-sm class="md-raised" ng-click="setExpireTime(-3 * 30 * 24 * 3600000)">-3 M</md-button>
+          <div flex hide-xs></div>
+      </md-list-item>
+      <md-divider></md-divider>
+  </md-list>
+  <div flex-md="20" flex-gt-md="25"></div>
+</md-bottom-sheet>

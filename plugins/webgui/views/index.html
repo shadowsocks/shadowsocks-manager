@@ -17,33 +17,17 @@
     <link rel="shortcut icon" href="/favicon.png">
     <link rel="manifest" href="/manifest.json">
     <title><%= title%></title>
+    <meta name="keywords" content="<%= keywords%>">
+    <meta name="description" content="<%= description%>">
     <base href="/">
 </head>
 
-<body ng-app="app" ng-cloak>
-    <script src="<%= cdn%>/libs/angular.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-inview.js"></script>
-    <script src="<%= cdn%>/libs/angular-animate.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-aria.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-messages.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-material.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-ui-router.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-translate.min.js"></script>
-    <script src="<%= cdn%>/libs/qrcode.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-qr.min.js"></script>
-    <script src="<%= cdn%>/libs/ngStorage.min.js"></script>
-    <script src="<%= cdn%>/libs/Chart.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-chart.min.js"></script>
-    <script src="<%= cdn%>/libs/moment.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-moment.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-websocket.min.js"></script>
-    <script src="<%= cdn%>/libs/marked.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-marked.min.js"></script>
-    <script src="<%= cdn%>/libs/angular-translate.min.js"></script>
+<body ng-cloak>
+    <script src="<%= cdn%>/libs/lib.js"></script>
     <script>
-        window.ssmgrVersion = '<%= version%>'
-        window.cdn = '<%= cdn%>'
-        window.ssmgrConfig = '<%- JSON.stringify(config)%>'
+        window.api = '';
+        window.cdn = '<%= cdn%>';
+        window.title = '<%= title%>';
     </script>
     <% if (analytics) { %>
     <script>

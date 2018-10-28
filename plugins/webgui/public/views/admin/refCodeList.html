@@ -1,0 +1,33 @@
+<div ng-if="total === 0" layout="row" layout-align="center center" style="margin-top: 25px; font-size: 1.1em; color: #555">当前没有生成邀请码</div>
+<div ng-if="total > 0" style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555">共 {{ total }} 个邀请码</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="c in code track by $index">
+        <md-card md-colors="{{ codeColor(c) }}" ng-click="editRefCode(c.id)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="70"><span>{{ c.code }}</span><br><span style="color: #aaa; font-size: 0.75em;">{{ c.email }}</span></div>
+                    <div flex layout="row" layout-align="end center">
+                        <span style="font-size: 0.9em; text-overflow: ellipsis; overflow: hidden;">{{ c.visit }} / {{ c.count }} / {{ c.maxUser }}</span>
+                        <div><md-icon>chevron_right</md-icon></div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" in-view="view($inview)" ng-if="code.length && !isCodePageFinish">
+        <md-card>
+            <md-card-content>
+                <div layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!code.length && !isCodePageFinish">
+    <div flex style="height: 180px;"></div>
+    <div flex layout="row" layout-align="center center">
+        <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+    </div>
+    <div flex style="height: 180px;"></div>
+</div>

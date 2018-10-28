@@ -2,8 +2,12 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('userSortDialog' , [ '$mdDialog', ($mdDialog) => {
+app.factory('userSortDialog' , [ '$mdDialog', '$http', ($mdDialog, $http) => {
   const publicInfo = {};
+  $http.get('/api/admin/group').then(success => {
+    publicInfo.groups = success.data;
+    publicInfo.groups.unshift({ id: -1, name: '所有组', comment: '' });
+  });
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -27,13 +31,23 @@ app.factory('userSortDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', '$localStorage', 'bind', function($scope, $mdDialog, $localStorage, bind) {
+    controller: ['$scope', '$mdDialog', '$localStorage', 'bind', '$mdMedia', function($scope, $mdDialog, $localStorage, bind, $mdMedia) {
       $scope.publicInfo = bind;
       $scope.userSort = $localStorage.admin.userSortSettings;
+      if(!$scope.userSort.type) {
+        $scope.userSort.type = {};
+      }
+      $scope.setDialogWidth = () => {
+        if($mdMedia('xs') || $mdMedia('sm')) {
+          return {};
+        }
+        return { 'min-width': '350px' };
+      };
     }],
     clickOutsideToClose: true,
   };
-  const show = () => {
+  const show = id => {
+    publicInfo.id = id;
     if(isDialogShow()) {
       return dialogPromise;
     }

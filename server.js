@@ -1,8 +1,3 @@
-if(process.env.NODE_ENV !== 'production') {
-  console.log('use babel-core/register');
-  require('babel-core/register');
-}
-
 require('./init/log');
 
 const log4js = require('log4js');

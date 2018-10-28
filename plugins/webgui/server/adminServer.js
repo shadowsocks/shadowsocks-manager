@@ -125,7 +125,7 @@ exports.editServer = (req, res) => {
     const method = req.body.method;
     const scale = req.body.scale;
     const shift = req.body.shift;
-    // return serverManager.edit(serverId, name, address, port, password, method, scale, comment, shift);
+    const check = +req.body.check;
     return serverManager.edit({
       id: serverId,
       name,
@@ -136,6 +136,7 @@ exports.editServer = (req, res) => {
       scale,
       comment,
       shift,
+      check,
     });
   }).then(success => {
     res.send('success');

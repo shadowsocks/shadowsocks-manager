@@ -1,14 +1,26 @@
 const app = angular.module('app');
 
-
-app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http, $q, moment, preload, $timeout) => {
+app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', 'configManager', ($http, $q, moment, preload, $timeout, configManager) => {
+  const config = configManager.getConfig();
   const getUser = (opt = {}) => {
     const search = opt.search || '';
-    const filter = opt.filter || 'all';
-    const sort = opt.sort || 'id';
+    // const filter = opt.filter || 'all';
+    const sort = opt.sort || 'id_desc';
     const page = opt.page || 1;
     const pageSize = opt.pageSize || 20;
-    return $http.get('/api/admin/user', { params: opt }).then(success => success.data);
+    const group = opt.hasOwnProperty('group') ? opt.group : -1;
+    const type = [];
+    for(const i in opt.type) {
+      if(opt.type[i]) { type.push(i); }
+    };
+    return $http.get('/api/admin/user', { params: {
+      search,
+      sort,
+      page,
+      pageSize,
+      group,
+      type,
+    } }).then(success => success.data);
   };
   const getOrder = (payType, opt = {}) => {
     if(payType === 'Paypal') {
@@ -18,13 +30,36 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
         if(m === 'FINISH') return 'finish';
       }).filter(f => f);
     }
-    const url = payType === '支付宝' ? '/api/admin/alipay' : '/api/admin/paypal';
+    let url;
+    if(payType === '支付宝') { url = '/api/admin/alipay'; }
+    if(payType === 'Paypal') { url = '/api/admin/paypal'; }
+    if(payType === '充值码') { url = '/api/admin/giftcard'; }
+    if(payType === '邀请码') { url = '/api/admin/refOrder'; }
     const search = opt.search || '';
     const filter = opt.filter || '';
     // const sort = opt.sort || 'alipay.createTime_desc';
     const page = opt.page || 1;
     const pageSize = opt.pageSize || 20;
     return $http.get(url, { params: opt }).then(success => success.data);
+  };
+
+  const getCsvOrder = (payType, opt = {}) => {
+    let url;
+    if(payType === '支付宝') { url = '/api/admin/alipay/csv'; }
+    if(payType === 'Paypal') { url = '/api/admin/paypal/csv'; }
+    if(payType === '充值码') { url = '/api/admin/giftcard/csv'; }
+    if(payType === '邀请码') { url = '/api/admin/refOrder/csv'; }
+    let downloadUrl = url + '?';
+    for(const o in opt) {
+      if(Array.isArray(opt[o])) {
+        opt[o].forEach(f => {
+          downloadUrl += (o + '=' + f + '&');
+        });
+      } else if (opt[o] || opt[o] >= 0) {
+        downloadUrl += (o + '=' + opt[o] + '&');
+      }
+    }
+    window.open(downloadUrl, '_blank');
   };
   
   const getServer = status => {
@@ -116,43 +151,50 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
       $http.get('/api/admin/user/recentLogin').then(success => success.data),
       $http.get('/api/admin/alipay/recentOrder').then(success => success.data),
       $http.get('/api/admin/paypal/recentOrder').then(success => success.data),
+      $http.get('/api/admin/flow/top').then(success => success.data),
     ]).then(success => {
       return {
         signup: success[0],
         login: success[1],
         order: success[2],
         paypalOrder: success[3],
+        topFlow: success[4],
       };
     });
     return indexInfoPromise;
   };
 
-  const getUserData = (userId) => {
-    const macAccount = JSON.parse(window.ssmgrConfig).macAccount;
+  const getUserData = userId => {
     const promises = [
       $http.get('/api/admin/user/' + userId),
       $http.get('/api/admin/alipay/' + userId),
       $http.get('/api/admin/paypal/' + userId),
+      $http.get('/api/admin/refOrder/' + userId),
+      config.giftcard ? $http.get('/api/admin/giftcard/' + userId) : $q.resolve({ data: [] }),
       $http.get('/api/admin/server'),
+      $http.get('/api/admin/account/mac', { params: { userId } }),
+      $http.get('/api/admin/ref/user/' + userId),
+      $http.get('/api/admin/ref/code/' + userId),
     ];
-    if(macAccount) {
-      promises.push($http.get('/api/admin/account/mac', {
-        params: {
-          userId,
-        }
-      }));
-    } else {
-      promises.push($q.resolve({
-        data: [],
-      }));
-    }
     return $q.all(promises).then(success => {
       return {
         user: success[0].data,
         alipayOrders: success[1].data,
         paypalOrders: success[2].data,
-        server: success[3].data,
-        macAccount: success[4].data,
+        refOrders: success[3].data,
+        giftCardOrders: success[4].data,
+        server: success[5].data,
+        macAccount: success[6].data,
+        refUsers: success[7].data,
+        refCodes: success[8].data,
+      };
+    });
+  };
+
+  const getAdminData = userId => {
+    return $http.get('/api/admin/admin/' + userId).then(success => {
+      return {
+        user: success.data
       };
     });
   };
@@ -277,6 +319,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
   return {
     getUser,
     getOrder,
+    getCsvOrder,
     getServer,
     getAccount,
     getMacAccount,
@@ -286,6 +329,7 @@ app.factory('adminApi', ['$http', '$q', 'moment', 'preload', '$timeout', ($http,
     getIndexInfo,
     getServerPortData,
     getUserData,
+    getAdminData,
     getChartData,
     getAccountChartData,
     getUserPortLastConnect,

@@ -91,4 +91,29 @@
             </md-card-content>
         </md-card>
     </div>
+    <div flex-xs="100" flex-sm="100" flex-gt-sm="50">
+        <md-card>
+            <md-card-header>
+                <md-card-header-text>
+                    <span class="md-headline" translate>今日流量排行</span>
+                </md-card-header-text>
+            </md-card-header>
+            <md-card-content>
+              <md-list>
+                  <md-divider></md-divider>
+                  <md-list-item ng-repeat="tf in topFlow">
+                      <div flex layout="row" layout-align="space-between center" ng-click="toTopUser(tf)">
+                          <div flex="30" flex-xs="60">
+                              <span>{{ tf.email || tf.port }}</span>
+                          </div>
+                          <div flex="30" flex-xs="40" style="text-align: right;">
+                              <span style="color: #555">{{ tf.sumFlow | flow }}</span>
+                          </div>
+                      </div>
+                      <md-divider></md-divider>
+                  </md-list-item>
+              </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
 </div>

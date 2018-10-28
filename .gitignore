@@ -42,3 +42,7 @@ config/development.yml
 
 .vscode
 lib
+plugins/webgui/libs/bundle.js
+plugins/webgui/libs/lib.js
+*.yml
+*.sqlite

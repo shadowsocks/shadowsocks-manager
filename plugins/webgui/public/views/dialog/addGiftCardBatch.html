@@ -1,0 +1,49 @@
+<md-dialog aria-label="add gift card dialog">
+    <div ng-show="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-dialog-content ng-show="publicInfo.status !== 'loading'">
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'show'">
+                <form>
+                    <md-input-container class="md-block">
+                        <label>数量</label>
+                        <input type="number" required name="count" ng-model="publicInfo.count">
+                    </md-input-container>
+                    <md-input-container class="md-block" style="height: 54px;">
+                        <label>类型</label>
+                        <md-select ng-model="publicInfo.orderId">
+                            <md-option ng-repeat="order in publicInfo.orderList" ng-value="{{order.id}}">{{ order.name }}</md-option>
+                            <!-- <md-option ng-value="7">年</md-option>
+                            <md-option ng-value="9">半年</md-option>
+                            <md-option ng-value="6">季度</md-option>
+                            <md-option ng-value="3">月</md-option>
+                            <md-option ng-value="2">周</md-option>
+                            <md-option ng-value="8">两周</md-option>
+                            <md-option ng-value="4">天</md-option>
+                            <md-option ng-value="5">小时</md-option> -->
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>备注</label>
+                        <input type="text" required name="comment" ng-model="publicInfo.comment">
+                    </md-input-container>
+                </form>
+            </div>
+            <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'error'">
+                <div style="white-space: pre-wrap;">创建失败</div>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="center center" ng-show="publicInfo.status !== 'loading'">
+        <md-button class="md-primary" ng-click="publicInfo.submit()" ng-show="publicInfo.status === 'show'">
+            {{ '确定' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-click="publicInfo.close()" ng-show="publicInfo.status === 'show'">
+            {{ '关闭' | translate }}
+        </md-button>
+        <md-button class="md-primary" ng-click="publicInfo.close()" ng-show="publicInfo.status === 'error'">
+            {{ '确定' | translate }}
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

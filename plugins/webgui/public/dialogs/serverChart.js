@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('serverChartDialog' , [ '$mdDialog', ($mdDialog) => {
+app.factory('serverChartDialog' , [ '$mdDialog', $mdDialog => {
   const publicInfo = {};
   const hide = () => {
     return $mdDialog.hide()

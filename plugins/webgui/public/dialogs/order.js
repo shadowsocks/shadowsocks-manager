@@ -57,8 +57,12 @@ app.factory('orderDialog', [ '$mdDialog', '$state', ($mdDialog, $state) => {
   };
 }]);
 
-app.factory('orderFilterDialog' , [ '$mdDialog', ($mdDialog) => {
+app.factory('orderFilterDialog' , [ '$mdDialog', '$http', ($mdDialog, $http) => {
   const publicInfo = {};
+  $http.get('/api/admin/group').then(success => {
+    publicInfo.groups = success.data;
+    publicInfo.groups.unshift({ id: -1, name: '所有组', comment: '' });
+  });
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -88,7 +92,8 @@ app.factory('orderFilterDialog' , [ '$mdDialog', ($mdDialog) => {
     }],
     clickOutsideToClose: true,
   };
-  const show = () => {
+  const show = id => {
+    publicInfo.id = id;
     if(isDialogShow()) {
       return dialogPromise;
     }

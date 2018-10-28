@@ -1,0 +1,24 @@
+<md-dialog aria-label="group dialog">
+    <div ng-if="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <md-dialog-content ng-hide="publicInfo.isLoading">
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="center center">
+                <md-input-container>
+                    <label>分组</label>
+                    <md-select ng-model="publicInfo.groupId">
+                        <md-option ng-repeat="group in groups" ng-value="group.id">
+                            {{ group.name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
+        <md-button class="md-primary" ng-click="publicInfo.setGroup()">
+            确定
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

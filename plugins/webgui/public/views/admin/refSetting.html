@@ -1,0 +1,92 @@
+<div layout="row" layout-xs="column" layout-wrap>
+    <div flex="100">
+        <md-card flex="100">
+            <md-card-content>
+                <div flex layout="row" layout-align="center center" ng-hide="!loading">
+                    <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                </div>
+                <md-divider ng-hide="loading"></md-divider>
+                <md-list layout="row" ng-hide="loading">
+                    <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+                    <div flex>
+                        <form name="refForm">
+                            <md-divider></md-divider>
+                            <md-list-item>
+                                <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                                    <div flex="75" translate>启用邀请码功能</div>
+                                    <div flex layout="row" layout-align="end center">
+                                        <md-switch ng-model="refSetting.useRef" aria-label="useRef" ng-disabled="id !== 1"></md-switch>
+                                    </div>
+                                </div>
+                            </md-list-item>
+                            <md-divider></md-divider>
+                            <md-list-item ng-show="refSetting.useRef && id === 1">
+                                <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                                    <div flex="75" translate>关闭注册时仍可使用邀请码</div>
+                                    <div flex layout="row" layout-align="end center">
+                                        <md-switch ng-model="refSetting.useWhenSignupClose" aria-label="useWhenSignupClose"></md-switch>
+                                    </div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="refSetting.useRef && id === 1"></md-divider>
+                            <md-list-item ng-show="refSetting.useRef && id === 1">
+                                <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                                    <label translate>每个用户拥有邀请码数量</label>
+                                    <input type="number" required name="refNumber" ng-model="refSetting.refNumber">
+                                </md-input-container>
+                            </md-list-item>
+                            <md-divider ng-show="refSetting.useRef && id === 1"></md-divider>
+                            <md-list-item ng-show="refSetting.useRef && id === 1">
+                                <md-input-container class="md-block" style="margin-bottom: -15px; width: 100%;">
+                                    <label translate>每个邀请码可邀请的用户数</label>
+                                    <input type="number" required name="refUserNumber" ng-model="refSetting.refUserNumber">
+                                </md-input-container>
+                            </md-list-item>
+                            <md-divider ng-show="refSetting.useRef && id === 1"></md-divider>
+                        </form>
+                    </div>
+                    <div flex-xs="5" flex-sm="10" flex-gt-sm="10"></div>
+                </md-list>
+                <md-divider ng-hide="loading"></md-divider>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex="100" layout="row" layout-xs="column" layout-wrap ng-show="refSetting.useRef">
+        <md-card ng-click="toRefCodeList()" flex ng-show="id === 1">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">邀请码列表</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div style="text-align: right;">
+                    <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card ng-click="toRefUserList()" flex ng-show="id === 1">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">邀请用户列表</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div style="text-align: right;">
+                    <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+        <md-card ng-click="toMyRefCode()" flex ng-show="id !== 1">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">我的邀请码</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div style="text-align: right;">
+                    <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

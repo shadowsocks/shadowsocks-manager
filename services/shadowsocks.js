@@ -5,12 +5,16 @@ const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 const version = appRequire('package').version;
 const exec = require('child_process').exec;
+const http = require('http');
 
 let clientIp = [];
 
 const config = appRequire('services/config').all();
 const host = config.shadowsocks.address.split(':')[0];
 const port = +config.shadowsocks.address.split(':')[1];
+const mPort = +config.manager.address.split(':')[1];
+
+client.bind(mPort);
 
 const knex = appRequire('init/knex').knex;
 
@@ -20,7 +24,7 @@ let shadowsocksType = 'libev';
 let lastFlow;
 
 const sendPing = () => {
-  client.send(new Buffer('ping'), port, host);
+  client.send(new Buffer.from('ping'), port, host);
 };
 
 let existPort = [];
@@ -47,15 +51,20 @@ const connect = () => {
       setExistPort(flow);
       const realFlow = compareWithLastFlow(flow, lastFlow);
 
-      for(const rf in realFlow) {
-        if(realFlow[rf]) {
-          (function(port) {
-            getIp(+port).then(ips => {
-              ips.forEach(ip => {
-                clientIp.push({ port: +port, time: Date.now(), ip });
-              });
+      const getConnectedIp = port => {
+        setTimeout(() => {
+          getIp(+port).then(ips => {
+            ips.forEach(ip => {
+              clientIp.push({ port: +port, time: Date.now(), ip });
             });
-          })(rf);
+          });
+        }, Math.ceil(Math.random() * 3 * 60 * 1000));
+      };
+      if((new Date()).getMinutes() % 3 === 0) {
+        for(const rf in realFlow) {
+          if(realFlow[rf]) {
+            getConnectedIp(rf);
+          }
         }
       }
 
@@ -125,7 +134,7 @@ const sendMessage = (message) => {
 };
 
 const startUp = async () => {
-  client.send(new Buffer('ping'), port, host);
+  client.send(new Buffer.from('ping'), port, host);
   if(config.runShadowsocks === 'python') {
     sendMessage(`remove: {"server_port": 65535}`);
   }
@@ -179,6 +188,7 @@ startUp();
 cron.minute(() => {
   resend();
   sendPing();
+  getGfwStatus();
 }, 1);
 
 const checkPortRange = (port) => {
@@ -287,14 +297,58 @@ const getFlow = async (options) => {
   }
 };
 
+let isGfw = 0;
+let getGfwStatusTime = null;
+const getGfwStatus = () => {
+  if(getGfwStatusTime && isGfw === 0 && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
+  getGfwStatusTime = Date.now();
+  const sites = [
+    'baidu.com:80',
+  ];
+  const site = sites[+Math.random().toString().substr(2) % sites.length];
+  const req = http.request({
+    hostname: site.split(':')[0],
+    port: +site.split(':')[1],
+    path: '/',
+    method: 'GET',
+    timeout: 2000,
+  }, res => {
+    if(res.statusCode === 200) {
+      isGfw = 0;
+    }
+    res.setEncoding('utf8');
+    res.on('data', (chunk) => {});
+    res.on('end', () => {});
+  });
+  req.on('timeout', () => {
+    req.abort();
+    isGfw += 1;
+  });
+  req.on('error', (e) => {
+    isGfw += 1;
+  });
+  req.end();
+};
+
 const getVersion = () => {
-  return { version };
+  return {
+    version,
+    isGfw: !!(isGfw > 5),
+  };
 };
 
 const getIp = port => {
-  const cmd = `netstat -ntu | grep ":${ port } " | grep ESTABLISHED | awk '{print $5}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
+  let cmd = '';
+  let shell = '';
+  if (process.platform === 'win32') {
+    cmd = `netstat -an | sls -Pattern ":${ port } " | sls -Pattern "ESTABLISHED" | %{$_.Line.Split(" ",[System.StringSplitOptions]::RemoveEmptyEntries)[2]} | %{$_.Split(":")[0]} | sls -Pattern "127\.0\.0\.1" -NotMatch | unique | %{$_.Line}`;
+    shell = 'powershell';
+  } else {
+    cmd = `ss -an | grep ":${ port } " | grep ESTAB | awk '{print $6}' | cut -d: -f1 | grep -v 127.0.0.1 | uniq -d`;
+    shell = '/bin/sh';
+  }
   return new Promise((resolve, reject) => {
-    exec(cmd, function(err, stdout, stderr){
+    exec(cmd, {shell: shell}, function(err, stdout, stderr){
       if(err) {
         reject(stderr);
       } else {

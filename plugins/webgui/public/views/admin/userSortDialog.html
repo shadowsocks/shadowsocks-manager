@@ -1,14 +1,35 @@
-<md-dialog aria-label="sort dialog">
+<md-dialog aria-label="sort dialog" ng-style="setDialogWidth()">
     <md-dialog-content>
         <div class="md-dialog-content">
             <div style="margin-bottom: 20px;">排序方式：</div>
             <div layout="row" layout-align="center center">
                 <md-radio-group ng-model="userSort.sort">
-                    <md-radio-button value="id_asc">用户ID ↑</md-radio-button>
-                    <md-radio-button value="id_desc">用户ID ↓</md-radio-button>
-                    <md-radio-button value="lastLogin_asc">上次登录 ↑</md-radio-button>
-                    <md-radio-button value="lastLogin_desc">上次登录 ↓</md-radio-button>
+                    <div layout="row">
+                        <md-radio-button value="id_asc">用户ID ↑</md-radio-button>
+                        <div style="width: 15px;"></div>
+                        <md-radio-button value="lastLogin_asc">上次登录 ↑</md-radio-button>
+                    </div>
+                    <div layout="row">
+                        <md-radio-button value="id_desc">用户ID ↓</md-radio-button>
+                        <div style="width: 15px;"></div>
+                        <md-radio-button value="lastLogin_desc">上次登录 ↓</md-radio-button>
+                    </div>
                 </md-radio-group>
+            </div>
+            <div style="margin-bottom: 20px;">用户类型：</div>
+            <div layout="row" layout-align="center stretch">
+                <div flex="15"></div>
+                <md-checkbox flex="35" ng-model="userSort.type.normal">普通</md-checkbox>
+                <md-checkbox flex="35" ng-model="userSort.type.admin">管理员</md-checkbox>
+                <div flex="15"></div>
+            </div>
+            <div style="margin-bottom: 0px;" ng-if="publicInfo.id === 1">分组：</div>
+            <div layout="row" layout-align="center stretch" ng-if="publicInfo.id === 1">
+                <md-select ng-model="userSort.group" style="width: 250px;" aria-label="group select">
+                    <md-option ng-repeat="group in publicInfo.groups" ng-value="group.id">
+                        {{ group.name }}
+                    </md-option>
+                </md-select>
             </div>
         </div>
     </md-dialog-content>

@@ -14,6 +14,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminUserPageController',
       templateUrl: `${ cdn }/public/views/admin/userPage.html`,
     })
+    .state('admin.adminPage', {
+      url: '/admin/:userId',
+      controller: 'AdminAdminPageController',
+      templateUrl: `${ cdn }/public/views/admin/adminPage.html`,
+    })
     .state('admin.addUser', {
       url: '/addUser',
       controller: 'AdminAddUserController',

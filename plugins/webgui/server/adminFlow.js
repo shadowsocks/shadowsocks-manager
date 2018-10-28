@@ -120,16 +120,7 @@ exports.getServerPortFlow = (req, res) => {
           i++;
         }
       }
-      return knex('webguiSetting').select().where({ key: 'account' })
-      .then(success => {
-        if(!success.length) {
-          return Promise.reject('settings not found');
-        }
-        success[0].value = JSON.parse(success[0].value);
-        return success[0].value.multiServerFlow;
-      }).then(isMultiServerFlow => {
-        return flow.getServerPortFlow(serverId, accountId, timeArray, isMultiServerFlow);
-      });
+      return flow.getServerPortFlowWithScale(serverId, accountId, timeArray, account.multiServerFlow);
     } else {
       return [ 0 ];
     }
@@ -170,6 +161,17 @@ exports.getServerPortLastConnect = (req, res) => {
   const serverId = +req.params.serverId;
   const accountId = +req.params.accountId;
   flow.getlastConnectTime(serverId, accountId)
+  .then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
+exports.getTopFlow = (req, res) => {
+  const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
+  flow.getTopFlow(group)
   .then(success => {
     res.send(success);
   }).catch(err => {

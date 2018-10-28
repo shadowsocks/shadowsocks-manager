@@ -6,19 +6,19 @@
             </md-card-title>
             <md-card-content>
                 <div ng-show="notices.length === 0">{{ '暂无公告' | translate }}</div>
-                <md-list>
+                <md-list ng-show="notices.length > 0">
                     <md-divider></md-divider>
-                    <md-list-item ng-repeat="notice in notices" ng-click="showNotice(notice)">
+                    <md-list-item ng-repeat-start="notice in notices" ng-click="showNotice(notice)">
                         <div flex layout="row" layout-align="space-between center">
                             <div>{{notice.title}}</div>
                         </div>
-                        <md-divider></md-divider>
                     </md-list-item>
+                    <md-divider ng-repeat-end></md-divider>
                 </md-list>
             </md-card-content>
         </md-card>
     </div>
-    <div flex="100" layout="row" layout-xs="column" layout-wrap>
+    <div flex="100" layout="row" layout-xs="column" layout-sm="column" layout-wrap>
         <md-card ng-click="toMyAccount()" flex>
             <md-card-title>
                 <md-card-title-text><span class="md-headline">{{ '账号' | translate }}</span></md-card-title-text>
@@ -39,5 +39,17 @@
                 </div>
             </md-card-content>
         </md-card>
+        <md-card ng-click="toRef()" flex ng-if="config.refCode">
+            <md-card-title>
+                <md-card-title-text><span class="md-headline">{{ '邀请码' | translate }}</span></md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <div style="text-align: right;">
+                    <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
     </div>
+    <div flex="100" style="height: 30px;"></div>
+    <div flex="100" style="text-align: center;"><ga></ga></div>
 </div>

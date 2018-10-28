@@ -1,0 +1,53 @@
+<div ng-if="total === 0" layout="row" layout-align="center center" style="margin-top: 25px; font-size: 1.1em; color: #555">当前没有邀请的用户</div>
+<div ng-if="total > 0" style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555">共 {{ total }} 个邀请用户</div>
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="u in user track by $index">
+        <md-card>
+            <md-card-content>
+                <md-list style="font-size: 0.9em;">
+                    <md-divider></md-divider>
+                    <md-list-item>
+                        <div class="md-list-item-text" flex layout="row" layout-align="space-between center">
+                            <span>邀请码：</span><span>{{ u.code }}</span>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-click="toUser(u.sourceUserId)">
+                        <div class="md-list-item-text" flex layout="row" layout-align="space-between center">
+                            <span>邀请人：</span><span>{{ u.sourceUser }}</span>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item ng-click="toUser(u.userId)">
+                        <div class="md-list-item-text" flex layout="row" layout-align="space-between center">
+                            <span>注册用户：</span><span>{{ u.user }}</span>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item style="height: 60%;">
+                        <div class="md-list-item-text" flex layout="row" layout-align="space-between center" style="color: #333;">
+                            <span>{{ u.time | date : 'yyyy-MM-dd HH:mm' }}</span><span>{{ u.time | timeago | translateTime }}</span>
+                        </div>
+                    </md-list-item>
+                    <md-divider></md-divider>
+                </md-list>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" in-view="view($inview)" ng-if="user.length && !isUserPageFinish">
+        <md-card>
+            <md-card-content>
+                <div layout="row" layout-align="center center">
+                    <md-progress-circular md-mode="indeterminate" class="md-hue-2" md-diameter="20px"></md-progress-circular>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div layout-fill layout="row" layout-align="center center" in-view="view($inview)" ng-if="!user.length && !isUserPageFinish">
+    <div flex style="height: 180px;"></div>
+    <div flex layout="row" layout-align="center center">
+        <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+    </div>
+    <div flex style="height: 180px;"></div>
+</div>

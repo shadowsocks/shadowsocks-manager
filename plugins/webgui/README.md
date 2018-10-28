@@ -27,6 +27,8 @@ This plugin provide a webgui to control shadowsocks.
         use: true
       macAccount:
         use: true
+      group:
+        use: true
       email:
         use: true
         username: 'username'
@@ -38,24 +40,26 @@ This plugin provide a webgui to control shadowsocks.
         port: '80'
         site: 'http://yourwebsite.com'
         # cdn: 'http://xxx.xxx.com'
+        # icon: 'icon.png'
+        # skin: 'default'
         # googleAnalytics: 'UA-xxxxxxxx-x'
         gcmSenderId: '456102641793'
         gcmAPIKey: 'AAAAGzzdqrE:XXXXXXXXXXXXXX'
-      alipay:
-        use: true
-        appid: 2015012104922471
-        notifyUrl: 'http://yourwebsite.com/api/user/alipay/callback'
-        merchantPrivateKey: 'xxxxxxxxxxxx'
-        alipayPublicKey: 'xxxxxxxxxxx'
-        gatewayUrl: 'https://openapi.alipay.com/gateway.do'
+      # alipay:
+      #   use: true
+      #   appid: 2015012104922471
+      #   notifyUrl: 'http://yourwebsite.com/api/user/alipay/callback'
+      #   merchantPrivateKey: 'xxxxxxxxxxxx'
+      #   alipayPublicKey: 'xxxxxxxxxxx'
+      #   gatewayUrl: 'https://openapi.alipay.com/gateway.do'
       # webgui_telegram:
       #   use: true
       #   token: '191374681:AAw6oaVPR4nnY7T4CtW78QX-Xy2Q5WD3wmZ'
-      paypal:
-        use: true
-        mode: 'live' # sandbox or live
-        client_id: 'At9xcGd1t5L6OrICKNnp2g9'
-        client_secret: 'EP40s6pQAZmqp_G_nrU9kKY4XaZph'
+      # paypal:
+      #   use: true
+      #   mode: 'live' # sandbox or live
+      #   client_id: 'At9xcGd1t5L6OrICKNnp2g9'
+      #   client_secret: 'EP40s6pQAZmqp_G_nrU9kKY4XaZph'
 
     db: 'webgui.sqlite'
     ```

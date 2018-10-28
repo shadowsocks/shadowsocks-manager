@@ -1,0 +1,47 @@
+<div layout="row">
+    <md-card flex>
+        <md-card-header>
+            <md-card-header-text ng-show="batch">
+                <span class="md-title">{{ batch.orderName }}</span>
+                <span class="md-subhead">创建于 {{ batch.createTime | timeago }}，目前状态 {{ batch.status | prettyPrintBatchStatus}}</span>
+            </md-card-header-text>
+            <md-card-header-text ng-hide="batch">
+                <span>
+                    <div flex layout="row" layout-align="center center">
+                        <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+                    </div>
+                </span>
+            </md-card-header-text>
+            <div ng-if="batch.status === 'AVAILABLE'">
+                <md-button class="md-primary" aria-label="revoke" ng-click="revoke()"> {{ '召回' | translate }}
+                </md-button>
+            </div>
+            <div ng-if="batch.status === 'AVAILABLE'">
+                <md-button class="md-primary" aria-label="export csv" download="batch{{ batch.batchNumber }}.csv" ng-href="{{ exportUrl }}"> {{ '导出 CSV' | translate }}
+                </md-button>
+            </div>
+        </md-card-header>
+    </md-card>
+</div>
+<div layout="row" ng-if="batch.cards.length > 0">
+    <md-card flex>
+        <md-list>
+            <md-divider></md-divider>
+            <md-list-item ng-repeat="card in batch.cards">
+                <div flex layout="row" layout-align="space-between center" ng-click="showPassword(card.id, card.password)">
+                    <div flex="30" flex-xs="60">
+                        <span ng-if="card.status === 'USED'">已用 {{ card.userEmail }}</span>
+                        <span ng-if="card.status !== 'USED'">{{ card.status | prettyPrintBatchStatus }}</span>
+                    </div>
+                    <div flex="20" flex-xs="40" style="text-align: right;">
+                        <span style="font-size: 0.9em; color: #555" ng-if="card.usedTime != null && card.usedTime !== NaN">{{ card.usedTime | timeago }}<br></span>
+                        <span style="font-size: 0.9em; color: #000">
+                            卡号 {{ card.id }}
+                        </span>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+    </md-card>
+</div>

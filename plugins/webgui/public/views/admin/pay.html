@@ -1,5 +1,9 @@
 <md-tabs md-dynamic-height md-border-bottom>
-    <md-tab ng-repeat="payType in payTypes" label="{{payType.name}}" md-on-select="selectPayType(payType.name)">
+    <md-tab ng-repeat="payType in payTypes"
+            label="{{payType.name}}"
+            md-on-select="selectPayType(payType.name)">
+    </md-tab>
+</md-tabs>
 <div ng-show="orders.length">
     <md-card>
         <md-list>
@@ -9,7 +13,7 @@
                     <div flex="30" flex-xs="60">
                         <span hide-xs hide-sm>{{order.orderId}}</span>
                         <span hide-gt-sm>
-                            <span style="font-size: 0.9em;">{{order.orderId | prettyOrderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                            <span style="font-size: 0.9em;">{{ order.orderId }}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                         </span>
                     </div>
                     <div hide-xs flex="30" style="text-align: right;">{{order.username}}</div>
@@ -37,7 +41,5 @@
         <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
     </div>
     <div flex style="height: 180px;"></div>
-</div> 
-    </md-tab>
-</md-tabs>
+</div>
 

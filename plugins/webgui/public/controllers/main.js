@@ -1,9 +1,21 @@
 const app = angular.module('app');
 
-app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state',
-  ($scope, $localStorage, $location, $http, $translate, languageDialog, $state) => {
-    $scope.version = window.ssmgrVersion;
-    $scope.config = JSON.parse(window.ssmgrConfig);
+app.controller('MainController', ['$scope', '$localStorage', '$location', '$http', '$translate', 'languageDialog', '$state', '$mdToast',
+  ($scope, $localStorage, $location, $http, $translate, languageDialog, $state, $mdToast) => {
+    $scope.setConfig = (key, value) => {
+      if(angular.isObject(key)) {
+        for(const k in key) {
+          $scope.config[k] = key[k];
+        }
+      } else {
+        $scope.config[key] = value;
+      }
+    };
+    $scope.config = window.ssmgrConfig;
+    $scope.config.title = window.title;
+    $scope.config.skin = 'default';
+    $scope.config.fullscreenSkin = false;
+    $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
       admin: {},
       home: {},
@@ -24,12 +36,23 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       const iOSSafari = iOS && webkit && !ua.match(/CriOS/i);
       return iOSSafari && standalone;
     };
-    if(isSafari() && $location.url() === '/home/index' && $localStorage.home.url !== '/home/index') {
-      location.href = $localStorage.home.url || '/';
+    if(isSafari() && $location.url() === '/' && $localStorage.home.url !== '/home/index') {
+      location.href = $localStorage.home.url || '/home/index';
     }
+    const setFs = () => {
+      if($scope.config.skin.substr(0, 3) === 'fs_' && $state.current.name === 'home.index') {
+        $scope.config.fullscreenSkin = true;
+      } else {
+        $scope.config.fullscreenSkin = false;
+      }
+    };
     $scope.$on('$stateChangeSuccess', () => {
       $scope.currentState = $state.current.name;
       $localStorage.home.url = $location.url();
+      setFs();
+    });
+    $scope.$watch('config.skin', () => {
+      setFs();
     });
 
     const isWechatBrowser = () => /micromessenger/.test(navigator.userAgent.toLowerCase());
@@ -46,5 +69,13 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
       languageDialog.show();
     };
     $translate.use($localStorage.language || navigator.language || 'zh-CN');
+    $scope.toast = (content, delay = 3000) => {
+      $mdToast.show(
+        $mdToast.simple()
+          .textContent(content)
+          .position('top right')
+          .hideDelay(delay)
+      );
+    };
   }
 ]);

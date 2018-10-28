@@ -7,6 +7,9 @@ const account = appRequire('plugins/account/index');
 const moment = require('moment');
 const push = appRequire('plugins/webgui/server/push');
 const config = appRequire('services/config').all();
+const ref = appRequire('plugins/webgui_ref/time');
+const orderPlugin = appRequire('plugins/webgui_order');
+const groupPlugin = appRequire('plugins/group');
 
 if(config.plugins.paypal && config.plugins.paypal.use) {
   paypal.configure({
@@ -16,24 +19,17 @@ if(config.plugins.paypal && config.plugins.paypal.use) {
   });
 }
 
-const createOrder = async (user, account, amount, type) => {
+const createOrder = async (user, account, orderId) => {
   try {
-    const orderSetting = await knex('webguiSetting').select().where({
-      key: 'payment',
-    }).then(success => {
-      if(!success.length) {
-        return Promise.reject('settings not found');
+    const orderInfo = await orderPlugin.getOneOrder(orderId);
+    if(+orderInfo.paypal <= 0) { return Promise.reject('amount error'); }
+    const userInfo = await knex('user').where({ id: user }).then(s => s[0]);
+    const groupInfo = await groupPlugin.getOneGroup(userInfo.group);
+    if(groupInfo.order) {
+      if(JSON.parse(groupInfo.order).indexOf(orderInfo.id) < 0) {
+        return Promise.reject('invalid order');
       }
-      success[0].value = JSON.parse(success[0].value);
-      return success[0].value;
-    }).then(success => {
-      if(type === 5) { return success.hour; }
-      else if(type === 4) { return success.day; }
-      else if(type === 2) { return success.week; }
-      else if(type === 3) { return success.month; }
-      else if(type === 6) { return success.season; }
-      else if(type === 7) { return success.year; }    
-    });
+    }
     const create_payment_json = {
       intent: 'sale',
       payer: {
@@ -46,9 +42,9 @@ const createOrder = async (user, account, amount, type) => {
       transactions: [{
         amount: {
           currency: 'USD',
-          total: amount,
+          total: orderInfo.paypal,
         },
-        description: orderSetting.orderName || 'ss'
+        description: orderInfo.name || 'ss'
       }]
     };
     const payment = await new Promise((resolve, reject) => {
@@ -61,12 +57,12 @@ const createOrder = async (user, account, amount, type) => {
         }
       });
     });
-    const orderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
+    const myOrderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
     await knex('paypal').insert({
-      orderId,
+      orderId: myOrderId,
       paypalId: payment.id,
-      orderType: type,
-      amount: amount + '',
+      orderType: orderId,
+      amount: orderInfo.paypal + '',
       user,
       account: (account !== 'undefined' && account) ? account : null,
       status: 'created',
@@ -172,6 +168,7 @@ cron.minute(async () => {
         });
       }).then(() => {
         logger.info(`订单支付成功: [${ order.orderId }][${ order.amount }][account: ${ accountId }]`);
+        ref.payWithRef(userId, order.orderType);
         sendSuccessMail(userId);
       }).catch(err => {
         logger.error(`订单支付失败: [${ order.orderId }]`, err);
@@ -212,12 +209,15 @@ const orderList = async (options = {}) => {
 
 const orderListAndPaging = async (options = {}) => {
   const search = options.search || '';
+  const group = options.group;
   const filter = options.filter || [];
   const sort = options.sort || 'paypal.createTime_desc';
   const page = options.page || 1;
   const pageSize = options.pageSize || 20;
+  const start = options.start ? moment(options.start).hour(0).minute(0).second(0).millisecond(0).toDate().getTime() : moment(0).toDate().getTime();
+  const end = options.end ? moment(options.end).hour(23).minute(59).second(59).millisecond(999).toDate().getTime() : moment().toDate().getTime();
 
-  let count = knex('paypal').select();
+  let count = knex('paypal').select().whereBetween('paypal.createTime', [start, end]);
   let orders = knex('paypal').select([
     'paypal.orderId',
     'paypal.orderType',
@@ -231,11 +231,16 @@ const orderListAndPaging = async (options = {}) => {
     'paypal.expireTime',
   ])
   .leftJoin('user', 'user.id', 'paypal.user')
-  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account');
+  .leftJoin('account_plugin', 'account_plugin.id', 'paypal.account')
+  .whereBetween('paypal.createTime', [start, end]);
 
   if(filter.length) {
     count = count.whereIn('paypal.status', filter);
     orders = orders.whereIn('paypal.status', filter);
+  }
+  if(group >= 0) {
+    count = count.leftJoin('user', 'user.id', 'paypal.user').where({ 'user.group': group });
+    orders = orders.where({ 'user.group': group });
   }
   if(search) {
     count = count.where('paypal.orderId', 'like', `%${ search }%`);
@@ -257,8 +262,28 @@ const orderListAndPaging = async (options = {}) => {
   };
 };
 
+const getUserFinishOrder = async userId => {
+  let orders = await knex('paypal').select([
+    'orderId',
+    'amount',
+    'createTime',
+  ]).where({
+    user: userId,
+  }).orderBy('createTime', 'DESC');
+  orders = orders.map(order => {
+    return {
+      orderId: order.orderId,
+      type: 'Paypal',
+      amount: order.amount,
+      createTime: order.createTime,
+    };
+  });
+  return orders;
+};
+
 exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;
+exports.getUserFinishOrder = getUserFinishOrder;
 
 cron.minute(() => {
   if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }

@@ -24,11 +24,6 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminNewNoticeController',
       templateUrl: `${ cdn }/public/views/admin/newNotice.html`,
     })
-    .state('admin.paymentSetting', {
-      url: '/settings/payment',
-      controller: 'AdminPaymentSettingController',
-      templateUrl: `${ cdn }/public/views/admin/paymentSetting.html`,
-    })
     .state('admin.paymentList', {
       url: '/settings/paymentList',
       controller: 'AdminPaymentListController',
@@ -63,6 +58,78 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/settings/telegram',
       controller: 'AdminTelegramSettingController',
       templateUrl: `${ cdn }/public/views/admin/telegramSetting.html`,
-    });
+    })
+    .state('admin.listGiftCardBatch', {
+      url: '/settings/giftcard',
+      controller: 'AdminGiftCardController',
+      templateUrl: `${ cdn }/public/views/admin/giftcardBatchList.html`
+    })
+    .state('admin.giftcardBatchDetails', {
+      url: '/settings/giftcard/batch/:batchNumber',
+      controller: 'AdminGiftCardBatchDetailsController',
+      templateUrl: `${ cdn }/public/views/admin/giftcardBatchDetails.html`
+    })
+    .state('admin.groupSetting', {
+      url: '/settings/group',
+      controller: 'AdminGroupSettingController',
+      templateUrl: `${ cdn }/public/views/admin/groupList.html`
+    })
+    .state('admin.addGroup', {
+      url: '/settings/addGroup',
+      controller: 'AdminAddGroupController',
+      templateUrl: `${ cdn }/public/views/admin/addGroup.html`
+    })
+    .state('admin.editGroup', {
+      url: '/settings/editGroup/:groupId',
+      controller: 'AdminEditGroupController',
+      templateUrl: `${ cdn }/public/views/admin/editGroup.html`
+    })
+    .state('admin.refSetting', {
+      url: '/settings/ref',
+      controller: 'AdminRefSettingController',
+      templateUrl: `${ cdn }/public/views/admin/refSetting.html`
+    })
+    .state('admin.refCodeList', {
+      url: '/settings/refCodeList',
+      controller: 'AdminRefCodeListController',
+      templateUrl: `${ cdn }/public/views/admin/refCodeList.html`
+    })
+    .state('admin.editRefCode', {
+      url: '/settings/refCode/:id',
+      controller: 'AdminEditRefCodeController',
+      templateUrl: `${ cdn }/public/views/admin/editRefCode.html`
+    })
+    .state('admin.refUserList', {
+      url: '/settings/refUserList',
+      controller: 'AdminRefUserListController',
+      templateUrl: `${ cdn }/public/views/admin/refUserList.html`
+    })
+    .state('admin.myRefCode', {
+      url: '/settings/myRefCode',
+      controller: 'AdminMyRefCodeController',
+      templateUrl: `${ cdn }/public/views/admin/myRefCode.html`
+    })
+    .state('admin.addRefUser', {
+      url: '/settings/addRefUser',
+      controller: 'AdminAddRefUserController',
+      templateUrl: `${ cdn }/public/views/admin/addRefUser.html`
+    })
+
+    .state('admin.order', {
+      url: '/settings/order',
+      controller: 'AdminOrderSettingController',
+      templateUrl: `${ cdn }/public/views/admin/orderSetting.html`
+    })
+    .state('admin.newOrder', {
+      url: '/settings/newOrder',
+      controller: 'AdminNewOrderController',
+      templateUrl: `${ cdn }/public/views/admin/newOrder.html`
+    })
+    .state('admin.editOrder', {
+      url: '/settings/editOrder/:id',
+      controller: 'AdminEditOrderController',
+      templateUrl: `${ cdn }/public/views/admin/editOrder.html`
+    })
+    ;
   }
 ]);

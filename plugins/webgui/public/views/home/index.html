@@ -1,28 +1,6 @@
-<div layout="column" layout-align="center center">
-    <div layout="column" layout-align="center center" style="background-color: #E0E0E0; width: 100%;">
-        <img src="/favicon.png" style="margin: 5vw; width: 300px;"></img>
-    </div>
-    <div layout="row" layout-align="space-around center" style="background-color: #E0E0E0; width: 100%;">
-        <md-button hide-gt-sm ng-click="login()" translate>
-            登录
-        </md-button>
-        <md-button hide-gt-sm ng-click="signup()" translate>
-            注册
-        </md-button>
-    </div>
-    <div hide-xs hide-sm hide-md style="height: 55px;"></div>
-    <div layout="row" layout-xs="column" style="width: 100%;">
-        <div layout="column" layout-align="center center"
-            style="width: 90%; margin: 35px 15px 35px 15px;"
-            ng-repeat="icon in icons">
-            <div flex="5"></div>
-            <md-icon class="material-icons" md-colors="{ color: 'default-primary-500'}" style="font-size: 84px; height: 108px; position: relative; left: -32px;">
-                {{ icon.icon }}
-            </md-icon>
-            <h2 translate>{{ icon.title }}</h2>
-            <div translate style="height: 50px;">{{ icon.content }}</div>
-            <div flex="5"></div>
-        </div>
+<div layout-fill layout="column" layout-align="space-between center" style="background-color: #E0E0E0;" ng-if="!config.fullscreenSkin">
+    <div layout-fill
+        ng-include="'/public/views/skin/' + config.skin + '.html'">
     </div>
 </div>
-<a href="https://github.com/shadowsocks/shadowsocks-manager"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 9;" src="https://camo.githubusercontent.com/52760788cde945287fbb584134c4cbc2bc36f904/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f77686974655f6666666666662e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"></a>
+<div hide-xs hide-sm style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{ config.version }}</div>

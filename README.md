@@ -21,15 +21,12 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## FreeAccount Demo:
 
-[https://free.ssmgr.top](https://free.ssmgr.top)
+[https://free.gyteng.com](https://free.gyteng.com)
 
-## FreeAccountMiner Demo:
-
-[https://coin.ssmgr.top](https://coin.ssmgr.top)
 
 ## Dependencies
 
-Node.js 6.*
+Node.js 8.*
 
 ## Install
 
@@ -46,6 +43,10 @@ use `node server.js` to run this program.
 ```
 npm i -g shadowsocks-manager
 ```
+You may need to use the `--unsafe-perm` flag if you receive an permission error
+```
+npm i -g shadowsocks-manager --unsafe-perm
+```
 use `ssmgr` to run this program.
 
 ### From docker:
@@ -58,19 +59,19 @@ docker run --name ssmgr -idt -v ~/.ssmgr:/root/.ssmgr --net=host gyteng/ssmgr [s
 here is the `Dockerfile`
 
 ```
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER gyteng <igyteng@gmail.com>
 RUN apt-get update && \
-    apt-get install tzdata net-tools curl git sudo software-properties-common python-pip -y && \
+    export DEBIAN_FRONTEND=noninteractive && \
+    apt-get install tzdata iproute2 curl git sudo software-properties-common python-pip -y && \
     pip install git+https://github.com/shadowsocks/shadowsocks.git@master && \
-    add-apt-repository ppa:max-c-lv/shadowsocks-libev -y && \
-    curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs shadowsocks-libev && \
-    npm i -g shadowsocks-manager && \
+    npm i -g shadowsocks-manager --unsafe-perm && \
     echo "Asia/Shanghai" > /etc/timezone && \
     rm /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
-ENTRYPOINT ["/usr/bin/ssmgr"]
+CMD ["/usr/bin/ssmgr"]
 ```
 
 ### Usage

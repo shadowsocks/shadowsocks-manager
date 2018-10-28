@@ -2,22 +2,37 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <div style="margin-bottom: 20px;">过滤条件：</div>
-            <div layout="column" layout-align="center center">
+            <md-input-container class="md-block">
+                <label translate>开始日期</label>
+                <!-- <input type="text" required name="start" ng-model="orderFilter.start"> -->
+                <md-datepicker ng-model="orderFilter.start" md-hide-icons="calendar"></md-datepicker>
+            </md-input-container>
+            <md-input-container class="md-block">
+                <label translate>结束日期</label>
+                <!-- <input type="text" required name="end" ng-model="orderFilter.end"> -->
+                <md-datepicker ng-model="orderFilter.end" md-hide-icons="calendar"></md-datepicker>
+            </md-input-container>
+            <div layout="column" layout-align="center stretch">
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.CREATE">创建</md-checkbox>
-                </div>
-                <div flex>
                     <md-checkbox ng-model="orderFilter.filter.WAIT_BUYER_PAY">等待</md-checkbox>
                 </div>
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.TRADE_SUCCESS">付款</md-checkbox>
-                </div>
-                <div flex>
                     <md-checkbox ng-model="orderFilter.filter.FINISH">完成</md-checkbox>
                 </div>
                 <div flex>
                     <md-checkbox ng-model="orderFilter.filter.TRADE_CLOSED">关闭</md-checkbox>
+                    <div></div>
                 </div>
+                <md-input-container ng-if="publicInfo.id === 1">
+                    <label>分组</label>
+                    <md-select ng-model="orderFilter.group">
+                        <md-option ng-repeat="group in publicInfo.groups" ng-value="group.id">
+                            {{ group.name }}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
             </div>
         </div>
     </md-dialog-content>

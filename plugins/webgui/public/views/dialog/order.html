@@ -20,19 +20,29 @@
                 <md-divider></md-divider>
                 <md-list-item>
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30" translate>订单类型：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.orderType }}</div>
+                        <div flex="30" translate>订单类型：</div><div flex="70" style="text-align:right;">{{ publicInfo.order.orderName }}</div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>
-                <md-list-item>
+                <md-list-item ng-if="publicInfo.order.amount">
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="30" translate>金额：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.amount }}</div>
                     </div>
                 </md-list-item>
-                <md-divider></md-divider>
+                <md-divider ng-if="publicInfo.order.amount"></md-divider>
+                <md-list-item ng-if="publicInfo.order.refTime">
+                    <div flex layout="row" layout-align="space-between center">
+                        <div flex="30" translate>时长：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.refTime | timePeriod }}</div>
+                    </div>
+                </md-list-item>
+                <md-divider ng-if="publicInfo.order.refTime"></md-divider>
                 <md-list-item ng-click="publicInfo.toUserPage(publicInfo.order.userId)">
                     <div flex layout="row" layout-align="space-between center">
-                        <div flex="30" translate>用户名：</div><div flex="70" style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                        <div flex="30" translate>用户名：</div>
+                        <div flex layout="row" layout-align="end center">
+                            <div style="text-align:right; font-size: 0.9em;">{{ publicInfo.order.username }}</div>
+                            <div><md-icon>chevron_right</md-icon></div>
+                        </div>
                     </div>
                 </md-list-item>
                 <md-divider></md-divider>

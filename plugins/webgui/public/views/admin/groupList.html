@@ -1,0 +1,16 @@
+<div layout="row" layout-wrap>
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="group in groups track by $index">
+        <md-card ng-click="editGroup(group.id)">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center">
+                    <div flex="80">
+                        <span>{{ group.name }}</span><br><span style="font-size: 0.9em; color: #666;">{{ group.comment }}</span>
+                    </div>
+                    <div flex="20">
+                        <div style="font-size: 0.9em; color: #666; text-align: right;">{{ group.userNumber }}</div>
+                    </div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

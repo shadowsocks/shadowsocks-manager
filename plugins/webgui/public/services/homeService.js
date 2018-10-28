@@ -1,14 +1,19 @@
 const app = angular.module('app');
 
 app.factory('homeApi', ['$http', $http => {
-  const userSignup = (email, code, password) => {
+  const userSignup = (email, code, password, ref) => {
     return $http.post('/api/home/signup', {
       email,
       code,
       password,
-    }).catch(err => {
+      ref,
+    })
+    .then(success => success.data)
+    .catch(err => {
       if(err.status === 403) {
-        return Promise.reject('用户注册失败');
+        let errData = '用户注册失败';
+        if(err.data === 'user exists') { errData = '该用户已存在'; }
+        return Promise.reject(errData);
       } else {
         return Promise.reject('网络异常，请稍后再试');
       }
@@ -19,7 +24,7 @@ app.factory('homeApi', ['$http', $http => {
       email,
       password,
     }).then(success => {
-      return success.data.type;
+      return success.data;
     }).catch(err => {
       if(err.status === 403) {
         let errData = '用户名或密码错误';
@@ -32,14 +37,16 @@ app.factory('homeApi', ['$http', $http => {
       }
     });
   };
-  const sendCode = email => {
+  const sendCode = (email, refCode) => {
     return $http.post('/api/home/code', {
       email,
+      refCode,
     }).then(success => {
       return 'success';
     }).catch(err => {
       if(err.status === 403) {
         let errData = '验证码发送错误';
+        if(err.data === 'invalid ref code') { errData = '发送错误，无效的邀请码'; }
         if(err.data === 'email in black list') { errData = '发送错误，请更换邮箱尝试'; }
         if(err.data === 'send email out of limit') { errData = '请求过于频繁，请稍后再试'; }
         if(err.data === 'signup close') { errData = '当前时段尚未开放注册'; }

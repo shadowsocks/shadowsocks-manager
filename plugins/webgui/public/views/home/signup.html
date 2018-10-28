@@ -42,7 +42,22 @@
                         </div>
                     </div>
                 </div>
+                <div layout="row" ng-if="home.refInput">
+                    <md-input-container class="md-block" flex="100">
+                        <label>{{ '邀请码' | translate }}</label>
+                        <input type="text" name="refId" ng-model="home.refInputCode">
+                    </md-input-container>
+                </div>
             </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div layout="row" layout-align="center center" ng-if="home.refId && !home.refIdValid">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex>
+            <div layout="row" layout-align="center center">
+                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+            </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
@@ -55,7 +70,7 @@
             <div flex="5"></div>
             <md-card-content layout="row" layout-align="center center">
                 <div flex="30" layout="row" layout-align="center center" layout-margin>
-                    <img src="/favicon.png" style="width: 100%;"></img>
+                    <img src="/favicon.png" style="width: 100%;">
                 </div>
                 <div flex>
                     <div flex layout="row">
@@ -107,6 +122,27 @@
                 </div>
             </md-card-content>
             <div flex="5"></div>
+        </md-card>
+        <div flex="25"></div>
+    </div>
+    <div layout="row" layout-align="center center" ng-if="home.refId && !home.refIdValid">
+        <div flex="25"></div>
+        <md-card flex="50">
+            <md-card-content layout="row" layout-align="center center">
+                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+            </md-card-content>
+        </md-card>
+        <div flex="25"></div>
+    </div>
+    <div layout="row" layout-align="center center" ng-if="home.refInput">
+        <div flex="25"></div>
+        <md-card flex="50">
+            <md-card-content layout="row" layout-align="center center">
+                <md-input-container class="md-block" flex="100">
+                    <label>{{ '邀请码' | translate }}</label>
+                    <input type="text" name="refId" ng-model="home.refInputCode">
+                </md-input-container>
+            </md-card-content>
         </md-card>
         <div flex="25"></div>
     </div>

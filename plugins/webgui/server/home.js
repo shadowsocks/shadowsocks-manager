@@ -10,6 +10,7 @@ const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
+const ref = appRequire('plugins/webgui_ref/index');
 
 const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
 let telegram;
@@ -51,6 +52,11 @@ exports.signup = (req, res) => {
       type,
     });
   }).then(success => {
+    req.session.user = success[0];
+    req.session.type = type;
+    if(req.body.ref) {
+      ref.addRefUser(req.body.ref, req.session.user);
+    }
     if(success[0] > 1) {
       const userId = success[0];
       // let port = 50000;
@@ -92,13 +98,29 @@ exports.signup = (req, res) => {
               };
               return checkIfPortExists(myPort);
             } else {
+              // return knex('account_plugin').select()
+              // .whereBetween('port', [port.start, port.end])
+              // .orderBy('port', 'DESC').limit(1).then(success => {
+              //   if(success.length) {
+              //     return success[0].port + 1;
+              //   }
+              //   return port.start;
+              // });
               return knex('account_plugin').select()
               .whereBetween('port', [port.start, port.end])
-              .orderBy('port', 'DESC').limit(1).then(success => {
-                if(success.length) {
-                  return success[0].port + 1;
+              .orderBy('port', 'ASC').then(success => {
+                const portArray = success.map(m => m.port);
+                let myPort;
+                for(let p = port.start; p <= port.end; p++) {
+                  if(portArray.indexOf(p) < 0) {
+                    myPort = p; break;
+                  }
                 }
-                return port.start;
+                if(myPort) {
+                  return myPort;
+                } else {
+                  return Promise.reject('no port');
+                }
               });
             }
           });
@@ -106,6 +128,7 @@ exports.signup = (req, res) => {
         getNewPort().then(port => {
           return account.addAccount(newUserAccount.type || 5, {
             user: userId,
+            orderId: 0,
             port,
             password: Math.random().toString().substr(2,10),
             time: Date.now(),
@@ -113,6 +136,7 @@ exports.signup = (req, res) => {
             flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
             server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
             autoRemove: newUserAccount.autoRemove ? 1 : 0,
+            multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
           });
         });
       });
@@ -125,10 +149,16 @@ exports.signup = (req, res) => {
       body: `用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`,
     });
     isTelegram && telegram.push(`用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`);
-    res.send('success');
+    res.send(type);
   }).catch(err => {
     logger.error(`[${ req.body.email }] signup fail: ${ err }`);
-    res.status(403).end();
+    // res.status(403).end();
+    const errorData = ['user exists'];
+    if(errorData.indexOf(err) < 0) {
+      return res.status(403).end();
+    } else {
+      return res.status(403).end(err);
+    }
   });
 };
 
@@ -148,7 +178,10 @@ exports.login = (req, res) => {
     logger.info(`[${ req.body.email }] login success`);
     req.session.user = success.id;
     req.session.type = success.type;
-    res.send({ type: success.type });
+    res.send({
+      type: success.type,
+      id: success.id,
+    });
   }).catch(err => {
     logger.error(`User[${ req.body.email }] login fail: ${ err }`);
     const errorData = ['invalid body', 'user not exists', 'invalid password', 'password retry out of limit'];
@@ -181,11 +214,108 @@ exports.logout = (req, res) => {
   res.send('success');
 };
 
-exports.status = (req, res) => {
-  res.send({ status: req.session.type });
+exports.status = async (req, res) => {
+  const colors = [
+    { value: 'red', color: '#F44336' },
+    { value: 'pink', color: '#E91E63' },
+    { value: 'purple', color: '#9C27B0' },
+    { value: 'deep-purple', color: '#673AB7' },
+    { value: 'indigo', color: '#3F51B5' },
+    { value: 'blue', color: '#2196F3' },
+    { value: 'light-blue', color: '#03A9F4' },
+    { value: 'cyan', color: '#00BCD4' },
+    { value: 'teal', color: '#009688' },
+    { value: 'green', color: '#4CAF50' },
+    { value: 'light-green', color: '#8BC34A' },
+    { value: 'lime', color: '#CDDC39' },
+    { value: 'yellow', color: '#FFEB3B' },
+    { value: 'amber', color: '#FFC107' },
+    { value: 'orange', color: '#FF9800' },
+    { value: 'deep-orange', color: '#FF5722' },
+    { value: 'brown', color: '#795548' },
+    { value: 'blue-grey', color: '#607D8B' },
+    { value: 'grey', color: '#9E9E9E' },
+  ];
+  try {
+    const base = (await knex('webguiSetting').select().where({
+      key: 'base',
+    }).then(success => {
+      success[0].value = JSON.parse(success[0].value);
+      return success[0].value;
+    }));
+    const themePrimary = base.themePrimary;
+    const themeAccent = base.themeAccent;
+    const filterColor = colors.filter(f => f.value === base.themePrimary);
+    const browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
+
+    const status = req.session.type; // admin/normal/undefined
+    const id = req.session.user;
+    const version = appRequire('package').version;
+    const site = config.plugins.webgui.site;
+    const skin = config.plugins.webgui.skin || 'default';
+    let alipay;
+    let paypal;
+    let paypalMode;
+    let telegram;
+    let giftcard;
+    let refCode;
+    let email;
+    let subscribe;
+    let multiAccount;
+    if(status) {
+      email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
+      alipay = config.plugins.alipay && config.plugins.alipay.use;
+      paypal = config.plugins.paypal && config.plugins.paypal.use;
+      paypalMode = config.plugins.paypal && config.plugins.paypal.mode;
+      telegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
+      giftcard = config.plugins.giftcard && config.plugins.giftcard.use;
+      refCode = (await knex('webguiSetting').select().where({
+        key: 'webgui_ref',
+      }).then(success => {
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value;
+      })).useRef;
+      subscribe = (await knex('webguiSetting').select().where({
+        key: 'account',
+      }).then(success => {
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value;
+      })).subscribe;
+    }
+    if(status === 'normal') {
+      knex('user').update({ lastLogin: Date.now() }).where({ id }).then();
+      const groupId = (await knex('user').select(['group']).where({ id }).then(s => s[0])).group;
+      multiAccount = (await knex('group').where({ id: groupId }).then(s => s[0])).multiAccount;
+    }
+    res.send({
+      status,
+      id,
+      email,
+      version,
+      themePrimary,
+      themeAccent,
+      browserColor,
+      site,
+      skin,
+      alipay,
+      paypal,
+      paypalMode,
+      telegram,
+      giftcard,
+      refCode,
+      subscribe,
+      multiAccount,
+    });
+  } catch(err) {
+    console.log(err);
+    delete req.session.user;
+    delete req.session.type;
+    return res.status(403).end();
+  }
 };
 
 exports.sendCode = (req, res) => {
+  const refCode = req.body.refCode;
   req.checkBody('email', 'Invalid email').isEmail();
   req.getValidationResult().then(result => {
     if(result.isEmpty) { return; }
@@ -197,6 +327,12 @@ exports.sendCode = (req, res) => {
     .then(success => JSON.parse(success[0].value))
     .then(success => {
       if(success.signUp.isEnable) { return; }
+      if(refCode) {
+        return ref.checkRefCodeForSignup(refCode).then(success => {
+          if(success) { return; }
+          return Promise.reject('invalid ref code');
+        });
+      }
       return Promise.reject('signup close');
     });
   }).then(() => {
@@ -221,7 +357,7 @@ exports.sendCode = (req, res) => {
     res.send('success');
   }).catch(err => {
     logger.error(err);
-    const errorData = ['email in black list', 'send email out of limit', 'signup close'];
+    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'invalid ref code'];
     if(errorData.indexOf(err) < 0) {
       return res.status(403).end();
     } else {
@@ -327,6 +463,16 @@ exports.resetPassword = (req, res) => {
     });
   }).then(success => {
     res.send('success');
+  }).catch(err => {
+    logger.error(err);
+    res.status(403).end();
+  });
+};
+
+exports.visitRef = (req, res) => {
+  const code = req.params.refCode;
+  ref.visitRefCode(code).then(success => {
+    res.send({ valid: success });
   }).catch(err => {
     logger.error(err);
     res.status(403).end();

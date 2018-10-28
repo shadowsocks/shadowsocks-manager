@@ -1,0 +1,31 @@
+<md-dialog aria-label="dialog">
+  <div ng-if="publicInfo.status === 'loading'" layout="row" layout-align="center center" layout-margin layout-padding>
+      <md-progress-circular md-mode="indeterminate" class="md-accent"></md-progress-circular>
+  </div>
+  <md-dialog-content ng-if="publicInfo.status !== 'loading'">
+      <div class="md-dialog-content">
+          <div layout="row" layout-align="center center" ng-if="publicInfo.status === 'show'">
+              <form name="commentForm">
+                  <md-input-container class="md-block">
+                      <label translate>备注</label>
+                      <input type="text" name="comment" ng-model="publicInfo.comment">
+                  </md-input-container>
+              </form>
+          </div>
+          <div layout="column" layout-align="center center" ng-if="publicInfo.status === 'error'">
+              <div style="margin-bottom: 20px;" translate>修改备注失败</div>
+          </div>
+      </div>
+  </md-dialog-content>
+  <md-dialog-actions layout="row" layout-align="center center" ng-if="publicInfo.status !== 'loading'">
+      <md-button class="md-primary" ng-click="publicInfo.close()" ng-if="publicInfo.status === 'show'">
+          {{ '取消' | translate }}
+      </md-button>
+      <md-button class="md-primary" ng-click="publicInfo.editComment()" ng-if="publicInfo.status === 'show'">
+          {{ '保存' | translate }}
+      </md-button>
+      <md-button class="md-primary" ng-click="publicInfo.close()" ng-if="publicInfo.status === 'error'">
+          {{ '确定' | translate }}
+      </md-button>
+  </md-dialog-actions>
+</md-dialog>

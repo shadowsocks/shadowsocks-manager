@@ -12,7 +12,7 @@
                     </div>
                 </md-toolbar>
                 <md-list>
-                    <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" ng-click="menuClick($index)">
+                    <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" ng-click="menuClick($index)" ng-hide="menu.hide">
                         <md-item-content md-ink-ripple layout="row" layout-align="start center">
                             <div class="inset">
                                 <md-icon class="material-icons">{{menu.icon}}</md-icon>
@@ -26,7 +26,7 @@
                 </md-list>
             </div>
         </md-content>
-        <div style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{version}}</div>
+        <div style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{ config.version }}</div>
     </md-sidenav>
     <div flex layout="column">
         <div>
@@ -48,7 +48,7 @@
                 <md-content style="background-color: #FAFAFA; overflow-x: hidden;">
                     <div layout="column" layout-align="center start">
                         <md-list style="width: 100%;">
-                            <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 0px;" ng-click="menuClick($index)">
+                            <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" style="padding-left: 0px;" ng-click="menuClick($index)" ng-hide="menu.hide">
                                 <md-item-content md-ink-ripple layout="row" layout-align="start center">
                                     <div style="padding-left: 0px;" class="inset">
                                         <md-icon class="material-icons">{{menu.icon}}</md-icon>
@@ -62,7 +62,7 @@
                         </md-list>
                     </div>
                 </md-content>
-                <div style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{version}}</div>
+                <div style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{ config.version }}</div>
             </md-sidenav>
             <md-content flex layout="row">
                 <div ui-view flex autoscroll="true"></div>
@@ -70,4 +70,7 @@
         </div>
     </div>
     </section>
+    <md-button ng-show="fabButton" class="md-fab md-fab-bottom-right" ng-click="fabButtonClick()">
+        <md-icon class="material-icons">{{ fabButtonIcon || 'add' }}</md-icon>
+    </md-button>
 </div>

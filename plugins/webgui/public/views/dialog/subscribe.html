@@ -1,0 +1,29 @@
+<md-dialog aria-label="subscribe dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div style="word-wrap: break-word; color: #666; font-size: 0.8em;">{{ publicInfo.subscribeLink }}</div>
+            <div style="margin-top: 15px; margin-bottom: 15px;">请选择订阅链接类型：</div>
+            <md-radio-group ng-model="publicInfo.linkType" layout="row" layout-align="start center" ng-change="{{ changeLinkType() }}">
+                <md-radio-button value="ss">
+                    ss
+                </md-radio-button>
+                <md-radio-button value="ssr">
+                    ssr
+                </md-radio-button>
+            </md-radio-group>
+            <md-checkbox style="margin-top: 15px;" ng-model="publicInfo.ip" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">将域名转换为IP地址</md-checkbox>
+            <div layout="row" layout-align="start center" style="margin-top: 25px;">
+                <div>
+                    <md-button class="md-primary" ngclipboard data-clipboard-text="{{ publicInfo.subscribeLink }}" ngclipboard-success="toast(e);">
+                        复制链接
+                    </md-button>
+                </div>
+                <div>
+                    <md-button class="md-primary" ng-click="publicInfo.updateLink()">
+                        更换链接
+                    </md-button>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

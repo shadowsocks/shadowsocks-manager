@@ -4,14 +4,34 @@
         <div flex="10" flex-gt-sm="30"></div>
         <div flex layout="column" layout-align="space-around stretch">
             <div style="height: 30px;"></div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">从订单中选择类型</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.fromOrder" aria-label="fromOrder" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
             <form name="accountForm">
-                <md-input-container class="md-block">
+                <md-input-container class="md-block" ng-show="account.fromOrder === 0">
                     <label translate>类型</label>
                     <div layout="row">
                         <md-select ng-model="account.type" flex="75">
-                            <md-option ng-repeat="type in typeList" value="{{type.value}}" translate>{{type.key}}</md-option>
+                            <md-option ng-repeat="type in typeList" value="{{type.value}}" translate>{{ type.key }}</md-option>
                         </md-select>
                         <div ng-if="+account.type >= 2 && +account.type <= 5" layout="row" layout-align="end center">
+                            <md-button ng-click="pickTime()">
+                                <md-icon class="material-icons">access_time</md-icon>
+                            </md-button>
+                        </div>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block" ng-show="+account.fromOrder === 1">
+                    <label translate>类型</label>
+                    <div layout="row">
+                        <md-select ng-model="account.orderId" flex="75">
+                            <md-option ng-repeat="order in orders" value="{{order.id}}" translate>{{ order.name }}</md-option>
+                        </md-select>
+                        <div layout="row" layout-align="end center">
                             <md-button ng-click="pickTime()">
                                 <md-icon class="material-icons">access_time</md-icon>
                             </md-button>
@@ -32,19 +52,49 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" ng-if="+account.type >= 2 && +account.type <= 5">
-                    <label translate>流量(MB)</label>
-                    <input type="number" required name="flow" ng-model="account.flow">
+                <md-input-container class="md-block" ng-if="account.fromOrder === 1 || +account.type !== 1">
+                    <label translate>流量</label>
+                    <input type="text" required name="flow" ng-model="account.flowStr">
                     <div ng-messages="accountForm.flow.$error">
                         <div ng-message="required">流量不能为空</div>
                     </div>
                 </md-input-container>
+                <md-input-container class="md-block">
+                    <label translate>自动删除延迟</label>
+                    <input type="text" required name="autoRemoveDelay" ng-model="account.autoRemoveDelayStr" ng-disabled="!account.autoRemove">
+                </md-input-container>
             </form>
-            <div ng-if="+account.type >= 2 && +account.type <= 5" style="width: 100%;" layout="row" layout-align="space-between center">
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">到期自动删除</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
                     </md-switch>
+                </div>
+            </div>
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">合并多服务器流量统计</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.multiServerFlow" aria-label="multiServerFlow" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">自定义可用服务器</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="account.accountServer" aria-label="account.accountServer">
+                    </md-switch>
+                </div>
+            </div>
+            <div layout="column" layout-wrap flex ng-if="account.accountServer && +account.type !== 1">
+                <div layout="column" layout-wrap flex ng-repeat="server in servers">
+                    <div flex="100">
+                        <md-checkbox ng-model="account.accountServerObj[server.id]">
+                            <div layout="row" layout-align="space-between center">
+                                <span flex>{{ server.name }}</span>
+                                <span flex style="color: #777">{{ server.host }}</span>
+                            </div>
+                        </md-checkbox>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,7 +104,7 @@
         <div flex="10" flex-gt-sm="30"></div>
         <div layout="row" flex layout-align="space-around center">
             <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!account.password || !account.port">确认</md-button>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

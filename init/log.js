@@ -16,6 +16,8 @@ const category = [
   'express',
   'flowSaver',
   'paypal',
+  'giftcard',
+  'autoban',
 ];
 
 log4js.configure({

@@ -5,6 +5,10 @@
         <div flex layout="column" layout-align="space-around stretch">
             <div style="height: 30px;"></div>
             <form name="userForm">
+                <md-radio-group layout="row" layout-align="center center" ng-model="user.type" ng-if="id === 1">
+                    <md-radio-button value="normal">普通用户</md-radio-button>
+                    <md-radio-button value="admin">管理员</md-radio-button>
+                </md-radio-group>
                 <md-input-container class="md-block">
                     <label>邮箱</label>
                     <input type="email" required name="email" ng-model="user.email">

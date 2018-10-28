@@ -32,16 +32,10 @@
                         <md-input-container class="md-block">
                             <label>流量(MB)</label>
                             <input type="number" required name="flow" ng-model="accountData.accountForNewUser.flow">
-                            <!-- <div ng-messages="accountForm.flow.$error">
-                                <div ng-message="required">流量不能为空</div>
-                            </div> -->
                         </md-input-container>
                         <md-input-container class="md-block">
                             <label>周期</label>
                             <input type="number" required name="limit" ng-model="accountData.accountForNewUser.limit">
-                            <!-- <div ng-messages="accountForm.flow.$error">
-                                <div ng-message="required">流量不能为空</div>
-                            </div> -->
                         </md-input-container>
                     </form>
                 </div>
@@ -49,7 +43,16 @@
             </md-list>
             <md-divider></md-divider>
             <md-list ng-show="accountData.accountForNewUser.isEnable">
-                <md-list-item ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>合并多服务器流量统计</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.multiServerFlow" aria-label="multiServer"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>到期自动删除</div>
                         <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.autoRemove" aria-label="autoremove"></md-switch></div>
@@ -125,8 +128,8 @@
             <md-list>
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
-                        <div flex="75" translate>合并多服务器流量统计</div>
-                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.multiServerFlow" aria-label="multiServer"></md-switch></div>
+                        <div flex="75" translate>开启订阅功能</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.subscribe" aria-label="subscribe"></md-switch></div>
                     </div>
                 </md-list-item>
             </md-list>
