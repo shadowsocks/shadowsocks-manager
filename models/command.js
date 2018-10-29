@@ -6,7 +6,7 @@ const createTable = async() => {
   if(exist) {
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.string('code').primary();
     table.bigInteger('time');
   });

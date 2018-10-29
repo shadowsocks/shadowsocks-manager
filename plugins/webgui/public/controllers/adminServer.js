@@ -231,7 +231,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     const setChart = (lineData, pieData) => {
       const pieDataSort = pieData.sort((a, b) => {
-        return a.flow >= b.flow;
+        return a.flow - b.flow;
       });
       $scope.pieChart = {
         data: pieDataSort.map(m => m.flow),

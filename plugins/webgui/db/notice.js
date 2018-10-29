@@ -12,7 +12,7 @@ const createTable = async() => {
     }
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.string('title');
     table.string('content', 16384);

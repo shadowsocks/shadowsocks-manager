@@ -12,7 +12,7 @@ const createTable = async() => {
     }
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.integer('userId').defaultTo(1);
     table.string('endpoint').unique();

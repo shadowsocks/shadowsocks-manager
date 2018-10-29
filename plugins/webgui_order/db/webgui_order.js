@@ -75,7 +75,7 @@ const createTable = async () => {
     await fixRefTime();
     return;
   }
-  await knex.schema.createTableIfNotExists(tableName, function(table) {
+  await knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.integer('baseId').defaultTo(0);
     table.string('name');
