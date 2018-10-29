@@ -4,7 +4,7 @@
           <h2>{{ publicInfo.notices[publicInfo.index].title }}</h2>
           <span flex></span>
           <md-button class="md-icon-button" ng-click="publicInfo.next()">
-              <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+              <md-icon class="material-icons" aria-label="Close dialog">{{ publicInfo.index < publicInfo.notices.length - 1 ? 'keyboard_arrow_right' : 'close' }}</md-icon>
           </md-button>
       </div>
   </md-toolbar>

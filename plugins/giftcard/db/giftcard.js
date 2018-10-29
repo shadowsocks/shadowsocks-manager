@@ -4,7 +4,7 @@ const tableName = 'giftcard';
 const createTable = async () => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) { return; }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.string('password').unique().notNull();
     table.integer('orderType').notNull();

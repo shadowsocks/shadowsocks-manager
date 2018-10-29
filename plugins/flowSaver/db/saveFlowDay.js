@@ -16,7 +16,7 @@ const createTable = async() => {
     }
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.integer('id');
     table.integer('accountId').defaultTo(0);
     table.integer('port');

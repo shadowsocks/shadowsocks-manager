@@ -46,7 +46,7 @@ app.factory('autopopDialog', [ '$mdDialog', ($mdDialog) => {
       };
     }],
     fullscreen: true,
-    clickOutsideToClose: true,
+    clickOutsideToClose: false,
   };
   const show = notices => {
     if(isDialogShow()) {
