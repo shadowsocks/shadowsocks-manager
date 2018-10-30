@@ -90,7 +90,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     const accountFilter = () => {
       accountSortTool($scope.accountInfo, $scope.accountMethod);
       $scope.accountInfo.account = $scope.accountInfo.account.filter(f => {
-        return (f.port + (f.user ? f.user : '')).indexOf($scope.menuSearch.text) >= 0;
+        return (f.port + (f.user ? f.user : '') + f.password).indexOf($scope.menuSearch.text) >= 0;
       });
       $scope.macAccountInfo.account = $scope.macAccountInfo.originalAccount.filter(f => {
         return (f.port + f.mac).indexOf($scope.menuSearch.text.replace(/-/g, '').replace(/:/g, '').toLowerCase()) >= 0;
