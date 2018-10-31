@@ -4,11 +4,13 @@ const path = require('path');
 const webpackStream = require('webpack-stream');
 const concat = require('gulp-concat');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const cleanCSS = require('gulp-clean-css');
 
 gulp.task('clean', () => {
   return del([
     'plugins/webgui/libs/bundle.js',
     'plugins/webgui/libs/lib.js',
+    'plugins/webgui/libs/style.css',
   ]);
 });
 
@@ -42,7 +44,7 @@ gulp.task('webguiLib', () => {
 
 gulp.task('webguiBuild', () => {
   return gulp.src([
-    'plugins/webgui/public/**',
+    'plugins/webgui/public/**/*.js',
   ])
   .pipe(webpackStream({
     entry: './plugins/webgui/public/app.js',
@@ -78,7 +80,6 @@ gulp.task('webguiBuild', () => {
             ]
           }
         }]
-        
       }]
     },
     optimization: {
@@ -89,4 +90,13 @@ gulp.task('webguiBuild', () => {
   .pipe(gulp.dest('plugins/webgui/libs'));
 });
 
-gulp.task('default', gulp.series('clean', gulp.parallel('webguiBuild', 'webguiLib')));
+gulp.task('webguiCss', () => {
+  return gulp.src([
+    'plugins/webgui/public/styles/**/*.css',
+  ])
+  .pipe(cleanCSS({compatibility: '*'}))
+  .pipe(concat('style.css'))
+  .pipe(gulp.dest('plugins/webgui/libs'));
+});
+
+gulp.task('default', gulp.series('clean', gulp.parallel('webguiBuild', 'webguiLib', 'webguiCss')));

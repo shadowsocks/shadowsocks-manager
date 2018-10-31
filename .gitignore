@@ -44,5 +44,6 @@ config/development.yml
 lib
 plugins/webgui/libs/bundle.js
 plugins/webgui/libs/lib.js
+plugins/webgui/libs/style.css
 *.yml
 *.sqlite
