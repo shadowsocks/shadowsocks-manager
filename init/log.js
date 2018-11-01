@@ -1,8 +1,8 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-const ssmgrPath = path.resolve(os.homedir() + '/.ssmgr');
-const logPath = path.resolve(os.homedir() + '/.ssmgr/logs');
+const ssmgrPath = path.resolve(os.homedir(), '.ssmgr');
+const logPath = path.resolve(os.homedir(), '.ssmgr', 'logs');
 const log4js = require('log4js');
 
 const category = [
@@ -20,24 +20,21 @@ const category = [
   'autoban',
 ];
 
-log4js.configure({
-  appenders: [{
-    type: 'console',
-    category,
-  }],
-});
+const configure = {
+  appenders: {
+    console: { type: 'console' },
+    filter: { type: 'logLevelFilter', appender: 'console', level: 'debug' }
+  },
+  categories: {
+    default: { appenders: [ 'console' ], level: 'debug' },
+  }
+};
+
+log4js.configure(configure);
 
 const setConsoleLevel = level => {
-  log4js.configure({
-    appenders: [{
-      type: 'logLevelFilter',
-      level,
-      category,
-      appender: {
-        type: 'console',
-      }
-    }]
-  });
+  configure.appenders.filter = { type: 'logLevelFilter', appender: 'console', level };
+  log4js.configure(configure);
 };
 
 const setFileAppenders = (filename) => {
@@ -56,15 +53,16 @@ const setFileAppenders = (filename) => {
   } catch(err) {
     fs.mkdirSync(path.resolve(logPath, filename));
   }
-  log4js.loadAppender('dateFile');
-  category.forEach(ctg => {
-    log4js.addAppender(log4js.appenderMakers['dateFile']({
+  for(const ctg of category) {
+    configure.appenders[ctg] = {
       type: 'dateFile',
-      filename: path.resolve(logPath, filename + '/' + ctg + '.log'),
+      filename: path.resolve(logPath, filename, ctg + '.log'),
       pattern: '-yyyy-MM-dd',
       compress: true,
-    }), ctg);
-  });
+    };
+    configure.categories[ctg] = { appenders: [ ctg, 'filter' ], level: 'debug' };
+  }
+  log4js.configure(configure);
 };
 
 exports.setConsoleLevel = setConsoleLevel;
