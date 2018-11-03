@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.27.5",
+  "version": "0.27.8",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -29,6 +29,7 @@
     "eslint": "^5.8.0",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^3.10.0",
     "gulp-concat": "^2.6.1",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "webpack": "^4.23.0",
@@ -51,7 +52,7 @@
     "knex": "^0.15.2",
     "later": "^1.2.0",
     "lodash": "^4.17.11",
-    "log4js": "^1.0.0",
+    "log4js": "^3.0.6",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "nodemailer": "^4.6.8",
