@@ -165,7 +165,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       }).then(s => s[0]).then(s => JSON.parse(s.value).subscribe);
       if(!isSubscribeOn) { return res.status(404).end(); }
       const subscribeAccount = await account.getAccountForSubscribe(token, ip);
-      for(let s of subscribeAccount.server) {
+      for(const s of subscribeAccount.server) {
         s.host = await getAddress(s.host, +resolveIp);
       }
       const baseSetting = await knex('webguiSetting').where({

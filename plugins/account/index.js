@@ -706,10 +706,13 @@ const getAccountForSubscribe = async (token, ip) => {
   } else {
     account.data = {};
   }
+  if(account.server) {
+    account.server = JSON.parse(account.server);
+  }
   const servers = await serverManager.list({ status: false });
   const validServers = servers.filter(server => {
-    if(!account.data.server) { return true; }
-    return account.data.server.indexOf(server.id) >= 0;
+    if(!account.server) { return true; }
+    return account.server.indexOf(server.id) >= 0;
   });
   return { server: validServers, account };
 };
@@ -744,7 +747,7 @@ const activeAccount = async accountId => {
     accountData.create = Date.now();
     await knex('account_plugin').update({ data: JSON.stringify(accountData) }).where({ id: accountInfo.id });
   }
-}
+};
 
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
