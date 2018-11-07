@@ -734,12 +734,23 @@ exports.deleteRefCode = async (req ,res) => {
   }
 };
 
-exports.deleteRefUser = async (req ,res) => {
+exports.deleteRefUser = async (req, res) => {
   try {
     const sourceUserId = +req.params.sourceUserId;
     const refUserId = +req.params.refUserId;
     await refUser.deleteRefUser(sourceUserId, refUserId);
     res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.alipayRefund = async (req, res) => {
+  try {
+    const orderId = req.body.orderId;
+    const result = await alipay.refund(orderId);
+    res.send(result);
   } catch(err) {
     console.log(err);
     res.status(403).end();

@@ -127,6 +127,8 @@ app.get('/api/admin/paypal/csv', isAdmin, isSuperAdmin, admin.getPaypalCsvOrders
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
 
+app.post('/api/admin/alipay/refund', isAdmin, isSuperAdmin, admin.alipayRefund);
+
 app.get('/api/admin/refOrder', isAdmin, admin.getRefOrders);
 app.get('/api/admin/refOrder/:userId(\\d+)', isAdmin, admin.getUserRefOrders);
 
