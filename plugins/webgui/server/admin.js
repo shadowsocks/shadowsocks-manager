@@ -749,7 +749,8 @@ exports.deleteRefUser = async (req, res) => {
 exports.alipayRefund = async (req, res) => {
   try {
     const orderId = req.body.orderId;
-    const result = await alipay.refund(orderId);
+    const amount = req.body.amount;
+    const result = await alipay.refund(orderId, amount);
     res.send(result);
   } catch(err) {
     console.log(err);
