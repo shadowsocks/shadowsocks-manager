@@ -78,14 +78,15 @@
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item>
-                                <div flex layout="row" layout-align="space-between center" ng-click="expireTimeSheet(account.type === 1 ? 0 : account.data.expire)">
-                                  <div flex="40" translate>到期时间：</div>
-                                  <div flex="60" style="text-align:right">
-                                      <span ng-if="account.type === 1" translate>不限时</span>
-                                      <span ng-if="account.type >=2 && account.type <= 5">
-                                          <span style="font-size: 0.9em;">{{account.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="fontColor(account)">{{ account.data.expire | timeago | translateTime }}</span>
-                                      </span>
-                                  </div>
+                                <div flex layout="row" layout-align="space-between center" ng-click="expireTimeSheet((account.type === 1 || account.active === 0) ? 0 : account.data.expire)">
+                                    <div flex="40" translate>到期时间：</div>
+                                    <div flex="60" style="text-align:right">
+                                        <span ng-if="account.type === 1" translate>不限时</span>
+                                        <span ng-if="account.active === 0" translate>未激活</span>
+                                        <span ng-if="account.type >=2 && account.type <= 5 && account.active !== 0">
+                                            <span ng-if="account.active !== 0" style="font-size: 0.9em;">{{account.data.expire | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;" ng-style="fontColor(account)">{{ account.data.expire | timeago | translateTime }}</span>
+                                        </span>
+                                    </div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>

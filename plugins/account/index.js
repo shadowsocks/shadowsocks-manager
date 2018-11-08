@@ -443,6 +443,43 @@ const setAccountLimit = async (userId, accountId, orderId) => {
     });
     return;
   }
+
+  const compareType = (current, order) => {
+    if(current === order) { return false; }
+    else if(current === 3) { return true; }
+    else if(current === 2 && order !== 3) { return true; }
+    else if(current === 4 && order === 5) { return true; }
+    else { return false; }
+  };
+  const onlyIncreaseTime = compareType(account.type, orderType);
+  if(onlyIncreaseTime) {
+    const accountData = JSON.parse(account.data);
+    const timePeriod = {
+      '2': 7 * 86400 * 1000,
+      '3': 30 * 86400 * 1000,
+      '4': 1 * 86400 * 1000,
+      '5': 3600 * 1000,
+    };
+    let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
+    if(expireTime <= Date.now()) {
+      expireTime = timePeriod[orderType] * limit + Date.now();
+    } else {
+      expireTime += timePeriod[orderType] * limit;
+    }
+    let countTime = timePeriod[account.type];
+    accountData.create = expireTime - countTime;
+    accountData.limit = 1;
+    while(accountData.create >= Date.now()) {
+      accountData.limit += 1;
+      accountData.create -= countTime;
+    }
+    await knex('account_plugin').update({
+      data: JSON.stringify(accountData),
+    }).where({ id: accountId });
+    await accountFlow.edit(accountId);
+    return;
+  }
+
   const accountData = JSON.parse(account.data);
   accountData.flow = orderInfo.flow;
   const timePeriod = {
@@ -450,8 +487,6 @@ const setAccountLimit = async (userId, accountId, orderId) => {
     '3': 30 * 86400 * 1000,
     '4': 1 * 86400 * 1000,
     '5': 3600 * 1000,
-    '6': 3 * 30 * 86400 * 1000,
-    '7': 12 * 30 * 86400 * 1000,
   };
   let expireTime = accountData.create + accountData.limit * timePeriod[account.type];
   if(expireTime <= Date.now()) {
@@ -460,8 +495,6 @@ const setAccountLimit = async (userId, accountId, orderId) => {
     expireTime += timePeriod[orderType] * limit;
   }
   let countTime = timePeriod[orderType];
-  if(orderType === 6) { countTime = timePeriod[3]; }
-  if(orderType === 7) { countTime = timePeriod[3]; }
   accountData.create = expireTime - countTime;
   accountData.limit = 1;
   while(accountData.create >= Date.now()) {
@@ -470,7 +503,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
   }
   // let port = await getAccount({ id: accountId }).then(success => success[0].port);
   await knex('account_plugin').update({
-    type: orderType >= 6 ? 3 : orderType,
+    type: orderType,
     orderId,
     data: JSON.stringify(accountData),
     server: orderInfo.server,
