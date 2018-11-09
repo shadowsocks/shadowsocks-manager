@@ -4,7 +4,7 @@ const tableName = 'group';
 const addDefaultGroup = async () => {
   const data = await knex('group').where({ id: 0 }).then(s => s[0]);
   if(!data) {
-    const id = await knex('group').returning('id').insert({ id: 0, name: '默认组', comment: '系统默认分组' });
+    const id = await knex('group').insert({ id: 0, name: '默认组', comment: '系统默认分组' }, 'id');
     if(id[0] !== 0) {
       await knex('group').update({ id: 0 }).where({ id: id[0] });
     }
