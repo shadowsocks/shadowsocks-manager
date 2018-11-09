@@ -3,7 +3,7 @@ const logger = log4js.getLogger('system');
 
 const knex = appRequire('init/knex').knex;
 const crypto = require('crypto');
-const path = require('path');
+// const path = require('path');
 const config = appRequire('services/config').all();
 const password = config.manager.password;
 const host = config.manager.address.split(':')[0];

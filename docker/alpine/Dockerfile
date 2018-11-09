@@ -27,7 +27,7 @@ RUN set -ex \
       | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
       | sort -u) \
   && rm -rf /tmp/repo
-RUN apk --no-cache add tzdata iproure2 && \
+RUN apk --no-cache add tzdata iproute2 && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     npm i -g shadowsocks-manager --unsafe-perm

@@ -18,7 +18,7 @@ client.bind(mPort);
 
 const knex = appRequire('init/knex').knex;
 
-const moment = require('moment');
+// const moment = require('moment');
 
 let shadowsocksType = 'libev';
 let lastFlow;
@@ -269,8 +269,8 @@ const listAccount = async () => {
 
 const getFlow = async (options) => {
   try {
-    const startTime = moment(options.startTime || new Date(0)).toDate().getTime();
-    const endTime = moment(options.endTime || new Date()).toDate().getTime();
+    const startTime = options.startTime || 0;
+    const endTime = options.endTime || Date.now();
 
     const accounts = await knex('account').select([ 'port' ]);
     const flows = await knex('flow').select([ 'port' ])
