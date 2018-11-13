@@ -377,8 +377,8 @@ exports.getCsvOrders = async (req, res) => {
   options.sort = req.query.sort || 'alipay.createTime_desc';
   options.start = req.query.start;
   options.end = req.query.end;
-  
-  options.filter = req.query.filter || '';
+
+  options.filter = ( Array.isArray(req.query.filter) ? req.query.filter : [req.query.filter] ) || [];
   alipay.getCsvOrder(options)
   .then(success => {
     res.setHeader('Content-disposition', 'attachment; filename=download.csv');
