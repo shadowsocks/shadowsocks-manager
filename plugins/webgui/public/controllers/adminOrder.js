@@ -8,7 +8,17 @@ app
       $state.go('admin.settings');
     });
     $http.get('/api/admin/order').then(success => {
-      $scope.orders = success.data;
+      $scope.orders = success.data.sort((a, b) => {
+        if(!a.baseId && !b.baseId) {
+          return a.id - b.id;
+        } else if(a.baseId && b.baseId) {
+          return a.baseId - b.baseId;
+        } else if(a.baseId && !b.baseId) {
+          return a.baseId - b.id;
+        } else if(!a.baseId && b.baseId) {
+          return a.id - b.baseId;
+        }  
+      });
     });
     $scope.editOrder = id => {
       $state.go('admin.editOrder', { id });
