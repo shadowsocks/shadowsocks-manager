@@ -417,9 +417,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
     $scope.typeList = [
       {key: '不限量', value: 1},
-      {key: '按周', value: 2},
-      {key: '按月', value: 3},
-      {key: '按天', value: 4},
+      {key: '月', value: 3},
+      {key: '周', value: 2},
+      {key: '天', value: 4},
       {key: '小时', value: 5},
     ];
     $scope.timeLimit = {
@@ -535,9 +535,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
     });
     $scope.typeList = [
       {key: '不限量', value: 1},
-      {key: '按周', value: 2},
-      {key: '按月', value: 3},
-      {key: '按天', value: 4},
+      {key: '月', value: 3},
+      {key: '周', value: 2},
+      {key: '天', value: 4},
       {key: '小时', value: 5},
     ];
     $scope.timeLimit = {

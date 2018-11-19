@@ -439,7 +439,7 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       autoRemove: orderInfo.autoRemove ? 1 : 0,
       autoRemoveDelay: orderInfo.autoRemoveDelay,
       multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
-      active: 0,
+      active: orderInfo.active,
     });
     return;
   }

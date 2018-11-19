@@ -54,6 +54,7 @@ app
       multiServerFlow: 0,
       changeOrderType: 1,
       server: null,
+      active: 1,
     };
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
@@ -100,6 +101,7 @@ app
           multiServerFlow: $scope.order.multiServerFlow,
           changeOrderType: $scope.order.changeOrderType,
           server: $scope.order.server,
+          avtive: $scope.order.avtive,
         }).then(success => {
           $state.go('admin.order');
         });
@@ -221,6 +223,7 @@ app
           changeOrderType: $scope.order.changeOrderType,
           server: $scope.order.server,
           changeCurrentAccount: $scope.changeCurrentAccount,
+          active: $scope.order.active,
         }).then(success => {
           $state.go('admin.order');
         });

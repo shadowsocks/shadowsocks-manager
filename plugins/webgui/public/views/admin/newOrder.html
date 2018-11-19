@@ -104,6 +104,13 @@
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-show="order.orderType === 'normal'">
+                <div flex="75">自动激活</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="order.active" aria-label="active" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center" ng-show="order.orderType === 'normal'">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="orderServer" aria-label="orderServer">

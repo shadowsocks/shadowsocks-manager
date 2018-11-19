@@ -41,6 +41,7 @@ exports.newOrder = async (req, res) => {
     data.portRange = req.body.portRange;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
+    data.active = req.body.active;
     await orderPlugin.newOrder(data);
     res.send('success');
   } catch(err) {
@@ -69,6 +70,7 @@ exports.editOrder = async (req, res) => {
     data.portRange = req.body.portRange;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
+    data.active = req.body.active;
     await orderPlugin.editOrder(data);
     const changeCurrentAccount = req.body.changeCurrentAccount;
     const update = {};

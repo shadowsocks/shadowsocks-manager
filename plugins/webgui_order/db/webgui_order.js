@@ -71,6 +71,12 @@ const createTable = async () => {
         table.integer('baseId').defaultTo(0);
       });
     }
+    const hasActive = await knex.schema.hasColumn(tableName, 'active');
+    if(!hasActive) {
+      await knex.schema.table(tableName, function(table) {
+        table.integer('active').defaultTo(1);
+      });
+    }
     await addDefaultOrder();
     await fixRefTime();
     return;
@@ -93,6 +99,7 @@ const createTable = async () => {
     table.string('portRange').defaultTo('0');
     table.integer('multiServerFlow').defaultTo(0);
     table.integer('changeOrderType').defaultTo(0);
+    table.integer('active').defaultTo(1);
   });
   await addDefaultOrder();
   return;

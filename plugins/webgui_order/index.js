@@ -65,6 +65,7 @@ const newOrder = async data => {
     portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
+    active: data.active,
   });
   return;
 };
@@ -87,6 +88,7 @@ const editOrder = async data => {
     portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
+    active: data.active,
   }).where({
     id: data.id,
   });
