@@ -28,7 +28,8 @@ const getOrdersAndAccountNumber = async () => {
     knex.raw('count(account_plugin.id) as accountNumber'),
   ])
   .leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
-  .groupBy('webgui_order.id');
+  .groupBy('webgui_order.id')
+  .orderBy('webgui_order.name', 'ASC');
   return orders;
 };
 

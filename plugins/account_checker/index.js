@@ -349,7 +349,7 @@ const checkAccount = async (serverId, accountId) => {
       } else {
         await Promise.all(accounts.map((account, index) => {
           return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
-            return checkAccount(account.serverId, account.accountId);
+            return checkAccount(account.serverId, account.accountId).catch();
           });
         }));
       }

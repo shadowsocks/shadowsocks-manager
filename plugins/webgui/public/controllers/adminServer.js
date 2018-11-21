@@ -89,6 +89,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
                   success.flow.forEach((number, index) => {
                     server.chart.data[0][index] = number;
                   });
+                  server.sumFlowOneHour = server.chart.data[0].reduce((a, b) => a + b);
                 });
               }, index * 1000);
             }
@@ -115,6 +116,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
                   success.flow.forEach((number, index) => {
                     server.chart.data[0][index] = number;
                   });
+                  server.sumFlowOneHour = server.chart.data[0].reduce((a, b) => a + b);
                 });
               }, index * 1000);
             }
