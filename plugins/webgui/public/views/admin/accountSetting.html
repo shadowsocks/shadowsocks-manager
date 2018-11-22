@@ -15,7 +15,7 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider></md-divider>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
             <md-list ng-show="accountData.accountForNewUser.isEnable" layout="row">
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
                 <div flex>
@@ -83,6 +83,19 @@
                 </md-list-item>
             </md-list>
             <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-list>
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="50" translate>新用户分组</div>
+                        <div flex="50" layout="row" layout-align="end center">
+                            <md-select ng-model="accountData.defaultGroup" aria-label="defaultGroup">
+                                <md-option ng-repeat="group in groups" ng-value="group.id">{{ group.name }}</md-option>
+                            </md-select>
+                        </div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ></md-divider>
             <md-list>
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">

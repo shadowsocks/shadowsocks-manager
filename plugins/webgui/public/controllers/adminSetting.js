@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
-app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$state',
-  ($scope, $http, $timeout, $state) => {
+app.controller('AdminSettingsController', ['$scope', '$state',
+  ($scope, $state) => {
     $scope.setTitle('设置');
     $scope.toSetting = path => { $state.go(path); };
     if($scope.id === 1) {
@@ -116,6 +116,12 @@ app.controller('AdminSettingsController', ['$scope', '$http', '$timeout', '$stat
       $scope.$watch('accountServerObj', () => {
         $scope.saveSetting();
       }, true);
+      return $http.get('/api/admin/group');
+    }).then(success => {
+      $scope.groups = success.data;
+      if(!($scope.accountData.defaultGroup >= 0)) {
+        $scope.accountData.defaultGroup = 0;
+      }
     });
   }
 ]).controller('AdminBaseSettingController', ['$scope', '$http', '$timeout', '$state', '$q',
