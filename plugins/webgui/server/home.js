@@ -64,7 +64,7 @@ exports.signup = async (req, res) => {
     if(req.body.ref) { ref.addRefUser(req.body.ref, req.session.user); }
     if(userId === 1) { return; }
     const newUserAccount = webguiSetting.accountForNewUser;
-    if(newUserAccount) {
+    if(newUserAccount.isEnable) {
       const getNewPort = async () => {
         return knex('webguiSetting').select().where({
           key: 'account',
