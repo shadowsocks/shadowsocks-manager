@@ -147,6 +147,15 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         }
         return server;
       });
+      if($scope.account.server) {
+        $scope.servers.sort((a, b) => {
+          if($scope.account.server.indexOf(a.id) >= 0 && $scope.account.server.indexOf(b.id) < 0) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+      }
       $scope.getServerPortData($scope.servers[0], $scope.accountId);
       $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
     }).catch(err => {
