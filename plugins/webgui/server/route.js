@@ -70,6 +70,7 @@ app.put('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.
 app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
+app.get('/api/admin/account/online', isAdmin, isSuperAdmin, admin.getOnlineAccount);
 app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
 app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);

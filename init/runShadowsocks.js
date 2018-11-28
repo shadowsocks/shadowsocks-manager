@@ -24,7 +24,7 @@ const run = async () => {
     const tempPassword = 'qwerASDF' + Math.random().toString().substr(2, 8);
     shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address]);
   } else {
-    shadowsocks = spawn('ss-manager', [ '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
+    shadowsocks = spawn('ss-manager', [ '-v', '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
   }
 
   shadowsocks.stdout.on('data', (data) => {

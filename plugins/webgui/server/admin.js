@@ -47,6 +47,16 @@ exports.getAccount = (req, res) => {
   });
 };
 
+exports.getOnlineAccount = (req, res) => {
+  const serverId = +req.query.serverId;
+  account.getOnlineAccount(serverId).then(success => {
+    res.send(success);
+  }).catch(err => {
+    console.log(err);
+    res.status(403).end();
+  });
+};
+
 exports.getAccountByPort = async (req, res) => {
   try {
     const port = +req.params.port;

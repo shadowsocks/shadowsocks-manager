@@ -150,6 +150,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
+    $scope.onlineAccount = [];
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
         $scope.server = success.data;
@@ -161,6 +162,11 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             exists: true,
           };
         });
+        return $http.get('/api/admin/account/online', {
+          params: { serverId }
+        });
+      }).then(success => {
+        $scope.onlineAccount = success.data;
         return adminApi.getAccount();
       }).then(accounts => {
         accounts.forEach(account => {
@@ -350,6 +356,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.matchPort = (port, passowrd, search) => {
       if(!search) { return true; }
       return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
+    };
+    $scope.accountColor = account => {
+      if(account.exists === false) {
+        return { background: 'red-50' };
+      } else if($scope.onlineAccount.indexOf(account.id) >= 0) {
+        return { background: 'blue-50' };
+      }
+      return {};
     };
     // $scope.$on('cancelSearch', () => {
       
