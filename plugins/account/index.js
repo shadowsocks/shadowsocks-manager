@@ -90,6 +90,18 @@ const getAccount = async (options = {}) => {
 };
 
 const getOnlineAccount = async serverId => {
+  if(!serverId) {
+    const onlines = await knex('saveFlow').select([
+      'saveFlow.id as serverId',
+    ]).countDistinct('saveFlow.accountId as online')
+    .where('saveFlow.time', '>', Date.now() - 5 * 60 * 1000)
+    .groupBy('saveFlow.id');
+    const result = {};
+    for(const online of onlines) {
+      result[online.serverId] = online.online;
+    };
+    return result;
+  }
   const account = await knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.port',

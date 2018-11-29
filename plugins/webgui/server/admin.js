@@ -48,7 +48,7 @@ exports.getAccount = (req, res) => {
 };
 
 exports.getOnlineAccount = (req, res) => {
-  const serverId = +req.query.serverId;
+  const serverId = req.query.serverId ? +req.query.serverId : 0;
   account.getOnlineAccount(serverId).then(success => {
     res.send(success);
   }).catch(err => {

@@ -60,7 +60,11 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       };
     }
     $scope.servers = $localStorage.admin.serverInfo.data;
+    $scope.online = {};
     const updateServerInfo = () => {
+      $http.get('/api/admin/account/online').then(success => {
+        $scope.online = success.data;
+      });
       adminApi.getServer(true).then(servers => {
         if(servers.map(s => s.id).join('') === $scope.servers.map(s => s.id).join('')) {
           $scope.servers.forEach((server, index) => {
