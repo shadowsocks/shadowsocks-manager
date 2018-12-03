@@ -154,6 +154,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
+    $scope.accountFilter = 'all';
     $scope.onlineAccount = [];
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
@@ -357,14 +358,27 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       banDialog.show(serverId, accountId);
     };
     $scope.setMenuSearchButton('search');
-    $scope.matchPort = (port, passowrd, search) => {
-      if(!search) { return true; }
-      return port.toString().indexOf(search) >= 0 || passowrd.toString().indexOf(search) >= 0;
+    $scope.matchPort = (account, searchStr) => {
+      let filter = true;
+      let search = true;
+      if($scope.accountFilter === 'all') {
+        filter = true;
+      } else if($scope.accountFilter === 'red') {
+        filter = !account.exists;
+      } else {
+        filter = $scope.onlineAccount.includes(account.id);
+      }
+      if(!searchStr) {
+        search = true;
+      } else {
+        search = (account.port.toString().includes(searchStr) || account.password.toString().includes(searchStr));
+      }
+      return filter && search;
     };
     $scope.accountColor = account => {
       if(account.exists === false) {
         return { background: 'red-50' };
-      } else if($scope.onlineAccount.indexOf(account.id) >= 0) {
+      } else if($scope.onlineAccount.includes(account.id)) {
         return { background: 'blue-50' };
       }
       return {};
