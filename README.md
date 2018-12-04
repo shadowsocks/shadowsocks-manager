@@ -17,7 +17,7 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## WebGUI Demo:
 
-[https://shadowghost.app](https://shadowghost.app)
+[https://shadowghost.app](https://ssmgr.gyteng.com)
 
 ## FreeAccount Demo:
 

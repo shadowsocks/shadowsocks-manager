@@ -74,12 +74,11 @@ const saveFlow = async () => {
         flow.forEach(async f => {
           await updateAccountFlow(f.id, f.accountId, f.flow);
         });
-        const insertPromises = [];
         for(let i = 0; i < Math.ceil(flow.length / 50); i++) {
-          const insert = knex('saveFlow').insert(flow.slice(i * 50, i * 50 + 50));
-          insertPromises.push(insert);
+          const insertFlow = flow.slice(i * 50, i * 50 + 50);
+          await knex('saveFlow').insert(insertFlow).catch();
+          logger.info(`[server: ${ server.id }] insert ${ insertFlow.length } flow`);
         }
-        await Promise.all(insertPromises);
       }
     };
     for(const server of servers) {
