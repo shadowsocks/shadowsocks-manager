@@ -18,21 +18,25 @@ client.bind(mPort);
 
 const knex = appRequire('init/knex').knex;
 
-// const moment = require('moment');
-
 let shadowsocksType = 'libev';
+let isNewPython = false;
 let lastFlow;
 
 const sendPing = () => {
-  client.send(new Buffer.from('ping'), port, host);
+  client.send(Buffer.from('ping'), port, host);
+  client.send(Buffer.from('list'), port, host);
 };
 
 let existPort = [];
 let existPortUpdatedAt = Date.now();
 const setExistPort = flow => {
   existPort = [];
-  for(const f in flow) {
-    existPort.push(+f);
+  if(Array.isArray(flow)) {
+    existPort = flow.map(f => f.server_port);
+  } else {
+    for(const f in flow) {
+      existPort.push(+f);
+    }
   }
   existPortUpdatedAt = Date.now();
 };
@@ -44,11 +48,17 @@ const connect = () => {
     const msgStr = new String(msg);
     if(msgStr.substr(0, 4) === 'pong') {
       shadowsocksType = 'python';
-    } else if(msgStr.substr(0, 3) === '[\n\t') {
+    } else if(msgStr.substr(0, 2) === '[{') {
+      isNewPython = true;
       portsForLibev = JSON.parse(msgStr);
+      setExistPort(portsForLibev);
+    } else if(msgStr.substr(0, 3) === '[\n\t') {
+      shadowsocksType = 'libev';
+      portsForLibev = JSON.parse(msgStr);
+      setExistPort(portsForLibev);
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
-      setExistPort(flow);
+      !isNewPython && setExistPort(flow);
       const realFlow = compareWithLastFlow(flow, lastFlow);
 
       const getConnectedIp = port => {
@@ -80,7 +90,7 @@ const connect = () => {
         return f.flow > 0;
       });
       const accounts = await knex('account').select();
-      if(shadowsocksType === 'python') {
+      if(shadowsocksType === 'python' && !isNewPython) {
         insertFlow.forEach(fe => {
           const account = accounts.filter(f => {
             return fe.port === f.port;
@@ -134,7 +144,7 @@ const sendMessage = (message) => {
 };
 
 const startUp = async () => {
-  client.send(new Buffer.from('ping'), port, host);
+  client.send(Buffer.from('ping'), port, host);
   if(config.runShadowsocks === 'python') {
     sendMessage(`remove: {"server_port": 65535}`);
   }
@@ -150,7 +160,7 @@ const resend = async () => {
   }
   const accounts = await knex('account').select([ 'port', 'password' ]);
   accounts.forEach(f => {
-    if(existPort.indexOf(f.port) < 0) {
+    if(!existPort.includes(f.port)) {
       sendMessage(`add: {"server_port": ${ f.port }, "password": "${ f.password }"}`);
     }
   });
