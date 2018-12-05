@@ -432,8 +432,9 @@ const getServerPortFlowWithScale = async (serverId, accountId, timeArray, isMult
 
 const getlastConnectTime = async (serverId, accountId) => {
   const lastConnectFromSaveFlow = await knex('saveFlow')
-  .select(['time'])
+  .select([ 'time' ])
   .where({ id: serverId, accountId })
+  .where('flow', '>', 100000)
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return success[0].time;
@@ -446,6 +447,7 @@ const getlastConnectTime = async (serverId, accountId) => {
   return knex('saveFlow5min')
   .select(['time'])
   .where({ id: serverId, accountId })
+  .where('flow', '>', 100000)
   .orderBy('time', 'desc').limit(1).then(success => {
     if(success[0]) {
       return { lastConnect: success[0].time };
