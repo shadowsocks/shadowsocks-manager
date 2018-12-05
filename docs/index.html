@@ -11,6 +11,10 @@
 <body>
   <div id="app"></div>
   <script>
+    const host = 'shadowsocks.github.io'
+    if(window.location.host === host && window.location.protocol !== 'https:') {
+      window.location.protocol = 'https:'
+    }
     window.$docsify = {
       loadSidebar: true,
       subMaxLevel: 2,
