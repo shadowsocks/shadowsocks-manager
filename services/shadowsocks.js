@@ -224,6 +224,7 @@ const addAccount = async (port, password) => {
       return Promise.reject('error');
     }
     await sendMessage(`add: {"server_port": ${ port }, "password": "${ password }"}`);
+    await knex('account').insert({ port, password });
     return { port, password };
   } catch(err) {
     return Promise.reject('error');
