@@ -1,3 +1,6 @@
-* [首页](/README)
+* [首页](/home)
 * [安装](/install)
+* [配置](/config)
 * [升级](/upgrade)
+* [VPS推荐](/vps)
+* [捐赠](/donate)
