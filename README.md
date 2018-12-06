@@ -11,7 +11,7 @@
 A shadowsocks manager tool for multi user and traffic control.  
 Base on Node.js and SQLite.
 
-For more details, you can see [the wiki page](https://github.com/shadowsocks/shadowsocks-manager/wiki).
+For more details, you can see [docs](https://shadowsocks.github.io/shadowsocks-manager/).
 
 If you want to use the old version, please switch to [this branch](https://github.com/shadowsocks/shadowsocks-manager/tree/version1).
 
