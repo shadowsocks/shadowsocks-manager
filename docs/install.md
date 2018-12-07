@@ -2,39 +2,37 @@
 
 ## 普通方式
 
-### 安装shadowsocks
+1. 安装 shadowsocks
 
-可以采用`libev`或`python`版本。
+  可以采用`libev`或`python`版本
 
-### 安装Node.js
+2. 安装 Node.js 8.x
 
-版本：`8.x`，建议使用[`nodesource`](https://github.com/nodesource/distributions)里边的方式安装，完成后确认一下版本号：
+  建议使用[`nodesource`](https://github.com/nodesource/distributions)里边的方式安装
 
-```shell
-$ node -v
-v8.14.0
-```
+3. 安装 ssmgr
 
-### 安装ssmgr
-
-```shell
+  ```shell
 npm i -g shadowsocks-manager
 ```
-若出现权限相关的错误提示，则需要尝试：
-```shell
+
+  若出现权限相关的错误提示，则需要尝试：
+
+  ```shell
 sudo npm i -g shadowsocks-manager --unsafe-perm
 ```
-安装完成后，使用`ssmgr`命令来运行程序。
 
-## Docker方式
+  安装完成后，使用`ssmgr`命令来运行程序
 
-### 安装Docker
+## Docker 方式
 
-参见[Docker官网](https://docs.docker.com/install/)。
+1. 安装 Docker
 
-### 运行
+  参见[Docker官网](https://docs.docker.com/install/)。
 
-```shell
+2. 运行
+
+  ```shell
 docker run --name ssmgr -idt --net=host \
        -v ~/.ssmgr:/root/.ssmgr \
        gyteng/ssmgr \
