@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">加载中</div>
   <script>
     const host = 'shadowsocks.github.io';
     if(window.location.host === host && window.location.protocol !== 'https:') {
@@ -24,13 +24,11 @@
       name: 'Shadowsocks-Manager',
       themeColor: '#2196F3',
       repo: 'https://github.com/shadowsocks/shadowsocks-manager/',
-      search: 'auto',
       search: {
         maxAge: 86400000,
-        paths: [], 
-        placeholder: {
-          '/': '搜索'
-        },
+        paths: 'auto', 
+        placeholder: '搜索',
+        noData: '找不到结果',
       },
     };
   </script>

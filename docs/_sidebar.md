@@ -1,6 +1,7 @@
 * [首页](/home)
 * [安装](/install)
 * [配置](/config)
+* [高级](/advanced)
 * [升级](/upgrade)
 * [VPS推荐](/vps)
 * [捐赠](/donate)
