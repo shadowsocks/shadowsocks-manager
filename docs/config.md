@@ -30,11 +30,17 @@ db: 'db.sqlite'
 }
 ```
 
-2. 调用刚刚的配置文件运行
+2. 运行 shadowsocks
 
-  `ssmgr -c /your/node/config/file -r libev:aes-256-cfb`
+  两种版本的命令有一些差异，都要保证`--manager-address`的参数和上一步配置文件一致
 
-!> `-r`后的参数请用本机实际安装的 shadowsocks 版本
+  - libev `ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001`
+  - python `ssserver -m aes-256-cfb -p 12345 -k abcedf --manager-address 127.0.0.1:6001`
+
+
+3. 调用刚刚的配置文件运行 ssmgr
+
+  `ssmgr -c /your/node/config/file`
 
 !> 此处需要让程序后台运行，关于后台运行的方法请参考`pm2`、`byobu`等工具
 
@@ -76,7 +82,13 @@ db: 'webgui.sqlite'
 
   `ssmgr -c /your/webgui/config/file`
 
+  若一切正常，便可看到主界面：
+
+![](/_media/home.png)
+
 !> 成功运行后，首个注册用户为管理员
+
+
 
 ## 配置更多的节点
 
