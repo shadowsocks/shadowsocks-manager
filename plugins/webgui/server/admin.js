@@ -97,6 +97,16 @@ exports.getOneAccount = async (req, res) => {
       accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
       accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
     }
+    accountInfo.publicKey = '';
+    accountInfo.privateKey = '';
+    if(accountInfo.key) {
+      if(accountInfo.key.includes(':')) {
+        accountInfo.publicKey = accountInfo.key.split(':')[0];
+        accountInfo.privateKey = accountInfo.key.split(':')[1];
+      } else {
+        accountInfo.publicKey = accountInfo.key;
+      }
+    }
     return res.send(accountInfo);
   } catch(err) {
     console.log(err);

@@ -159,6 +159,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
         $scope.server = success.data;
+        $scope.isWg = $scope.server.name.startsWith('wg:');
         $scope.currentPorts = {};
         $scope.server.ports.forEach(f => {
           $scope.currentPorts[f.port] = {

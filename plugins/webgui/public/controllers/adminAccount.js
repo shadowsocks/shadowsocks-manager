@@ -410,6 +410,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         });
       });
     };
+    $scope.clipboardSuccess = event => {
+      $scope.toast('二维码链接已复制到剪贴板');
+    };
   }
 ])
 .controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog', '$filter',

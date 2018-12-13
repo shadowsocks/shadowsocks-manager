@@ -87,7 +87,7 @@
         <md-card md-colors="accountColor(value)">
             <md-card-content style="padding-top: 5px; padding-bottom: 5px;">
                 <div layout="row" layout-align="space-between center">
-                    <div flex="70" ng-click="toAccountPage(value.port)"><span>{{ value.port }}</span><br><span style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</span></div>
+                    <div flex="70" ng-click="toAccountPage(value.port)"><span>{{ value.port }}</span><br><span style="text-align:right; color: #aaa; font-size: 0.8em;">{{ isWg ? '-' : value.password }}</span></div>
                     <div flex="30" layout="row" layout-align="space-between center">
                         <div></div>
                         <md-button class="md-icon-button" aria-label="ban" ng-click="banAccount(value.id)">
