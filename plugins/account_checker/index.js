@@ -166,10 +166,10 @@ const isOverFlow = async (server, account) => {
   }
 };
 
-const deletePort = (server, account) => {
+const deletePort = async (server, account) => {
   // console.log(`del ${ server.name } ${ account.port }`);
   const portNumber = server.shift + account.port;
-  manager.send({
+  await manager.send({
     command: 'del',
     port: portNumber,
   }, {
@@ -179,18 +179,61 @@ const deletePort = (server, account) => {
   }).catch();
 };
 
-const addPort = (server, account) => {
+const runCommand = async cmd => {
+  const exec = require('child_process').exec;
+  return new Promise((resolve, reject) => {
+    exec(cmd, (err, stdout, stderr) => {
+      if(err) {
+        return reject(stderr);
+      } else {
+        return resolve(stdout);
+      }
+    });
+  });
+};
+
+const generateAccountKey = async account => {
+  const privateKey = await runCommand('wg genkey');
+  const publicKey = await runCommand(`echo '${ privateKey.trim() }' | wg pubkey`);
+  await knex('account_plugin').update({
+    key: publicKey.trim() + ':' + privateKey.trim(),
+  }).where({ id: account.id });
+  return publicKey.trim();
+};
+
+const addPort = async (server, account) => {
   // console.log(`add ${ server.name } ${ account.port }`);
-  const portNumber = server.shift + account.port;
-  manager.send({
-    command: 'add',
-    port: portNumber,
-    password: account.password,
-  }, {
-    host: server.host,
-    port: server.port,
-    password: server.password,
-  }).catch();
+  if(server.name.substr(0, 3) === 'wg:') {
+    let publicKey = account.key;
+    if(!publicKey) {
+      publicKey = await generateAccountKey(account);
+    }
+    if(publicKey.includes(':')) {
+      publicKey = publicKey.split(':')[0];
+    }
+    const portNumber = server.shift + account.port;
+    await manager.send({
+      command: 'add',
+      port: portNumber,
+      password: publicKey,
+    }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    }).catch();
+    
+  } else {
+    const portNumber = server.shift + account.port;
+    await manager.send({
+      command: 'add',
+      port: portNumber,
+      password: account.password,
+    }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    }).catch();
+  }
 };
 
 const deleteExtraPorts = async serverInfo => {
@@ -208,7 +251,7 @@ const deleteExtraPorts = async serverInfo => {
     for(const p of currentPorts) {
       if(accountObj[p.port - serverInfo.shift]) { continue; }
       await sleep(sleepTime);
-      deletePort(serverInfo, { port: p.port - serverInfo.shift });
+      await deletePort(serverInfo, { port: p.port - serverInfo.shift });
     }
   } catch(err) {
     console.log(err);
@@ -233,36 +276,36 @@ const checkAccount = async (serverId, accountId) => {
 
     // 检查账号是否激活
     if(!isAccountActive(serverInfo, accountInfo)) {
-      exists && deletePort(serverInfo, accountInfo);
+      exists && await deletePort(serverInfo, accountInfo);
       return;
     }
 
     // 检查账号是否包含该服务器
     if(!hasServer(serverInfo, accountInfo)) {
       await modifyAccountFlow(serverInfo.id, accountInfo.id, 20 * 60 * 1000 + randomInt(30000));
-      exists && deletePort(serverInfo, accountInfo);
+      exists && await deletePort(serverInfo, accountInfo);
       return;
     }
 
     // 检查账号是否过期
     if(isExpired(serverInfo, accountInfo)) {
-      exists && deletePort(serverInfo, accountInfo);
+      exists && await deletePort(serverInfo, accountInfo);
       return;
     }
 
     // 检查账号是否被ban
     if(await isBaned(serverInfo, accountInfo)) {
-      exists && deletePort(serverInfo, accountInfo);
+      exists && await deletePort(serverInfo, accountInfo);
       return;
     }
 
     // 检查账号是否超流量
     if(await isOverFlow(serverInfo, accountInfo)) {
-      exists && deletePort(serverInfo, accountInfo);
+      exists && await deletePort(serverInfo, accountInfo);
       return;
     }
 
-    !exists && addPort(serverInfo, accountInfo);
+    !exists && await addPort(serverInfo, accountInfo);
   } catch(err) {
     console.log(err);
   }

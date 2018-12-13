@@ -4,10 +4,10 @@ const tableName = 'account_plugin';
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
-    const hasActive = await knex.schema.hasColumn(tableName, 'active');
-    if(!hasActive) {
+    const hasKey = await knex.schema.hasColumn(tableName, 'key');
+    if(!hasKey) {
       await knex.schema.table(tableName, function(table) {
-        table.integer('active').defaultTo(1);
+        table.string('key');
       });
     }
     const results = await knex(tableName).whereNull('orderId');
@@ -24,6 +24,7 @@ const createTable = async() => {
     table.string('server');
     table.integer('port').unique();
     table.string('password');
+    table.string('key');
     table.string('data');
     table.string('subscribe');
     table.integer('status');
