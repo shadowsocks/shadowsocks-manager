@@ -5,6 +5,12 @@
         <div flex layout="column" layout-align="space-around stretch">
             <div style="height: 30px;"></div>
             <form name="serverForm">
+                <div layout="row" layout-align="center stretch" style="width: 100%;">
+                    <md-select ng-model="server.type" style="width: 100%;" aria-label="type">
+                        <md-option ng-value="'Shadowsocks'">Shadowsocks</md-option>
+                        <md-option ng-value="'WireGuard'">WireGuard</md-option>
+                    </md-select>
+                </div>
                 <md-input-container class="md-block">
                     <label>名称</label>
                     <input type="text" required name="name" ng-model="server.name">
@@ -37,7 +43,19 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <div class="md-block" layout="column" layout-align="center stretch" style="margin-bottom: 25px;">
+                <md-input-container class="md-block" ng-if="server.type === 'WireGuard'">
+                    <label>Public key</label>
+                    <input type="text" required name="publicKey" ng-model="server.key">
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="server.type === 'WireGuard'">
+                    <label>网段</label>
+                    <input type="text" required name="net" ng-model="server.net">
+                </md-input-container>
+                <md-input-container class="md-block" ng-if="server.type === 'WireGuard'">
+                    <label>WireGuard端口</label>
+                    <input type="number" required name="wgPort" ng-model="server.wgPort">
+                </md-input-container>
+                <div ng-if="server.type === 'Shadowsocks'" class="md-block" layout="column" layout-align="center stretch" style="margin-bottom: 25px;">
                     <label flex style="color: rgba(0,0,0, 0.54); font-size: 13px;">加密方式</label>
                     <md-autocomplete flex
                         md-selected-item="server.method"
@@ -60,7 +78,7 @@
                         <div ng-message="required">流量倍率不能为空</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block">
+                <md-input-container class="md-block" ng-if="server.type === 'Shadowsocks'">
                     <label>端口偏移</label>
                     <input type="number" required name="shift" ng-model="server.shift">
                     <div ng-messages="serverForm.shift.$error">

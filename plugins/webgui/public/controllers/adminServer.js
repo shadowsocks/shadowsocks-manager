@@ -159,7 +159,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
         $scope.server = success.data;
-        $scope.isWg = $scope.server.name.startsWith('wg:');
+        $scope.isWg = $scope.server.type === 'WireGuard';
         $scope.currentPorts = {};
         $scope.server.ports.forEach(f => {
           $scope.currentPorts[f.port] = {
@@ -421,12 +421,15 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.method = $scope.methodSearch;
     };
     $scope.server = {
+      type: 'Shadowsocks',
+      method: 'aes-256-cfb',
       scale: 1,
       shift: 0,
     };
     $scope.confirm = () => {
       alertDialog.loading();
       $http.post('/api/admin/server', {
+        type: $scope.server.type,
         name: $scope.server.name,
         address: $scope.server.address,
         port: +$scope.server.port,
@@ -435,6 +438,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         comment: $scope.server.comment,
         scale: $scope.server.scale,
         shift: $scope.server.shift,
+        key: $scope.server.key,
+        net: $scope.server.net,
+        wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
       }, {
         timeout: 15000,
       }).then(success => {
@@ -484,6 +490,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     })
     .then(success => {
       $scope.serverInfoloaded = true;
+      $scope.server.type = success.data.type;
       $scope.server.name = success.data.name;
       $scope.server.comment = success.data.comment;
       $scope.server.address = success.data.host;
@@ -492,18 +499,25 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.method = success.data.method;
       $scope.server.scale = success.data.scale;
       $scope.server.shift = success.data.shift;
+      $scope.server.key = success.data.key;
+      $scope.server.net = success.data.net;
+      $scope.server.wgPort = success.data.wgPort;
     });
     $scope.confirm = () => {
       alertDialog.loading();
       $http.put('/api/admin/server/' + $stateParams.serverId, {
+        type: $scope.server.type,
         name: $scope.server.name,
-        comment: $scope.server.comment,
         address: $scope.server.address,
         port: +$scope.server.port,
         password: $scope.server.password,
         method: $scope.server.method,
+        comment: $scope.server.comment,
         scale: $scope.server.scale,
         shift: $scope.server.shift,
+        key: $scope.server.key,
+        net: $scope.server.net,
+        wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
         check: $scope.server.check,
       }).then(success => {
         alertDialog.show('修改服务器成功', '确定');

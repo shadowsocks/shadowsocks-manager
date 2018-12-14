@@ -203,7 +203,7 @@ const generateAccountKey = async account => {
 
 const addPort = async (server, account) => {
   // console.log(`add ${ server.name } ${ account.port }`);
-  if(server.name.substr(0, 3) === 'wg:') {
+  if(server.type === 'WireGuard') {
     let publicKey = account.key;
     if(!publicKey) {
       publicKey = await generateAccountKey(account);
