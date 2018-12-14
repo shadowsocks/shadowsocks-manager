@@ -23,7 +23,7 @@ exports.getAccount = async (req, res) => {
   try {
     const userId = req.session.user;
     const accounts = await account.getAccount({ userId });
-    for(let account of accounts) {
+    for(const account of accounts) {
       account.data = JSON.parse(account.data);
       if (account.type >= 2 && account.type <= 5) {
         const time = {
@@ -42,6 +42,16 @@ exports.getAccount = async (req, res) => {
         account.data.flowPack = await flowPack.getFlowPack(account.id, account.data.from, account.data.to);
       }
       account.server = account.server ? JSON.parse(account.server) : account.server;
+      account.publicKey = '';
+      account.privateKey = '';
+      if(account.key) {
+        if(account.key.includes(':')) {
+          account.publicKey = account.key.split(':')[0];
+          account.privateKey = account.key.split(':')[1];
+        } else {
+          account.publicKey = account.key;
+        }
+      }
     }
     res.send(accounts);
   } catch (err) {
@@ -94,7 +104,7 @@ exports.getServers = (req, res) => {
     });
   };
   let servers;
-  knex('server').select(['id', 'host', 'name', 'method', 'scale', 'comment', 'shift']).orderBy('name')
+  knex('server').select(['id', 'type' ,'host', 'name', 'method', 'scale', 'comment', 'shift', 'key', 'net', 'wgPort']).orderBy('name')
     .then(success => {
       servers = serverAliasFilter(success);
       return account.getAccount({

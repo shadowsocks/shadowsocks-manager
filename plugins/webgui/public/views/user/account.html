@@ -41,24 +41,38 @@
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>端口：</div>
-                                    <div flex="60" style="text-align:right">{{a.port + a.serverInfo.shift}}</div>
+                                    <div flex="60" style="text-align:right">{{ isWG(a.serverInfo) ? a.serverInfo.wgPort : a.port + a.serverInfo.shift}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
-                            <md-list-item>
+                            <md-list-item ng-hide="isWG(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>密码：</div>
                                     <div flex="60" style="text-align:right">{{a.password}}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider></md-divider>
-                            <md-list-item>
+                            <md-divider ng-hide="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-hide="isWG(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '加密方式：' | translate }}</div>
                                     <div flex="60" style="text-align:right">{{a.serverInfo.method}}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider></md-divider>
+                            <md-divider ng-hide="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-show="isWG(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>公钥：</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis;">{{a.publicKey}}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-show="isWG(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40">{{ '私钥：' | translate }}</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis;">{{a.privateKey}}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isWG(a.serverInfo)"></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '流量：'| translate }}</div>
@@ -120,9 +134,16 @@
                     </div>
                     <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                         <div hide-xs></div>
-                        <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)" size="getQrCodeSize()"
-                            layout-margin text="createQrCode(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)"
+                        <div ng-hide="isWG(a.serverInfo)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
+                            <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)" size="getQrCodeSize()"
+                            layout-margin text="createQrCode(a.serverInfo, a)"
                             image="true"></qr>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
+                        </div>
+                        <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
+                            <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
+                            <md-button class="md-primary">显示WireGuard配置</md-button>
+                        </div>
                         <div hide-xs></div>
                     </div>
                 </div>

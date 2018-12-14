@@ -158,8 +158,8 @@ app
     };
   }
 ])
-.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog', 'subscribeDialog', '$q', '$state',
-  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog, subscribeDialog, $q, $state) => {
+.controller('UserAccountController', ['$scope', '$http', '$mdMedia', 'userApi', 'alertDialog', 'payDialog', 'qrcodeDialog', '$interval', '$localStorage', 'changePasswordDialog', 'payByGiftCardDialog', 'subscribeDialog', '$q', '$state', 'wireGuardConfigDialog',
+  ($scope, $http, $mdMedia, userApi, alertDialog, payDialog, qrcodeDialog, $interval, $localStorage, changePasswordDialog, payByGiftCardDialog, subscribeDialog, $q, $state, wireGuardConfigDialog) => {
     $scope.setTitle('账号');
     $scope.setFabButton($scope.config.multiAccount ? () => {
       $scope.createOrder();
@@ -230,8 +230,24 @@ app
         return String.fromCharCode('0x' + p1);
       }));
     };
-    $scope.createQrCode = (method, password, host, port, serverName) => {
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+    $scope.createQrCode = (server, account) => {
+      if(!server) { return ''; }
+      if(server.type === 'WireGuard') {
+        const a = account.port % 254;
+        const b = (account.port - a) / 254;
+        return [
+          '[Interface]',
+          `Address = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.${ b }.${ a + 1 }/32`,
+          `PrivateKey = ${ account.privateKey }`,
+          'DNS = 8.8.8.8',
+          '[Peer]',
+          `PublicKey = ${ server.key }`,
+          `Endpoint = ${ server.host }:${ server.wgPort }`,
+          `AllowedIPs = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.0.0/16`,
+        ].join('\n');
+      } else {
+        return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));
+      }
     };
 
     $scope.getServerPortData = (account, serverId) => {
@@ -345,6 +361,15 @@ app
       return {
         filter: 'blur(4px)'
       };
+    };
+    $scope.clipboardSuccess = event => {
+      $scope.toast('二维码链接已复制到剪贴板');
+    };
+    $scope.isWG = server => {
+      return (server && server.type === 'WireGuard');
+    };
+    $scope.showWireGuard = (server, account) => {
+      wireGuardConfigDialog.show(server, account);
     };
   }
 ])

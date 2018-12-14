@@ -202,8 +202,23 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         return String.fromCharCode('0x' + p1);
       }));
     };
-    $scope.createQrCode = (method, password, host, port, serverName) => {
-      return 'ss://' + base64Encode(method + ':' + password + '@' + host + ':' + port);
+    $scope.createQrCode = (server, account) => {
+      if(server.type === 'WireGuard') {
+        const a = account.port % 254;
+        const b = (account.port - a) / 254;
+        return [
+          '[Interface]',
+          `Address = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.${ b }.${ a + 1 }/32`,
+          `PrivateKey = ${ account.privateKey }`,
+          'DNS = 8.8.8.8',
+          '[Peer]',
+          `PublicKey = ${ server.key }`,
+          `Endpoint = ${ server.host }:${ server.wgPort }`,
+          `AllowedIPs = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.0.0/16`,
+        ].join('\n');
+      } else {
+        return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));
+      }
     };
     $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
       const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
