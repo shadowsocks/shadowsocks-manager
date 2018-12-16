@@ -54,6 +54,7 @@ exports.addServer = async (req, res) => {
     const result = await req.getValidationResult();
     if(!result.isEmpty()) { return Promise.reject('Invalid Body'); }
     const type = req.body.type;
+    const isWG = type === 'WireGuard';
     const name = req.body.name;
     const comment = req.body.comment;
     const address = req.body.address;
@@ -61,10 +62,10 @@ exports.addServer = async (req, res) => {
     const password = req.body.password;
     const method = req.body.method;
     const scale = req.body.scale;
-    const shift = req.body.shift;
-    const key = req.body.key;
-    const net = req.body.net;
-    const wgPort = req.body.wgPort;
+    const shift = isWG ? 0 : req.body.shift;
+    const key = isWG ? req.body.key : null;
+    const net = isWG ? req.body.net: null;
+    const wgPort = isWG ? req.body.wgPort : null;
     await manager.send({
       command: 'flow',
       options: { clear: false, },
@@ -108,6 +109,7 @@ exports.editServer = async (req, res) => {
     if(!result.isEmpty()) { return Promise.reject('Invalid Body'); }
     const serverId = req.params.serverId;
     const type = req.body.type;
+    const isWG = type === 'WireGuard';
     const name = req.body.name;
     const comment = req.body.comment;
     const address = req.body.address;
@@ -115,10 +117,10 @@ exports.editServer = async (req, res) => {
     const password = req.body.password;
     const method = req.body.method;
     const scale = req.body.scale;
-    const shift = req.body.shift;
-    const key = req.body.key;
-    const net = req.body.net;
-    const wgPort = req.body.wgPort;
+    const shift = isWG ? 0 : req.body.shift;
+    const key = isWG ? req.body.key : null;
+    const net = isWG ? req.body.net: null;
+    const wgPort = isWG ? req.body.wgPort : null;
     const check = +req.body.check;
     await manager.send({
       command: 'flow',
