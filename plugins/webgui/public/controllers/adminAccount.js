@@ -214,7 +214,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
           '[Peer]',
           `PublicKey = ${ server.key }`,
           `Endpoint = ${ server.host }:${ server.wgPort }`,
-          `AllowedIPs = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.0.0/16`,
+          `AllowedIPs = 0.0.0.0/0`,
         ].join('\n');
       } else {
         return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));

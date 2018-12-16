@@ -39,7 +39,7 @@ app.factory('wireGuardConfigDialog', [ '$mdDialog', ($mdDialog) => {
         '[Peer]',
         `PublicKey = ${ $scope.publicInfo.server.key }`,
         `Endpoint = ${ $scope.publicInfo.server.host }:${ $scope.publicInfo.server.wgPort }`,
-        `AllowedIPs = ${ $scope.publicInfo.server.net.split('.')[0] }.${ $scope.publicInfo.server.net.split('.')[1] }.0.0/16`,
+        `AllowedIPs = 0.0.0.0/0`,
       ].join('\n');
       $scope.setDialogWidth = () => {
         if($mdMedia('xs') || $mdMedia('sm')) {
