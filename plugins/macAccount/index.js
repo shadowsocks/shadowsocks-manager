@@ -162,7 +162,7 @@ const getAccountForUser = async (mac, ip, opt) => {
     expire = accountData.data.create + accountData.data.limit * timePeriod;
   }
   const isMultiServerFlow = account.multiServerFlow;
-  const servers = await serverPlugin.list({ status: false });
+  const servers = (await serverPlugin.list({ status: false })).filter(server => server.type === 'Shadowsocks');
   let server = servers.filter(s => {
     return s.id === myServerId;
   })[0];
