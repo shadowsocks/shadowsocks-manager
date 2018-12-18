@@ -20,3 +20,8 @@ plugins:
 - fs_zelda
 
 ## 创建自定义皮肤
+
+- 在`/plugin/webgui/public/views/skin`目录下创建自己的皮肤文件`yourskin.html`
+- 更改配置文件填上皮肤名称
+
+!> 若皮肤名称以 fs_ 开头，则首页会隐藏顶部的导航条
