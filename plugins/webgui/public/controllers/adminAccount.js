@@ -220,9 +220,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$stateParams', '$
         return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));
       }
     };
-    $scope.showQrcodeDialog = (method, password, host, port, serverName) => {
-      const ssAddress = $scope.createQrCode(method, password, host, port, serverName);
-      qrcodeDialog.show(serverName, ssAddress);
+    $scope.showQrcodeDialog = (server, account) => {
+      const ssAddress = $scope.createQrCode(server, account);
+      qrcodeDialog.show(server.name, ssAddress);
     };
     $scope.editAccount = id => {
       $state.go('admin.editAccount', { accountId: id });
