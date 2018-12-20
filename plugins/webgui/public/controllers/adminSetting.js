@@ -96,7 +96,10 @@ app.controller('AdminSettingsController', ['$scope', '$state',
     };
     $scope.setServerForNewUser = false;
     $scope.accountServerObj = {};
-    $http.get('/api/admin/setting/account').then(success => {
+    $http.get('/api/admin/order').then(success => {
+      $scope.orders = success.data.filter(f => !f.baseId);
+      return $http.get('/api/admin/setting/account');
+    }).then(success => {
       $scope.accountData = success.data;
       if($scope.accountData.accountForNewUser.server) {
         $scope.setServerForNewUser = true;

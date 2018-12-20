@@ -58,7 +58,9 @@ exports.getMacAccountForUser = (req, res) => {
   const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
   const noPassword = !!(+req.query.noPassword);
   const noFlow = !!(+req.query.noFlow);
+  const type = req.query.type || 'Shadowsocks';
   macAccount.getAccountForUser(mac.toLowerCase(), ip, {
+    type,
     noPassword,
     noFlow,
   }).then(success => {

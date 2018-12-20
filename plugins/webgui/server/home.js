@@ -114,18 +114,36 @@ exports.signup = async (req, res) => {
         });
       };
       const port = await getNewPort();
-      await account.addAccount(newUserAccount.type || 5, {
-        user: userId,
-        orderId: 0,
-        port,
-        password: Math.random().toString().substr(2,10),
-        time: Date.now(),
-        limit: newUserAccount.limit || 8,
-        flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
-        server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
-        autoRemove: newUserAccount.autoRemove ? 1 : 0,
-        multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
-      });
+      if(newUserAccount.fromOrder) {
+        const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
+        if(orderInfo) {
+          await account.addAccount(orderInfo.type || 5, {
+            user: userId,
+            orderId: orderInfo.id,
+            port,
+            password: Math.random().toString().substr(2,10),
+            time: Date.now(),
+            limit: orderInfo.cycle,
+            flow: orderInfo.flow,
+            server: orderInfo.server,
+            autoRemove: orderInfo.autoRemove ? 1 : 0,
+            multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
+          });
+        }
+      } else {
+        await account.addAccount(newUserAccount.type || 5, {
+          user: userId,
+          orderId: 0,
+          port,
+          password: Math.random().toString().substr(2,10),
+          time: Date.now(),
+          limit: newUserAccount.limit || 8,
+          flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
+          server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
+          autoRemove: newUserAccount.autoRemove ? 1 : 0,
+          multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
+        });
+      }
     }
     logger.info(`[${ req.body.email }] signup success`);
     push.pushMessage('注册', {

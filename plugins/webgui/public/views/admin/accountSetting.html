@@ -16,10 +16,19 @@
                 </md-list-item>
             </md-list>
             <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable">
+                <md-list-item>
+                    <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>从订单中选择类型</div>
+                        <div flex layout="row" layout-align="end center"><md-switch ng-model="accountData.accountForNewUser.fromOrder" aria-label="accountForNewUser"></md-switch></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
             <md-list ng-show="accountData.accountForNewUser.isEnable" layout="row">
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
                 <div flex>
-                    <form name="newAccountForm">
+                    <form name="newAccountForm" ng-if="!accountData.accountForNewUser.fromOrder">
                         <md-input-container class="md-block" style="height: 54px;">
                             <label>类型</label>
                             <md-select ng-model="accountData.accountForNewUser.type">
@@ -38,11 +47,19 @@
                             <input type="number" required name="limit" ng-model="accountData.accountForNewUser.limit">
                         </md-input-container>
                     </form>
+                    <form name="newAccountForm" ng-if="accountData.accountForNewUser.fromOrder">
+                        <md-input-container class="md-block" style="height: 54px;">
+                            <label>类型</label>
+                            <md-select ng-model="accountData.accountForNewUser.type">
+                                <md-option ng-value="order.id" ng-repeat="order in orders">{{ order.name }}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </form>
                 </div>
                 <div flex-xs="5" flex-sm="10" flex-gt-sm="20"></div>
             </md-list>
             <md-divider></md-divider>
-            <md-list ng-show="accountData.accountForNewUser.isEnable">
+            <md-list ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder">
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>合并多服务器流量统计</div>
@@ -50,8 +67,8 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
-            <md-list ng-show="accountData.accountForNewUser.isEnable">
+            <md-divider ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder"></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder">
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>到期自动删除</div>
@@ -59,8 +76,8 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
-            <md-list ng-show="accountData.accountForNewUser.isEnable">
+            <md-divider ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder"></md-divider>
+            <md-list ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder">
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                         <div flex="75" translate>自定义新用户可用服务器</div>
@@ -82,7 +99,7 @@
                     </div>
                 </md-list-item>
             </md-list>
-            <md-divider ng-show="accountData.accountForNewUser.isEnable"></md-divider>
+            <md-divider ng-show="accountData.accountForNewUser.isEnable && !accountData.accountForNewUser.fromOrder"></md-divider>
             <md-list>
                 <md-list-item>
                     <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">

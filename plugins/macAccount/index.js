@@ -121,6 +121,7 @@ const getNoticeForUser = async (mac, ip) => {
 const getAccountForUser = async (mac, ip, opt) => {
   const noPassword = opt.noPassword;
   const noFlow = opt.noFlow;
+  const type = opt.type;
   if(scanLoginLog(ip)) {
     return Promise.reject('ip is in black list');
   }
@@ -162,7 +163,7 @@ const getAccountForUser = async (mac, ip, opt) => {
     expire = accountData.data.create + accountData.data.limit * timePeriod;
   }
   const isMultiServerFlow = account.multiServerFlow;
-  const servers = (await serverPlugin.list({ status: false })).filter(server => server.type === 'Shadowsocks');
+  const servers = (await serverPlugin.list({ status: false })).filter(server => server.type === type);
   let server = servers.filter(s => {
     return s.id === myServerId;
   })[0];
@@ -192,7 +193,6 @@ const getAccountForUser = async (mac, ip, opt) => {
     }).then(success => {
       if(startTime && !noFlow) {
         return getFlow(isMultiServerFlow ? null : success.id, account.accountId);
-        // return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
       } else {
         return -1;
       }
