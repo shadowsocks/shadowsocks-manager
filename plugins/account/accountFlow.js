@@ -35,15 +35,34 @@ const pwd = async (accountId, password) => {
     });
   }
   accountServers.forEach(server => {
-    manager.send({
-      command: 'pwd',
-      port: accountInfo.port + server.shift,
-      password,
-    }, {
-      host: server.host,
-      port: server.port,
-      password: server.password,
-    });
+    if(server.type === 'WireGuard') {
+      let publicKey = accountInfo.key;
+      if(!publicKey) {
+        return;
+      }
+      if(publicKey.includes(':')) {
+        publicKey = publicKey.split(':')[0];
+      }
+      manager.send({
+        command: 'pwd',
+        port: accountInfo.port + server.shift,
+        password: publicKey,
+      }, {
+        host: server.host,
+        port: server.port,
+        password: server.password,
+      });
+    } else {
+      manager.send({
+        command: 'pwd',
+        port: accountInfo.port + server.shift,
+        password,
+      }, {
+        host: server.host,
+        port: server.port,
+        password: server.password,
+      });
+    }
   });
 };
 

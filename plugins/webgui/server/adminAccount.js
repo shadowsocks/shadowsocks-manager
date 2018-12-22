@@ -3,6 +3,7 @@ const account = appRequire('plugins/account/index');
 const dns = require('dns');
 const net = require('net');
 const knex = appRequire('init/knex').knex;
+const flowPlugin = appRequire('plugins/flowSaver/flow');
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -148,6 +149,8 @@ const urlsafeBase64 = str => {
 exports.getSubscribeAccountForUser = async (req, res) => {
   try {
     const ssr = req.query.ssr;
+    let type = req.query.type || 'shadowrocket';
+    if(ssr === '1') { type = 'ssr'; }
     const resolveIp = req.query.ip;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
@@ -173,11 +176,75 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       const baseSetting = await knex('webguiSetting').where({
         key: 'base'
       }).then(s => s[0]).then(s => JSON.parse(s.value));
-      const result = subscribeAccount.server.map(s => {
-        if(ssr === '1') {
-          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.name) + '&group=' + urlsafeBase64(baseSetting.title));
+      if(subscribeAccount.account.type !== 1) {
+        const random = Math.floor(Math.random() * 9999) % (subscribeAccount.server.length - 1);
+        const insert = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
+        const time = {
+          '2': 7 * 24 * 3600000,
+          '3': 30 * 24 * 3600000,
+          '4': 24 * 3600000,
+          '5': 3600000,
+        };
+        const expire = subscribeAccount.account.data.create + subscribeAccount.account.data.limit * time[subscribeAccount.account.type];
+        if(Date.now() >= expire) {
+          insert.subscribeName = '已过期';
+        } else if((expire - Date.now()) >= 48 * 3600 * 1000) {
+          insert.subscribeName = (Math.floor((expire - Date.now())/(24 * 3600 * 1000))) + '天后过期';
+        } else if((expire - Date.now()) >= 3600 * 1000) {
+          insert.subscribeName = (Math.floor((expire - Date.now())/(3600 * 1000))) + '小时后过期';
+        } else if((expire - Date.now()) > 0) {
+          insert.subscribeName = (Math.floor((expire - Date.now())/(60 * 1000))) + '分钟后过期';
         }
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.name).toString('base64');
+        let insertFlow;
+        if(subscribeAccount.account.multiServerFlow) {
+          insertFlow = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
+          const flow = subscribeAccount.account.data.flow;
+          const time = {
+            '2': 7 * 24 * 3600000,
+            '3': 30 * 24 * 3600000,
+            '4': 24 * 3600000,
+            '5': 3600000,
+          };
+          let from = subscribeAccount.account.data.create;
+          let to = subscribeAccount.account.data.create + time[subscribeAccount.account.type];
+          while(to <= Date.now()) {
+            from = to;
+            to = from + time[subscribeAccount.account.type];
+          }
+          const [ currentFlow ] = await flowPlugin.getServerPortFlowWithScale(insertFlow.id, subscribeAccount.account.id, [from, to], true);
+          const toFlowString = input => {
+            const K = 1000;
+            const M = 1000 * 1000;
+            const G = 1000 * 1000 * 1000;
+            const T = 1000 * 1000 * 1000 * 1000;
+            const P = 1000 * 1000 * 1000 * 1000 * 1000;
+            if (input < K) {
+              return input + ' B';
+            } else if (input < M) {
+              return (input / K).toFixed(1) + ' KB';
+            } else if (input < G) {
+              return (input / M).toFixed(1) + ' MB';
+            } else if (input < T) {
+              return (input / G).toFixed(2) + ' GB';
+            } else if (input < P) {
+              return (input / T).toFixed(3) + ' TB';
+            } else {
+              return input;
+            }
+          };
+          insertFlow.subscribeName = toFlowString(currentFlow) + ' / ' + toFlowString(flow);
+        }
+        subscribeAccount.server.unshift(insert);
+        if(insertFlow) { subscribeAccount.server.unshift(insertFlow); }
+      }
+      const result = subscribeAccount.server.map(s => {
+        if(type === 'shadowrocket') {
+          return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.subscribeName || s.name).toString('base64');
+        } else if(type === 'potatso') {
+          return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + encodeURI(s.subscribeName || s.name);
+        } else if(type === 'ssr') {
+          return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.subscribeName || s.name) + '&group=' + urlsafeBase64(baseSetting.title));
+        }
       }).join('\r\n');
       return res.send(Buffer.from(result).toString('base64'));
     }

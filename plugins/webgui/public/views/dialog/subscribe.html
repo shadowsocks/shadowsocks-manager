@@ -4,12 +4,7 @@
             <div style="word-wrap: break-word; color: #666; font-size: 0.8em;">{{ publicInfo.subscribeLink }}</div>
             <div style="margin-top: 15px; margin-bottom: 15px;">请选择订阅链接类型：</div>
             <md-radio-group ng-model="publicInfo.linkType" layout="row" layout-align="start center" ng-change="{{ changeLinkType() }}">
-                <md-radio-button value="ss">
-                    ss
-                </md-radio-button>
-                <md-radio-button value="ssr">
-                    ssr
-                </md-radio-button>
+                <md-radio-button ng-repeat="type in publicInfo.types" value="{{ type }}">{{ type }}</md-radio-button>
             </md-radio-group>
             <md-checkbox style="margin-top: 15px;" ng-model="publicInfo.ip" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">将域名转换为IP地址</md-checkbox>
             <div layout="row" layout-align="start center" style="margin-top: 25px;">
