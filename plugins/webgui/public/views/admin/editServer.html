@@ -77,6 +77,13 @@
                     <div ng-messages="serverForm.scale.$error">
                         <div ng-message="required">流量倍率不能为空</div>
                     </div>
+                </md-input-container>                
+                <md-input-container class="md-block">
+                    <label>月流量(单向)</label>
+                    <input type="text" required name="monthflowStr" placeholder="eg:1T" ng-model="server.monthflowStr">
+                    <div ng-messages="serverForm.monthflowStr.$error">
+                        <div ng-message="required">月流量不能为空</div>
+                    </div>
                 </md-input-container>
                 <md-input-container class="md-block" ng-if="server.type === 'Shadowsocks'">
                     <label>端口偏移</label>

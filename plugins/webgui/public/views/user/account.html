@@ -3,15 +3,19 @@
         <md-card>
             <md-card-content>
                 <div style="margin-top: 30px; margin-bottom: 30px;" translate>目前该用户没有分配账号，请联系管理员处理</div>
-                <div ng-show="config.alipay || config.paypal || config.giftcard" ng-click="createOrder()" style="margin-bottom: 30px;">{{ '或' | translate }}
-                    <span><md-button class="md-primary">{{ '点击这里' | translate }}</md-button></span>
-                {{ '付款立即开通帐号' | translate }}</div>
+                <div ng-show="config.alipay || config.paypal || config.giftcard" ng-click="createOrder()" style="margin-bottom: 30px;">{{
+                    '或' | translate }}
+                    <span>
+                        <md-button class="md-primary">{{ '点击这里' | translate }}</md-button>
+                    </span>
+                    {{ '付款立即开通帐号' | translate }}</div>
             </md-card-content>
         </md-card>
     </div>
     <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by a.id">
         <md-card ng-click="toAccount(a.id)" style="position: relative;">
-            <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 1;" ng-if="a.active === 0">
+            <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 1;"
+                ng-if="a.active === 0">
                 <div style="width: 100%; height: 100%;" layout="row" layout-align="center center">
                     <md-button class="md-raised md-warn" ng-click="activeAccount(a)"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
                 </div>
@@ -41,7 +45,8 @@
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>端口：</div>
-                                    <div flex="60" style="text-align:right">{{ isWG(a.serverInfo) ? a.serverInfo.wgPort : a.port + a.serverInfo.shift}}</div>
+                                    <div flex="60" style="text-align:right">{{ isWG(a.serverInfo) ? a.serverInfo.wgPort
+                                        : a.port + a.serverInfo.shift}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
@@ -79,7 +84,9 @@
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="a.type === 1">{{ '不限量' | translate }}</span>
                                         <span ng-if="a.type >=2 && a.type <= 5">
-                                            <span ng-style="a.isFlowOutOfLimit[a.serverInfo.id] ? {color: '#a33'} : {color: '#333'}">{{ a.serverPortFlow | flow }}</span> / {{ a.data.flow + a.data.flowPack | flow }}</span>
+                                            <span ng-style="a.isFlowOutOfLimit[a.serverInfo.id] ? {color: '#a33'} : {color: '#333'}">{{
+                                                a.serverPortFlow | flow }}</span> / {{ a.data.flow + a.data.flowPack |
+                                            flow }}</span>
                                     </div>
                                 </div>
                             </md-list-item>
@@ -96,7 +103,9 @@
                                     <div flex="40">{{ '周期：' | translate }}</div>
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="a.type === 1">{{ '无' | translate }}</span>
-                                        <span ng-if="a.type >=2 && a.type <= 5"><span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
+                                        <span ng-if="a.type >=2 && a.type <= 5"><span style="font-size: 0.9em;">{{a.data.from
+                                                | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{a.data.to
+                                                | date : 'yyyy-MM-dd HH:mm'}}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -108,7 +117,9 @@
                                     <div flex="60" style="text-align:right">
                                         <span ng-if="a.type === 1" translate>不限时</span>
                                         <span ng-if="a.type >=2 && a.type <= 5">
-                                            <span style="font-size: 0.9em;">{{ a.data.expire | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;" ng-style="fontColor(a)">{{ a.data.expire | timeago | translateTime }}</span>
+                                            <span style="font-size: 0.9em;">{{ a.data.expire | date : 'yyyy-MM-dd
+                                                HH:mm' }}</span><br><span style="font-size: 0.9em;" ng-style="fontColor(a)">{{
+                                                a.data.expire | timeago | translateTime }}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -118,7 +129,9 @@
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>最近连接：</div>
                                     <div flex="60" style="text-align:right">
-                                        <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date : 'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{ a.lastConnect | timeago | translateTime }}</span>
+                                        <span ng-if="a.lastConnect" style="font-size: 0.9em;">{{a.lastConnect | date :
+                                            'yyyy-MM-dd HH:mm'}}<span><br><span ng-if="a.lastConnect" style="font-size: 0.9em;">{{
+                                                    a.lastConnect | timeago | translateTime }}</span>
                                     </div>
                                 </div>
                             </md-list-item>
@@ -136,20 +149,31 @@
                         <div hide-xs></div>
                         <div ng-hide="isWG(a.serverInfo)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
                             <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo, a)" size="getQrCodeSize()"
-                            layout-margin text="createQrCode(a.serverInfo, a)"
-                            image="true"></qr>
-                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
+                                layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}"
+                                ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
                         </div>
-                        <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
+                        <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column"
+                            layout-align-xs="center center" style="background-color: #eee;">
                             <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
                             <md-button class="md-primary">显示WireGuard配置</md-button>
                         </div>
                         <div hide-xs></div>
                     </div>
                 </div>
-                <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{ '修改密码' | translate }}</md-button>
-                <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
-                <md-button class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
+                <div class="btns" style="display: flex;justify-content: center;flex-wrap: wrap;">
+                    <md-button style="margin:6px 0;" class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{
+                        '修改密码' |
+                        translate }}</md-button>
+                    <md-button style="margin:6px 0;" class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard"
+                        ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
+                    <md-button style="margin:6px 0;" class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{
+                        '订阅' |
+                        translate
+                        }}(推荐)</md-button>
+                    <md-button style="margin:6px 0;" class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">
+                        <a class="md-primary" style="text-decoration:none;text-transform:capitalize;" href="{{shadowrocket(a.subscribe)}}">Shadowrocket(一键订阅)</a></md-button>
+                </div>
             </md-card-content>
         </md-card>
     </div>

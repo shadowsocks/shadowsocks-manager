@@ -51,6 +51,8 @@ exports.addServer = async (req, res) => {
     req.checkBody('method', 'Invalid method').notEmpty();
     req.checkBody('scale', 'Invalid scale').notEmpty();
     req.checkBody('shift', 'Invalid shift').isInt();
+    req.checkBody('monthflow', 'Invalid monthflow').isInt({ min: 0 });
+    req.checkBody('resetday', 'Invalid resetday').isInt({ min: 1, max: 31 });
     const result = await req.getValidationResult();
     if(!result.isEmpty()) { return Promise.reject('Invalid Body'); }
     const type = req.body.type;
@@ -63,6 +65,8 @@ exports.addServer = async (req, res) => {
     const method = req.body.method;
     const scale = req.body.scale;
     const shift = isWG ? 0 : req.body.shift;
+    const monthflow=req.body.monthflow;
+    const resetday=req.body.resetday;
     const key = isWG ? req.body.key : null;
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
@@ -84,6 +88,8 @@ exports.addServer = async (req, res) => {
       scale,
       comment,
       shift,
+      monthflow,
+      resetday,
       key,
       net,
       wgPort,
@@ -105,6 +111,8 @@ exports.editServer = async (req, res) => {
     req.checkBody('method', 'Invalid method').notEmpty();
     req.checkBody('scale', 'Invalid scale').notEmpty();
     req.checkBody('shift', 'Invalid shift').isInt();
+    req.checkBody('monthflow', 'Invalid monthflow').isInt({ min: 0 });
+    req.checkBody('resetday', 'Invalid resetday').isInt({ min: 1, max: 31 });
     const result = await req.getValidationResult();
     if(!result.isEmpty()) { return Promise.reject('Invalid Body'); }
     const serverId = req.params.serverId;
@@ -118,6 +126,8 @@ exports.editServer = async (req, res) => {
     const method = req.body.method;
     const scale = req.body.scale;
     const shift = isWG ? 0 : req.body.shift;
+    const monthflow=req.body.monthflow;
+    const resetday=req.body.resetday;
     const key = isWG ? req.body.key : null;
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
@@ -140,7 +150,9 @@ exports.editServer = async (req, res) => {
       method,
       scale,
       comment,
-      shift,
+      shift, 
+      monthflow,
+      resetday,
       key,
       net,
       wgPort,

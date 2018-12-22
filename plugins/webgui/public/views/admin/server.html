@@ -4,7 +4,10 @@
             <md-card-header>
                 <md-card-header-text layout="row" layout-align="space-between center">
                     <div layout="column">
-                        <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span><span ng-show="server.status !== -1 && !server.isGfw" style="color: #3a3;">&nbsp;{{server.status}}</span><span ng-show="server.status !== -1 && server.isGfw" style="color: #a33;">&nbsp;{{server.status}}</span><span style="color: #999;">&nbsp;{{ online[server.id] }}</span></span>
+                        <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span><span
+                                ng-show="server.status !== -1 && !server.isGfw" style="color: #3a3;">&nbsp;{{server.status}}</span><span
+                                ng-show="server.status !== -1 && server.isGfw" style="color: #a33;">&nbsp;{{server.status}}</span><span
+                                style="color: #999;">&nbsp;{{ online[server.id] }}</span></span>
                         <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                     </div>
                     <div>
@@ -19,12 +22,8 @@
                     </div>
                 </div>
                 <div style="width: 95%; max-width: 500px;">
-                    <canvas class="chart chart-line"
-                        chart-data="server.chart.data"
-                        chart-labels="chart.labels"
-                        chart-series="chart.series"
-                        chart-options="chart.options"
-                        chart-dataset-override="chart.datasetOverride">
+                    <canvas class="chart chart-line" chart-data="server.chart.data" chart-labels="chart.labels"
+                        chart-series="chart.series" chart-options="chart.options" chart-dataset-override="chart.datasetOverride">
                     </canvas>
                 </div>
             </div>
@@ -42,6 +41,11 @@
                 <div layout="row" layout-align="space-between center">
                     <div translate>本月流量：</div>
                     <div>{{server.flow.month | flow}}</div>
+                </div>
+
+                <div layout="row" layout-align="space-between center">
+                    <div translate>当期流量(每月{{server.resetday}}号重置)：</div>
+                    <div>{{server.useFlowStr+" / "+server.monthFlowStr}}</div>
                 </div>
             </md-card-content>
         </md-card>

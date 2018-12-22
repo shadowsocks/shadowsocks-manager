@@ -16,7 +16,7 @@ app
 }])
 .config(['$httpProvider', '$compileProvider', ($httpProvider, $compileProvider) => {
   $httpProvider.interceptors.push('authInterceptor');
-  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss|blob):/);
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|http|ss|blob|shadowrocket):/);
   $httpProvider.interceptors.push(['$q', $q => {
     return {
       request: function (config) {

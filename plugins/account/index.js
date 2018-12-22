@@ -77,6 +77,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.password',
     'account_plugin.key',
     'account_plugin.data',
+    'account_plugin.subscribe',
     'account_plugin.status',
     'account_plugin.autoRemove',
     'account_plugin.autoRemoveDelay',
