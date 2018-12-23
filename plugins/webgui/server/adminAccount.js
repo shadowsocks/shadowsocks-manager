@@ -219,29 +219,47 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             const T = 1000 * 1000 * 1000 * 1000;
             const P = 1000 * 1000 * 1000 * 1000 * 1000;
             if (input < K) {
-              return input + ' B';
+              return input + 'B';
             } else if (input < M) {
-              return (input / K).toFixed(1) + ' KB';
+              return (input / K).toFixed(1) + 'KB';
             } else if (input < G) {
-              return (input / M).toFixed(1) + ' MB';
+              return (input / M).toFixed(1) + 'MB';
             } else if (input < T) {
-              return (input / G).toFixed(2) + ' GB';
+              return (input / G).toFixed(2) + 'GB';
             } else if (input < P) {
-              return (input / T).toFixed(3) + ' TB';
+              return (input / T).toFixed(3) + 'TB';
             } else {
               return input;
             }
           };
-          insertFlow.subscribeName = toFlowString(currentFlow) + ' / ' + toFlowString(flow);
+          insertFlow.subscribeName = toFlowString(currentFlow) + '/' + toFlowString(flow);
         }
         subscribeAccount.server.unshift(insert);
         if(insertFlow) { subscribeAccount.server.unshift(insertFlow); }
+      }
+      if(type === 'ssd') {
+        const ssdInfo = {
+          airport: 'ssmgr',
+          port: subscribeAccount.account.port,
+          encryption: 'aes-256-gcm',
+          password: subscribeAccount.account.password,
+          servers: subscribeAccount.server.filter(s => !s.subscribeName).map(s => {
+            return {
+              id: s.id,
+              server: s.host,
+              port: subscribeAccount.account.port + s.shift,
+              encryption: s.method,
+              remarks: s.name,
+            };
+          }),
+        };
+        return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
       }
       const result = subscribeAccount.server.map(s => {
         if(type === 'shadowrocket') {
           return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.subscribeName || s.name).toString('base64');
         } else if(type === 'potatso') {
-          return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + encodeURI(s.subscribeName || s.name);
+          return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
         } else if(type === 'ssr') {
           return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.subscribeName || s.name) + '&group=' + urlsafeBase64(baseSetting.title));
         }
