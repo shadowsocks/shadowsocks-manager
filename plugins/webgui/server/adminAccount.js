@@ -4,6 +4,7 @@ const dns = require('dns');
 const net = require('net');
 const knex = appRequire('init/knex').knex;
 const flowPlugin = appRequire('plugins/flowSaver/flow');
+const moment = require('moment');
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -158,6 +159,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       await macAccount.getAccountForUser(token.toLowerCase(), ip, {
         noPassword: 0,
         noFlow: 1,
+        type,
       }).then(success => {
         const result = success.servers.map(server => {
           return 'ss://' + Buffer.from(server.method + ':' + success.default.password + '@' + server.address + ':' + server.port).toString('base64') + '#' + Buffer.from(server.name).toString('base64');
@@ -176,6 +178,21 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       const baseSetting = await knex('webguiSetting').where({
         key: 'base'
       }).then(s => s[0]).then(s => JSON.parse(s.value));
+      const ssdInfo = {
+        airport: 'ssmgr',
+        port: subscribeAccount.account.port,
+        encryption: 'aes-256-gcm',
+        password: subscribeAccount.account.password,
+        servers: subscribeAccount.server.filter(s => !s.subscribeName).map(s => {
+          return {
+            id: s.id,
+            server: s.host,
+            port: subscribeAccount.account.port + s.shift,
+            encryption: s.method,
+            remarks: s.name,
+          };
+        }),
+      };
       if(subscribeAccount.account.type !== 1) {
         const random = Math.floor(Math.random() * 9999) % (subscribeAccount.server.length - 1);
         const insert = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
@@ -186,6 +203,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           '5': 3600000,
         };
         const expire = subscribeAccount.account.data.create + subscribeAccount.account.data.limit * time[subscribeAccount.account.type];
+        ssdInfo.expiry = moment(expire).format('YYYY-MM-DD HH:mm:ss');
         if(Date.now() >= expire) {
           insert.subscribeName = '已过期';
         } else if((expire - Date.now()) >= 48 * 3600 * 1000) {
@@ -212,6 +230,8 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             to = from + time[subscribeAccount.account.type];
           }
           const [ currentFlow ] = await flowPlugin.getServerPortFlowWithScale(insertFlow.id, subscribeAccount.account.id, [from, to], true);
+          ssdInfo.traffic_used = currentFlow / (1000 * 1000 * 1000);
+          ssdInfo.traffic_total = flow / (1000 * 1000 * 1000);
           const toFlowString = input => {
             const K = 1000;
             const M = 1000 * 1000;
@@ -238,21 +258,6 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         if(insertFlow) { subscribeAccount.server.unshift(insertFlow); }
       }
       if(type === 'ssd') {
-        const ssdInfo = {
-          airport: 'ssmgr',
-          port: subscribeAccount.account.port,
-          encryption: 'aes-256-gcm',
-          password: subscribeAccount.account.password,
-          servers: subscribeAccount.server.filter(s => !s.subscribeName).map(s => {
-            return {
-              id: s.id,
-              server: s.host,
-              port: subscribeAccount.account.port + s.shift,
-              encryption: s.method,
-              remarks: s.name,
-            };
-          }),
-        };
         return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
       }
       const result = subscribeAccount.server.map(s => {
