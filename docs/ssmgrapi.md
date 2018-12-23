@@ -37,10 +37,10 @@ ssmgr 之间采用 TCP socket 的方式通讯，接口协议如下：
 ```
 {
   command: 'del',
-  port: '1234
+  port: 1234
 }
 {
-  port: '1234
+  port: 1234
 }
 ```
 
