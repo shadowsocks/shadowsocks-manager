@@ -121,7 +121,8 @@ const getNoticeForUser = async (mac, ip) => {
 const getAccountForUser = async (mac, ip, opt) => {
   const noPassword = opt.noPassword;
   const noFlow = opt.noFlow;
-  const type = opt.type;
+  let type = opt.type;
+  if(type !== 'WireGuard') { type = 'Shadowsocks'; }
   if(scanLoginLog(ip)) {
     return Promise.reject('ip is in black list');
   }
