@@ -183,15 +183,18 @@ const getUserStatus = async telegramId => {
   }
 };
 
-const pull = () => {
-  return getMessage()
-  .then(() => {
-    return pull();
-  }).catch(() => {
-    return pull();
-  });
-};
-pull();
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
+(async () => {
+  while(true) {
+    try {
+      await getMessage();
+    } catch(err) {
+      console.log(err);
+      await sleep(3000);
+    }
+  }
+})();
 
 exports.telegram = telegram;
 
