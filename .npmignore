@@ -46,6 +46,7 @@ docker
 docs
 wikiImage
 .eslintrc.json
+.gitattributes
 *.sqlite
 gulpfile.js
 plugins/webgui/libs/*.min.js
