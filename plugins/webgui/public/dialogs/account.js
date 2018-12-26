@@ -61,20 +61,21 @@ app.factory('accountSortDialog' , [ '$mdDialog', ($mdDialog) => {
     escapeToClose: false,
     locals: { bind: publicInfo },
     bindToController: true,
-    controller: ['$scope', '$mdDialog', '$sessionStorage', 'accountSortTool', 'bind', function($scope, $mdDialog, $sessionStorage, accountSortTool, bind) {
+    controller: ['$scope', '$mdDialog', '$localStorage', 'accountSortTool', 'bind', function($scope, $mdDialog, $localStorage, accountSortTool, bind) {
       $scope.publicInfo = bind;
-      $scope.sortAndFilter = () => {
-        accountSortTool($scope.publicInfo.accountInfo, $scope.publicInfo.accountMethod);
-      };
+      $scope.publicInfo.accountFilter = $localStorage.admin.accountFilterSettings;
+      // $scope.sortAndFilter = () => {
+      //   accountSortTool($scope.publicInfo.accountInfo, $scope.publicInfo.accountMethod);
+      // };
     }],
     clickOutsideToClose: true,
   };
-  const show = (accountMethod, accountInfo) => {
+  const show = () => {
     if(isDialogShow()) {
       return dialogPromise;
     }
-    publicInfo.accountMethod = accountMethod;
-    publicInfo.accountInfo = accountInfo;
+    // publicInfo.accountMethod = accountMethod;
+    // publicInfo.accountInfo = accountInfo;
     dialogPromise = $mdDialog.show(dialog);
     return dialogPromise;
   };

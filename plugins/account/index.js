@@ -809,6 +809,125 @@ const activeAccount = async accountId => {
   }
 };
 
+const getAccountAndPaging = async (opt) => {
+  const search = opt.search || '';
+  const page = opt.page || 1;
+  const pageSize = opt.pageSize || 20;
+  const sort = opt.sort || 'port_asc';
+  const filter = opt.filter;
+
+  // let count = knex('account_plugin').select();
+  // let account = knex('account_plugin').select([
+  //   'account_plugin.id',
+  //   'account_plugin.type',
+  //   'account_plugin.orderId',
+  //   'account_plugin.userId',
+  //   'account_plugin.server',
+  //   'account_plugin.port',
+  //   'account_plugin.password',
+  //   'account_plugin.key',
+  //   'account_plugin.data',
+  //   'account_plugin.status',
+  //   'account_plugin.autoRemove',
+  //   'account_plugin.autoRemoveDelay',
+  //   'account_plugin.multiServerFlow',
+  //   'account_plugin.active',
+  //   'user.id as userId',
+  //   'user.email as user',
+  // ])
+  // .leftJoin('user', 'user.id', 'account_plugin.userId')
+  // .where(where);
+
+  // if(search) {
+  //   count = count.where('port', 'like', `%${ search }%`);
+  //   account = account.where('port', 'like', `%${ search }%`);
+  // }
+
+  // count = await count.count('id as count').then(success => success[0].count);
+  // account = await account.orderBy('account_plugin.' + sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
+  
+  let account = await knex('account_plugin').select([
+    'account_plugin.id',
+    'account_plugin.type',
+    'account_plugin.orderId',
+    'account_plugin.userId',
+    'account_plugin.server',
+    'account_plugin.port',
+    'account_plugin.password',
+    'account_plugin.key',
+    'account_plugin.data',
+    'account_plugin.status',
+    'account_plugin.autoRemove',
+    'account_plugin.autoRemoveDelay',
+    'account_plugin.multiServerFlow',
+    'account_plugin.active',
+    'user.id as userId',
+    'user.email as user',
+  ])
+  .leftJoin('user', 'user.id', 'account_plugin.userId')
+  .orderBy('account_plugin.port', 'ASC');
+
+  account.forEach(a => {
+    if(a.data) {
+      a.data = JSON.parse(a.data);
+      const time = {
+        '2': 7 * 24 * 3600000,
+        '3': 30 * 24 * 3600000,
+        '4': 24 * 3600000,
+        '5': 3600000,
+      };
+      a.data.expire = a.data.create + a.data.limit * time[a.type];
+    }
+  });
+  if(search) {
+    account = account.filter(f => {
+      return f.port.toString().includes(search) || f.password.includes(search);
+    });
+  }
+  account = account.filter(f => {
+    let show = true;
+    if(!filter.unlimit && f.type === 1) {
+      show = false;
+    }
+    if(!filter.expired && f.data && f.data.expire >= Date.now()) {
+      show = false;
+    }
+    if(!filter.unexpired && f.data && f.data.expire <= Date.now()) {
+      show = false;
+    }
+    return show;
+  });
+  account = account.sort((a, b) => {
+    if(sort === 'port_asc') {
+      return a.port >= b.port ? 1 : -1;
+    } else if (sort === 'port_desc') {
+      return a.port <= b.port ? 1 : -1;
+    } else if (sort === 'expire_desc') {
+      if(!a.data) { return -1; }
+      if(!b.data) { return 1; }
+      return a.data.expire <= b.data.expire ? 1 : -1;
+    } else if (sort === 'expire_asc') {
+      if(!a.data) { return 1; }
+      if(!b.data) { return -1; }
+      return a.data.expire >= b.data.expire ? 1 : -1;
+    }
+  });
+
+  const count = account.length;
+  const start = pageSize * (page - 1);
+  const end = start + pageSize;
+  const result = account.slice(start, end);
+  
+  const maxPage = Math.ceil(count / pageSize);
+  return {
+    total: count,
+    page,
+    maxPage,
+    pageSize,
+    account: result,
+  };
+};
+
 exports.addAccount = addAccount;
 exports.getAccount = getAccount;
 exports.delAccount = delAccount;
@@ -833,3 +952,5 @@ exports.editMultiAccounts = editMultiAccounts;
 
 exports.activeAccount = activeAccount;
 exports.getOnlineAccount = getOnlineAccount;
+
+exports.getAccountAndPaging = getAccountAndPaging;

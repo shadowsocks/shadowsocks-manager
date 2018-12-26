@@ -263,6 +263,21 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     if(type === 'ssd') {
       return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
     }
+    if(type = 'clash') {
+      const yaml = require('js-yaml');
+      const clashConfig = appRequire('plugins/webgui/server/clash');
+      clashConfig.Proxy = subscribeAccount.server.map(server => {
+        return {
+          cipher: server.method,
+          name: server.subscribeName || server.name,
+          password: subscribeAccount.account.password,
+          port: subscribeAccount.account.port +  + server.shift,
+          server: server.host,
+          type: 'ss'
+        };
+      });
+      return res.send(yaml.safeDump(clashConfig));
+    }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
         return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.subscribeName || s.name).toString('base64');
