@@ -51,7 +51,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       }).catch(() => {
         if($state.current.name !== 'admin.account') { return; }
         $timeout(() => {
-          $scope.geAccount(search);
+          $scope.getAccount(search);
         }, 5000);
       });
     };
@@ -76,70 +76,15 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         accountFilter();
       }, 500);
     });
-    // $scope.accountMethod = $localStorage.admin.accountFilterSettings;
-    // $scope.accountInfo = {};
-    // $scope.macAccountInfo = {};
-    // $scope.sortAndFilter = () => {
-    //   accountSortTool($scope.accountInfo, $scope.accountMethod);
-    // };
-    // if(!$localStorage.admin.accountInfo) {
-    //   $localStorage.admin.accountInfo = {
-    //     time: Date.now(),
-    //     data: [],
-    //   };
-    // }
-    // if(!$localStorage.admin.macAccountInfo) {
-    //   $localStorage.admin.macAccountInfo = {
-    //     time: Date.now(),
-    //     data: [],
-    //   };
-    // }
-    // $scope.accountInfo.originalAccount = $localStorage.admin.accountInfo.data;
-    // $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
-    // $scope.macAccountInfo.originalAccount = $localStorage.admin.macAccountInfo.data;
-    // $scope.macAccountInfo.account = angular.copy($scope.macAccountInfo.originalAccount);
-    // $scope.sortAndFilter();
-    // const getAccountInfo = () => {
-    //   adminApi.getAccount().then(accounts => {
-    //     $localStorage.admin.accountInfo = {
-    //       time: Date.now(),
-    //       data: accounts,
-    //     };
-    //     $scope.accountInfo.originalAccount = accounts;
-    //     $scope.accountInfo.account = angular.copy($scope.accountInfo.originalAccount);
-    //     $scope.sortAndFilter();
-    //     return adminApi.getMacAccount();
-    //   }).then(macAccounts => {
-    //     $localStorage.admin.macAccountInfo = {
-    //       time: Date.now(),
-    //       data: macAccounts,
-    //     };
-    //     // $scope.macAccount = macAccounts;
-    //     $scope.macAccountInfo.originalAccount = macAccounts;
-    //     $scope.macAccountInfo.account = angular.copy($scope.macAccountInfo.originalAccount);
-    //   });
-    // };
-    // getAccountInfo();
-    // $scope.$on('visibilitychange', (event, status) => {
-    //   if(status === 'visible') {
-    //     if($localStorage.admin.accountInfo && Date.now() - $localStorage.admin.accountInfo.time >= 20 * 1000) {
-    //       getAccountInfo();
-    //     }
-    //   }
-    // });
-    // $scope.setInterval($interval(() => {
-    //   if($localStorage.admin.accountInfo && Date.now() - $localStorage.admin.accountInfo.time >= 90 * 1000) {
-    //     getAccountInfo();
-    //   }
-    // }, 15 * 1000));
     $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addAccount');
     } : null);
-    $scope.toAccount = id => {
-      $state.go('admin.accountPage', { accountId: id });
-    };
-    $scope.toMacAccount = userId => {
-      $state.go('admin.userPage', { userId });
+    $scope.toAccount = account => {
+      if(account.mac) {
+        $state.go('admin.userPage', { userId: account.userId });
+      } else {
+        $state.go('admin.accountPage', { accountId: account.id });
+      }
     };
     $scope.sortAndFilterDialog = () => {
       return accountSortDialog.show();
@@ -152,25 +97,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         $scope.getAccount();
       });
     });
-    // const accountFilter = () => {
-    //   accountSortTool($scope.accountInfo, $scope.accountMethod);
-    //   $scope.accountInfo.account = $scope.accountInfo.account.filter(f => {
-    //     return (f.port + (f.user ? f.user : '') + f.password).indexOf($scope.menuSearch.text) >= 0;
-    //   });
-    //   $scope.macAccountInfo.account = $scope.macAccountInfo.originalAccount.filter(f => {
-    //     return (f.port + f.mac).indexOf($scope.menuSearch.text.replace(/-/g, '').replace(/:/g, '').toLowerCase()) >= 0;
-    //   });
-    // };
-    // $scope.$on('cancelSearch', () => {
-    //   // accountSortTool($scope.accountInfo, $scope.accountMethod);
-    // });
-    // $scope.$watch('menuSearch.text', () => {
-    //   if(!$scope.menuSearch.text) { return; }
-    //   timeoutPromise && $timeout.cancel(timeoutPromise);
-    //   timeoutPromise = $timeout(() => {
-    //     accountFilter();
-    //   }, 500);
-    // });
     $scope.accountColor = account => {
       if(account.type === 1) {
         return {

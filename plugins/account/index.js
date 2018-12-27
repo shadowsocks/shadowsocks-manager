@@ -816,36 +816,6 @@ const getAccountAndPaging = async (opt) => {
   const sort = opt.sort || 'port_asc';
   const filter = opt.filter;
 
-  // let count = knex('account_plugin').select();
-  // let account = knex('account_plugin').select([
-  //   'account_plugin.id',
-  //   'account_plugin.type',
-  //   'account_plugin.orderId',
-  //   'account_plugin.userId',
-  //   'account_plugin.server',
-  //   'account_plugin.port',
-  //   'account_plugin.password',
-  //   'account_plugin.key',
-  //   'account_plugin.data',
-  //   'account_plugin.status',
-  //   'account_plugin.autoRemove',
-  //   'account_plugin.autoRemoveDelay',
-  //   'account_plugin.multiServerFlow',
-  //   'account_plugin.active',
-  //   'user.id as userId',
-  //   'user.email as user',
-  // ])
-  // .leftJoin('user', 'user.id', 'account_plugin.userId')
-  // .where(where);
-
-  // if(search) {
-  //   count = count.where('port', 'like', `%${ search }%`);
-  //   account = account.where('port', 'like', `%${ search }%`);
-  // }
-
-  // count = await count.count('id as count').then(success => success[0].count);
-  // account = await account.orderBy('account_plugin.' + sort.split('_')[0], sort.split('_')[1]).limit(pageSize).offset((page - 1) * pageSize);
-  
   let account = await knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.type',
@@ -879,9 +849,17 @@ const getAccountAndPaging = async (opt) => {
       a.data.expire = a.data.create + a.data.limit * time[a.type];
     }
   });
+  if(filter.mac) {
+    const macAccounts = await macAccount.getAllAccount();
+    account.splice(account.length, 0, ...macAccounts);
+  }
   if(search) {
     account = account.filter(f => {
-      return f.port.toString().includes(search) || f.password.includes(search);
+      return (
+        (f.port && f.port.toString().includes(search)) ||
+        (f.password && f.password.includes(search)) ||
+        (f.mac && f.mac.includes(search))
+      );
     });
   }
   account = account.filter(f => {
