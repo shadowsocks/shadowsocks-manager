@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const crypto = require('crypto');
 const macAccount = appRequire('plugins/macAccount/index');
+const salt = appRequire('services/config').get('salt');
 
 const checkPasswordLimit = {
   number: 5,
@@ -17,11 +18,19 @@ const checkExist = async (obj) => {
   }
 };
 
+const sha512 = function(text) {
+  return crypto.createHash('sha512').update(text).digest('hex');
+};
+
+const createSha512Password = function(password, username) {
+  return sha512(sha512(password + username) + salt);
+};
+
 const md5 = function(text) {
   return crypto.createHash('md5').update(text).digest('hex');
 };
 
-const createPassword = function(password, username) {
+const createMd5Password = function(password, username) {
   return md5(password + username);
 };
 
@@ -46,7 +55,7 @@ const addUser = async (options) => {
     });
     if(options.username && options.password) {
       Object.assign(insert, {
-        password: createPassword(options.password, options.username)
+        password: createSha512Password(options.password, options.username)
       });
     }
     if(options.group) {
@@ -82,9 +91,17 @@ const checkPassword = async (username, password) => {
     ) {
       return Promise.reject('password retry out of limit');
     }
-    if(createPassword(password, username) === user[0].password) {
+    if(createSha512Password(password, username) === user[0].password) {
       await knex('user').update({
         lastLogin: Date.now(),
+      }).where({
+        username,
+      });
+      return user[0];
+    } else if(createMd5Password(password, username) === user[0].password) {
+      await knex('user').update({
+        lastLogin: Date.now(),
+        password: createSha512Password(password, username)
       }).where({
         username,
       });
@@ -110,7 +127,7 @@ const editUser = async (userInfo, edit) => {
       throw new Error('user not found');
     }
     if(edit.password) {
-      edit.password = createPassword(edit.password, username);
+      edit.password = createSha512Password(edit.password, username);
     }
     const user = await knex('user').update(edit).where(userInfo);
     return;
