@@ -777,3 +777,24 @@ exports.alipayRefund = async (req, res) => {
     res.status(403).end();
   }
 };
+
+exports.getAccountAndPaging = async (req, res) => {
+  try {
+    const page = +req.body.page || 1;
+    const pageSize = +req.body.pageSize || 20;
+    const sort = req.body.sort;
+    const search = req.body.search || '';
+    const filter = req.body.filter;
+    const accounts = await account.getAccountAndPaging({
+      page,
+      pageSize,
+      search,
+      sort,
+      filter,
+    });
+    return res.send(accounts);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};

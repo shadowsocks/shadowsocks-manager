@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('webgui');
 const app = appRequire('plugins/webgui/index').app;
 // const wss = appRequire('plugins/webgui/index').wss;
 const sessionParser = appRequire('plugins/webgui/index').sessionParser;
@@ -70,6 +72,7 @@ app.put('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.
 app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
+app.post('/api/admin/accountWithPage', isAdmin, admin.getAccountAndPaging);
 app.get('/api/admin/account/online', isAdmin, isSuperAdmin, admin.getOnlineAccount);
 app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
@@ -348,7 +351,7 @@ app.get('/serviceworker.js', async (req, res) => {
       serviceWorkerTime: setting.serviceWorkerTime,
     });
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     res.status(500).end();
   }
 });

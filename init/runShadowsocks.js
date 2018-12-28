@@ -36,7 +36,7 @@ const run = async () => {
   });
 
   shadowsocks.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+    logger.error(`child process exited with code ${code}`);
   });
   logger.info(`Run shadowsocks (${ type === 'python' ? 'python' : 'libev'})`);
   return;

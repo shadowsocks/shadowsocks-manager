@@ -4,10 +4,14 @@
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": false
         }
     },
     "rules": {
-        "semi": 2
+        "semi": 2,
+        "no-unreachable": 2,
+        "eol-last": 2,
+        "no-console": 1,
+        "linebreak-style": 1
     }
 }
