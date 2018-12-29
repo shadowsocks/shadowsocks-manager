@@ -549,10 +549,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
     });
-    $http.get('/api/admin/order').then(success => {
-      $scope.orders = success.data.filter(f => !f.baseId);
-      $scope.account.orderId = success.data[0].id;
-    });
     $scope.typeList = [
       {key: '不限量', value: 1},
       {key: '月', value: 3},
@@ -615,7 +611,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $q.all([
       $http.get('/api/admin/server'),
       $http.get(`/api/admin/account/${ accountId }`),
+      $http.get('/api/admin/order'),
     ]).then(success => {
+      $scope.orders = success[2].data.filter(f => !f.baseId);
+      $scope.account.orderId = success[2].data[0].id;
       $scope.servers = success[0].data;
       $scope.account.type = success[1].data.type;
       if(success[1].data.orderId) {
