@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
-app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http', 'accountSortDialog','$timeout', 'adminApi', '$localStorage', 'accountSortTool',
-  ($scope, $state, $mdMedia, $http, accountSortDialog, $timeout, adminApi, $localStorage, accountSortTool) => {
+app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http', 'accountSortDialog','$timeout', 'adminApi', '$localStorage',
+  ($scope, $state, $mdMedia, $http, accountSortDialog, $timeout, adminApi, $localStorage) => {
     $scope.setTitle('账号');
     $scope.setMenuRightButton('sort_by_alpha');
     $scope.setMenuSearchButton('search');
@@ -13,6 +13,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           unexpired: true,
           unlimit: true,
           mac: true,
+          orderId: 0,
         },
       };
     }
