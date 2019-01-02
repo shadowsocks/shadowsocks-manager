@@ -111,6 +111,7 @@ const orderListAndPaging = async (options = {}) => {
   let orders = knex(dbTableName).select([
     `${dbTableName}.password as orderId`,
     `${dbTableName}.orderType`,
+    'webgui_order.name as orderName',
     'user.id as userId',
     'user.username',
     'account_plugin.port',
@@ -121,6 +122,7 @@ const orderListAndPaging = async (options = {}) => {
   .orderBy(`${dbTableName}.usedTime`, 'DESC')
   .leftJoin('user', 'user.id', `${dbTableName}.user`)
   .leftJoin('account_plugin', 'account_plugin.id', `${dbTableName}.account`)
+  .leftJoin('webgui_order', 'webgui_order.id', `${dbTableName}.orderType`)
   .whereBetween(`${dbTableName}.usedTime`, [start, end]);
 
   if (filter.length) {
