@@ -59,7 +59,7 @@ const connect = () => {
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
       !isNewPython && setExistPort(flow);
-      const realFlow = compareWithLastFlow(flow, lastFlow);
+      const realFlow = await compareWithLastFlow(flow, lastFlow);
 
       const getConnectedIp = port => {
         setTimeout(() => {
@@ -166,7 +166,7 @@ const resend = async () => {
   }
 };
 
-const compareWithLastFlow = (flow, lastFlow) => {
+const compareWithLastFlow = async (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
   }
@@ -182,6 +182,15 @@ const compareWithLastFlow = (flow, lastFlow) => {
       realFlow[f] = flow[f] - lastFlow[f];
     } else {
       realFlow[f] = flow[f];
+    }
+  }
+  for(const lf in lastFlow) {
+    if(lastFlow[lf] >= 250 * 1000 * 1000 && !flow[lf]) {
+      const account = await knex('account').where({ port: +lf }).then(s => s[0]);
+      if(account) {
+        await sendMessage(`remove: {"server_port": ${ account.port }}`);
+        await sendMessage(`add: {"server_port": ${ account.port }, "password": "${ account.password }"}`);
+      }
     }
   }
   if(Object.keys(realFlow).map(m => realFlow[m]).sort((a, b) => a > b)[0] < 0) {
