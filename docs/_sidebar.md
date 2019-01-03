@@ -22,5 +22,6 @@
   * [manager API](/managerapi)
   * [ssmgr API](/ssmgrapi)
 
+* [翻译](/translate)
 * [VPS推荐](/vps)
 * [捐赠](/donate)
