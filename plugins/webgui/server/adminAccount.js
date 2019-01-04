@@ -153,6 +153,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     let type = req.query.type || 'shadowrocket';
     if(ssr === '1') { type = 'ssr'; }
     const resolveIp = req.query.ip;
+    const showFlow = req.query.flow || 0;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     let subscribeAccount;
@@ -186,7 +187,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         };
       }),
     };
-    if(subscribeAccount.account.type !== 1) {
+    if(subscribeAccount.account.type !== 1 && +showFlow) {
       const random = Math.floor(Math.random() * 9999) % (subscribeAccount.server.length - 1);
       const insert = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
       const time = {
