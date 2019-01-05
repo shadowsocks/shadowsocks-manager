@@ -23,7 +23,7 @@
                     <div flex layout="row" layout-align="space-between center">
                         <div flex="5"></div>
                         <div style="margin-bottom: 25px;">
-                            <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">{{ '发送验证码' | translate }}</span><span ng-if="sendCodeTime > 0">已发送({{sendCodeTime}})</span></md-button>
+                            <md-button class="md-primary" ng-disabled="sendCodeTime || !user.email" ng-click="sendCode()" aria-label="send code"><span ng-if="sendCodeTime === 0">{{ '发送验证码' | translate }}</span><span ng-if="sendCodeTime > 0">{{ '已发送' | translate }}({{sendCodeTime}})</span></md-button>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
         <div flex="10" flex-gt-sm="30"></div>
         <div flex>
             <div layout="row" layout-align="center center">
-                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+                <div style="color: #bbb;">{{ '邀请码' | translate }} [{{ home.refId }}] {{ '无效' | translate }}</div>
             </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
@@ -129,7 +129,7 @@
         <div flex="25"></div>
         <md-card flex="50">
             <md-card-content layout="row" layout-align="center center">
-                <div style="color: #bbb;">邀请码 [{{ home.refId }}] 无效</div>
+                <div style="color: #bbb;">{{ '邀请码' | translate }} [{{ home.refId }}] {{ '无效' | translate }}</div>
             </md-card-content>
         </md-card>
         <div flex="25"></div>
