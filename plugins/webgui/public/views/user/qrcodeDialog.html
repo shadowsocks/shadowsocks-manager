@@ -17,7 +17,7 @@
                 <div>
                     <br>{{ '点击二维码或者用移动设备扫描二维码可自动填充服务器信息' | translate }}
                 </div>
-                <div style="word-break: break-all;"><br>{{ publicInfo.ssAddress }}</div>
+                <div style="word-break: break-all;" ngclipboard data-clipboard-text="{{ publicInfo.ssAddress }}"><br>{{ publicInfo.ssAddress }}</div>
             </div>
         </div>
     </md-dialog-content>

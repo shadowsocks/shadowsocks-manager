@@ -1,0 +1,19 @@
+<md-dialog aria-label="wireguard dialog" ng-style="setDialogWidth()">
+  <md-toolbar hide-gt-sm>
+      <div class="md-toolbar-tools">
+          <h2>{{ server.name }}</h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="publicInfo.hide()">
+              <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+          </md-button>
+      </div>
+  </md-toolbar>
+  <md-dialog-content>
+      <div class="md-dialog-content">
+        <md-input-container class="md-block">
+          <label>WireGuard配置</label>
+          <textarea readonly ng-model="publicInfo.config" rows="7" md-select-on-focus></textarea>
+        </md-input-container>
+      </div>
+  </md-dialog-content>
+</md-dialog>

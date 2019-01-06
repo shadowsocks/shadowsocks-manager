@@ -28,7 +28,8 @@ const getOrdersAndAccountNumber = async () => {
     knex.raw('count(account_plugin.id) as accountNumber'),
   ])
   .leftJoin('account_plugin', 'account_plugin.orderId', 'webgui_order.id')
-  .groupBy('webgui_order.id');
+  .groupBy('webgui_order.id')
+  .orderBy('webgui_order.name', 'ASC');
   return orders;
 };
 
@@ -65,6 +66,7 @@ const newOrder = async data => {
     portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
+    active: data.active,
   });
   return;
 };
@@ -87,6 +89,7 @@ const editOrder = async data => {
     portRange: data.portRange,
     multiServerFlow: data.multiServerFlow,
     changeOrderType: data.changeOrderType,
+    active: data.active,
   }).where({
     id: data.id,
   });

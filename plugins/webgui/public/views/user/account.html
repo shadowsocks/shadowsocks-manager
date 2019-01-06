@@ -3,7 +3,7 @@
         <md-card>
             <md-card-content>
                 <div style="margin-top: 30px; margin-bottom: 30px;" translate>目前该用户没有分配账号，请联系管理员处理</div>
-                <div ng-show="config.alipay || config.paypal" ng-click="createOrder()" style="margin-bottom: 30px;">{{ '或' | translate }}
+                <div ng-show="config.alipay || config.paypal || config.giftcard" ng-click="createOrder()" style="margin-bottom: 30px;">{{ '或' | translate }}
                     <span><md-button class="md-primary">{{ '点击这里' | translate }}</md-button></span>
                 {{ '付款立即开通帐号' | translate }}</div>
             </md-card-content>
@@ -11,7 +11,7 @@
     </div>
     <div flex="100" flex-gt-md="{{flexGtSm}}" ng-repeat="a in account track by a.id">
         <md-card ng-click="toAccount(a.id)" style="position: relative;">
-            <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 100;" ng-if="a.active === 0">
+            <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 1;" ng-if="a.active === 0">
                 <div style="width: 100%; height: 100%;" layout="row" layout-align="center center">
                     <md-button class="md-raised md-warn" ng-click="activeAccount(a)"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
                 </div>
@@ -41,24 +41,38 @@
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>端口：</div>
-                                    <div flex="60" style="text-align:right">{{a.port + a.serverInfo.shift}}</div>
+                                    <div flex="60" style="text-align:right">{{ isWG(a.serverInfo) ? a.serverInfo.wgPort : a.port + a.serverInfo.shift}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
-                            <md-list-item>
+                            <md-list-item ng-hide="isWG(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>密码：</div>
                                     <div flex="60" style="text-align:right">{{a.password}}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider></md-divider>
-                            <md-list-item>
+                            <md-divider ng-hide="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-hide="isWG(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '加密方式：' | translate }}</div>
                                     <div flex="60" style="text-align:right">{{a.serverInfo.method}}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider></md-divider>
+                            <md-divider ng-hide="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-show="isWG(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>公钥：</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em;">{{a.publicKey}}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isWG(a.serverInfo)"></md-divider>
+                            <md-list-item ng-show="isWG(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40">{{ '私钥：' | translate }}</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em;">{{a.privateKey}}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isWG(a.serverInfo)"></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '流量：'| translate }}</div>
@@ -120,9 +134,16 @@
                     </div>
                     <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center">
                         <div hide-xs></div>
-                        <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)" size="getQrCodeSize()"
-                            layout-margin text="createQrCode(a.serverInfo.method, a.password, a.serverInfo.host, a.port + a.serverInfo.shift, a.serverInfo.name)"
+                        <div ng-hide="isWG(a.serverInfo)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
+                            <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo, a)" size="getQrCodeSize()"
+                            layout-margin text="createQrCode(a.serverInfo, a)"
                             image="true"></qr>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
+                        </div>
+                        <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
+                            <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
+                            <md-button class="md-primary">显示WireGuard配置</md-button>
+                        </div>
                         <div hide-xs></div>
                     </div>
                 </div>

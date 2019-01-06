@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/libs/MaterialIcons-Regular.eot);
+  /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(/libs/MaterialIcons-Regular.woff2) format('woff2'),
+       url(/libs/MaterialIcons-Regular.woff) format('woff'),
+       url(/libs/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+.animate-show {
+line-height: 20px;
+opacity: 1;
+padding: 30px;
+/*border: 1px solid black;*/
+/*background: white;*/
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+line-height: 0;
+opacity: 0;
+padding: 30 0px;
+}
+
+.check-element {
+padding: 10px;
+border: 1px solid black;
+background: white;
+}
+
+/*md-sidenav,
+md-sidenav.md-locked-open,
+md-sidenav.md-closed.md-locked-open-add-active {
+  min-width: 200px !important;
+  width: 85vw !important;
+  max-width: 210px !important;
+}*/
+
+.search-input > input {
+color: #FFF;
+}
+.search-input > .md-errors-spacer {
+min-height: 0px;
+}
+
+.markdown-table table {
+border-collapse: collapse;
+}
+
+.markdown-table table, .markdown-table th, .markdown-table td {
+padding: 5px;
+border: 1px solid #999999;
+}

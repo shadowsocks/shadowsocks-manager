@@ -44,6 +44,7 @@ app
       multiServerFlow: 0,
       changeOrderType: 1,
       server: null,
+      active: 1,
     };
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
@@ -90,6 +91,7 @@ app
           multiServerFlow: $scope.order.multiServerFlow,
           changeOrderType: $scope.order.changeOrderType,
           server: $scope.order.server,
+          active: $scope.order.active,
         }).then(success => {
           $state.go('admin.order');
         });
@@ -135,6 +137,9 @@ app
       $scope.orderInfoLoaded = true;
       $scope.servers = success[0].data;
       $scope.order = success[1].data;
+      if($scope.order.server) {
+        $scope.order.server = JSON.parse($scope.order.server);
+      } 
       $scope.orders = success[2].data.filter(f => {
         return !f.baseId;
       });
@@ -208,6 +213,7 @@ app
           changeOrderType: $scope.order.changeOrderType,
           server: $scope.order.server,
           changeCurrentAccount: $scope.changeCurrentAccount,
+          active: $scope.order.active,
         }).then(success => {
           $state.go('admin.order');
         });

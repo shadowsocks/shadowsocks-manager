@@ -121,6 +121,8 @@ const getNoticeForUser = async (mac, ip) => {
 const getAccountForUser = async (mac, ip, opt) => {
   const noPassword = opt.noPassword;
   const noFlow = opt.noFlow;
+  let type = opt.type;
+  if(type !== 'WireGuard') { type = 'Shadowsocks'; }
   if(scanLoginLog(ip)) {
     return Promise.reject('ip is in black list');
   }
@@ -139,6 +141,7 @@ const getAccountForUser = async (mac, ip, opt) => {
     'account_plugin.port',
     'account_plugin.password',
     'account_plugin.multiServerFlow as multiServerFlow',
+    'account_plugin.key',
   ])
   .leftJoin('user', 'mac_account.userId', 'user.id')
   .leftJoin('account_plugin', 'mac_account.userId', 'account_plugin.userId');
@@ -162,7 +165,7 @@ const getAccountForUser = async (mac, ip, opt) => {
     expire = accountData.data.create + accountData.data.limit * timePeriod;
   }
   const isMultiServerFlow = account.multiServerFlow;
-  const servers = await serverPlugin.list({ status: false });
+  const servers = (await serverPlugin.list({ status: false })).filter(server => server.type === type);
   let server = servers.filter(s => {
     return s.id === myServerId;
   })[0];
@@ -187,12 +190,14 @@ const getAccountForUser = async (mac, ip, opt) => {
         port: account.port + f.shift,
         method: f.method,
         comment: f.comment,
+        endpointPort: f.wgPort,
+        publicKey: f.key,
+        gateway: f.net,
       };
       return serverInfo;
     }).then(success => {
       if(startTime && !noFlow) {
         return getFlow(isMultiServerFlow ? null : success.id, account.accountId);
-        // return flow.getFlowFromSplitTime(isMultiServerFlow ? null : success.id, account.accountId, startTime, Date.now());
       } else {
         return -1;
       }
@@ -213,7 +218,20 @@ const getAccountForUser = async (mac, ip, opt) => {
       });
     }).then(success => {
       serverInfo.status = success;
-      serverInfo.base64 = 'ss://' + Buffer.from(server.method + ':' + server.password + '@' + serverInfo.address + ':' + account.port).toString('base64');
+      if(f.type === 'Shadowsocks') {
+        serverInfo.base64 = 'ss://' + Buffer.from(server.method + ':' + server.password + '@' + serverInfo.address + ':' + account.port).toString('base64');
+      } else {
+        let privateKey = account.key || '';
+        if(privateKey.includes(':')) {
+          privateKey = privateKey.split(':')[1];
+        }
+        const a = account.port % 254;
+        const b = (account.port - a) / 254;
+        const address = `${ f.net.split('.')[0] }.${ f.net.split('.')[1] }.${ b }.${ a + 1 }`;
+        serverInfo.endpointHost = serverInfo.address;
+        serverInfo.address = address;
+        serverInfo.base64 = `wg://${ serverInfo.address }:${ f.wgPort }?prikey=${ privateKey }&pubkey=${ f.key }&gateway=${ f.net }&address=${ address }#${ serverInfo.name }`;
+      }
       return serverInfo;
     });
   });
@@ -231,6 +249,9 @@ const getAccountForUser = async (mac, ip, opt) => {
     },
     servers: serverReturn,
   };
+  if(accountData.key) {
+    data.default.privateKey = accountData.key.includes(':') ? accountData.key.split(':')[1] : accountData.key;
+  }
   if(noPassword) {
     delete data.default.password;
   }
@@ -320,12 +341,61 @@ const userAddMacAccount = async (userId, mac) => {
   const macAddress = formatMacAddress(mac);
   if(!isMacAddress(macAddress)) { return Promise.reject(); }
   const currentMacAccount = await knex('mac_account').where({ userId });
-  if(currentMacAccount.length) { return Promise.reject(); }
-  await knex('mac_account').insert({
+  const insertData = {
     mac: macAddress,
     userId,
-  });
+  };
+  if(currentMacAccount.length) { return Promise.reject(); }
+  const userAccount = await knex('account_plugin').where({ userId });
+  if(userAccount.length) {
+    insertData.accountId = userAccount[0].id;
+  }
+  await knex('mac_account').insert(insertData);
   return;
+};
+
+const getMacAccountForSubscribe = async (mac, ip) => {
+  if(scanLoginLog(ip)) {
+    return Promise.reject('ip is in black list');
+  }
+  const macAccount = await knex('mac_account').where({ mac }).then(success => success[0]);
+  if(!macAccount) {
+    loginFail(mac, ip);
+    return Promise.reject('mac account not found');
+  }
+  await getAccount(macAccount.userId);
+  const myAccountId = macAccount.accountId;
+  const accounts = await knex('mac_account').select([
+    'mac_account.id',
+    'mac_account.mac',
+    'account_plugin.id as accountId',
+  ])
+  .leftJoin('user', 'mac_account.userId', 'user.id')
+  .leftJoin('account_plugin', 'mac_account.userId', 'account_plugin.userId');
+  const myAccount = accounts.filter(a => {
+    return a.accountId === myAccountId;
+  })[0];
+  const account = await knex('account_plugin').where({
+    id: myAccount.accountId
+  }).then(s => s[0]);
+  if(!account) {
+    loginFail(mac, ip);
+    return Promise.reject('can not find account');
+  }
+  if(account.data) {
+    account.data = JSON.parse(account.data);
+  } else {
+    account.data = {};
+  }
+  if(account.server) {
+    account.server = JSON.parse(account.server);
+  }
+  const servers = (await serverPlugin.list({ status: false })).filter(server => server.type === 'Shadowsocks');
+  const validServers = servers.filter(server => {
+    if(!account.server) { return true; }
+    return account.server.indexOf(server.id) >= 0;
+  });
+  return { server: validServers, account };
 };
 
 exports.editAccount = editAccount;
@@ -340,3 +410,4 @@ exports.getAllAccount = getAllAccount;
 exports.getAccountByUserId = getAccountByUserId;
 
 exports.userAddMacAccount = userAddMacAccount;
+exports.getMacAccountForSubscribe = getMacAccountForSubscribe;

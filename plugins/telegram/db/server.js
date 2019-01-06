@@ -4,7 +4,7 @@ const config = appRequire('services/config').all();
 const manager = appRequire('services/manager');
 
 const createTable = async () => {
-  await knex.schema.createTableIfNotExists(tableName, function(table) {
+  await knex.schema.createTable(tableName, function(table) {
     table.increments('id');
     table.string('name');
     table.string('host');

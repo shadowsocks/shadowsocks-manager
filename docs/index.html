@@ -1,24 +1,39 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-
+<html lang="zh">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Error">
-    <link rel="apple-touch-startup-image" href="./favicon.png">
-    <link rel="apple-touch-icon" href="./favicon.png">
-    <meta name="msapplication-TileImage" content="./favicon.png">
-    <link rel="shortcut icon" href="./favicon.png">
-    <title>Shadowsocks-Manager</title>
+  <meta charset="UTF-8">
+  <title>Shadowsocks-Manager</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
 </head>
-
-<body style="display: flex; align-items:center; justify-content:center; height: 80vh;">
-  <div>
-    <img src="./favicon.png" style="width: 250px;">
-    <h1 style="color: #666">Coming soon</h1>
-  </div>
+<body>
+  <div id="app">加载中</div>
+  <script>
+    const host = 'shadowsocks.github.io';
+    if(window.location.host === host && window.location.protocol !== 'https:') {
+      window.location.protocol = 'https:';
+    }
+    window.$docsify = {
+      homepage: 'home.md',
+      coverpage: true,
+      onlyCover: true,
+      loadSidebar: true,
+      subMaxLevel: 2,
+      name: 'Shadowsocks-Manager',
+      themeColor: '#2196F3',
+      repo: 'https://github.com/shadowsocks/shadowsocks-manager/',
+      search: {
+        maxAge: 86400000,
+        paths: 'auto', 
+        placeholder: '搜索',
+        noData: '找不到结果',
+      },
+    };
+  </script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.js"></script>
 </body>
-
 </html>

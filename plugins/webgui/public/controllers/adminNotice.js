@@ -31,7 +31,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
       title: $scope.notice.title,
       content: $scope.notice.content,
       group: $scope.notice.group,
-      showNotice: $scope.notice.showNotice,
+      autopop: $scope.notice.autopop,
     }).then(success => {
       $state.go('admin.notice');
     });
@@ -56,7 +56,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
       title: $scope.notice.title,
       content: $scope.notice.content,
       group: $scope.notice.group,
-      showNotice: $scope.notice.showNotice,
+      autopop: $scope.notice.autopop,
     }).then(success => {
       $state.go('admin.notice');
     });

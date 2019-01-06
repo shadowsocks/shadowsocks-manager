@@ -3,7 +3,7 @@
         <md-card flex>
             <md-card-header>
                 <md-card-header-text ng-show="server">
-                    <span class="md-title">{{ server.name }}&nbsp;<span style="color: #999">[{{ portNumber }}]</span></span>
+                    <span class="md-title">{{ server.name }}&nbsp;<span style="color: #999" ng-if="portNumber">[ {{ onlineAccount.length }} / {{ portNumber }} ]</span></span>
                     <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                 </md-card-header-text>
                 <md-card-header-text ng-hide="server">
@@ -53,9 +53,10 @@
                     </div>
                     <div width="{{getChartSize().pie[0]}}">
                         <div layout="row" layout-align="center center">
-                            <div>
+                            <div style="position: relative;">
+                                <div style="position: absolute; bottom: 3px; color: #666;" ng-style="{ 'right': (getChartSize().pie[0] - getChartSize().pie[1])/2 + 'px' }">{{ pieChart.data.length }}</div>
                                 <canvas id="pie" class="chart chart-pie"
-                                    width="{{getChartSize().pie[0] + 200}}"
+                                    width="{{getChartSize().pie[0]}}"
                                     height="{{getChartSize().pie[1]}}"
                                     chart-data="pieChart.data"
                                     chart-labels="pieChart.labels"
@@ -70,12 +71,23 @@
         </md-card>
     </div>
 </div>
+<div layout="row" layout-wrap ng-show="server">
+    <md-card>
+        <md-card-content>
+            <md-radio-group ng-model="accountFilter" layout="row">
+                <md-radio-button value="all">全部</md-radio-button>
+                <md-radio-button value="red">停止</md-radio-button>
+                <md-radio-button value="blue">在线</md-radio-button>
+            </md-radio-group>
+        </md-card-content>
+    </md-card>
+</div>
 <div layout="row" layout-wrap>
-    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="(key, value) in currentPorts" ng-if="matchPort(value.port, value.password, menuSearch.text)">
-        <md-card md-colors="{{ value.exists ? {} : {'background': 'red-50'} }}">
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="(key, value) in currentPorts" ng-show="matchPort(value, menuSearch.text)">
+        <md-card md-colors="accountColor(value)">
             <md-card-content style="padding-top: 5px; padding-bottom: 5px;">
                 <div layout="row" layout-align="space-between center">
-                    <div flex="70" ng-click="toAccountPage(value.port)"><span>{{ value.port }}</span><br><span style="text-align:right; color: #aaa; font-size: 0.8em;">{{ value.password }}</span></div>
+                    <div flex="70" ng-click="toAccountPage(value.port)"><span>{{ value.port }}</span><br><span style="text-align:right; color: #aaa; font-size: 0.8em;">{{ isWg ? '-' : value.password }}</span></div>
                     <div flex="30" layout="row" layout-align="space-between center">
                         <div></div>
                         <md-button class="md-icon-button" aria-label="ban" ng-click="banAccount(value.id)">

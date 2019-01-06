@@ -4,7 +4,17 @@ const accountPlugin = appRequire('plugins/account');
 exports.getOrders = async (req, res) => {
   try {
     const orders = await orderPlugin.getOrdersAndAccountNumber();
-    res.send(orders);
+    const ordersSorted = orders.filter(f => f.baseId === 0);
+    orders.filter(f => f.baseId).forEach(order => {
+      let spliceMark;
+      ordersSorted.forEach((os, index) => {
+        if(order.baseId === os.id) {
+          spliceMark = index + 1;
+        }
+      });
+      ordersSorted.splice(spliceMark, 0, order);
+    });
+    res.send(ordersSorted);
   } catch(err) {
     console.log(err);
     res.status(403).end();
@@ -41,6 +51,7 @@ exports.newOrder = async (req, res) => {
     data.portRange = req.body.portRange;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
+    data.active = req.body.active;
     await orderPlugin.newOrder(data);
     res.send('success');
   } catch(err) {
@@ -69,6 +80,7 @@ exports.editOrder = async (req, res) => {
     data.portRange = req.body.portRange;
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
+    data.active = req.body.active;
     await orderPlugin.editOrder(data);
     const changeCurrentAccount = req.body.changeCurrentAccount;
     const update = {};

@@ -34,7 +34,7 @@ exports.getUsers = (req, res) => {
   const pageSize = +req.query.pageSize || 20;
   const search = req.query.search || '';
   const sort = req.query.sort || 'id_asc';
-  const type = req.query.type || ['normal'];
+  const type = Array.isArray(req.query.type) ? req.query.type : [req.query.type || ''];
   const group = req.adminInfo.id === 1 ? +req.query.group : req.adminInfo.group;
   user.getUserAndPaging({
     page,

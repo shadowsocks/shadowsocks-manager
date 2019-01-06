@@ -4,20 +4,21 @@ const tableName = 'notice';
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
-    const hasColumnGroup = await knex.schema.hasColumn(tableName, 'group');
-    if(!hasColumnGroup) {
+    const hasAutopop = await knex.schema.hasColumn(tableName, 'autopop');
+    if(!hasAutopop) {
       await knex.schema.table(tableName, function(table) {
-        table.integer('group').defaultTo(0);
+        table.integer('autopop').defaultTo(0);
       });
     }
     return;
   }
-  return knex.schema.createTableIfNotExists(tableName, function(table) {
+  return knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.string('title');
     table.string('content', 16384);
     table.bigInteger('time');
     table.integer('group').defaultTo(0);
+    table.integer('autopop').defaultTo(0);
   });
 };
 

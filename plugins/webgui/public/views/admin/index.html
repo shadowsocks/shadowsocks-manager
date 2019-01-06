@@ -11,7 +11,7 @@
                   <md-divider></md-divider>
                   <md-list-item ng-repeat="user in signupUsers" ng-click="toUser(user.id)">
                       <div flex layout="row" layout-align="space-between center">
-                          <div style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;" flex="70" flex-xs="60">{{user.username}}</div>
+                          <div style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow: ellipsis;" flex="70" flex-xs="60">{{user.username}}</div>
                           <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;" ng-if="user.createTime">{{user.createTime | timeagoshort | translateTime}}</div>
                       </div>
                       <md-divider></md-divider>
@@ -32,7 +32,7 @@
                   <md-divider></md-divider>
                   <md-list-item ng-repeat="user in loginUsers" ng-click="toUser(user.id)">
                       <div flex layout="row" layout-align="space-between center">
-                          <div style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;" flex="70" flex-xs="60">{{user.username}}</div>
+                          <div style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow: ellipsis;" flex="70" flex-xs="60">{{user.username}}</div>
                           <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;" ng-if="user.lastLogin">{{user.lastLogin | timeagoshort | translateTime}}</div>
                       </div>
                       <md-divider></md-divider>
@@ -103,7 +103,7 @@
                   <md-divider></md-divider>
                   <md-list-item ng-repeat="tf in topFlow">
                       <div flex layout="row" layout-align="space-between center" ng-click="toTopUser(tf)">
-                          <div flex="30" flex-xs="60">
+                          <div flex="70" flex-xs="60" style="overflow: hidden; text-overflow: ellipsis;">
                               <span>{{ tf.email || tf.port }}</span>
                           </div>
                           <div flex="30" flex-xs="40" style="text-align: right;">

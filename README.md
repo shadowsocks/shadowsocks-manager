@@ -11,13 +11,13 @@
 A shadowsocks manager tool for multi user and traffic control.  
 Base on Node.js and SQLite.
 
-For more details, you can see [the wiki page](https://github.com/shadowsocks/shadowsocks-manager/wiki).
+For more details, you can see [docs](https://shadowsocks.github.io/shadowsocks-manager/).
 
 If you want to use the old version, please switch to [this branch](https://github.com/shadowsocks/shadowsocks-manager/tree/version1).
 
 ## WebGUI Demo:
 
-[https://wall.gyteng.com](https://wall.gyteng.com)
+[https://shadowghost.app](https://ssmgr.gyteng.com)
 
 ## FreeAccount Demo:
 
@@ -179,13 +179,11 @@ Join the group if you have some problem: [https://t.me/ssmgr](https://t.me/ssmgr
 
 * [DigitalOcean](https://m.do.co/c/d43891b79a52)
 
-* [Vultr](http://www.vultr.com/?ref=6926595)
+* [Vultr](https://www.vultr.com/?ref=6926595)
 
 * [AlibabaCloud](https://account-intl.aliyun.com/register/intl_register.htm?biz_params=%7B%22intl%22%3A%22%7B%5C%22referralCode%5C%22%3A%5C%22koa26v%5C%22%7D%22%7D)
 
 * [BandwagonHost](https://bandwagonhost.com/aff.php?aff=19999)
-
-* [dediserve](https://manage.dediserve.com/?affid=841)
 
 ### Donate
 If you find this project helpful, please consider making a donation:  

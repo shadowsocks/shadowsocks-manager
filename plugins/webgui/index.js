@@ -27,7 +27,7 @@ const cors = require('cors');
 app.set('trust proxy', 'loopback');
 app.use(log4js.connectLogger(expressLogger, {
   level: 'auto',
-  format: '[:req[x-real-ip]] :method :status :response-timems :url',
+  format: '[:req[host]] [:req[x-real-ip]] :method :status :response-timems :url',
 }));
 
 if(config.plugins.webgui.cors) {

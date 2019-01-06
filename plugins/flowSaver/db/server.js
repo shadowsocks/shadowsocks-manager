@@ -6,10 +6,21 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('flowSaver');
 
 const createTable = async () => {
-  const hasTable = await knex.schema.hasTable(tableName);
-  if(!hasTable) {
+  const exist = await knex.schema.hasTable(tableName);
+  if(exist) {
+    const hasType = await knex.schema.hasColumn(tableName, 'type');
+    if(!hasType) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('type').defaultTo('Shadowsocks');
+        table.string('key');
+        table.string('net');
+        table.integer('wgPort');
+      });
+    }
+  } else {
     await knex.schema.createTable(tableName, function(table) {
       table.increments('id');
+      table.string('type').defaultTo('Shadowsocks');
       table.string('name');
       table.string('host');
       table.integer('port');
@@ -18,6 +29,9 @@ const createTable = async () => {
       table.string('method').defaultTo('aes-256-cfb');
       table.string('comment').defaultTo('');
       table.integer('shift').defaultTo(0);
+      table.string('key');
+      table.string('net');
+      table.integer('wgPort');
     });
   }
   const list = await knex('server').select(['name', 'host', 'port', 'password']);

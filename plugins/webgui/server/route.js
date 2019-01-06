@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('webgui');
 const app = appRequire('plugins/webgui/index').app;
 // const wss = appRequire('plugins/webgui/index').wss;
 const sessionParser = appRequire('plugins/webgui/index').sessionParser;
@@ -70,6 +72,8 @@ app.put('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.
 app.delete('/api/admin/server/:serverId(\\d+)', isAdmin, isSuperAdmin, adminServer.deleteServer);
 
 app.get('/api/admin/account', isAdmin, admin.getAccount);
+app.post('/api/admin/accountWithPage', isAdmin, admin.getAccountAndPaging);
+app.get('/api/admin/account/online', isAdmin, isSuperAdmin, admin.getOnlineAccount);
 app.get('/api/admin/macAccount', isAdmin, admin.getAllMacAccount);
 app.get('/api/admin/account/port/:port(\\d+)', isAdmin, admin.getAccountByPort);
 app.get('/api/admin/account/:accountId(\\d+)', isAdmin, admin.getOneAccount);
@@ -126,6 +130,8 @@ app.get('/api/admin/paypal', isAdmin, admin.getPaypalOrders);
 app.get('/api/admin/paypal/csv', isAdmin, isSuperAdmin, admin.getPaypalCsvOrders);
 app.get('/api/admin/paypal/recentOrder', isAdmin, admin.getPaypalRecentOrders);
 app.get('/api/admin/paypal/:userId(\\d+)', isAdmin, admin.getPaypalUserOrders);
+
+app.post('/api/admin/alipay/refund', isAdmin, isSuperAdmin, admin.alipayRefund);
 
 app.get('/api/admin/refOrder', isAdmin, admin.getRefOrders);
 app.get('/api/admin/refOrder/:userId(\\d+)', isAdmin, admin.getUserRefOrders);
@@ -345,7 +351,7 @@ app.get('/serviceworker.js', async (req, res) => {
       serviceWorkerTime: setting.serviceWorkerTime,
     });
   } catch(err) {
-    console.log(err);
+    logger.error(err);
     res.status(500).end();
   }
 });

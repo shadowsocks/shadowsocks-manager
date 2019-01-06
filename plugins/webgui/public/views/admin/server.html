@@ -4,7 +4,7 @@
             <md-card-header>
                 <md-card-header-text layout="row" layout-align="space-between center">
                     <div layout="column">
-                        <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span><span ng-show="server.status !== -1 && !server.isGfw" style="color: #3a3;">&nbsp;{{server.status}}</span><span ng-show="server.status !== -1 && server.isGfw" style="color: #a33;">&nbsp;{{server.status}}</span></span>
+                        <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span><span ng-show="server.status !== -1 && !server.isGfw" style="color: #3a3;">&nbsp;{{server.status}}</span><span ng-show="server.status !== -1 && server.isGfw" style="color: #a33;">&nbsp;{{server.status}}</span><span style="color: #999;">&nbsp;{{ online[server.id] }}</span></span>
                         <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                     </div>
                     <div>
@@ -12,7 +12,12 @@
                     </div>
                 </md-card-header-text>
             </md-card-header>
-            <div layout="row" layout-align="center center" ng-if="serverChart.showChart">
+            <div layout="row" layout-align="center center" ng-if="serverChart.showChart" style="position: relative;">
+                <div style="position: absolute; width: 100%; height: 100%; z-index: 1;">
+                    <div ng-if="server.sumFlowOneHour" style="position: absolute; right: 4%; bottom: 28px; color: rgba(70, 70, 70, 0.75); background-color: rgba(225, 225, 225, 0.5);">
+                        {{ server.sumFlowOneHour | flow }}
+                    </div>
+                </div>
                 <div style="width: 95%; max-width: 500px;">
                     <canvas class="chart chart-line"
                         chart-data="server.chart.data"
