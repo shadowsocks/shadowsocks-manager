@@ -71,6 +71,11 @@ plugins:
     host: '0.0.0.0'
     port: '80'
     site: 'http://yourwebsite.com'
+    # icon: 'icon.png'
+    # skin: 'default'
+    # googleAnalytics: 'UA-xxxxxxxx-x'
+    # gcmSenderId: '476902381496'
+    # gcmAPIKey: 'AAAAGzddLRc:XXXXXXXXXXXXXX'
 db: 'webgui.sqlite'
 ```
 

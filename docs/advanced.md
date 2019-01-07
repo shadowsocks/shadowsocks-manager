@@ -112,3 +112,25 @@ plugins:
     host: 'smtp.your-email.com'
     proxy: 'socks://127.0.0.1:1234/'
 ```
+
+# 使用充值码功能
+
+在配置文件中加上 giftcard 插件即可：
+
+```yaml
+plugins:
+  giftcard:
+    use: true
+```
+
+# 使用 Telegram Bot
+
+使用该插件后，管理员和用户都能够绑定 Telegram 账号，管理员可以实时收到用户注册和付费提醒，普通用户每天早上可以收到昨日流量统计。
+
+从[@BotFather](https://telegram.me/BotFather)申请一个bot，然后在配置文件中加上 webgui_telegram 插件：
+
+```yaml
+webgui_telegram:
+  use: true
+  token: '191374681:AAw6RaVHR4nnP7T4Ct4a8QX-XyFQ5W53wmZ'
+```
