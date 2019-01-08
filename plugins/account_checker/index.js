@@ -24,13 +24,30 @@ const modifyAccountFlow = async (serverId, accountId, time) => {
   }).where({ serverId, accountId });
 };
 
+const portList = {};
+const updatePorts = async server => {
+  if(!portList[server.id] || Date.now() - portList[server.id].update >= 35 * 1000) {
+    const ports = (await manager.send({ command: 'list' }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    })).map(m => m.port);
+    portList[server.id] = {
+      ports,
+      update: Date.now(),
+    };
+  }
+  return portList[server.id].ports;
+};
+
 const isPortExists = async (server, account) => {
-  const ports = (await manager.send({ command: 'list' }, {
-    host: server.host,
-    port: server.port,
-    password: server.password,
-  })).map(m => m.port);
-  if(ports.indexOf(server.shift + account.port) >= 0) {
+  // const ports = (await manager.send({ command: 'list' }, {
+  //   host: server.host,
+  //   port: server.port,
+  //   password: server.password,
+  // })).map(m => m.port);
+  const ports = await updatePorts(server);
+  if(ports.includes(server.shift + account.port)) {
     return true;
   } else {
     return false;
@@ -254,7 +271,7 @@ const deleteExtraPorts = async serverInfo => {
       await deletePort(serverInfo, { port: p.port - serverInfo.shift });
     }
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
@@ -307,7 +324,7 @@ const checkAccount = async (serverId, accountId) => {
 
     !exists && await addPort(serverInfo, accountInfo);
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
@@ -341,7 +358,7 @@ const checkAccount = async (serverId, accountId) => {
       }
       if(time <= 300) { time += 10; }
     } catch(err) {
-      console.log(err);
+      logger.error(err);
       const end = Date.now();
       if(end - start <= time * 1000) {
         await sleep(time * 1000 - (end - start));
@@ -364,12 +381,12 @@ const checkAccount = async (serverId, accountId) => {
         .where('nextCheckTime', '>', Date.now())
         .orderBy('nextCheckTime', 'asc').limit(30 - datas.length))];
       }
-    } catch(err) { console.log(err); }
+    } catch(err) { logger.error(err); }
     try {
       const datas = await knex('account_flow').select()
       .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000).limit(15);
       accounts = [...accounts, ...datas];
-    } catch(err) { console.log(err); }
+    } catch(err) { logger.error(err); }
     try {
       datas = await knex('account_flow').select()
       .orderByRaw('rand()').limit(5);
