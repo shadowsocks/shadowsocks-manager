@@ -777,6 +777,8 @@ const getAccountForSubscribe = async (token, ip) => {
   return { server: validServers, account };
 };
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 const editMultiAccounts = async (orderId, update) => {
   const accounts = await knex('account_plugin').where({ orderId });
   const updateData = {};
@@ -795,6 +797,7 @@ const editMultiAccounts = async (orderId, update) => {
     if(Object.keys(updateData).length === 0) { break; }
     await knex('account_plugin').update(updateData).where({ id: account.id });
     await accountFlow.edit(account.id);
+    await sleep(500);
   }
 };
 

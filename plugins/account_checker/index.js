@@ -4,14 +4,14 @@ const knex = appRequire('init/knex').knex;
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
+let acConfig = {};
+if(config.plugins.account_checker && config.plugins.account_checker.use) {
+  acConfig = config.plugins.account_checker;
+}
 const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
 
-const sleep = time => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), time);
-  });
-};
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const randomInt = max => {
   return Math.ceil(Math.random() * max % max);
@@ -170,10 +170,10 @@ const isOverFlow = async (server, account) => {
       return { flow: a.flow + b.flow };
     }, { flow: data.flow }).flow;
   
-    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000 / server.scale;
+    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 60000000 * 60 * 1000 / server.scale;
     if(nextCheckTime >= account.expireTime - Date.now() && account.expireTime - Date.now() > 0) { nextCheckTime = account.expireTime - Date.now(); }
     if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
-    if(nextCheckTime >= 3 * 60 * 60 * 1000) { nextCheckTime = 3 * 60 * 60 * 1000; }
+    if(nextCheckTime >= 12 * 60 * 60 * 1000) { nextCheckTime = 12 * 60 * 60 * 1000; }
     await writeFlow(server.id, account.id, realFlow, nextCheckTime);
 
     return sumFlow >= flowWithFlowPacks;
@@ -329,6 +329,7 @@ const checkAccount = async (serverId, accountId) => {
 };
 
 (async () => {
+  if(acConfig.isNotMaster) { return; }
   let time = 67;
   while(true) {
     const start = Date.now();
@@ -374,7 +375,9 @@ const checkAccount = async (serverId, accountId) => {
     try {
       const datas = await knex('account_flow').select()
       .where('nextCheckTime', '<', Date.now())
-      .orderBy('nextCheckTime', 'asc').limit(600);
+      .orderBy('nextCheckTime', 'asc')
+      .limit(acConfig.limit || 600)
+      .offset(acConfig.offset || 0);
       accounts = [...accounts, ...datas];
       if(datas.length < 30) {
         accounts = [...accounts, ...(await knex('account_flow').select()
@@ -384,7 +387,9 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { logger.error(err); }
     try {
       const datas = await knex('account_flow').select()
-      .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000).limit(15);
+      .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000)
+      .limit(acConfig.updateTimeLimit || 15)
+      .offset(acConfig.updateTimeOffset || 0);
       accounts = [...accounts, ...datas];
     } catch(err) { logger.error(err); }
     try {
@@ -419,6 +424,7 @@ const checkAccount = async (serverId, accountId) => {
           await sleep((30 - accounts.length) * 1000);
         }
       } else {
+        logger.info('no need to check');
         await sleep(30 * 1000);
       }
     } catch (err) {
