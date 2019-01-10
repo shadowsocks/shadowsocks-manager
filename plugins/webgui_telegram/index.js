@@ -187,6 +187,7 @@ const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 (async () => {
   while(true) {
+    if(!isMainWorker()) { await sleep(30000); continue; }
     try {
       await getMessage();
     } catch(err) {

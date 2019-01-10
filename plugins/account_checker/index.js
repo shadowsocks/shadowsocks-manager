@@ -1,5 +1,8 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('account');
+const cluster = require('cluster');
+const process = require('process');
+const redis = appRequire('init/redis').redis;
 const knex = appRequire('init/knex').knex;
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
@@ -332,6 +335,7 @@ const checkAccount = async (serverId, accountId) => {
   if(acConfig.isNotMaster) { return; }
   let time = 67;
   while(true) {
+    if(!isMainWorker()) { await sleep(30000); continue; }
     const start = Date.now();
     try {
       await sleep(sleepTime);
@@ -372,21 +376,29 @@ const checkAccount = async (serverId, accountId) => {
   while(true) {
     const start = Date.now();
     let accounts = [];
+    const redis = appRequire('init/redis').redis;
+    const keys = await redis.keys('CheckAccount:*');
+    const ids = (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
+      return [...a, ...b];
+    }, []);
     try {
       const datas = await knex('account_flow').select()
       .where('nextCheckTime', '<', Date.now())
+      .whereNotIn('id', ids)
       .orderBy('nextCheckTime', 'asc')
       .limit(acConfig.limit || 600)
       .offset(acConfig.offset || 0);
       accounts = [...accounts, ...datas];
       if(datas.length < 30) {
         accounts = [...accounts, ...(await knex('account_flow').select()
+        .whereNotIn('id', accounts.map(account => account.id))
         .where('nextCheckTime', '>', Date.now())
         .orderBy('nextCheckTime', 'asc').limit(30 - datas.length))];
       }
     } catch(err) { logger.error(err); }
     try {
       const datas = await knex('account_flow').select()
+      .whereNotIn('id', accounts.map(account => account.id))
       .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000)
       .limit(acConfig.updateTimeLimit || 15)
       .offset(acConfig.updateTimeOffset || 0);
@@ -394,11 +406,13 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { logger.error(err); }
     try {
       datas = await knex('account_flow').select()
+      .whereNotIn('id', accounts.map(account => account.id))
       .orderByRaw('rand()').limit(5);
       accounts = [...accounts, ...datas];
     } catch(err) { }
     try {
       datas = await knex('account_flow').select()
+      .whereNotIn('id', accounts.map(account => account.id))
       .orderByRaw('random()').limit(5);
       accounts = [...accounts, ...datas];
     } catch(err) { }
@@ -419,6 +433,7 @@ const checkAccount = async (serverId, accountId) => {
         }));
       }
       if(accounts.length) {
+        await redis.set(`CheckAccount:${ process.uptime() }:${ cluster.worker.id }`, JSON.stringify(accounts.map(account => account.id)), 'EX', 45);
         logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
         if(accounts.length < 30) {
           await sleep((30 - accounts.length) * 1000);
