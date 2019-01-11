@@ -374,12 +374,13 @@ const checkAccount = async (serverId, accountId) => {
 
 (async () => {
   while(true) {
+    await sleep(randomInt(2000));
     const start = Date.now();
     let accounts = [];
     const redis = appRequire('init/redis').redis;
     const keys = await redis.keys('CheckAccount:*');
-    const ids = (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
-      return [...a, ...b];
+    const ids = keys.length === 0 ? [] : (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
+      return b ? [...a, ...b] : a;
     }, []);
     try {
       const datas = await knex('account_flow').select()
@@ -391,6 +392,7 @@ const checkAccount = async (serverId, accountId) => {
       accounts = [...accounts, ...datas];
       if(datas.length < 30) {
         accounts = [...accounts, ...(await knex('account_flow').select()
+        .whereNotIn('id', ids)
         .whereNotIn('id', accounts.map(account => account.id))
         .where('nextCheckTime', '>', Date.now())
         .orderBy('nextCheckTime', 'asc').limit(30 - datas.length))];
@@ -398,6 +400,7 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { logger.error(err); }
     try {
       const datas = await knex('account_flow').select()
+      .whereNotIn('id', ids)
       .whereNotIn('id', accounts.map(account => account.id))
       .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000)
       .limit(acConfig.updateTimeLimit || 15)
@@ -406,12 +409,14 @@ const checkAccount = async (serverId, accountId) => {
     } catch(err) { logger.error(err); }
     try {
       datas = await knex('account_flow').select()
+      .whereNotIn('id', ids)
       .whereNotIn('id', accounts.map(account => account.id))
       .orderByRaw('rand()').limit(5);
       accounts = [...accounts, ...datas];
     } catch(err) { }
     try {
       datas = await knex('account_flow').select()
+      .whereNotIn('id', ids)
       .whereNotIn('id', accounts.map(account => account.id))
       .orderByRaw('random()').limit(5);
       accounts = [...accounts, ...datas];
