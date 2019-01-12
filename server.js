@@ -1,5 +1,8 @@
 const cluster = require('cluster');
-const numCPUs = 2; //require('os').cpus().length;
+let numCPUs = 1;
+if(process.argv.indexOf('--multiCore') > 1) {
+  numCPUs = require('os').cpus().length;
+}
 require('./init/log');
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
@@ -39,7 +42,7 @@ if(cluster.isMaster) {
     }
   });
   cluster.on('exit', (worker, code, signal) => {
-    logger.error(`worker [${worker.process.pid}][${worker.id}] died`);
+    logger.error(`worker [${ worker.process.pid }][${ worker.id }] died`);
     for(w in cluster.workers) {
       process.env.mainWorker = w;
       break;

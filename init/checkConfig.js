@@ -19,6 +19,7 @@ program
   .option('-p, --password [password]', 'manager password, both server side and manager side must be equals')
   .option('-r, --run [type]', 'run shadowsocks from child_process, sample: libev / libev:aes-256-cfb / python / python:aes-256-cfb')
   .option('--debug', 'show debug message')
+  .option('--multiCore', 'multi core')
   .parse(process.argv);
 
 if(program.config) { global.configFile = program.config; }

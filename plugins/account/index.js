@@ -847,9 +847,9 @@ const getAccountAndPaging = async (opt) => {
   .where(where);
 
   if(!filter.hasUser && filter.noUser) {
-    account = await account.whereNotNull('user.id');
-  } else if(filter.hasUser && !filter.noUser) {
     account = await account.whereNull('user.id');
+  } else if(filter.hasUser && !filter.noUser) {
+    account = await account.whereNotNull('user.id');
   } else {
     account = await account;
   }
