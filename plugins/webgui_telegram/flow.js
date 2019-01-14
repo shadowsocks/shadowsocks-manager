@@ -45,4 +45,4 @@ const getUsers = async () => {
   });
 };
 
-cron.cron(getUsers, '0 9 * * *');
+cron.cron(getUsers, 'GetUsers', '0 9 * * *', 24 * 3600);

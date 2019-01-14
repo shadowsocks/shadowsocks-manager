@@ -161,7 +161,7 @@ cron.minute(async () => {
   for(const order of orders) {
     await scanOrder(order);
   }
-}, 1);
+}, 'CheckAlipayOrder', 1);
 
 const checkOrder = async (orderId) => {
   const order = await knex('alipay').select().where({
@@ -348,10 +348,10 @@ const refund = async (orderId, amount) => {
   return result;
 };
 
-cron.minute(() => {
+cron.minute(async () => {
   if(!alipay_f2f) { return; }
-  knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
-}, 53);
+  await knex('alipay').delete().where({ status: 'CREATE' }).whereBetween('createTime', [0, Date.now() - 1 * 24 * 3600 * 1000]);
+}, 'DeleteAlipayOrder', 53);
 
 exports.orderListAndPaging = orderListAndPaging;
 exports.orderList = orderList;

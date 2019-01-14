@@ -80,18 +80,18 @@ const generateFlow = async (type) => {
   await generateFlow(type);
 };
 
-cron.minute(() => {
+cron.minute(async () => {
   knex('saveFlow').delete().whereBetween('time', [0, Date.now() - 36 * 3600 * 1000]).then();
   knex('saveFlowDay').delete().whereBetween('time', [0, Date.now() - 45 * 24 * 3600 * 1000]).then();
   knex('saveFlowHour').delete().whereBetween('time', [0, Date.now() - 7 * 24 * 3600 * 1000]).then();
   knex('saveFlow5min').delete().whereBetween('time', [0, Date.now() - 3 * 24 * 3600 * 1000]).then();
-}, 37);
-cron.minute(() => {
+}, 'RemoveOldFlow',37);
+cron.minute(async () => {
   generateFlow('5min');
-}, 5);
+}, 'Generate5minFlow', 5);
 cron.cron(() => {
   generateFlow('hour');
-}, '1 * * * *');
+},'GenerateHourFlow', '1 * * * *', 3600);
 cron.cron(() => {
   generateFlow('day');
-}, '1 0 * * *');
+}, 'GenerateDayFlow', '1 0 * * *', 24 * 3600);

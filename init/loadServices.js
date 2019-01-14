@@ -1,4 +1,3 @@
-const path = require('path');
 const config = appRequire('services/config').all();
 
 const shadowsocks = () => {

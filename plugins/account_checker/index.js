@@ -4,6 +4,7 @@ const cluster = require('cluster');
 const process = require('process');
 const redis = appRequire('init/redis').redis;
 const knex = appRequire('init/knex').knex;
+const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
@@ -331,11 +332,9 @@ const checkAccount = async (serverId, accountId) => {
   }
 };
 
-(async () => {
-  if(acConfig.isNotMaster) { return; }
-  let time = 67;
-  while(true) {
-    if(!isMainWorker()) { await sleep(30000); continue; }
+let time = 67;
+cron.loop(
+  async() => {
     const start = Date.now();
     try {
       await sleep(sleepTime);
@@ -369,8 +368,10 @@ const checkAccount = async (serverId, accountId) => {
         await sleep(time * 1000 - (end - start));
       }
     }
-  }
-})();
+  },
+  'AccountCheckerDeleteExtraPorts',
+  360,
+);
 
 (async () => {
   while(true) {

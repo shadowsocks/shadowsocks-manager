@@ -1,4 +1,5 @@
 const knex = appRequire('init/knex').knex;
+const cron = appRequire('init/cron');
 const config = appRequire('services/config').all();
 const token = config.plugins.webgui_telegram.token;
 const rp = require('request-promise');
@@ -185,17 +186,20 @@ const getUserStatus = async telegramId => {
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
-(async () => {
-  while(true) {
-    if(!isMainWorker()) { await sleep(30000); continue; }
-    try {
-      await getMessage();
-    } catch(err) {
-      console.log(err);
-      await sleep(3000);
-    }
-  }
-})();
+// (async () => {
+//   while(true) {
+//     if(!isMainWorker()) { await sleep(30000); continue; }
+//     try {
+//       await getMessage();
+//     } catch(err) {
+//       console.log(err);
+//       await sleep(3000);
+//     }
+//   }
+// })();
+cron.loop(async () => {
+  await getMessage();
+}, 'WebguiTelegramGetMessage', 45);
 
 exports.telegram = telegram;
 

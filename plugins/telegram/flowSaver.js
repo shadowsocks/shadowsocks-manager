@@ -71,6 +71,6 @@ const saveFlow = async () => {
 
 cron.minute(() => {
   saveFlow();
-}, 1);
+}, 'TelegramSaveFlow', 1);
 
 exports.getFlow = getFlow;
