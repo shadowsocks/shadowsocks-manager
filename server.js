@@ -1,7 +1,9 @@
 const cluster = require('cluster');
-let numCPUs = 1;
+if(!process.env.numCPUs) {
+  process.env.numCPUs = 1;
+}
 if(process.argv.indexOf('--multiCore') > 1) {
-  numCPUs = require('os').cpus().length;
+  process.env.numCPUs = require('os').cpus().length;
 }
 require('./init/log');
 const log4js = require('log4js');
@@ -37,7 +39,7 @@ if(cluster.isMaster) {
   process.env.mainWorker = 1;
   cluster.fork();
   cluster.on('message', (worker, message, handle) => {
-    if(message === 'Worker start' && Object.keys(cluster.workers).length < numCPUs) {
+    if(message === 'Worker start' && Object.keys(cluster.workers).length < (+process.env.numCPUs)) {
       cluster.fork();
     }
   });

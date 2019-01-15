@@ -1,3 +1,5 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
 const later = require('later');
 const redis = appRequire('init/redis').redis;
 later.date.localTime();
@@ -40,18 +42,23 @@ const loop = function(fn, name, time = 300, multiCore = false) {
   const fnWithRedis = async () => {
     const run = await redis.setnx(`Cron:${ name }`, 1);
     if(run) {
-      redis.expire(`Cron:${ name }`, time);
+      await redis.expire(`Cron:${ name }`, time);
       try {
         await fn();
         await redis.del(`Cron:${ name }`);
         await fnWithRedis();
       } catch(err) {
-        console.log(err);
+        logger.error(err);
         await redis.del(`Cron:${ name }`);
+        sleep(3000 * (+process.env.numCPUs));
         await fnWithRedis();
       }
     } else {
-      sleep(3000);
+      const ttl = await redis.ttl(`Cron:${ name }`);
+      if(ttl === -1) {
+        await redis.expire(`Cron:${ name }`, time);
+      }
+      sleep(3000 * (+process.env.numCPUs));
       await fnWithRedis();
     }
   };

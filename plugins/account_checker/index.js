@@ -114,6 +114,7 @@ const isBaned = async (server, account) => {
 const isOverFlow = async (server, account) => {
   let realFlow = 0;
   const writeFlow = async (serverId, accountId, flow, time) => {
+    await redis.hset('AccountFlow:flow', `${ serverId }:${ accountId }`, flow);
     const exists = await knex('account_flow').where({ serverId, accountId }).then(s => s[0]);
     if(exists) {
       await knex('account_flow').update({
@@ -337,6 +338,17 @@ cron.loop(
   async() => {
     const start = Date.now();
     try {
+      const currentServerAccountList = await redis.hgetall('AccountFlow:flow');
+      const serverAccountList = await knex('account_plugin').select([
+        'account_plugin.id as accountId',
+        'server.id as serverId',
+      ]).crossJoin('server').then(s => s.map(m => `${ m.serverId }:${ m.accountId }`));
+      for(const sal of serverAccountList) {
+        if(!currentServerAccountList.hasOwnProperty(sal)) {
+          await accountFlow.add(sal.split(':')[1]);
+        }
+      }
+
       await sleep(sleepTime);
       const servers = await knex('server').where({});
       for(const server of servers) {
