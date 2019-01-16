@@ -30,7 +30,7 @@ server {
   ssl_certificate_key    /xxx/domain.key;
   location / {
       proxy_set_header   X-Real-IP        $remote_addr;
-      proxy_set_heade    Host             $http_host;
+      proxy_set_header   Host             $http_host;
       proxy_set_header   X-Frame-Options  DENY;
       proxy_pass         http://127.0.0.1:8080;
   }
