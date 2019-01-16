@@ -23,7 +23,7 @@ const addAccount = async (type, options) => {
       autoRemove: 0,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   } else if (type >= 2 && type <= 5) {
     const [ accountId ] = await knex('account_plugin').insert({
       type,
@@ -44,7 +44,7 @@ const addAccount = async (type, options) => {
       active: options.active,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   }
 };
 

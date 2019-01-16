@@ -74,8 +74,9 @@
 <div layout="row" layout-wrap ng-show="server">
     <md-card>
         <md-card-content>
-            <md-radio-group ng-model="accountFilter" layout="row">
+            <md-radio-group ng-model="accountFilter.value" layout="row">
                 <md-radio-button value="all">全部</md-radio-button>
+                <md-radio-button value="white">可用</md-radio-button>
                 <md-radio-button value="red">停止</md-radio-button>
                 <md-radio-button value="blue">在线</md-radio-button>
             </md-radio-group>

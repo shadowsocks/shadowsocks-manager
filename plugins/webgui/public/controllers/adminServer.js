@@ -149,12 +149,17 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     } : null);
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia', '$interval', 'banDialog',
-  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia, $interval, banDialog) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$localStorage', '$mdMedia', '$interval', 'banDialog',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $localStorage, $mdMedia, $interval, banDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
-    $scope.accountFilter = 'all';
+    if(!$localStorage.admin.serverPortFilter) {
+      $localStorage.admin.serverPortFilter = {
+        value: 'all',
+      };
+    }
+    $scope.accountFilter = $localStorage.admin.serverPortFilter;
     $scope.onlineAccount = [];
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
@@ -362,9 +367,11 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.matchPort = (account, searchStr) => {
       let filter = true;
       let search = true;
-      if($scope.accountFilter === 'all') {
+      if($scope.accountFilter.value === 'all') {
         filter = true;
-      } else if($scope.accountFilter === 'red') {
+      } else if($scope.accountFilter.value === 'white') {
+        filter = account.exists;
+      } else if($scope.accountFilter.value === 'red') {
         filter = !account.exists;
       } else {
         filter = $scope.onlineAccount.includes(account.id);

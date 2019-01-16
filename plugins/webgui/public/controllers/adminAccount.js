@@ -517,7 +517,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         server: $scope.account.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
-        $state.go('admin.account');
+        $state.go('admin.accountPage', { accountId: success.data.id });
       }).catch(() => {
         alertDialog.show('添加账号失败', '确定');
       });

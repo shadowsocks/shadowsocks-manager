@@ -1,15 +1,10 @@
 const knex = appRequire('init/knex').knex;
-const redis = appRequire('init/redis').redis;
 const manager = appRequire('services/manager');
 
 const add = async accountId => {
   const servers = await knex('server').select();
   const accountInfo = await knex('account_plugin').where({ id: accountId }).then(s => s[0]);
   const addAccountFlow = async (server, accountId) => {
-    const accountFlowRedisInfo = await redis.hget('AccountFlow:flow', `${ server.id }:${ accountId }`);
-    if(!accountFlowRedisInfo) {
-      await redis.hset('AccountFlow:flow', `${ server.id }:${ accountId }`, 0);
-    }
     const accountFlowInfo = await knex('account_flow').where({ serverId: server.id, accountId }).then(s => s[0]);
     if(accountFlowInfo) { return; }
     await knex('account_flow').insert({
@@ -114,8 +109,6 @@ const server = async serverId => {
 };
 
 const updateFlow = async (serverId, accountId, flow) => {
-  await redis.hincrby('AccountFlow:flow', `${ serverId }:${ accountId }`, flow);
-  await redis.zadd('AccountFlow:updateTime', Date.now(), `${ serverId }:${ accountId }`);
   const exists = await knex('account_flow').where({
     serverId,
     accountId,
