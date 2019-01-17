@@ -178,7 +178,7 @@ cron.minute(async () => {
   for(const order of orders) {
     await scanOrder(order);
   }
-}, 1);
+}, 'CheckPaypalOrder', 1);
 
 const orderList = async (options = {}) => {
   const where = {};
@@ -288,4 +288,4 @@ exports.getUserFinishOrder = getUserFinishOrder;
 cron.minute(() => {
   if(!config.plugins.paypal || !config.plugins.paypal.use) { return; }
   knex('paypal').delete().where({ status: 'created' }).whereBetween('expireTime', [0, Date.now() - 1 * 24 * 3600 * 1000]).then();
-}, 30);
+}, 'DeletePaypalOrder', 30);

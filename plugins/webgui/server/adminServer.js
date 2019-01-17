@@ -52,7 +52,7 @@ exports.addServer = async (req, res) => {
     req.checkBody('scale', 'Invalid scale').notEmpty();
     req.checkBody('shift', 'Invalid shift').isInt();
     const result = await req.getValidationResult();
-    if(!result.isEmpty()) { return Promise.reject('Invalid Body'); }
+    if(!result.isEmpty()) { return Promise.reject(result.array()); }
     const type = req.body.type;
     const isWG = type === 'WireGuard';
     const name = req.body.name;

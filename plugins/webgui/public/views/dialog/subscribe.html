@@ -9,6 +9,7 @@
                 </md-radio-button>
             </md-radio-group>
             <md-checkbox style="margin-top: 15px;" ng-model="publicInfo.ip" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">将域名转换为IP地址</md-checkbox>
+            <md-checkbox ng-model="publicInfo.flow" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">显示流量信息</md-checkbox>
             <div layout="row" layout-align="start center" style="margin-top: 25px;">
                 <div>
                     <md-button class="md-primary" ngclipboard data-clipboard-text="{{ publicInfo.subscribeLink }}" ngclipboard-success="toast(e);">

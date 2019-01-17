@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
-app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http', 'accountSortDialog','$timeout', 'adminApi', '$localStorage', 'accountSortTool',
-  ($scope, $state, $mdMedia, $http, accountSortDialog, $timeout, adminApi, $localStorage, accountSortTool) => {
+app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http', 'accountSortDialog','$timeout', 'adminApi', '$localStorage',
+  ($scope, $state, $mdMedia, $http, accountSortDialog, $timeout, adminApi, $localStorage) => {
     $scope.setTitle('账号');
     $scope.setMenuRightButton('sort_by_alpha');
     $scope.setMenuSearchButton('search');
@@ -13,6 +13,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           unexpired: true,
           unlimit: true,
           mac: true,
+          orderId: 0,
         },
       };
     }
@@ -516,7 +517,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         server: $scope.account.accountServer ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
-        $state.go('admin.account');
+        $state.go('admin.accountPage', { accountId: success.data.id });
       }).catch(() => {
         alertDialog.show('添加账号失败', '确定');
       });
@@ -547,10 +548,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $scope.setTitle('编辑账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
-    });
-    $http.get('/api/admin/order').then(success => {
-      $scope.orders = success.data.filter(f => !f.baseId);
-      $scope.account.orderId = success.data[0].id;
     });
     $scope.typeList = [
       {key: '不限量', value: 1},
@@ -614,7 +611,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $q.all([
       $http.get('/api/admin/server'),
       $http.get(`/api/admin/account/${ accountId }`),
+      $http.get('/api/admin/order'),
     ]).then(success => {
+      $scope.orders = success[2].data.filter(f => !f.baseId);
+      $scope.account.orderId = success[2].data[0].id;
       $scope.servers = success[0].data;
       $scope.account.type = success[1].data.type;
       if(success[1].data.orderId) {

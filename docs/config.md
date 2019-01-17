@@ -71,7 +71,17 @@ plugins:
     host: '0.0.0.0'
     port: '80'
     site: 'http://yourwebsite.com'
+    # icon: 'icon.png'
+    # skin: 'default'
+    # googleAnalytics: 'UA-xxxxxxxx-x'
+    # gcmSenderId: '476902381496'
+    # gcmAPIKey: 'AAAAGzddLRc:XXXXXXXXXXXXXX'
 db: 'webgui.sqlite'
+# 从 0.30 开始需要配置 redis
+redis:
+  host: 'your.redis.host'
+  password: 'yourRedisPassword'
+  db: 0
 ```
 
 !> email 部分用于给注册用户发送验证邮件，请填写正确的参数并选用支持 smtp 的 vps

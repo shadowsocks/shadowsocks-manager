@@ -1,36 +1,57 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('account');
+const cluster = require('cluster');
+const process = require('process');
+const redis = appRequire('init/redis').redis;
 const knex = appRequire('init/knex').knex;
+const cron = appRequire('init/cron');
 const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
+let acConfig = {};
+if(config.plugins.account_checker && config.plugins.account_checker.use) {
+  acConfig = config.plugins.account_checker;
+}
 const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
 
-const sleep = time => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(), time);
-  });
-};
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const randomInt = max => {
   return Math.ceil(Math.random() * max % max);
 };
 
-const modifyAccountFlow = async (serverId, accountId, time) => {
+const modifyAccountFlow = async (serverId, accountId, nextCheckTime) => {
   await knex('account_flow').update({
     checkTime: Date.now(),
-    nextCheckTime: Date.now() + time,
+    nextCheckTime,
   }).where({ serverId, accountId });
 };
 
+const portList = {};
+const updatePorts = async server => {
+  if(!portList[server.id] || Date.now() - portList[server.id].update >= 35 * 1000) {
+    const ports = (await manager.send({ command: 'list' }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    })).map(m => m.port);
+    portList[server.id] = {
+      ports,
+      update: Date.now(),
+    };
+  }
+  return portList[server.id].ports;
+};
+
 const isPortExists = async (server, account) => {
-  const ports = (await manager.send({ command: 'list' }, {
-    host: server.host,
-    port: server.port,
-    password: server.password,
-  })).map(m => m.port);
-  if(ports.indexOf(server.shift + account.port) >= 0) {
+  // const ports = (await manager.send({ command: 'list' }, {
+  //   host: server.host,
+  //   port: server.port,
+  //   password: server.password,
+  // })).map(m => m.port);
+  const ports = await updatePorts(server);
+  if(ports.includes(server.shift + account.port)) {
     return true;
   } else {
     return false;
@@ -45,6 +66,7 @@ const hasServer = (server, account) => {
   if(!account.server) { return true; }
   const serverList = JSON.parse(account.server);
   if(serverList.indexOf(server.id) >= 0) { return true; }
+  modifyAccountFlow(server.id, account.id, Date.now() + 24 * 3600 * 100);
   return false;
 };
 
@@ -58,19 +80,23 @@ const isExpired = (server, account) => {
     const data = JSON.parse(account.data);
     const expireTime = data.create + data.limit * timePeriod;
     account.expireTime = expireTime;
+    let nextCheckTime = data.create;
+    while(nextCheckTime <= Date.now()) {
+      nextCheckTime += timePeriod;
+    }
     if(expireTime <= Date.now() || data.create >= Date.now()) {
-      const nextCheckTime = 10 * 60 * 1000 + randomInt(30000);
       if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
-        modifyAccountFlow(server.id, account.id, nextCheckTime > account.autoRemoveDelay ? account.autoRemoveDelay : nextCheckTime);
         knex('account_plugin').delete().where({ id: account.id }).then();
-      } else {
-        modifyAccountFlow(server.id, account.id, nextCheckTime);
+      } else if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay >= Date.now()) {
+        modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
       }
       return true;
     } else {
+      modifyAccountFlow(server.id, account.id, nextCheckTime);
       return false;
     }
   } else {
+    modifyAccountFlow(server.id, account.id, Date.now() + 24 * 3600 * 100);
     return false;
   }
 };
@@ -98,7 +124,8 @@ const isOverFlow = async (server, account) => {
       await knex('account_flow').update({
         flow,
         checkTime: Date.now(),
-        nextCheckTime: Date.now() + Math.ceil(time),
+        // nextCheckTime: Date.now() + Math.ceil(time),
+        checkFlowTime: Date.now(),
       }).where({ id: exists.id });
     }
   };
@@ -153,10 +180,10 @@ const isOverFlow = async (server, account) => {
       return { flow: a.flow + b.flow };
     }, { flow: data.flow }).flow;
   
-    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 200000000 * 60 * 1000 / server.scale;
+    let nextCheckTime = (flowWithFlowPacks - sumFlow) / 60000000 * 60 * 1000 / server.scale;
     if(nextCheckTime >= account.expireTime - Date.now() && account.expireTime - Date.now() > 0) { nextCheckTime = account.expireTime - Date.now(); }
     if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
-    if(nextCheckTime >= 3 * 60 * 60 * 1000) { nextCheckTime = 3 * 60 * 60 * 1000; }
+    if(nextCheckTime >= 12 * 60 * 60 * 1000) { nextCheckTime = 12 * 60 * 60 * 1000; }
     await writeFlow(server.id, account.id, realFlow, nextCheckTime);
 
     return sumFlow >= flowWithFlowPacks;
@@ -254,7 +281,7 @@ const deleteExtraPorts = async serverInfo => {
       await deletePort(serverInfo, { port: p.port - serverInfo.shift });
     }
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
@@ -282,7 +309,7 @@ const checkAccount = async (serverId, accountId) => {
 
     // 检查账号是否包含该服务器
     if(!hasServer(serverInfo, accountInfo)) {
-      await modifyAccountFlow(serverInfo.id, accountInfo.id, 20 * 60 * 1000 + randomInt(30000));
+      // await modifyAccountFlow(serverInfo.id, accountInfo.id, 20 * 60 * 1000 + randomInt(30000));
       exists && await deletePort(serverInfo, accountInfo);
       return;
     }
@@ -307,13 +334,13 @@ const checkAccount = async (serverId, accountId) => {
 
     !exists && await addPort(serverInfo, accountInfo);
   } catch(err) {
-    console.log(err);
+    logger.error(err);
   }
 };
 
-(async () => {
-  let time = 67;
-  while(true) {
+let time = 67;
+cron.loop(
+  async() => {
     const start = Date.now();
     try {
       await sleep(sleepTime);
@@ -341,43 +368,59 @@ const checkAccount = async (serverId, accountId) => {
       }
       if(time <= 300) { time += 10; }
     } catch(err) {
-      console.log(err);
+      logger.error(err);
       const end = Date.now();
       if(end - start <= time * 1000) {
         await sleep(time * 1000 - (end - start));
       }
     }
-  }
-})();
+  },
+  'AccountCheckerDeleteExtraPorts',
+  360,
+);
 
 (async () => {
   while(true) {
+    await sleep(randomInt(2000));
     const start = Date.now();
     let accounts = [];
+    const redis = appRequire('init/redis').redis;
+    const keys = await redis.keys('CheckAccount:*');
+    const ids = keys.length === 0 ? [] : (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
+      return b ? [...a, ...b] : a;
+    }, []);
     try {
       const datas = await knex('account_flow').select()
       .where('nextCheckTime', '<', Date.now())
-      .orderBy('nextCheckTime', 'asc').limit(600);
+      .whereNotIn('id', ids)
+      .orderBy('nextCheckTime', 'asc')
+      .limit(acConfig.limit || 400)
+      .offset(acConfig.offset || 0);
       accounts = [...accounts, ...datas];
-      if(datas.length < 30) {
-        accounts = [...accounts, ...(await knex('account_flow').select()
-        .where('nextCheckTime', '>', Date.now())
-        .orderBy('nextCheckTime', 'asc').limit(30 - datas.length))];
-      }
-    } catch(err) { console.log(err); }
+    } catch(err) { logger.error(err); }
     try {
       const datas = await knex('account_flow').select()
-      .orderBy('updateTime', 'desc').where('checkTime', '<', Date.now() - 60000).limit(15);
+      .whereNotIn('id', ids)
+      .whereNotIn('id', accounts.map(account => account.id))
+      .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
+      .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
+      .orderBy('updateTime', 'desc')
+      .limit(acConfig.updateTimeLimit || 400)
+      .offset(acConfig.updateTimeOffset || 0);
       accounts = [...accounts, ...datas];
-    } catch(err) { console.log(err); }
+    } catch(err) { logger.error(err); }
     try {
       datas = await knex('account_flow').select()
-      .orderByRaw('rand()').limit(5);
+      .whereNotIn('id', ids)
+      .whereNotIn('id', accounts.map(account => account.id))
+      .orderByRaw('rand()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
       accounts = [...accounts, ...datas];
     } catch(err) { }
     try {
       datas = await knex('account_flow').select()
-      .orderByRaw('random()').limit(5);
+      .whereNotIn('id', ids)
+      .whereNotIn('id', accounts.map(account => account.id))
+      .orderByRaw('random()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
       accounts = [...accounts, ...datas];
     } catch(err) { }
 
@@ -397,11 +440,13 @@ const checkAccount = async (serverId, accountId) => {
         }));
       }
       if(accounts.length) {
+        await redis.set(`CheckAccount:${ process.uptime() }:${ cluster.worker.id }`, JSON.stringify(accounts.map(account => account.id)), 'EX', 45);
         logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
         if(accounts.length < 30) {
           await sleep((30 - accounts.length) * 1000);
         }
       } else {
+        logger.info('no need to check');
         await sleep(30 * 1000);
       }
     } catch (err) {

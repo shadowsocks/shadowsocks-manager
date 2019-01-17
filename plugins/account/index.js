@@ -23,7 +23,7 @@ const addAccount = async (type, options) => {
       autoRemove: 0,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   } else if (type >= 2 && type <= 5) {
     const [ accountId ] = await knex('account_plugin').insert({
       type,
@@ -44,7 +44,7 @@ const addAccount = async (type, options) => {
       active: options.active,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   }
 };
 
@@ -777,6 +777,8 @@ const getAccountForSubscribe = async (token, ip) => {
   return { server: validServers, account };
 };
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 const editMultiAccounts = async (orderId, update) => {
   const accounts = await knex('account_plugin').where({ orderId });
   const updateData = {};
@@ -795,6 +797,7 @@ const editMultiAccounts = async (orderId, update) => {
     if(Object.keys(updateData).length === 0) { break; }
     await knex('account_plugin').update(updateData).where({ id: account.id });
     await accountFlow.edit(account.id);
+    await sleep(500);
   }
 };
 
@@ -816,7 +819,12 @@ const getAccountAndPaging = async (opt) => {
   const sort = opt.sort || 'port_asc';
   const filter = opt.filter;
 
-  let account = await knex('account_plugin').select([
+  const where = {};
+  if(filter.orderId) {
+    where['account_plugin.orderId'] = +filter.orderId;
+  }
+  
+  let account = knex('account_plugin').select([
     'account_plugin.id',
     'account_plugin.type',
     'account_plugin.orderId',
@@ -835,7 +843,16 @@ const getAccountAndPaging = async (opt) => {
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
-  .orderBy('account_plugin.port', 'ASC');
+  .orderBy('account_plugin.port', 'ASC')
+  .where(where);
+
+  if(!filter.hasUser && filter.noUser) {
+    account = await account.whereNull('user.id');
+  } else if(filter.hasUser && !filter.noUser) {
+    account = await account.whereNotNull('user.id');
+  } else {
+    account = await account;
+  }
 
   account.forEach(a => {
     if(a.data) {
@@ -856,6 +873,7 @@ const getAccountAndPaging = async (opt) => {
   if(search) {
     account = account.filter(f => {
       return (
+        (f.user && f.user.includes(search)) ||
         (f.port && f.port.toString().includes(search)) ||
         (f.password && f.password.includes(search)) ||
         (f.mac && f.mac.includes(search))
@@ -876,7 +894,11 @@ const getAccountAndPaging = async (opt) => {
     return show;
   });
   account = account.sort((a, b) => {
-    if(sort === 'port_asc') {
+    if(a.mac && !b.mac) {
+      return 1;
+    } else if(!a.mac && b.mac) {
+      return -1;
+    } else if(sort === 'port_asc') {
       return a.port >= b.port ? 1 : -1;
     } else if (sort === 'port_desc') {
       return a.port <= b.port ? 1 : -1;

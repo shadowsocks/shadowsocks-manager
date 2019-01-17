@@ -1,5 +1,6 @@
 module.exports = {
-  Proxy: [],
+	Proxy: [],
+	'Proxy Group': [],
   Rule: [
     'DOMAIN,gs.apple.com,Proxy',
 		'DOMAIN-SUFFIX,mzstatic.com,DIRECT',

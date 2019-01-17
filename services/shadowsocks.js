@@ -1,6 +1,8 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
-const cron = appRequire('init/cron');
+const later = require('later');
+later.date.localTime();
+// const cron = appRequire('init/cron');
 const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 const version = appRequire('package').version;
@@ -59,7 +61,7 @@ const connect = () => {
     } else if(msgStr.substr(0, 5) === 'stat:') {
       let flow = JSON.parse(msgStr.substr(5));
       !isNewPython && setExistPort(flow);
-      const realFlow = compareWithLastFlow(flow, lastFlow);
+      const realFlow = await compareWithLastFlow(flow, lastFlow);
 
       const getConnectedIp = port => {
         setTimeout(() => {
@@ -166,10 +168,11 @@ const resend = async () => {
   }
 };
 
-const compareWithLastFlow = (flow, lastFlow) => {
+let restartFlow = 300;
+const compareWithLastFlow = async (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
-  }
+  } 
   const realFlow = {};
   if(!lastFlow) {
     for(const f in flow) {
@@ -177,9 +180,18 @@ const compareWithLastFlow = (flow, lastFlow) => {
     }
     return flow;
   }
+  if(restartFlow > 50) { restartFlow--; }
   for(const f in flow) {
     if(lastFlow[f]) {
       realFlow[f] = flow[f] - lastFlow[f];
+      if(realFlow[f] === 0 && flow[f] > restartFlow * 1000 * 1000) {
+        restartFlow += 10;
+        const account = await knex('account').where({ port: +f }).then(s => s[0]);
+        if(account) {
+          await sendMessage(`remove: {"server_port": ${ account.port }}`);
+          await sendMessage(`add: {"server_port": ${ account.port }, "password": "${ account.password }"}`);
+        }
+      }
     } else {
       realFlow[f] = flow[f];
     }
@@ -195,11 +207,16 @@ const compareWithLastFlow = (flow, lastFlow) => {
 
 connect();
 startUp();
-cron.minute(() => {
+later.setInterval(() => {
   resend();
   sendPing();
   getGfwStatus();
-}, 1);
+}, later.parse.text('every 1 mins'));
+// cron.minute(() => {
+//   resend();
+//   sendPing();
+//   getGfwStatus();
+// }, 1);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }

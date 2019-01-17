@@ -87,9 +87,7 @@ app.listen(port, host, () => {
 //   }
 // });
 
-app.use((err, req, res, next) => {
-  return res.render('error');
-});
+app.use((err, req, res, next) => res.render('error'));
 
 exports.app = app;
 // exports.wss = wss;

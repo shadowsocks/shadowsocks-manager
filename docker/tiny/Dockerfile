@@ -6,8 +6,8 @@ RUN apt-get update && \
     pip install git+https://github.com/gyteng/shadowsocks.git@master && \
     curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs shadowsocks-libev && \
-    npm i -g shadowsocks-manager --unsafe-perm && \
+    git clone https://github.com/gyteng/shadowsocks-manager-tiny.git ssmgr && \
     echo "Asia/Shanghai" > /etc/timezone && \
     rm /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
-CMD ["/usr/bin/ssmgr"]
+CMD ["node", "/ssmgr"]

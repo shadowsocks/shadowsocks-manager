@@ -8,7 +8,6 @@ const addDefaultGroup = async () => {
   if (!data) {
     const id = await knex('group').insert(
       { id: 0, name: '默认组', comment: '系统默认分组' },
-      'id',
     );
     if (id[0] !== 0) {
       await knex('group')
