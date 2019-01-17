@@ -1,0 +1,39 @@
+<div layout-fill layout-align="center center">
+  <link rel="stylesheet" href="/public/views/skin/fs_sea/css/sea.css">
+  <link rel="stylesheet" href="/public/views/skin/fs_sea/css/jquery.fancybox.min.css">
+  <script src="/public/views/skin/fs_sea/js/pace.min.js"></script>
+  <div class="video">
+  	<div class="video-frame">
+  		<img src="/public/views/skin/fs_sea/overlay.png" alt="show">
+  	</div>
+  	<div class="video-media">
+  		<video playsinline="" autoplay="" loop="" muted="" data-autoplay="" poster="/public/views/skin/fs_sea/sea.png" x5-video-player-type="h5">
+  			<source src="https://1drv.ws/v/s!ArVyYS-SIMlucMmOixsN1rtA_fs" type="video/mp4">
+  			<source src="https://1drv.ws/u/s!ArVyYS-SIMlubremQGRgzcRIX-E" type="video/ogg">
+  			<source src="https://1drv.ws/u/s!ArVyYS-SIMlubxeGF4g_FraTmDQ" type="video/webm">
+  		</video>
+  		<div class="video-overlay"></div>
+  	</div>
+    <div class="video-inner text-center text-white">
+      <h1><a href="/home/index">{{ config.title }}</a></h1>
+      <p id="hitokoto">:D 获取中...</p>
+      <script>
+        fetch('https://v1.hitokoto.cn/?c=d')
+          .then(function (res){
+            return res.json();
+          })
+          .then(function (data) {
+            var hitokoto = document.getElementById('hitokoto');
+            hitokoto.innerText = data.hitokoto; 
+          })
+          .catch(function (err) {
+            console.error(err);
+          })
+      </script>
+    </div>
+  	<div class="video-menu">
+  		<a href="/home/login"><i class="fe fe-user">登录</i></a>
+  		<a href="/home/signup"><i class="fe fe-pencil">注册</i></a>
+  	</div>
+  </div>
+</div>
