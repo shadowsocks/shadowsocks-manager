@@ -1,9 +1,13 @@
+const log4js = require('log4js');
+const logger = log4js.getLogger('system');
 const knex = appRequire('init/knex').knex;
 const cron = appRequire('init/cron');
 const config = appRequire('services/config').all();
 const token = config.plugins.webgui_telegram.token;
 const rp = require('request-promise');
 const url = `https://api.telegram.org/bot${ token }/`;
+
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const sendMessage = (text, chat_id, reply_to_message_id) => {
   return rp({
@@ -125,14 +129,16 @@ const getMessage = async () => {
     const resultObj = JSON.parse(result);
     if(resultObj.ok && resultObj.result.length) {
       resultObj.result.forEach(message => {
-        console.log(message);
+        logger.info(message);
         telegram.emit('message', message);
       });
-    }
-    if(resultObj.result.length) {
       await setUpdateId(resultObj.result[resultObj.result.length - 1].update_id + 1);
+    } else {
+      await sleep(3000);
     }
   } catch (err) {
+    logger.error(err);
+    await sleep(3000);
     return;
   }
 };
@@ -183,8 +189,6 @@ const getUserStatus = async telegramId => {
     return { status: user.type, id: user.id };
   }
 };
-
-const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 // (async () => {
 //   while(true) {

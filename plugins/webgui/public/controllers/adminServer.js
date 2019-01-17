@@ -402,6 +402,20 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         
     //   }, 500);
     // });
+    let serverIds = [ serverId ];
+    $http.get('/api/admin/server').then(success => {
+      serverIds = success.data.map(s => s.id);
+    });
+    $scope.nextServer = () => {
+      const currentIndex = serverIds.indexOf(+serverId);
+      const nextServerId = serverIds[(currentIndex + 1) % serverIds.length];
+      $state.go('admin.serverPage', { serverId: nextServerId });
+    };
+    $scope.prevServer = () => {
+      const currentIndex = serverIds.indexOf(+serverId);
+      const prevServerId = serverIds[(currentIndex - 1 + serverIds.length) % serverIds.length];
+      $state.go('admin.serverPage', { serverId: prevServerId });
+    };
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',

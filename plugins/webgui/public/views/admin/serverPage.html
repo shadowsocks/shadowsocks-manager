@@ -73,13 +73,15 @@
 </div>
 <div layout="row" layout-wrap ng-show="server">
     <md-card>
-        <md-card-content>
-            <md-radio-group ng-model="accountFilter.value" layout="row">
+        <md-card-content layout="row">
+            <md-icon hide-xs hide-sm class="material-icons" ng-click="prevServer()" style="margin-left: 15px; margin-right: 15px;">navigate_before</md-icon>
+            <md-radio-group ng-model="accountFilter.value" layout="row" layout-wrap>
                 <md-radio-button value="all">全部</md-radio-button>
                 <md-radio-button value="white">可用</md-radio-button>
                 <md-radio-button value="red">停止</md-radio-button>
                 <md-radio-button value="blue">在线</md-radio-button>
             </md-radio-group>
+            <md-icon hide-xs hide-sm class="material-icons" ng-click="nextServer()" style="margin-left: 15px; margin-right: 15px;">navigate_next</md-icon>
         </md-card-content>
     </md-card>
 </div>
