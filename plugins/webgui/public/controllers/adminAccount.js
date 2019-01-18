@@ -147,8 +147,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       }
       $scope.getServerPortData($scope.servers[0], $scope.accountId);
       $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
-    }).catch(err => {
-      console.log(err);
+    }).catch(() => {
       $state.go('admin.account');
     });
     let currentServerId;

@@ -10,9 +10,10 @@ const minute = function(fn, name, time = 1) {
   // const fnWithRedis = async () => {
   //   const run = await redis.setnx(`Cron:${ name }`, 1);
   //   if(run) {
-  //     redis.expire(`Cron:${ name }`, time * 60 - 1);
-  //     logger.info(`cron: ${ name }, [${ time }]`);
+  //     redis.expire(`Cron:${ name }`, time * 60);
+  //     logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time * 60 }]`);
   //     await fn();
+  //     await redis.del(`Cron:${ name }`);
   //   }
   // };
   const fnWithRedis = () => { if(isMainWorker()) { logger.info(`[${ cluster.worker.id }]cron: ${ name }, [${ time }]`); fn(); }; };
@@ -24,8 +25,9 @@ const second = function(fn, name, time = 10) {
   //   const run = await redis.setnx(`Cron:${ name }`, 1);
   //   if(run) {
   //     redis.expire(`Cron:${ name }`, time - 1);
-  //     logger.info(`cron: ${ name }, [${ time }]`);
+  //     logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time }]`);
   //     await fn();
+  //     await redis.del(`Cron:${ name }`);
   //   }
   // };
   const fnWithRedis = () => { if(isMainWorker()) { logger.info(`[${ cluster.worker.id }]cron: ${ name }, [${ time }]`); fn(); }; };
@@ -37,8 +39,9 @@ const cron = function(fn, name, cronString, time) {
   //   const run = await redis.setnx(`Cron:${ name }`, 1);
   //   if(run) {
   //     redis.expire(`Cron:${ name }`, time - 1);
-  //     logger.info(`cron: ${ name }, [${ time }]`);
+  //     logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time }]`);
   //     await fn();
+  //     await redis.del(`Cron:${ name }`);
   //   }
   // };
   const fnWithRedis = () => { if(isMainWorker()) { logger.info(`[${ cluster.worker.id }]cron: ${ name }, [${ time }]`); fn(); }; };
@@ -51,7 +54,7 @@ const loop = function(fn, name, time = 300, multiCore = false) {
   //   if(run) {
   //     await redis.expire(`Cron:${ name }`, time);
   //     try {
-  //       logger.info(`cron: ${ name }, [${ time }]`);
+  //       logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time }]`);
   //       await fn();
   //       await redis.del(`Cron:${ name }`);
   //       await fnWithRedis();
@@ -71,6 +74,7 @@ const loop = function(fn, name, time = 300, multiCore = false) {
   //   }
   // };
   // fnWithRedis();
+
   (async () => {
     if(isMainWorker()) {
       while(true) {
