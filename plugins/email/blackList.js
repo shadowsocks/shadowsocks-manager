@@ -1,4 +1,6 @@
 const blackList = [
+  '@next2cloud.info',
+  '@alexbox.online',
   '@prmail.top',
   '@www.bccto.me',
   '@grr.la',
