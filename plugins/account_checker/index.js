@@ -359,14 +359,22 @@ cron.loop(
         await deleteExtraPorts(server);
       }
       await sleep(sleepTime);
+
       const accounts = await knex('account_plugin').select([
-        'account_plugin.id as id'
-      ]).crossJoin('server')
-      .leftJoin('account_flow', function () {
-        this
-        .on('account_flow.serverId', 'server.id')
-        .on('account_flow.accountId', 'account_plugin.id');
-      }).whereNull('account_flow.id');
+        'account_plugin.id as id',
+      ])
+      .count('account_flow.serverId as count')
+      .leftOuterJoin('account_flow', 'account_flow.accountId', 'account_plugin.id')
+      .groupBy('account_flow.accountId')
+      .having('count', '<', servers.length);
+      // const accounts = await knex('account_plugin').select([
+      //   'account_plugin.id as id',
+      // ]).crossJoin('server')
+      // .leftJoin('account_flow', function () {
+      //   this
+      //   .on('account_flow.serverId', 'server.id')
+      //   .on('account_flow.accountId', 'account_plugin.id');
+      // }).whereNull('account_flow.id');
       for(const account of accounts) {
         await sleep(sleepTime);
         await accountFlow.add(account.id);
