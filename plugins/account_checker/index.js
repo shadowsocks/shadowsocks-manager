@@ -347,7 +347,7 @@ const checkAccount = async (serverId, accountId) => {
   }
 };
 
-let time = 67;
+let time = 120;
 cron.loop(
   async() => {
     const start = Date.now();
@@ -365,8 +365,9 @@ cron.loop(
       ])
       .count('account_flow.serverId as count')
       .leftOuterJoin('account_flow', 'account_flow.accountId', 'account_plugin.id')
-      .groupBy('account_flow.accountId')
+      .groupBy('account_plugin.id')
       .having('count', '<', servers.length);
+
       // const accounts = await knex('account_plugin').select([
       //   'account_plugin.id as id',
       // ]).crossJoin('server')
@@ -383,7 +384,7 @@ cron.loop(
       if(end - start <= time * 1000) {
         await sleep(time * 1000 - (end - start));
       }
-      if(time <= 300) { time += 10; }
+      if(time <= 600) { time += 10; }
     } catch(err) {
       logger.error(err);
       const end = Date.now();

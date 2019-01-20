@@ -80,7 +80,7 @@ const loop = function(fn, name, time = 300, multiCore = false) {
       while(true) {
         await sleep(1000);
         try {
-          logger.info(`[${ cluster.worker.id }]cron: ${ name }, [${ time }]`); fn();
+          logger.info(`[${ cluster.worker.id }]cron: ${ name }, [${ time }]`);
           await fn();
         } catch(err) {
           logger.error(err);
