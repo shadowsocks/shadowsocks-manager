@@ -461,78 +461,80 @@ cron.minute(async () => {
       }
     }
   } else {
-    await sleep(randomInt(2000));
-    const start = Date.now();
-    let accounts = [];
-    const redis = appRequire('init/redis').redis;
-    const keys = await redis.keys('CheckAccount:*');
-    const ids = keys.length === 0 ? [] : (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
-      return b ? [...a, ...b] : a;
-    }, []);
-    try {
-      const datas = await knex('account_flow').select()
-      .where('nextCheckTime', '<', Date.now())
-      .whereNotIn('id', ids)
-      .orderBy('nextCheckTime', 'asc')
-      .limit(acConfig.limit || 400)
-      .offset(acConfig.offset || 0);
-      accounts = [...accounts, ...datas];
-    } catch(err) { logger.error(err); }
-    try {
-      const datas = await knex('account_flow').select()
-      .whereNotIn('id', ids)
-      .whereNotIn('id', accounts.map(account => account.id))
-      .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
-      .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
-      .orderBy('updateTime', 'desc')
-      .limit(acConfig.updateTimeLimit || 400)
-      .offset(acConfig.updateTimeOffset || 0);
-      accounts = [...accounts, ...datas];
-    } catch(err) { logger.error(err); }
-    try {
-      datas = await knex('account_flow').select()
-      .whereNotIn('id', ids)
-      .whereNotIn('id', accounts.map(account => account.id))
-      .orderByRaw('rand()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
-      accounts = [...accounts, ...datas];
-    } catch(err) { }
-    try {
-      datas = await knex('account_flow').select()
-      .whereNotIn('id', ids)
-      .whereNotIn('id', accounts.map(account => account.id))
-      .orderByRaw('random()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
-      accounts = [...accounts, ...datas];
-    } catch(err) { }
+    while(true) {
+      await sleep(randomInt(2000));
+      const start = Date.now();
+      let accounts = [];
+      const redis = appRequire('init/redis').redis;
+      const keys = await redis.keys('CheckAccount:*');
+      const ids = keys.length === 0 ? [] : (await redis.mget(keys)).map(m => JSON.parse(m)).reduce((a, b) => {
+        return b ? [...a, ...b] : a;
+      }, []);
+      try {
+        const datas = await knex('account_flow').select()
+        .where('nextCheckTime', '<', Date.now())
+        .whereNotIn('id', ids)
+        .orderBy('nextCheckTime', 'asc')
+        .limit(acConfig.limit || 400)
+        .offset(acConfig.offset || 0);
+        accounts = [...accounts, ...datas];
+      } catch(err) { logger.error(err); }
+      try {
+        const datas = await knex('account_flow').select()
+        .whereNotIn('id', ids)
+        .whereNotIn('id', accounts.map(account => account.id))
+        .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
+        .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
+        .orderBy('updateTime', 'desc')
+        .limit(acConfig.updateTimeLimit || 400)
+        .offset(acConfig.updateTimeOffset || 0);
+        accounts = [...accounts, ...datas];
+      } catch(err) { logger.error(err); }
+      try {
+        datas = await knex('account_flow').select()
+        .whereNotIn('id', ids)
+        .whereNotIn('id', accounts.map(account => account.id))
+        .orderByRaw('rand()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
+        accounts = [...accounts, ...datas];
+      } catch(err) { }
+      try {
+        datas = await knex('account_flow').select()
+        .whereNotIn('id', ids)
+        .whereNotIn('id', accounts.map(account => account.id))
+        .orderByRaw('random()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
+        accounts = [...accounts, ...datas];
+      } catch(err) { }
 
-    try {
-      if(accounts.length <= 120) {
-        for(const account of accounts) {
-          const start = Date.now();
-          await checkAccount(account.serverId, account.accountId).catch();
-          const time = 60 * 1000 / accounts.length - (Date.now() - start);
-          await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
+      try {
+        if(accounts.length <= 120) {
+          for(const account of accounts) {
+            const start = Date.now();
+            await checkAccount(account.serverId, account.accountId).catch();
+            const time = 60 * 1000 / accounts.length - (Date.now() - start);
+            await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
+          }
+        } else {
+          await Promise.all(accounts.map((account, index) => {
+            return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
+              return checkAccount(account.serverId, account.accountId).catch();
+            });
+          }));
         }
-      } else {
-        await Promise.all(accounts.map((account, index) => {
-          return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
-            return checkAccount(account.serverId, account.accountId).catch();
-          });
-        }));
-      }
-      if(accounts.length) {
-        await redis.set(`CheckAccount:${ process.uptime() }:${ cluster.worker.id }`, JSON.stringify(accounts.map(account => account.id)), 'EX', 45);
-        logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
-        if(accounts.length < 30) {
-          await sleep((30 - accounts.length) * 1000);
+        if(accounts.length) {
+          await redis.set(`CheckAccount:${ process.uptime() }:${ cluster.worker.id }`, JSON.stringify(accounts.map(account => account.id)), 'EX', 45);
+          logger.info(`check ${ accounts.length } accounts, ${ Date.now() - start } ms`);
+          if(accounts.length < 30) {
+            await sleep((30 - accounts.length) * 1000);
+          }
+        } else {
+          logger.info('no need to check');
+          await sleep(30 * 1000);
         }
-      } else {
-        logger.info('no need to check');
-        await sleep(30 * 1000);
-      }
-    } catch (err) {
-      const end = Date.now();
-      if(end - start <= 60 * 1000) {
-        await sleep(60 * 1000 - (end - start));
+      } catch (err) {
+        const end = Date.now();
+        if(end - start <= 60 * 1000) {
+          await sleep(60 * 1000 - (end - start));
+        }
       }
     }
   }
