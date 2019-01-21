@@ -435,8 +435,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       'aes-256-gcm',
       'aes-192-gcm',
       'aes-128-gcm',
+      'rc4-md5',
+      'bf-cfb',
+      'salsa20',
+      'chacha20',
       'chacha20-ietf',
-      'chacha20-ietf-poly1305'
+      'chacha20-ietf-poly1305',
+      'xchacha20-ietf-poly1305'
     ];
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
@@ -497,8 +502,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       'aes-256-gcm',
       'aes-192-gcm',
       'aes-128-gcm',
+      'rc4-md5',
+      'bf-cfb',
+      'salsa20',
+      'chacha20',
       'chacha20-ietf',
-      'chacha20-ietf-poly1305'
+      'chacha20-ietf-poly1305',
+      'xchacha20-ietf-poly1305'
     ];
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
