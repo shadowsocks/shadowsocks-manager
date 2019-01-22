@@ -12,7 +12,12 @@ const minute = function(fn, name, time = 1) {
     if(run) {
       redis.expire(`Cron:${ name }`, time * 60);
       logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time * 60 }]`);
+      const start = Date.now();
       await fn();
+      const duration = Date.now() - start;
+      if(duration < (time * 60 * 1000 / 2)) {
+        await sleep(time * 60 * 1000 / 2 - duration);
+      }
       await redis.del(`Cron:${ name }`);
     }
   };
@@ -26,7 +31,12 @@ const second = function(fn, name, time = 10) {
     if(run) {
       redis.expire(`Cron:${ name }`, time - 1);
       logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time }]`);
+      const start = Date.now();
       await fn();
+      const duration = Date.now() - start;
+      if(duration < (time * 1000 / 2)) {
+        await sleep(time * 1000 / 2 - duration);
+      }
       await redis.del(`Cron:${ name }`);
     }
   };
@@ -40,7 +50,12 @@ const cron = function(fn, name, cronString, time) {
     if(run) {
       redis.expire(`Cron:${ name }`, time - 1);
       logger.info(`[${ cluster.worker.id }] cron: ${ name }, [${ time }]`);
+      const start = Date.now();
       await fn();
+      const duration = Date.now() - start;
+      if(duration < (time * 1000 / 2)) {
+        await sleep(time * 1000 / 2 - duration);
+      }
       await redis.del(`Cron:${ name }`);
     }
   };

@@ -134,7 +134,7 @@ const getMessage = async () => {
       });
       await setUpdateId(resultObj.result[resultObj.result.length - 1].update_id + 1);
     } else {
-      await sleep(3000);
+      await sleep(15000);
     }
   } catch (err) {
     logger.error(err);
@@ -190,17 +190,6 @@ const getUserStatus = async telegramId => {
   }
 };
 
-// (async () => {
-//   while(true) {
-//     if(!isMainWorker()) { await sleep(30000); continue; }
-//     try {
-//       await getMessage();
-//     } catch(err) {
-//       console.log(err);
-//       await sleep(3000);
-//     }
-//   }
-// })();
 cron.loop(async () => {
   await getMessage();
 }, 'WebguiTelegramGetMessage', 45);

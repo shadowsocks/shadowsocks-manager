@@ -181,16 +181,11 @@ const isOverFlow = async (server, account) => {
       if(+s === server.id) { realFlow = flow; }
       sumFlow += Math.ceil(flow * serverObj[s].scale);
     }
-    
+
     const flowPacks = await knex('webgui_flow_pack').where({ accountId: account.id }).whereBetween('createTime', [startTime, endTime]);
     const flowWithFlowPacks = flowPacks.reduce((a, b) => {
       return { flow: a.flow + b.flow };
     }, { flow: data.flow }).flow;
-  
-    // let nextCheckTime = (flowWithFlowPacks - sumFlow) / 60000000 * 60 * 1000 / server.scale;
-    // if(nextCheckTime >= account.expireTime - Date.now() && account.expireTime - Date.now() > 0) { nextCheckTime = account.expireTime - Date.now(); }
-    // if(nextCheckTime <= 0) { nextCheckTime = 600 * 1000; }
-    // if(nextCheckTime >= 12 * 60 * 60 * 1000) { nextCheckTime = 12 * 60 * 60 * 1000; }
     await writeFlow(server.id, account.id, realFlow);
     if(account.multiServerFlow && sumFlow < flowWithFlowPacks) {
       await writeFlowForOtherServer(server.id, account.id, realFlow);
@@ -417,7 +412,7 @@ cron.minute(async () => {
           const datas = await knex('account_flow').select()
           .where('nextCheckTime', '<', Date.now())
           .orderBy('nextCheckTime', 'desc')
-          .limit(50)
+          .limit(200)
           .offset(0);
           accounts = [...accounts, ...datas];
         } catch(err) {
@@ -475,8 +470,8 @@ cron.minute(async () => {
         .where('nextCheckTime', '<', Date.now())
         .whereNotIn('id', ids)
         .orderBy('nextCheckTime', 'asc')
-        .limit(acConfig.limit || 400)
-        .offset(acConfig.offset || 0);
+        .limit(400)
+        .offset(0);
         accounts = [...accounts, ...datas];
       } catch(err) { logger.error(err); }
       try {
@@ -486,8 +481,8 @@ cron.minute(async () => {
         .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
         .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
         .orderBy('updateTime', 'desc')
-        .limit(acConfig.updateTimeLimit || 400)
-        .offset(acConfig.updateTimeOffset || 0);
+        .limit(400)
+        .offset(0);
         accounts = [...accounts, ...datas];
       } catch(err) { logger.error(err); }
       try {

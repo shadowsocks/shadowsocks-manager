@@ -15,6 +15,7 @@ const macAccount = appRequire('plugins/macAccount/index');
 const refOrder = appRequire('plugins/webgui_ref/order');
 const refUser = appRequire('plugins/webgui_ref/user');
 const flowPack = appRequire('plugins/webgui_order/flowPack');
+const accountFlow = appRequire('plugins/account/accountFlow');
 
 exports.getAccount = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
@@ -107,6 +108,7 @@ exports.getOneAccount = async (req, res) => {
         accountInfo.publicKey = accountInfo.key;
       }
     }
+    await accountFlow.edit(accountInfo.id);
     return res.send(accountInfo);
   } catch(err) {
     console.log(err);
