@@ -80,6 +80,7 @@ db: 'webgui.sqlite'
 # 从 0.30 开始需要配置 redis
 redis:
   host: 'your.redis.host'
+  port: 6379
   password: 'yourRedisPassword'
   db: 0
 ```

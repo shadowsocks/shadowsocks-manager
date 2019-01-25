@@ -88,7 +88,7 @@ const loop = function(fn, name, time = 300, multiCore = false) {
       } catch(err) {
         logger.error(err);
         await redis.del(`Cron:${ name }`);
-        sleep(3000 * (+process.env.numCPUs));
+        await sleep(3000 * (+process.env.numCPUs));
         await fnWithRedis();
       }
     } else {
@@ -96,7 +96,7 @@ const loop = function(fn, name, time = 300, multiCore = false) {
       if(ttl === -1) {
         await redis.expire(`Cron:${ name }`, time);
       }
-      sleep(3000 * (+process.env.numCPUs));
+      await sleep(3000 * (+process.env.numCPUs));
       await fnWithRedis();
     }
   };
