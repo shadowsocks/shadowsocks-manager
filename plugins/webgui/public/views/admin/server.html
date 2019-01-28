@@ -7,9 +7,9 @@
                         <span class="md-title">{{server.name}}<span ng-show="server.status === -1" style="color: #a33;">&nbsp;离线</span><span ng-show="server.status !== -1 && !server.isGfw" style="color: #3a3;">&nbsp;{{server.status}}</span><span ng-show="server.status !== -1 && server.isGfw" style="color: #a33;">&nbsp;{{server.status}}</span><span style="color: #999;">&nbsp;{{ online[server.id] }}</span></span>
                         <span class="md-subhead">{{server.host.split(':')[0]}}:{{server.port}}</span>
                     </div>
-                    <div>
+                    <!-- <div>
                         <md-icon>chevron_right</md-icon>
-                    </div>
+                    </div> -->
                 </md-card-header-text>
             </md-card-header>
             <div layout="row" layout-align="center center" ng-if="serverChart.showChart" style="position: relative;">
