@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:10-alpine
 LABEL maintainer="gyteng <igyteng@gmail.com>"
 COPY ./shadowsocks-libev /tmp/repo
 RUN set -ex \

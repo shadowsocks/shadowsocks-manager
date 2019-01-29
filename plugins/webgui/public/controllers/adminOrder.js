@@ -9,6 +9,14 @@ app
     });
     $http.get('/api/admin/order').then(success => {
       $scope.orders = success.data;
+      $scope.groupOrders = [];
+      $scope.orders.forEach(order => {
+        if(!order.baseId) {
+          $scope.groupOrders.push([order]);
+        } else {
+          $scope.groupOrders[$scope.groupOrders.length - 1].push(order);
+        }
+      });
     });
     $scope.editOrder = id => {
       $state.go('admin.editOrder', { id });
@@ -16,6 +24,14 @@ app
     $scope.setFabButton(() => {
       $state.go('admin.newOrder');
     });
+    $scope.orderColor = order => {
+      if(order.baseId) {
+        return {
+          background: 'blue-50', 'border-color': 'blue-300',
+        };
+      }
+      return {};
+    };
   }
 ])
 .controller('AdminNewOrderController', ['$scope', '$state', '$http', '$filter',
