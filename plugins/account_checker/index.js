@@ -12,6 +12,7 @@ let acConfig = {};
 if(config.plugins.account_checker && config.plugins.account_checker.use) {
   acConfig = config.plugins.account_checker;
 }
+const speed = acConfig.speed || 5;
 const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
 
@@ -426,7 +427,7 @@ cron.minute(async () => {
             const datas = await knex('account_flow').select()
             .where('nextCheckTime', '<', Date.now())
             .orderBy('nextCheckTime', 'desc')
-            .limit(200)
+            // .limit(200)
             .offset(0);
             accounts = [...accounts, ...datas];
           } catch(err) {
@@ -463,12 +464,20 @@ cron.minute(async () => {
       if(accountLeft) {
         const serverId = +accountLeft.split(':')[0];
         const accountId = +accountLeft.split(':')[1];
+        const start = Date.now();
         await checkAccount(serverId, accountId).catch();
+        if(Date.now() - start < (1000 / speed)) {
+          await sleep(1000 / speed - (Date.now() - start));
+        }
       }
       if(accountRight) {
         const serverId = +accountRight.split(':')[0];
         const accountId = +accountRight.split(':')[1];
+        const start = Date.now();
         await checkAccount(serverId, accountId).catch();
+        if(Date.now() - start < (1000 / speed)) {
+          await sleep(1000 / speed - (Date.now() - start));
+        }
       }
     }
   } else {
