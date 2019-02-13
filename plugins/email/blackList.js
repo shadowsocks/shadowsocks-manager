@@ -1,4 +1,6 @@
 const blackList = [
+  '@mailprotech.com',
+  '@mail-apps.com',
   '@mail.bccto.me',
   '@braun4email.com',
   '@linshiyouxiang.net',
