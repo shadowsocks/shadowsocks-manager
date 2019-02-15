@@ -6,7 +6,26 @@ const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
+const runCommand = async cmd => {
+  const exec = require('child_process').exec;
+  return new Promise((resolve, reject) => {
+    exec(cmd, (err, stdout, stderr) => {
+      if(err) {
+        return reject(stderr);
+      } else {
+        return resolve(stdout);
+      }
+    });
+  });
+};
+
 const addAccount = async (type, options) => {
+  let key;
+  try {
+    const privateKey = await runCommand('wg genkey');
+    const publicKey = await runCommand(`echo '${ privateKey.trim() }' | wg pubkey`);
+    key = publicKey.trim() + ':' + privateKey.trim();
+  } catch(err) {}
   if(!options.hasOwnProperty('active')) { options.active = 1; }
   if(type === 6 || type === 7) {
     type = 3;
@@ -21,6 +40,7 @@ const addAccount = async (type, options) => {
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: 0,
+      key,
     });
     await accountFlow.add(accountId);
     return accountId;
@@ -42,6 +62,7 @@ const addAccount = async (type, options) => {
       autoRemoveDelay: options.autoRemoveDelay || 0,
       multiServerFlow: options.multiServerFlow || 0,
       active: options.active,
+      key,
     });
     await accountFlow.add(accountId);
     return accountId;
