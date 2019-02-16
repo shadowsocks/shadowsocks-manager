@@ -459,6 +459,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
 ]).controller('AdminRefCodeListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
   ($scope, $http, $timeout, $state, $mdMedia) => {
     $scope.setTitle('邀请码列表');
+    $scope.setMenuSearchButton('search');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.refSetting');
     });
@@ -472,13 +473,17 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       if($mdMedia('md')) { return 60; }
       if($mdMedia('gt-md')) { return 80; }
     };
-    $scope.getCode = () => {
+    $scope.getCode = search => {
       $scope.isCodeLoading = true;
       $http.get('/api/admin/setting/ref/code', { params: {
         page: $scope.currentPage,
         pageSize: getPageSize(),
-      } }).then(success => success.data).then(success => {
+        search,
+      } }).then(success => success.data)
+      .then(success => {
         $scope.total = success.total;
+        if(!search && $scope.menuSearch.text) { return; }
+        if(search && search !== $scope.menuSearch.text) { return; }
         success.code.forEach(f => {
           $scope.code.push(f);
         });
@@ -491,10 +496,28 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       }).catch(err => {
         if($state.current.name !== 'admin.refCodeList') { return; }
         $timeout(() => {
-          $scope.getCode();
+          $scope.getCode(search);
         }, 5000);
       });
     };
+
+    $scope.$on('cancelSearch', () => {
+      $scope.code = [];
+      $scope.currentPage = 1;
+      $scope.isCodePageFinish = false;
+      $scope.getCode();
+    });
+    let timeoutPromise;
+    $scope.$watch('menuSearch.text', () => {
+      if(!$scope.menuSearch.text) { return; }
+      timeoutPromise && $timeout.cancel(timeoutPromise);
+      timeoutPromise = $timeout(() => {
+        $scope.code = [];
+        $scope.currentPage = 1;
+        $scope.isCodePageFinish = false;
+        $scope.getCode($scope.menuSearch.text);
+      }, 500);
+    });
 
     $scope.view = inview => {
       if(!inview || $scope.isCodeLoading || $scope.isCodePageFinish) { return; }

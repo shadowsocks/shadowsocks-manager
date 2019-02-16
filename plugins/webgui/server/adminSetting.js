@@ -298,9 +298,11 @@ exports.modifyRef = (req, res) => {
 exports.getRefCode = (req, res) => {
   const page = +req.query.page || 1;
   const pageSize = +req.query.pageSize || 20;
+  const search = req.query.search;
   refAdmin.getRefCodeAndPaging({
     page,
     pageSize,
+    search,
   }).then(success => {
     return res.send(success);
   }).catch(err => {

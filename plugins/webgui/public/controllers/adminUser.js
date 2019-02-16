@@ -28,7 +28,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       if($mdMedia('md')) { return 60; }
       if($mdMedia('gt-md')) { return 80; }
     };
-    $scope.getUsers = (search) => {
+    $scope.getUsers = search => {
       $scope.isUserLoading = true;
       adminApi.getUser({
         page: $scope.currentPage,
