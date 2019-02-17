@@ -1,0 +1,47 @@
+# WireGuard 节点
+
+## 安装 WireGuard
+
+```shell
+sudo add-apt-repository ppa:wireguard/wireguard
+sudo apt update
+sudo apt install wireguard -y
+```
+
+## 配置路由表
+
+假设网卡名为`ens3`
+
+```
+sudo iptables -t filter -A FORWARD -i wg0 -j ACCEPT
+sudo iptables -t filter -A FORWARD -o wg0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wg0 -o ens3 -j ACCEPT
+sudo iptables -A FORWARD -i ens3 -o wg0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
+```
+
+## 增加配置文件
+
+```
+[Interface]
+Address = 10.100.0.1/16 
+PrivateKey = 8REGzY7PA3p81VN9KQ4mKM7d8oFZBu2wD7Pbs8ppPkW= 
+ListenPort = 50000
+```
+
+## 启动 WireGuard
+
+```shell
+sudo wg-quick up ./wg0.conf
+```
+
+## 启动 s 端
+
+使用[此项目](https://github.com/gyteng/shadowsocks-manager-wireguard)作为 s 端即可
+```
+node index --gateway 10.100.0.1
+           --manager 0.0.0.0:6789
+           --password 123456
+           --interface wg0
+           --db /your/data.json
+```

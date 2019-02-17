@@ -6,6 +6,7 @@
 
 * 进阶
   * [高级配置](/advanced)
+  * [WireGuard节点](/wireguard)
   * [支付](/pay)
   * [首页皮肤](/skin)
 
