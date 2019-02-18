@@ -193,3 +193,6 @@ If you find this project helpful, please consider making a donation:
 
 * WeChat Pay  
 <img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/wechat.png" width="160">
+
+* Paypal
+[Donate link](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UQZLYGCTSLGQ&source=url)

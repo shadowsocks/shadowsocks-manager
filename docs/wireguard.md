@@ -20,6 +20,14 @@ sudo iptables -A FORWARD -i ens3 -o wg0 -m state --state ESTABLISHED,RELATED -j 
 sudo iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
 ```
 
+## 生成密钥
+
+```shell
+wg genkey > privatekey
+wg pubkey < privatekey > publickey
+```
+其中 private key 写在配置文件里，public key 在 web 端增加服务器时填写
+
 ## 增加配置文件
 
 ```
