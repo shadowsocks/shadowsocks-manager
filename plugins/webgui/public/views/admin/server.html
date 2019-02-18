@@ -1,5 +1,5 @@
 <div layout="row" layout-wrap>
-    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="server in servers track by server.id">
+    <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="server in servers track by server.id" ng-show="showServer(server.name)">
         <md-card ng-click="id === 1 && toServerPage(server.id)">
             <md-card-header>
                 <md-card-header-text layout="row" layout-align="space-between center">

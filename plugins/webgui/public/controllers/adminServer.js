@@ -3,6 +3,7 @@ const app = angular.module('app');
 app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout', '$interval', 'serverChartDialog',
   ($scope, $http, $state, moment, $localStorage, adminApi, $timeout, $interval, serverChartDialog) => {
     $scope.setTitle('服务器');
+    $scope.setMenuSearchButton('search');
     $scope.setMenuRightButton('timeline');
     if(!$localStorage.admin.serverChart) {
       $localStorage.admin.serverChart = { showFlow: true, showChart: true };
@@ -147,6 +148,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addServer');
     } : null);
+    $scope.showServer = serverName => {
+      if(!$scope.menuSearch.text) { return true; }
+      return serverName.toString().includes($scope.menuSearch.text);
+    };
   }
 ])
 .controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$localStorage', '$mdMedia', '$interval', 'banDialog',
