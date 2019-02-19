@@ -30,26 +30,26 @@
                 <div flex>
                     <form name="newAccountForm" ng-if="!accountData.accountForNewUser.fromOrder">
                         <md-input-container class="md-block" style="height: 54px;">
-                            <label>类型</label>
+                            <label>{{ '类型' | translate}}</label>
                             <md-select ng-model="accountData.accountForNewUser.type">
-                                <md-option ng-value="2">周</md-option>
-                                <md-option ng-value="3">月</md-option>
-                                <md-option ng-value="4">天</md-option>
-                                <md-option ng-value="5">小时</md-option>
+                                <md-option ng-value="2">{{ '周' | translate}}</md-option>
+                                <md-option ng-value="3">{{ '月' | translate}}</md-option>
+                                <md-option ng-value="4">{{ '天' | translate}}</md-option>
+                                <md-option ng-value="5">{{ '小时' | translate}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>流量(MB)</label>
+                            <label>{{ '流量(MB)' | translate}}</label>
                             <input type="number" required name="flow" ng-model="accountData.accountForNewUser.flow">
                         </md-input-container>
                         <md-input-container class="md-block">
-                            <label>周期</label>
+                            <label>{{ '周期' | translate}}</label>
                             <input type="number" required name="limit" ng-model="accountData.accountForNewUser.limit">
                         </md-input-container>
                     </form>
                     <form name="newAccountForm" ng-if="accountData.accountForNewUser.fromOrder">
                         <md-input-container class="md-block" style="height: 54px;">
-                            <label>类型</label>
+                            <label>{{ '类型' | translate}}</label>
                             <md-select ng-model="accountData.accountForNewUser.type">
                                 <md-option ng-value="order.id" ng-repeat="order in orders">{{ order.name }}</md-option>
                             </md-select>
@@ -133,11 +133,11 @@
                     <div flex>
                         <form name="portForm" layout="column" layout-gt-sm="row">
                             <md-input-container class="md-block" flex-gt-sm="50">
-                                <label>起始端口</label>
+                                <label>{{ '起始端口' | translate}}</label>
                                 <input type="number" required name="startPort" ng-model="accountData.port.start">
                             </md-input-container>
                             <md-input-container class="md-block" flex-gt-sm="50">
-                                <label>结束端口</label>
+                                <label>{{ '结束端口' | translate}}</label>
                                 <input type="number" required name="endPort" ng-model="accountData.port.end">
                             </md-input-container>
                         </form>
