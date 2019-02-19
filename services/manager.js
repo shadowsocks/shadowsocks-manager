@@ -31,12 +31,12 @@ const checkData = async (receive) => {
   const buffer = receive.data;
   let length = 0;
   let data;
-  if (buffer.length < 2) {
+  if (buffer.length < 4) {
     return;
   }
-  length = buffer[0] * 256 + buffer[1];
-  if (buffer.length >= length + 2) {
-    data = buffer.slice(2, length + 2);
+  length = buffer[0] * 256 * 256 * 256 + buffer[1] * 256 * 256 + buffer[2] * 256 + buffer[3];
+  if (buffer.length >= length + 4) {
+    data = buffer.slice(4, length + 4);
     const message = JSON.parse(data.toString());
     return message;
   } else {
