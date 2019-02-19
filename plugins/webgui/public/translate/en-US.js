@@ -98,7 +98,7 @@ module.exports = {
   '不限时': 'unlimited',
   '最近连接：': 'Last Connected:',
   '备注：': 'Comments:',
-  '复制链接': 'copy links',
+  '复制链接': 'Copy Links',
   '显示WireGuard配置': 'Show WireGuard Configuration',
   '时': 'hour',
   '天': 'day',
@@ -167,7 +167,7 @@ module.exports = {
 
   '地址': 'IP Address',
   '地址不能为空': 'IP Address cannot be empty',
-  '公钥': 'Public key',
+  '公钥': 'Public Key',
   '网段': 'Network Segment',
   'WireGuard端口': 'WireGuard Port',
   '加密方式': 'Encryption Method',
@@ -219,6 +219,11 @@ module.exports = {
   '自动激活': 'Automatic Activate',
   '将改动变更到已有的账号': 'Save Changes To Existing Accounts',
   '服务器': 'Servers',
+
+  '订单名称': 'Order Name',
+
+  '最大邀请次数': 'Maximum of Referral',
+  '访问次数': 'Views',
 
   '修改密码': 'Change Password',
   '绑定Telegram': 'Binding Telegram',
