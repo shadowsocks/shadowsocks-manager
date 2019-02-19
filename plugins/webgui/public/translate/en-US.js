@@ -25,6 +25,7 @@ module.exports = {
   '关闭': 'Close',
   '下一步': 'Next',
   '无效': 'not valid',
+  '已发送': 'has been sent',
 
   '服务器': 'Servers',
   '用户': 'Users',
