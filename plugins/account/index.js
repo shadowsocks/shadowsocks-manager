@@ -6,7 +6,26 @@ const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 
+const runCommand = async cmd => {
+  const exec = require('child_process').exec;
+  return new Promise((resolve, reject) => {
+    exec(cmd, (err, stdout, stderr) => {
+      if(err) {
+        return reject(stderr);
+      } else {
+        return resolve(stdout);
+      }
+    });
+  });
+};
+
 const addAccount = async (type, options) => {
+  let key;
+  try {
+    const privateKey = await runCommand('wg genkey');
+    const publicKey = await runCommand(`echo '${ privateKey.trim() }' | wg pubkey`);
+    key = publicKey.trim() + ':' + privateKey.trim();
+  } catch(err) {}
   if(!options.hasOwnProperty('active')) { options.active = 1; }
   if(type === 6 || type === 7) {
     type = 3;
@@ -21,9 +40,10 @@ const addAccount = async (type, options) => {
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: 0,
+      key,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   } else if (type >= 2 && type <= 5) {
     const [ accountId ] = await knex('account_plugin').insert({
       type,
@@ -42,9 +62,10 @@ const addAccount = async (type, options) => {
       autoRemoveDelay: options.autoRemoveDelay || 0,
       multiServerFlow: options.multiServerFlow || 0,
       active: options.active,
+      key,
     });
     await accountFlow.add(accountId);
-    return;
+    return accountId;
   }
 };
 
@@ -777,6 +798,8 @@ const getAccountForSubscribe = async (token, ip) => {
   return { server: validServers, account };
 };
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
+
 const editMultiAccounts = async (orderId, update) => {
   const accounts = await knex('account_plugin').where({ orderId });
   const updateData = {};
@@ -795,6 +818,7 @@ const editMultiAccounts = async (orderId, update) => {
     if(Object.keys(updateData).length === 0) { break; }
     await knex('account_plugin').update(updateData).where({ id: account.id });
     await accountFlow.edit(account.id);
+    await sleep(500);
   }
 };
 
@@ -844,9 +868,9 @@ const getAccountAndPaging = async (opt) => {
   .where(where);
 
   if(!filter.hasUser && filter.noUser) {
-    account = await account.whereNotNull('user.id');
-  } else if(filter.hasUser && !filter.noUser) {
     account = await account.whereNull('user.id');
+  } else if(filter.hasUser && !filter.noUser) {
+    account = await account.whereNotNull('user.id');
   } else {
     account = await account;
   }

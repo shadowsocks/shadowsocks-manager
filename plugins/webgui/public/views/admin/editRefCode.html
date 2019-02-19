@@ -1,7 +1,7 @@
 <md-card>
     <md-card-title>
         <md-card-title-text>
-            <span class="md-headline">{{ refCode.code }}<md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(refCode.code) }}" ngclipboard-success="clipboardSuccess(e);">复制链接</md-button></span>
+            <span class="md-headline">{{ refCode.code }}<md-button class="md-primary" ngclipboard data-clipboard-text="{{ getRefUrl(refCode.code) }}" ngclipboard-success="clipboardSuccess(e);">{{ '复制链接' | translate }}</md-button></span>
         </md-card-title-text>
     </md-card-title>
     <md-card-content>

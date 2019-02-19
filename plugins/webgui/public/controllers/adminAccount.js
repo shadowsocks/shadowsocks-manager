@@ -147,8 +147,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       }
       $scope.getServerPortData($scope.servers[0], $scope.accountId);
       $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
-    }).catch(err => {
-      console.log(err);
+    }).catch(() => {
       $state.go('admin.account');
     });
     let currentServerId;
@@ -514,10 +513,10 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: $scope.account.accountServer ? server : null,
+        server: ($scope.account.accountServer && +$scope.account.type > 1) ? server : null,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
-        $state.go('admin.account');
+        $state.go('admin.accountPage', { accountId: success.data.id });
       }).catch(() => {
         alertDialog.show('添加账号失败', '确定');
       });
@@ -669,7 +668,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: $scope.account.accountServer ? server : null,
+        server: ($scope.account.accountServer && +$scope.account.type > 1) ? server : null,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });

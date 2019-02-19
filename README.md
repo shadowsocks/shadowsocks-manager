@@ -21,12 +21,12 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## FreeAccount Demo:
 
-[https://free.gyteng.com](https://free.gyteng.com)
+[https://free.gyteng.com](https://free1.gyteng.com)
 
 
 ## Dependencies
 
-Node.js 8.*
+Node.js 10.*
 
 ## Install
 
@@ -193,3 +193,6 @@ If you find this project helpful, please consider making a donation:
 
 * WeChat Pay  
 <img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/wechat.png" width="160">
+
+* Paypal  
+[Donate link](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UQZLYGCTSLGQ&source=url)

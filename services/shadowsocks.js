@@ -1,6 +1,8 @@
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
-const cron = appRequire('init/cron');
+const later = require('later');
+later.date.localTime();
+// const cron = appRequire('init/cron');
 const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 const version = appRequire('package').version;
@@ -205,11 +207,16 @@ const compareWithLastFlow = async (flow, lastFlow) => {
 
 connect();
 startUp();
-cron.minute(() => {
+later.setInterval(() => {
   resend();
   sendPing();
   getGfwStatus();
-}, 1);
+}, later.parse.text('every 1 mins'));
+// cron.minute(() => {
+//   resend();
+//   sendPing();
+//   getGfwStatus();
+// }, 1);
 
 const checkPortRange = (port) => {
   if(!config.shadowsocks.portRange) { return true; }

@@ -108,9 +108,25 @@ const server = async serverId => {
   }
 };
 
+const updateFlow = async (serverId, accountId, flow) => {
+  const exists = await knex('account_flow').where({
+    serverId,
+    accountId,
+  }).then(success => success[0]);
+  if(!exists) { return; }
+  await knex('account_flow').update({
+    flow: exists.flow + flow,
+    updateTime: Date.now(),
+  }).where({
+    serverId,
+    accountId,
+  });
+};
+
 exports.add = add;
 exports.del = del;
 exports.pwd = pwd;
 exports.edit = edit;
 exports.addServer = server;
 exports.editServer = server;
+exports.updateFlow = updateFlow;

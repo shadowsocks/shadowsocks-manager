@@ -3,6 +3,7 @@ const app = angular.module('app');
 app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', '$localStorage', 'adminApi', '$timeout', '$interval', 'serverChartDialog',
   ($scope, $http, $state, moment, $localStorage, adminApi, $timeout, $interval, serverChartDialog) => {
     $scope.setTitle('服务器');
+    $scope.setMenuSearchButton('search');
     $scope.setMenuRightButton('timeline');
     if(!$localStorage.admin.serverChart) {
       $localStorage.admin.serverChart = { showFlow: true, showChart: true };
@@ -147,14 +148,23 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addServer');
     } : null);
+    $scope.showServer = serverName => {
+      if(!$scope.menuSearch.text) { return true; }
+      return serverName.toString().includes($scope.menuSearch.text);
+    };
   }
 ])
-.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$q', '$mdMedia', '$interval', 'banDialog',
-  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $q, $mdMedia, $interval, banDialog) => {
+.controller('AdminServerPageController', ['$scope', '$state', '$stateParams', '$http', 'moment', '$mdDialog', 'adminApi', '$localStorage', '$mdMedia', '$interval', 'banDialog',
+  ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $localStorage, $mdMedia, $interval, banDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     const serverId = $stateParams.serverId;
-    $scope.accountFilter = 'all';
+    if(!$localStorage.admin.serverPortFilter) {
+      $localStorage.admin.serverPortFilter = {
+        value: 'all',
+      };
+    }
+    $scope.accountFilter = $localStorage.admin.serverPortFilter;
     $scope.onlineAccount = [];
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
@@ -362,9 +372,11 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.matchPort = (account, searchStr) => {
       let filter = true;
       let search = true;
-      if($scope.accountFilter === 'all') {
+      if($scope.accountFilter.value === 'all') {
         filter = true;
-      } else if($scope.accountFilter === 'red') {
+      } else if($scope.accountFilter.value === 'white') {
+        filter = account.exists;
+      } else if($scope.accountFilter.value === 'red') {
         filter = !account.exists;
       } else {
         filter = $scope.onlineAccount.includes(account.id);
@@ -395,6 +407,20 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         
     //   }, 500);
     // });
+    let serverIds = [ serverId ];
+    $http.get('/api/admin/server').then(success => {
+      serverIds = success.data.map(s => s.id);
+    });
+    $scope.nextServer = () => {
+      const currentIndex = serverIds.indexOf(+serverId);
+      const nextServerId = serverIds[(currentIndex + 1) % serverIds.length];
+      $state.go('admin.serverPage', { serverId: nextServerId });
+    };
+    $scope.prevServer = () => {
+      const currentIndex = serverIds.indexOf(+serverId);
+      const prevServerId = serverIds[(currentIndex - 1 + serverIds.length) % serverIds.length];
+      $state.go('admin.serverPage', { serverId: prevServerId });
+    };
   }
 ])
 .controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
@@ -414,8 +440,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       'aes-256-gcm',
       'aes-192-gcm',
       'aes-128-gcm',
+      'rc4-md5',
+      'bf-cfb',
+      'salsa20',
+      'chacha20',
       'chacha20-ietf',
-      'chacha20-ietf-poly1305'
+      'chacha20-ietf-poly1305',
+      'xchacha20-ietf-poly1305'
     ];
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;
@@ -476,8 +507,13 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       'aes-256-gcm',
       'aes-192-gcm',
       'aes-128-gcm',
+      'rc4-md5',
+      'bf-cfb',
+      'salsa20',
+      'chacha20',
       'chacha20-ietf',
-      'chacha20-ietf-poly1305'
+      'chacha20-ietf-poly1305',
+      'xchacha20-ietf-poly1305'
     ];
     $scope.setMethod = () => {
       $scope.server.method = $scope.methodSearch;

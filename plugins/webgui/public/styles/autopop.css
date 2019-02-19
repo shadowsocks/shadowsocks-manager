@@ -1,0 +1,8 @@
+@media (max-width: 960px) {
+  .auto-pop-dialog-size {
+    height: 100%;
+  }
+  .auto-pop-content-size {
+    height: 100%;
+  }
+}

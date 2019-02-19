@@ -1,4 +1,4 @@
-<md-dialog aria-label="order dialog" ng-style="setDialogWidth()">
+<md-dialog aria-label="order dialog" ng-style="setDialogWidth()" class="auto-pop-dialog-size">
   <md-toolbar>
       <div class="md-toolbar-tools">
           <h2>{{ publicInfo.notices[publicInfo.index].title }}</h2>
@@ -8,9 +8,12 @@
           </md-button>
       </div>
   </md-toolbar>
-  <md-dialog-content>
+  <md-dialog-content class="auto-pop-content-size">
       <div class="md-dialog-content">
           <div marked="publicInfo.notices[publicInfo.index].content"></div>
       </div>
   </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="publicInfo.next()" class="md-primary">{{ publicInfo.index < publicInfo.notices.length - 1 ? '下一条' : '关闭' }}</md-button>
+  </md-dialog-actions>
 </md-dialog>

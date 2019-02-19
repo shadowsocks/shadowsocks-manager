@@ -16,6 +16,7 @@ const crypto = require('crypto');
 const flowPack = appRequire('plugins/webgui_order/flowPack');
 const alipayPlugin = appRequire('plugins/alipay/index');
 const macAccountPlugin = appRequire('plugins/macAccount/index');
+const accountFlow = appRequire('plugins/account/accountFlow');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -52,6 +53,7 @@ exports.getAccount = async (req, res) => {
           account.publicKey = account.key;
         }
       }
+      await accountFlow.edit(account.id);
     }
     res.send(accounts);
   } catch (err) {

@@ -1,6 +1,21 @@
-<div layout="row" layout-wrap>
+<!-- <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in orders track by $index">
-        <md-card ng-click="editOrder(order.id)">
+        <md-card ng-click="editOrder(order.id)" md-colors="{{ orderColor(order) }}">
+            <md-card-content>
+                <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
+                    <div flex="80">{{ order.name }}</div>
+                    <div flex="20" style="color: #666; font-size: 0.9em; text-align: right;">{{ order.accountNumber }}</div>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>
+<div style="height: 100px;"></div> -->
+
+<div layout="row" layout-wrap ng-repeat="orders in groupOrders">
+    <div layout="row" flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in orders track by $index">
+        <div hide-gt-xs style="width: 25px; height: 10px;" ng-if="order.baseId"></div>
+        <md-card flex ng-click="editOrder(order.id)" md-colors="{{ orderColor(order) }}">
             <md-card-content>
                 <div layout="row" layout-align="space-between center" style="word-break: keep-all; white-space:nowrap; overflow: hidden; text-overflow:ellipsis;">
                     <div flex="80">{{ order.name }}</div>

@@ -6,7 +6,7 @@
 
   可以采用`libev`或`python`版本
 
-2. 安装 Node.js 8.x
+2. 安装 Node.js 10.*
 
   建议使用[`nodesource`](https://github.com/nodesource/distributions)里边的方式安装
 

@@ -9,3 +9,7 @@
 2. 微信
 
 ![wechat](/_media/wechat.jpg ':size=480')
+
+3. Paypal
+
+[Donate link](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UQZLYGCTSLGQ&source=url)
