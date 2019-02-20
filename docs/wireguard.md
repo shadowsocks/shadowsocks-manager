@@ -1,5 +1,7 @@
 # WireGuard 节点
 
+虽然项目名称为`shadowsocks-manager`，同样支持 WireGuard 做节点
+
 ## 安装 WireGuard
 
 ```shell
@@ -7,6 +9,8 @@ sudo add-apt-repository ppa:wireguard/wireguard
 sudo apt update
 sudo apt install wireguard -y
 ```
+
+!> Web 端也需要安装
 
 ## 配置路由表
 
@@ -47,9 +51,9 @@ sudo wg-quick up ./wg0.conf
 
 使用[此项目](https://github.com/gyteng/shadowsocks-manager-wireguard)作为 s 端即可
 ```
-node index --gateway 10.100.0.1
-           --manager 0.0.0.0:6789
-           --password 123456
-           --interface wg0
+node index --gateway 10.100.0.1 \
+           --manager 0.0.0.0:6789 \
+           --password 123456 \
+           --interface wg0 \
            --db /your/data.json
 ```
