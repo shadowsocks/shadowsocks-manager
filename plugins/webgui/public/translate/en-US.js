@@ -207,6 +207,30 @@ module.exports = {
   '停止': 'Stopped',
   '在线': 'Online',
 
+  '请添加 Telegram 账号': 'Please Add Telegram Account',
+  '完成绑定': 'Finish Bind',
+  '已绑定': 'Bound',
+  '解除绑定': 'Unbind',
+
+  '该页面尚未完工': 'This page is unfinished',
+
+  '个用户': 'Users',
+
+  '邀请人': 'Referrer',
+  '发送邮件': 'Send Mail',
+  '账号': 'Account',
+  'MAC账号': 'MAC Account',
+  '邀请用户': 'Invited Users',
+  '充值码订单': 'Recharge Code Orders',
+  'Ref订单': 'Referral Orders',
+
+  '用户ID ↑': 'User ID ↑',
+  '上次登录 ↑': 'Last Login Time ↑',
+  '用户ID ↓': 'User ID ↓',
+  '上次登录 ↓': 'Last Login Time ↓',
+  '用户类型：': 'User Type:',
+  '分组：': 'Group:',
+
 
   '修改密码': 'Change Password',
   '绑定Telegram': 'Binding Telegram',
@@ -250,13 +274,12 @@ module.exports = {
   '下一步': 'Next',
 
   '用户': 'Users',
-  '账号': 'Accounts',
+  '账户': 'Accounts',
   '订单': 'Orders',
   '设置': 'Settings',
   '退出': 'Exit',
 
   '我的账号': 'My account',
-  '账号': 'Account',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
 
