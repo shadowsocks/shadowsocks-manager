@@ -4,7 +4,7 @@
         <md-divider></md-divider>
         <md-list-item layout="row">
             <div flex layout="row" layout-align="space-between center">
-                <div flex="40">开始时间：</div>
+                <div flex="40" translate>开始时间：</div>
                 <div flex="60" style="text-align:right">
                     <span style="font-size: 0.9em;">{{account.time | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ account.time | timeago }}</span>
                 </div>
@@ -44,7 +44,7 @@
         <md-divider></md-divider>
         <md-list-item layout="row">
             <div flex layout="row" layout-align="space-between center">
-                <div flex="40">到期时间：</div>
+                <div flex="40" translate>到期时间：</div>
                 <div flex="60" style="text-align:right">
                     <span style="font-size: 0.9em;">{{account.time + timeLimit[account.type] * account.limit | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{ account.time + timeLimit[account.type] * account.limit | timeago }}</span>
                 </div>
@@ -53,7 +53,7 @@
         <md-divider></md-divider>
         <md-list-item layout="row">
             <div flex layout="row" layout-align="space-between center">
-                <div flex="40">时长：</div>
+                <div flex="40" translate>时长：</div>
                 <div flex="60" style="text-align:right">
                     <span>{{ account.limit }}</span>
                 </div>
