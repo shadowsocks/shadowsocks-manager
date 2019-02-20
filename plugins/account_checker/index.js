@@ -361,11 +361,20 @@ cron.loop(
     try {
       await sleep(sleepTime);
       const servers = await knex('server').where({});
+      const totalAccounts = await knex('account_plugin').select([ 'id' ]);
       for(const server of servers) {
         await sleep(1000);
         await deleteExtraPorts(server);
       }
       await sleep(sleepTime);
+      if(servers.length * totalAccounts.length > 1000) {
+        const ids = await knex('account_flow')
+        .select(['id'])
+        .orderBy('id', 'ASC')
+        .limit(Math.ceil(servers.length * totalAccounts.length / 1000));
+        await knex('account_flow').delete()
+        .whereIn('id', ids.map(m => m.id));
+      }
 
       const accounts = await knex('account_plugin').select([
         'account_plugin.id as id',
@@ -415,69 +424,77 @@ cron.minute(async () => {
   const accountNumber = await knex('account_plugin').select(['id']).then(s => s.length);
   if(serverNumber * accountNumber > 300) {
     while(true) {
-      const accountLeft = await redis.lpop('CheckAccount:Queue');
-      const accountRight = await redis.rpop('CheckAccount:Queue');
-      const queueLength = await redis.llen('CheckAccount:Queue');
-      if(!accountLeft || queueLength < 10) {
-        const mark = await redis.setnx('CheckAccount:Mark', 1);
-        if(mark) {
-          redis.expire('CheckAccount:Mark', 5);
-          let accounts = [];
-          try {
-            const datas = await knex('account_flow').select()
-            .where('nextCheckTime', '<', Date.now())
-            .orderBy('nextCheckTime', 'desc')
-            // .limit(200)
-            .offset(0);
-            accounts = [...accounts, ...datas];
-          } catch(err) {
-            logger.error(err);
+      try {
+        const accountLeft = await redis.lpop('CheckAccount:Queue');
+        const accountRight = await redis.rpop('CheckAccount:Queue');
+        const queueLength = await redis.llen('CheckAccount:Queue');
+        if(!accountLeft || queueLength < 10) {
+          const mark = await redis.setnx('CheckAccount:Mark', 1);
+          if(mark) {
+            redis.expire('CheckAccount:Mark', 5);
+            let accounts = [];
+            try {
+              const datas = await knex('account_flow').select()
+              .where('nextCheckTime', '<', Date.now())
+              .orderBy('nextCheckTime', 'desc')
+              // .limit(200)
+              .offset(0);
+              accounts = [...accounts, ...datas];
+            } catch(err) {
+              logger.error(err);
+            }
+            try {
+              const datas = await knex('account_flow').select()
+              .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
+              .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
+              .whereNotIn('id', accounts.map(account => account.id))
+              .orderBy('updateTime', 'desc')
+              .limit(50)
+              .offset(0);
+              accounts = [...accounts, ...datas];
+            } catch(err) { logger.error(err); }
+            try {
+              datas = await knex('account_flow').select()
+              .whereNotIn('id', accounts.map(account => account.id))
+              .orderByRaw('rand()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
+              accounts = [...accounts, ...datas];
+            } catch(err) { }
+            try {
+              datas = await knex('account_flow').select()
+              .whereNotIn('id', accounts.map(account => account.id))
+              .orderByRaw('random()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
+              accounts = [...accounts, ...datas];
+            } catch(err) { }
+            if(accounts.length) {
+              logger.info(`Add [${ accounts.length }] elements to queue`);
+              await redis.lpush('CheckAccount:Queue', accounts.map(m => `${ m.serverId }:${ m.accountId }`));
+            }
+            redis.del('CheckAccount:Mark');
+            await sleep(5000);
+          };
+        }
+        if(accountLeft) {
+          const serverId = +accountLeft.split(':')[0];
+          const accountId = +accountLeft.split(':')[1];
+          const start = Date.now();
+          await checkAccount(serverId, accountId).catch();
+          if(Date.now() - start < (1000 / speed)) {
+            await sleep(1000 / speed - (Date.now() - start));
           }
-          try {
-            const datas = await knex('account_flow').select()
-            .where('updateTime', '>', Date.now() - 8 * 60 * 1000)
-            .where('checkFlowTime', '<', Date.now() - 10 * 60 * 1000)
-            .whereNotIn('id', accounts.map(account => account.id))
-            .orderBy('updateTime', 'desc')
-            .limit(50)
-            .offset(0);
-            accounts = [...accounts, ...datas];
-          } catch(err) { logger.error(err); }
-          try {
-            datas = await knex('account_flow').select()
-            .whereNotIn('id', accounts.map(account => account.id))
-            .orderByRaw('rand()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
-            accounts = [...accounts, ...datas];
-          } catch(err) { }
-          try {
-            datas = await knex('account_flow').select()
-            .whereNotIn('id', accounts.map(account => account.id))
-            .orderByRaw('random()').limit(accounts.length < 30 ? 35 - accounts.length : 5);
-            accounts = [...accounts, ...datas];
-          } catch(err) { }
-          logger.info(`Add [${ accounts.length }] elements to queue`);
-          await redis.lpush('CheckAccount:Queue', accounts.map(m => `${ m.serverId }:${ m.accountId }`));
-          redis.del('CheckAccount:Mark');
-          await sleep(5000);
-        };
-      }
-      if(accountLeft) {
-        const serverId = +accountLeft.split(':')[0];
-        const accountId = +accountLeft.split(':')[1];
-        const start = Date.now();
-        await checkAccount(serverId, accountId).catch();
-        if(Date.now() - start < (1000 / speed)) {
-          await sleep(1000 / speed - (Date.now() - start));
+        }
+        if(accountRight) {
+          const serverId = +accountRight.split(':')[0];
+          const accountId = +accountRight.split(':')[1];
+          const start = Date.now();
+          await checkAccount(serverId, accountId).catch();
+          if(Date.now() - start < (1000 / speed)) {
+            await sleep(1000 / speed - (Date.now() - start));
+          }
         }
       }
-      if(accountRight) {
-        const serverId = +accountRight.split(':')[0];
-        const accountId = +accountRight.split(':')[1];
-        const start = Date.now();
-        await checkAccount(serverId, accountId).catch();
-        if(Date.now() - start < (1000 / speed)) {
-          await sleep(1000 / speed - (Date.now() - start));
-        }
+      catch(err) {
+        logger.error(err);
+        await sleep(5000);
       }
     }
   } else {
