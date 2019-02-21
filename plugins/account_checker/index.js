@@ -90,12 +90,12 @@ const isExpired = (server, account) => {
         knex('account_plugin').delete().where({ id: account.id }).then();
       } else if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay >= Date.now()) {
         modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
-      } else {
-        modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
+      } else if(account.active && !account.autoRemove) {
+        modifyAccountFlow(server.id, account.id, Date.now() + randomInt(7 * 24 * 3600 * 1000));
       }
       return true;
     } else {
-      modifyAccountFlow(server.id, account.id, Date.now() + randomInt(7 * 24 * 3600 * 1000));
+      modifyAccountFlow(server.id, account.id, nextCheckTime);
       return false;
     }
   } else {
