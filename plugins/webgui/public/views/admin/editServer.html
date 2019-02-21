@@ -79,7 +79,7 @@
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block" ng-if="server.type === 'Shadowsocks'">
-                    <label translate>端口偏移</label>
+                    <label translate>端口偏移量</label>
                     <input type="number" required name="shift" ng-model="server.shift">
                     <div ng-messages="serverForm.shift.$error">
                         <div ng-message="required" translate>端口偏移量不能为空</div>

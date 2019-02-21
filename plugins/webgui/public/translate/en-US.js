@@ -19,7 +19,7 @@ module.exports = {
   '不限时': 'unlimited',
   '最近连接：': 'Last Connected:',
   '备注：': 'Comments:',
-  '复制链接': 'Copy Links',
+  '复制链接': 'Copy Link',
   '显示WireGuard配置': 'Show WireGuard Configuration',
   '时': 'hour',
   '天': 'day',
@@ -48,9 +48,9 @@ module.exports = {
 
   '排序方式：': 'Sort by:',
   '端口号 ↑': 'Port ↑',
-  '过期时间 ↑': 'Expire Date ↑',
+  '过期时间 ↑': 'Expiry Date ↑',
   '端口号 ↓': 'Port ↓',
-  '过期时间 ↓': 'Expire Date ↓',
+  '过期时间 ↓': 'Expiry Date ↓',
   '过滤条件：': 'Filter Condition:',
   '未过期': 'Unexpired',
   '已过期': 'Expired',
@@ -231,27 +231,81 @@ module.exports = {
   '用户类型：': 'User Type:',
   '分组：': 'Group:',
 
+  '请选择添加账号类型：': 'Select Account Type:',
+  '充值码': 'Recharge Code',  
+  '下一步': 'Next',
+  '请选择充值的端口：': 'Select Port:',
+  '新建端口': 'Add Port',
+  '邀请码数量': 'Referral Codes',
+
+  '数量': 'Total',
+  '创建失败': 'Creation Failed',
+
+  '下一条': 'Next',
+
+  '封禁时长：': 'Baned Duration:',
+  '分钟': 'Min',
+  '解封时间：': 'Unban Time:',
+
+  '注意：<br>此处修改的密码为Shadowsocks的密码': 'Caution:<br>Change your Shadowsocks password here',
+  '修改密码成功': 'Password has been updated',
+  '修改密码失败': 'Change password failed',
+
+  '修改备注失败': 'Change comments failed',
+
+  '最近连接IP': 'Recent Connected IP',
+  '本服务器：': 'Current Server:',
+  '暂无': 'none',
+  '所有服务器：': 'All Servers:',
+
+  '请选择语言：': 'Choose language:',
+
+  '订单详情': 'Order Detail',
+  '订单号：': 'Order ID:',
+  '金额：': 'Value:',
+  '用户名：': 'User:',
+  '创建时间：': 'Creation Time:',
+  '状态：': 'Status:',
+
+  '请选择支付方式：': 'Select Payment:',
+  '支付宝扫码支付': 'Alipay QR code Payment',
+  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
+  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
+  '请选择续费周期：': 'Select Service Duration:',
+  '有效期：': 'Validity Period:',
+  '支付成功': 'Pay successful',
+  '支付失败': 'Pay failed',
+  '详情': 'Detail',
+  '支付': 'Pay',
+  '返回': 'Back',
+
+  '显示流量': 'Show Data Usage',
+  '显示图表': 'Show Graph',
+
+  '邮件设置': 'Email Configuration',
+
+  'WireGuard配置': 'WireGuard Configuration',
+
+  '请选择订阅链接类型：': 'Select Subscribe Type:',
+  '将域名转换为IP地址': 'Convert Domain Name to IP Adress',
+  '显示流量信息': 'Show Data Usage Info',
+  '重置链接': 'Reset Link',
 
   '修改密码': 'Change Password',
   '绑定Telegram': 'Binding Telegram',
-  '修改密码成功': 'Change password success',
-  '修改密码失败': 'Change password fail',
+  
   '续费': 'Recharge',
   '或': 'or',
   '点击这里': 'Click Here',
   '付款立即开通帐号': 'to pay and get an account now.',
   '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
   '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
-  '请选择续费周期：': 'Service duration:',
   '一小时': '1 hour',
   '一天': '1 day',
   '一周': '1 week',
   '一个月': '1 month',
   '三个月': '3 months',
   '一年': '1 year',
-  '支付宝扫码支付': 'Alipay QR code Payment',
-  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
-  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
 
   '首页': 'Home',
   '登录': 'Sign in',
@@ -259,7 +313,6 @@ module.exports = {
   '找回密码': 'Reset password',
   '验证码': 'Verification code',
   '发送验证码': 'Get code',
-  '请选择语言：': 'Choose language:',
   '快速搭建':'Fast deployment',
   '易于配置':'Easy configuration',
   '官方标准':'Official API',
@@ -270,8 +323,6 @@ module.exports = {
   '验证码不能为空': 'Code cannot be empty',
   '验证码已发至邮箱': 'A verification code has been sent to your email address',
   '用户注册成功':'Successfully registered.',
-  
-  '下一步': 'Next',
 
   '用户': 'Users',
   '账户': 'Accounts',
@@ -283,16 +334,9 @@ module.exports = {
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
 
-  '订单号：': 'Order No.:',
-  '金额：': 'Sum:',
-  '用户名：': 'Username:',
-  '创建时间：': 'Creation Time:',
-  '状态：': 'Status:',
-
   '基本设置': 'Basic Settings',
   '公告管理': 'Announcement Management',
   '支付设置': 'Payment Configuration',
-  '邮件设置': 'Email Configuration',
   '账号设置': 'Account Configuration',
 
   '用户注册失败': 'Registration failed',
@@ -309,7 +353,6 @@ module.exports = {
   '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
   '请输入正确的邮箱地址': 'Invalid email address.',
 
-  '支付成功': 'Payment successful.',
   '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
   '系统错误': 'An error occurred.',
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',

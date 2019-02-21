@@ -6,7 +6,7 @@
         <div class="md-dialog-content">
             <div layout="row" layout-align="center center">
                 <md-input-container>
-                    <label>分组</label>
+                    <label translate>分组</label>
                     <md-select ng-model="publicInfo.groupId">
                         <md-option ng-repeat="group in groups" ng-value="group.id">
                             {{ group.name }}
@@ -18,7 +18,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
         <md-button class="md-primary" ng-click="publicInfo.setGroup()">
-            确定
+            {{ '确定' | translate}}
         </md-button>
     </md-dialog-actions>
 </md-dialog>
