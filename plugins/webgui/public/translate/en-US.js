@@ -305,7 +305,7 @@ module.exports = {
   '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
   '或': 'or',
   '点击这里': 'Click Here',
-  '付款立即开通帐号': 'To pay and get an account now',
+  '付款立即开通账号': 'To pay and get an account now',
   '激活账号': 'Activate account',
 
   '修改密码': 'Change Password',
@@ -327,6 +327,12 @@ module.exports = {
   '一年': '1 year',
 
   '首页': 'Home',
+  '用户': 'Users',
+  '账户': 'Accounts',
+  '订单': 'Orders',
+  '设置': 'Settings',
+  '退出': 'Exit',
+
   '注册': 'Sign up',
   '快速搭建':'Fast deployment',
   '易于配置':'Easy configuration',
@@ -338,20 +344,16 @@ module.exports = {
   '验证码已发至邮箱': 'A verification code has been sent to your email address',
   '用户注册成功':'Successfully registered.',
 
-  '用户': 'Users',
-  '账户': 'Accounts',
-  '订单': 'Orders',
-  '设置': 'Settings',
-  '退出': 'Exit',
-
   '我的账号': 'My account',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
 
   '基本设置': 'Basic Settings',
   '公告管理': 'Announcement Management',
-  '支付设置': 'Payment Configuration',
-  '账号设置': 'Account Configuration',
+  '群组管理': 'Group Settings',
+  '订单设置': 'Order Settings',
+  '支付设置': 'Payment Settings',
+  '账号设置': 'Account Settings',
 
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
@@ -375,4 +377,24 @@ module.exports = {
 
   '→ 登录': '→Sign In',
   '→ 注册': '→Sign Up',
+
+  '立即同步所有端口': 'Synchronize All Ports Now',
+  '添加用户': 'Add User',
+  '用户信息': 'User Info',
+  '添加账号': 'Add Account',
+  '编辑账号': 'Edit Account',
+  '新增群组': 'Add Group',
+  '修改群组': 'Edit Group',
+  '新增服务器': 'Add Server',
+  '编辑服务器': 'Edit Server',
+  '新增订单': 'Add Order',
+  '编辑订单': 'Edit Order',
+  '新增公告': 'Add Announcement',
+  '编辑公告': 'Edit Announcement',
+  '注册验证码': 'Verification code',
+  '密码重置': 'Reset password',
+  '订单完成': 'Order completed',
+  '邀请码管理': 'Referral Management',
+
+  '所有组': 'All Gruops'
 };

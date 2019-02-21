@@ -1,6 +1,6 @@
 <md-tabs md-dynamic-height md-border-bottom>
     <md-tab ng-repeat="payType in payTypes"
-            label="{{payType.name}}"
+            label="{{payType.name | translate}}"
             md-on-select="selectPayType(payType.name)">
     </md-tab>
 </md-tabs>
