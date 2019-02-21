@@ -67,7 +67,7 @@ const hasServer = (server, account) => {
   if(!account.server) { return true; }
   const serverList = JSON.parse(account.server);
   if(serverList.indexOf(server.id) >= 0) { return true; }
-  modifyAccountFlow(server.id, account.id, Date.now() + 24 * 3600 * 100);
+  modifyAccountFlow(server.id, account.id, Date.now() + randomInt(7 * 24 * 3600 * 1000));
   return false;
 };
 
@@ -90,14 +90,16 @@ const isExpired = (server, account) => {
         knex('account_plugin').delete().where({ id: account.id }).then();
       } else if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay >= Date.now()) {
         modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
+      } else {
+        modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
       }
       return true;
     } else {
-      modifyAccountFlow(server.id, account.id, nextCheckTime);
+      modifyAccountFlow(server.id, account.id, Date.now() + randomInt(7 * 24 * 3600 * 1000));
       return false;
     }
   } else {
-    modifyAccountFlow(server.id, account.id, Date.now() + 24 * 3600 * 100);
+    modifyAccountFlow(server.id, account.id, Date.now() + 24 * 3600 * 1000);
     return false;
   }
 };
