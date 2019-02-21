@@ -396,5 +396,5 @@ module.exports = {
   '订单完成': 'Order completed',
   '邀请码管理': 'Referral Management',
 
-  '所有组': 'All Gruops'
+  '所有组': 'All Groups'
 };
