@@ -13,7 +13,7 @@
         <md-card ng-click="toAccount(a.id)" style="position: relative;">
             <div style="position: absolute; background: rgba(255, 255, 255, 0.75); width: 100%; height: 100%; z-index: 1;" ng-if="a.active === 0">
                 <div style="width: 100%; height: 100%;" layout="row" layout-align="center center">
-                    <md-button class="md-raised md-warn" ng-click="activeAccount(a)"><span style="font-size: 1.5em; margin: 10px;">激活账号</span></md-button>
+                    <md-button class="md-raised md-warn" ng-click="activeAccount(a)"><span style="font-size: 1.5em; margin: 10px;">{{ '激活账号' | translate }}</span></md-button>
                 </div>
             </div>
             <md-card-header ng-style="isBlur(a)">
@@ -54,7 +54,7 @@
                             <md-divider ng-hide="isWG(a.serverInfo) || config.simple"></md-divider>
                             <md-list-item ng-hide="isWG(a.serverInfo) || config.simple">
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40">{{ '加密方式：' | translate }}</div>
+                                    <div flex="40" translate>加密方式：</div>
                                     <div flex="60" style="text-align:right">{{a.serverInfo.method}}</div>
                                 </div>
                             </md-list-item>
@@ -68,16 +68,16 @@
                             <md-divider ng-show="isWG(a.serverInfo) && !config.simple"></md-divider>
                             <md-list-item ng-show="isWG(a.serverInfo) && !config.simple">
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40">{{ '私钥：' | translate }}</div>
+                                    <div flex="40" translate>私钥：</div>
                                     <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em;">{{a.privateKey}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-show="isWG(a.serverInfo) && !config.simple"></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40">{{ '流量：'| translate }}</div>
+                                    <div flex="40" translate>流量：</div>
                                     <div flex="60" style="text-align:right">
-                                        <span ng-if="a.type === 1">{{ '不限量' | translate }}</span>
+                                        <span ng-if="a.type === 1" translate>不限量</span>
                                         <span ng-if="a.type >=2 && a.type <= 5">
                                             <span ng-style="a.isFlowOutOfLimit[a.serverInfo.id] ? {color: '#a33'} : {color: '#333'}">{{ a.serverPortFlow | flow }}</span> / {{ a.data.flow + a.data.flowPack | flow }}</span>
                                     </div>
@@ -86,16 +86,16 @@
                             <md-divider></md-divider>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40">{{ '流量倍率：' | translate }}</div>
+                                    <div flex="40" translate>流量倍率：</div>
                                     <div flex="60" style="text-align:right">{{ a.serverInfo.scale }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item ng-style="cycleStyle(a)">
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40">{{ '周期：' | translate }}</div>
+                                    <div flex="40" translate>周期：</div>
                                     <div flex="60" style="text-align:right">
-                                        <span ng-if="a.type === 1">{{ '无' | translate }}</span>
+                                        <span ng-if="a.type === 1" translate>无</span>
                                         <span ng-if="a.type >=2 && a.type <= 5"><span style="font-size: 0.9em;">{{a.data.from | date : 'yyyy-MM-dd HH:mm'}}</span><br><span style="font-size: 0.9em;">{{a.data.to | date : 'yyyy-MM-dd HH:mm'}}</span>
                                         </span>
                                     </div>
@@ -126,7 +126,7 @@
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>备注：</div>
-                                    <div flex="60" style="text-align:right">{{ a.serverInfo.comment || '无' }}</div>
+                                    <div flex="60" style="text-align:right">{{ a.serverInfo.comment || '无' | translate}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
@@ -138,11 +138,11 @@
                             <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo, a)" size="getQrCodeSize()"
                             layout-margin text="createQrCode(a.serverInfo, a)"
                             image="true"></qr>
-                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">{{ '复制链接' | translate}}</md-button>
                         </div>
                         <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
                             <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
-                            <md-button class="md-primary">显示WireGuard配置</md-button>
+                            <md-button class="md-primary">{{ '显示WireGuard配置' | translate}}</md-button>
                         </div>
                         <div hide-xs></div>
                     </div>

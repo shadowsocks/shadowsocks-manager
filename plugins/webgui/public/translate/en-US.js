@@ -286,20 +286,39 @@ module.exports = {
 
   'WireGuard配置': 'WireGuard Configuration',
 
-  '请选择订阅链接类型：': 'Select Subscribe Type:',
+  '请选择订阅链接类型：': 'Select Subscribe Link Type:',
   '将域名转换为IP地址': 'Convert Domain Name to IP Adress',
   '显示流量信息': 'Show Data Usage Info',
   '重置链接': 'Reset Link',
 
-  '修改密码': 'Change Password',
-  '绑定Telegram': 'Binding Telegram',
-  
-  '续费': 'Recharge',
+  '必须填写一个有效邮箱地址': 'Must Input a valid Email address',
+  '忘记密码': 'forget password',
+  '登录': 'Sign in',
+
+  '重置密码': 'Reset password',
+
+  '验证码': 'Verification code',
+  '验证码不能为空': 'Verification code cannot be empty',
+  '发送验证码': 'Get code',
+  '无效': 'invalid',
+
+  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
   '或': 'or',
   '点击这里': 'Click Here',
-  '付款立即开通帐号': 'to pay and get an account now.',
+  '付款立即开通帐号': 'To pay and get an account now',
+  '激活账号': 'Activate account',
+
+  '修改密码': 'Change Password',
+  '订阅链接': 'Subscribe Link',
+  '续费': 'Recharge',
+
+  '绑定Telegram': 'Binding Telegram',
+
   '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
-  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
+  '已邀请用户': 'Invited Users',
+
+  '并输入': 'and input',
+
   '一小时': '1 hour',
   '一天': '1 day',
   '一周': '1 week',
@@ -308,11 +327,7 @@ module.exports = {
   '一年': '1 year',
 
   '首页': 'Home',
-  '登录': 'Sign in',
   '注册': 'Sign up',
-  '找回密码': 'Reset password',
-  '验证码': 'Verification code',
-  '发送验证码': 'Get code',
   '快速搭建':'Fast deployment',
   '易于配置':'Easy configuration',
   '官方标准':'Official API',
@@ -320,7 +335,6 @@ module.exports = {
   '带有插件系统，仅需修改配置文件即可运行': 'Plugin-based, super-easy deployment',
   '支持libev和python版本的标准manager API': 'Supports standard manager API of both ss-libev and ss-python',
   '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
-  '验证码不能为空': 'Code cannot be empty',
   '验证码已发至邮箱': 'A verification code has been sent to your email address',
   '用户注册成功':'Successfully registered.',
 
@@ -358,4 +372,7 @@ module.exports = {
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
 
   '修改': 'Modify',
+
+  '→ 登录': '→Sign In',
+  '→ 注册': '→Sign Up',
 };
