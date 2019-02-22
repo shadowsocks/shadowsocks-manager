@@ -282,7 +282,7 @@ module.exports = {
   '显示流量': 'Show Data Usage',
   '显示图表': 'Show Graph',
 
-  '邮件设置': 'Email Configuration',
+  '邮件设置': 'Email Settings',
 
   'WireGuard配置': 'WireGuard Configuration',
 
@@ -350,7 +350,7 @@ module.exports = {
 
   '基本设置': 'Basic Settings',
   '公告管理': 'Announcement Management',
-  '群组管理': 'Group Settings',
+  '群组管理': 'Group Management',
   '订单设置': 'Order Settings',
   '支付设置': 'Payment Settings',
   '账号设置': 'Account Settings',
