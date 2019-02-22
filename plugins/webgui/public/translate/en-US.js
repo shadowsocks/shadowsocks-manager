@@ -391,10 +391,11 @@ module.exports = {
   '编辑订单': 'Edit Order',
   '新增公告': 'Add Announcement',
   '编辑公告': 'Edit Announcement',
+  '邀请码管理': 'Referral Management',
+
   '注册验证码': 'Verification code',
   '密码重置': 'Reset password',
   '订单完成': 'Order completed',
-  '邀请码管理': 'Referral Management',
 
   '所有组': 'All Groups',
 };

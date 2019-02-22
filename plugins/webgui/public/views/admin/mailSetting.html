@@ -3,8 +3,8 @@
         <md-list>
             <md-divider></md-divider>
             <md-list-item ng-repeat="mail in mails" ng-click="setEmail(mail.type)">
-                <div translate>
-                    {{ mail.name }}
+                <div>
+                    {{ mail.name | translate}}
                 </div>
                 <md-divider></md-divider>
             </md-list-item>
