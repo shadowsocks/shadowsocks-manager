@@ -45,7 +45,7 @@ if(cluster.isMaster) {
   });
   cluster.on('exit', (worker, code, signal) => {
     logger.error(`worker [${ worker.process.pid }][${ worker.id }] died`);
-    for(w in cluster.workers) {
+    for(let w in cluster.workers) {
       process.env.mainWorker = w;
       break;
     }
