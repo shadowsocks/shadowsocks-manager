@@ -66,7 +66,9 @@ const saveFlow = async () => {
       }
     };
     for(const server of servers) {
-      await saveServerFlow(server).catch();
+      await saveServerFlow(server).catch(err => {
+        logger.error(`[server: ${ server.id }] save flow error`);
+      });
     }
   } catch(err) {
     logger.error(err);

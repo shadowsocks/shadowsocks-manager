@@ -26,8 +26,8 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## Dependencies
 
-Node.js 10.*
-Redis
+* Node.js 10.*
+* Redis
 
 ## Install
 

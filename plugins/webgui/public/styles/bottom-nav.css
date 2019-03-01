@@ -1,0 +1,8 @@
+.bottom-nav {
+  background-color: rgb(250,250,250);
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
