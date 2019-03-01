@@ -45,12 +45,27 @@ if(cluster.isMaster) {
   });
   cluster.on('exit', (worker, code, signal) => {
     logger.error(`worker [${ worker.process.pid }][${ worker.id }] died`);
-    for(w in cluster.workers) {
+    for(const w in cluster.workers) {
       process.env.mainWorker = w;
       break;
     }
     cluster.fork();
   });
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  rl.on('line', input => {
+    if(input === 'rs') {
+      for(const w in cluster.workers) {
+        cluster.workers[w].kill();
+        break;
+      }
+    }
+  });
 } else {
   startWorker();
 }
+
+

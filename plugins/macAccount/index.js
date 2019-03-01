@@ -5,6 +5,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const dns = require('dns');
 const net = require('net');
 const config = appRequire('services/config').all();
+const redis = appRequire('init/redis').redis;
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -269,14 +270,20 @@ const deleteAccount = id => {
 };
 
 const login = async (mac, ip) => {
-  if(scanLoginLog(ip)) {
-    return Promise.reject('ip is in black list');
+  // if(scanLoginLog(ip)) {
+  //   return Promise.reject('ip is in black list');
+  // }
+  const failNumber = await redis.scard(`Temp:MacLoginFail:${ ip }`);
+  if(+failNumber >= 10) {
+    return Promise.reject('mac login out of limit');
   }
   const account = await knex('mac_account').where({
     mac: formatMacAddress(mac)
   }).then(success => success[0]);
   if(!account) {
-    loginFail(mac, ip);
+    // loginFail(mac, ip);
+    await redis.sadd(`Temp:MacLoginFail:${ ip }`, mac);
+    await redis.expire(`Temp:MacLoginFail:${ ip }`, 120);
     return Promise.reject('mac account not found');
   } else {
     return account;
