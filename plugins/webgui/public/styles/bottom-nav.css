@@ -2,6 +2,7 @@
   background-color: rgb(250,250,250);
   overflow: hidden;
   position: sticky;
+  position: -webkit-sticky;
   bottom: 0;
   width: 100%;
   z-index: 10;
