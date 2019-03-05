@@ -17,7 +17,7 @@ ADD models /ssmgr/models
 ADD services /ssmgr/services
 ADD plugins /ssmgr/plugins
 
-RUN cd /ssmgr && npm run build && npm i -g && rm -rf /ssmgr
+RUN cd /ssmgr && npm i -g && rm -rf /ssmgr
 
 EXPOSE 80
 VOLUME ["/root/.ssmgr"]
