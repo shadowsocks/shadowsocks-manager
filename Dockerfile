@@ -17,8 +17,8 @@ ADD models /ssmgr/models
 ADD services /ssmgr/services
 ADD plugins /ssmgr/plugins
 
-RUN cd /ssmgr && npm i && npm run build
+RUN cd /ssmgr && npm run build && npm i -g && rm -rf /ssmgr
 
 EXPOSE 80
 VOLUME ["/root/.ssmgr"]
-ENTRYPOINT ["/usr/local/bin/node", "/ssmgr", "--multiCore"]
+ENTRYPOINT ["/usr/bin/ssmgr", "--multiCore"]
