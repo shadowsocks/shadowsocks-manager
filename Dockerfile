@@ -6,6 +6,9 @@ RUN apk --no-cache add tzdata python  && \
 
 ADD package.json /ssmgr/package.json
 ADD package-lock.json /ssmgr/package-lock.json
+ADD .npmignore /ssmgr/.npmignore
+ADD .eslintignore /ssmgr/.eslintignore
+ADD .eslintrc.json /ssmgr/.eslintrc.json
 ADD gulpfile.js /ssmgr/gulpfile.js
 ADD server.js /ssmgr/server.js
 ADD init /ssmgr/init
