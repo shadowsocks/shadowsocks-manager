@@ -21,4 +21,4 @@ RUN cd /ssmgr && npm i -g && rm -rf /ssmgr
 
 EXPOSE 80
 VOLUME ["/root/.ssmgr"]
-ENTRYPOINT ["/usr/bin/ssmgr", "--multiCore"]
+ENTRYPOINT ["/usr/local/bin/ssmgr", "--multiCore"]
