@@ -55,13 +55,16 @@
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
-    <div flex layout="row" layout-align="center start">
-        <div flex="10" flex-gt-sm="30"></div>
-        <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-            <md-button class="md-warn" ng-click="delete()" ng-disabled="groupId === 0">删除</md-button>
-            <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+    <div style="height: 50px;"></div>
+    <div class="bottom-nav">
+        <div flex layout="row" layout-align="center start">
+            <div flex="10" flex-gt-sm="30"></div>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+                <md-button class="md-warn" ng-click="delete()" ng-disabled="groupId === 0">删除</md-button>
+                <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+            </div>
+            <div flex="10" flex-gt-sm="30"></div>
         </div>
-        <div flex="10" flex-gt-sm="30"></div>
     </div>
 </div>
