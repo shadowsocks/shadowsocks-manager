@@ -13,7 +13,7 @@
 3. 安装 ssmgr
 
   ```shell
-npm i -g shadowsocks-manager
+sudo npm i -g shadowsocks-manager
 ```
 
   若出现权限相关的错误提示，则需要尝试：
