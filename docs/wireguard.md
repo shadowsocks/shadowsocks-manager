@@ -24,6 +24,12 @@ sudo iptables -A FORWARD -i ens3 -o wg0 -m state --state ESTABLISHED,RELATED -j 
 sudo iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
 ```
 
+## 开启转发功能
+
+```
+echo 1 >/proc/sys/net/ipv4/ip_forward
+```
+
 ## 生成密钥
 
 ```shell
