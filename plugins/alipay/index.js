@@ -324,6 +324,7 @@ const getUserFinishOrder = async userId => {
     'createTime',
   ]).where({
     user: userId,
+    status: 'FINISH',
   }).orderBy('createTime', 'DESC');
   orders = orders.map(order => {
     return {

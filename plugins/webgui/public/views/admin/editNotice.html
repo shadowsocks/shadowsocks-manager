@@ -18,7 +18,7 @@
                 </div>
                 <md-input-container class="md-block">
                     <label>内容</label>
-                    <textarea ng-model="notice.content" rows="7" md-no-autogrow md-select-on-focus></textarea>
+                    <textarea ng-model="notice.content" rows="7" md-select-on-focus></textarea>
                 </md-input-container>
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75">自动弹出</div>
@@ -31,12 +31,15 @@
         </div>
     </md-card-content>
 </md-card>
-<div flex layout="row" layout-align="center start">
-    <div flex="10" flex-gt-sm="30"></div>
-    <div layout="row" flex layout-align="space-around center">
-        <md-button class="md-raised md-warn" ng-click="delete()">删除</md-button>
-        <md-button class="md-raised" ng-click="preview()">预览</md-button>
-        <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
+<div style="height: 50px;"></div>
+<div class="bottom-nav">
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <md-button class="md-raised md-warn" ng-click="delete()">删除</md-button>
+            <md-button class="md-raised" ng-click="preview()" ng-disabled="!notice.title || !notice.content">预览</md-button>
+            <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
     </div>
-    <div flex="10" flex-gt-sm="30"></div>
 </div>
