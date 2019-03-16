@@ -1,0 +1,5 @@
+.add-card {
+  border: 1px dashed transparent;
+  background: linear-gradient(white,white) padding-box, repeating-linear-gradient(-45deg,#ccc 0, #ccc 0.25em,white 0,white 0.55em);
+  box-shadow: none !important;
+}

@@ -478,6 +478,13 @@ app
         }
       });
     };
+    $scope.addMacAccount = () => {
+      addMacAccountDialog.show().then(() => {
+        getMacAccount();
+      }).catch(err => {
+        getMacAccount();
+      });
+    };
     getMacAccount();
   }
 ])
