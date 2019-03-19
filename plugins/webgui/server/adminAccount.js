@@ -261,7 +261,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         return {
           cipher: server.method,
           name: server.subscribeName || server.name,
-          password: subscribeAccount.account.password,
+          password: String(subscribeAccount.account.password),
           port: subscribeAccount.account.port + server.shift,
           server: server.host,
           type: 'ss'
