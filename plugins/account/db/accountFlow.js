@@ -6,8 +6,7 @@ const createTable = async() => {
   if(exist) {
     await knex.schema.table(tableName, function(table) {
       table.index('id');
-      table.index('serverId');
-      table.index('accountId');
+      table.index(['serverId', 'accountId']);
       table.index('updateTime');
       table.index('checkTime');
       table.index('nextCheckTime');
@@ -35,8 +34,7 @@ const createTable = async() => {
     table.string('status').defaultTo('checked');
 
     table.index('id');
-    table.index('serverId');
-    table.index('accountId');
+    table.index(['serverId', 'accountId']);
     table.index('updateTime');
     table.index('checkTime');
     table.index('nextCheckTime');
