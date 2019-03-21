@@ -4,6 +4,15 @@ const tableName = 'account_flow';
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
   if(exist) {
+    await knex.schema.table(tableName, function(table) {
+      table.index('id');
+      table.index('serverId');
+      table.index('accountId');
+      table.index('updateTime');
+      table.index('checkTime');
+      table.index('nextCheckTime');
+      table.index('checkFlowTime');
+    });
     const hasCheckFlowTime = await knex.schema.hasColumn(tableName, 'checkFlowTime');
     if(!hasCheckFlowTime) {
       await knex.schema.table(tableName, function(table) {
@@ -24,6 +33,14 @@ const createTable = async() => {
     table.bigInteger('autobanTime');
     table.bigInteger('flow').defaultTo(0);
     table.string('status').defaultTo('checked');
+
+    table.index('id');
+    table.index('serverId');
+    table.index('accountId');
+    table.index('updateTime');
+    table.index('checkTime');
+    table.index('nextCheckTime');
+    table.index('checkFlowTime');
   });
 };
 
