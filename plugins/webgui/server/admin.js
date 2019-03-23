@@ -133,8 +133,10 @@ exports.addAccount = (req, res) => {
       const autoRemoveDelay = +req.body.autoRemoveDelay || 0;
       const multiServerFlow = +req.body.multiServerFlow || 0;
       const server = req.body.server ? JSON.stringify(req.body.server) : null;
+      const user = req.body.user || null;
       return account.addAccount(type, {
         port, password, time, limit, flow, autoRemove, autoRemoveDelay, server, multiServerFlow, orderId,
+        user,
       });
     }
     result.throw();

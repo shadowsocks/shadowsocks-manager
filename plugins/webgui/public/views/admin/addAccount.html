@@ -97,6 +97,23 @@
                     </div>
                 </div>
             </div>
+            <md-autocomplete
+                md-selected-item="accountUser.selectedItem"
+                md-search-text-change="accountUser.searchChange(accountUser.search)"
+                md-search-text="accountUser.search"
+                md-selected-item-change="accountUser.selectedItemChange(item)"
+                md-items="item in accountUser.querySearch(accountUser.search)"
+                md-item-text="item.username"
+                md-delay="750"
+                md-require-match="true"
+                placeholder="指定用户(可选)">
+                <md-item-template>
+                    <span md-highlight-text="accountUser.search" md-highlight-flags="^i">{{ item.username }}</span>
+                </md-item-template>
+                <md-not-found>
+                    没有匹配的用户
+                </md-not-found>
+            </md-autocomplete>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

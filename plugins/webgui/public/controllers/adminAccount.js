@@ -514,6 +514,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
         server: ($scope.account.accountServer && +$scope.account.type > 1) ? server : null,
+        user: $scope.account.user,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
         $state.go('admin.accountPage', { accountId: success.data.id });
@@ -540,6 +541,16 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $http.get('/api/admin/server').then(success => {
       $scope.servers = success.data;
     });
+    $scope.accountUser = {
+      search: '',
+      searchChange: function(search) {},
+      selectedItemChange: function(item) {
+        $scope.account.user = item ? item.id : null;
+      },
+      querySearch: function(search) {
+        return $http.get('/api/admin/user', { params: { pageSize: 5, group: -1, search, type: 'normal' }}).then(success => success.data.users);
+      }
+    };
   }
 ])
 .controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog', '$filter', '$q',
