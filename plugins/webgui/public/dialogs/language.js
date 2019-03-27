@@ -41,6 +41,7 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
         { id: 'en-US', name: 'English' },
         { id: 'ru-RU', name: 'Русский' },
       ];
+      $scope.refresh = () => { window.location.reload(true); };
     }],
     clickOutsideToClose: true,
   };

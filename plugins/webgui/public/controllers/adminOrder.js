@@ -149,6 +149,7 @@ app
       $http.get('/api/admin/server'),
       $http.get(`/api/admin/order/${ $scope.orderId }`),
       $http.get('/api/admin/order'),
+      $http.get('/api/admin/group'),
     ]).then(success => {
       $scope.orderInfoLoaded = true;
       $scope.servers = success[0].data;
@@ -173,7 +174,27 @@ app
           }
         });
       }
+      $scope.groups = success[3].data;
+      $scope.orderGroupObj = {};
+      $scope.groups.forEach(group => {
+        if(!group.order) {
+          $scope.orderGroupObj[group.id] = { disabled: true, checked: true };
+        } else if(group.order.includes($scope.order.id)) {
+          $scope.orderGroupObj[group.id] = { disabled: false, checked: true };
+        } else {
+          $scope.orderGroupObj[group.id] = { disabled: false, checked: false };
+        }
+      });
     });
+    $scope.orderGroup = [];
+    $scope.$watch('orderGroupObj', () => {
+      $scope.orderGroup = [];
+      for(const ogo in $scope.orderGroupObj) {
+        if($scope.orderGroupObj[ogo].checked) {
+          $scope.orderGroup.push(ogo);
+        }
+      }
+    }, true);
     $scope.cancel = () => { $state.go('admin.order'); };
     $scope.delete = () => {
       confirmDialog.show({
@@ -230,6 +251,7 @@ app
           server: $scope.order.server,
           changeCurrentAccount: $scope.changeCurrentAccount,
           active: $scope.order.active,
+          group: $scope.orderGroup,
         }).then(success => {
           $state.go('admin.order');
         });

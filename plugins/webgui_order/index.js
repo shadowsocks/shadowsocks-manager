@@ -49,7 +49,7 @@ const getOneOrderByAccountId = async accountId => {
 };
 
 const newOrder = async data => {
-  await knex('webgui_order').insert({
+  const [ id ] = await knex('webgui_order').insert({
     baseId: data.baseId,
     name: data.name,
     shortComment: data.shortComment,
@@ -68,7 +68,7 @@ const newOrder = async data => {
     changeOrderType: data.changeOrderType,
     active: data.active,
   });
-  return;
+  return id;
 };
 
 const editOrder = async data => {

@@ -132,6 +132,23 @@
                     </div>
                 </div>
             </div>
+            <div style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">自定义分组</div>
+                <div flex layout="row" layout-align="end center">
+                    <span style="color: #777; margin-top: 16px; margin-bottom: 16px;">{{ orderGroup.length }}</span>
+                </div>
+            </div>
+            <div layout="column" layout-wrap flex>
+                <div layout="column" layout-wrap flex ng-repeat="group in groups">
+                    <div flex="100">
+                        <md-checkbox ng-model="orderGroupObj[group.id].checked" ng-disabled="orderGroupObj[group.id].disabled">
+                            <div layout="row" layout-align="space-between center">
+                                <span flex>{{ group.name }}</span>
+                            </div>
+                        </md-checkbox>
+                    </div>
+                </div>
+            </div>
             <div style="width: 100%;" layout="column" layout-align="center none" ng-hide="order.baseId">
                 <div style="width: 100%;">将改动变更到已有的账号</div>
                 <div layout="row" layout-align="start center" layout-margin>

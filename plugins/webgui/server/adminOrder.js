@@ -1,5 +1,6 @@
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountPlugin = appRequire('plugins/account');
+const groupPlugin = appRequire('plugins/group');
 
 exports.getOrders = async (req, res) => {
   try {
@@ -52,7 +53,8 @@ exports.newOrder = async (req, res) => {
     data.multiServerFlow = req.body.multiServerFlow;
     data.changeOrderType = req.body.changeOrderType;
     data.active = req.body.active;
-    await orderPlugin.newOrder(data);
+    const orderId = await orderPlugin.newOrder(data);
+    await groupPlugin.editMultiGroupForOrder(orderId, req.body.group || []);
     res.send('success');
   } catch(err) {
     console.log(err);
@@ -87,6 +89,7 @@ exports.editOrder = async (req, res) => {
     if(changeCurrentAccount.flow) { update.flow = data.flow; }
     if(changeCurrentAccount.server) { update.server = data.server; }
     if(changeCurrentAccount.autoRemove) { update.autoRemove = data.autoRemove; }
+    await groupPlugin.editMultiGroupForOrder(data.id, req.body.group || []);
     accountPlugin.editMultiAccounts(data.id, update);
     res.send('success');
   } catch(err) {
