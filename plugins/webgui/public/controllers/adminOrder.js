@@ -127,8 +127,8 @@ app
     };
   }
 ])
-.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter', '$q',
-  ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q) => {
+.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter', '$q', 'setOrderGroupDialog', 'setOrderServerDialog',
+  ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q, setOrderGroupDialog, setOrderServerDialog) => {
     $scope.setTitle('编辑订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
     $scope.changeCurrentAccount = {
@@ -163,7 +163,7 @@ app
       $scope.order.flowStr = $filter('flowNum2Str')($scope.order.flow);
       $scope.order.refTimeStr = $filter('timeNum2Str')($scope.order.refTime);
       $scope.order.autoRemoveDelayStr = $filter('timeNum2Str')($scope.order.autoRemoveDelay);
-      $scope.orderServer = !!$scope.order.server;
+      $scope.order.orderServer = !!$scope.order.server;
       $scope.orderServerObj = {};
       if($scope.order.server) {
         $scope.servers.forEach(server => {
@@ -230,7 +230,7 @@ app
         }
       })
       .filter(f => f);
-      $scope.order.server = $scope.orderServer ? server : null;
+      $scope.order.server = $scope.order.orderServer ? server : null;
       if(!$scope.order.baseId) {
         $http.put(`/api/admin/order/${ $scope.orderId }`, {
           baseId: 0,
@@ -279,6 +279,12 @@ app
         });
       }
       
+    };
+    $scope.setOrderGroup = () => {
+      setOrderGroupDialog.show($scope.orderId, $scope.groups, $scope.orderGroupObj);
+    };
+    $scope.setOrderServer = () => {
+      setOrderServerDialog.show($scope.order, $scope.servers, $scope.orderServerObj);
     };
   }
 ])
