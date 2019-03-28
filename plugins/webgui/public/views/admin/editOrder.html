@@ -113,30 +113,11 @@
                     </md-switch>
                 </div>
             </div>
-            <!-- <div style="width: 100%;" layout="row" layout-align="space-between center" ng-hide="order.baseId">
-                <div flex="75">自定义可用服务器</div>
-                <div flex layout="row" layout-align="end center">
-                    <md-switch ng-model="orderServer" aria-label="orderServer">
-                    </md-switch>
-                </div>
-            </div> -->
-            <!-- <div layout="column" layout-wrap flex ng-if="orderServer" ng-hide="order.baseId">
-                <div layout="column" layout-wrap flex ng-repeat="server in servers">
-                    <div flex="100">
-                        <md-checkbox ng-model="orderServerObj[server.id]">
-                            <div layout="row" layout-align="space-between center">
-                                <span flex>{{ server.name }}</span>
-                                <span flex style="color: #777">{{ server.host }}</span>
-                            </div>
-                        </md-checkbox>
-                    </div>
-                </div>
-            </div> -->
             <md-divider ng-hide="order.baseId"></md-divider>
             <div ng-click="setOrderServer()" ng-hide="order.baseId">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75" translate>
-                        <span>自定义服务器</span>
+                        <span>自定义服务器&nbsp;</span><span style="color: #777">[{{ orderServer.length }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -147,7 +128,7 @@
             <div ng-click="setOrderGroup()">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75" translate>
-                        <span>自定义分组</span> <span style="color: #777">[{{ orderGroup.length }}]</span>
+                        <span>自定义分组&nbsp;</span><span style="color: #777">[{{ orderGroup.length }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -158,7 +139,7 @@
             <div ng-click="setCurrentAccount()" ng-hide="order.baseId">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75" translate>
-                        <span>将改动变更到已有的账号</span>
+                        <span>将改动变更到已有的账号&nbsp;</span><span style="color: #777">[{{ currentAccount }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -166,20 +147,6 @@
                 </div>
             </div>
             <md-divider></md-divider>
-            <!-- <div style="width: 100%;" layout="column" layout-align="center none" ng-hide="order.baseId">
-                <div style="width: 100%;">将改动变更到已有的账号</div>
-                <div layout="row" layout-align="start center" layout-margin>
-                    <md-checkbox ng-model="changeCurrentAccount.flow" aria-label="flow">
-                        流量
-                    </md-checkbox>
-                    <md-checkbox ng-model="changeCurrentAccount.server" aria-label="server">
-                        服务器
-                    </md-checkbox>
-                    <md-checkbox ng-model="changeCurrentAccount.autoRemove" aria-label="autoRemove">
-                        到期自动删除
-                    </md-checkbox>
-                </div>
-            </div> -->
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

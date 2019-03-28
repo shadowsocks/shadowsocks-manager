@@ -186,12 +186,32 @@ app
         }
       });
     });
+    $scope.orderServer = [];
+    $scope.$watchGroup(['orderServerObj', 'order.orderServer'], () => {
+      $scope.orderServer = [];
+      if($scope.order && $scope.order.orderServer) {
+        for(const oso in $scope.orderServerObj) {
+          if($scope.orderServerObj[oso]) {
+            $scope.orderServer.push(oso);
+          }
+        }
+      }
+    }, true);
     $scope.orderGroup = [];
     $scope.$watch('orderGroupObj', () => {
       $scope.orderGroup = [];
       for(const ogo in $scope.orderGroupObj) {
         if($scope.orderGroupObj[ogo].checked) {
           $scope.orderGroup.push(ogo);
+        }
+      }
+    }, true);
+    $scope.currentAccount = 0;
+    $scope.$watch('changeCurrentAccount', () => {
+      $scope.currentAccount = 0;
+      for(const cca in $scope.changeCurrentAccount) {
+        if($scope.changeCurrentAccount[cca]) {
+          $scope.currentAccount++;
         }
       }
     }, true);
