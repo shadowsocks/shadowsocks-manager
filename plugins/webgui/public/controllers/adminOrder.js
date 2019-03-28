@@ -127,8 +127,8 @@ app
     };
   }
 ])
-.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter', '$q', 'setOrderGroupDialog', 'setOrderServerDialog',
-  ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q, setOrderGroupDialog, setOrderServerDialog) => {
+.controller('AdminEditOrderController', ['$scope', '$state', '$http', '$stateParams', 'confirmDialog', '$filter', '$q', 'setOrderGroupDialog', 'setOrderServerDialog', 'setCurrentAccountDialog',
+  ($scope, $state, $http, $stateParams, confirmDialog, $filter, $q, setOrderGroupDialog, setOrderServerDialog, setCurrentAccountDialog) => {
     $scope.setTitle('编辑订单');
     $scope.setMenuButton('arrow_back', 'admin.order');
     $scope.changeCurrentAccount = {
@@ -278,13 +278,15 @@ app
           $state.go('admin.order');
         });
       }
-      
     };
     $scope.setOrderGroup = () => {
       setOrderGroupDialog.show($scope.orderId, $scope.groups, $scope.orderGroupObj);
     };
     $scope.setOrderServer = () => {
       setOrderServerDialog.show($scope.order, $scope.servers, $scope.orderServerObj);
+    };
+    $scope.setCurrentAccount = () => {
+      setCurrentAccountDialog.show($scope.changeCurrentAccount);
     };
   }
 ])

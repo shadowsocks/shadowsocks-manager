@@ -479,7 +479,7 @@ cron.minute(async () => {
           const serverId = +accountLeft.split(':')[0];
           const accountId = +accountLeft.split(':')[1];
           const start = Date.now();
-          await checkAccount(serverId, accountId).catch();
+          await checkAccount(serverId, accountId).catch(err => {});
           if(Date.now() - start < (1000 / speed)) {
             await sleep(1000 / speed - (Date.now() - start));
           }
@@ -488,7 +488,7 @@ cron.minute(async () => {
           const serverId = +accountRight.split(':')[0];
           const accountId = +accountRight.split(':')[1];
           const start = Date.now();
-          await checkAccount(serverId, accountId).catch();
+          await checkAccount(serverId, accountId).catch(err => {});
           if(Date.now() - start < (1000 / speed)) {
             await sleep(1000 / speed - (Date.now() - start));
           }
@@ -548,14 +548,14 @@ cron.minute(async () => {
         if(accounts.length <= 120) {
           for(const account of accounts) {
             const start = Date.now();
-            await checkAccount(account.serverId, account.accountId).catch();
+            await checkAccount(account.serverId, account.accountId).catch(err => {});
             const time = 60 * 1000 / accounts.length - (Date.now() - start);
             await sleep((time <= 0 || time > sleepTime) ? sleepTime : time);
           }
         } else {
           await Promise.all(accounts.map((account, index) => {
             return sleep(index * (60 + Math.ceil(accounts.length % 10)) * 1000 / accounts.length).then(() => {
-              return checkAccount(account.serverId, account.accountId).catch();
+              return checkAccount(account.serverId, account.accountId).catch(err => {});
             });
           }));
         }

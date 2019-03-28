@@ -154,8 +154,19 @@
                     </div>
                 </div>
             </div>
+            <md-divider ng-hide="order.baseId"></md-divider>
+            <div ng-click="setCurrentAccount()" ng-hide="order.baseId">
+                <div style="width: 100%;" layout="row" layout-align="space-between center">
+                    <div flex="75" translate>
+                        <span>将改动变更到已有的账号</span>
+                    </div>
+                    <div flex layout="row" layout-align="end center">
+                        <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
+                    </div>
+                </div>
+            </div>
             <md-divider></md-divider>
-            <div style="width: 100%;" layout="column" layout-align="center none" ng-hide="order.baseId">
+            <!-- <div style="width: 100%;" layout="column" layout-align="center none" ng-hide="order.baseId">
                 <div style="width: 100%;">将改动变更到已有的账号</div>
                 <div layout="row" layout-align="start center" layout-margin>
                     <md-checkbox ng-model="changeCurrentAccount.flow" aria-label="flow">
@@ -168,7 +179,7 @@
                         到期自动删除
                     </md-checkbox>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

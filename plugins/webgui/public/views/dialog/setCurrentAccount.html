@@ -1,0 +1,23 @@
+<md-dialog aria-label="setCurrentAccount dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="column" layout-wrap flex>
+                <div layout="column" layout-align="center stretch">
+                    <md-checkbox ng-model="publicInfo.changeCurrentAccount.flow" aria-label="flow">
+                        流量
+                    </md-checkbox>
+                </div>
+                <div layout="column" layout-align="center stretch">
+                    <md-checkbox ng-model="publicInfo.changeCurrentAccount.server" aria-label="server">
+                        服务器
+                    </md-checkbox>
+                </div>
+                <div layout="column" layout-align="center stretch">
+                    <md-checkbox ng-model="publicInfo.changeCurrentAccount.autoRemove" aria-label="autoRemove">
+                        到期自动删除
+                    </md-checkbox>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>
