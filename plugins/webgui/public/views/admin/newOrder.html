@@ -110,7 +110,7 @@
                     </md-switch>
                 </div>
             </div>
-            <div style="width: 100%;" layout="row" layout-align="space-between center" ng-show="order.orderType === 'normal'">
+            <!-- <div style="width: 100%;" layout="row" layout-align="space-between center" ng-show="order.orderType === 'normal'">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="orderServer" aria-label="orderServer">
@@ -128,16 +128,42 @@
                         </md-checkbox>
                     </div>
                 </div>
+            </div> -->
+            <md-divider ng-show="order.orderType === 'normal'"></md-divider>
+            <div ng-click="setOrderServer()" ng-show="order.orderType === 'normal'">
+                <div style="width: 100%;" layout="row" layout-align="space-between center">
+                    <div flex="75" translate>
+                        <span>自定义服务器&nbsp;</span><span style="color: #777">[{{ orderServer.length }}]</span>
+                    </div>
+                    <div flex layout="row" layout-align="end center">
+                        <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
+                    </div>
+                </div>
             </div>
+            <md-divider></md-divider>
+            <div ng-click="setOrderGroup()">
+                <div style="width: 100%;" layout="row" layout-align="space-between center">
+                    <div flex="75" translate>
+                        <span>自定义分组&nbsp;</span><span style="color: #777">[{{ orderGroup.length }}]</span>
+                    </div>
+                    <div flex layout="row" layout-align="end center">
+                        <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
+                    </div>
+                </div>
+            </div>
+            <md-divider></md-divider>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
-    <div flex layout="row" layout-align="center start">
-        <div flex="10" flex-gt-sm="30"></div>
-        <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!order.name">确认</md-button>
+    <div style="height: 50px;"></div>
+    <div class="bottom-nav">
+        <div flex layout="row" layout-align="center start">
+            <div flex="10" flex-gt-sm="30"></div>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button class="md-primary" ng-click="cancel()">取消</md-button>
+                <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!order.name">确认</md-button>
+            </div>
+            <div flex="10" flex-gt-sm="30"></div>
         </div>
-        <div flex="10" flex-gt-sm="30"></div>
     </div>
 </div>
