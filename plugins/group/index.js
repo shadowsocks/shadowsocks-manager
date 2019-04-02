@@ -10,11 +10,9 @@ const getGroupsAndUserNumber = async () => {
     'group.name as name',
     'group.comment as comment',
     'group.order as order',
-    knex.raw('count(user.id) as userNumber'),
   ])
+  .count('user.id as userNumber')
   .leftJoin('user', 'user.group', 'group.id')
-  .where('user.id', '>', 1)
-  .orWhereNull('user.id')
   .groupBy('group.id');
   groups.forEach(group => {
     if(group.order) {
