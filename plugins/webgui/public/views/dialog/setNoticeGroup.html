@@ -1,0 +1,23 @@
+<md-dialog aria-label="setNoticeGroup dialog" ng-style="setDialogWidth()">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="space-between center">
+                <div flex="75">自定义分组</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="publicInfo.notice.group" aria-label="noticeGroup" ng-true-value="1" ng-false-value="0">
+                    </md-switch>
+                </div>
+            </div>
+            <div layout="column" layout-warp flex ng-show="publicInfo.notice.group">
+                <md-divider></md-divider>
+                <div flex="60" layout-align="space-between center" layout="row"
+                    ng-repeat-start="group in publicInfo.groups">
+                    <md-checkbox style="top: 8px;" ng-model="publicInfo.notice.groupObj[group.id]">
+                        <div>{{ group.name }}</div>
+                    </md-checkbox>
+                </div>
+                <md-divider ng-repeat-end></md-divider>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

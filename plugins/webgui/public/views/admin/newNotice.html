@@ -3,23 +3,24 @@
         <div>
             <form name="noticeForm">
                 <div flex layout="row" layout-align="space-between start">
-                    <md-input-container class="md-block" flex-gt-sm>
+                    <md-input-container class="md-block" flex-gt-sm style="width: 100%;">
                         <label>标题</label>
                         <input name="title" ng-model="notice.title">
                     </md-input-container>
-                    <md-input-container>
+                    <!-- <md-input-container>
                         <label>分组</label>
                         <md-select ng-model="notice.group">
                             <md-option ng-repeat="group in groups" ng-value="group.id">
                                 {{ group.name }}
                             </md-option>
                         </md-select>
-                    </md-input-container>
+                    </md-input-container> -->
                 </div>
                 <md-input-container class="md-block">
                     <label>内容</label>
                     <textarea ng-model="notice.content" rows="7" md-select-on-focus></textarea>
                 </md-input-container>
+                <md-divider></md-divider>
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75">自动弹出</div>
                     <div flex layout="row" layout-align="end center">
@@ -27,6 +28,18 @@
                         </md-switch>
                     </div>
                 </div>
+                <md-divider></md-divider>
+                <div ng-click="setNoticeGroup()">
+                    <div style="width: 100%;" layout="row" layout-align="space-between center">
+                        <div flex="75" translate>
+                            <span>分组</span>
+                        </div>
+                        <div flex layout="row" layout-align="end center">
+                            <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>
+                        </div>
+                    </div>
+                </div>
+                <md-divider></md-divider>
             </form>
         </div>
     </md-card-content>

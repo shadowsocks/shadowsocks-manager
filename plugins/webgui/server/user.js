@@ -310,15 +310,21 @@ exports.getPrice = async (req, res) => {
 exports.getNotice = async (req, res) => {
   try {
     const userId = req.session.user;
-    const groupInfo = await knex('user').select([
-      'group.id as id',
-      'group.showNotice as showNotice',
-    ]).innerJoin('group', 'user.group', 'group.id').where({
-      'user.id': userId,
-    }).then(s => s[0]);
-    const group = [groupInfo.id];
-    if(groupInfo.showNotice) { group.push(-1); }
-    const notices = await knex('notice').select().whereIn('group', group).orderBy('time', 'desc');
+    const noticesWithoutGroup = await knex('notice').where({ group: 0 });
+    const noticesWithGroup = await knex('notice').select([
+      'notice.id as id',
+      'notice.title as title',
+      'notice.content as content',
+      'notice.time as time',
+      'notice.group as group',
+      'notice.autopop as autopop',
+    ])
+    .innerJoin('notice_group', 'notice.id', 'notice_group.noticeId')
+    .innerJoin('user', 'user.group', 'notice_group.groupId')
+    .where('notice.group', '>', 0)
+    .where({ 'user.id': userId })
+    .groupBy('notice.id');
+    const notices = [...noticesWithoutGroup, ...noticesWithGroup ].sort((a, b) => b.time - a.time);
     return res.send(notices);
   } catch (err) {
     console.log(err);

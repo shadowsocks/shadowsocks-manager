@@ -133,7 +133,7 @@
             <div ng-click="setOrderServer()" ng-show="order.orderType === 'normal'">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75" translate>
-                        <span>自定义服务器&nbsp;</span><span style="color: #777">[{{ orderServer.length }}]</span>
+                        <span>自定义服务器&nbsp;</span><span style="color: #777">[{{ order.orderServer ? orderServer.length : '∞' }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-primary"><md-icon>keyboard_arrow_right</md-icon></md-button>

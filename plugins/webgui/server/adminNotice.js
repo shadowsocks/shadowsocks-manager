@@ -21,60 +21,112 @@ exports.getNotice = (req, res) => {
   });
 };
 
-exports.getOneNotice = (req, res) => {
-  const id = req.params.noticeId;
-  knex('notice').select().where({
-    id,
-  }).then(success => {
-    if(!success.length) {
+exports.getOneNotice = async (req, res) => {
+  // const id = req.params.noticeId;
+  // knex('notice').select().where({
+  //   id,
+  // }).then(success => {
+  //   if(!success.length) {
+  //     return Promise.reject(new Error('notice not found'));
+  //   }
+  //   return res.send(success[0]);
+  // }).catch(err => {
+  //   console.log(err);
+  //   res.status(403).end();
+  // });
+  try {
+    const id = req.params.noticeId;
+    const noticeInfo = await knex('notice').where({
+      id,
+    }).then(success => success[0]);
+    if(!noticeInfo) {
       return Promise.reject(new Error('notice not found'));
     }
-    return res.send(success[0]);
-  }).catch(err => {
+    if(noticeInfo.group) {
+      const groups = await knex('notice_group').where({
+        noticeId: noticeInfo.id,
+      }).then(success => success.map(m => m.groupId));
+      noticeInfo.groups = groups;
+    }
+    res.send(noticeInfo);
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
-exports.addNotice = (req, res) => {
-  const title = req.body.title;
-  const content = req.body.content;
-  const group = +req.body.group;
-  const autopop = req.body.autopop;
-  knex('notice').insert({
-    title,
-    content,
-    time: Date.now(),
-    group,
-    autopop,
-  }).then(success => {
-    return res.send('success');
-  }).catch(err => {
+exports.addNotice = async (req, res) => {
+  try {
+    const title = req.body.title;
+    const content = req.body.content;
+    const group = +req.body.group;
+    const groups = req.body.groups;
+    const autopop = req.body.autopop;
+    const [ id ] = await knex('notice').insert({
+      title,
+      content,
+      time: Date.now(),
+      group,
+      autopop,
+    });
+    if(group && groups.length) {
+      await knex('notice_group').insert(groups.map(groupId => {
+        return {
+          noticeId: id,
+          groupId,
+        };
+      }));
+    }
+    res.send('success');
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
-exports.editNotice = (req, res) => {
-  const id = req.params.noticeId;
-  const title = req.body.title;
-  const content = req.body.content;
-  const group = +req.body.group;
-  const autopop = req.body.autopop;
-  knex('notice').update({
-    title,
-    content,
-    time: Date.now(),
-    group,
-    autopop
-  }).where({
-    id,
-  }).then(success => {
+exports.editNotice = async (req, res) => {
+  try {
+    const id = req.params.noticeId;
+    const title = req.body.title;
+    const content = req.body.content;
+    const group = +req.body.group;
+    const groups = req.body.groups;
+    const autopop = req.body.autopop;
+    await knex('notice').update({
+      title,
+      content,
+      time: Date.now(),
+      group,
+      autopop
+    }).where({
+      id,
+    });
+    if(group) {
+      const currentGroups = await knex('notice_group').where({
+        noticeId: id,
+      }).then(success => success.map(m => m.groupId));
+      for(const groupId of currentGroups) {
+        if(!groups.includes(groupId)) {
+          await knex('notice_group').delete().where({
+            noticeId: id,
+            groupId,
+          });
+        }
+      }
+      for(const groupId of groups) {
+        if(!currentGroups.includes(groupId)) {
+          await knex('notice_group').insert({
+            noticeId: id,
+            groupId,
+          });
+        }
+      }
+    }
     return res.send('success');
-  }).catch(err => {
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.deleteNotice = (req, res) => {
