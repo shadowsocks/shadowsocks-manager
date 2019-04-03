@@ -290,6 +290,7 @@ const blackList = [
   '@digitalsanctuary.com',
   '@dildosfromspace.com',
   '@dingbone.com',
+  '@disbox.net',
   '@discard.cf',
   '@discard.email',
   '@discard.ga',
