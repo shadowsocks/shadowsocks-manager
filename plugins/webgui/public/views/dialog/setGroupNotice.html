@@ -1,0 +1,16 @@
+<md-dialog aria-label="setNoticeGroup dialog" ng-style="setDialogWidth()">
+  <md-dialog-content>
+      <div class="md-dialog-content">
+          <div layout="column" layout-warp flex>
+              <md-divider></md-divider>
+              <div flex="60" layout-align="space-between center" layout="row"
+                  ng-repeat-start="notice in publicInfo.notices">
+                  <md-checkbox style="top: 8px;" ng-model="publicInfo.group.noticeObj[notice.id].value" ng-disabled="publicInfo.group.noticeObj[notice.id].disabled">
+                      <div>{{ notice.title }}</div>
+                  </md-checkbox>
+              </div>
+              <md-divider ng-repeat-end></md-divider>
+          </div>
+      </div>
+  </md-dialog-content>
+</md-dialog>

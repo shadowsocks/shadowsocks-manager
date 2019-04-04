@@ -1,39 +1,34 @@
 const knex = appRequire('init/knex').knex;
 
-exports.getNotice = (req, res) => {
-  knex('notice').select([
-    'notice.id as id',
-    'notice.title as title',
-    'notice.content as content',
-    'notice.time as time',
-    'group.name as groupName',
-    'notice.autopop as autopop',
-  ]).orderBy('time', 'desc')
-  .leftJoin('group', 'notice.group', 'group.id')
-  .then(success => {
-    success.forEach(f => {
-      if(!f.groupName) { f.groupName = '所有组'; }
-    });
-    return res.send(success);
-  }).catch(err => {
+exports.getNotice = async (req, res) => {
+  try {
+    const noticesWithoutGroup = await knex('notice').where({ group: 0 });
+    const noticesWithGroup = await knex('notice').select([
+      'notice.id as id',
+      'notice.title as title',
+      'notice.content as content',
+      'notice.time as time',
+      'notice.group as group',
+      'notice.autopop as autopop',
+      knex.raw('GROUP_CONCAT(notice_group.groupId) as groupIds'),
+    ])
+    .innerJoin('notice_group', 'notice.id', 'notice_group.noticeId')
+    .where('notice.group', '>', 0)
+    .groupBy('notice.id');
+    const notices = [...noticesWithoutGroup, ...noticesWithGroup ].map(m => {
+      if(m.group) {
+        m.groupIds = m.groupIds.split(',').map(m => +m);
+      }
+      return m;
+    }).sort((a, b) => b.time - a.time);
+    return res.send(notices);
+  } catch(err) {
     console.log(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.getOneNotice = async (req, res) => {
-  // const id = req.params.noticeId;
-  // knex('notice').select().where({
-  //   id,
-  // }).then(success => {
-  //   if(!success.length) {
-  //     return Promise.reject(new Error('notice not found'));
-  //   }
-  //   return res.send(success[0]);
-  // }).catch(err => {
-  //   console.log(err);
-  //   res.status(403).end();
-  // });
   try {
     const id = req.params.noticeId;
     const noticeInfo = await knex('notice').where({

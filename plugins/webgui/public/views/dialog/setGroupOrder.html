@@ -1,0 +1,20 @@
+<md-dialog aria-label="setGroupOrder dialog">
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="row" layout-align="space-between center">
+                <div flex="75">自定义分组订单</div>
+                <div flex layout="row" layout-align="end center">
+                    <md-switch ng-model="publicInfo.group.groupOrder" aria-label="groupOrder">
+                    </md-switch>
+                </div>
+            </div>
+            <div layout="column" layout-wrap flex ng-repeat="order in publicInfo.orders" ng-if="publicInfo.group.groupOrder">
+                <div layout="column" layout-align="center stretch">
+                    <md-checkbox ng-model="publicInfo.orderObj[order.id]">
+                        <div>{{ order.name }}</div>
+                    </md-checkbox>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>
