@@ -24,11 +24,10 @@ exports.addGroup = async (req, res) => {
   try {
     const name = req.body.name;
     const comment = req.body.comment;
-    const showNotice = !!req.body.showNotice;
     const order = req.body.order ? JSON.stringify(req.body.order) : null;
     const multiAccount = !!req.body.multiAccount;
     const notices = req.body.notices;
-    const [ id ] = await group.addGroup(name, comment, showNotice, order, multiAccount);
+    const [ id ] = await group.addGroup(name, comment, order, multiAccount);
     const ids = await knex('notice').where({ group: 1 }).then(success => success.map(m => m.id));
     for(const noticeId of notices) {
       if(ids.includes(noticeId)) {
@@ -50,11 +49,10 @@ exports.editGroup = async (req, res) => {
     const id = +req.params.id;
     const name = req.body.name;
     const comment = req.body.comment;
-    const showNotice = !!req.body.showNotice;
     const order = req.body.order ? JSON.stringify(req.body.order) : null;
     const multiAccount = !!req.body.multiAccount;
     const notices = req.body.notices;
-    await group.editGroup(id, name, comment, showNotice, order, multiAccount);
+    await group.editGroup(id, name, comment, order, multiAccount);
     const ids = await knex('notice').where({ group: 1 }).then(success => success.map(m => m.id));
     const currentIds = await knex('notice_group').where({
       groupId: id,

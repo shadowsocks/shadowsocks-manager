@@ -27,7 +27,8 @@ const configure = {
   },
   categories: {
     default: { appenders: [ 'console' ], level: 'debug' },
-  }
+  },
+  disableClustering: true,
 };
 
 log4js.configure(configure);
