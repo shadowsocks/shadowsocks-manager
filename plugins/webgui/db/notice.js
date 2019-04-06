@@ -10,6 +10,9 @@ const createTable = async() => {
         table.integer('autopop').defaultTo(0);
       });
     }
+    await knex(tableName).update({
+      group: 0
+    }).whereNotIn('group', [0, 1]);
     return;
   }
   return knex.schema.createTable(tableName, function(table) {
