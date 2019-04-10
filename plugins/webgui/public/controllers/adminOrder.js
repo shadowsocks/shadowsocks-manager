@@ -290,6 +290,7 @@ app
               let errData = '删除订单失败';
               if(err.data === 'account with this order exists') { errData = '无法删除订单，请先删除订单对应的账号'; }
               if(err.data === 'giftcard with this order exists') { errData = '无法删除订单，请先删除订单对应的充值码'; }
+              if(err.data === 'flowpack order exists') { errData = '无法删除订单，请先删除对应的流量包订单'; }
               return Promise.reject(errData);
             } else {
               return Promise.reject('网络异常，请稍后再试');
