@@ -30,9 +30,10 @@ exports.signup = async (req, res) => {
     req.checkBody('password', 'Invalid password').notEmpty();
     let type = 'normal';
     const validation = await req.getValidationResult();
-    if(!validation.isEmpty()) {
-      return Promise.reject('invalid body');
-    }
+    // if(!validation.isEmpty()) {
+    //   return Promise.reject('invalid body');
+    // }
+    if(!validation.isEmpty()) { return Promise.reject(validation.array()); }
     const email = req.body.email.toString().toLowerCase();
     const code = req.body.code;
     await emailPlugin.checkCode(email, code);
