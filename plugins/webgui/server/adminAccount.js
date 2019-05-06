@@ -6,6 +6,7 @@ const knex = appRequire('init/knex').knex;
 const flowPlugin = appRequire('plugins/flowSaver/flow');
 const moment = require('moment');
 const fs = require('fs');
+const path = require("path");
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -148,7 +149,7 @@ const urlsafeBase64 = str => {
   return Buffer.from(str).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 };
 
-const clashData = fs.readFileSync('clash.txt');
+const clashData = fs.readFileSync(path.resolve(__dirname, "clash.txt"),"utf8");
 exports.getSubscribeAccountForUser = async (req, res) => {
   try {
     const ssr = req.query.ssr;
