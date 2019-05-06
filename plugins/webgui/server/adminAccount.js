@@ -148,6 +148,7 @@ const urlsafeBase64 = str => {
   return Buffer.from(str).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 };
 
+const clashData = fs.readFileSync('clash.txt');
 exports.getSubscribeAccountForUser = async (req, res) => {
   try {
     const ssr = req.query.ssr;
@@ -256,26 +257,24 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
     }
     if(type === 'clash') {
-      fs.readFile(path.join(__dirname, "./clash.txt"), function (error, result) {
-        let yml = result + "\n\n\nProxy:\n";
-        subscribeAccount.server.map(server => {
-            const name = server.subscribeName || server.name;
-            const cipher = server.method;
-            const password = subscribeAccount.account.password;
-            const host = server.host;
-            const port = subscribeAccount.account.port + server.shift;
-            yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }";
-          });
-        yml += "\nProxy Group:\n" +
-            "  - name: Proxy\n" +
-            "    type: select\n" +
-            "    proxies:\n";
-        subscribeAccount.server.map(server => {
-          const name = server.subscribeName || server.name;
-          yml += "      - " + name;
-        });
-        return res.send(yml);
+      let yml = clashData + "\n\n\nProxy:\n";
+      subscribeAccount.server.map(server => {
+        const name = server.subscribeName || server.name;
+        const cipher = server.method;
+        const password = subscribeAccount.account.password;
+        const host = server.host;
+        const port = subscribeAccount.account.port + server.shift;
+        yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }";
       });
+      yml += "\nProxy Group:\n" +
+          "  - name: Proxy\n" +
+          "    type: select\n" +
+          "    proxies:\n";
+      subscribeAccount.server.map(server => {
+        const name = server.subscribeName || server.name;
+        yml += "      - " + name;
+      });
+      return res.send(yml);
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
