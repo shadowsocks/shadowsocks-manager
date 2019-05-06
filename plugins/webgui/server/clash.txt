@@ -36,15 +36,12 @@ dns:
   listen: 0.0.0.0:53
   enhanced-mode: redir-host
   nameserver:
-    - 202.103.24.68
-    - 218.104.111.114
     - 114.114.114.114
+    - 119.29.29.29
     - 1.1.1.1
     - tls:# dns.rubyfish.cn:853 # dns over tls
   fallback: # 与 nameserver 内的服务器列表同时发起请求，当规则符合 GEOIP 在 CN 以外时，fallback 列表内的域名服务器生效。
     - 223.5.5.5
-    - 114.114.114.114
-    - 1.1.1.1
     - 8.8.8.8
     - tls:# dns.rubyfish.cn:853 # dns over tls
 

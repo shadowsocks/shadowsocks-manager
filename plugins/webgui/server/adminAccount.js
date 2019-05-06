@@ -265,7 +265,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         const password = subscribeAccount.account.password;
         const host = server.host;
         const port = subscribeAccount.account.port + server.shift;
-        yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }";
+        yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }\n";
       });
       yml += "\nProxy Group:\n" +
           "  - name: Proxy\n" +
@@ -273,7 +273,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           "    proxies:\n";
       subscribeAccount.server.map(server => {
         const name = server.subscribeName || server.name;
-        yml += "      - " + name;
+        yml += "      - \"" + name + "\"\n";
       });
       return res.send(yml);
     }
