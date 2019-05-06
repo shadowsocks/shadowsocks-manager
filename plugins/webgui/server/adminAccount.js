@@ -5,6 +5,7 @@ const net = require('net');
 const knex = appRequire('init/knex').knex;
 const flowPlugin = appRequire('plugins/flowSaver/flow');
 const moment = require('moment');
+const fs = require('fs');
 
 const formatMacAddress = mac => mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 
@@ -255,27 +256,26 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
     }
     if(type === 'clash') {
-      const yaml = require('js-yaml');
-      const clashConfig = appRequire('plugins/webgui/server/clash');
-      clashConfig.Proxy = subscribeAccount.server.map(server => {
-        return {
-          cipher: server.method,
-          name: server.subscribeName || server.name,
-          password: String(subscribeAccount.account.password),
-          port: subscribeAccount.account.port + server.shift,
-          server: server.host,
-          type: 'ss'
-        };
+      fs.readFile(path.join(__dirname, "./clash.txt"), function (error, result) {
+        let yml = result + "\n\n\nProxy:\n";
+        subscribeAccount.server.map(server => {
+            const name = server.subscribeName || server.name;
+            const cipher = server.method;
+            const password = subscribeAccount.account.password;
+            const host = server.host;
+            const port = subscribeAccount.account.port + server.shift;
+            yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }";
+          });
+        yml += "\nProxy Group:\n" +
+            "  - name: Proxy\n" +
+            "    type: select\n" +
+            "    proxies:\n";
+        subscribeAccount.server.map(server => {
+          const name = server.subscribeName || server.name;
+          yml += "      - " + name;
+        });
+        return res.send(yml);
       });
-      clashConfig['Proxy Group'][0] = {
-        name: 'Proxy',
-        type: 'select',
-        proxies: subscribeAccount.server.map(server => {
-          return server.subscribeName || server.name;
-        }),
-      };
-      
-      return res.send(yaml.safeDump(clashConfig));
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
