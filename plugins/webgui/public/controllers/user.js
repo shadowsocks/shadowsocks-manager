@@ -35,15 +35,15 @@ app
         $mdSidenav('left').toggle();
       }
     };
-    $scope.menus = [{
+    $scope.menus = [/*{
       name: '首页',
       icon: 'home',
       click: 'user.index'
-    }, {
+    },*/ {
       name: '账号',
       icon: 'account_circle',
       click: 'user.account'
-    }, {
+    }, /*{
       name: '订单',
       icon: 'attach_money',
       click: 'user.order',
@@ -54,7 +54,7 @@ app
       click: 'user.settings'
     }, {
       name: 'divider',
-    }, {
+    }, */{
       name: '退出',
       icon: 'exit_to_app',
       click: function() {
