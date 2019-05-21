@@ -32,11 +32,11 @@ app
         name: '登录',
         icon: 'cloud',
         click: 'home.login'
-      }, {
+      }/*, {
         name: '注册',
         icon: 'face',
         click: 'home.signup'
-      }];
+      }*/];
       $scope.menuClick = (index) => {
         $mdSidenav('left').close();
         $state.go($scope.menus[index].click);
