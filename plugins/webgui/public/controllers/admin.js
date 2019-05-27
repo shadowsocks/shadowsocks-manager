@@ -46,6 +46,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
       name: '订单',
       icon: 'attach_money',
       click: 'admin.pay',
+      hide: !($scope.config.paypal || $scope.config.giftcard || $scope.config.refCode || $scope.config.alipay),
     }, {
       name: '设置',
       icon: 'settings',
