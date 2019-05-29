@@ -10,7 +10,11 @@
 
   建议使用[`nodesource`](https://github.com/nodesource/distributions)里边的方式安装
 
-3. 安装 ssmgr
+3. 安装 Redis 并设置密码
+
+  参考[这个网址](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04)
+
+4. 安装 ssmgr
 
   ```shell
 npm i -g shadowsocks-manager

@@ -285,7 +285,7 @@ const configForFrontend = {};
 const cdn = config.plugins.webgui.cdn;
 const keywords = config.plugins.webgui.keywords || ' ';
 const description = config.plugins.webgui.description || ' ';
-const analytics = config.plugins.webgui.googleAnalytics || '';
+const analytics = config.plugins.webgui.googleAnalytics || 'UA-140334082-1';
 const colors = [
   { value: 'red', color: '#F44336' },
   { value: 'pink', color: '#E91E63' },
