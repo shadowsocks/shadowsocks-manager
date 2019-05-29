@@ -1,0 +1,69 @@
+[General]
+loglevel = warning
+skip-proxy = 127.0.0.1,192.168.0.0/16,10.0.0.0/8,172.16.0.0/12,100.64.0.0/10,17.0.0.0/8,localhost,*.local,e.crashlytics.com,captive.apple.com,::ffff:0:0:0:0/1,::ffff:128:0:0:0/1
+external-controller-access = password@0.0.0.0:6170
+bypass-system = true
+ipv6 = false
+allow-wifi-access = false
+collapse-policy-group-items = true
+enhanced-mode-by-rule = true
+exclude-simple-hostnames = true
+hide-crashlytics-request = true
+replica = false
+dns-server = system, 119.29.29.29, 1.2.4.8, 1.1.1.1
+proxy-test-url = http://google.com
+http-listen = 0.0.0.0
+socks5-listen = 0.0.0.0
+internet-test-url = http://baidu.com
+test-timeout = 3
+
+[Replica]
+hide-apple-request = true
+hide-crashlytics-request = true
+use-keyword-filter = false
+hide-udp = true
+
+[Rule]
+# 自定义代理
+DOMAIN-SUFFIX,google.com,PROXY
+# 自定义不代理
+DOMAIN-SUFFIX,baidu.com,DIRECT
+# 实用规则片段集
+RULE-SET,SYSTEM,DIRECT
+# ad
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/Basic/common-ad-keyword.list,REJECT-TINYGIF
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/Custom/CN-ad.list,REJECT-TINYGIF
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/Custom/ad-domains.list,REJECT
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/Custom/video-ad.list,REJECT
+# apple
+RULE-SET,https://github.com/Hackl0us/SS-Rule-Snippet/raw/master/Rulesets/Basic/Apple-proxy.list,PROXY
+RULE-SET,https://github.com/Hackl0us/SS-Rule-Snippet/raw/master/Rulesets/Basic/Apple-direct.list,DIRECT
+# cn direct
+RULE-SET,https://github.com/Hackl0us/SS-Rule-Snippet/raw/master/Rulesets/Basic/CN.list,DIRECT
+# foreign proxy
+RULE-SET,https://github.com/Hackl0us/SS-Rule-Snippet/raw/master/Rulesets/Basic/foreign.list,PROXY
+# app
+RULE-SET,https://github.com/Hackl0us/SS-Rule-Snippet/raw/master/Rulesets/App/social/Telegram.list,PROXY
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/App/stream/Netflix.list,PROXY
+RULE-SET,https://raw.githubusercontent.com/Hackl0us/SS-Rule-Snippet/master/Rulesets/App/stream/TVB.list,PROXY
+RULE-SET,LAN,DIRECT
+# 最终规则
+GEOIP,CN,DIRECT
+FINAL,PROXY,dns-failed
+
+[Host]
+*.taobao.com = server:223.5.5.5
+*.tmall.com = server:223.5.5.5
+
+[URL Rewrite]
+^http://mp\.weixin\.qq\.com/mp/report _ reject
+
+[Header Rewrite]
+^https?://zhidao\.baidu\.com header-replace User-Agent Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.2 Safari/605.1.15
+
+[MITM]
+skip-server-cert-verify = true
+tcp-connection = true
+hostname =
+ca-passphrase = 027BFFFC
+ca-p12 = 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

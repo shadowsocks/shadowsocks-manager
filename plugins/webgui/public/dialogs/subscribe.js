@@ -38,7 +38,7 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
     controller: ['$scope', '$mdMedia', '$mdDialog', 'bind', 'configManager', '$mdToast', function($scope, $mdMedia, $mdDialog, bind, configManager, $mdToast) {
       $scope.publicInfo = bind;
       $scope.publicInfo.types = [
-        'shadowrocket', 'potatso', 'ssr', 'ssd', 'clash',
+        'shadowrocket', 'potatso', 'ssr', 'ssd', 'clash', 'surge3'
       ];
       const config = configManager.getConfig();
       $scope.changeLinkType = () => {

@@ -150,6 +150,7 @@ const urlsafeBase64 = str => {
 };
 
 const clashData = fs.readFileSync(path.resolve(__dirname, "clash.txt"),"utf8");
+const surge3Data = fs.readFileSync(path.resolve(__dirname, "surge3.txt"),"utf8");
 exports.getSubscribeAccountForUser = async (req, res) => {
   try {
     const ssr = req.query.ssr;
@@ -258,24 +259,43 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
     }
     if(type === 'clash') {
-      let yml = clashData + "\n\n\nProxy:\n";
+      let data = clashData + "\n\n\nProxy:\n";
       subscribeAccount.server.map(server => {
         const name = server.subscribeName || server.name;
         const cipher = server.method;
         const password = subscribeAccount.account.password;
         const host = server.host;
         const port = subscribeAccount.account.port + server.shift;
-        yml += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }\n";
+        data += "  - { name: \"" + name + "\", type: ss, server: \"" + host + "\", port: " + port + ", cipher: \"" + cipher + "\", password: \"" + password + "\" }\n";
       });
-      yml += "\nProxy Group:\n" +
+      data += "\nProxy Group:\n" +
           "  - name: Proxy\n" +
           "    type: select\n" +
           "    proxies:\n";
       subscribeAccount.server.map(server => {
         const name = server.subscribeName || server.name;
-        yml += "      - \"" + name + "\"\n";
+        data += "      - \"" + name + "\"\n";
       });
-      return res.send(yml);
+      return res.send(data);
+    }
+    if (type === 'surge3') {
+      let data = surge3Data + "\n\n\n[Proxy]\n";
+      subscribeAccount.server.map(server => {
+        const name = server.subscribeName || server.name;
+        const cipher = server.method;
+        const password = subscribeAccount.account.password;
+        const host = server.host;
+        const port = subscribeAccount.account.port + server.shift;
+        // name = ss, example.com, 8388, encrypt-method=aes-256-gcm, password=pwd, udp-relay=true, tfo=true
+        data += name + " = ss, " + host + ", " + port + ", encrypt-method=" + cipher + ", password=" + password + ", udp-relay=true, tfo=true\n";
+      });
+      data += "\n[Proxy Group]\n" +
+          "PROXY = select";
+      subscribeAccount.server.map(server => {
+        const name = server.subscribeName || server.name;
+        data += ", " + name;
+      });
+      return res.send(data);
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
