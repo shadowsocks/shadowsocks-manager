@@ -12,6 +12,7 @@ const groupPlugin = appRequire('plugins/group/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 const ref = appRequire('plugins/webgui_ref/index');
+const rp = require('request-promise');
 
 const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
 let telegram;
@@ -199,6 +200,38 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const { google_signin } =  config.plugins.webgui;
+    if(!token || !google_signin) {
+      return Promise.reject();
+    }
+    const result = await rp({
+      uri: 'https://oauth2.googleapis.com/tokeninfo',
+      method: 'GET',
+      qs: {
+        id_token: token
+      },
+      json: true,
+    });
+    if(result.azp === google_signin && result.aud === google_signin && result.email && result.email_verified === 'true') {
+      const email = result.email;
+      const user = await knex('user').where({ username: email }).then(s => s[0]);
+      if(user) {
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
+      }
+      return Promise.reject();
+    }
+    return Promise.reject();
+  } catch(err) {
+    console.log(err);
+    return res.status(403).end();
+  }
+};
+
 exports.macLogin = (req, res) => {
   delete req.session.user;
   delete req.session.type;
@@ -259,6 +292,7 @@ exports.status = async (req, res) => {
     const version = appRequire('package').version;
     const site = config.plugins.webgui.site;
     const skin = config.plugins.webgui.skin || 'default';
+    const google_signin = config.plugins.webgui.google_signin || '';
     let alipay;
     let paypal;
     let paypalMode;
@@ -319,6 +353,7 @@ exports.status = async (req, res) => {
       subscribe,
       multiAccount,
       simple,
+      google_signin,
     });
   } catch(err) {
     logger.error(err);
