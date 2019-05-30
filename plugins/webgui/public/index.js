@@ -13,10 +13,22 @@ angular.module('app', [
   'ngclipboard',
 ]);
 
+const addMeta = (name, content) => {
+  const meta = document.createElement('meta');
+  meta.name = name;
+  meta.content = content;
+  document.getElementsByTagName('head')[0].appendChild(meta);
+};
+
 const window = require('window');
 angular.element(() => {
   $.get(window.api + '/api/home/login').then(success => {
     window.ssmgrConfig = success;
+
+    if(window.ssmgrConfig.google_signin) {
+      addMeta('google-signin-scope', 'profile email');
+      addMeta('google-signin-client_id', window.ssmgrConfig.google_signin);
+    }
 
     require('./directives/focusMe');
 

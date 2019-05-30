@@ -232,4 +232,46 @@ app
       $state.go('home.signup');
     }
   ])
+  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog',
+    ($scope, $state, $http, configManager, alertDialog) => {
+      document.addEventListener('gapiLoaded', () => { gapi.load('auth2', init); });
+      let auth2;
+      const init = () => {
+        auth2 = gapi.auth2.getAuthInstance();
+        auth2.isSignedIn.listen(signInChanged);
+        auth2.currentUser.listen(userChanged);
+        if(auth2.isSignedIn.get() === true) {
+          auth2.signIn();
+        }
+      };
+      const signInChanged = isSignedIn => {
+        if(isSignedIn) {
+          const googleUser = auth2.currentUser.get();
+          const authResponse = googleUser.getAuthResponse();
+          const token = authResponse.id_token;
+          alertDialog.loading().then(() => {
+            return $http.post('/api/home/googleLogin', {
+              token,
+            });
+          }).then(success => {
+            alertDialog.close();
+            auth2.disconnect();
+            $scope.setId(success.data.id);
+            configManager.deleteConfig();
+            if (success.data.type === 'normal') {
+              $state.go('user.index');
+            } else if (success.data.type === 'admin') {
+              $state.go('admin.index');
+            }
+          }).catch(err => {
+            alertDialog.show('登录失败', '确定');
+          });
+        }
+      };
+
+      // const userChanged = user => {
+      //   console.log('User Changed');
+      // };
+    }
+  ])
 ;
