@@ -87,6 +87,9 @@ app
           $scope.login();
         }
       };
+      $scope.socialLogin = () => {
+        $state.go('home.google');
+      };
     }
   ])
   .controller('HomeSignupController', ['$scope', '$state', '$interval', '$timeout', 'homeApi', 'alertDialog', '$localStorage', 'configManager',
@@ -232,14 +235,14 @@ app
       $state.go('home.signup');
     }
   ])
-  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog',
-    ($scope, $state, $http, configManager, alertDialog) => {
-      document.addEventListener('gapiLoaded', () => { gapi.load('auth2', init); });
+  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window',
+    ($scope, $state, $http, configManager, alertDialog, $window) => {
+      document.addEventListener('gapiLoaded', () => { gapi.load('auth2', gapiInit); });
       let auth2;
-      const init = () => {
+      const gapiInit = () => {
         auth2 = gapi.auth2.getAuthInstance();
         auth2.isSignedIn.listen(signInChanged);
-        auth2.currentUser.listen(userChanged);
+        // auth2.currentUser.listen(userChanged);
         if(auth2.isSignedIn.get() === true) {
           auth2.signIn();
         }
@@ -269,8 +272,27 @@ app
         }
       };
 
-      // const userChanged = user => {
-      //   console.log('User Changed');
+      // $window.fbAsyncInit = function() {
+      //   FB.init({ 
+      //     appId: '2319830048077781',
+      //     status: true, 
+      //     cookie: true, 
+      //     xfbml: true,
+      //     version: 'v2.4'
+      //   });
+      // };
+      // (function(d, s, id){
+      //   var js, fjs = d.getElementsByTagName(s)[0];
+      //   if (d.getElementById(id)) {return;}
+      //   js = d.createElement(s); js.id = id;
+      //   js.src = "https://connect.facebook.net/en_US/sdk.js";
+      //   fjs.parentNode.insertBefore(js, fjs);
+      // }(document, 'script', 'facebook-jssdk'));
+
+      // $window.checkLoginState = () => {
+      //   FB.getLoginStatus(function(response) {
+      //     console.log(response);
+      //   });
       // };
     }
   ])
