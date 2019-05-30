@@ -24,6 +24,130 @@ const formatMacAddress = mac => {
   return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 };
 
+const getNewPort = async () => {
+  return knex('webguiSetting').select().where({
+    key: 'account',
+  }).then(success => {
+    if(!success.length) { return Promise.reject('settings not found'); }
+    success[0].value = JSON.parse(success[0].value);
+    return success[0].value.port;
+  }).then(port => {
+    if(port.random) {
+      const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
+      let retry = 0;
+      let myPort = getRandomPort();
+      const checkIfPortExists = port => {
+        let myPort = port;
+        return knex('account_plugin').select()
+        .where({ port }).then(success => {
+          if(success.length && retry <= 30) {
+            retry++;
+            myPort = getRandomPort();
+            return checkIfPortExists(myPort);
+          } else if (success.length && retry > 30) {
+            return Promise.reject('Can not get a random port');
+          } else {
+            return myPort;
+          }
+        });
+      };
+      return checkIfPortExists(myPort);
+    } else {
+      return knex('account_plugin').select()
+      .whereBetween('port', [port.start, port.end])
+      .orderBy('port', 'ASC').then(success => {
+        const portArray = success.map(m => m.port);
+        let myPort;
+        for(let p = port.start; p <= port.end; p++) {
+          if(portArray.indexOf(p) < 0) {
+            myPort = p; break;
+          }
+        }
+        if(myPort) {
+          return myPort;
+        } else {
+          return Promise.reject('no port');
+        }
+      });
+    }
+  });
+};
+
+const createUser = async (email, password) => {
+  let type = 'normal';
+  await knex('user').count('id AS count').then(success => {
+    if(!success[0].count) {
+      type = 'admin';
+    }
+  });
+  let group = 0;
+  const webguiSetting = await knex('webguiSetting').select().where({
+    key: 'account',
+  }).then(success => JSON.parse(success[0].value));
+  if(webguiSetting.defaultGroup) {
+    try {
+      await groupPlugin.getOneGroup(webguiSetting.defaultGroup);
+      group = webguiSetting.defaultGroup;
+    } catch(err) {}
+  }
+  const [ userId ] = await user.add({
+    username: email,
+    email,
+    password,
+    type,
+    group,
+  });
+  if(userId === 1) {
+    return {
+      id: userId,
+      type: 'admin',
+    };
+  }
+  const newUserAccount = webguiSetting.accountForNewUser;
+  if(newUserAccount.isEnable) {
+    const port = await getNewPort();
+    if(newUserAccount.fromOrder) {
+      const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
+      if(orderInfo) {
+        await account.addAccount(orderInfo.type || 5, {
+          user: userId,
+          orderId: orderInfo.id,
+          port,
+          password: Math.random().toString().substr(2,10),
+          time: Date.now(),
+          limit: orderInfo.cycle,
+          flow: orderInfo.flow,
+          server: orderInfo.server,
+          autoRemove: orderInfo.autoRemove ? 1 : 0,
+          multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
+        });
+      }
+    } else {
+      await account.addAccount(newUserAccount.type || 5, {
+        user: userId,
+        orderId: 0,
+        port,
+        password: Math.random().toString().substr(2,10),
+        time: Date.now(),
+        limit: newUserAccount.limit || 8,
+        flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
+        server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
+        autoRemove: newUserAccount.autoRemove ? 1 : 0,
+        multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
+      });
+    }
+  }
+  logger.info(`[${ email }] signup success`);
+  push.pushMessage('注册', {
+    body: `Google用户[ ${ email.toString().toLowerCase() } ]注册成功`,
+  });
+  isTelegram && telegram.push(`Google用户[ ${ email.toString().toLowerCase() } ]注册成功`);
+  return {
+    id: userId,
+    type: 'normal',
+  };
+};
+
 exports.signup = async (req, res) => {
   try {
     req.checkBody('email', 'Invalid email').isEmail();
@@ -31,9 +155,6 @@ exports.signup = async (req, res) => {
     req.checkBody('password', 'Invalid password').notEmpty();
     let type = 'normal';
     const validation = await req.getValidationResult();
-    // if(!validation.isEmpty()) {
-    //   return Promise.reject('invalid body');
-    // }
     if(!validation.isEmpty()) { return Promise.reject(validation.array()); }
     const email = req.body.email.toString().toLowerCase();
     const code = req.body.code;
@@ -67,54 +188,6 @@ exports.signup = async (req, res) => {
     if(userId === 1) { return; }
     const newUserAccount = webguiSetting.accountForNewUser;
     if(newUserAccount.isEnable) {
-      const getNewPort = async () => {
-        return knex('webguiSetting').select().where({
-          key: 'account',
-        }).then(success => {
-          if(!success.length) { return Promise.reject('settings not found'); }
-          success[0].value = JSON.parse(success[0].value);
-          return success[0].value.port;
-        }).then(port => {
-          if(port.random) {
-            const getRandomPort = () => Math.floor(Math.random() * (port.end - port.start + 1) + port.start);
-            let retry = 0;
-            let myPort = getRandomPort();
-            const checkIfPortExists = port => {
-              let myPort = port;
-              return knex('account_plugin').select()
-              .where({ port }).then(success => {
-                if(success.length && retry <= 30) {
-                  retry++;
-                  myPort = getRandomPort();
-                  return checkIfPortExists(myPort);
-                } else if (success.length && retry > 30) {
-                  return Promise.reject('Can not get a random port');
-                } else {
-                  return myPort;
-                }
-              });
-            };
-            return checkIfPortExists(myPort);
-          } else {
-            return knex('account_plugin').select()
-            .whereBetween('port', [port.start, port.end])
-            .orderBy('port', 'ASC').then(success => {
-              const portArray = success.map(m => m.port);
-              let myPort;
-              for(let p = port.start; p <= port.end; p++) {
-                if(portArray.indexOf(p) < 0) {
-                  myPort = p; break;
-                }
-              }
-              if(myPort) {
-                return myPort;
-              } else {
-                return Promise.reject('no port');
-              }
-            });
-          }
-        });
-      };
       const port = await getNewPort();
       if(newUserAccount.fromOrder) {
         const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
@@ -222,8 +295,13 @@ exports.googleLogin = async (req, res) => {
         req.session.user = user.id;
         req.session.type = user.type;
         return res.send({ id: user.id, type: user.type });
+      } else {
+        const password = Math.random().toString();
+        const user = await createUser(email, password);
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
       }
-      return Promise.reject();
     }
     return Promise.reject();
   } catch(err) {
