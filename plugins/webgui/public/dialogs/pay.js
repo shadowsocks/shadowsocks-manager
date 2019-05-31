@@ -56,39 +56,32 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
     }
     const env = publicInfo.config.paypalMode === 'sandbox' ? 'sandbox' : 'production';
     if(publicInfo.myPayType === 'paypal') {
-      paypal.Button.render({
-        locale: $localStorage.language ? $localStorage.language.replace('-', '_') : 'zh_CN',
-        style: {
-          label: 'checkout', // checkout | credit | pay
-          size:  'medium',   // small    | medium | responsive
-          shape: 'rect',     // pill     | rect
-          color: 'blue'      // gold     | blue   | silver
-        },
-        env, // production or sandbox
-        commit: true,
-        payment: function() {
+      paypal.Buttons({
+        createOrder: function(data,actions) {
           var CREATE_URL = '/api/user/paypal/create';
-          return paypal.request.post(CREATE_URL, {
+          return $http.post(CREATE_URL, {
             accountId: publicInfo.accountId,
             orderId: publicInfo.orderId,
           })
           .then(function(res) {
-            return res.paymentID;
+            return res.data.paymentID;
           });
         },
-        onAuthorize: function(data, actions) {
+        onApprove: function (data) {
           var EXECUTE_URL = '/api/user/paypal/execute/';
           var data = {
             paymentID: data.paymentID,
             payerID: data.payerID
           };
-          return paypal.request.post(EXECUTE_URL, data)
+          return $http.post(EXECUTE_URL, data)
           .then(function (res) {
-            publicInfo.status = 'success';
-            publicInfo.message = '订单会在两分钟内生效，请稍候';
+            $timeout(function(){
+              publicInfo.status = 'success';
+              publicInfo.message = '订单会在两分钟内生效，请稍候';
+            })
           });
         }
-      }, '#paypal-button-container');
+      }).render('#paypal-button-container')
     }
   };
   let interval = null;

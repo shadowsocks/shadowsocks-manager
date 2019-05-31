@@ -48,9 +48,11 @@
         </div>
         <div ng-hide="mainLoading" ui-view layout-fill></div>
     </div>
+
     <% if (paypal) { %>
-        <script async src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script async src="https://www.paypal.com/sdk/js?client-id=<%= paypalClientId %>&currency=USD&commit=true"></script>
     <% } %>
+
 </body>
 
 </html>

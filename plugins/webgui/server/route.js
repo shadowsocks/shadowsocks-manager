@@ -331,6 +331,7 @@ const homePage = (req, res) => {
       analytics,
       config: configForFrontend,
       paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
+      paypalClientId: (config.plugins.paypal && config.plugins.paypal.use) ? config.plugins.paypal.client_id : ''
     });
   });
 };

@@ -57,6 +57,15 @@ const createOrder = async (user, account, orderId) => {
         }
       });
     });
+
+    let token;
+
+    for (let link of payment.links) {
+      if (link.rel === 'approval_url') {
+        token = link.href.match(/EC-\w+/)[0];
+      }
+    }
+
     const myOrderId = moment().format('YYYYMMDDHHmmss') + Math.random().toString().substr(2, 6);
     await knex('paypal').insert({
       orderId: myOrderId,
@@ -69,7 +78,7 @@ const createOrder = async (user, account, orderId) => {
       createTime: Date.now(),
       expireTime: Date.now() + 2 * 60 * 60 * 1000,
     });
-    return { paymentID: payment.id };
+    return { paymentID: token };
   } catch (err) {
     console.log(err);
     return Promise.reject(err);
