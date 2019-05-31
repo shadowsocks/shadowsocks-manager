@@ -1,0 +1,23 @@
+<div layout="column" layout-align="center center" ng-cloak layout-fill>
+  <div class="social-button">
+    <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div>
+  </div>
+  <div style="height: 20px;"></div>
+  <div class="social-button">
+    <div class="fb-login-button"
+      data-size="large"
+      data-button-type="continue_with"
+      data-auto-logout-link="false"
+      data-use-continue-as="false"
+      onlogin="checkLoginState()">
+    </div>
+  </div>
+</div>
+<script>
+$.getScript('https://apis.google.com/js/platform.js').done(() => {
+  document.dispatchEvent(new CustomEvent('gapiLoaded', {}));
+});
+$.getScript('https://connect.facebook.net/zh_CN/sdk.js').done(() => {
+  document.dispatchEvent(new CustomEvent('fbLoaded', {}));
+});
+</script>

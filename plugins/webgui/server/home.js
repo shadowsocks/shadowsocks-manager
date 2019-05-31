@@ -310,6 +310,53 @@ exports.googleLogin = async (req, res) => {
   }
 };
 
+exports.facebookLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+    const facebook_login =  config.plugins.webgui.facebook_login;
+    if(!token || !facebook_login) {
+      return Promise.reject();
+    }
+    const result = await rp({
+      uri: 'https://graph.facebook.com/debug_token',
+      method: 'GET',
+      qs: {
+        access_token: token,
+        input_token: token,
+      },
+      json: true,
+    });
+    const userInfo = await rp({
+      uri: 'https://graph.facebook.com/me',
+      method: 'POST',
+      qs: {
+        fields: 'email',
+        access_token: token,
+      },
+      json: true,
+    });
+    if(result.data.app_id === facebook_login && result.data.is_valid && userInfo.email) {
+      const email = userInfo.email;
+      const user = await knex('user').where({ username: email }).then(s => s[0]);
+      if(user) {
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
+      } else {
+        const password = Math.random().toString();
+        const user = await createUser(email, password);
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
+      }
+    }
+    return Promise.reject();
+  } catch(err) {
+    console.log(err);
+    return res.status(403).end();
+  }
+};
+
 exports.macLogin = (req, res) => {
   delete req.session.user;
   delete req.session.type;
@@ -371,6 +418,7 @@ exports.status = async (req, res) => {
     const site = config.plugins.webgui.site;
     const skin = config.plugins.webgui.skin || 'default';
     const google_signin = config.plugins.webgui.google_signin || '';
+    const facebook_login = config.plugins.webgui.facebook_login || '';
     let alipay;
     let paypal;
     let paypalMode;
@@ -432,6 +480,7 @@ exports.status = async (req, res) => {
       multiAccount,
       simple,
       google_signin,
+      facebook_login,
     });
   } catch(err) {
     logger.error(err);

@@ -60,6 +60,7 @@ app.post('/api/home/ref/:refCode', home.visitRef);
 app.post('/api/home/signup', home.signup);
 app.post('/api/home/login', home.login);
 app.post('/api/home/googleLogin', home.googleLogin);
+app.post('/api/home/facebookLogin', home.facebookLogin);
 app.post('/api/home/macLogin', home.macLogin);
 app.post('/api/home/logout', home.logout);
 app.post('/api/home/password/sendEmail', home.sendResetPasswordEmail);

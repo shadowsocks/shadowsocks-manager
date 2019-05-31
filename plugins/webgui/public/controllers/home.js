@@ -88,7 +88,7 @@ app
         }
       };
       $scope.socialLogin = () => {
-        $state.go('home.google');
+        $state.go('home.social');
       };
     }
   ])
@@ -235,7 +235,7 @@ app
       $state.go('home.signup');
     }
   ])
-  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window',
+  .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window',
     ($scope, $state, $http, configManager, alertDialog, $window) => {
       document.addEventListener('gapiLoaded', () => { gapi.load('auth2', gapiInit); });
       let auth2;
@@ -247,6 +247,7 @@ app
           auth2.signIn();
         }
       };
+
       const signInChanged = isSignedIn => {
         if(isSignedIn) {
           const googleUser = auth2.currentUser.get();
@@ -272,28 +273,50 @@ app
         }
       };
 
-      // $window.fbAsyncInit = function() {
-      //   FB.init({ 
-      //     appId: '2319830048077781',
-      //     status: true, 
-      //     cookie: true, 
-      //     xfbml: true,
-      //     version: 'v2.4'
-      //   });
-      // };
+      document.addEventListener('gapiLoaded', () => { $window.fbInit(); });
+      $window.fbInit = function() {
+        if($window.FB) {
+        FB.init({ 
+          appId: $scope.config.facebook_login,
+          status: true, 
+          cookie: true, 
+          xfbml: true,
+          version: 'v2.4'
+        });
+        }
+      };
       // (function(d, s, id){
       //   var js, fjs = d.getElementsByTagName(s)[0];
       //   if (d.getElementById(id)) {return;}
       //   js = d.createElement(s); js.id = id;
-      //   js.src = "https://connect.facebook.net/en_US/sdk.js";
+      //   js.src = "https://connect.facebook.net/zh_CN/sdk.js";
       //   fjs.parentNode.insertBefore(js, fjs);
       // }(document, 'script', 'facebook-jssdk'));
 
-      // $window.checkLoginState = () => {
-      //   FB.getLoginStatus(function(response) {
-      //     console.log(response);
-      //   });
-      // };
+      $window.checkLoginState = () => {
+        FB.getLoginStatus(function(response) {
+          if(response.status === 'connected') {
+            const token = response.authResponse.accessToken;
+            alertDialog.loading().then(() => {
+              return $http.post('/api/home/facebookLogin', {
+                token,
+              });
+            }).then(success => {
+              alertDialog.close();
+              // FB.logout();
+              $scope.setId(success.data.id);
+              configManager.deleteConfig();
+              if (success.data.type === 'normal') {
+                $state.go('user.index');
+              } else if (success.data.type === 'admin') {
+                $state.go('admin.index');
+              }
+            }).catch(err => {
+              alertDialog.show('登录失败', '确定');
+            });
+          }
+        });
+      };
     }
   ])
 ;
