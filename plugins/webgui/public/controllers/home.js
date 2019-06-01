@@ -235,17 +235,15 @@ app
       $state.go('home.signup');
     }
   ])
-  .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window',
-    ($scope, $state, $http, configManager, alertDialog, $window) => {
+  .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window', '$document',
+    ($scope, $state, $http, configManager, alertDialog, $window, $document) => {
       $scope.back = () => {
         $state.go('home.login');
       };
-      document.addEventListener('gapiLoaded', () => { gapi.load('auth2', gapiInit); });
       let auth2;
-      const gapiInit = () => {
+      $window.gapiInit = () => {
         auth2 = gapi.auth2.getAuthInstance();
         auth2.isSignedIn.listen(signInChanged);
-        // auth2.currentUser.listen(userChanged);
         if(auth2.isSignedIn.get() === true) {
           auth2.signIn();
         }
@@ -276,9 +274,7 @@ app
         }
       };
 
-      document.addEventListener('gapiLoaded', () => { $window.fbInit(); });
       $window.fbInit = function() {
-        if($window.FB) {
         FB.init({ 
           appId: $scope.config.facebook_login,
           status: true, 
@@ -286,15 +282,7 @@ app
           xfbml: true,
           version: 'v2.4'
         });
-        }
       };
-      // (function(d, s, id){
-      //   var js, fjs = d.getElementsByTagName(s)[0];
-      //   if (d.getElementById(id)) {return;}
-      //   js = d.createElement(s); js.id = id;
-      //   js.src = "https://connect.facebook.net/zh_CN/sdk.js";
-      //   fjs.parentNode.insertBefore(js, fjs);
-      // }(document, 'script', 'facebook-jssdk'));
 
       $window.checkLoginState = () => {
         FB.getLoginStatus(function(response) {
@@ -306,7 +294,6 @@ app
               });
             }).then(success => {
               alertDialog.close();
-              // FB.logout();
               $scope.setId(success.data.id);
               configManager.deleteConfig();
               if (success.data.type === 'normal') {

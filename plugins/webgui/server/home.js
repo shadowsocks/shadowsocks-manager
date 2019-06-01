@@ -73,7 +73,7 @@ const getNewPort = async () => {
   });
 };
 
-const createUser = async (email, password) => {
+const createUser = async (email, password, from = '') => {
   let type = 'normal';
   await knex('user').count('id AS count').then(success => {
     if(!success[0].count) {
@@ -139,9 +139,9 @@ const createUser = async (email, password) => {
   }
   logger.info(`[${ email }] signup success`);
   push.pushMessage('注册', {
-    body: `Google用户[ ${ email.toString().toLowerCase() } ]注册成功`,
+    body: `${ from }用户[ ${ email.toString().toLowerCase() } ]注册成功`,
   });
-  isTelegram && telegram.push(`Google用户[ ${ email.toString().toLowerCase() } ]注册成功`);
+  isTelegram && telegram.push(`${ from }用户[ ${ email.toString().toLowerCase() } ]注册成功`);
   return {
     id: userId,
     type: 'normal',
@@ -297,7 +297,7 @@ exports.googleLogin = async (req, res) => {
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
-        const user = await createUser(email, password);
+        const user = await createUser(email, password, 'Google');
         req.session.user = user.id;
         req.session.type = user.type;
         return res.send({ id: user.id, type: user.type });
@@ -344,7 +344,7 @@ exports.facebookLogin = async (req, res) => {
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
-        const user = await createUser(email, password);
+        const user = await createUser(email, password, 'Facebook');
         req.session.user = user.id;
         req.session.type = user.type;
         return res.send({ id: user.id, type: user.type });
