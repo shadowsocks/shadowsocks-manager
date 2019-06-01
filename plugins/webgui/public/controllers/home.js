@@ -237,6 +237,9 @@ app
   ])
   .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window',
     ($scope, $state, $http, configManager, alertDialog, $window) => {
+      $scope.back = () => {
+        $state.go('home.login');
+      };
       document.addEventListener('gapiLoaded', () => { gapi.load('auth2', gapiInit); });
       let auth2;
       const gapiInit = () => {

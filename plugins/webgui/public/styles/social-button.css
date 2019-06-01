@@ -1,4 +1,6 @@
 .social-button {
-  width: 232px;
+  width: 100%;
   height: 40px;
+  display: flex;
+  justify-content: center;
 }
