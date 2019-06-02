@@ -18,15 +18,18 @@ if(config.plugins.email.type === 'smtp') {
     host: config.plugins.email.host,
     port: config.plugins.email.port || 465,
     secure: config.plugins.email.hasOwnProperty('secure') ? config.plugins.email.secure : true,
-    auth: {
-      user: config.plugins.email.username,
-      pass: config.plugins.email.password,
-    },
+    auth: {},
     tls: {
       rejectUnauthorized: !config.plugins.email.allowUnauthorizedTls,
     },
     proxy: config.plugins.email.proxy || '',
   };
+  if(config.plugins.email.username && config.plugins.email.password) {
+    emailConfig.auth = {
+      user: config.plugins.email.username,
+      pass: config.plugins.email.password,
+    }
+  }
   transporter = nodemailer.createTransport(emailConfig);
   if(config.plugins.email.proxy && config.plugins.email.proxy.indexOf('socks') >= 0) {
     transporter.set('proxy_socks_module', require('socks'));
