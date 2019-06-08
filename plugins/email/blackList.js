@@ -1,4 +1,6 @@
 const blackList = [
+  '@themegreview.com',
+  '@beluckygame.com',
   '@figurescoin.com',
   '@iffymedia.com',
   '@icemail.club',
