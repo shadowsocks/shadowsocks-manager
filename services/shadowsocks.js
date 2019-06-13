@@ -7,7 +7,7 @@ const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 const version = appRequire('package').version;
 const exec = require('child_process').exec;
-const http = require('http');
+const https = require('https');
 
 let clientIp = [];
 
@@ -327,15 +327,15 @@ const getGfwStatus = () => {
   if(getGfwStatusTime && isGfw === 0 && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
   getGfwStatusTime = Date.now();
   const sites = [
-    'baidu.com:80',
+    'baidu.com:443',
   ];
   const site = sites[+Math.random().toString().substr(2) % sites.length];
-  const req = http.request({
+  const req = https.request({
     hostname: site.split(':')[0],
     port: +site.split(':')[1],
     path: '/',
     method: 'GET',
-    timeout: 2000,
+    timeout: 8000,
   }, res => {
     if(res.statusCode === 200) {
       isGfw = 0;
