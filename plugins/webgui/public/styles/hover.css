@@ -2,10 +2,10 @@
   cursor: pointer;
 }
 
-.hover-large {
+.hover-flow {
   transition: transform .2s;
 }
 
-.hover-large:hover {
-  transform: scale(1.05);
+.hover-flow:hover {
+  transform: translateY(-5px);
 }

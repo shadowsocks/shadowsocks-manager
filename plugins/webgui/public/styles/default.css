@@ -58,14 +58,6 @@ border: 1px solid black;
 background: white;
 }
 
-/*md-sidenav,
-md-sidenav.md-locked-open,
-md-sidenav.md-closed.md-locked-open-add-active {
-  min-width: 200px !important;
-  width: 85vw !important;
-  max-width: 210px !important;
-}*/
-
 .search-input > input {
 color: #FFF;
 }
