@@ -5,7 +5,7 @@
         <div flex layout="column" layout-align="space-around stretch">
             <form name="userForm">
                 <md-input-container class="md-block">
-                    <label>{{ '邮箱' | translate }}</label>
+                    <label>{{ '邮箱(推荐使用163，QQ邮箱无法收取)' | translate }}</label>
                     <input type="email" required name="email" ng-model="user.email">
                     <div ng-messages="userForm.email.$error">
                         <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
@@ -78,7 +78,7 @@
                         <div flex layout="column" layout-align="space-around stretch">
                           <form name="userForm">
                               <md-input-container class="md-block">
-                                  <label>{{ '邮箱' | translate }}</label>
+                                  <label>{{ '邮箱(推荐使用163，QQ邮箱无法收取)' | translate }}</label>
                                   <input type="email" required name="email" ng-model="user.email">
                                   <div ng-messages="userForm.email.$error">
                                       <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
