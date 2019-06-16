@@ -62,6 +62,16 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'HomeSocialLoginController',
       templateUrl: `${ cdn }/public/views/home/social.html`,
     })
+    .state('home.google', {
+      url: '/google',
+      controller: 'HomeGoogleLoginController',
+      templateUrl: `${ cdn }/public/views/home/google.html`,
+    })
+    .state('home.facebook', {
+      url: '/facebook',
+      controller: 'HomeFacebookLoginController',
+      templateUrl: `${ cdn }/public/views/home/facebook.html`,
+    })
     ;
   }
 ]);

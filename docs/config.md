@@ -76,8 +76,10 @@ plugins:
     # googleAnalytics: 'UA-xxxxxxxx-x'
     # gcmSenderId: '476902381496'
     # gcmAPIKey: 'AAAAGzddLRc:XXXXXXXXXXXXXX'
-    # google_signin: '562121334879-d5p34i1h8d6fjql9jems6fkdcgr0gqn9.apps.googleusercontent.com'
-    # facebook_login: '4596548008367539'
+    # google_login_client_id: '724695589056-p78tu8738t4fjel56yhe34qq34gjufsi.apps.googleusercontent.com'
+    # google_login_client_secret: 'TjUd36YnQ-YUI2uUtQa_43Tl'
+    # facebook_login_client_id: '9825686749820123'
+    # facebook_login_client_secret: 'a46c6bb6f8281c23d2b74b43008c9c46'
 db: 'webgui.sqlite'
 # 从 0.30 开始需要配置 redis
 redis:

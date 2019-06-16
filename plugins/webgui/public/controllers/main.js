@@ -15,6 +15,13 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     $scope.config.title = window.title;
     $scope.config.skin = 'default';
     $scope.config.fullscreenSkin = false;
+    $scope.config.url = $location.protocol() + '://' + $location.host();
+    if($location.protocol() === 'https' && $location.port() !== 443) {
+      $scope.config.url += (':' + $location.port());
+    }
+    if($location.protocol() === 'http' && $location.port() !== 80) {
+      $scope.config.url += (':' + $location.port());
+    }
     $scope.setId = id => { $scope.id = id; };
     $localStorage.$default({
       admin: {},

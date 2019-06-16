@@ -6,18 +6,21 @@
           <form name="userForm">
               <md-input-container class="md-block">
                 <div class="social-button">
-                  <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div>
+                  <!-- <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div> -->
+                  <md-button class="md-raised" ng-click="google()">Google</md-button>
                 </div>
               </md-input-container>
+              
               <md-input-container class="md-block">
                 <div class="social-button">
-                  <div class="fb-login-button"
+                  <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
+                  <!-- <div class="fb-login-button"
                     data-size="large"
                     data-button-type="continue_with"
                     data-auto-logout-link="false"
                     data-use-continue-as="false"
                     onlogin="checkLoginState()">
-                  </div>
+                  </div> -->
                 </div>
               </md-input-container>
           </form>
@@ -50,18 +53,20 @@
                           <form name="userForm">
                               <md-input-container class="md-block">
                                 <div class="social-button">
-                                  <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div>
+                                  <!-- <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div> -->
+                                  <md-button class="md-raised" ng-click="google()">Google</md-button>
                                 </div>
                               </md-input-container>
                               <md-input-container class="md-block">
                                 <div class="social-button">
-                                  <div class="fb-login-button"
+                                  <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
+                                  <!-- <div class="fb-login-button"
                                     data-size="large"
                                     data-button-type="continue_with"
                                     data-auto-logout-link="false"
                                     data-use-continue-as="false"
                                     onlogin="checkLoginState()">
-                                  </div>
+                                  </div> -->
                                 </div>
                               </md-input-container>
                           </form>
@@ -84,23 +89,6 @@
   </div>
 </div>
 
-
-
-<!-- <div layout="column" layout-align="center center" ng-cloak layout-fill>
-  <div class="social-button">
-    <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div>
-  </div>
-  <div style="height: 20px;"></div>
-  <div class="social-button">
-    <div class="fb-login-button"
-      data-size="large"
-      data-button-type="continue_with"
-      data-auto-logout-link="false"
-      data-use-continue-as="false"
-      onlogin="checkLoginState()">
-    </div>
-  </div>
-</div> -->
 <script>
 $.getScript('https://apis.google.com/js/platform.js').done(() => {
   document.dispatchEvent(new CustomEvent('gapiLoaded', {}));

@@ -235,78 +235,53 @@ app
       $state.go('home.signup');
     }
   ])
-  .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window', '$document',
-    ($scope, $state, $http, configManager, alertDialog, $window, $document) => {
+  .controller('HomeSocialLoginController', ['$scope', '$state', '$http', 'configManager', 'alertDialog', '$window', '$location',
+    ($scope, $state, $http, configManager, alertDialog, $window, $location) => {
       $scope.back = () => {
         $state.go('home.login');
       };
-      let auth2;
-      $window.gapiInit = () => {
-        auth2 = gapi.auth2.getAuthInstance();
-        auth2.isSignedIn.listen(signInChanged);
-        if(auth2.isSignedIn.get() === true) {
-          auth2.signIn();
+      const google_login_client_id = $scope.config.google_login_client_id;
+      const google_login_redirect_uri = $scope.config.url + '/home/google';
+      $scope.google = () => {
+        window.location.replace(`https://accounts.google.com/o/oauth2/v2/auth?client_id=${ google_login_client_id }&redirect_uri=${ google_login_redirect_uri }&scope=email&access_type=online&state=ssmgr&response_type=code&prompt=consent`);
+      };
+      const facebook_login_client_id = $scope.config.facebook_login_client_id;
+      const facebook_login_redirect_uri = $scope.config.url + '/home/facebook';
+      $scope.facebook = () => {
+        window.location.replace(`https://www.facebook.com/v3.3/dialog/oauth?client_id=${ facebook_login_client_id }&redirect_uri=${ facebook_login_redirect_uri }&state=ssmgr&scope=email`);
+      };
+    }
+  ])
+  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
+    ($scope, $state, $http, $location, configManager) => {
+      $http.post('/api/home/googleLogin', {
+        code: $location.search().code,
+        redirect_uri: $scope.config.url + '/home/google',
+      }).then(success => {
+        $scope.setId(success.data.id);
+        configManager.deleteConfig();
+        if (success.data.type === 'normal') {
+          $state.go('user.index');
+        } else if (success.data.type === 'admin') {
+          $state.go('admin.index');
         }
-      };
-
-      const signInChanged = isSignedIn => {
-        if(isSignedIn) {
-          const googleUser = auth2.currentUser.get();
-          const authResponse = googleUser.getAuthResponse();
-          const token = authResponse.id_token;
-          alertDialog.loading().then(() => {
-            return $http.post('/api/home/googleLogin', {
-              token,
-            });
-          }).then(success => {
-            alertDialog.close();
-            auth2.disconnect();
-            $scope.setId(success.data.id);
-            configManager.deleteConfig();
-            if (success.data.type === 'normal') {
-              $state.go('user.index');
-            } else if (success.data.type === 'admin') {
-              $state.go('admin.index');
-            }
-          }).catch(err => {
-            alertDialog.show('登录失败', '确定');
-          });
+      }); 
+    }
+  ])
+  .controller('HomeFacebookLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
+    ($scope, $state, $http, $location, configManager) => {
+      $http.post('/api/home/facebookLogin', {
+        code: $location.search().code,
+        redirect_uri: $scope.config.url + '/home/facebook',
+      }).then(success => {
+        $scope.setId(success.data.id);
+        configManager.deleteConfig();
+        if (success.data.type === 'normal') {
+          $state.go('user.index');
+        } else if (success.data.type === 'admin') {
+          $state.go('admin.index');
         }
-      };
-
-      $window.fbInit = function() {
-        FB.init({ 
-          appId: $scope.config.facebook_login,
-          status: true, 
-          cookie: true, 
-          xfbml: true,
-          version: 'v2.4'
-        });
-      };
-
-      $window.checkLoginState = () => {
-        FB.getLoginStatus(function(response) {
-          if(response.status === 'connected') {
-            const token = response.authResponse.accessToken;
-            alertDialog.loading().then(() => {
-              return $http.post('/api/home/facebookLogin', {
-                token,
-              });
-            }).then(success => {
-              alertDialog.close();
-              $scope.setId(success.data.id);
-              configManager.deleteConfig();
-              if (success.data.type === 'normal') {
-                $state.go('user.index');
-              } else if (success.data.type === 'admin') {
-                $state.go('admin.index');
-              }
-            }).catch(err => {
-              alertDialog.show('登录失败', '确定');
-            });
-          }
-        });
-      };
+      }); 
     }
   ])
 ;

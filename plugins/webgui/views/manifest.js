@@ -27,7 +27,7 @@ const manifest = {
     }
   ],
   start_url: '/',
-  display: 'standalone',
+  display: 'fullscreen',
   background_color: '#2196F3',
   theme_color: '#2196F3',
   gcm_sender_id: gcmSenderId,
