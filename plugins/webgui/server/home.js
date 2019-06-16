@@ -332,11 +332,15 @@ exports.googleLogin = async (req, res) => {
 let facebookAppToken = '';
 const getFacebookAppToken = async () => {
   if(facebookAppToken) { return facebookAppToken; }
+  const {
+    facebook_login_client_id: client_id,
+    facebook_login_client_secret: client_secret
+  } =  config.plugins.webgui;
   const result = await rp({
     uri: 'https://graph.facebook.com/oauth/access_token',
     qs: {
-      client_id: '2319830048077781',
-      client_secret: 'bfe3b5e599281a37b23b7b44398b9604',
+      client_id,
+      client_secret,
       grant_type: 'client_credentials',
     },
     json: true,
