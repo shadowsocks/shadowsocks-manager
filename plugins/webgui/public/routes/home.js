@@ -72,6 +72,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'HomeFacebookLoginController',
       templateUrl: `${ cdn }/public/views/home/facebook.html`,
     })
+    .state('home.github', {
+      url: '/github',
+      controller: 'HomeGithubLoginController',
+      templateUrl: `${ cdn }/public/views/home/github.html`,
+    })
     ;
   }
 ]);

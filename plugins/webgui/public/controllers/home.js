@@ -240,6 +240,7 @@ app
       $scope.back = () => {
         $state.go('home.login');
       };
+      const state = Math.random();
       const google_login_client_id = $scope.config.google_login_client_id;
       const google_login_redirect_uri = $scope.config.url + '/home/google';
       $scope.google = () => {
@@ -249,6 +250,11 @@ app
       const facebook_login_redirect_uri = $scope.config.url + '/home/facebook';
       $scope.facebook = () => {
         window.location.replace(`https://www.facebook.com/v3.3/dialog/oauth?client_id=${ facebook_login_client_id }&redirect_uri=${ facebook_login_redirect_uri }&state=ssmgr&scope=email`);
+      };
+      const github_login_client_id = $scope.config.github_login_client_id;
+      const github_login_redirect_uri = $scope.config.url + '/home/github';
+      $scope.github = () => {
+        window.location.replace(`https://github.com/login/oauth/authorize?client_id=${ github_login_client_id }&redirect_uri=${ github_login_redirect_uri }&state=${ state }&scope=user`);
       };
     }
   ])
@@ -273,6 +279,23 @@ app
       $http.post('/api/home/facebookLogin', {
         code: $location.search().code,
         redirect_uri: $scope.config.url + '/home/facebook',
+      }).then(success => {
+        $scope.setId(success.data.id);
+        configManager.deleteConfig();
+        if (success.data.type === 'normal') {
+          $state.go('user.index');
+        } else if (success.data.type === 'admin') {
+          $state.go('admin.index');
+        }
+      }); 
+    }
+  ])
+  .controller('HomeGithubLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
+    ($scope, $state, $http, $location, configManager) => {
+      $http.post('/api/home/githubLogin', {
+        code: $location.search().code,
+        redirect_uri: $scope.config.url + '/home/github',
+        state: $location.search().state,
       }).then(success => {
         $scope.setId(success.data.id);
         configManager.deleteConfig();

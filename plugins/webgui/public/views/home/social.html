@@ -1,99 +1,83 @@
 <div layout="column" hide-gt-sm>
-  <div flex="15" style="height: 40px;"></div>
-  <div flex layout="row">
-      <div flex="10" flex-gt-sm="30"></div>
-      <div flex layout="column" layout-align="space-around stretch">
-          <form name="userForm">
-              <md-input-container class="md-block">
-                <div class="social-button">
-                  <!-- <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div> -->
-                  <md-button class="md-raised" ng-click="google()">Google</md-button>
-                </div>
-              </md-input-container>
-              
-              <md-input-container class="md-block">
-                <div class="social-button">
-                  <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
-                  <!-- <div class="fb-login-button"
-                    data-size="large"
-                    data-button-type="continue_with"
-                    data-auto-logout-link="false"
-                    data-use-continue-as="false"
-                    onlogin="checkLoginState()">
-                  </div> -->
-                </div>
-              </md-input-container>
-          </form>
-      </div>
-      <div flex="10" flex-gt-sm="30"></div>
-  </div>
-  <div flex layout="row" layout-align="center start">
-      <div flex="10" flex-gt-sm="30"></div>
-      <div layout="row" flex layout-align="space-around center">
-          <div></div>
-          <md-button class="md-primary" ng-click="back()" translate>返回</md-button>
-      </div>
-      <div flex="10" flex-gt-sm="30"></div>
-  </div>
+    <div flex="15" style="height: 40px;"></div>
+    <div flex layout="row">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div flex layout="column" layout-align="space-around stretch">
+            <form name="userForm">
+                <md-input-container class="md-block">
+                    <div class="social-button">
+                        <md-button class="md-raised" ng-click="google()">Google</md-button>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <div class="social-button">
+                        <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
+                    </div>
+                </md-input-container>
+                <md-input-container class="md-block">
+                    <div class="social-button">
+                        <md-button class="md-raised" ng-click="github()">Github</md-button>
+                    </div>
+                </md-input-container>
+            </form>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
+    <div flex layout="row" layout-align="center start">
+        <div flex="10" flex-gt-sm="30"></div>
+        <div layout="row" flex layout-align="space-around center">
+            <div></div>
+            <md-button class="md-primary" ng-click="back()" translate>返回</md-button>
+        </div>
+        <div flex="10" flex-gt-sm="30"></div>
+    </div>
 </div>
 <div layout="column" hide-xs hide-sm>
-  <div flex="20" style="min-height: 120px; height: 120px;"></div>
-  <div layout="row" layout-align="center center">
-      <div flex="25"></div>
-      <md-card flex="50" style="min-height: 40vh;">
-          <div flex="5"></div>
-          <md-card-content layout="row" layout-align="center center">
-              <div flex="30" layout="row" layout-align="center center" layout-margin>
-                  <img src="/favicon.png" style="width: 100%;">
-              </div>
-              <div flex>
-                  <div flex layout="row">
-                      <div flex="10"></div>
-                      <div flex layout="column" layout-align="space-around stretch">
-                          <form name="userForm">
-                              <md-input-container class="md-block">
-                                <div class="social-button">
-                                  <!-- <div class="g-signin2" data-theme="dark" data-longtitle="true" data-width="232" data-height="40"></div> -->
-                                  <md-button class="md-raised" ng-click="google()">Google</md-button>
-                                </div>
-                              </md-input-container>
-                              <md-input-container class="md-block">
-                                <div class="social-button">
-                                  <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
-                                  <!-- <div class="fb-login-button"
-                                    data-size="large"
-                                    data-button-type="continue_with"
-                                    data-auto-logout-link="false"
-                                    data-use-continue-as="false"
-                                    onlogin="checkLoginState()">
-                                  </div> -->
-                                </div>
-                              </md-input-container>
-                          </form>
-                      </div>
-                      <div flex="10"></div>
-                  </div>
-                  <div flex layout="row" layout-align="center start">
-                      <div flex="10"></div>
-                      <div layout="row" flex layout-align="space-around center">
-                        <div></div>
-                        <md-button class="md-primary" ng-click="back()" translate>返回</md-button>
-                      </div>
-                      <div flex="10"></div>
-                  </div>
-              </div>
-          </md-card-content>
-          <div flex="5"></div>
-      </md-card>
-      <div flex="25"></div>
-  </div>
+    <div flex="20" style="min-height: 120px; height: 120px;"></div>
+    <div layout="row" layout-align="center center">
+        <div flex="25"></div>
+        <md-card flex="50" style="min-height: 40vh;">
+            <div flex="5"></div>
+            <md-card-content layout="row" layout-align="center center">
+                <div flex="30" layout="row" layout-align="center center" layout-margin>
+                    <img src="/favicon.png" style="width: 100%;">
+                </div>
+                <div flex>
+                    <div flex layout="row">
+                        <div flex="10"></div>
+                        <div flex layout="column" layout-align="space-around stretch">
+                            <form name="userForm">
+                                <md-input-container class="md-block">
+                                    <div class="social-button">
+                                        <md-button class="md-raised" ng-click="google()">Google</md-button>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <div class="social-button">
+                                        <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
+                                    </div>
+                                </md-input-container>
+                                <md-input-container class="md-block">
+                                    <div class="social-button">
+                                        <md-button class="md-raised" ng-click="github()">Github</md-button>
+                                    </div>
+                                </md-input-container>
+                            </form>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                    <div flex layout="row" layout-align="center start">
+                        <div flex="10"></div>
+                        <div layout="row" flex layout-align="space-around center">
+                            <div></div>
+                            <md-button class="md-primary" ng-click="back()" translate>返回</md-button>
+                        </div>
+                        <div flex="10"></div>
+                    </div>
+                </div>
+            </md-card-content>
+            <div flex="5"></div>
+        </md-card>
+        <div flex="25"></div>
+    </div>
 </div>
-
-<script>
-$.getScript('https://apis.google.com/js/platform.js').done(() => {
-  document.dispatchEvent(new CustomEvent('gapiLoaded', {}));
-});
-$.getScript('https://connect.facebook.net/zh_CN/sdk.js').done(() => {
-  document.dispatchEvent(new CustomEvent('fbLoaded', {}));
-});
-</script>

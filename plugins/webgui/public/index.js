@@ -25,15 +25,6 @@ angular.element(() => {
   $.get(window.api + '/api/home/login').then(success => {
     window.ssmgrConfig = success;
 
-    // if(window.ssmgrConfig.google_signin) {
-    //   addMeta('google-signin-scope', 'profile email');
-    //   addMeta('google-signin-client_id', window.ssmgrConfig.google_signin);
-    //   document.addEventListener('gapiLoaded', () => { gapi.load('auth2', gapiInit); });
-    // }
-    // if(window.ssmgrConfig.facebook_login) {
-    //   document.addEventListener('fbLoaded', () => { window.fbInit(); });
-    // }
-
     require('./directives/focusMe');
 
     require('./services/preloadService.js');

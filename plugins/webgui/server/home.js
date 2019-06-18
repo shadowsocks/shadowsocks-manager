@@ -402,7 +402,71 @@ exports.facebookLogin = async (req, res) => {
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
-        const user = await createUser(email, password, 'Google');
+        const user = await createUser(email, password, 'Facebook');
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
+      }
+    }
+    return Promise.reject();
+  } catch(err) {
+    logger.error(err);
+    return res.status(403).end();
+  }
+};
+
+exports.githubLogin = async (req, res) => {
+  try {
+    const { code, redirect_uri, state } = req.body;
+    const {
+      github_login_client_id: client_id,
+      github_login_client_secret: client_secret
+    } =  config.plugins.webgui;
+    if(!code || !client_id) {
+      return Promise.reject();
+    }
+    const result = await rp({
+      uri: 'https://github.com/login/oauth/access_token',
+      method: 'POST',
+      body: {
+        code,
+        client_id,
+        client_secret,
+        redirect_uri,
+        state,
+      },
+      json: true,
+    });
+    if(!result.access_token) { return Promise.reject(); }
+    const userInfo = await rp({
+      uri: 'https://api.github.com/user',
+      method: 'GET',
+      headers: {
+        'User-Agent': 'ssmgr',
+        Authorization: `token ${ result.access_token }`,
+      },
+      json: true,
+    });
+    const emails = await rp({
+      uri: 'https://api.github.com/user/emails',
+      method: 'GET',
+      headers: {
+        'User-Agent': 'ssmgr',
+        Authorization: `token ${ result.access_token }`,
+      },
+      json: true,
+    });
+    const emailInfo = emails.filter(f => f.email === userInfo.email)[0];
+    if(emailInfo.email && emailInfo.verified) {
+      const email = emailInfo.email;
+      const user = await knex('user').where({ username: email }).then(s => s[0]);
+      if(user) {
+        req.session.user = user.id;
+        req.session.type = user.type;
+        return res.send({ id: user.id, type: user.type });
+      } else {
+        const password = Math.random().toString();
+        const user = await createUser(email, password, 'Github');
         req.session.user = user.id;
         req.session.type = user.type;
         return res.send({ id: user.id, type: user.type });
@@ -477,6 +541,7 @@ exports.status = async (req, res) => {
     const skin = config.plugins.webgui.skin || 'default';
     const google_login_client_id = config.plugins.webgui.google_login_client_id || '';
     const facebook_login_client_id = config.plugins.webgui.facebook_login_client_id || '';
+    const github_login_client_id = config.plugins.webgui.github_login_client_id || '';
     let alipay;
     let paypal;
     let paypalMode;
@@ -539,6 +604,7 @@ exports.status = async (req, res) => {
       simple,
       google_login_client_id,
       facebook_login_client_id,
+      github_login_client_id,
     });
   } catch(err) {
     logger.error(err);
