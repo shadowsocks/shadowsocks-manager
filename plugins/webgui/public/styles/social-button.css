@@ -1,6 +1,17 @@
+.social-buttons-mobile {
+  margin-top: 3vh;
+  margin-bottom: 5vh;
+}
+
+.social-buttons {
+  margin-top: 1vh;
+  margin-bottom: 3vh;
+}
+
 .social-button {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: center;
+  width: 20vw;
+  max-width: 60px;
+  color: #333;
+  margin: 15px;
+  cursor: pointer;
 }

@@ -2,24 +2,12 @@
     <div flex="15" style="height: 40px;"></div>
     <div flex layout="row">
         <div flex="10" flex-gt-sm="30"></div>
-        <div flex layout="column" layout-align="space-around stretch">
-            <form name="userForm">
-                <md-input-container class="md-block">
-                    <div class="social-button">
-                        <md-button class="md-raised" ng-click="google()">Google</md-button>
-                    </div>
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <div class="social-button">
-                        <md-button class="md-raised" ng-click="facebook()">Facebook</md-button>
-                    </div>
-                </md-input-container>
-                <md-input-container class="md-block">
-                    <div class="social-button">
-                        <md-button class="md-raised" ng-click="github()">Github</md-button>
-                    </div>
-                </md-input-container>
-            </form>
+        <div flex layout="row" layout-align="center center">
+            <div class="social-buttons-mobile" layout="row" layout-align="center center">
+                <div><img class="social-button" src="/libs/google-brands.svg" ng-click="google()"></div>
+                <div><img class="social-button" src="/libs/facebook-brands.svg" ng-click="facebook()"></div>
+                <div><img class="social-button" src="/libs/github-brands.svg" ng-click="github()"></div>
+            </div>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>
@@ -45,8 +33,8 @@
                 <div flex>
                     <div flex layout="row">
                         <div flex="10"></div>
-                        <div flex layout="column" layout-align="space-around stretch">
-                            <form name="userForm">
+                        <div flex layout="column" layout="row" layout-align="center center">
+                            <!-- <form name="userForm">
                                 <md-input-container class="md-block">
                                     <div class="social-button">
                                         <md-button class="md-raised" ng-click="google()">Google</md-button>
@@ -62,7 +50,12 @@
                                         <md-button class="md-raised" ng-click="github()">Github</md-button>
                                     </div>
                                 </md-input-container>
-                            </form>
+                            </form> -->
+                            <div class="social-buttons" layout="row" layout-align="center center">
+                                <div><img class="social-button" src="/libs/google-brands.svg" ng-click="google()"></div>
+                                <div><img class="social-button" src="/libs/facebook-brands.svg" ng-click="facebook()"></div>
+                                <div><img class="social-button" src="/libs/github-brands.svg" ng-click="github()"></div>
+                            </div>
                         </div>
                         <div flex="10"></div>
                     </div>
