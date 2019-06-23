@@ -290,13 +290,16 @@ app
       }); 
     }
   ])
-  .controller('HomeGithubLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
-    ($scope, $state, $http, $location, configManager) => {
-      $http.post('/api/home/githubLogin', {
-        code: $location.search().code,
-        redirect_uri: $scope.config.url + '/home/github',
-        state: $location.search().state,
+  .controller('HomeGithubLoginController', ['$scope', '$state', '$http', '$location', 'configManager', 'alertDialog',
+    ($scope, $state, $http, $location, configManager, alertDialog) => {
+      alertDialog.loading().then(() => {
+        return $http.post('/api/home/githubLogin', {
+          code: $location.search().code,
+          redirect_uri: $scope.config.url + '/home/github',
+          state: $location.search().state,
+        });
       }).then(success => {
+        alertDialog.close();
         $scope.setId(success.data.id);
         configManager.deleteConfig();
         if (success.data.type === 'normal') {
@@ -304,7 +307,9 @@ app
         } else if (success.data.type === 'admin') {
           $state.go('admin.index');
         }
-      }); 
+      }).catch(err => {
+        alertDialog.show('登录失败，请稍后重试', '确定');
+      });
     }
   ])
 ;
