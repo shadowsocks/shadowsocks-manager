@@ -13,6 +13,8 @@ const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 const ref = appRequire('plugins/webgui_ref/index');
 const rp = require('request-promise');
+const TwitterLogin = appRequire('plugins/webgui/server/twitterLogin');
+const redis = appRequire('init/redis').redis;
 
 const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
 let telegram;
@@ -456,7 +458,7 @@ exports.githubLogin = async (req, res) => {
       },
       json: true,
     });
-    const emailInfo = emails.filter(f => f.email === userInfo.email)[0];
+    const emailInfo = emails.filter(f => f.primary === true)[0];
     if(emailInfo.email && emailInfo.verified) {
       const email = emailInfo.email;
       const user = await knex('user').where({ username: email }).then(s => s[0]);
@@ -473,6 +475,70 @@ exports.githubLogin = async (req, res) => {
       }
     }
     return Promise.reject();
+  } catch(err) {
+    logger.error(err);
+    return res.status(403).end();
+  }
+};
+
+exports.getTwitterLoginUrl = async (req, res) => {
+  try {
+    const { callbackUrl } = req.query;
+    const time = callbackUrl.split('?time=')[1];
+    const {
+      twitter_login_consumer_key: consumerKey,
+      twitter_login_consumer_secret: consumerSecret
+    } =  config.plugins.webgui;
+    if(!callbackUrl || !time || !consumerKey || !consumerSecret) {
+      throw('invalid params');
+    }
+    if(Math.abs(Date.now() - (+time)) >= 10 * 60 * 1000) {
+      throw('invalid time');
+    }
+    const tl = new TwitterLogin({
+      consumerKey,
+      consumerSecret,
+      callbackUrl,
+    });
+    const { tokenSecret, url } = await tl.login();
+    await redis.set(`TwitterLogin:${time}`, tokenSecret, 'EX', 120);
+    res.send(url);
+  } catch(err) {
+    logger.error(err);
+    return res.status(403).end();
+  }
+};
+
+exports.twitterLogin = async (req, res) => {
+  try {
+    const { oauth_token, oauth_verifier, callbackUrl } = req.body;
+    const time = callbackUrl.split('?time=')[1];
+    const {
+      twitter_login_consumer_key: consumerKey,
+      twitter_login_consumer_secret: consumerSecret
+    } =  config.plugins.webgui;
+    const tl = new TwitterLogin({
+      consumerKey,
+      consumerSecret,
+      callbackUrl,
+    });
+    const tokenSecret = await redis.get(`TwitterLogin:${time}`);
+    const { userToken, userTokenSecret } = await tl.callback({ oauth_token, oauth_verifier }, tokenSecret);
+    const userInfo = await tl.userInfo({ userToken, userTokenSecret });
+    
+    const email = userInfo.email;
+    const user = await knex('user').where({ username: email }).then(s => s[0]);
+    if(user) {
+      req.session.user = user.id;
+      req.session.type = user.type;
+      return res.send({ id: user.id, type: user.type });
+    } else {
+      const password = Math.random().toString();
+      const user = await createUser(email, password, 'Twitter');
+      req.session.user = user.id;
+      req.session.type = user.type;
+      return res.send({ id: user.id, type: user.type });
+    }
   } catch(err) {
     logger.error(err);
     return res.status(403).end();

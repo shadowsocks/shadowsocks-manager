@@ -82,6 +82,8 @@ plugins:
     # facebook_login_client_secret: 'a46c6bb6f8281c23d2b74b43008c9c46'
     # github_login_client_id: '7c45c34c1de3ef937d37'
     # github_login_client_secret: 'd2768efe5258cfb9ce4da11ed7ddc334bc65756b'
+    # twitter_login_consumer_key: 'tKPH3RViDT68PtHBMHYJuQ'
+    # twitter_login_consumer_secret: 'wYCtWdUSEfm8H3ES0r5rgHKeqGvYGiFDrGj4THiq3T6'
 
 db: 'webgui.sqlite'
 # 从 0.30 开始需要配置 redis
