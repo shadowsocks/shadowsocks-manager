@@ -157,7 +157,7 @@ exports.signup = async (req, res) => {
     req.checkBody('password', 'Invalid password').notEmpty();
     let type = 'normal';
     const validation = await req.getValidationResult();
-    if(!validation.isEmpty()) { return Promise.reject(validation.array()); }
+    if(!validation.isEmpty()) { throw(validation.array()); }
     const email = req.body.email.toString().toLowerCase();
     const code = req.body.code;
     await emailPlugin.checkCode(email, code);
@@ -247,7 +247,7 @@ exports.login = async (req, res) => {
     req.checkBody('password', 'Invalid password').notEmpty();
     const validation = await req.getValidationResult();
     if(!validation.isEmpty()) {
-      return Promise.reject('invalid body');
+      throw('invalid body');
     }
     const email = req.body.email.toString().toLowerCase();
     const password = req.body.password;
