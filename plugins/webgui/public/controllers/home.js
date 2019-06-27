@@ -268,12 +268,15 @@ app
       };
     }
   ])
-  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
-    ($scope, $state, $http, $location, configManager) => {
-      $http.post('/api/home/googleLogin', {
-        code: $location.search().code,
-        redirect_uri: $scope.config.url + '/home/google',
+  .controller('HomeGoogleLoginController', ['$scope', '$state', '$http', '$location', 'configManager', 'alertDialog',
+    ($scope, $state, $http, $location, configManager, alertDialog) => {
+      alertDialog.loading().then(() => {
+        return $http.post('/api/home/googleLogin', {
+          code: $location.search().code,
+          redirect_uri: $scope.config.url + '/home/google',
+        });
       }).then(success => {
+        alertDialog.close();
         $scope.setId(success.data.id);
         configManager.deleteConfig();
         if (success.data.type === 'normal') {
@@ -281,15 +284,20 @@ app
         } else if (success.data.type === 'admin') {
           $state.go('admin.index');
         }
-      }); 
+      }).catch(err => {
+        alertDialog.show('登录失败，请稍后重试', '确定');
+      });
     }
   ])
-  .controller('HomeFacebookLoginController', ['$scope', '$state', '$http', '$location', 'configManager',
-    ($scope, $state, $http, $location, configManager) => {
-      $http.post('/api/home/facebookLogin', {
-        code: $location.search().code,
-        redirect_uri: $scope.config.url + '/home/facebook',
+  .controller('HomeFacebookLoginController', ['$scope', '$state', '$http', '$location', 'configManager', 'alertDialog',
+    ($scope, $state, $http, $location, configManager, alertDialog) => {
+      alertDialog.loading().then(() => {
+        return $http.post('/api/home/facebookLogin', {
+          code: $location.search().code,
+          redirect_uri: $scope.config.url + '/home/facebook',
+        });
       }).then(success => {
+        alertDialog.close();
         $scope.setId(success.data.id);
         configManager.deleteConfig();
         if (success.data.type === 'normal') {
@@ -297,7 +305,9 @@ app
         } else if (success.data.type === 'admin') {
           $state.go('admin.index');
         }
-      }); 
+      }).catch(err => {
+        alertDialog.show('登录失败，请稍后重试', '确定');
+      });
     }
   ])
   .controller('HomeGithubLoginController', ['$scope', '$state', '$http', '$location', 'configManager', 'alertDialog',

@@ -315,6 +315,7 @@ exports.googleLogin = async (req, res) => {
       if(user) {
         req.session.user = user.id;
         req.session.type = user.type;
+        logger.info(`Google用户[${email}]登录`);
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
@@ -401,6 +402,7 @@ exports.facebookLogin = async (req, res) => {
       if(user) {
         req.session.user = user.id;
         req.session.type = user.type;
+        logger.info(`Facebook用户[${email}]登录`);
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
@@ -465,6 +467,7 @@ exports.githubLogin = async (req, res) => {
       if(user) {
         req.session.user = user.id;
         req.session.type = user.type;
+        logger.info(`Github用户[${email}]登录`);
         return res.send({ id: user.id, type: user.type });
       } else {
         const password = Math.random().toString();
@@ -531,6 +534,7 @@ exports.twitterLogin = async (req, res) => {
     if(user) {
       req.session.user = user.id;
       req.session.type = user.type;
+      logger.info(`Twitter用户[${email}]登录`);
       return res.send({ id: user.id, type: user.type });
     } else {
       const password = Math.random().toString();
