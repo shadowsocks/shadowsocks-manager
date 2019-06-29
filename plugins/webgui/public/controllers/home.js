@@ -285,7 +285,7 @@ app
           $state.go('admin.index');
         }
       }).catch(err => {
-        alertDialog.show('登录失败，请稍后重试', '确定');
+        alertDialog.show('登录失败，请稍后重试', '确定').then(() => { $state.go('home.social'); });
       });
     }
   ])
@@ -306,7 +306,7 @@ app
           $state.go('admin.index');
         }
       }).catch(err => {
-        alertDialog.show('登录失败，请稍后重试', '确定');
+        alertDialog.show('登录失败，请稍后重试', '确定').then(() => { $state.go('home.social'); });
       });
     }
   ])
@@ -328,7 +328,7 @@ app
           $state.go('admin.index');
         }
       }).catch(err => {
-        alertDialog.show('登录失败，请稍后重试', '确定');
+        alertDialog.show('登录失败，请稍后重试', '确定').then(() => { $state.go('home.social'); });
       });
     }
   ])
@@ -350,7 +350,7 @@ app
           $state.go('admin.index');
         }
       }).catch(err => {
-        alertDialog.show('登录失败，请稍后重试', '确定');
+        alertDialog.show('登录失败，请稍后重试', '确定').then(() => { $state.go('home.social'); });
       });
     }
   ])

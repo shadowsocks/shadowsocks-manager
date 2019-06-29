@@ -283,7 +283,7 @@ exports.googleLogin = async (req, res) => {
       google_login_client_secret: client_secret
     } =  config.plugins.webgui;
     if(!code || !client_id) {
-      return Promise.reject();
+      return await Promise.reject();
     }
     const result = await rp({
       uri: 'https://www.googleapis.com/oauth2/v4/token',
@@ -297,7 +297,7 @@ exports.googleLogin = async (req, res) => {
       },
       json: true,
     });
-    if(!result.access_token) { return Promise.reject(); }
+    if(!result.access_token) { return await Promise.reject(); }
     const userInfo = await rp({
       uri: 'https://www.googleapis.com/oauth2/v1/userinfo',
       method: 'GET',
@@ -325,7 +325,7 @@ exports.googleLogin = async (req, res) => {
         return res.send({ id: user.id, type: user.type });
       }
     }
-    return Promise.reject();
+    return await Promise.reject();
   } catch(err) {
     logger.error(err);
     return res.status(403).end();
@@ -427,7 +427,7 @@ exports.githubLogin = async (req, res) => {
       github_login_client_secret: client_secret
     } =  config.plugins.webgui;
     if(!code || !client_id) {
-      return Promise.reject();
+      return await Promise.reject();
     }
     const result = await rp({
       uri: 'https://github.com/login/oauth/access_token',
@@ -441,7 +441,7 @@ exports.githubLogin = async (req, res) => {
       },
       json: true,
     });
-    if(!result.access_token) { return Promise.reject(); }
+    if(!result.access_token) { return await Promise.reject(); }
     const userInfo = await rp({
       uri: 'https://api.github.com/user',
       method: 'GET',
@@ -477,7 +477,7 @@ exports.githubLogin = async (req, res) => {
         return res.send({ id: user.id, type: user.type });
       }
     }
-    return Promise.reject();
+    return await Promise.reject();
   } catch(err) {
     logger.error(err);
     return res.status(403).end();
@@ -516,6 +516,9 @@ exports.twitterLogin = async (req, res) => {
   try {
     const { oauth_token, oauth_verifier, callbackUrl } = req.body;
     const time = callbackUrl.split('?time=')[1];
+    if(Math.abs(Date.now() - (+time)) >= 10 * 60 * 1000) {
+      throw('invalid time');
+    }
     const {
       twitter_login_consumer_key: consumerKey,
       twitter_login_consumer_secret: consumerSecret
