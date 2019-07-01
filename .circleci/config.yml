@@ -1,34 +1,14 @@
 version: 2
 
-defaults: &defaults
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:12.4.0
-
 jobs:
-  test:
-    <<: *defaults  
+
+  npm-publish:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:12.4.0
     steps:
       - checkout
-
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-
       - run: npm install
-
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
-  deploy:
-    <<: *defaults
-    steps:
       - attach_workspace:
           at: ~/repo
       - run:
@@ -37,19 +17,95 @@ jobs:
       - run:
           name: Publish package
           command: npm publish
+
+  docker-ubuntu:
+    working_directory: ~/repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: |
+            docker build -t gyteng/ssmgr ~/repo/docker/ubuntu
+      - run:
+          name: Login
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Push docker image
+          command: |
+            docker push gyteng/ssmgr
+
+  docker-tiny:
+    working_directory: ~/repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build docker image
+          command: |
+            docker build -t gyteng/ssmgr-tiny ~/repo/docker/tiny
+      - run:
+          name: Login
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Push docker image
+          command: |
+            docker push gyteng/ssmgr-tiny
+
+  docker-alpine:
+    working_directory: ~/repo
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Checkout libev
+          command: |
+            git clone https://github.com/shadowsocks/shadowsocks-libev.git ~/repo/docker/alpine/shadowsocks-libev
+      - run:
+          name: Install submodule
+          command: |
+            cd ~/repo/docker/alpine/shadowsocks-libev && git submodule init && git submodule update
+      - run:
+          name: Build docker image
+          command: |
+            docker build -t gyteng/ssmgr-alpine ~/repo/docker/alpine
+      - run:
+          name: Login
+          command: |
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Push docker image
+          command: |
+            docker push gyteng/ssmgr-alpine
             
 workflows:
   version: 2
-  test-deploy:
+  deploy:
     jobs:
-      - test:
+      - npm-publish:
           filters:
             branches:
               only:
                 - master
-      - deploy:
-          requires:
-            - test
+      - docker-ubuntu:
+          filters:
+            branches:
+              only:
+                - master
+      - docker-tiny:
+          filters:
+            branches:
+              only:
+                - master
+      - docker-alpine:
           filters:
             branches:
               only:
