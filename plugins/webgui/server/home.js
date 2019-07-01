@@ -337,8 +337,8 @@ const getFacebookAppToken = async () => {
   if(facebookAppToken) { return facebookAppToken; }
   const {
     facebook_login_client_id: client_id,
-    facebook_login_client_secret: client_secret
-  } =  config.plugins.webgui;
+    facebook_login_client_secret: client_secret,
+  } = config.plugins.webgui;
   const result = await rp({
     uri: 'https://graph.facebook.com/oauth/access_token',
     qs: {
@@ -358,8 +358,8 @@ exports.facebookLogin = async (req, res) => {
     const { code, redirect_uri } = req.body;
     const {
       facebook_login_client_id: client_id,
-      facebook_login_client_secret: client_secret
-    } =  config.plugins.webgui;
+      facebook_login_client_secret: client_secret,
+    } = config.plugins.webgui;
     if(!code || !client_id) {
       return Promise.reject();
     }
@@ -392,7 +392,7 @@ exports.facebookLogin = async (req, res) => {
       method: 'POST',
       qs: {
         fields: 'email',
-        access_token: result.access_token
+        access_token: result.access_token,
       },
       json: true,
     });
@@ -424,8 +424,8 @@ exports.githubLogin = async (req, res) => {
     const { code, redirect_uri, state } = req.body;
     const {
       github_login_client_id: client_id,
-      github_login_client_secret: client_secret
-    } =  config.plugins.webgui;
+      github_login_client_secret: client_secret,
+    } = config.plugins.webgui;
     if(!code || !client_id) {
       return await Promise.reject();
     }

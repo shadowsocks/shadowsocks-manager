@@ -198,8 +198,8 @@ const listenPort = config.plugins.freeAccount.listen.split(':')[1];
 const listenHost = config.plugins.freeAccount.listen.split(':')[0];
 
 if(config.plugins.freeAccount.ad) {
-  app.get('ads.txt', (req, res) => {
-    return res.send(`google.com, pub-${ config.plugins.freeAccount.ad.client.substr('pub-')[1] }, DIRECT, f08c47fec0942fa0`);
+  app.get('/ads.txt', (req, res) => {
+    return res.send(`google.com, pub-${ config.plugins.freeAccount.ad.client.split('pub-')[1] }, DIRECT, f08c47fec0942fa0`);
   });
 }
 
