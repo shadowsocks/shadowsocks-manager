@@ -196,6 +196,13 @@ app.set('trust proxy', 'loopback');
 app.use('/libs', express.static(path.resolve('./plugins/freeAccount/libs')));
 const listenPort = config.plugins.freeAccount.listen.split(':')[1];
 const listenHost = config.plugins.freeAccount.listen.split(':')[0];
+
+if(config.plugins.freeAccount.ad) {
+  app.get('ads.txt', (req, res) => {
+    return res.send(`google.com, pub-${ config.plugins.freeAccount.ad.client.substr('pub-')[1] }, DIRECT, f08c47fec0942fa0`);
+  });
+}
+
 app.get('/', (req, res) => {
   logger.info(`[${ req.ip }] /`);
   qrcode = 'ss://' + Buffer.from(`${ method }:${ currentPassword }@${ address }:${ currentPort }`).toString('base64');
@@ -208,6 +215,7 @@ app.get('/', (req, res) => {
     adSlot: config.plugins.freeAccount.ad && config.plugins.freeAccount.ad.slot,
   });
 });
+
 app.post('/qrcode', async (req, res) => {
   const token = req.body.token;
   const ip = req.ip;
