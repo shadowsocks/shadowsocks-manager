@@ -44,7 +44,11 @@ angular.element(() => {
     angular.bootstrap(document, ['app']);
   }).catch(err => {
     let time = 5000;
-    if(err.status === 403) { time = 1500; }
+    if(err.status === 403) {
+      time = 1500;
+    } else {
+      time += 500;
+    }
     setTimeout(() => { location.reload(); }, time);
   });
 });

@@ -68,11 +68,7 @@ gulp.task('webguiBuild', () => {
                 '@babel/env', {
                   targets: {
                     browsers: [
-                      'Chrome >= 57',
-                      'FireFox >= 50',
-                      'Safari >= 7',
-                      'ie >= 9',
-                      'last 4 Edge versions'
+                      'last 3 versions'
                     ]
                   }
                 }
