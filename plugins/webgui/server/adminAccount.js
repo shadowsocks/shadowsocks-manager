@@ -279,7 +279,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + Buffer.from(s.subscribeName || s.name).toString('base64');
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'potatso') {
         return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'ssr') {

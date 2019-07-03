@@ -8,7 +8,11 @@ if(process.argv.indexOf('--multiCore') > 1) {
 require('./init/log');
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
-logger.info(`System start[${ process.pid }].`);
+if(cluster.isMaster) {
+  logger.info(`System start[${ process.pid }].`);
+} else {
+  logger.info(`Worker start[${ process.pid }].`);
+}
 
 process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -19,7 +23,6 @@ process.on('uncaughtException', (err) => {
 });
 
 const startWorker = async () => {
-  logger.info(`Worker [${ process.pid }] started`);
   require('./init/utils');
 
   require('./init/moveConfigFile');
@@ -44,6 +47,7 @@ if(cluster.isMaster) {
     }
   });
   cluster.on('exit', (worker, code, signal) => {
+    if(code === 0) { return; }
     logger.error(`worker [${ worker.process.pid }][${ worker.id }] died`);
     for(const w in cluster.workers) {
       process.env.mainWorker = w;
