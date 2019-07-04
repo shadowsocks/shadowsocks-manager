@@ -1,6 +1,8 @@
 const user = appRequire('plugins/user/index');
 const refUser = appRequire('plugins/webgui_ref/user');
 const account = appRequire('plugins/account/index');
+const log4js = require('log4js');
+const logger = log4js.getLogger('webgui');
 
 exports.getOneUser = async (req, res) => {
   try {
@@ -29,22 +31,23 @@ exports.getOneAdmin = (req, res) => {
   });
 };
 
-exports.getUsers = (req, res) => {
-  const page = +req.query.page || 1;
-  const pageSize = +req.query.pageSize || 20;
-  const search = req.query.search || '';
-  const sort = req.query.sort || 'id_asc';
-  const type = Array.isArray(req.query.type) ? req.query.type : [req.query.type || ''];
-  const group = req.adminInfo.id === 1 ? +req.query.group : req.adminInfo.group;
-  user.getUserAndPaging({
-    page,
-    pageSize,
-    search,
-    sort,
-    type,
-    group,
-  }).then(success => {
-    success.users = success.users.map(m => {
+exports.getUsers = async (req, res) => {
+  try {
+    const page = +req.query.page || 1;
+    const pageSize = +req.query.pageSize || 20;
+    const search = req.query.search || '';
+    const sort = req.query.sort || 'id_asc';
+    const type = Array.isArray(req.query.type) ? req.query.type : [req.query.type || ''];
+    const group = req.adminInfo.id === 1 ? +req.query.group : req.adminInfo.group;
+    const result = await user.getUserAndPaging({
+      page,
+      pageSize,
+      search,
+      sort,
+      type,
+      group,
+    });
+    result.users = result.users.map(m => {
       return {
         id: m.id,
         type: m.type,
@@ -54,11 +57,11 @@ exports.getUsers = (req, res) => {
         port: m.port,
       };
     });
-    return res.send(success);
-  }).catch(err => {
-    console.log(err);
+    return res.send(result);
+  } catch(err) {
+    logger.error(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.addUser = (req, res) => {

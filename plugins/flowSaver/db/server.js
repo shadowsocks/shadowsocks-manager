@@ -35,7 +35,7 @@ const createTable = async () => {
     });
   }
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
-  if(list.length === 0) {
+  if(list.length === 0 && config.manager) {
     const host = config.manager.address.split(':')[0];
     const port = +config.manager.address.split(':')[1];
     const password = config.manager.password;
@@ -50,7 +50,7 @@ const createTable = async () => {
       password,
     }).catch(() => {
       logger.error(`connect to server ${ password }@${ host }:${ port } fail.`);
-      process.exit(1);
+      // process.exit(1);
     });
     await knex('server').insert({
       name: 'default',

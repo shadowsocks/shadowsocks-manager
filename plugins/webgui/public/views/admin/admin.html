@@ -15,7 +15,7 @@
                     <md-list-item ng-repeat-start="menu in menus" ng-if="menu.name !== 'divider'" ng-click="menuClick($index)" ng-hide="menu.hide">
                         <md-item-content md-ink-ripple layout="row" layout-align="start center">
                             <div class="inset">
-                                <md-icon class="material-icons">{{menu.icon}}</md-icon>
+                                <md-icon class="material-icons">{{ menu.icon }}</md-icon>
                             </div>
                             <div class="inset">
                                 {{ menu.name | translate }}

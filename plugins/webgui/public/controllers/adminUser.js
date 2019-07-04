@@ -12,6 +12,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         sort: 'id_asc',
         type: {
           normal: true,
+          admin: true,
         },
         group: -1,
       };
@@ -33,7 +34,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       adminApi.getUser({
         page: $scope.currentPage,
         pageSize: getPageSize(),
-        search,
+        search: search,
         sort: $scope.userSort.sort,
         type: $scope.userSort.type,
         group: $scope.userSort.group,
@@ -50,7 +51,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
           $scope.isUserPageFinish = true;
         }
         $scope.isUserLoading = false;
-      }).catch(() => {
+      }).catch((err) => {
         if($state.current.name !== 'admin.user') { return; }
         $timeout(() => {
           $scope.getUsers(search);

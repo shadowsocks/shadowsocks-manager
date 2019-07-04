@@ -5,9 +5,16 @@ const dns = require('dns');
 const net = require('net');
 const crypto = require('crypto');
 const config = appRequire('services/config').all();
-const host = config.manager.address.split(':')[0];
-const port = +config.manager.address.split(':')[1];
-const password = config.manager.password;
+let host;
+let port;
+let password;
+try {
+  const host = config.manager.address.split(':')[0];
+  const port = +config.manager.address.split(':')[1];
+  const password = config.manager.password;
+} catch(err) {
+
+}
 
 const pack = (data, password) => {
   const message = JSON.stringify(data);
