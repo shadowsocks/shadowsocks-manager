@@ -1,24 +1,11 @@
 const knex = appRequire('init/knex').knex;
+const config = appRequire('services/config').all();
 const tableName = 'user';
 
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
-  if(exist) {
-    const hasColumnGroup = await knex.schema.hasColumn(tableName, 'group');
-    if(!hasColumnGroup) {
-      await knex.schema.table(tableName, function(table) {
-        table.integer('group').defaultTo(0);
-      });
-    }
-    const hasComment = await knex.schema.hasColumn(tableName, 'comment');
-    if(!hasComment) {
-      await knex.schema.table(tableName, function(table) {
-        table.string('comment').defaultTo('');
-      });
-    }
-    return;
-  }
-  return knex.schema.createTable(tableName, function(table) {
+  if(exist) { return; }
+  await knex.schema.createTable(tableName, function(table) {
     table.increments('id').primary();
     table.string('username').unique();
     table.string('email');
@@ -32,6 +19,16 @@ const createTable = async() => {
     table.integer('group').defaultTo(0);
     table.string('comment').defaultTo('');
   });
+  if(config.plugins.webgui.admin_username && config.plugins.webgui.admin_password) {
+    const user = appRequire('plugins/user/index');
+    await user.add({
+      username: config.plugins.webgui.admin_username,
+      email: config.plugins.webgui.admin_username,
+      password: config.plugins.webgui.admin_password,
+      type: 'admin',
+      group: 0,
+    });
+  }
 };
 
 exports.createTable = createTable;

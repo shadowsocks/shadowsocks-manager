@@ -71,6 +71,8 @@ plugins:
     host: '0.0.0.0'
     port: '80'
     site: 'http://yourwebsite.com'
+    # admin_username: 'youremail@address.com'
+    # admin_password: '35710935109364'
     # icon: 'icon.png'
     # skin: 'default'
     # googleAnalytics: 'UA-xxxxxxxx-x'
@@ -106,7 +108,7 @@ redis:
 
 ![](/_media/home.png)
 
-!> 成功运行后，首个注册用户为管理员
+!> 成功运行后，如果有配置`admin_username`和`admin_password`字段，则会自动创建管理员账号，否则首个注册用户为管理员
 
 
 
