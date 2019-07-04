@@ -1,4 +1,5 @@
 <div layout="row" layout-wrap>
+    <div ng-if="!servers.length" class="zero-element">没有服务器<br /><span class="zero-element-link" ng-if="id === 1" ng-click="addServer()">点击这里添加</span></div>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="server in servers track by server.id" ng-show="showServer(server.name)">
         <md-card ng-click="id === 1 && toServerPage(server.id)">
             <md-card-header>

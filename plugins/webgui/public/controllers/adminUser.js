@@ -34,7 +34,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       adminApi.getUser({
         page: $scope.currentPage,
         pageSize: getPageSize(),
-        search: search,
+        search,
         sort: $scope.userSort.sort,
         type: $scope.userSort.type,
         group: $scope.userSort.group,
@@ -51,7 +51,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
           $scope.isUserPageFinish = true;
         }
         $scope.isUserLoading = false;
-      }).catch((err) => {
+      }).catch(() => {
         if($state.current.name !== 'admin.user') { return; }
         $timeout(() => {
           $scope.getUsers(search);

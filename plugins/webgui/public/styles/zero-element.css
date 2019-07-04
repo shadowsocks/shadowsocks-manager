@@ -1,0 +1,15 @@
+.zero-element {
+  width: 100%;
+  text-align: center;
+  margin-top: 38vh;
+  color: #999;
+  font-size: 1.5em;
+}
+
+.zero-element-link {
+  cursor: pointer;
+}
+
+.zero-element-link:hover {
+  color: #666;
+}
