@@ -80,6 +80,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $scope.setFabButton($scope.id === 1 ? () => {
       $state.go('admin.addAccount');
     } : null);
+    $scope.addAccount = () => {
+      $state.go('admin.addAccount');
+    };
     $scope.toAccount = account => {
       if(account.mac) {
         $state.go('admin.userPage', { userId: account.userId });

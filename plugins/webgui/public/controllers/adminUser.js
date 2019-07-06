@@ -7,6 +7,9 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     $scope.setFabButton(() => {
       $state.go('admin.addUser');
     });
+    $scope.addUser = () => {
+      $state.go('admin.addUser');
+    };
     if(!$localStorage.admin.userSortSettings) {
       $localStorage.admin.userSortSettings = {
         sort: 'id_asc',
