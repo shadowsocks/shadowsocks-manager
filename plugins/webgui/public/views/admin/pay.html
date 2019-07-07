@@ -4,6 +4,7 @@
             md-on-select="selectPayType(payType.name)">
     </md-tab>
 </md-tabs>
+<div ng-if="orders.length === 0 && !isOrderLoading" class="zero-element">没有订单</div>
 <div ng-show="orders.length">
     <md-card>
         <md-list>
