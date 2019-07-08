@@ -4,22 +4,24 @@ const tableName = 'user';
 
 const createTable = async() => {
   const exist = await knex.schema.hasTable(tableName);
-  if(exist) { return; }
-  await knex.schema.createTable(tableName, function(table) {
-    table.increments('id').primary();
-    table.string('username').unique();
-    table.string('email');
-    table.string('telegram');
-    table.string('password');
-    table.string('type');
-    table.bigInteger('createTime');
-    table.bigInteger('lastLogin');
-    table.string('resetPasswordId');
-    table.bigInteger('resetPasswordTime');
-    table.integer('group').defaultTo(0);
-    table.string('comment').defaultTo('');
-  });
-  if(config.plugins.webgui.admin_username && config.plugins.webgui.admin_password) {
+  if(!exist) {
+    await knex.schema.createTable(tableName, function(table) {
+      table.increments('id').primary();
+      table.string('username').unique();
+      table.string('email');
+      table.string('telegram');
+      table.string('password');
+      table.string('type');
+      table.bigInteger('createTime');
+      table.bigInteger('lastLogin');
+      table.string('resetPasswordId');
+      table.bigInteger('resetPasswordTime');
+      table.integer('group').defaultTo(0);
+      table.string('comment').defaultTo('');
+    });
+  }
+  const users = await knex('user').select(['id']);
+  if(users.length === 0 && config.plugins.webgui.admin_username && config.plugins.webgui.admin_password) {
     const user = appRequire('plugins/user/index');
     await user.add({
       username: config.plugins.webgui.admin_username,
