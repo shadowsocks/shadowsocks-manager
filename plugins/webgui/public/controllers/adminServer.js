@@ -169,6 +169,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     }
     $scope.accountFilter = $localStorage.admin.serverPortFilter;
     $scope.onlineAccount = [];
+    $scope.getServerInfoError = false;
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
         $scope.server = success.data;
@@ -203,6 +204,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         $scope.portNumber = Object.keys($scope.currentPorts).filter(f => {
           return $scope.currentPorts[f].exists;
         }).length;
+        $scope.getServerInfoError = false;
+      }).catch(() => {
+        $scope.getServerInfoError = true;
       });
     };
     getServerInfo();

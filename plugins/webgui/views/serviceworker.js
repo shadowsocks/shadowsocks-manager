@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2019-07-01 11:46:31 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2019-07-14 12:32:48 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
@@ -13,6 +13,11 @@ const onlineCacheUrl = [
   '/libs/MaterialIcons-Regular.ttf',
   '/libs/MaterialIcons-Regular.woff',
   '/libs/MaterialIcons-Regular.woff2',
+
+  '/libs/facebook-brands.svg',
+  '/libs/github-brands.svg',
+  '/libs/google-brands.svg',
+  '/libs/twitter-brands.svg',
 
   '/libs/style.css',
   

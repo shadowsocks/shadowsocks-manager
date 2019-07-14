@@ -335,7 +335,7 @@ const getGfwStatus = () => {
     port: +site.split(':')[1],
     path: '/',
     method: 'GET',
-    timeout: 8000,
+    timeout: 8000 + isGfw * 2000,
   }, res => {
     if(res.statusCode === 200) {
       isGfw = 0;
