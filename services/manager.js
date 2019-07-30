@@ -153,7 +153,16 @@ const send = async (data, options) => {
           successMark = false;
         }
       });
-      ret.version = versions.join(',');
+      if(versions.length === 1) {
+        ret.version = versions[0];
+      } else {
+        const diff = versions.some((ele, index, arr) => index > 0 && ele !== arr[index - 1]);
+        if(diff) {
+          ret.version = versions.join(',');
+        } else {
+          ret.version = versions[0] + ' x ' + versions.length;
+        }
+      }
       return successMark ? ret : Promise.reject();
     } else if(data.command === 'flow') {
       let successMark = false;
