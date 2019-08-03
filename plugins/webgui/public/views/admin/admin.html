@@ -79,11 +79,14 @@
                 <div style="position: absolute; left: 5px; bottom: 5px; color:#555; font-size:12px;">{{ config.version }}</div>
             </md-sidenav>
             <md-content flex layout="row">
-                <div ui-view flex autoscroll="true"></div>
+                <div scroll class="scroll-container" ui-view flex autoscroll="true"></div>
             </md-content>
         </div>
     </div>
     </section>
+    <div class="md-fab-number">
+        {{ fabNumber }}
+    </div>
     <md-button ng-show="fabButton" class="md-fab md-fab-bottom-right" ng-click="fabButtonClick()">
         <md-icon class="material-icons">{{ fabButtonIcon || 'add' }}</md-icon>
     </md-button>

@@ -1,0 +1,16 @@
+.md-fab-number {
+  position: absolute;
+  bottom: 32px;
+  right: 92px;
+  font-size: 32px;
+  color: rgba(100, 100, 100, 0.8);
+  transition-property: color;
+  transition-duration: 1s;
+  user-select: none;
+}
+
+.md-fab-number-scroll {
+  color: rgba(100, 100, 100, 0.1);
+  transition-property: color;
+  transition-duration: 1s;
+}

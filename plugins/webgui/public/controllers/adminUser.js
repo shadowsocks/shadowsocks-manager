@@ -42,7 +42,8 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         type: $scope.userSort.type,
         group: $scope.userSort.group,
       }).then(success => {
-        $scope.total = success.total;
+        // $scope.total = success.total;
+        $scope.setFabNumber(success.total);
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
         success.users.forEach(f => {

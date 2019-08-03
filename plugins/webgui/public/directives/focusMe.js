@@ -11,6 +11,26 @@ app.directive('focusMe', ['$timeout', $timeout => {
   };
 }]);
 
+app.directive('scroll', [() => {
+  return {
+    restrict: 'A',
+    link: () => {
+      const targetMove = () => {
+        const fabNumberElement = angular.element(document.querySelector('.md-fab-number'));
+        if(!fabNumberElement.hasClass('md-fab-number-scroll')) {
+          fabNumberElement.addClass('md-fab-number-scroll');
+          setTimeout(() => {
+            fabNumberElement.removeClass('md-fab-number-scroll');
+          }, 5500);
+        }
+      };
+      angular.element(document.querySelector('.scroll-container'))
+      .bind('mousewheel', () => { targetMove(); })
+      .bind('touchmove', () => { targetMove(); });
+    }
+  };
+}]);
+
 app.directive('ga', () => {
   return {
     restrict: 'E',
