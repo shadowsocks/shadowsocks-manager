@@ -292,6 +292,7 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
         group: $scope.orderFilter.group,
         filter: Object.keys($scope.orderFilter.filter).filter(f => $scope.orderFilter.filter[f]),
       }).then(success => {
+        $scope.setFabNumber(success.total);
         if(oldTabSwitchTime !== tabSwitchTime) { return; }
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
