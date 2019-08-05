@@ -426,8 +426,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     };
   }
 ])
-.controller('AdminAddAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'alertDialog', '$filter',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet, alertDialog, $filter) => {
+.controller('AdminAddAccountController', ['$scope', '$state', '$http', '$mdBottomSheet', 'alertDialog', '$filter', 'setAccountServerDialog',
+  ($scope, $state, $http, $mdBottomSheet, alertDialog, $filter, setAccountServerDialog) => {
     $scope.setTitle('添加账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $http.get('/api/admin/order').then(success => {
@@ -496,16 +496,16 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       $scope.account.autoRemoveDelay = $filter('timeStr2Num')($scope.account.autoRemoveDelayStr);
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
-      if($scope.account.server) {
-        $scope.servers.forEach(server => {
-          if($scope.account.server.indexOf(server.id) >= 0) {
-            $scope.account.accountServerObj[server.id] = true;
-          } else {
-            $scope.account.accountServerObj[server.id] = false;
-          }
-        });
-      }
-      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
+      // if($scope.account.server) {
+      //   $scope.servers.forEach(server => {
+      //     if($scope.account.server.indexOf(server.id) >= 0) {
+      //       $scope.account.accountServerObj[server.id] = true;
+      //     } else {
+      //       $scope.account.accountServerObj[server.id] = false;
+      //     }
+      //   });
+      // }
+      // const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
       $http.post('/api/admin/account', {
         type: +$scope.account.type,
         orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
@@ -517,7 +517,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: ($scope.account.accountServer && +$scope.account.type > 1) ? server : null,
+        server: $scope.account.server,
         user: $scope.account.user,
       }).then(success => {
         alertDialog.show('添加账号成功', '确定');
@@ -555,10 +555,24 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         return $http.get('/api/admin/user', { params: { pageSize: 5, group: -1, search, type: 'normal' }}).then(success => success.data.users);
       }
     };
+    $scope.setAccountServer = () => {
+      setAccountServerDialog.show($scope.account, $scope.servers);
+    };
+    const setServers = () => {
+      if(!$scope.account.accountServerObj) { return; }
+      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
+      $scope.account.server = ($scope.account.accountServer && +$scope.account.type > 1) ? server : null;
+    };
+    $scope.$watch('account.accountServerObj', () => {
+      setServers();
+    }, true);
+    $scope.$watch('account.accountServer', () => {
+      setServers();
+    }, true);
   }
 ])
-.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog', '$filter', '$q',
-  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog, alertDialog, $filter, $q) => {
+.controller('AdminEditAccountController', ['$scope', '$state', '$stateParams', '$http', '$mdBottomSheet', 'confirmDialog', 'alertDialog', '$filter', '$q', 'setAccountServerDialog',
+  ($scope, $state, $stateParams, $http, $mdBottomSheet, confirmDialog, alertDialog, $filter, $q, setAccountServerDialog) => {
     $scope.setTitle('编辑账号');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.accountPage', { accountId: $stateParams.accountId });
@@ -670,7 +684,6 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       $scope.account.autoRemoveDelay = $filter('timeStr2Num')($scope.account.autoRemoveDelayStr);
       alertDialog.loading();
       $scope.account.flow = $filter('flowStr2Num')($scope.account.flowStr);
-      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
       $http.put(`/api/admin/account/${ accountId }/data`, {
         type: +$scope.account.type,
         orderId: $scope.account.fromOrder ? +$scope.account.orderId : 0,
@@ -683,7 +696,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         autoRemove: $scope.account.autoRemove ? 1 : 0,
         autoRemoveDelay: $scope.account.autoRemoveDelay,
         multiServerFlow: $scope.account.multiServerFlow ? 1 : 0,
-        server: ($scope.account.accountServer && +$scope.account.type > 1) ? server : null,
+        server: $scope.account.server,
       }).then(success => {
         alertDialog.show('修改账号成功', '确定');
         $state.go('admin.accountPage', { accountId: $stateParams.accountId });
@@ -721,5 +734,19 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         $state.go('admin.account');
       });
     };
+    $scope.setAccountServer = () => {
+      setAccountServerDialog.show($scope.account, $scope.servers);
+    };
+    const setServers = () => {
+      if(!$scope.account.accountServerObj) { return; }
+      const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
+      $scope.account.server = ($scope.account.accountServer && +$scope.account.type > 1) ? server : null;
+    };
+    $scope.$watch('account.accountServerObj', () => {
+      setServers();
+    }, true);
+    $scope.$watch('account.accountServer', () => {
+      setServers();
+    }, true);
   }
 ]);

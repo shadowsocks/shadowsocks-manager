@@ -1,7 +1,11 @@
 .md-fab-number {
   position: absolute;
-  bottom: 32px;
-  right: 92px;
+  display: flex;
+  align-items: center;
+  margin: 6px;
+  height: 56px;
+  bottom: 20px;
+  right: 86px;
   font-size: 32px;
   color: rgba(100, 100, 100, 0.8);
   transition-property: color;

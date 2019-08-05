@@ -64,6 +64,14 @@
                     <input type="text" required name="autoRemoveDelay" ng-model="account.autoRemoveDelayStr" ng-disabled="!account.autoRemove">
                 </md-input-container>
             </form>
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%; height: 52px;" layout="row" layout-align="space-between center" ng-click="setAccountServer()">
+                <div flex="75" translate>
+                    <span>自定义服务器&nbsp;[{{ account.server ? account.server.length : '∞' }}]</span>
+                </div>
+                <div flex layout="row" layout-align="end center">
+                    <md-button class="md-icon-button"><md-icon>keyboard_arrow_right</md-icon></md-button>
+                </div>
+            </div>
             <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">到期自动删除</div>
                 <div flex layout="row" layout-align="end center">
@@ -78,7 +86,7 @@
                     </md-switch>
                 </div>
             </div>
-            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
+            <!-- <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">自定义可用服务器</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.accountServer" aria-label="account.accountServer">
@@ -96,7 +104,7 @@
                         </md-checkbox>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <md-autocomplete
                 md-selected-item="accountUser.selectedItem"
                 md-search-text-change="accountUser.searchChange(accountUser.search)"
