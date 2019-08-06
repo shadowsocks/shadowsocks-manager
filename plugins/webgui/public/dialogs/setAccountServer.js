@@ -23,7 +23,7 @@ app.factory('setAccountServerDialog' , [ '$mdDialog', $mdDialog => {
   };
   const dialog = {
     templateUrl: `${ cdn }/public/views/dialog/setAccountServer.html`,
-    escapeToClose: false,
+    escapeToClose: true,
     locals: { bind: publicInfo },
     bindToController: true,
     controller: ['$scope', 'bind', '$mdMedia', function($scope, bind, $mdMedia) {
