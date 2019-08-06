@@ -40,21 +40,27 @@ module.exports = {
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
 
+  // admin/user/1
+  '用户信息': 'User Information',
+  // admin/addUser
+  '添加用户': 'Add User',
+
+  // admin/account/1
   '地址：': 'Address:',
   '端口：': 'Port:',
   '密码：': 'Password:',
   '加密方式：': 'Encryption Method:',
   '流量：': 'Data Usage:',
+  '流量倍率：': 'Data Usage Rate:',
   '周期：': 'Duration:',
   '到期时间：': 'Due Date:',
   '最近连接：': 'Last Connected:',
   '备注：': 'Comments:',
-  '修改密码': 'Change Password',
-  '绑定Telegram': 'Binding Telegram',
-  '邀请码': 'Referral code',
+  // admin/account/1/edit
+  '编辑账号': 'Edit Account',
+  '自动删除延迟': 'Delay Before Auto Deletion',
+
   'mac地址': 'MAC Address',
-  '修改密码成功': 'Change password success',
-  '修改密码失败': 'Change password fail',
   '续费': 'Recharge',
   '不限时': 'unlimited',
   '不限量': 'unlimited',
@@ -77,6 +83,7 @@ module.exports = {
 
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
+  '今日流量排行': 'Today\'s Data Usage Ranking',
   '支付宝订单': 'Alipay Orders',
   'PayPal订单': 'PayPal Orders',
   '订单号：': 'Order No.:',
@@ -86,15 +93,11 @@ module.exports = {
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
 
+  // admin/server
   '本日流量：': 'Today:',
   '本周流量：': 'This Week:',
   '本月流量：': 'This Month:',
-
-  '基本设置': 'Basic Settings',
-  '公告管理': 'Announcement Management',
-  '支付设置': 'Payment Configuration',
-  '邮件设置': 'Email Configuration',
-  '账号设置': 'Account Configuration',
+  '编辑服务器': 'Edit Server',
 
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
@@ -119,11 +122,72 @@ module.exports = {
 
   '修改': 'Modify',
 
+  // admin/settings
+  '基本设置': 'Basic Settings',
+  '公告管理': 'Announcement Management',
+  '群组管理': 'Group Management',
+  '订单设置': 'Order Management',
+  '支付设置': 'Payment Configuration',
+  '邮件设置': 'Email Configuration',
+  '账号设置': 'Account Configuration',
+  '充值码': 'Gift Card',
+  '修改密码': 'Change Password',
+  '邀请码': 'Referral Code',
+
+  // admin/settings/base
   '网站标题': 'Website Title',
+  '网站短标题': 'Website Short Title',
   '使用Service Worker缓存静态页面': 'Use ServiceWorker to create a static cache page',
+  '接收消息推送': 'Allow Notification Push',
+  '主题颜色': 'Primary Color',
+  '主题第二颜色': 'Highlight Color',
+
+  // admin/notice/new
+  '新增公告': 'New Announcement',
+  '分组': 'Group',
+  '自定义分组': 'Custom Group',
+
+  // admin/settings/addGroup
+  '新增群组': 'New Group',
+  // admin/settings/editGroup/0
+  '修改群组': 'Modify Group',
+
+  // admin/settings/newOrder
+  '新增订单': 'New Order',
+  '小时': 'Hour',
+  '天': 'Day',
+  '周': 'Week',
+  '月': 'Month',
+
+  // admin/settings/account
   '新用户自动分配账号': 'New User Gets Auto-Allocation Account',
+  '新用户分组': 'Default Group for New User',
   '随机分配端口号': 'Random Port',
+  '新端口号分配范围': 'Port Allocation Range',
   '开放注册': 'Open Registration',
+  '开启订阅功能': 'Enable Subscription',
+  '精简模式': 'Simple Mode',
+
+  // admin/settings/password
+  '原密码': 'Old password',
+  '新密码': 'New password',
+  '重复新密码': 'New password again',
+  '修改密码成功': 'Change password success',
+  '修改密码失败': 'Change password fail',
+
+  // admin/settings/ref
+  '邀请码管理': 'Refferal Code',
+  '启用邀请码功能': 'Enable Refferal Code',
+  '关闭注册时仍可使用邀请码': 'Allow Refferal Code When Registration Closed',
+  '每个用户拥有邀请码数量': 'Refferal Code Amount Per User',
+  '每个邀请码可邀请的用户数': 'Invited User Amount Per Code',
+
+  // admin/settings/telegram
+  '绑定Telegram': 'Binding Telegram',
+
+  // admin/settings/giftcard
+  '充值码管理': 'Gift Card',
+
   '合并多服务器流量统计': 'Sum Up Stat. of Multi-Server Data Usage',
   '注册时间': 'Signup Date',
   '上次登录': 'Latest Signin',
@@ -134,13 +198,7 @@ module.exports = {
   '完成': 'Success',
   '关闭': 'Closed',
 
-  '原密码': 'Old password',
-  '新密码': 'New password',
-  '重复新密码': 'New password again',
-
   '类型': 'Type',
   '端口': 'Port',
-  '流量(MB)': 'Data Usage(MB)',
-
-  '接收消息推送': 'Receive push message',
+  '流量(MB)': 'Data Usage (MB)',
 };
