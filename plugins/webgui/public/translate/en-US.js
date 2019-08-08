@@ -35,6 +35,7 @@ module.exports = {
   '设置': 'Settings',
   '退出': 'Exit',
 
+  // settings menu
   // admin/settings
   '基本设置': 'Basic Settings',
   '公告管理': 'Announcement Management',
@@ -43,9 +44,9 @@ module.exports = {
   '支付设置': 'Payment Configuration',
   '邮件设置': 'Email Configuration',
   '账号设置': 'Account Configuration',
+  '修改密码': 'Change Password',
+  '邀请码': 'Referral Code',
   '充值码': 'Gift Card',
-  // '修改密码': 'Change Password',
-  // '邀请码': 'Referral Code',
 
   // user/index
   // '账号': 'Accounts',
@@ -142,7 +143,7 @@ module.exports = {
   'PayPal 订单': 'PayPal Orders',
   '充值码订单': 'Gift Card Orders',
   'Ref 订单': 'Ref Orders',
-  '邀请码': 'Referral Code',
+  // '邀请码': 'Referral Code',
   '确定要删除该邀请码？\n注意，邀请码对应的邀请关系也会被一并删除': 'Sure to the referral code?\nNote that the corresponding referral would be deleted at the same time.',
   '删除邀请码失败': 'Failed to delete the referral code',
   // dialog/email
@@ -151,10 +152,6 @@ module.exports = {
   '发送': 'Send',
   // dialog/addAccount
   '请选择添加账号类型': 'Please choose account type',
-  // '端口': '',
-  // '地址': '',
-  // '充值码': '',
-  // '邀请码': '',
   // '关闭': '',
   // '下一步': '',
   '暂无可分配的账号': 'No account can be assigned now',
@@ -195,7 +192,7 @@ module.exports = {
   '不限时': 'Unlimited',
   '最近连接：': 'Last Connected:',
   '备注：': 'Comment:',
-  '修改密码': 'Change Password',
+  // '修改密码': 'Change Password',
   '续费': 'Recharge',
   '复制配置链接': 'Copy Configuration Link',
   '配置链接已复制到剪贴板': 'Configuration Link has been copied to the clipboard',
@@ -253,26 +250,6 @@ module.exports = {
   '用户名：': 'Username:',
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
-  // admin/editOrder
-  '编辑订单': 'Edit Order',
-  '短备注': 'Short Comment',
-  '周期': 'Duration',
-  '小时': 'Hour',
-  // '天': 'Day',
-  // '周': 'Week',
-  '月': 'Month',
-  '支付宝': 'Alipay',
-  '邀请获得时长': 'Acquired Duration by Referral',
-  '端口分配范围': 'Port Allocation Range',
-  '续费允许更换套餐': 'Allow to change order type when recharging',
-  '自动激活': 'Auto Activate',
-  '自定义适用服务器': 'Custom Applicable Servers',
-  '自定义适用分组': 'Custom Applicable Groups',
-  '将改动变更到已有的账号': 'Apply changes to current accounts',
-  // admin/newOrder
-  '新增订单': 'New Order',
-  '普通订单': 'General Order',
-  '流量包': 'Data Pack',
 
   'mac地址': 'MAC Address',
   '或': 'or',
@@ -312,22 +289,49 @@ module.exports = {
 
   '修改': 'Modify',
 
-  // admin/settings/base
+  // setting pages
+  // admin/baseSettings
   '网站标题': 'Website Title',
   '网站短标题': 'Website Short Title',
-  '使用Service Worker缓存静态页面': 'Use ServiceWorker to create a static cache page',
+  '使用 Service Worker 缓存静态页面': 'Use Service Worker to cache static pages',
   '接收消息推送': 'Allow Notification Push',
   '主题颜色': 'Primary Color',
   '主题第二颜色': 'Highlight Color',
-
-  // admin/notice/new
+  // admin/newNotice & admin/editNotice
   '新增公告': 'New Announcement',
+  '编辑公告': 'Edit Announcement',
   '自定义分组': 'Custom Group',
-
-  // admin/settings/addGroup
+  '自动弹出': 'Auto Popup',
+  '预览': 'Preview',
+  // admin/addGroup & admin/editGroup
   '新增群组': 'New Group',
-  // admin/settings/editGroup/0
+  '备注不能为空': 'Comment is required',
+  '允许购买多个账号': 'Allow to buy many accounts',
   '修改群组': 'Modify Group',
+  '': '',
+  // admin/newOrder & admin/editOrder
+  '新增订单': 'New Order',
+  '普通订单': 'General Order',
+  '流量包': 'Data Pack',
+  '编辑订单': 'Edit Order',
+  '短备注': 'Short Comment',
+  '周期': 'Duration',
+  '小时': 'Hour',
+  // '天': 'Day',
+  // '周': 'Week',
+  '月': 'Month',
+  '支付宝': 'Alipay',
+  '邀请获得时长': 'Acquired Duration by Referral',
+  '端口分配范围': 'Port Allocation Range',
+  '续费允许更换套餐': 'Allow to change order type when recharging',
+  '自动激活': 'Auto Activate',
+  '自定义适用服务器': 'Custom Applicable Servers',
+  '自定义适用分组': 'Custom Applicable Groups',
+  '将改动变更到已有的账号': 'Apply changes to current accounts',
+  '注册验证码': 'Signup Verification Code',
+  '密码重置': 'Reset Password',
+  '订单完成': 'Order Completed',
+  '': '',
 
   // admin/settings/account
   '新用户自动分配账号': 'New User Gets Auto-Allocation Account',
