@@ -40,6 +40,7 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
         { id: 'ja-JP', name: '日本語' },
         { id: 'en-US', name: 'English' },
         { id: 'ru-RU', name: 'Русский' },
+        { id: 'ko-KR', name: '한국' },
       ];
       $scope.refresh = () => { window.location.reload(true); };
     }],

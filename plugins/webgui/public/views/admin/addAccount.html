@@ -73,38 +73,19 @@
                 </div>
             </div>
             <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
-                <div flex="75">到期自动删除</div>
-                <div flex layout="row" layout-align="end center">
-                    <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
-                    </md-switch>
-                </div>
-            </div>
-            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
                 <div flex="75">合并多服务器流量统计</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.multiServerFlow" aria-label="multiServerFlow" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
-            <!-- <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
-                <div flex="75">自定义可用服务器</div>
+            <div ng-if="account.fromOrder === 1 || +account.type !== 1" style="width: 100%;" layout="row" layout-align="space-between center">
+                <div flex="75">到期自动删除</div>
                 <div flex layout="row" layout-align="end center">
-                    <md-switch ng-model="account.accountServer" aria-label="account.accountServer">
+                    <md-switch ng-model="account.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
-            <div layout="column" layout-wrap flex ng-if="account.accountServer && +account.type !== 1">
-                <div layout="column" layout-wrap flex ng-repeat="server in servers">
-                    <div flex="100">
-                        <md-checkbox ng-model="account.accountServerObj[server.id]">
-                            <div layout="row" layout-align="space-between center">
-                                <span flex>{{ server.name }}</span>
-                                <span flex style="color: #777">{{ server.host }}</span>
-                            </div>
-                        </md-checkbox>
-                    </div>
-                </div>
-            </div> -->
             <md-autocomplete
                 md-selected-item="accountUser.selectedItem"
                 md-search-text-change="accountUser.searchChange(accountUser.search)"

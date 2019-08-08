@@ -1,8 +1,8 @@
 const app = angular.module('app');
 
 app
-  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$timeout', '$localStorage', 'configManager',
-    ($scope, $mdMedia, $mdSidenav, $state, $http, $timeout, $localStorage, configManager) => {    
+  .controller('HomeController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$localStorage', 'configManager',
+    ($scope, $mdMedia, $mdSidenav, $state, $localStorage, configManager) => {    
       const config = configManager.getConfig();
       if(config.status === 'normal') {
         return $state.go('user.index');
