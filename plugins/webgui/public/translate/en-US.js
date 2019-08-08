@@ -15,9 +15,9 @@ module.exports = {
   '带有插件系统，仅需修改配置文件即可运行': 'Plugin-based, super-easy deployment',
   '支持libev和python版本的标准manager API': 'Supports standard manager API of both ss-libev and ss-python',
   '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
-  '邮箱不能为空': 'Email address cannot be empty',
-  '验证码不能为空': 'Code cannot be empty',
-  '密码不能为空': 'Password cannot be empty',
+  '邮箱不能为空': 'Email address is required',
+  '验证码不能为空': 'Verification Code is required',
+  '密码不能为空': 'Password is required',
   '验证码已发至邮箱': 'A verification code has been sent to your email address',
   '用户注册成功':'Successfully registered.',
   '确定': 'OK',
@@ -36,15 +36,10 @@ module.exports = {
   '退出': 'Exit',
 
   '我的账号': 'My account',
-  '账号': 'Account',
+  // '账号': 'Accounts',
   '点击进入': 'Enter',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
-
-  // admin/user/1
-  '用户信息': 'User Information',
-  // admin/addUser
-  '添加用户': 'Add User',
 
   // admin/account/1
   '地址：': 'Address:',
@@ -94,13 +89,14 @@ module.exports = {
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
 
+  // server pages & dialogs
+  // ref: plugins/webgui/public/controllers/adminServer.js
   // admin/server
   '本日流量：': 'Today:',
   '本周流量：': 'This Week:',
   '本月流量：': 'This Month:',
   '没有服务器': 'No Servers',
   '点击这里添加': 'Click Here to Add One',
-
   // admin/serverPage
   '时': 'Hour',
   '天': 'Day',
@@ -110,7 +106,6 @@ module.exports = {
   '停止': 'Stopped',
   '在线': 'Online',
   '服务器连接失败': 'Server Connection Failed',
-  
   // admin/addServer
   '新增服务器': 'New Server',
   '名称': 'Name',
@@ -130,7 +125,6 @@ module.exports = {
   '端口偏移量不能为空': 'Port Offset is required',
   '添加服务器成功': 'Successfully added a server',
   '添加服务器失败': 'Failed to add a server',
-
   // admin/editServer
   '编辑服务器': 'Edit Server',
   '立即同步所有端口': 'Sync to All Ports Now',
@@ -139,6 +133,70 @@ module.exports = {
   '修改服务器失败': 'Failed to edit the server',
   '确定要删除服务器吗？': 'Sure to delete the server?',
   '删除服务器失败': 'Deleting the server failed',
+
+  // user pages & dialogs
+  // ref: plugins/webgui/public/controllers/adminUser.js
+  // admin/user
+  '没有用户': 'No Users',
+  // admin/userPage
+  '用户信息': 'User Info',
+  '注册时间': 'Signup Date',
+  '上次登录': 'Latest Signin',
+  '邀请人': 'Referrer',
+  '分组': 'Group',
+  '备注': 'Comment',
+  '（空）': '(null)',
+  '保存': 'Save',
+  '修改备注失败': 'Failed to edit comment',
+  '发送邮件': 'Send an Email',
+  '设置分组': 'Set Group',
+  '删除用户': 'Delete User',
+  '确定要删除该用户吗？': 'Sure to delete the user?',
+  '删除用户失败': 'Failed to delete the user',
+  // '账号': 'Accounts',
+  '确定要将此账号从该用户的列表移除？': 'Sure to remove the account?',
+  '移除': 'Remove',
+  '移除账号失败': 'Failed to remove the account',
+  '确定要删除该 MAC 账号？': 'Sure to delete the MAC account?',
+  '删除 MAC 账号失败': 'Failed to delete the MAC account',
+  '邀请用户': 'Referred Users',
+  '确定要删除该邀请关系？': 'Sure to delete the referral?',
+  '删除邀请关系失败': 'Failed to delete the referral',
+  '支付宝订单': 'Alipay Orders',
+  'PayPal 订单': 'PayPal Orders',
+  '充值码订单': 'Gift Card Orders',
+  'Ref 订单': 'Ref Orders',
+  '邀请码': 'Referral Code',
+  '确定要删除该邀请码？\n注意，邀请码对应的邀请关系也会被一并删除': 'Sure to the referral code?\nNote that the corresponding referral would be deleted at the same time.',
+  '删除邀请码失败': 'Failed to delete the referral code',
+  // dialog/email
+  '标题': 'Title',
+  '内容': 'Content',
+  '发送': 'Send',
+  // dialog/addAccount
+  '请选择添加账号类型': 'Please choose account type',
+  // '端口': '',
+  // '地址': '',
+  // '充值码': '',
+  // '邀请码': '',
+  // '关闭': '',
+  // '下一步': '',
+  '暂无可分配的账号': 'No account can be assigned now',
+  '请选择充值的端口': 'Please choose a port to recharge',
+  '新建端口': 'Add a new port',
+  '邀请码数量': 'Amount of referral code',
+  // admin/adminPage
+  '管理员信息': 'Admin Info',
+  // admin/addUser
+  '添加用户': 'Add User',
+  '普通用户': 'General User',
+  '管理员': 'Admin',
+  '添加用户成功': 'Successfully added a new user',
+  '添加用户失败': 'Failed to add a user',
+  // admin/userSortDialog
+  '排序方式：': 'Sort by:',
+  '用户类型：': 'Users Type',
+  '分组：': 'Group:',
   '': '',
 
   '用户注册失败': 'Registration failed',
@@ -174,7 +232,7 @@ module.exports = {
   '账号设置': 'Account Configuration',
   '充值码': 'Gift Card',
   '修改密码': 'Change Password',
-  '邀请码': 'Referral Code',
+  // '邀请码': 'Referral Code',
 
   // admin/settings/base
   '网站标题': 'Website Title',
@@ -186,7 +244,6 @@ module.exports = {
 
   // admin/notice/new
   '新增公告': 'New Announcement',
-  '分组': 'Group',
   '自定义分组': 'Custom Group',
 
   // admin/settings/addGroup
@@ -222,7 +279,7 @@ module.exports = {
   '启用邀请码功能': 'Enable Referral Code',
   '关闭注册时仍可使用邀请码': 'Allow Referral Code When Registration Closed',
   '每个用户拥有邀请码数量': 'Referral Code Amount Per User',
-  '每个邀请码可邀请的用户数': 'Invited User Amount Per Code',
+  '每个邀请码可邀请的用户数': 'Referred User Amount Per Code',
 
   // admin/settings/telegram
   '绑定Telegram': 'Binding Telegram',
@@ -231,8 +288,6 @@ module.exports = {
   '充值码管理': 'Gift Card',
 
   '合并多服务器流量统计': 'Sum Up Stat. of Multi-Server Data Usage',
-  '注册时间': 'Signup Date',
-  '上次登录': 'Latest Signin',
 
   '创建': 'Created',
   '等待': 'Pending',
