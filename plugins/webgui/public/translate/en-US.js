@@ -52,10 +52,15 @@ module.exports = {
   '点击进入': 'Enter',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
+  '支付宝订单': 'Alipay Orders',
+  'PayPal 订单': 'PayPal Orders',
 
+  // index page
+  // admin/index
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
-  '今日流量排行': 'Today\'s Data Usage Ranking',
+  '无': 'None',
+  '今日流量排行': 'Data Usage Ranking Today',
 
   // server pages & dialogs
   // ref: plugins/webgui/public/controllers/adminServer.js
@@ -186,7 +191,6 @@ module.exports = {
   '不限量': 'Unlimited',
   '流量倍率：': 'Data Rate:',
   '周期：': 'Duration:',
-  '无': 'None',
   '到期时间：': 'Expiration Date:',
   '不限时': 'Unlimited',
   '最近连接：': 'Last Connected:',
@@ -207,7 +211,7 @@ module.exports = {
   '自定义服务器': 'Custom servers',
   '合并多服务器流量统计': 'Sum up data usage of multi-server',
   '到期自动删除': 'Auto delete after expiration',
-  '清除该账号流量': "Clean data usage of this account",
+  '清除该账号流量': 'Clean data usage of this account',
   // admin/pickTime
   '开始时间：': 'Start Date:',
   // '到期时间：': 'Expiration Date:',
@@ -243,8 +247,6 @@ module.exports = {
   '开始日期': 'Start Date',
   '结束日期': 'End Date',
   // dialog/order
-  '支付宝订单': 'Alipay Orders',
-  'PayPal订单': 'PayPal Orders',
   '订单号：': 'Order No.:',
   '订单类型：': 'Order Type:',
   '金额：': 'Sum:',
