@@ -35,6 +35,18 @@ module.exports = {
   '设置': 'Settings',
   '退出': 'Exit',
 
+  // admin/settings
+  '基本设置': 'Basic Settings',
+  '公告管理': 'Announcement Management',
+  '群组管理': 'Group Management',
+  '订单设置': 'Order Management',
+  '支付设置': 'Payment Configuration',
+  '邮件设置': 'Email Configuration',
+  '账号设置': 'Account Configuration',
+  '充值码': 'Gift Card',
+  // '修改密码': 'Change Password',
+  // '邀请码': 'Referral Code',
+
   // user/index
   // '账号': 'Accounts',
   '点击进入': 'Enter',
@@ -44,14 +56,6 @@ module.exports = {
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
   '今日流量排行': 'Today\'s Data Usage Ranking',
-  '支付宝订单': 'Alipay Orders',
-  'PayPal订单': 'PayPal Orders',
-  '订单号：': 'Order No.:',
-  '订单类型：': 'Order Type:',
-  '金额：': 'Sum:',
-  '用户名：': 'Username:',
-  '创建时间：': 'Creation Time:',
-  '状态：': 'Status:',
 
   // server pages & dialogs
   // ref: plugins/webgui/public/controllers/adminServer.js
@@ -111,7 +115,7 @@ module.exports = {
   '上次登录': 'Latest Signin',
   '邀请人': 'Referrer',
   '分组': 'Group',
-  '备注': 'Comment',
+  // '备注': 'Comment',
   '（空）': '(null)',
   '保存': 'Save',
   '修改备注失败': 'Failed to edit comment',
@@ -228,6 +232,46 @@ module.exports = {
   '无期限': 'Unlimited',
   // '订单类型：': 'Order Type:',
 
+  // oeder pages
+  // admin/pay
+  '没有订单': 'No Orders',
+  '创建': 'Created',
+  '等待': 'Pending',
+  '付款': 'Paid',
+  '完成': 'Success',
+  '已关闭': 'Closed',
+  '开始日期': 'Start Date',
+  '结束日期': 'End Date',
+  // dialog/order
+  '支付宝订单': 'Alipay Orders',
+  'PayPal订单': 'PayPal Orders',
+  '订单号：': 'Order No.:',
+  '订单类型：': 'Order Type:',
+  '金额：': 'Sum:',
+  '用户名：': 'Username:',
+  '创建时间：': 'Creation Time:',
+  '状态：': 'Status:',
+  // admin/editOrder
+  '编辑订单': 'Edit Order',
+  '短备注': 'Short Comment',
+  '周期': 'Duration',
+  '小时': 'Hour',
+  // '天': 'Day',
+  // '周': 'Week',
+  '月': 'Month',
+  '支付宝': 'Alipay',
+  '邀请获得时长': 'Acquired Duration by Referral',
+  '端口分配范围': 'Port Allocation Range',
+  '续费允许更换套餐': 'Allow to change order type when recharging',
+  '自动激活': 'Auto Activate',
+  '自定义适用服务器': 'Custom Applicable Servers',
+  '自定义适用分组': 'Custom Applicable Groups',
+  '将改动变更到已有的账号': 'Apply changes to current accounts',
+  // admin/newOrder
+  '新增订单': 'New Order',
+  '普通订单': 'General Order',
+  '流量包': 'Data Pack',
+
   'mac地址': 'MAC Address',
   '或': 'or',
   '点击这里': 'Click Here',
@@ -266,18 +310,6 @@ module.exports = {
 
   '修改': 'Modify',
 
-  // admin/settings
-  '基本设置': 'Basic Settings',
-  '公告管理': 'Announcement Management',
-  '群组管理': 'Group Management',
-  '订单设置': 'Order Management',
-  '支付设置': 'Payment Configuration',
-  '邮件设置': 'Email Configuration',
-  '账号设置': 'Account Configuration',
-  '充值码': 'Gift Card',
-  // '修改密码': 'Change Password',
-  // '邀请码': 'Referral Code',
-
   // admin/settings/base
   '网站标题': 'Website Title',
   '网站短标题': 'Website Short Title',
@@ -294,13 +326,6 @@ module.exports = {
   '新增群组': 'New Group',
   // admin/settings/editGroup/0
   '修改群组': 'Modify Group',
-
-  // admin/settings/newOrder
-  '新增订单': 'New Order',
-  '小时': 'Hour',
-  // '天': 'Day',
-  // '周': 'Week',
-  '月': 'Month',
 
   // admin/settings/account
   '新用户自动分配账号': 'New User Gets Auto-Allocation Account',
@@ -330,13 +355,6 @@ module.exports = {
 
   // admin/settings/giftcard
   '充值码管理': 'Gift Card',
-
-  '创建': 'Created',
-  '等待': 'Pending',
-  '付款': 'Paid',
-  '完成': 'Success',
-  // conflict
-  // '关闭': 'Closed',
 
   '流量(MB)': 'Data Usage (MB)',
 };
