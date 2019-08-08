@@ -418,7 +418,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       });
     };
     $scope.clipboardSuccess = event => {
-      $scope.toast('二维码链接已复制到剪贴板');
+      $scope.toast('配置链接已复制到剪贴板');
     };
     $scope.isWG = server => server.type === 'WireGuard';
     $scope.showWireGuard = (server, account) => {
@@ -725,7 +725,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     };
     $scope.deleteAccount = () => {
       confirmDialog.show({
-        text: '真的要删除账号吗？',
+        text: '确定要删除账号吗？',
         cancel: '取消',
         confirm: '删除',
         error: '删除账号失败',

@@ -35,47 +35,11 @@ module.exports = {
   '设置': 'Settings',
   '退出': 'Exit',
 
-  '我的账号': 'My account',
+  // user/index
   // '账号': 'Accounts',
   '点击进入': 'Enter',
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
-
-  // admin/account/1
-  '地址：': 'Address:',
-  '端口：': 'Port:',
-  '密码：': 'Password:',
-  '加密方式：': 'Encryption Method:',
-  '流量：': 'Data Usage:',
-  '流量倍率：': 'Data Rate:',
-  '周期：': 'Duration:',
-  '到期时间：': 'Due Date:',
-  '最近连接：': 'Last Connected:',
-  '备注：': 'Comment:',
-  // admin/account/1/edit
-  '编辑账号': 'Edit Account',
-  '自动删除延迟': 'Delay Before Auto Deletion',
-
-  'mac地址': 'MAC Address',
-  '续费': 'Recharge',
-  '不限时': 'unlimited',
-  '不限量': 'unlimited',
-  '无': 'none',
-  '或': 'or',
-  '点击这里': 'Click Here',
-  '付款立即开通帐号': 'to pay and get an account now.',
-  '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
-  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
-  '请选择续费周期：': 'Service duration:',
-  '一小时': '1 hour',
-  '一天': '1 day',
-  '一周': '1 week',
-  '一个月': '1 month',
-  '三个月': '3 months',
-  '一年': '1 year',
-  '支付宝扫码支付': 'Alipay QR code Payment',
-  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
-  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
 
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
@@ -97,6 +61,9 @@ module.exports = {
   '本月流量：': 'This Month:',
   '没有服务器': 'No Servers',
   '点击这里添加': 'Click Here to Add One',
+  // dialog/serverChart
+  '显示流量': 'Show Data Usage',
+  '显示图表': 'Show Chart',
   // admin/serverPage
   '时': 'Hour',
   '天': 'Day',
@@ -197,7 +164,86 @@ module.exports = {
   '排序方式：': 'Sort by:',
   '用户类型：': 'Users Type',
   '分组：': 'Group:',
-  '': '',
+
+  // account pages & dialogs
+  // ref: plugins/webgui/public/controllers/adminAccount.js
+  // admin/account
+  '没有账号': 'No Accounts',
+  '点击这里添加': 'Click Here to Add One',
+  // admin/accountPage
+  '未激活': 'Not Active',
+  '公钥：': 'Public Key:',
+  '私钥：': 'Private Key:',
+  '地址：': 'Address:',
+  '端口：': 'Port:',
+  '密码：': 'Password:',
+  '加密方式：': 'Encryption Method:',
+  '流量：': 'Data Usage:',
+  '不限量': 'Unlimited',
+  '流量倍率：': 'Data Rate:',
+  '周期：': 'Duration:',
+  '无': 'None',
+  '到期时间：': 'Expiration Date:',
+  '不限时': 'Unlimited',
+  '最近连接：': 'Last Connected:',
+  '备注：': 'Comment:',
+  '修改密码': 'Change Password',
+  '续费': 'Recharge',
+  '复制配置链接': 'Copy Configuration Link',
+  '配置链接已复制到剪贴板': 'Configuration Link has been copied to the clipboard',
+  '显示 WireGuard 配置': 'Show WireGuard Configuration',
+  // admin/editAccount
+  '编辑账号': 'Edit Account',
+  '从订单中选择类型': 'Choose type from orders',
+  '更改类型时保持过期时间不变': 'Keep expiration date unchanged when changing the type',
+  '类型': 'Type',
+  '流量': 'Data',
+  '流量不能为空': 'Data usage is required',
+  '自动删除延迟': 'Delay before auto deletion',
+  '自定义服务器': 'Custom servers',
+  '合并多服务器流量统计': 'Sum up data usage of multi-server',
+  '到期自动删除': 'Auto delete after expiration',
+  '清除该账号流量': "Clean data usage of this account",
+  // admin/pickTime
+  '开始时间：': 'Start Date:',
+  // '到期时间：': 'Expiration Date:',
+  '时长：': 'Duration(s):',
+  // admin/addAccount
+  '添加账号': 'New Account',
+  '指定用户（可选）': 'Specify user (Optional)',
+  '没有匹配的用户': 'No matching users',
+  '添加账号成功': 'Successfully added a new account',
+  '添加账号失败': 'Failed to add a account',
+  '修改账号成功': 'Successfully edited the account',
+  '修改账号失败': 'Failed to edit the account',
+  '删除账号失败': 'Failed to delete the account',
+  // admin/accountSortAndFilterDialog
+  '端口号': 'Port Number',
+  '过期时间': 'Expiration Date',
+  '过滤条件：': 'Filter:',
+  '未过期': 'Available',
+  '已过期': 'Expired',
+  '已绑定用户': 'Binded to users',
+  '未绑定用户': 'Idle',
+  '无期限': 'Unlimited',
+  // '订单类型：': 'Order Type:',
+
+  'mac地址': 'MAC Address',
+  '或': 'or',
+  '点击这里': 'Click Here',
+  '付款立即开通帐号': 'to pay and get an account now.',
+  '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
+  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
+  '请选择续费周期：': 'Service duration:',
+  '一小时': '1 hour',
+  '一天': '1 day',
+  '一周': '1 week',
+  '一个月': '1 month',
+  '三个月': '3 months',
+  '一年': '1 year',
+  '支付宝扫码支付': 'Alipay QR code Payment',
+  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
+  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
 
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
@@ -212,8 +258,6 @@ module.exports = {
   '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email address.',
   '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
   '请输入正确的邮箱地址': 'Invalid email address.',
-
-  '已过期': 'expired',
 
   '支付成功': 'Payment successful.',
   '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
@@ -231,7 +275,7 @@ module.exports = {
   '邮件设置': 'Email Configuration',
   '账号设置': 'Account Configuration',
   '充值码': 'Gift Card',
-  '修改密码': 'Change Password',
+  // '修改密码': 'Change Password',
   // '邀请码': 'Referral Code',
 
   // admin/settings/base
@@ -287,8 +331,6 @@ module.exports = {
   // admin/settings/giftcard
   '充值码管理': 'Gift Card',
 
-  '合并多服务器流量统计': 'Sum Up Stat. of Multi-Server Data Usage',
-
   '创建': 'Created',
   '等待': 'Pending',
   '付款': 'Paid',
@@ -296,10 +338,5 @@ module.exports = {
   // conflict
   // '关闭': 'Closed',
 
-  '类型': 'Type',
   '流量(MB)': 'Data Usage (MB)',
-
-  // dialog/serverChart
-  '显示流量': 'Show Data Usage',
-  '显示图表': 'Show Chart',
 };
