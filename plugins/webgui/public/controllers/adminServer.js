@@ -574,7 +574,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.deleteServer = () => {
       confirmDialog.show({
-        text: '真的要删除服务器吗？',
+        text: '确定要删除服务器吗？',
         cancel: '取消',
         confirm: '删除',
         error: '删除服务器失败',

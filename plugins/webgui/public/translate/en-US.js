@@ -27,6 +27,7 @@ module.exports = {
   '无效': 'not valid',
   '已发送': 'has been sent',
 
+  // side nav
   '服务器': 'Servers',
   '用户': 'Users',
   '账号': 'Accounts',
@@ -40,21 +41,27 @@ module.exports = {
   '公告': 'Announcements',
   '暂无公告': 'Nothing here',
 
+  // admin/user/1
+  '用户信息': 'User Information',
+  // admin/addUser
+  '添加用户': 'Add User',
+
+  // admin/account/1
   '地址：': 'Address:',
   '端口：': 'Port:',
   '密码：': 'Password:',
   '加密方式：': 'Encryption Method:',
   '流量：': 'Data Usage:',
+  '流量倍率：': 'Data Rate:',
   '周期：': 'Duration:',
   '到期时间：': 'Due Date:',
   '最近连接：': 'Last Connected:',
-  '备注：': 'Comments:',
-  '修改密码': 'Change Password',
-  '绑定Telegram': 'Binding Telegram',
-  '邀请码': 'Referral code',
+  '备注：': 'Comment:',
+  // admin/account/1/edit
+  '编辑账号': 'Edit Account',
+  '自动删除延迟': 'Delay Before Auto Deletion',
+
   'mac地址': 'MAC Address',
-  '修改密码成功': 'Change password success',
-  '修改密码失败': 'Change password fail',
   '续费': 'Recharge',
   '不限时': 'unlimited',
   '不限量': 'unlimited',
@@ -77,6 +84,7 @@ module.exports = {
 
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
+  '今日流量排行': 'Today\'s Data Usage Ranking',
   '支付宝订单': 'Alipay Orders',
   'PayPal订单': 'PayPal Orders',
   '订单号：': 'Order No.:',
@@ -86,15 +94,52 @@ module.exports = {
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
 
+  // admin/server
   '本日流量：': 'Today:',
   '本周流量：': 'This Week:',
   '本月流量：': 'This Month:',
+  '没有服务器': 'No Servers',
+  '点击这里添加': 'Click Here to Add One',
 
-  '基本设置': 'Basic Settings',
-  '公告管理': 'Announcement Management',
-  '支付设置': 'Payment Configuration',
-  '邮件设置': 'Email Configuration',
-  '账号设置': 'Account Configuration',
+  // admin/serverPage
+  '时': 'Hour',
+  '天': 'Day',
+  '周': 'Week',
+  '全部': 'All',
+  '可用': 'Available',
+  '停止': 'Stopped',
+  '在线': 'Online',
+  '服务器连接失败': 'Server Connection Failed',
+  
+  // admin/addServer
+  '新增服务器': 'New Server',
+  '名称': 'Name',
+  '名称不能为空': 'Name is required',
+  '备注': 'Comment',
+  '地址': 'Address',
+  '地址不能为空': 'Address is required',
+  '端口': 'Port',
+  '端口不能为空': 'Port is required',
+  '密码不能为空': 'Password is required',
+  '公钥': 'Public Key',
+  '网段': 'Network Segment',
+  '加密方式': 'Encryption Method',
+  '流量倍率': 'Data Rate',
+  '流量倍率不能为空': 'Data Rate is required',
+  '端口偏移': 'Port Offset',
+  '端口偏移量不能为空': 'Port Offset is required',
+  '添加服务器成功': 'Successfully added a server',
+  '添加服务器失败': 'Failed to add a server',
+
+  // admin/editServer
+  '编辑服务器': 'Edit Server',
+  '立即同步所有端口': 'Sync to All Ports Now',
+  '删除': 'Delete',
+  '修改服务器成功': 'Successfully edited the server',
+  '修改服务器失败': 'Failed to edit the server',
+  '确定要删除服务器吗？': 'Sure to delete the server?',
+  '删除服务器失败': 'Deleting the server failed',
+  '': '',
 
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
@@ -119,11 +164,72 @@ module.exports = {
 
   '修改': 'Modify',
 
+  // admin/settings
+  '基本设置': 'Basic Settings',
+  '公告管理': 'Announcement Management',
+  '群组管理': 'Group Management',
+  '订单设置': 'Order Management',
+  '支付设置': 'Payment Configuration',
+  '邮件设置': 'Email Configuration',
+  '账号设置': 'Account Configuration',
+  '充值码': 'Gift Card',
+  '修改密码': 'Change Password',
+  '邀请码': 'Referral Code',
+
+  // admin/settings/base
   '网站标题': 'Website Title',
+  '网站短标题': 'Website Short Title',
   '使用Service Worker缓存静态页面': 'Use ServiceWorker to create a static cache page',
+  '接收消息推送': 'Allow Notification Push',
+  '主题颜色': 'Primary Color',
+  '主题第二颜色': 'Highlight Color',
+
+  // admin/notice/new
+  '新增公告': 'New Announcement',
+  '分组': 'Group',
+  '自定义分组': 'Custom Group',
+
+  // admin/settings/addGroup
+  '新增群组': 'New Group',
+  // admin/settings/editGroup/0
+  '修改群组': 'Modify Group',
+
+  // admin/settings/newOrder
+  '新增订单': 'New Order',
+  '小时': 'Hour',
+  // '天': 'Day',
+  // '周': 'Week',
+  '月': 'Month',
+
+  // admin/settings/account
   '新用户自动分配账号': 'New User Gets Auto-Allocation Account',
+  '新用户分组': 'Default Group for New User',
   '随机分配端口号': 'Random Port',
+  '新端口号分配范围': 'Port Allocation Range',
   '开放注册': 'Open Registration',
+  '开启订阅功能': 'Enable Subscription',
+  '精简模式': 'Simple Mode',
+
+  // admin/settings/password
+  '原密码': 'Old password',
+  '新密码': 'New password',
+  '重复新密码': 'New password again',
+  '修改密码成功': 'Change password success',
+  '修改密码失败': 'Change password fail',
+
+  // admin/settings/ref
+  '邀请码管理': 'Referral Code',
+  '启用邀请码功能': 'Enable Referral Code',
+  '关闭注册时仍可使用邀请码': 'Allow Referral Code When Registration Closed',
+  '每个用户拥有邀请码数量': 'Referral Code Amount Per User',
+  '每个邀请码可邀请的用户数': 'Invited User Amount Per Code',
+
+  // admin/settings/telegram
+  '绑定Telegram': 'Binding Telegram',
+
+  // admin/settings/giftcard
+  '充值码管理': 'Gift Card',
+
   '合并多服务器流量统计': 'Sum Up Stat. of Multi-Server Data Usage',
   '注册时间': 'Signup Date',
   '上次登录': 'Latest Signin',
@@ -132,15 +238,13 @@ module.exports = {
   '等待': 'Pending',
   '付款': 'Paid',
   '完成': 'Success',
-  '关闭': 'Closed',
-
-  '原密码': 'Old password',
-  '新密码': 'New password',
-  '重复新密码': 'New password again',
+  // conflict
+  // '关闭': 'Closed',
 
   '类型': 'Type',
-  '端口': 'Port',
-  '流量(MB)': 'Data Usage(MB)',
+  '流量(MB)': 'Data Usage (MB)',
 
-  '接收消息推送': 'Receive push message',
+  // dialog/serverChart
+  '显示流量': 'Show Data Usage',
+  '显示图表': 'Show Chart',
 };
