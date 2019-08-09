@@ -198,6 +198,7 @@ module.exports = {
   '复制配置链接': 'Copy Configuration Link',
   '配置链接已复制到剪贴板': 'Configuration Link has been copied to the clipboard',
   '显示 WireGuard 配置': 'Show WireGuard Configuration',
+  'WireGuard 配置': 'WireGuard Configuration',
   // admin/editAccount
   '编辑账号': 'Edit Account',
   '从订单中选择类型': 'Choose Type From Orders',
@@ -248,6 +249,28 @@ module.exports = {
   '结束日期': 'End Date',
   // admin/editPayment
   '自定义可用服务器': 'Custom Available Servers',
+  // dialog/pay
+  '请选择支付方式：': 'Please choose Payment Type:',
+  '支付宝扫码支付': 'Alipay QR code Payment',
+  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
+  '请点击下面按钮完成 PayPal 支付': 'Please click the following button to pay with PayPal',
+  '请选择续费周期：': 'Service duration:',
+  '一小时': '1 hour',
+  '一天': '1 day',
+  '一周': '1 week',
+  '一个月': '1 month',
+  '三个月': '3 months',
+  '一年': '1 year',
+  '有效期：': 'Validity Duration:',
+  '支付成功': 'Payment successful.',
+  '支付失败': 'Payment Failed.',
+  '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
+  '系统错误': 'An error occurred.',
+  '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
+  '详情': 'Details',
+  '支付': 'Pay',
+  '返回': 'Back',
+
   // dialog/order
   '订单号：': 'Order No.:',
   '订单类型：': 'Order Type:',
@@ -256,22 +279,11 @@ module.exports = {
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
 
-  'mac地址': 'MAC Address',
   '或': 'or',
   '点击这里': 'Click Here',
   '付款立即开通帐号': 'to pay and get an account now.',
   '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
   '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
-  '请选择续费周期：': 'Service duration:',
-  '一小时': '1 hour',
-  '一天': '1 day',
-  '一周': '1 week',
-  '一个月': '1 month',
-  '三个月': '3 months',
-  '一年': '1 year',
-  '支付宝扫码支付': 'Alipay QR code Payment',
-  '手机请点击二维码付款': 'On your smartphone, please click the QR code to pay',
-  'PayPal支付请点击下面按钮': 'For PayPal users, please click the following button',
 
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
@@ -286,11 +298,6 @@ module.exports = {
   '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email address.',
   '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
   '请输入正确的邮箱地址': 'Invalid email address.',
-
-  '支付成功': 'Payment successful.',
-  '订单会在两分钟内生效，请稍候': 'The order is taking effect in 2 minutes. Please wait.',
-  '系统错误': 'An error occurred.',
-  '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
 
   '修改': 'Modify',
 
@@ -357,6 +364,8 @@ module.exports = {
   '原密码': 'Old password',
   '新密码': 'New password',
   '重复新密码': 'New password again',
+  '注意：': 'Attention:',
+  '此处修改的密码为 Shadowsocks 的密码。': 'The password to be changed here for Shadowsocks.',
   '修改密码成功，请重新登录': 'Successfully Changed Password. Please login again.',
   '修改密码成功': 'Successfully Changed Password',
   '修改密码失败': 'Failed to Change Password',
@@ -418,4 +427,26 @@ module.exports = {
   '添加邀请关系': 'Add Referral Relationship',
   '邀请人邮箱': 'Referrer\'s Email',
   '被邀请用户邮箱': 'Referred User\'s Email',
+
+  // dialogs
+  // dialog/autopop
+  '下一条': 'Next',
+  // '关闭': 'Close',
+  // dialog/ban
+  '封禁时长：': 'Ban Duration:',
+  '解封时间：': 'Unban at:',
+  '分钟': 'minute(s)',
+  // dialog/ip
+  '最近连接': 'Last Connected',
+  '本服务器：': 'The Server: ',
+  '暂无': 'None',
+  '所有服务器：': 'All Servers: ',
+  // dialog/subscribe
+  '请选择订阅链接类型：': 'Please choose subscription link type:',
+  '将域名转换为 IP 地址': 'Convert the domain name to IP address',
+  '显示流量信息': 'Show Data Usage Info',
+  '更换链接': 'Change Link',
+
+  '该页面尚未完工': 'This Page is Under Development',
+  '': '',
 };

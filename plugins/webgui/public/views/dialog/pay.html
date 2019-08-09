@@ -19,7 +19,7 @@
                     <div translate>手机请点击二维码付款</div>
                 </div>
                 <div style="margin-top: 30px;" ng-if="publicInfo.config.paypal && publicInfo.myPayType === 'paypal'" layout="column" layout-align="center center">
-                    <div translate>请点击下面按钮完成PayPal支付</div>
+                    <div translate>请点击下面按钮完成 PayPal 支付</div>
                     <div style="margin-top: 5px;" id="paypal-button-container"></div>
                 </div> 
             </div>
@@ -35,24 +35,26 @@
                         </div>
                     </md-radio-button>
                     <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-show="+publicInfo.orderId === +order.id && order.shortComment">{{ order.shortComment }}</div>
-                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-if="publicInfo.selectedOrder.baseId" ng-show="+publicInfo.orderId === +order.id" ng-repeat-end>有效期：{{ publicInfo.account.data.to | date : 'yyyy-MM-dd HH:mm' }}</div>
+                    <div style="margin: 5px 0 5px 30px; color: #666; font-size: 0.85em;" ng-if="publicInfo.selectedOrder.baseId" ng-show="+publicInfo.orderId === +order.id" ng-repeat-end>
+                        {{ '有效期：' | translate }}{{ publicInfo.account.data.to | date : 'yyyy-MM-dd HH:mm' }}
+                    </div>
                 </md-radio-group>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'giftcard'">
                 <form>
                     <md-input-container class="md-block" flex-gt-sm>
-                        <label>充值码</label>
+                        <label translate>充值码</label>
                         <input ng-model="publicInfo.giftCardPassword">
                     </md-input-container>
                 </form>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'success'">
-                <div style="margin-bottom: 20px;">支付成功</div>
-                <div style="margin-bottom: 20px;">{{ publicInfo.message }}</div>
+                <div style="margin-bottom: 20px;" translate>支付成功</div>
+                <div style="margin-bottom: 20px;" translate>{{ publicInfo.message }}</div>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'error'">
-                <div style="margin-bottom: 20px;">支付失败</div>
-                <div style="margin-bottom: 20px;">{{ publicInfo.message }}</div>
+                <div style="margin-bottom: 20px;" translate>支付失败</div>
+                <div style="margin-bottom: 20px;" translate>{{ publicInfo.message }}</div>
             </div>
             <div layout="column" layout-align="center center" ng-show="publicInfo.status === 'comment'">
                 <div class="markdown-table" marked="publicInfo.comment"></div>
@@ -85,7 +87,8 @@
             {{ '返回' | translate }}
         </md-button>
         <md-button class="md-primary" ng-show="publicInfo.status === 'comment'" ng-click="publicInfo.createOrder()" ng-disabled="publicInfo.time > 0">
-            支付<span ng-show="publicInfo.time">({{ publicInfo.time }})</span>
+            {{ '支付' | translate }}
+            <span ng-show="publicInfo.time">({{ publicInfo.time }})</span>
         </md-button>
     </md-dialog-actions>
 </md-dialog>
