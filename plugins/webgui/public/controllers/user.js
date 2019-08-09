@@ -363,7 +363,7 @@ app
       };
     };
     $scope.clipboardSuccess = event => {
-      $scope.toast('二维码链接已复制到剪贴板');
+      $scope.toast('配置链接已被复制到剪贴板');
     };
     $scope.isWG = server => {
       return (server && server.type === 'WireGuard');
@@ -452,7 +452,7 @@ app
 ])
 .controller('UserOrderController', ['$scope', '$http',
   ($scope, $http) => {
-    $scope.setTitle('我的订单');
+    $scope.setTitle('订单');
     $http.get('/api/user/order').then(success => {
       $scope.orders = success.data;
     });
@@ -460,7 +460,7 @@ app
 ])
 .controller('UserMacAddressController', ['$scope', '$state', '$http', 'addMacAccountDialog',
   ($scope, $state, $http, addMacAccountDialog) => {
-    $scope.setTitle('MAC地址');
+    $scope.setTitle(`MAC 地址`);
     $scope.setMenuButton('arrow_back', 'user.settings');
     const getMacAccount = () => {
       $http.get('/api/user/account/mac').then(success => {

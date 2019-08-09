@@ -8,7 +8,7 @@
                 <div style="margin-bottom: 20px;" translate>请选择支付方式：</div>
                 <md-radio-group ng-model="publicInfo.myPayType" flex>
                     <md-radio-button ng-repeat="pt in publicInfo.payType" value="{{pt.type}}" >
-                        {{ pt.name }}
+                        {{ pt.name | translate }}
                     </md-radio-button>
                 </md-radio-group>
             </div>

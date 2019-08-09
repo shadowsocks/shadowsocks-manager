@@ -4,9 +4,11 @@ module.exports = {
   '取消': 'Cancel',
   '关闭': 'Close',
   '下一步': 'Next',
+  '下一条': 'Next',  // dialog/autopop
+  // '修改': 'Modify',
   '返回': 'Back',
 
-  // home pages
+  // home pages & dialogs
   // home/signup
   '邮箱': 'Email',
   '邮箱不能为空': 'Email address is required',
@@ -21,12 +23,27 @@ module.exports = {
   // '邀请码': 'Referral Code',
   '无效': 'Not Valid',
   '用户注册成功':'Successfully registered.',
+  '用户注册失败': 'Registration Failed',
+  '该用户已存在': 'This user already exists.',
+  '网络异常，请稍后再试': 'Network failure. Please try again later.',
+  '验证码发送错误': 'Unable to send verification code.',
+  '发送错误，无效的邀请码': 'Unable to send verification code because of invalid referral code',
+  '发送错误，请更换邮箱尝试': 'Unable to send verification code. Please try to use a different email address.',
+  '请求过于频繁，请稍后再试': 'Too many requests. Please try again later.',
+  '当前时段尚未开放注册': 'Registration is currently unavailable.',
   // home/signin
   '找回密码': 'Reset Password',
-  '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
   '社交账号登录': 'SNS Login',
+  '用户名或密码错误': 'Incorrect username or password.',
+  '该用户尚未注册': 'No such user',
+  '请输入正确的用户名格式': 'Invalid username.',
+  '密码重试次数已达上限\n请稍后再试': 'Too many login attempts.\n Please try again later.',
   // home/resetPassword
   '重置密码': 'Reset Password',
+  '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
+  '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email address.',
+  '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
+  '请输入正确的邮箱地址': 'Invalid email address.',
 
   // side nav
   '服务器': 'Servers',
@@ -35,6 +52,9 @@ module.exports = {
   '订单': 'Orders',
   '设置': 'Settings',
   '退出': 'Exit',
+
+  // user pages' title
+  'MAC 地址': 'MAC Address',
 
   // settings menu
   // admin/settings
@@ -59,7 +79,6 @@ module.exports = {
   '检查网线、调制解调器和路由器': 'Check network cables, modems, and routers',
   '重新连接到 Wi-Fi 网络': 'Reconnect to a Wi-Fi network',
   '登录账号': 'Sign in',
-  '': '',
   // admin/index
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
@@ -191,12 +210,12 @@ module.exports = {
   '点击这里添加': 'Click Here to Add One',
   // admin/accountPage
   '未激活': 'Not Active',
-  '公钥：': 'Public Key:',
-  '私钥：': 'Private Key:',
   '地址：': 'Address:',
   '端口：': 'Port:',
   '密码：': 'Password:',
   '加密方式：': 'Encryption Method:',
+  '公钥：': 'Public Key:',
+  '私钥：': 'Private Key:',
   '流量：': 'Data Usage:',
   '不限量': 'Unlimited',
   '流量倍率：': 'Data Rate:',
@@ -208,7 +227,7 @@ module.exports = {
   // '修改密码': 'Change Password',
   '续费': 'Recharge',
   '复制配置链接': 'Copy Configuration Link',
-  '配置链接已复制到剪贴板': 'Configuration Link has been copied to the clipboard',
+  '配置链接已被复制到剪贴板': 'Configuration Link has been copied to the clipboard',
   '显示 WireGuard 配置': 'Show WireGuard Configuration',
   'WireGuard 配置': 'WireGuard Configuration',
   // admin/editAccount
@@ -248,6 +267,16 @@ module.exports = {
   '无期限': 'Unlimited',
   // '订单类型：': 'Order Type:',
   // '全部': 'All',
+  // user/account
+  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator.',
+  '或': 'Or',
+  '点击这里': 'Click Here',
+  '付款立即开通帐号': 'to pay and get an account now.',
+  '激活账号': 'Activate Account',
+  // '已过期': 'Expired',
+  '订阅链接': 'Subscription Link',
+  // user/qrcodeDialog
+  '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
 
   // oeder pages
   // admin/pay
@@ -281,7 +310,6 @@ module.exports = {
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
   '详情': 'Details',
   '支付': 'Pay',
-
   // dialog/order
   '订单号：': 'Order No.:',
   '订单类型：': 'Order Type:',
@@ -289,28 +317,6 @@ module.exports = {
   '用户名：': 'Username:',
   '创建时间：': 'Creation Time:',
   '状态：': 'Status:',
-
-  '或': 'or',
-  '点击这里': 'Click Here',
-  '付款立即开通帐号': 'to pay and get an account now.',
-  '点击二维码或者用移动设备扫描二维码可自动填充服务器信息': 'Click the QR code or scan it by smartphone to retrieve server information automatically',
-  '目前该用户没有分配账号，请联系管理员处理': 'No account has been assigned to you yet. Please contact the administrator, ',
-
-  '用户注册失败': 'Registration failed',
-  '网络异常，请稍后再试': 'Network failure. Please try again later.',
-  '用户名或密码错误': 'Incorrect username or password.',
-  '该用户尚未注册的': 'No such user',
-  '请输入正确的用户名格式': 'Invalid username.',
-  '密码重试次数已达上限\n请稍后再试': 'Too many login attempts.\n Please try again later.',
-  '验证码发送错误': 'Unable to send verification code.',
-  '发送错误，请更换邮箱尝试': 'Unable to send verification code. Please try to use a different email address.',
-  '请求过于频繁，请稍后再试': 'Too many requests. Please try again later.',
-  '当前时段尚未开放注册': 'Registration is currently unavailable.',
-  '重置密码链接已发至您的邮箱，\n请注意查收': 'A password reset link has been sent to your email address.',
-  '重置密码链接已经发送，\n请勿重复发送': 'The password reset link has already been sent. \n Please do not request it again.',
-  '请输入正确的邮箱地址': 'Invalid email address.',
-
-  '修改': 'Modify',
 
   // setting pages
   // admin/baseSettings
@@ -351,6 +357,7 @@ module.exports = {
   // '周': 'Week',
   '月': 'Month',
   '支付宝': 'Alipay',
+  'Paypal': 'PayPal',
   '邀请获得时长': 'Acquired Duration by Referral',
   '端口分配范围': 'Port Allocation Range',
   '续费允许更换套餐': 'Allow to change order type when recharging',
@@ -438,11 +445,14 @@ module.exports = {
   '添加邀请关系': 'Add Referral Relationship',
   '邀请人邮箱': 'Referrer\'s Email',
   '被邀请用户邮箱': 'Referred User\'s Email',
+  // user/ref
+  '没有可用的邀请码': 'No Available Referral Code',
+  '已邀请用户': 'Referred User',
+  '当前没有邀请用户': 'No Referred User',
+  '邀请链接已被复制到剪贴板': 'Configuration Link has been copied to the clipboard',
+  '邀请奖励': 'Referral Reward',
 
   // dialogs
-  // dialog/autopop
-  '下一条': 'Next',
-  // '关闭': 'Close',
   // dialog/ban
   '封禁时长：': 'Ban Duration:',
   '解封时间：': 'Unban at:',
