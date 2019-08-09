@@ -1,30 +1,32 @@
 module.exports = {
-  '首页': 'Home',
-  '登录': 'Sign in',
-  '注册': 'Sign up',
-  '邮箱': 'Email',
-  '密码': 'Password',
-  '找回密码': 'Reset password',
-  '验证码': 'Verification code',
-  '发送验证码': 'Get code',
-  '快速搭建':'Fast deployment',
-  '易于配置':'Easy configuration',
-  '官方标准':'Official API',
-  '仅依赖Node.js，无需安装数据库（可选MySQL）': 'Depends on Node.js and SQLite only (optionally MySQL)',
-  '带有插件系统，仅需修改配置文件即可运行': 'Plugin-based, super-easy deployment',
-  '支持libev和python版本的标准manager API': 'Supports standard manager API of both ss-libev and ss-python',
-  '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
-  '邮箱不能为空': 'Email address is required',
-  '验证码不能为空': 'Verification Code is required',
-  '密码不能为空': 'Password is required',
-  '验证码已发至邮箱': 'A verification code has been sent to your email address',
-  '用户注册成功':'Successfully registered.',
+  // general
   '确定': 'OK',
   '取消': 'Cancel',
   '关闭': 'Close',
   '下一步': 'Next',
-  '无效': 'not valid',
-  '已发送': 'has been sent',
+  '返回': 'Back',
+
+  // home pages
+  // home/signup
+  '邮箱': 'Email',
+  '邮箱不能为空': 'Email address is required',
+  '必须填写一个有效邮箱地址': 'Please fill in a valid email address',
+  '验证码': 'Verification Code',
+  '验证码不能为空': 'Verification Code is required',
+  '发送验证码': 'Get Code',
+  '已发送': 'Sent',
+  '验证码已发至邮箱': 'A verification code has been sent to your email address',
+  '密码': 'Password',
+  '密码不能为空': 'Password is required',
+  // '邀请码': 'Referral Code',
+  '无效': 'Not Valid',
+  '用户注册成功':'Successfully registered.',
+  // home/signin
+  '找回密码': 'Reset Password',
+  '请输入邮箱地址再点击“找回密码”': 'Please fill in your email address first',
+  '社交账号登录': 'SNS Login',
+  // home/resetPassword
+  '重置密码': 'Reset Password',
 
   // side nav
   '服务器': 'Servers',
@@ -48,6 +50,16 @@ module.exports = {
   '充值码': 'Gift Card',
 
   // index page
+  // home/index
+  '首页': 'Home',
+  '登录': 'Sign in',
+  '注册': 'Sign up',
+  '您的账号': ' your account',
+  '一个账号': ' an account',
+  '检查网线、调制解调器和路由器': 'Check network cables, modems, and routers',
+  '重新连接到 Wi-Fi 网络': 'Reconnect to a Wi-Fi network',
+  '登录账号': 'Sign in',
+  '': '',
   // admin/index
   '最新注册用户': 'Recent Registrations',
   '最近登录用户': 'Recent Logins',
@@ -269,7 +281,6 @@ module.exports = {
   '生成支付订单出错，请稍后再试': 'Unable to process your order. Please try again later.',
   '详情': 'Details',
   '支付': 'Pay',
-  '返回': 'Back',
 
   // dialog/order
   '订单号：': 'Order No.:',
