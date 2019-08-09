@@ -75,7 +75,7 @@ app.controller('MainController', ['$scope', '$localStorage', '$location', '$http
     $scope.chooseLanguage = () => {
       languageDialog.show();
     };
-    $translate.use($localStorage.language || navigator.language || 'zh-CN');
+    $translate.use($localStorage.language || $scope.config.language || navigator.language || 'zh-CN');
     $scope.toast = (content, delay = 3000) => {
       $mdToast.show(
         $mdToast.simple()

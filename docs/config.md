@@ -75,6 +75,7 @@ plugins:
     # admin_password: '35710935109364'
     # icon: 'icon.png'
     # skin: 'default'
+    # language: 'en-US'
     # googleAnalytics: 'UA-xxxxxxxx-x'
     # gcmSenderId: '476902381496'
     # gcmAPIKey: 'AAAAGzddLRc:XXXXXXXXXXXXXX'

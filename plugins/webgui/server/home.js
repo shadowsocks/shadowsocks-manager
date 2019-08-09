@@ -615,6 +615,7 @@ exports.status = async (req, res) => {
     const version = appRequire('package').version;
     const site = config.plugins.webgui.site;
     const skin = config.plugins.webgui.skin || 'default';
+    const language = config.plugins.webgui.language || '';
     const google_login_client_id = config.plugins.webgui.google_login_client_id || '';
     const facebook_login_client_id = config.plugins.webgui.facebook_login_client_id || '';
     const github_login_client_id = config.plugins.webgui.github_login_client_id || '';
@@ -669,6 +670,7 @@ exports.status = async (req, res) => {
       browserColor,
       site,
       skin,
+      language,
       alipay,
       paypal,
       paypalMode,

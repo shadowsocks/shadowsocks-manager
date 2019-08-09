@@ -82,6 +82,7 @@ gulp.task('webguiBuild', () => {
       minimizer: [new UglifyJsPlugin()],
     },
     mode: 'production',
+    performance: { hints: false },
   }))
   .pipe(gulp.dest('plugins/webgui/libs'));
 });
