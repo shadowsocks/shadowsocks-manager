@@ -27,7 +27,7 @@
             <div layout="row" layout-align="center stretch" ng-if="publicInfo.id === 1">
                 <md-select ng-model="userSort.group" style="width: 250px;" aria-label="group select">
                     <md-option ng-repeat="group in publicInfo.groups" ng-value="group.id">
-                        {{ group.name }}
+                        {{ group.name | translate }}
                     </md-option>
                 </md-select>
             </div>

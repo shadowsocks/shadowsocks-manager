@@ -7,7 +7,6 @@ module.exports = {
   '找回密码': 'Reset password',
   '验证码': 'Verification code',
   '发送验证码': 'Get code',
-  '请选择语言：': 'Choose language:',
   '快速搭建':'Fast deployment',
   '易于配置':'Easy configuration',
   '官方标准':'Official API',
@@ -48,6 +47,12 @@ module.exports = {
   '邀请码': 'Referral Code',
   '充值码': 'Gift Card',
 
+  // index page
+  // admin/index
+  '最新注册用户': 'Recent Registrations',
+  '最近登录用户': 'Recent Logins',
+  '无': 'None',
+  '今日流量排行': 'Data Usage Ranking Today',
   // user/index
   // '账号': 'Accounts',
   '点击进入': 'Enter',
@@ -55,13 +60,8 @@ module.exports = {
   '暂无公告': 'Nothing here',
   '支付宝订单': 'Alipay Orders',
   'PayPal 订单': 'PayPal Orders',
-
-  // index page
-  // admin/index
-  '最新注册用户': 'Recent Registrations',
-  '最近登录用户': 'Recent Logins',
-  '无': 'None',
-  '今日流量排行': 'Data Usage Ranking Today',
+  // dialog/language
+  '请选择语言：': 'Choose language:',
 
   // server pages & dialogs
   // ref: plugins/webgui/public/controllers/adminServer.js
@@ -152,8 +152,8 @@ module.exports = {
   '发送': 'Send',
   // dialog/addAccount
   '请选择添加账号类型': 'Please choose account type',
-  // '关闭': '',
-  // '下一步': '',
+  // '关闭': 'Close',
+  // '下一步': 'Next',
   '暂无可分配的账号': 'No account can be assigned now',
   '请选择充值的端口': 'Please choose a port to recharge',
   '新建端口': 'Add a new port',
@@ -170,6 +170,7 @@ module.exports = {
   '排序方式：': 'Sort by:',
   '用户类型：': 'Users Type',
   '分组：': 'Group:',
+  '所有组': 'All Groups',
 
   // account pages & dialogs
   // ref: plugins/webgui/public/controllers/adminAccount.js
@@ -202,12 +203,13 @@ module.exports = {
   '从订单中选择类型': 'Choose Type From Orders',
   '更改类型时保持过期时间不变': 'Keep Expiration Date Unchanged When Changing the Type',
   '类型': 'Type',
-  '流量': 'Data',
+  '流量': 'Data Usage',
   '流量不能为空': 'Data usage is required',
   '自动删除延迟': 'Delay Before Auto Deletion',
   '自定义服务器': 'Custom Servers',
   '合并多服务器流量统计': 'Sum Up Data Usage of Multi-Server',
   '到期自动删除': 'Auto Delete After Expiration',
+  '自定义新用户可用服务器': 'Custom Available Servers for New Users',
   '清除该账号流量': 'Clean Data Usage of This Account',
   // admin/pickTime
   '开始时间：': 'Start Date:',
@@ -232,6 +234,7 @@ module.exports = {
   '未绑定用户': 'Idle',
   '无期限': 'Unlimited',
   // '订单类型：': 'Order Type:',
+  // '全部': 'All',
 
   // oeder pages
   // admin/pay
@@ -243,6 +246,8 @@ module.exports = {
   '已关闭': 'Closed',
   '开始日期': 'Start Date',
   '结束日期': 'End Date',
+  // admin/editPayment
+  '自定义可用服务器': 'Custom Available Servers',
   // dialog/order
   '订单号：': 'Order No.:',
   '订单类型：': 'Order Type:',
@@ -314,6 +319,8 @@ module.exports = {
   '修改群组失败': 'Failed to modify the group',
   '删除群组成功': 'Successfully deleted the group',
   '删除群组失败': 'Failed to delete the group',
+  // dialog/setGroupOrder
+  '自定义分组订单': 'Custom Orders for this Group',
   // admin/newOrder & admin/editOrder
   '新增订单': 'New Order',
   '普通订单': 'General Order',
@@ -338,7 +345,7 @@ module.exports = {
   '订单完成': 'Order Completed',
   // admin/accountSettings
   '新用户自动分配账号': 'Auto Allocate Accounts for New Users',
-  '新用户分组': 'Default Group for New User',
+  '新用户分组': 'Default Group for New Users',
   '随机分配端口号': 'Random Port',
   '新端口号分配范围': 'Allocated Port Range',
   '起始端口': 'Start Port',
@@ -361,19 +368,21 @@ module.exports = {
   '每个邀请码可邀请的用户数': 'Referred User Amount Per Code',
   '邀请码列表': 'Referral Code List',
   '邀请用户列表': 'Referred User List',
-  // admin/settings/telegram
+  // admin/telegramSettings
   '绑定 Telegram': 'Binding Telegram',
   '请添加': 'Please Add',
   '并输入': 'and Send a message',
   '完成绑定': 'to complete binding',
   '已绑定': 'Binded',
   '解除绑定': 'Unbind',
-  // admin/settings/giftcard
+
+  // giftcard pages
+  // admin/giftcardBatchDetails
   '充值码管理': 'Gift Card Management',
   '创建于': 'Created ',
   '，目前状态：': ', Now Status:',
   '可用': 'AVAILABLE',
-  '售罄': 'USEDUP',
+  '售罄': 'USED UP',
   '已召回': 'REVOKED',
   '其它': 'Other',
   '召回': 'Revoke',
@@ -384,6 +393,9 @@ module.exports = {
   '，密码：': ', Password: ',
   '确定要召回这些卡片吗？\n该操作不可撤销。': 'Sure to revoke these cards?\nThe operation is irrevocable.',
   '召回失败': 'Failed to Revoke',
+  // dialog/addGiftCardBatch
+  '数量': 'Amount',
+  '创建失败': 'Failed to Create',
 
   // referral pages
   // admin/refCodeList
@@ -404,6 +416,6 @@ module.exports = {
   '注册用户：': 'Registered User',
   // admin/addRefUser
   '添加邀请关系': 'Add Referral Relationship',
-  '邀请人邮箱': 'Referrer Email',
-  '被邀请用户邮箱': 'Referred User Email',
+  '邀请人邮箱': 'Referrer\'s Email',
+  '被邀请用户邮箱': 'Referred User\'s Email',
 };
