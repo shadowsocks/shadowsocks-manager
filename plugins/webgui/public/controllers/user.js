@@ -402,7 +402,7 @@ app
     $scope.confirm = () => {
       alertDialog.loading();
       userApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
-        alertDialog.show('修改密码成功，请重新登录', '确定')
+        alertDialog.show(`{{ '修改密码成功，请重新登录' | translate }}`, '确定')
         .then(() => {
           return $http.post('/api/home/logout');
         }).then(() => {
@@ -418,7 +418,7 @@ app
 ])
 .controller('UserTelegramController', ['$scope', '$http', '$interval',
   ($scope, $http, $interval) => {
-    $scope.setTitle('绑定Telegram');
+    $scope.setTitle('绑定 Telegram');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $scope.isLoading = true;
     $scope.code = {};
@@ -446,7 +446,7 @@ app
     $http.get('/api/user/ref/user').then(success => { $scope.user = success.data; });
     $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
     $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已复制到剪贴板');
+      $scope.toast('邀请链接已被复制到剪贴板');
     };
   }
 ])

@@ -14,12 +14,12 @@
                     md-item-text="item.username"
                     md-delay="750"
                     md-require-match="true"
-                    placeholder="邀请人邮箱">
+                    placeholder="{{ '邀请人邮箱' | translate }}">
                     <md-item-template>
                         <span md-highlight-text="sourceUser.search" md-highlight-flags="^i">{{ item.username }}</span>
                     </md-item-template>
                     <md-not-found>
-                        没有匹配的用户
+                        {{ '没有匹配的用户' | translate }}
                     </md-not-found>
                 </md-autocomplete>
                 <div style="height: 30px;"></div>
@@ -39,12 +39,12 @@
                     md-item-text="item.username"
                     md-delay="750"
                     md-require-match="true"
-                    placeholder="被邀请用户邮箱">
+                    placeholder="{{ '被邀请用户邮箱' | translate }}">
                     <md-item-template>
                         <span md-highlight-text="refUser.search" md-highlight-flags="^i">{{ item.username }}</span>
                     </md-item-template>
                     <md-not-found>
-                        没有匹配的用户
+                        {{ '没有匹配的用户' | translate }}
                     </md-not-found>
                 </md-autocomplete>
                 <div style="height: 30px;"></div>
@@ -55,8 +55,8 @@
     <div flex layout="row" layout-align="center start">
         <div flex="10" flex-gt-sm="30"></div>
         <div layout="row" flex layout-align="space-around center">
-            <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!sourceUser.selectedItem || !refUser.selectedItem || !sourceUserCode">确认</md-button>
+            <md-button class="md-primary" ng-click="cancel()">{{ '取消' | translate }}</md-button>
+            <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!sourceUser.selectedItem || !refUser.selectedItem || !sourceUserCode">{{ '确定' | translate }}</md-button>
         </div>
         <div flex="10" flex-gt-sm="30"></div>
     </div>

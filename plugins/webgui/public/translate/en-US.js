@@ -69,7 +69,7 @@ module.exports = {
   '本日流量：': 'Today:',
   '本周流量：': 'This Week:',
   '本月流量：': 'This Month:',
-  '没有服务器': 'No Servers',
+  '没有服务器': 'No Server',
   '点击这里添加': 'Click Here to Add One',
   // dialog/serverChart
   '显示流量': 'Show Data Usage',
@@ -114,7 +114,7 @@ module.exports = {
   // user pages & dialogs
   // ref: plugins/webgui/public/controllers/adminUser.js
   // admin/user
-  '没有用户': 'No Users',
+  '没有用户': 'No User',
   // admin/userPage
   '用户信息': 'User Info',
   '注册时间': 'Signup Date',
@@ -144,7 +144,7 @@ module.exports = {
   '充值码订单': 'Gift Card Orders',
   'Ref 订单': 'Ref Orders',
   // '邀请码': 'Referral Code',
-  '确定要删除该邀请码？\n注意，邀请码对应的邀请关系也会被一并删除': 'Sure to the referral code?\nNote that the corresponding referral would be deleted at the same time.',
+  '确定要删除该邀请码？\n注意，邀请码对应的邀请关系也会被一并删除': 'Sure to the referral code?\nNote that the corresponding referral relationship would be deleted at the same time.',
   '删除邀请码失败': 'Failed to delete the referral code',
   // dialog/email
   '标题': 'Title',
@@ -174,7 +174,7 @@ module.exports = {
   // account pages & dialogs
   // ref: plugins/webgui/public/controllers/adminAccount.js
   // admin/account
-  '没有账号': 'No Accounts',
+  '没有账号': 'No Account',
   '点击这里添加': 'Click Here to Add One',
   // admin/accountPage
   '未激活': 'Not Active',
@@ -199,16 +199,16 @@ module.exports = {
   '显示 WireGuard 配置': 'Show WireGuard Configuration',
   // admin/editAccount
   '编辑账号': 'Edit Account',
-  '从订单中选择类型': 'Choose type from orders',
-  '更改类型时保持过期时间不变': 'Keep expiration date unchanged when changing the type',
+  '从订单中选择类型': 'Choose Type From Orders',
+  '更改类型时保持过期时间不变': 'Keep Expiration Date Unchanged When Changing the Type',
   '类型': 'Type',
   '流量': 'Data',
   '流量不能为空': 'Data usage is required',
-  '自动删除延迟': 'Delay before auto deletion',
-  '自定义服务器': 'Custom servers',
-  '合并多服务器流量统计': 'Sum up data usage of multi-server',
-  '到期自动删除': 'Auto delete after expiration',
-  '清除该账号流量': 'Clean data usage of this account',
+  '自动删除延迟': 'Delay Before Auto Deletion',
+  '自定义服务器': 'Custom Servers',
+  '合并多服务器流量统计': 'Sum Up Data Usage of Multi-Server',
+  '到期自动删除': 'Auto Delete After Expiration',
+  '清除该账号流量': 'Clean Data Usage of This Account',
   // admin/pickTime
   '开始时间：': 'Start Date:',
   // '到期时间：': 'Expiration Date:',
@@ -216,7 +216,7 @@ module.exports = {
   // admin/addAccount
   '添加账号': 'New Account',
   '指定用户（可选）': 'Specify user (Optional)',
-  '没有匹配的用户': 'No matching users',
+  '没有匹配的用户': 'No matching user',
   '添加账号成功': 'Successfully added a new account',
   '添加账号失败': 'Failed to add a account',
   '修改账号成功': 'Successfully edited the account',
@@ -235,7 +235,7 @@ module.exports = {
 
   // oeder pages
   // admin/pay
-  '没有订单': 'No Orders',
+  '没有订单': 'No Order',
   '创建': 'Created',
   '等待': 'Pending',
   '付款': 'Paid',
@@ -308,7 +308,12 @@ module.exports = {
   '备注不能为空': 'Comment is required',
   '允许购买多个账号': 'Allow to buy many accounts',
   '修改群组': 'Modify Group',
-  '': '',
+  '添加群组成功': 'Successfully added a new group',
+  '添加群组失败': 'Failed to add a group',
+  '修改群组成功': 'Successfully modified the group',
+  '修改群组失败': 'Failed to modify the group',
+  '删除群组成功': 'Successfully deleted the group',
+  '删除群组失败': 'Failed to delete the group',
   // admin/newOrder & admin/editOrder
   '新增订单': 'New Order',
   '普通订单': 'General Order',
@@ -331,36 +336,74 @@ module.exports = {
   '注册验证码': 'Signup Verification Code',
   '密码重置': 'Reset Password',
   '订单完成': 'Order Completed',
-  '': '',
-
-  // admin/settings/account
-  '新用户自动分配账号': 'New User Gets Auto-Allocation Account',
+  // admin/accountSettings
+  '新用户自动分配账号': 'Auto Allocate Accounts for New Users',
   '新用户分组': 'Default Group for New User',
   '随机分配端口号': 'Random Port',
-  '新端口号分配范围': 'Port Allocation Range',
+  '新端口号分配范围': 'Allocated Port Range',
+  '起始端口': 'Start Port',
+  '结束端口': 'End Port',
   '开放注册': 'Open Registration',
   '开启订阅功能': 'Enable Subscription',
   '精简模式': 'Simple Mode',
-
-  // admin/settings/password
+  // admin/changePassword
   '原密码': 'Old password',
   '新密码': 'New password',
   '重复新密码': 'New password again',
-  '修改密码成功': 'Change password success',
-  '修改密码失败': 'Change password fail',
-
-  // admin/settings/ref
-  '邀请码管理': 'Referral Code',
+  '修改密码成功，请重新登录': 'Successfully Changed Password. Please login again.',
+  '修改密码成功': 'Successfully Changed Password',
+  '修改密码失败': 'Failed to Change Password',
+  // admin/refSettings
+  '邀请码管理': 'Referral Code Management',
   '启用邀请码功能': 'Enable Referral Code',
-  '关闭注册时仍可使用邀请码': 'Allow Referral Code When Registration Closed',
+  '关闭注册时仍可使用邀请码': 'Allow Referral Code While Registration Closed',
   '每个用户拥有邀请码数量': 'Referral Code Amount Per User',
   '每个邀请码可邀请的用户数': 'Referred User Amount Per Code',
-
+  '邀请码列表': 'Referral Code List',
+  '邀请用户列表': 'Referred User List',
   // admin/settings/telegram
-  '绑定Telegram': 'Binding Telegram',
-
+  '绑定 Telegram': 'Binding Telegram',
+  '请添加': 'Please Add',
+  '并输入': 'and Send a message',
+  '完成绑定': 'to complete binding',
+  '已绑定': 'Binded',
+  '解除绑定': 'Unbind',
   // admin/settings/giftcard
-  '充值码管理': 'Gift Card',
+  '充值码管理': 'Gift Card Management',
+  '创建于': 'Created ',
+  '，目前状态：': ', Now Status:',
+  '可用': 'AVAILABLE',
+  '售罄': 'USEDUP',
+  '已召回': 'REVOKED',
+  '其它': 'Other',
+  '召回': 'Revoke',
+  '已用': 'Used',
+  '卡号': 'Card No.',
+  '导出 CSV': 'Export as CSV',
+  '卡号：': 'Card No.: ',
+  '，密码：': ', Password: ',
+  '确定要召回这些卡片吗？\n该操作不可撤销。': 'Sure to revoke these cards?\nThe operation is irrevocable.',
+  '召回失败': 'Failed to Revoke',
 
-  '流量(MB)': 'Data Usage (MB)',
+  // referral pages
+  // admin/refCodeList
+  '当前没有生成邀请码': 'No Referral Code Now',
+  '共': 'Totally',
+  '个邀请码': 'Code(s)',
+  // admin/editRefCode
+  '编辑邀请码': 'Edit Referral Code',
+  '复制链接': 'Copy Link',
+  '最大邀请次数': 'Max Referral Amount',
+  '访问次数': 'Visit Amount',
+  '邀请链接已被复制到剪贴板': 'Ref link has been copied to the clipboard',
+  // admin/refUserList
+  '当前没有已被邀请的用户': 'No Referred User Now',
+  '个邀请用户': 'Referred User(s)',
+  '邀请码：': 'Referral Code',
+  '邀请人：': 'Referrer',
+  '注册用户：': 'Registered User',
+  // admin/addRefUser
+  '添加邀请关系': 'Add Referral Relationship',
+  '邀请人邮箱': 'Referrer Email',
+  '被邀请用户邮箱': 'Referred User Email',
 };

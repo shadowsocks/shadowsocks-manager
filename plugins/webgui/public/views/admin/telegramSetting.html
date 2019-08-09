@@ -14,7 +14,7 @@
           <md-list ng-show="code.code && !isLoading">
               <md-list-item>
                   <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
-                      <div>请添加 Telegram 账号 <a ng-href="https://t.me/{{code.telegram}}" target="_blank">@{{ code.telegram }}</a> 并输入“{{ code.code }}”完成绑定</div>
+                      <div>{{ '请添加' | translate }} Telegram {{ '账号' | translate }} <a ng-href="https://t.me/{{code.telegram}}" target="_blank">@{{ code.telegram }}</a> {{ '并输入' |  translate }} “{{ code.code }}” {{ '完成绑定' |  translate }}</div>
                   </div>
               </md-list-item>
           </md-list>
@@ -23,7 +23,7 @@
                   <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
                       <div flex="75" translate>已绑定</div>
                       <div flex layout="row" layout-align="end center">
-                          <md-button class="md-primary" ng-click="unbind()">解除绑定&gt;&gt;</md-button>
+                          <md-button class="md-primary" ng-click="unbind()">{{ '解除绑定' | translate }}&gt;&gt;</md-button>
                       </div>
                   </div>
               </md-list-item>
