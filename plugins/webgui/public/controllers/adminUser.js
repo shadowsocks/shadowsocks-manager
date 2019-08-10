@@ -143,7 +143,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     getUserData();
     $scope.deleteUserAccount = (accountId) => {
       confirmDialog.show({
-        text: '确定要将此账号从该用户的列表移除？',
+        text: '将此账号移除出该用户的列表？',
         cancel: '取消',
         confirm: '移除',
         error: '移除账号失败',
@@ -156,10 +156,10 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteMacAccount = accountId => {
       confirmDialog.show({
-        text: '确定要删除该 MAC 账号？',
+        text: '删除该账号？',
         cancel: '取消',
         confirm: '删除',
-        error: '删除 MAC 账号失败',
+        error: '删除账号失败',
         fn: function () { return $http.delete('/api/admin/account/mac/', {
           params: { id: accountId },
         }); },
@@ -189,7 +189,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteUser = () => {
       confirmDialog.show({
-        text: '确定要删除该用户吗？',
+        text: '真的要删除该用户吗？',
         cancel: '取消',
         confirm: '删除',
         error: '删除用户失败',
@@ -220,7 +220,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteRefUser = refUserId => {
       confirmDialog.show({
-        text: '确定要删除该邀请关系？',
+        text: '删除该邀请关系？',
         cancel: '取消',
         confirm: '删除',
         error: '删除邀请关系失败',
@@ -233,7 +233,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
     };
     $scope.deleteRefCode = code => {
       confirmDialog.show({
-        text: '确定要删除该邀请码？\n注意，邀请码对应的邀请关系也会被一并删除',
+        text: '删除该邀请码？\n注意，邀请码对应的邀请关系也会一并删除',
         cancel: '取消',
         confirm: '删除',
         error: '删除邀请码失败',
@@ -294,7 +294,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
 
     $scope.deleteUser = () => {
       confirmDialog.show({
-        text: '确定要删除该用户吗？',
+        text: '真的要删除该用户吗？',
         cancel: '取消',
         confirm: '删除',
         error: '删除用户失败',

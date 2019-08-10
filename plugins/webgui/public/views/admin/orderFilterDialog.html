@@ -1,7 +1,7 @@
 <md-dialog aria-label="filter dialog">
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div style="margin-bottom: 20px;" translate="">过滤条件：</div>
+            <div style="margin-bottom: 20px;">过滤条件：</div>
             <md-input-container class="md-block">
                 <label translate>开始日期</label>
                 <!-- <input type="text" required name="start" ng-model="orderFilter.start"> -->
@@ -14,19 +14,19 @@
             </md-input-container>
             <div layout="column" layout-align="center stretch">
                 <div flex>
-                    <md-checkbox ng-model="orderFilter.filter.CREATE">{{ '创建' | translate }}</md-checkbox>
-                    <md-checkbox ng-model="orderFilter.filter.WAIT_BUYER_PAY">{{ '等待' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="orderFilter.filter.CREATE">创建</md-checkbox>
+                    <md-checkbox ng-model="orderFilter.filter.WAIT_BUYER_PAY">等待</md-checkbox>
                 </div>
                 <div flex>
-                    <md-checkbox ng-model="orderFilter.filter.TRADE_SUCCESS">{{ '付款' | translate }}</md-checkbox>
-                    <md-checkbox ng-model="orderFilter.filter.FINISH">{{ '完成' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="orderFilter.filter.TRADE_SUCCESS">付款</md-checkbox>
+                    <md-checkbox ng-model="orderFilter.filter.FINISH">完成</md-checkbox>
                 </div>
                 <div flex>
-                    <md-checkbox ng-model="orderFilter.filter.TRADE_CLOSED">{{ '已关闭' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="orderFilter.filter.TRADE_CLOSED">关闭</md-checkbox>
                     <div></div>
                 </div>
                 <md-input-container ng-if="publicInfo.id === 1">
-                    <label translate>分组</label>
+                    <label>分组</label>
                     <md-select ng-model="orderFilter.group">
                         <md-option ng-repeat="group in publicInfo.groups" ng-value="group.id">
                             {{ group.name }}
@@ -38,7 +38,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row">
         <md-button class="md-primary" ng-click="publicInfo.hide()">
-            {{ '确定' | translate }}
+            确定
         </md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -1,5 +1,5 @@
 <!-- <div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-show="total">共 {{ total }} 个</div> -->
-<div ng-if="total === 0" class="zero-element">{{ '没有账号' | translate }}<br /><span class="zero-element-link" ng-if="id === 1" ng-click="addAccount()">{{ '点击这里添加' | translate }}</span></div>
+<div ng-if="total === 0" class="zero-element">没有账号<br /><span class="zero-element-link" ng-if="id === 1" ng-click="addAccount()">点击这里添加</span></div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in account track by $index">
         <md-card ng-click="toAccount(a)" md-colors="{{ accountColor(a) }}" class="hover-mouse hover-flow">

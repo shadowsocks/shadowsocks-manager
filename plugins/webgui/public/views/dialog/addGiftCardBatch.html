@@ -7,11 +7,11 @@
             <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'show'">
                 <form>
                     <md-input-container class="md-block">
-                        <label translate>数量</label>
+                        <label>数量</label>
                         <input type="number" required name="count" ng-model="publicInfo.count">
                     </md-input-container>
                     <md-input-container class="md-block" style="height: 54px;">
-                        <label translate>类型</label>
+                        <label>类型</label>
                         <md-select ng-model="publicInfo.orderId">
                             <md-option ng-repeat="order in publicInfo.orderList" ng-value="{{order.id}}">{{ order.name }}</md-option>
                             <!-- <md-option ng-value="7">年</md-option>
@@ -25,13 +25,13 @@
                         </md-select>
                     </md-input-container>
                     <md-input-container class="md-block">
-                        <label translate>备注</label>
+                        <label>备注</label>
                         <input type="text" required name="comment" ng-model="publicInfo.comment">
                     </md-input-container>
                 </form>
             </div>
             <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'error'">
-                <div style="white-space: pre-wrap;" translate>创建失败</div>
+                <div style="white-space: pre-wrap;">创建失败</div>
             </div>
         </div>
     </md-dialog-content>

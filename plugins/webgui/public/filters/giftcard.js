@@ -5,7 +5,7 @@ app.filter('prettyPrintBatchStatus', function () {
         const result = {
             AVAILABLE: '可用',
             USEDUP: '售罄',
-            REVOKED: '已召回'
+            REVOKED: '召回'
         };
         return result[status] || '其它';
     };

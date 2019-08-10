@@ -8,8 +8,7 @@
                         <div flex layout="row" layout-align="space-between center">
                             <div flex="40" translate>封禁时长：</div>
                             <div flex="60" style="text-align:right">
-                                <span style="width: 55px;">{{ publicInfo.banTime | ban }}</span>
-                                {{ '分钟' | translate }}
+                                <span style="width: 55px;">{{ publicInfo.banTime | ban }}</span>分钟
                             </div>
                         </div>
                         <div flex layout="row" layout-align="space-between center">
@@ -34,10 +33,10 @@
     </md-dialog-content>
     <md-dialog-actions layout="row">
         <md-button class="md-warn" ng-click="publicInfo.ban()">
-            {{ '确定' | translate }}
+            确定
         </md-button>
         <md-button class="md-primary" ng-click="publicInfo.hide()">
-            {{ '取消' | translate }}
+            取消
         </md-button>
     </md-dialog-actions>
 </md-dialog>
