@@ -69,7 +69,7 @@ module.exports = {
   '邀请码': 'Referral Code',
   '充值码': 'Gift Card',
 
-  // index page
+  // index pages
   // home/index
   '首页': 'Home',
   '登录': 'Sign in',
