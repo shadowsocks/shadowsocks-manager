@@ -2,7 +2,7 @@
   <form ng-cloak>
     <md-dialog-content>
       <div class="md-dialog-content">
-        <div layout="row" layout-wrap flex ng-if="account.length === 0" translate>
+        <div layout="row" layout-wrap flex ng-if="account.length === 0">
           暂无可分配的账号
         </div>
         <div layout="row" layout-wrap flex ng-if="account.length">
@@ -16,7 +16,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row">
       <md-button ng-click="confirmAccount()">
-        {{ '确定' | translate }}
+        确定
       </md-button>
     </md-dialog-actions>
   </form>

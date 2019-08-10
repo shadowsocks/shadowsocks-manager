@@ -12,7 +12,7 @@ app.filter('order', function () {
       created: '创建',
       approved: '付款',
       finish: '完成',
-      closed: '已关闭',
+      closed: '关闭',
     };
     return result[status] || '其它';
   };

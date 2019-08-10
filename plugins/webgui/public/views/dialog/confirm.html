@@ -5,19 +5,19 @@
     <md-dialog-content ng-show="publicInfo.status !== 'loading'">
         <div class="md-dialog-content">
             <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'show'">
-                <div style="white-space: pre-wrap;">{{ publicInfo.text }}</div>
+                <div style="white-space: pre-wrap;">{{publicInfo.text}}</div>
             </div>
             <div layout="row" layout-align="center center" ng-show="publicInfo.status === 'error'">
-                <div style="white-space: pre-wrap;">{{ publicInfo.error }}</div>
+                <div style="white-space: pre-wrap;">{{publicInfo.error}}</div>
             </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="center center" ng-show="publicInfo.status !== 'loading'">
         <md-button class="md-primary" ng-click="publicInfo.cancelFn()" ng-show="publicInfo.status === 'show'">
-            {{ publicInfo.cancel | translate }}
+            {{publicInfo.cancel | translate }}
         </md-button>
         <md-button class="md-warn" ng-click="publicInfo.confirmFn()" ng-show="publicInfo.status === 'show'">
-            {{ publicInfo.confirm | translate }}
+            {{publicInfo.confirm | translate }}
         </md-button>
         <md-button class="md-primary" ng-click="publicInfo.cancelFn()" ng-show="publicInfo.status === 'error'">
             {{ '确定' | translate }}

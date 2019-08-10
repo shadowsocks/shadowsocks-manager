@@ -20,7 +20,7 @@
                     </md-list-item>
                     <md-list-item ng-if="!signupUsers.length">
                         <div flex layout="row" layout-align="space-between center">
-                            <div translate>无</div>
+                            <div>无</div>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
@@ -49,7 +49,7 @@
                     </md-list-item>
                     <md-list-item ng-if="!loginUsers.length">
                         <div flex layout="row" layout-align="space-between center">
-                            <div translate>无</div>
+                            <div>无</div>
                         </div>
                         <md-divider></md-divider>
                     </md-list-item>
@@ -71,7 +71,7 @@
                         <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
                             <div flex="30" flex-xs="60">
                                 <span style="font-size: 0.9em;">{{ order.orderId }}</span><br><span
-                                    style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
+                                    style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                             </div>
                             <div flex="30" flex-xs="40" style="text-align: right;">
                                 <span style="font-size: 0.9em; color: #555">{{order.amount}}</span><br><span
@@ -88,7 +88,7 @@
         <md-card>
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-headline" translate>PayPal 订单</span>
+                    <span class="md-headline" translate>PayPal订单</span>
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
@@ -98,7 +98,7 @@
                         <div flex layout="row" layout-align="space-between center" ng-click="showOrderInfo(order)">
                             <div flex="30" flex-xs="60">
                                 <span style="font-size: 0.9em;">{{ order.orderId }}</span><br><span
-                                    style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
+                                    style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
                             </div>
                             <div flex="30" flex-xs="40" style="text-align: right;">
                                 <span style="font-size: 0.9em; color: #555">{{order.amount}}</span><br><span

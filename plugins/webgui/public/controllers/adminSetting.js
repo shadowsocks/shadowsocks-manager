@@ -276,7 +276,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
     $scope.confirm = () => {
       alertDialog.loading();
       adminApi.changePassword($scope.data.password, $scope.data.newPassword).then(success => {
-        alertDialog.show(`{{ '修改密码成功，请重新登录' | translate }}`, '确定')
+        alertDialog.show('修改密码成功，请重新登录', '确定')
         .then(() => {
           return $http.post('/api/home/logout');
         }).then(() => {
@@ -285,13 +285,13 @@ app.controller('AdminSettingsController', ['$scope', '$state',
           $state.go('home.index');
         });
       }).catch(err => {
-        alertDialog.show(`{{ '修改密码失败' | translate }}`, '确定');
+        alertDialog.show('修改密码失败', '确定');
       });
     };
   }
 ]).controller('AdminTelegramSettingController', ['$scope', '$http', '$interval', '$state',
   ($scope, $http, $interval, $state) => {
-    $scope.setTitle('绑定 Telegram');
+    $scope.setTitle('绑定Telegram');
     $scope.setMenuButton('arrow_back', 'admin.settings');
     $scope.isLoading = true;
     $scope.code = {};
@@ -570,7 +570,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
   });
   $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
   $scope.clipboardSuccess = event => {
-    $scope.toast('邀请链接已被复制到剪贴板');
+    $scope.toast('邀请链接已复制到剪贴板');
   };
 }
 ]).controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
@@ -636,7 +636,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       return `${ $scope.config.site }/home/ref/${ code }`;
     };
     $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已被复制到剪贴板');
+      $scope.toast('邀请链接已复制到剪贴板');
     };
   }
 ])
@@ -682,7 +682,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       .then(success => {
         $state.go('admin.refUserList');
       }).catch(err => {
-        alertDialog.show(`{{ '添加失败' | translate }}`, '确定');
+        alertDialog.show('添加失败', '确定');
       });
     };
     $scope.cancel = () => {
