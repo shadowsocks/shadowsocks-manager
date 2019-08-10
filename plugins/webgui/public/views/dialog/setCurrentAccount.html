@@ -4,17 +4,17 @@
             <div layout="column" layout-wrap flex>
                 <div layout="column" layout-align="center stretch">
                     <md-checkbox ng-model="publicInfo.changeCurrentAccount.flow" aria-label="flow">
-                        流量
+                        {{ '流量' | translate }}
                     </md-checkbox>
                 </div>
                 <div layout="column" layout-align="center stretch">
                     <md-checkbox ng-model="publicInfo.changeCurrentAccount.server" aria-label="server">
-                        服务器
+                        {{ '服务器' | translate }}
                     </md-checkbox>
                 </div>
                 <div layout="column" layout-align="center stretch">
                     <md-checkbox ng-model="publicInfo.changeCurrentAccount.autoRemove" aria-label="autoRemove">
-                        到期自动删除
+                        {{ '到期自动删除' | translate }}
                     </md-checkbox>
                 </div>
             </div>

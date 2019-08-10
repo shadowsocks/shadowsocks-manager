@@ -12,9 +12,9 @@
                     <div layout="column" layout-align="center center">
                         <div layout="row" layout-align="center center" style="margin-bottom: 15px;">
                             <md-radio-group ng-model="flowType" ng-change="getChartData()" layout="row" layout-align="center center">
-                                <md-radio-button value="hour">时</md-radio-button>
-                                <md-radio-button value="day" >天</md-radio-button>
-                                <md-radio-button value="week">周</md-radio-button>
+                                <md-radio-button value="hour">{{ '时' | translate }}</md-radio-button>
+                                <md-radio-button value="day" >{{ '天' | translate }}</md-radio-button>
+                                <md-radio-button value="week">{{ '周' | translate }}</md-radio-button>
                             </md-radio-group>
                         </div>
                         <div>
@@ -69,10 +69,10 @@
         <md-card-content layout="row">
             <md-icon hide-xs hide-sm class="material-icons" ng-click="prevServer()" style="margin-left: 15px; margin-right: 15px;">navigate_before</md-icon>
             <md-radio-group ng-model="accountFilter.value" layout="row" layout-wrap>
-                <md-radio-button value="all">全部</md-radio-button>
-                <md-radio-button value="white">可用</md-radio-button>
-                <md-radio-button value="red">停止</md-radio-button>
-                <md-radio-button value="blue">在线</md-radio-button>
+                <md-radio-button value="all">{{ '全部' | translate }}</md-radio-button>
+                <md-radio-button value="white">{{ '可用' | translate }}</md-radio-button>
+                <md-radio-button value="red">{{ '停止' | translate }}</md-radio-button>
+                <md-radio-button value="blue">{{ '在线' | translate }}</md-radio-button>
             </md-radio-group>
             <md-icon hide-xs hide-sm class="material-icons" ng-click="nextServer()" style="margin-left: 15px; margin-right: 15px;">navigate_next</md-icon>
         </md-card-content>
@@ -98,7 +98,7 @@
 <div ng-hide="server">
     <div flex layout="row" class="zero-element" layout-align="center center">
         <md-progress-circular ng-show="!getServerInfoError" md-mode="indeterminate" class="md-accent"></md-progress-circular>
-        <div ng-show="getServerInfoError">服务器连接失败</div>
+        <div ng-show="getServerInfoError" translate>服务器连接失败</div>
     </div>
 </div>
 <div style="height: 100px;"></div>

@@ -1,41 +1,41 @@
 <md-dialog aria-label="sort dialog">
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div style="margin-bottom: 20px;">排序方式：</div>
+            <div style="margin-bottom: 20px;" translate>排序方式：</div>
             <div layout="row" layout-align="center center">
                 <md-radio-group ng-model="publicInfo.accountFilter.sort" ng-change="sortAndFilter()">
                     <div layout="row">
-                        <md-radio-button value="port_asc">端口号 ↑</md-radio-button>
+                        <md-radio-button value="port_asc">{{ '端口号' | translate }} ↑</md-radio-button>
                         <div style="width: 15px;"></div>
-                        <md-radio-button value="expire_asc">过期时间 ↑</md-radio-button>
+                        <md-radio-button value="expire_asc">{{ '过期时间' | translate }} ↑</md-radio-button>
                     </div>
                     <div layout="row">
-                        <md-radio-button value="port_desc">端口号 ↓</md-radio-button>
+                        <md-radio-button value="port_desc">{{ '端口号' | translate }} ↓</md-radio-button>
                         <div style="width: 15px;"></div>
-                        <md-radio-button value="expire_desc">过期时间 ↓</md-radio-button>
+                        <md-radio-button value="expire_desc">{{ '过期时间' | translate }} ↓</md-radio-button>
                     </div>
                 </md-radio-group>
             </div>
-            <div style="margin-bottom: 20px;">过滤条件：</div>
+            <div style="margin-bottom: 20px;" translate>过滤条件：</div>
             <div layout="column" layout-align="center stretch">
                 <div flex>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.expired" ng-change="sortAndFilter()">未过期</md-checkbox>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.unexpired" ng-change="sortAndFilter()">已过期</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.expired" ng-change="sortAndFilter()">{{ '未过期' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.unexpired" ng-change="sortAndFilter()">{{ '已过期' | translate }}</md-checkbox>
                 </div>
                 <div flex>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.hasUser" ng-change="sortAndFilter()">已绑定用户</md-checkbox>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.noUser" ng-change="sortAndFilter()">未绑定用户</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.hasUser" ng-change="sortAndFilter()">{{ '已绑定用户' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.noUser" ng-change="sortAndFilter()">{{ '未绑定用户' | translate }}</md-checkbox>
                 </div>
                 <div flex>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.unlimit" ng-change="sortAndFilter()">无期限</md-checkbox>
-                    <md-checkbox ng-model="publicInfo.accountFilter.filter.mac" ng-change="sortAndFilter()">MAC地址</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.unlimit" ng-change="sortAndFilter()">{{ '无期限' | translate }}</md-checkbox>
+                    <md-checkbox ng-model="publicInfo.accountFilter.filter.mac" ng-change="sortAndFilter()">MAC {{ '地址' | translate }}</md-checkbox>
                 </div>
             </div>
-            <div style="margin-bottom: 0px;">订单类型：</div>
+            <div style="margin-bottom: 0px;" translate>订单类型：</div>
             <div layout="row" layout-align="center stretch" style="width: 100%;">
                 <md-select ng-model="publicInfo.accountFilter.filter.orderId" style="width: 100%;" aria-label="baseId">
                     <md-option ng-repeat="o in publicInfo.orders" ng-value="o.id">
-                        {{ o.name }}
+                        {{ o.name | translate }}
                     </md-option>
                 </md-select>
             </div>
@@ -43,7 +43,7 @@
     </md-dialog-content>
     <md-dialog-actions layout="row">
         <md-button class="md-primary" ng-click="publicInfo.hide()">
-            确定
+            {{ '确定' | translate }}
         </md-button>
     </md-dialog-actions>
 </md-dialog>

@@ -2,7 +2,7 @@
     <md-dialog-content>
         <div class="md-dialog-content">
             <div layout="row" layout-align="space-between center">
-                <div flex="75">自定义服务器&nbsp;[{{ publicInfo.account.server ? publicInfo.account.server.length : '∞' }}]</div>
+                <div flex="75">{{ '自定义服务器' | translate }}&nbsp;[{{ publicInfo.account.server ? publicInfo.account.server.length : '∞' }}]</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="publicInfo.account.accountServer" aria-label="accountServer">
                     </md-switch>
@@ -24,7 +24,7 @@
             <div style="height: 30px;">
             </div>
             <div style="position: absolute; left: 0; right: 0; bottom: 0px; width: 90%; background: #FFF;" flex="100" layout="row" layout-align="center center">
-                <md-button class="md-raised md-primary" ng-click="publicInfo.hide()">确定</md-button>
+                <md-button class="md-raised md-primary" ng-click="publicInfo.hide()">{{ '确定' | translate }}</md-button>
             </div>
         </div>
     </md-dialog-content>

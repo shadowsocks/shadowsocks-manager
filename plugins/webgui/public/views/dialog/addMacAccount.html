@@ -7,7 +7,7 @@
       <div layout="row" layout-align="center center">
         <form name="macForm">
           <md-input-container class="md-block">
-            <label translate>MAC地址</label>
+            <label>MAC {{ '地址' | translate }}</label>
             <input type="text" required name="mac" ng-model="publicInfo.mac">
           </md-input-container>
         </form>
@@ -16,7 +16,7 @@
   </md-dialog-content>
   <md-dialog-actions layout="row" ng-hide="publicInfo.isLoading">
     <md-button class="md-primary" ng-click="publicInfo.addMac()">
-      确认
+      {{ '确定' | translate }}
     </md-button>
   </md-dialog-actions>
 </md-dialog>
