@@ -1,6 +1,6 @@
 <div layout="row" layout-xs="column" layout-wrap>
-    <div flex="100">
-        <md-card flex="100">
+    <div flex-xs="100" flex-sm="100" flex-gt-sm="50">
+        <md-card>
             <md-card-title>
                 <md-card-title-text><span class="md-headline">{{ '公告' | translate }}</span></md-card-title-text>
             </md-card-title>
@@ -8,18 +8,42 @@
                 <div ng-show="notices.length === 0">{{ '暂无公告' | translate }}</div>
                 <md-list ng-show="notices.length > 0">
                     <md-divider></md-divider>
-                    <md-list-item ng-repeat-start="notice in notices" ng-click="showNotice(notice)">
+                    <md-list-item ng-repeat-start="notice in notices" ng-show="$index < 3" ng-click="showNotice(notice)">
                         <div flex layout="row" layout-align="space-between center">
                             <div>{{notice.title}}</div>
                         </div>
                     </md-list-item>
-                    <md-divider ng-repeat-end></md-divider>
+                    <md-divider ng-repeat-end ng-show="$index < 3"></md-divider>
                 </md-list>
+                <div style="text-align: right;" ng-click="toNotice()">
+                    <md-button class="md-primary">{{ '更多' | translate }}&gt;&gt;</md-button>
+                </div>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex-xs="100" flex-sm="100" flex-gt-sm="50">
+        <md-card ng-click="toMyAccount()" flex>
+            <md-card-title>
+                <md-card-title-text><span class="md-headline">{{ '账号' | translate }}</span></md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <md-list ng-show="notices.length > 0">
+                    <md-divider></md-divider>
+                    <md-list-item></md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item></md-list-item>
+                    <md-divider></md-divider>
+                    <md-list-item></md-list-item>
+                    <md-divider></md-divider>
+                </md-list>
+                <div style="text-align: right;">
+                    <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
+                </div>
             </md-card-content>
         </md-card>
     </div>
     <div flex="100" layout="row" layout-xs="column" layout-sm="column" layout-wrap>
-        <md-card ng-click="toMyAccount()" flex>
+        <!-- <md-card ng-click="toMyAccount()" flex>
             <md-card-title>
                 <md-card-title-text><span class="md-headline">{{ '账号' | translate }}</span></md-card-title-text>
             </md-card-title>
@@ -28,7 +52,7 @@
                     <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
                 </div>
             </md-card-content>
-        </md-card>
+        </md-card> -->
         <md-card ng-click="toTelegram()" flex ng-if="config.telegram">
             <md-card-title>
                 <md-card-title-text><span class="md-headline">{{ '绑定Telegram' | translate }}</span></md-card-title-text>

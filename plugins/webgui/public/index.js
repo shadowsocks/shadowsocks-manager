@@ -25,6 +25,17 @@ angular.element(() => {
   $.get(window.api + '/api/home/login').then(success => {
     window.ssmgrConfig = success;
 
+    window.$crisp = [];
+    window.CRISP_RUNTIME_CONFIG = {
+      session_merge : true
+    };
+    window.CRISP_READY_TRIGGER = () => {
+      const event = document.createEvent('Event');
+      event.initEvent('crispReady', true, true);
+      document.dispatchEvent(event);
+    };
+    window.CRISP_WEBSITE_ID = window.ssmgrConfig.crisp;
+
     require('./directives/focusMe');
 
     require('./services/preloadService.js');

@@ -246,6 +246,12 @@ if (config.plugins.webgui.gcmAPIKey && config.plugins.webgui.gcmSenderId) {
   app.delete('/api/push/client', push.deleteClient);
 }
 
+if (config.plugins.webgui_crisp && config.plugins.webgui_crisp.use) {
+  const crisp = appRequire('plugins/webgui_crisp/index');
+  app.get('/api/user/crisp', isUser, crisp.getUserToken);
+  app.post('/api/user/crisp', isUser, crisp.setUserToken);
+}
+
 app.get('/favicon.png', (req, res) => {
   let file = './libs/favicon.png';
   let options = {

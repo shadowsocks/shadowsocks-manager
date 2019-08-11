@@ -57,6 +57,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'UserMacAddressController',
       templateUrl: `${ cdn }/public/views/user/macAddress.html`,
     })
+    .state('user.notice', {
+      url: '/notice',
+      controller: 'UserNoticeController',
+      templateUrl: `${ cdn }/public/views/user/notice.html`,
+    })
     ;
   }])
 ;

@@ -18,6 +18,7 @@ const createTable = async() => {
       table.bigInteger('resetPasswordTime');
       table.integer('group').defaultTo(0);
       table.string('comment').defaultTo('');
+      table.string('crisp');
     });
   }
   const users = await knex('user').select(['id']);
@@ -29,6 +30,12 @@ const createTable = async() => {
       password: config.plugins.webgui.admin_password,
       type: 'admin',
       group: 0,
+    });
+  }
+  const hasCrisp = await knex.schema.hasColumn(tableName, 'crisp');
+  if(!hasCrisp) {
+    await knex.schema.table(tableName, function(table) {
+      table.string('crisp');
     });
   }
 };

@@ -1,8 +1,8 @@
 const app = angular.module('app');
 
 app
-.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager',
-  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager) => {
+.controller('UserController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager', '$window',
+  ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager, $window) => {
     const config = configManager.getConfig();
     if(config.status === 'admin') {
       return $state.go('admin.index');
@@ -58,6 +58,7 @@ app
       name: '退出',
       icon: 'exit_to_app',
       click: function() {
+        $crisp.push(['do', 'session:reset']);
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.user = {};
@@ -129,6 +130,36 @@ app
         };
       });
     };
+    document.addEventListener('crispReady', function (e) {
+      console.log('start ready');
+      $crisp.push(['do', 'chat:close']);
+      if(!$scope.crispToken) {
+        $scope.crispToken = $crisp.get('session:identifier');
+        $http.post('/api/user/crisp', { token: $scope.crispToken });
+      }
+    }, false);
+    const startCrisp = () => {
+      console.log('start crisp');
+      (function() {
+        d = document;
+        s = d.createElement('script');
+        s.src = 'https://client.crisp.chat/l.js';
+        s.async = 1;
+        d.getElementsByTagName('head')[0].appendChild(s);
+      })();
+    };
+    if(config.crisp) {
+      $http.get('/api/user/crisp').then(success => {
+        $scope.crispToken = success.data.token;
+        $crisp.push(['set', 'user:email', config.email]);
+        if(!$scope.crispToken) {
+          startCrisp();
+        } else {
+          window.CRISP_TOKEN_ID = $scope.crispToken;
+          startCrisp();
+        }
+      });
+    }
   }
 ])
 .controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog', '$sessionStorage', 'autopopDialog',
@@ -152,6 +183,9 @@ app
     };
     $scope.toTelegram = () => {
       $state.go('user.telegram');
+    };
+    $scope.toNotice = () => {
+      $state.go('user.notice');
     };
     $scope.toRef = () => {
       $state.go('user.ref');
@@ -486,6 +520,18 @@ app
       });
     };
     getMacAccount();
+  }
+])
+.controller('UserNoticeController', ['$scope', 'userApi', 'markdownDialog',
+  ($scope, userApi, markdownDialog) => {
+    $scope.setTitle('公告');
+    $scope.setMenuButton('arrow_back', 'user.index');
+    userApi.getNotice().then(success => {
+      $scope.notices = success;
+    });
+    $scope.showNotice = notice => {
+      markdownDialog.show(notice.title, notice.content);
+    };
   }
 ])
 ;

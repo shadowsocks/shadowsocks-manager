@@ -619,6 +619,7 @@ exports.status = async (req, res) => {
     const google_login_client_id = config.plugins.webgui.google_login_client_id || '';
     const facebook_login_client_id = config.plugins.webgui.facebook_login_client_id || '';
     const github_login_client_id = config.plugins.webgui.github_login_client_id || '';
+    const crisp = (config.plugins.webgui_crisp && config.plugins.webgui_crisp.use) ? config.plugins.webgui_crisp.websiteId : '';
     let alipay;
     let paypal;
     let paypalMode;
@@ -683,6 +684,7 @@ exports.status = async (req, res) => {
       google_login_client_id,
       facebook_login_client_id,
       github_login_client_id,
+      crisp,
     });
   } catch(err) {
     logger.error(err);
