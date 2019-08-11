@@ -1,6 +1,7 @@
 const user = appRequire('plugins/user/index');
 const account = appRequire('plugins/account/index');
 const flow = appRequire('plugins/flowSaver/flow');
+const moment = require('moment');
 const knex = appRequire('init/knex').knex;
 const emailPlugin = appRequire('plugins/email/index');
 const orderPlugin = appRequire('plugins/webgui_order');
@@ -56,6 +57,39 @@ exports.getAccount = async (req, res) => {
       await accountFlow.edit(account.id);
     }
     res.send(accounts);
+  } catch (err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.getAccountUsage = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const accounts = await account.getAccount({ userId });
+    const servers = await knex('server').where({}).then(s => s.map(m => m.id));
+    const day = [
+      moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+      moment().hour(24).minute(0).second(0).millisecond(0).toDate().valueOf(),
+    ];
+    const week = [
+      moment().day(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+      moment().day(7).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+    ];
+    const month = [
+      moment().date(0).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+      moment().date(31).hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
+    ];
+    const dayFlow = await Promise.all(accounts.map(m => {
+      return flow.getServerPortFlowWithScale(null, m.id, day, true).then(s => s[0]);
+    })).then(s => s.reduce((a, b) => a + b, 0));
+    const weekFlow = await Promise.all(accounts.map(m => {
+      return flow.getServerPortFlowWithScale(null, m.id, week, true).then(s => s[0]);
+    })).then(s => s.reduce((a, b) => a + b, 0));
+    const monthFlow = await Promise.all(accounts.map(m => {
+      return flow.getServerPortFlowWithScale(null, m.id, month, true).then(s => s[0]);
+    })).then(s => s.reduce((a, b) => a + b, 0));
+    res.send([dayFlow, weekFlow, monthFlow]);
   } catch (err) {
     console.log(err);
     res.status(403).end();

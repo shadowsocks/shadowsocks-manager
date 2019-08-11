@@ -175,6 +175,9 @@ app
         }
       }
     });
+    userApi.getUsage().then(success => {
+      $scope.usage = success;
+    });
     $scope.toMyAccount = () => {
       $state.go('user.account');
     };

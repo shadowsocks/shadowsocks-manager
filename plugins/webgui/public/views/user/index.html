@@ -29,11 +29,38 @@
             <md-card-content>
                 <md-list ng-show="notices.length > 0">
                     <md-divider></md-divider>
-                    <md-list-item></md-list-item>
+                    <md-list-item>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="70" flex-xs="60" style="overflow: hidden; text-overflow: ellipsis;">
+                                <span>今日</span>
+                            </div>
+                            <div flex="30" flex-xs="40" style="text-align: right;">
+                                <span style="color: #555">{{ usage[0] | flow}}</span>
+                            </div>
+                        </div>
+                    </md-list-item>
                     <md-divider></md-divider>
-                    <md-list-item></md-list-item>
+                    <md-list-item>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="70" flex-xs="60" style="overflow: hidden; text-overflow: ellipsis;">
+                                <span>本周</span>
+                            </div>
+                            <div flex="30" flex-xs="40" style="text-align: right;">
+                                <span style="color: #555">{{ usage[1] | flow}}</span>
+                            </div>
+                        </div>
+                    </md-list-item>
                     <md-divider></md-divider>
-                    <md-list-item></md-list-item>
+                    <md-list-item>
+                        <div flex layout="row" layout-align="space-between center">
+                            <div flex="70" flex-xs="60" style="overflow: hidden; text-overflow: ellipsis;">
+                                <span>本月</span>
+                            </div>
+                            <div flex="30" flex-xs="40" style="text-align: right;">
+                                <span style="color: #555">{{ usage[2] | flow}}</span>
+                            </div>
+                        </div>
+                    </md-list-item>
                     <md-divider></md-divider>
                 </md-list>
                 <div style="text-align: right;">

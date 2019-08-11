@@ -6,8 +6,6 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     if(userAccountPromise && !userAccountPromise.$$state.status) {
       return userAccountPromise;
     }
-    let account = null;
-    let servers = null;
     userAccountPromise = $q.all([
       $http.get('/api/user/account'),
       $http.get('/api/user/server'),
@@ -15,9 +13,6 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
       return {
         account: success[0].data,
         servers: success[1].data.map(server => {
-          // if(server.host.indexOf(':') >= 0) {
-          //   server.host = server.host.split(':')[1];
-          // }
           return server;
         }),
       };
@@ -87,6 +82,10 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     return $http.get('/api/user/notice').then(success => success.data);
   };
 
+  const getUsage = () => {
+    return $http.get('/api/user/usage').then(success => success.data);
+  };
+
   return {
     getServerPortData,
     getUserAccount,
@@ -94,5 +93,6 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     changePassword,
     updateAccount,
     getNotice,
+    getUsage,
   };
 }]);
