@@ -99,7 +99,7 @@ module.exports = {
   '用户注册失败': 'Registration failed',
   '网络异常，请稍后再试': 'Network failure. Please try again later.',
   '用户名或密码错误': 'Incorrect username or password.',
-  '该用户尚未注册的': 'No such user',
+  '该用户尚未注册': 'No such user',
   '请输入正确的用户名格式': 'Invalid username.',
   '密码重试次数已达上限\n请稍后再试': 'Too many login attempts.\n Please try again later.',
   '验证码发送错误': 'Unable to send verification code.',
