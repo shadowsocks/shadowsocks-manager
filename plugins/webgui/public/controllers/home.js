@@ -45,6 +45,9 @@ app
   ])
   .controller('HomeIndexController', ['$scope', '$state',
     ($scope, $state) => {
+      if($scope.config.crisp && $crisp.is) {
+        window.location.reload();
+      }
       $scope.login = () => { $state.go('home.login'); };
       $scope.signup = () => { $state.go('home.signup'); };
     }

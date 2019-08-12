@@ -58,11 +58,13 @@ app
       name: '退出',
       icon: 'exit_to_app',
       click: function() {
-        $crisp.push(['do', 'session:reset']);
         $http.post('/api/home/logout').then(() => {
           $localStorage.home = {};
           $localStorage.user = {};
           configManager.deleteConfig();
+          if(config.crisp) {
+            $crisp.push(['do', 'session:reset', [false]]);
+          }
           $state.go('home.index');
         });
       },
