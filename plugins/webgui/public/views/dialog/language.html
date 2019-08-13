@@ -4,7 +4,12 @@
             <div layout="column" layout-align="center center">
                 <div style="margin-bottom: 20px;">{{ '请选择语言：' | translate }}</div>
                 <md-radio-group ng-model="publicInfo.myLanguage" ng-change="chooseLanguage()" flex>
-                    <md-radio-button ng-repeat="language in languages" value="{{ language.id }}">
+                    <md-radio-button ng-if="language.default" ng-repeat="language in languages" value="{{ language.id }}">
+                        <span layout="row" layout-align="space-between center">
+                            <span>{{ language.name }}</span>
+                        </span>
+                    </md-radio-button>
+                    <md-radio-button ng-if="!language.default" ng-repeat="language in languages" value="{{ language.id }}">
                         <span layout="row" layout-align="space-between center">
                             <span>{{ language.name }}</span>
                         </span>

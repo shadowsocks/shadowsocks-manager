@@ -42,6 +42,11 @@ app.factory('languageDialog' , [ '$mdDialog', $mdDialog => {
         { id: 'ko-KR', name: '한국' },
         { id: 'ru-RU', name: 'Русский' },
       ];
+      $scope.languages.forEach(language => {
+        if(language.id === window.ssmgrConfig.language) {
+          language.default = true;
+        }
+      });
       $scope.refresh = () => { window.location.reload(true); };
     }],
     clickOutsideToClose: true,
