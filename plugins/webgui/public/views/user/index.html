@@ -70,16 +70,16 @@
         </md-card>
     </div>
     <div flex="100" layout="row" layout-xs="column" layout-sm="column" layout-wrap>
-        <!-- <md-card ng-click="toMyAccount()" flex>
+        <md-card ng-click="toCrisp()" flex ng-if="config.crisp">
             <md-card-title>
-                <md-card-title-text><span class="md-headline">{{ '账号' | translate }}</span></md-card-title-text>
+                <md-card-title-text><span class="md-headline">{{ '客服咨询' | translate }}</span></md-card-title-text>
             </md-card-title>
             <md-card-content>
                 <div style="text-align: right;">
                     <md-button class="md-primary">{{ '点击进入' | translate }}&gt;&gt;</md-button>
                 </div>
             </md-card-content>
-        </md-card> -->
+        </md-card>
         <md-card ng-click="toTelegram()" flex ng-if="config.telegram">
             <md-card-title>
                 <md-card-title-text><span class="md-headline">{{ '绑定Telegram' | translate }}</span></md-card-title-text>

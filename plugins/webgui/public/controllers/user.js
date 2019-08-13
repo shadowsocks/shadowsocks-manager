@@ -133,15 +133,17 @@ app
       });
     };
     document.addEventListener('crispReady', function (e) {
-      console.log('start ready');
-      $crisp.push(['do', 'chat:close']);
+      // $crisp.push(['do', 'chat:close']);
       if(!$scope.crispToken) {
         $scope.crispToken = $crisp.get('session:identifier');
         $http.post('/api/user/crisp', { token: $scope.crispToken });
       }
     }, false);
     const startCrisp = () => {
-      console.log('start crisp');
+      $crisp.push(['do', 'chat:hide']);
+      $crisp.push(['on', 'chat:closed', () => {
+        $crisp.push(['do', 'chat:hide']);
+      }]);
       (function() {
         d = document;
         s = d.createElement('script');
@@ -194,6 +196,10 @@ app
     };
     $scope.toRef = () => {
       $state.go('user.ref');
+    };
+    $scope.toCrisp = () => {
+      $crisp.push(['do', 'chat:open']);
+      $crisp.push(['do', 'chat:show']);
     };
   }
 ])
