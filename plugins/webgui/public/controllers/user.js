@@ -133,7 +133,8 @@ app
       });
     };
     document.addEventListener('crispReady', function (e) {
-      // $crisp.push(['do', 'chat:close']);
+      $crisp.push(['set', 'session:data', [[['user-type', 'ssmgr-user']]]]);
+      $crisp.push(['set', 'session:data', [[['user-agent', navigator.userAgent]]]]);
       if(!$scope.crispToken) {
         $scope.crispToken = $crisp.get('session:identifier');
         $http.post('/api/user/crisp', { token: $scope.crispToken });

@@ -590,7 +590,7 @@ exports.getAccountIpInfo = (req, res) => {
       if(success.code !== 0) {
         return Promise.reject(success.code);
       }
-      const result = [success.data.region + success.data.city, success.data.isp];
+      const result = [success.data.region + (success.data.region === success.data.city ? '' : success.data.city), success.data.isp];
       return result;
     });
   };
