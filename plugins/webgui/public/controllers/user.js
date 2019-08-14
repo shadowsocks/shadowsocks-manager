@@ -170,6 +170,7 @@ app
 .controller('UserIndexController', ['$scope', '$state', 'userApi', 'markdownDialog', '$sessionStorage', 'autopopDialog',
   ($scope, $state, userApi, markdownDialog, $sessionStorage, autopopDialog) => {
     $scope.setTitle('首页');
+    $scope.notices = [];
     userApi.getNotice().then(success => {
       $scope.notices = success;
       if(!$sessionStorage.showNotice) {

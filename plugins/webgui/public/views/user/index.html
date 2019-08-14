@@ -5,8 +5,7 @@
                 <md-card-title-text><span class="md-headline">{{ '公告' | translate }}</span></md-card-title-text>
             </md-card-title>
             <md-card-content>
-                <div ng-show="notices.length === 0">{{ '暂无公告' | translate }}</div>
-                <md-list ng-show="notices.length > 0">
+                <md-list>
                     <md-divider></md-divider>
                     <md-list-item ng-repeat-start="notice in notices" ng-show="$index < 3" ng-click="showNotice(notice)">
                         <div flex layout="row" layout-align="space-between center">
@@ -14,6 +13,12 @@
                         </div>
                     </md-list-item>
                     <md-divider ng-repeat-end ng-show="$index < 3"></md-divider>
+                    <md-list-item ng-show="notices.length <=2" />
+                    <md-divider ng-show="notices.length <=2"></md-divider>
+                    <md-list-item ng-show="notices.length <=1" />
+                    <md-divider ng-show="notices.length <=1"></md-divider>
+                    <md-list-item ng-show="notices.length <=0"></md-list-item>
+                    <md-divider ng-show="notices.length <=0"></md-divider>
                 </md-list>
                 <div style="text-align: right;" ng-click="toNotice()">
                     <md-button class="md-primary">{{ '更多' | translate }}&gt;&gt;</md-button>
@@ -27,7 +32,7 @@
                 <md-card-title-text><span class="md-headline">{{ '账号' | translate }}</span></md-card-title-text>
             </md-card-title>
             <md-card-content>
-                <md-list ng-show="notices.length > 0">
+                <md-list>
                     <md-divider></md-divider>
                     <md-list-item>
                         <div flex layout="row" layout-align="space-between center">
