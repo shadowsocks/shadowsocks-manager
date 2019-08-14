@@ -11,54 +11,54 @@
                     <md-divider></md-divider>
                     <md-list-item>
                         <div flex layout="row" layout-align="space-between center">
-                            <div flex="30">注册时间</div>
+                            <div flex="30" translate>注册时间</div>
                             <div flex="70" style="text-align: right;" ng-if="user.createTime">
-                                <span style="font-size: 0.9em;">{{ user.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.createTime | timeagoshort }}</span>
+                                <span style="font-size: 0.9em;">{{ user.createTime | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.createTime | timeagoshort | translateTime }}</span>
                             </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item>
                         <div flex layout="row" layout-align="space-between center">
-                            <div flex="30">上次登录</div>
+                            <div flex="30" translate>上次登录</div>
                             <div flex="70" style="text-align: right;" ng-if="user.lastLogin">
-                                <span style="font-size: 0.9em;">{{ user.lastLogin | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.lastLogin | timeagoshort }}</span>
+                                <span style="font-size: 0.9em;">{{ user.lastLogin | date : 'yyyy-MM-dd HH:mm' }}</span><br><span style="font-size: 0.9em;">{{ user.lastLogin | timeagoshort | translateTime }}</span>
                             </div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
                     <md-list-item ng-if="user.ref" ng-click="toRefUser(user.ref.id)">
                         <div flex layout="row" layout-align="space-between center">
-                            <div flex="30">邀请人</div>
+                            <div flex="30" translate>邀请人</div>
                             <div flex="70" style="text-align: right;">{{ user.ref.email }}</div>
                         </div>
                     </md-list-item>
                     <md-divider ng-if="user.ref"></md-divider>
                     <md-list-item ng-if="id === 1">
                         <div flex layout="row" layout-align="space-between center">
-                            <div flex="30">分组</div>
+                            <div flex="30" translate>分组</div>
                             <div flex="70" style="text-align: right;">{{ groupInfo[user.group].name }}</div>
                         </div>
                     </md-list-item>
                     <md-divider ng-if="id === 1"></md-divider>
                     <md-list-item ng-click="editComment()">
                         <div flex layout="row" layout-align="space-between center">
-                            <div flex="30">备注</div>
-                            <div flex="70" style="text-align: right;">{{ user.comment || '（空）' }}</div>
+                            <div flex="30" translate>备注</div>
+                            <div flex="70" style="text-align: right;" translate>{{ user.comment || '（空）' }}</div>
                         </div>
                     </md-list-item>
                     <md-divider></md-divider>
-              </md-list>
+                </md-list>
             <div flex layout="row" ng-if="id === 1">
-                <md-button class="md-primary" ng-click="sendEmail()">发送邮件</md-button>
-                <md-button class="md-primary" ng-click="setUserGroup()">设置分组</md-button>
-                <md-button class="md-warn" ng-click="deleteUser()">删除用户</md-button>
+                <md-button class="md-primary" ng-click="sendEmail()">{{ '发送邮件' | translate }}</md-button>
+                <md-button class="md-primary" ng-click="setUserGroup()">{{ '设置分组' | translate }}</md-button>
+                <md-button class="md-warn" ng-click="deleteUser()">{{ '删除用户' | translate }}</md-button>
             </div>
             </md-card-content>
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.account.length">账号 [{{ user.account.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.account.length">{{ '账号' | translate }} [{{ user.account.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in user.account track by $index">
         <md-card>
@@ -78,7 +78,7 @@
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.macAccount.length">mac账号 [{{ user.macAccount.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="user.macAccount.length">{{ 'MAC 账号' | translate }} [{{ user.macAccount.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="a in user.macAccount track by $index">
         <md-card>
@@ -98,7 +98,7 @@
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refUsers.length">邀请用户 [{{ refUsers.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refUsers.length">{{ '邀请用户' | translate }} [{{ refUsers.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="user in refUsers track by $index">
         <md-card>
@@ -118,14 +118,14 @@
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="alipayOrders.length">支付宝订单 [{{ alipayOrders.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="alipayOrders.length">{{ '支付宝订单' | translate }} [{{ alipayOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in alipayOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
                     </div>
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
@@ -135,14 +135,14 @@
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="paypalOrders.length">Paypal订单 [{{ paypalOrders.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="paypalOrders.length">{{ 'PayPal 订单' | translate }} [{{ paypalOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in paypalOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
                     </div>
                     <div flex="30" style="font-size: 0.9em; text-align: right;">
                         <span style="color: #555">{{order.amount}}</span><br><span style="color: #000">{{order.status | order}}</span>
@@ -152,35 +152,35 @@
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="giftCardOrders.length">充值码订单 [{{ giftCardOrders.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="giftCardOrders.length">{{ '充值码订单' | translate }} [{{ giftCardOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in giftCardOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
                     </div>
                 </div>
             </md-card-content>
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refOrders.length">Ref订单 [{{ refOrders.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refOrders.length">{{ 'Ref 订单' | translate }} [{{ refOrders.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="order in refOrders track by $index">
         <md-card ng-click="showOrderInfo(order)">
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
                     <div flex="70" style="font-size: 0.9em;">
-                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago }}</span>
+                        <span>{{order.orderId}}</span><br><span style="font-size: 0.9em;">{{ order.createTime | timeago | translateTime }}</span>
                     </div>
                 </div>
             </md-card-content>
         </md-card>
     </div>
 </div>
-<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refCodes.length">邀请码 [{{ refCodes.length }}]</div>
+<div style="margin: 10px 10px 5px 10px; font-size: 0.8em; color: #555" ng-if="refCodes.length">{{ '邀请码' | translate }} [{{ refCodes.length }}]</div>
 <div layout="row" layout-wrap>
     <div flex-xs="100" flex-sm="50" flex-md="33" flex-gt-md="25" ng-repeat="code in refCodes track by $index">
         <md-card>

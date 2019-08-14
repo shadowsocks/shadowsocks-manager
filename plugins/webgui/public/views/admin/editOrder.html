@@ -20,18 +20,18 @@
                     </md-select>
                 </div>
                 <md-input-container class="md-block">
-                    <label>名称</label>
+                    <label translate>名称</label>
                     <input type="text" required name="name" ng-model="order.name">
                     <div ng-messages="orderForm.name.$error">
-                        <div ng-message="required">名称不能为空</div>
+                        <div ng-message="required" translate>名称不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>短备注</label>
+                    <label translate>短备注</label>
                     <input type="text" name="shortComment" ng-model="order.shortComment">
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>备注</label>
+                    <label translate>备注</label>
                     <textarea ng-model="order.comment" rows="3" md-no-autogrow md-select-on-focus></textarea>
                 </md-input-container>
                 <div layout="row" layout-align="space-between start" ng-hide="order.baseId">
@@ -44,70 +44,70 @@
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>周期</label>
+                        <label translate>周期</label>
                         <input type="number" name="cycle" ng-model="order.cycle" style="margin: 20px 0 20px 0;">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center">
                     <md-input-container class="md-block" flex="45">
-                        <label>支付宝</label>
+                        <label translate>支付宝</label>
                         <input type="number" step="any" name="alipay" ng-model="order.alipay">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>Paypal</label>
+                        <label>PayPal</label>
                         <input type="number" step="any" name="paypal" ng-model="order.paypal">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center" ng-hide="order.baseId">
                     <md-input-container class="md-block" flex="45">
-                        <label>流量</label>
+                        <label translate>流量</label>
                         <input type="text" name="flow" ng-model="order.flowStr">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>邀请获得时长</label>
+                        <label translate>邀请获得时长</label>
                         <input type="text" name="refTime" ng-model="order.refTimeStr">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center" ng-show="order.baseId">
-                        <md-input-container class="md-block" flex="100">
-                            <label>流量</label>
-                            <input type="text" name="flow" ng-model="order.flowStr">
-                        </md-input-container>
-                    </div>
+                    <md-input-container class="md-block" flex="100">
+                        <label translate>流量</label>
+                        <input type="text" name="flow" ng-model="order.flowStr">
+                    </md-input-container>
+                </div>
                 <div layout="row" layout-align="space-between center" ng-hide="order.baseId">
                     <md-input-container class="md-block" flex="45">
-                        <label>自动删除延迟</label>
+                        <label translate>自动删除延迟</label>
                         <input type="text" name="autoRemoveDelay" ng-model="order.autoRemoveDelayStr" ng-disabled="!order.autoRemove">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>端口分配范围</label>
+                        <label translate>端口分配范围</label>
                         <input type="text" name="portRange" ng-model="order.portRange">
                     </md-input-container>
                 </div>
             </form>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-hide="order.baseId">
-                <div flex="75">到期自动删除</div>
+                <div flex="75" translate>到期自动删除</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="order.autoRemove" aria-label="autoRemove" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-hide="order.baseId">
-                <div flex="75">合并多服务器流量统计</div>
+                <div flex="75" translate>合并多服务器流量统计</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="order.multiServerFlow" aria-label="multiServerFlow" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-hide="order.baseId">
-                <div flex="75">续费允许更换套餐</div>
+                <div flex="75" translate>续费允许更换套餐</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="order.changeOrderType" aria-label="changeOrderType" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-hide="order.baseId">
-                <div flex="75">自动激活</div>
+                <div flex="75" translate>自动激活</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="order.active" aria-label="active" ng-true-value="1" ng-false-value="0">
                     </md-switch>
@@ -116,8 +116,8 @@
             <md-divider ng-hide="order.baseId"></md-divider>
             <div ng-click="setOrderServer()" ng-hide="order.baseId">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
-                    <div flex="75" translate>
-                        <span>自定义服务器&nbsp;</span><span style="color: #777">[{{ order.orderServer ? orderServer.length : '∞' }}]</span>
+                    <div flex="75">
+                        <span>{{ '自定义可用服务器' | translate }}&nbsp;</span><span style="color: #777">[{{ order.orderServer ? orderServer.length : '∞' }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-icon-button"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -127,8 +127,8 @@
             <md-divider></md-divider>
             <div ng-click="setOrderGroup()">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
-                    <div flex="75" translate>
-                        <span>自定义分组&nbsp;</span><span style="color: #777">[{{ orderGroup.length }}]</span>
+                    <div flex="75">
+                        <span>{{ '自定义适用分组' | translate }}&nbsp;</span><span style="color: #777">[{{ orderGroup.length }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-icon-button"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -138,8 +138,8 @@
             <md-divider ng-hide="order.baseId"></md-divider>
             <div ng-click="setCurrentAccount()" ng-hide="order.baseId">
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
-                    <div flex="75" translate>
-                        <span>将改动变更到已有的账号&nbsp;</span><span style="color: #777">[{{ currentAccount }}]</span>
+                    <div flex="75">
+                        <span>{{ '将改动变更到已有的账号' | translate }}&nbsp;</span><span style="color: #777">[{{ currentAccount }}]</span>
                     </div>
                     <div flex layout="row" layout-align="end center">
                         <md-button class="md-icon-button"><md-icon>keyboard_arrow_right</md-icon></md-button>
@@ -155,9 +155,9 @@
         <div flex layout="row" layout-align="center start">
             <div flex="10" flex-gt-sm="30"></div>
             <div layout="row" flex layout-align="space-around center">
-                <md-button class="md-primary" ng-click="cancel()">取消</md-button>
-                <md-button class="md-warn" ng-click="delete()">删除</md-button>
-                <md-button class="md-raised md-primary" ng-click="confirm()">确认</md-button>
+                <md-button class="md-primary" ng-click="cancel()">{{ '取消' | translate}}</md-button>
+                <md-button class="md-warn" ng-click="delete()">{{ '删除' | translate}}</md-button>
+                <md-button class="md-raised md-primary" ng-click="confirm()">{{ '确定' | translate}}</md-button>
             </div>
             <div flex="10" flex-gt-sm="30"></div>
         </div>

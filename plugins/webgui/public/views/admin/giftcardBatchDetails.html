@@ -3,7 +3,7 @@
         <md-card-header>
             <md-card-header-text ng-show="batch">
                 <span class="md-title">{{ batch.orderName }}</span>
-                <span class="md-subhead">创建于 {{ batch.createTime | timeago }}，目前状态 {{ batch.status | prettyPrintBatchStatus}}</span>
+                <span class="md-subhead">{{ '创建于' | translate }}{{ batch.createTime | timeago | translateTime }}{{ '，目前状态：' | translate }}{{ batch.status | prettyPrintBatchStatus | translate }}</span>
             </md-card-header-text>
             <md-card-header-text ng-hide="batch">
                 <span>
@@ -30,13 +30,13 @@
             <md-list-item ng-repeat="card in batch.cards">
                 <div flex layout="row" layout-align="space-between center" ng-click="showPassword(card.id, card.password)">
                     <div flex="30" flex-xs="60">
-                        <span ng-if="card.status === 'USED'">已用 {{ card.userEmail }}</span>
-                        <span ng-if="card.status !== 'USED'">{{ card.status | prettyPrintBatchStatus }}</span>
+                        <span ng-if="card.status === 'USED'">{{ '已用' | translate }} {{ card.userEmail }}</span>
+                        <span ng-if="card.status !== 'USED'">{{ card.status | prettyPrintBatchStatus | translate }}</span>
                     </div>
                     <div flex="20" flex-xs="40" style="text-align: right;">
-                        <span style="font-size: 0.9em; color: #555" ng-if="card.usedTime != null && card.usedTime !== NaN">{{ card.usedTime | timeago }}<br></span>
+                        <span style="font-size: 0.9em; color: #555" ng-if="card.usedTime != null && card.usedTime !== NaN">{{ card.usedTime | timeago | translateTime }}<br></span>
                         <span style="font-size: 0.9em; color: #000">
-                            卡号 {{ card.id }}
+                            {{ '卡号' | translate }} {{ card.id }}
                         </span>
                     </div>
                 </div>

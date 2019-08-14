@@ -3,7 +3,7 @@
         <md-card>
             <md-card-header>
                 <md-card-header-text>
-                    <span class="md-title">{{ account.port || '...' }} <span ng-if="account.active === 0" style="color: #a33;">未激活</span></span>
+                    <span class="md-title">{{ account.port || '...' }} <span ng-if="account.active === 0" style="color: #a33;">{{ '未激活' | translate }}</span></span>
                     <span class="md-subhead" ng-click="toUserPage(account.userId)">{{ account.user || account.password || '...' }}</span>
                 </md-card-header-text>
             </md-card-header>
@@ -122,11 +122,11 @@
                         <div layout-hide-xs></div>
                         <div ng-hide="isWG(server)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
                             <qr ng-click="showQrcodeDialog(server, account)" size="getQrCodeSize()" layout-margin text="createQrCode(server, account)" image="true"></qr>
-                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(server, account) }}" ngclipboard-success="clipboardSuccess(e);">复制二维码链接</md-button>
+                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(server, account) }}" ngclipboard-success="clipboardSuccess(e);">{{ '复制配置链接' | translate }}</md-button>
                         </div>
                         <div ng-show="isWG(server)" ng-click="showWireGuard(server, account)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
                             <qr size="getQrCodeSize()" layout-margin text="createQrCode(server, account)" image="true"></qr>
-                            <md-button class="md-primary">显示WireGuard配置</md-button>
+                            <md-button class="md-primary">{{ '显示 WireGuard 配置' | translate }}</md-button>
                         </div>
                         <div layout-hide-xs></div>
                     </div>
@@ -137,9 +137,9 @@
                         <div layout="column" layout-align="center center">
                             <div layout="row" layout-align="center center" style="margin-bottom: 15px;">
                                 <md-radio-group ng-model="flowType.value" ng-change="getChartData(server.id)" layout="row" layout-align="center center">
-                                    <md-radio-button value="hour">时</md-radio-button>
-                                    <md-radio-button value="day" >天</md-radio-button>
-                                    <md-radio-button value="week">周</md-radio-button>
+                                    <md-radio-button value="hour">{{ '时' | translate }}</md-radio-button>
+                                    <md-radio-button value="day" >{{ '天' | translate }}</md-radio-button>
+                                    <md-radio-button value="week">{{ '周' | translate }}</md-radio-button>
                                 </md-radio-group>
                             </div>
                             <div>
