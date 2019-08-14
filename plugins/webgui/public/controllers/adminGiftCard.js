@@ -28,7 +28,7 @@ app.controller('AdminGiftCardController', ['$scope', '$http', 'addGiftCardBatchD
 ]).controller('AdminGiftCardBatchDetailsController', ['$scope', '$http', '$stateParams', 'confirmDialog', 'alertDialog',
   ($scope, $http, $stateParams, confirmDialog, alertDialog) => {
     const batchNumber = $stateParams.batchNumber;
-    $scope.setTitle(`充值码[ ${batchNumber} ]`);
+    $scope.setTitle(`充值码 [${batchNumber}]`);
     $scope.setMenuButton('arrow_back', 'admin.listGiftCardBatch');
     const showDetails = () => {
       $http.get(`/api/admin/giftcard/details/${batchNumber}`).then(result => {
@@ -48,7 +48,7 @@ app.controller('AdminGiftCardController', ['$scope', '$http', 'addGiftCardBatchD
 
     $scope.revoke = () => {
       confirmDialog.show({
-        text: '确实要召回这些卡片吗？该操作不可撤销。',
+        text: '确定要召回这些卡片吗？\n该操作不可撤销。',
         cancel: '取消',
         confirm: '召回',
         error: '召回失败',

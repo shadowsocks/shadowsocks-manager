@@ -291,7 +291,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
   }
 ]).controller('AdminTelegramSettingController', ['$scope', '$http', '$interval', '$state',
   ($scope, $http, $interval, $state) => {
-    $scope.setTitle('绑定Telegram');
+    $scope.setTitle('绑定 Telegram');
     $scope.setMenuButton('arrow_back', 'admin.settings');
     $scope.isLoading = true;
     $scope.code = {};
@@ -570,7 +570,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
   });
   $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
   $scope.clipboardSuccess = event => {
-    $scope.toast('邀请链接已复制到剪贴板');
+    $scope.toast('邀请链接已被复制到剪贴板');
   };
 }
 ]).controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
@@ -636,7 +636,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       return `${ $scope.config.site }/home/ref/${ code }`;
     };
     $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已复制到剪贴板');
+      $scope.toast('邀请链接已被复制到剪贴板');
     };
   }
 ])

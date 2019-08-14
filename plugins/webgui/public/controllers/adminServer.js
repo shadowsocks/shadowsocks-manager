@@ -223,7 +223,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         .title('')
         .textContent('删除服务器？')
         .ariaLabel('deleteServer')
-        .ok('确认')
+        .ok('确定')
         .cancel('取消');
       $mdDialog.show(confirm).then(() => {
         return $http.delete(`/api/admin/server/${ serverId }`);
@@ -574,7 +574,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.deleteServer = () => {
       confirmDialog.show({
-        text: '真的要删除服务器吗？',
+        text: '确定要删除服务器吗？',
         cancel: '取消',
         confirm: '删除',
         error: '删除服务器失败',
