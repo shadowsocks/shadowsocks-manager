@@ -536,8 +536,8 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       $state.go('admin.editRefCode', { id });
     };
   }
-]).controller('AdminEditRefCodeController', ['$scope', '$http', '$timeout', '$state', '$mdMedia', '$stateParams',
-($scope, $http, $timeout, $state, $mdMedia, $stateParams) => {
+]).controller('AdminEditRefCodeController', ['$scope', '$http', '$timeout', '$state', '$filter', '$stateParams',
+($scope, $http, $timeout, $state, $filter, $stateParams) => {
   $scope.setTitle('编辑邀请码');
   $scope.setMenuButton('arrow_back', function() {
     $state.go('admin.refCodeList');
@@ -570,7 +570,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
   });
   $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
   $scope.clipboardSuccess = event => {
-    $scope.toast('邀请链接已复制到剪贴板');
+    $scope.toast($filter('translate')('邀请链接已复制到剪贴板'));
   };
 }
 ]).controller('AdminRefUserListController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
@@ -624,8 +624,8 @@ app.controller('AdminSettingsController', ['$scope', '$state',
     });
   }
 ])
-.controller('AdminMyRefCodeController', ['$scope', '$http', '$timeout', '$state', '$mdMedia',
-  ($scope, $http, $timeout, $state, $mdMedia) => {
+.controller('AdminMyRefCodeController', ['$scope', '$http', '$filter', '$state', '$mdMedia',
+  ($scope, $http, $filter, $state, $mdMedia) => {
     $scope.setTitle('我的邀请码');
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.refSetting');
@@ -636,7 +636,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       return `${ $scope.config.site }/home/ref/${ code }`;
     };
     $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已复制到剪贴板');
+      $scope.toast($filter('translate')('邀请链接已复制到剪贴板'));
     };
   }
 ])

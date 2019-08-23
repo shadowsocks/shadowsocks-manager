@@ -485,15 +485,15 @@ app
     };
   }
 ])
-.controller('UserRefController', ['$scope', '$http',
-  ($scope, $http) => {
+.controller('UserRefController', ['$scope', '$http', '$filter',
+  ($scope, $http, $filter) => {
     $scope.setTitle('邀请码');
     $scope.setMenuButton('arrow_back', 'user.settings');
     $http.get('/api/user/ref/code').then(success => { $scope.code = success.data; });
     $http.get('/api/user/ref/user').then(success => { $scope.user = success.data; });
     $scope.getRefUrl = code => `${ $scope.config.site }/home/ref/${ code }`;
     $scope.clipboardSuccess = event => {
-      $scope.toast('邀请链接已复制到剪贴板');
+      $scope.toast($filter('translate')('邀请链接已复制到剪贴板'));
     };
   }
 ])
