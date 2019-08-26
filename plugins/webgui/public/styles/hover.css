@@ -3,9 +3,9 @@
 }
 
 .hover-flow {
-  transition: transform .2s;
+  /* transition: transform .2s; */
 }
 
 .hover-flow:hover {
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
 }
