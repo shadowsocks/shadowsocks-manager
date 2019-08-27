@@ -8,7 +8,7 @@
                         <span style="color: #666; font-size: 0.9em;">{{ order.createTime | date : 'yyyy-MM-dd HH:mm' }}</span>
                     </div>
                     <div flex="40" style="text-align: right;">
-                        <span style="color: #333; font-size: 0.9em;">{{ order.type }}</span><br>
+                        <span style="color: #333; font-size: 0.9em;" translate>{{ order.type }}</span><br>
                         <span style="color: #666; font-size: 0.9em;" ng-if="order.amount">{{ order.amount }}</span>
                         <span style="color: #666; font-size: 0.9em;" ng-if="order.refTime">{{ order.refTime | timePeriod }}</span>
                     </div>
