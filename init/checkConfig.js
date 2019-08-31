@@ -20,7 +20,7 @@ program
   .option('-r, --run [type]', 'run shadowsocks from child_process, sample: libev / libev:aes-256-cfb / python / python:aes-256-cfb')
   .option('--debug', 'show debug message')
   .option('--multiCore', 'multi core')
-  .option('--isGfwUrl', 'custom gfw status url')
+  .option('--isGfwUrl [isGfwUrl]', 'custom gfw status url')
   .parse(process.argv);
 
 if(program.config) { global.configFile = program.config; }
