@@ -20,6 +20,7 @@ program
   .option('-r, --run [type]', 'run shadowsocks from child_process, sample: libev / libev:aes-256-cfb / python / python:aes-256-cfb')
   .option('--debug', 'show debug message')
   .option('--multiCore', 'multi core')
+  .option('--isGfwUrl', 'custom gfw status url')
   .parse(process.argv);
 
 if(program.config) { global.configFile = program.config; }
@@ -35,9 +36,8 @@ if(program.type) {config.set('type', program.type);}
 if(program.shadowsocks) {config.set('shadowsocks.address', program.shadowsocks);}
 if(program.manager) {config.set('manager.address', program.manager);}
 if(program.password) {config.set('manager.password', program.password);}
-if(program.db) {
-  config.set('db', program.db);
-}
+if(program.db) {config.set('db', program.db);}
+if(program.isGfwUrl) {config.set('isGfwUrl', program.isGfwUrl);}
 if (typeof config.get('db') === 'object') {
   logName = config.get('db.database');
 } else {

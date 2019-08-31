@@ -326,13 +326,13 @@ let getGfwStatusTime = null;
 const getGfwStatus = () => {
   if(getGfwStatusTime && isGfw === 0 && Date.now() - getGfwStatusTime < 600 * 1000) { return; }
   getGfwStatusTime = Date.now();
-  const sites = [
-    'baidu.com:443',
-  ];
-  const site = sites[+Math.random().toString().substr(2) % sites.length];
+  let site = 'baidu.com';
+  if(config.isGfwUrl) {
+    site = config.isGfwUrl;
+  }
   const req = https.request({
     hostname: site.split(':')[0],
-    port: +site.split(':')[1],
+    port: +site.split(':')[1] || 443,
     path: '/',
     method: 'GET',
     timeout: 8000 + isGfw * 2000,
