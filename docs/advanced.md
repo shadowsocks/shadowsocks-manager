@@ -134,3 +134,13 @@ webgui_telegram:
   use: true
   token: '191374681:AAw6RaVHR4nnP7T4Ct4a8QX-XyFQ5W53wmZ'
 ```
+
+# 增加 Crisp 客服
+
+增加该插件后，用户登陆后的首页会增加一个“客服咨询”入口。
+
+```yaml
+webgui_crisp:
+  use: true
+  websiteId: '6d8e3987-ec62-08b2-80a1-b3c776ad371c'
+```
