@@ -1,5 +1,6 @@
 const user = appRequire('plugins/user/index');
 const account = appRequire('plugins/account/index');
+const accountPlugin = account;
 const flow = appRequire('plugins/flowSaver/flow');
 const moment = require('moment');
 const knex = appRequire('init/knex').knex;
@@ -55,6 +56,17 @@ exports.getAccount = async (req, res) => {
         }
       }
       await accountFlow.edit(account.id);
+
+      const onlines = await accountPlugin.getOnlineAccount();
+      const serversWithoutWireGuard = await knex('server').select(['id']).where({ type: 'Shadowsocks' }).then(s => s.map(m => m.id));
+      account.idle = serversWithoutWireGuard.filter(server => {
+        if(account.server) {
+          return account.server.includes(server);
+        }
+        return true;
+      }).sort((a, b) => {
+        return (onlines[a] || 0)  - (onlines[b] || 0);
+      })[0];
     }
     res.send(accounts);
   } catch (err) {

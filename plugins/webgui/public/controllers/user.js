@@ -243,9 +243,10 @@ app
     };
     setAccountServerList($scope.account, $scope.servers);
 
-    const getUserAccountInfo = () => {
+    const getUserAccountInfo = (first) => {
       userApi.getUserAccount().then(success => {
         $scope.servers = success.servers;
+        let setDefaultTab = false;
         if(success.account.map(m => m.id).join('') === $scope.account.map(m => m.id).join('')) {
           success.account.forEach((a, index) => {
             $scope.account[index].data = a.data;
@@ -263,8 +264,14 @@ app
             })[0].id;
             $scope.getServerPortData(f, serverId);
           });
+          setDefaultTab = true;
         }
         setAccountServerList($scope.account, $scope.servers);
+        if(setDefaultTab) {
+          $scope.account.forEach(f => {
+            f.defaultTab = f.serverList.findIndex(e => e.id === f.idle) || 0;
+          });
+        }
         $localStorage.user.serverInfo.data = success.servers;
         $localStorage.user.serverInfo.time = Date.now();
         $localStorage.user.accountInfo.data = success.account;
@@ -274,7 +281,7 @@ app
         }
       });
     };
-    getUserAccountInfo();
+    getUserAccountInfo(true);
 
     const base64Encode = str => {
       return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
