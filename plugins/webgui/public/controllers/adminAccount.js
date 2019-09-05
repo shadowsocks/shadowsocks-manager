@@ -126,7 +126,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.accountId = +$stateParams.accountId;
     $scope.account = { port: '...' };
-    $scope.defaultTab = 0;
+    $scope.defaultTab = -1;
     $q.all([
       $http.get(`/api/admin/account/${ $scope.accountId }`),
       $http.get('/api/admin/server'),
@@ -150,8 +150,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           }
         });
       }
-      $scope.defaultTab = $scope.servers.findIndex(e => e.id === $scope.account.idle);
-      $scope.getServerPortData($scope.servers[0], $scope.accountId);
+      $scope.defaultTab = $scope.servers.findIndex(e => e.id === $scope.account.idle) || 0;
+      $scope.getServerPortData($scope.servers[$scope.defaultTab], $scope.accountId);
       $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
     }).catch(() => {
       $state.go('admin.account');
