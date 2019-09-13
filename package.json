@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.33.18",
+  "version": "0.33.19",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -20,10 +20,10 @@
     "gfw"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
     "ajv": "^6.10.2",
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
@@ -44,7 +44,7 @@
     "compression": "^1.7.4",
     "connect-session-knex": "^1.4.0",
     "cors": "^2.8.5",
-    "ejs": "^2.6.2",
+    "ejs": "^2.7.1",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "express-validator": "^5.3.1",
