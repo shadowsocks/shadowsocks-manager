@@ -9,9 +9,9 @@ let host;
 let port;
 let password;
 try {
-  const host = config.manager.address.split(':')[0];
-  const port = +config.manager.address.split(':')[1];
-  const password = config.manager.password;
+  host = config.manager.address.split(':')[0];
+  port = +config.manager.address.split(':')[1];
+  password = config.manager.password;
 } catch(err) {
 
 }
