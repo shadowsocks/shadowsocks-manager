@@ -205,6 +205,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           `Address = ${ server.net.split('.')[0] }.${ server.net.split('.')[1] }.${ b }.${ a + 1 }/32`,
           `PrivateKey = ${ account.privateKey }`,
           'DNS = 8.8.8.8',
+          'MTU = 1520',
           '[Peer]',
           `PublicKey = ${ server.key }`,
           `Endpoint = ${ server.host }:${ server.wgPort }`,
