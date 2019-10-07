@@ -630,6 +630,7 @@ exports.status = async (req, res) => {
     let subscribe;
     let multiAccount;
     let simple;
+    let macAccount;
     if(status) {
       email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
       alipay = config.plugins.alipay && config.plugins.alipay.use;
@@ -655,6 +656,12 @@ exports.status = async (req, res) => {
         success[0].value = JSON.parse(success[0].value);
         return success[0].value;
       })).simple;
+      macAccount = (await knex('webguiSetting').select().where({
+        key: 'account',
+      }).then(success => {
+        success[0].value = JSON.parse(success[0].value);
+        return success[0].value;
+      })).macAccount;
     }
     if(status === 'normal') {
       knex('user').update({ lastLogin: Date.now() }).where({ id }).then();
@@ -681,6 +688,7 @@ exports.status = async (req, res) => {
       subscribe,
       multiAccount,
       simple,
+      macAccount,
       google_login_client_id,
       facebook_login_client_id,
       github_login_client_id,
