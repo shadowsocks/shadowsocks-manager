@@ -269,7 +269,8 @@ app
         setAccountServerList($scope.account, $scope.servers);
         if(setDefaultTab) {
           $scope.account.forEach(f => {
-            f.defaultTab = f.serverList.findIndex(e => e.id === f.idle) || 0;
+            f.defaultTab = f.serverList.findIndex(e => e.id === f.idle);
+            if(f.defaultTab < 0) { f.defaultTab = 0; }
           });
         }
         $localStorage.user.serverInfo.data = success.servers;
@@ -289,6 +290,7 @@ app
       }));
     };
     $scope.createQrCode = (server, account) => {
+      // console.log(server, account);
       if(!server) { return ''; }
       if(server.type === 'WireGuard') {
         const a = account.port % 254;

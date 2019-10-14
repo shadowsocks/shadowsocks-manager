@@ -150,10 +150,11 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           }
         });
       }
-      $scope.defaultTab = $scope.servers.findIndex(e => e.id === $scope.account.idle) || 0;
+      $scope.defaultTab = $scope.servers.findIndex(e => e.id === $scope.account.idle);
+      if($scope.defaultTab < 0) { $scope.defaultTab = 0; }
       $scope.getServerPortData($scope.servers[$scope.defaultTab], $scope.accountId);
       $scope.isMultiServerFlow = !!$scope.account.multiServerFlow;
-    }).catch(() => {
+    }).catch((err) => {
       $state.go('admin.account');
     });
     let currentServerId;
