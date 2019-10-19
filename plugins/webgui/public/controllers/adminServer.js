@@ -127,6 +127,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             }
           });
         }
+        $scope.setFabNumber($scope.servers.length);
       });
     };
     updateServerInfo();
