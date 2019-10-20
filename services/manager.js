@@ -163,6 +163,7 @@ const send = async (data, options) => {
           ret.version = versions[0] + ' x ' + versions.length;
         }
       }
+      ret.number = versions.length;
       return successMark ? ret : Promise.reject();
     } else if(data.command === 'flow') {
       let successMark = false;

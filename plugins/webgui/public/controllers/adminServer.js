@@ -74,6 +74,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             server.port = servers[index].port;
             server.status = servers[index].status;
             server.isGfw = servers[index].isGfw;
+            server.number = servers[index].number;
             adminApi.getServerFlow(server.id).then(flow => {
               if(!server.flow) {
                 server.flow = {};
@@ -127,7 +128,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
             }
           });
         }
-        $scope.setFabNumber($scope.servers.length);
+        const { number } = $scope.servers.reduce((a, b) => {
+          return { number: a.number + b.number };
+        }, { number: 0 });
+        if ($scope.servers.length === number) {
+          $scope.setFabNumber($scope.servers.length);
+        } else {
+          $scope.setFabNumber($scope.servers.length + ' / ' + number);
+        }
       });
     };
     updateServerInfo();
