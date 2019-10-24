@@ -131,6 +131,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         const { number } = $scope.servers.reduce((a, b) => {
           return { number: a.number + b.number };
         }, { number: 0 });
+        if($state.current.name !== 'admin.server') { return; }
         if ($scope.servers.length === number) {
           $scope.setFabNumber($scope.servers.length);
         } else {

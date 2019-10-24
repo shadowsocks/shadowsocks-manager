@@ -43,6 +43,7 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
         group: $scope.userSort.group,
       }).then(success => {
         // $scope.total = success.total;
+        if($state.current.name !== 'admin.user') { return; }
         $scope.setFabNumber(success.total);
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }

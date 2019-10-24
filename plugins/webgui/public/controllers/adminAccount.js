@@ -38,6 +38,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         filter: $scope.accountFilter.filter,
       }).then(success => {
         // $scope.total = success.data.total;
+        if($state.current.name !== 'admin.account') { return; }
         $scope.setFabNumber(success.data.total);
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
