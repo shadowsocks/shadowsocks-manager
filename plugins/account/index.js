@@ -309,10 +309,12 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
         return 50000;
       }
     });
+    let password = Math.random().toString().substr(2,10);
+    if(password[0] === '0') { password = '1' + password.substr(1); }
     await addAccount(3, {
       user: userId,
       port,
-      password: Math.random().toString().substr(2,10),
+      password,
       time: Date.now(),
       limit: number,
       flow: 200 * 1000 * 1000 * 1000,
@@ -477,11 +479,13 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       });
     };
     const port = await getNewPort();
+    let password = Math.random().toString().substr(2,10);
+    if(password[0] === '0') { password = '1' + password.substr(1); }
     await addAccount(orderType, {
       orderId,
       user: userId,
       port,
-      password: Math.random().toString().substr(2,10),
+      password,
       time: Date.now(),
       limit,
       flow: orderInfo.flow,
@@ -646,12 +650,14 @@ const addAccountTime = async (userId, accountId, accountType, accountPeriod = 1)
       }
     };
     const port = await getNewPort();
+    let password = Math.random().toString().substr(2,10);
+    if(password[0] === '0') { password = '1' + password.substr(1); }
     await knex('account_plugin').insert({
       type: accountType,
       userId,
       server: getPaymentInfo(accountType).server ? JSON.stringify(getPaymentInfo(accountType).server) : null,
       port,
-      password: Math.random().toString().substr(2,10),
+      password,
       data: JSON.stringify({
         create: Date.now(),
         flow: getPaymentInfo(accountType).flow * 1000 * 1000,
