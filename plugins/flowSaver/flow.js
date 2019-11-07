@@ -151,9 +151,9 @@ const splitTime = async (start, end) => {
   const now = Date.now();
   const getMinute = moment(now).get('minute');
   const splitEnd = {
-    day: moment(now).hour(0).minute(0).second(0).millisecond(0).toDate().getTime(),
-    hour: moment(now).minute(0).second(0).millisecond(0).toDate().getTime(),
-    fiveMin: moment(now).minute(getMinute - getMinute%5).second(0).millisecond(0).toDate().getTime(),
+    day: moment(now).hour(0).minute(0).second(0).millisecond(0).valueOf(),
+    hour: moment(now).minute(0).second(0).millisecond(0).valueOf(),
+    fiveMin: moment(now).minute(getMinute - getMinute%5).second(0).millisecond(0).valueOf(),
   };
   const isDay = time => {
     const hour = moment(time).get('hour');
@@ -185,20 +185,21 @@ const splitTime = async (start, end) => {
   };
   const next = (time, type) => {
     if(type === 'day') {
-      return moment(time).add(1, 'days').hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
+      return moment(time).add(1, 'days').hour(0).minute(0).second(0).millisecond(0).valueOf();
     }
     if(type === 'hour') {
-      return moment(time).add(1, 'hours').minute(0).second(0).millisecond(0).toDate().getTime();
+      return moment(time).add(1, 'hours').minute(0).second(0).millisecond(0).valueOf();
     }
     if(type === '5min') {
       const getMinute = moment(time).get('minute');
-      return moment(time).minute(getMinute - getMinute%5).add(5, 'minutes').second(0).millisecond(0).toDate().getTime();
+      return moment(time).minute(getMinute - getMinute%5).add(5, 'minutes').second(0).millisecond(0).valueOf();
     }
   };
   let timeStart = start;
   let timeEnd = end;
   let last = 'origin';
-  while(timeStart < timeEnd) {
+  let i = 0;
+  while(timeStart < timeEnd && i < 50) {
     if(isDay(timeStart) && next(timeStart, 'day') <= splitEnd.day && next(timeStart, 'day') <= end) {
       if(last === 'day' && time.day.length) {
         const length = time.day.length;
@@ -244,6 +245,7 @@ const splitTime = async (start, end) => {
       timeStart = timeEnd;
       last = 'origin';
     }
+    i += 1;
   }
   return time;
 };
