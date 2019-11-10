@@ -116,6 +116,7 @@ const onlineCacheUrl = [
   '/public/views/dialog/setCurrentAccount.html',
   '/public/views/dialog/setEmail.html',
   '/public/views/dialog/setUserGroup.html',
+  '/public/views/dialog/showWireGuardConfig.html',
   '/public/views/dialog/subscribe.html',
 ];
 

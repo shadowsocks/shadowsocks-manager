@@ -68,7 +68,7 @@ jobs:
       - run:
           name: Checkout libev
           command: |
-            git clone https://github.com/shadowsocks/shadowsocks-libev.git ~/repo/docker/alpine/shadowsocks-libev
+            git clone https://github.com/shadowsocks/shadowsocks-libev.git ~/repo/docker/alpine/shadowsocks-libev && git checkout 7763b961c5551d1c29ac358d2ea9d1d9ddfc74c7
       - run:
           name: Install submodule
           command: |
