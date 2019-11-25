@@ -17,7 +17,7 @@ If you want to use the old version, please switch to [this branch](https://githu
 
 ## WebGUI Demo:
 
-[https://shadowghost.app](https://2young.2simple.dev)
+[https://app.3840x2160.work](https://app.3840x2160.work)
 
 ## FreeAccount Demo:
 

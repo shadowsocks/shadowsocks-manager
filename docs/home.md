@@ -4,7 +4,7 @@ Shadowsocks-Manager 是一个基于`Node.js`开发的 shadowsocks 多用户管�
 
 ## Demo {docsify-ignore}
 
-* [ShadowGhost](https://2young.2simple.dev)
+* [ShadowGhost](https://app.3840x2160.work)
 * [FreeAccount](https://free2.gyteng.com)
 
 ## Telegram {docsify-ignore}
