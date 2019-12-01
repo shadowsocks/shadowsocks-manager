@@ -85,6 +85,13 @@
                         <div ng-message="required">端口偏移量不能为空</div>
                     </div>
                 </md-input-container>
+                <div style="width: 100%;">
+                    <md-chips ng-model="tags" placeholder="请输入标签">
+                        <md-chip-template>
+                            <strong>{{$chip}}</strong>
+                        </md-chip-template>
+                    </md-chips>
+                </div>
                 <div style="width: 100%;" layout="row" layout-align="space-between center">
                     <div flex="75">立即同步所有端口</div>
                     <div flex layout="row" layout-align="end center">

@@ -501,6 +501,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.cancel = () => {
       $state.go('admin.server');
     };
+    $scope.tags = [];
   }
 ])
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog',
@@ -593,5 +594,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         $state.go('admin.server');
       });
     };
+    $scope.tags = [];
   }
 ]);
