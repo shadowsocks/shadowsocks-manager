@@ -440,8 +440,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
   }
 ])
-.controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog',
-  ($scope, $state, $stateParams, $http, alertDialog) => {
+.controller('AdminAddServerController', ['$scope', '$state', '$stateParams', '$http', 'alertDialog', '$q',
+  ($scope, $state, $stateParams, $http, alertDialog, $q) => {
     $scope.setTitle('新增服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
     $scope.methods = [
@@ -511,8 +511,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.tags = [];
   }
 ])
-.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog',
-  ($scope, $state, $stateParams, $http, confirmDialog, alertDialog) => {
+.controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog', '$q',
+  ($scope, $state, $stateParams, $http, confirmDialog, alertDialog, $q) => {
     $scope.setTitle('编辑服务器');
     const serverId = $stateParams.serverId;
     $scope.setMenuButton('arrow_back', function() {
