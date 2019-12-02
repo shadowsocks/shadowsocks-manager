@@ -537,6 +537,14 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.method = $scope.methodSearch;
     };
     $scope.serverInfoloaded = false;
+    $http.get('/api/admin/tag', {
+      params: {
+        type: 'server',
+        key: $stateParams.serverId,
+      }
+    }).then(success => {
+      $scope.tags = success.data;
+    });
     $http.get(`/api/admin/server/${ serverId }`, {
       params: {
         noPort: true,
@@ -558,6 +566,11 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.wgPort = success.data.wgPort;
     });
     $scope.confirm = () => {
+      $http.put('/api/admin/tag', {
+        type: 'server',
+        key: $stateParams.serverId,
+        tags: $scope.tags,
+      });
       alertDialog.loading();
       $http.put('/api/admin/server/' + $stateParams.serverId, {
         type: $scope.server.type,

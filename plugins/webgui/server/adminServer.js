@@ -1,5 +1,6 @@
 const manager = appRequire('services/manager');
 const serverManager = appRequire('plugins/flowSaver/server');
+const webguiTag = appRequire('plugins/webgui_tag');
 const knex = appRequire('init/knex').knex;
 
 exports.getServers = (req, res) => {
@@ -162,4 +163,29 @@ exports.deleteServer = (req, res) => {
     console.log(err);
     res.status(403).end();
   });
+};
+
+exports.getTags = async (req, res) => {
+  try {
+    const type = req.query.type;
+    const key = +req.query.key;
+    const tags = await webguiTag.getTags(type, key);
+    res.send(tags);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
+exports.setTags = async (req, res) => {
+  try {
+    const type = req.body.type;
+    const key = +req.body.key;
+    const tags = req.body.tags;
+    await webguiTag.setTags(type, key, tags);
+    res.send('success');
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
 };

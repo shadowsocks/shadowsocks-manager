@@ -1,9 +1,25 @@
 const knex = appRequire('init/knex').knex;
 
 const getTags = async (type, key) => {
-
+  const tags = await knex('tag').select(['name']).where({ type, key }).then(success => success.map(m => m.name));
+  return tags;
 };
 
 const setTags = async (type, key, tags) => {
-
+  const currentTags = await knex('tag').select(['id', 'name']).where({ type, key });
+  for(const ct of currentTags) {
+    if(!tags.includes(ct.name)) {
+      await knex('tag').delete().where({ id: ct.id });
+    }
+  }
+  await knex('tag').insert(tags.filter(f => {
+    return !currentTags.map(m => m.name).includes(f);
+  }).map(tag => {
+    return {
+      type, key, name: tag,
+    };
+  }));
 };
+
+exports.getTags = getTags;
+exports.setTags = setTags;

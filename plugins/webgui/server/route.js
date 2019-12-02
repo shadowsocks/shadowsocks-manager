@@ -196,6 +196,9 @@ app.post('/api/admin/order', isAdmin, isSuperAdmin, adminOrder.newOrder);
 app.put('/api/admin/order/:orderId(\\d+)', isAdmin, isSuperAdmin, adminOrder.editOrder);
 app.delete('/api/admin/order/:orderId(\\d+)', isAdmin, isSuperAdmin, adminOrder.deleteOrder);
 
+app.get('/api/admin/tag', isAdmin, isSuperAdmin, adminServer.getTags);
+app.put('/api/admin/tag', isAdmin, isSuperAdmin, adminServer.setTags);
+
 app.get('/api/user/notice', isUser, user.getNotice);
 app.get('/api/user/account', isUser, user.getAccount);
 app.get('/api/user/usage', isUser, user.getAccountUsage);
