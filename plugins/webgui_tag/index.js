@@ -9,7 +9,7 @@ const setTags = async (type, key, tags) => {
   const currentTags = await knex('tag').select(['id', 'name']).where({ type, key });
   for(const ct of currentTags) {
     if(!tags.includes(ct.name)) {
-      await knex('tag').delete().where({ id: ct.id });
+      knex('tag').delete().where({ id: ct.id });
     }
   }
   await knex('tag').insert(tags.filter(f => {
