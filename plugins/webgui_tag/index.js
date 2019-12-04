@@ -1,8 +1,10 @@
 const knex = appRequire('init/knex').knex;
 
 const getTags = async (type, key) => {
-  const tags = await knex('tag').select(['name']).where({ type, key }).then(success => success.map(m => m.name));
-  return tags;
+  if(key) {
+    return knex('tag').select(['name']).where({ type, key }).then(success => success.map(m => m.name));
+  }
+  return knex('tag').select(['name']).where({ type }).groupBy('name').then(success => success.map(m => m.name));
 };
 
 const setTags = async (type, key, tags) => {

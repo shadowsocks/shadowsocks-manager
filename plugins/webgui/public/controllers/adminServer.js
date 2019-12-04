@@ -474,6 +474,22 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       scale: 1,
       shift: 0,
     };
+    $scope.tagsAutoComplete = {
+      searchText: '',
+      selectedItem: '',
+      items: [],
+      querySearch: (query) => {
+        if(!query) { return []; }
+        return $scope.tagsAutoComplete.items.filter(f => (f.includes(query) && !$scope.tags.includes(f)));
+      },
+    };
+    $http.get('/api/admin/tag', {
+      params: {
+        type: 'server',
+      }
+    }).then(success => {
+      $scope.tagsAutoComplete.items = success.data;
+    });
     $scope.confirm = () => {
       alertDialog.loading();
       $q.all([
@@ -551,6 +567,22 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       }
     }).then(success => {
       $scope.tags = success.data;
+    });
+    $scope.tagsAutoComplete = {
+      searchText: '',
+      selectedItem: '',
+      items: [],
+      querySearch: (query) => {
+        if(!query) { return []; }
+        return $scope.tagsAutoComplete.items.filter(f => (f.includes(query) && !$scope.tags.includes(f)));
+      },
+    };
+    $http.get('/api/admin/tag', {
+      params: {
+        type: 'server',
+      }
+    }).then(success => {
+      $scope.tagsAutoComplete.items = success.data;
     });
     $http.get(`/api/admin/server/${ serverId }`, {
       params: {

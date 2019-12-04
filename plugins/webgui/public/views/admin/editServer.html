@@ -87,6 +87,15 @@
                 </md-input-container>
                 <div style="width: 100%;">
                     <md-chips ng-model="tags" placeholder="请输入标签">
+                        <md-autocomplete
+                            md-selected-item="tagsAutoComplete.selectedItem"
+                            md-search-text="tagsAutoComplete.searchText"
+                            md-items="item in tagsAutoComplete.querySearch(tagsAutoComplete.searchText)"
+                            md-item-text="item"
+                            placeholder="请输入标签"
+                        >
+                          <span md-highlight-text="tagsAutoComplete.searchText">{{item}}</span>
+                        </md-autocomplete>
                         <md-chip-template>
                             <strong>{{$chip}}</strong>
                         </md-chip-template>
