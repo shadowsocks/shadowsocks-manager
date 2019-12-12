@@ -330,15 +330,15 @@ exports.getPrice = async (req, res) => {
       orders = orders.filter(f => {
         return JSON.parse(groupSetting.order).indexOf(f.id) >= 0;
       });
-      if(orderInfo) {
-        orders = orders.filter(f => {
-          if(!f.baseId) { return true; }
-          if(f.baseId === orderInfo.id && !isExpired(accountInfo)) { return true; }
-          return false;
-        });
-      } else {
-        orders = orders.filter(f => !f.baseId);
-      }
+    }
+    if(orderInfo) {
+      orders = orders.filter(f => {
+        if(!f.baseId) { return true; }
+        if(f.baseId === orderInfo.id && !isExpired(accountInfo)) { return true; }
+        return false;
+      });
+    } else {
+      orders = orders.filter(f => !f.baseId);
     }
     let currentOrder = [];
     if(changeOrderTypeId && !isExpired(accountInfo)) {
