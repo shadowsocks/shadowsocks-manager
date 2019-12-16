@@ -3,7 +3,7 @@ const gulp = require('gulp');
 const path = require('path');
 const webpackStream = require('webpack-stream');
 const concat = require('gulp-concat');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const cleanCSS = require('gulp-clean-css');
 
 gulp.task('clean', () => {
@@ -79,7 +79,8 @@ gulp.task('webguiBuild', () => {
       }]
     },
     optimization: {
-      minimizer: [new UglifyJsPlugin()],
+      minimize: true,
+      minimizer: [new TerserPlugin()],
     },
     mode: 'production',
     performance: { hints: false },
