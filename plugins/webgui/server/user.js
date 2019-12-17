@@ -19,6 +19,7 @@ const flowPack = appRequire('plugins/webgui_order/flowPack');
 const alipayPlugin = appRequire('plugins/alipay/index');
 const macAccountPlugin = appRequire('plugins/macAccount/index');
 const accountFlow = appRequire('plugins/account/accountFlow');
+const webguiTag = appRequire('plugins/webgui_tag');
 
 const alipay = appRequire('plugins/alipay/index');
 
@@ -139,57 +140,62 @@ exports.getOneAccount = async (req, res) => {
   }
 };
 
-exports.getServers = (req, res) => {
-  const userId = req.session.user;
-  const serverAliasFilter = servers => {
-    return servers.map(server => {
-      if(server.host.indexOf(':') >= 0) {
-        const hosts = server.host.split(':');
-        const number = Math.ceil(Math.random() * (hosts.length - 1));
-        server.host = hosts[number];
-      }
-      return server;
+exports.getServers = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    const serverAliasFilter = servers => {
+      return servers.map(server => {
+        if(server.host.indexOf(':') >= 0) {
+          const hosts = server.host.split(':');
+          const number = Math.ceil(Math.random() * (hosts.length - 1));
+          server.host = hosts[number];
+        }
+        return server;
+      });
+    };
+    let servers = await knex('server').select(['id', 'type' ,'host', 'name', 'method', 'scale', 'comment', 'shift', 'key', 'net', 'wgPort']).orderBy('name');
+    servers = serverAliasFilter(servers);
+    let accounts = await account.getAccount({
+      userId,
     });
-  };
-  let servers;
-  knex('server').select(['id', 'type' ,'host', 'name', 'method', 'scale', 'comment', 'shift', 'key', 'net', 'wgPort']).orderBy('name')
-    .then(success => {
-      servers = serverAliasFilter(success);
-      return account.getAccount({
-        userId,
-      }).then(accounts => {
-        return accounts.map(f => {
-          f.server = f.server ? JSON.parse(f.server) : f.server;
-          return f;
+    accounts = accounts.map(f => {
+      f.server = f.server ? JSON.parse(f.server) : f.server;
+      return f;
+    });
+    if (!accounts.length) {
+      return res.send([]);
+    }
+    const isAll = accounts.some(account => {
+      if (!account.server) { return true; }
+    });
+    if (!isAll) {
+      let accountArray = [];
+      accounts.forEach(account => {
+        account.server.forEach(s => {
+          if (!accountArray.includes(s)) {
+            accountArray.push(s);
+          }
         });
       });
-    })
-    .then(success => {
-      if (!success.length) {
-        return res.send([]);
+      servers = servers.filter(f => accountArray.includes(f.id));
+    }
+    const serverTags = {};
+    for(server of servers) {
+      const tags = await webguiTag.getTags('server', server.id);
+      if(tags.length) {
+        serverTags[server.id] = tags;
       }
-      const isAll = success.some(account => {
-        if (!account.server) { return true; }
-      });
-      if (isAll) {
-        return res.send(servers);
-      } else {
-        let accountArray = [];
-        success.forEach(account => {
-          account.server.forEach(s => {
-            if (accountArray.indexOf(s) < 0) {
-              accountArray.push(s);
-            }
-          });
-        });
-        return res.send(servers.filter(f => {
-          return accountArray.indexOf(f.id) >= 0;
-        }));
+    }
+    res.send(servers.filter(server => {
+      if(serverTags[server.id] && (serverTags[server.id].includes('#hide') || serverTags[server.id].includes('#_hide'))) {
+        return false;
       }
-    }).catch(err => {
-      console.log(err);
-      res.status(500).end();
-    });
+      return true;
+    }));
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
 };
 
 exports.getServerPortFlow = (req, res) => {
