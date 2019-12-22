@@ -14,13 +14,16 @@ const setTags = async (type, key, tags) => {
       await knex('tag').delete().where({ id: ct.id });
     }
   }
-  await knex('tag').insert(tags.filter(f => {
+  const newTags = tags.filter(f => {
     return !currentTags.map(m => m.name).includes(f);
   }).map(tag => {
     return {
       type, key, name: tag,
     };
-  }));
+  });
+  if(newTags.length) {
+    await knex('tag').insert(newTags);
+  }
 };
 
 exports.getTags = getTags;
