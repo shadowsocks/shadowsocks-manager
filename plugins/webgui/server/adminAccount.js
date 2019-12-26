@@ -274,8 +274,34 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           return server.subscribeName || server.name;
         }),
       };
-      
       return res.send(yaml.safeDump(clashConfig));
+    }
+    if(type === 'mellow') {
+      const template = [
+        '[Endpoint]',
+        '@{SERVERS}',
+        'Direct, builtin, freedom, domainStrategy=UseIP',
+        'Dns-Out, builtin, dns',
+        '[EndpointGroup]',
+        '@{GROUP}',
+        '[RoutingRule]',
+        'DOMAIN-KEYWORD, geosite:cn, Direct',
+        'GEOIP, cn, Direct',
+        'GEOIP, private, Direct',
+        'FINAL, allServers',
+        '[Dns]',
+        'hijack = Dns-Out',
+        '[DnsServer]',
+        'localhost',
+        '8.8.8.8',
+      ].join('\n')
+      .replace('@{SERVERS}', subscribeAccount.server.map(s => {
+        return `${s.subscribeName || s.name}, ss, ss://${s.method}:${subscribeAccount.account.password}@${s.host}:${(subscribeAccount.account.port +  + s.shift)}\n`;
+      }).join(''))
+      .replace('@{GROUP}', 'allServers, ' + subscribeAccount.server.map(s => {
+        return `${s.subscribeName || s.name}`;
+      }).join(':') + ', latency, interval=300, timeout=6');
+      return res.send(template);
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
