@@ -218,7 +218,7 @@ app.get('/', (req, res) => {
 
 app.post('/qrcode', async (req, res) => {
   const token = req.body.token;
-  const ip = req.ip;
+  const ip = req.headers['x-real-ip'] || req.ip;
   let recaptchaResult = {
     success: true,
     score: 1,
