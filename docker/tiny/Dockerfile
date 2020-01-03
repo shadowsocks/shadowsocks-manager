@@ -4,7 +4,7 @@ RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get install tzdata iproute2 curl git sudo software-properties-common python-pip -y && \
     pip install git+https://github.com/gyteng/shadowsocks.git@master && \
-    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs shadowsocks-libev && \
     git clone https://github.com/gyteng/shadowsocks-manager-tiny.git ssmgr && \
     echo "Asia/Shanghai" > /etc/timezone && \
