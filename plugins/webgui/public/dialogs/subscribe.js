@@ -3,7 +3,7 @@ const window = require('window');
 const cdn = window.cdn || '';
 
 app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
-  const publicInfo = { linkType: 'shadowrocket', ip: '0', flow: '0' };
+  const publicInfo = { linkType: 'android', ip: '0', flow: '0' };
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -38,7 +38,7 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
     controller: ['$scope', '$mdMedia', '$mdDialog', 'bind', 'configManager', '$mdToast', function($scope, $mdMedia, $mdDialog, bind, configManager, $mdToast) {
       $scope.publicInfo = bind;
       $scope.publicInfo.types = [
-        'shadowrocket', 'potatso', 'ssr', 'ssd', 'clash', 'mellow',
+        'android', 'shadowrocket', 'potatso', 'ssr', 'ssd', 'clash', 'mellow',
       ];
       const config = configManager.getConfig();
       $scope.changeLinkType = () => {

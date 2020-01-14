@@ -303,11 +303,28 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       }).join(':') + ', latency, interval=300, timeout=6');
       return res.send(template);
     }
+    if(type === 'android') {
+      const servers = subscribeAccount.server.map(s => {
+        return {
+          id: s.id,
+          remark: s.name,
+          server: s.host,
+          server_port: subscribeAccount.account.port + s.shift,
+          password: subscribeAccount.account.password,
+          method: s.method,
+        };
+      });
+      return res.json({
+        version: 1,
+        remark: 'ssmgr',
+        servers,
+      });
+    }
     const result = subscribeAccount.server.map(s => {
       if(type === 'shadowrocket') {
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'potatso') {
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port +  + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
+        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'ssr') {
         return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.subscribeName || s.name) + '&group=' + urlsafeBase64(baseSetting.title));
       }
