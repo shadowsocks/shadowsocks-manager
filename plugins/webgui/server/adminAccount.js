@@ -307,7 +307,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       const servers = subscribeAccount.server.map(s => {
         return {
           id: s.id,
-          remark: s.name,
+          remarks: s.name,
           server: s.host,
           server_port: subscribeAccount.account.port + s.shift,
           password: subscribeAccount.account.password,
@@ -316,7 +316,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       });
       return res.json({
         version: 1,
-        remark: 'ssmgr',
+        remarks: 'ssmgr',
         servers,
       });
     }
