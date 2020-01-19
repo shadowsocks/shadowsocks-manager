@@ -16,7 +16,7 @@
                         复制链接
                     </md-button>
                 </div>
-                <div>
+                <div ng-hide="publicInfo.userType === 'admin'">
                     <md-button class="md-primary" ng-click="publicInfo.updateLink()">
                         更换链接
                     </md-button>

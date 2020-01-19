@@ -2,8 +2,10 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
+app.factory('subscribeDialog', [ '$mdDialog', '$http', 'configManager', ($mdDialog, $http, configManager) => {
   const publicInfo = { linkType: 'android', ip: '0', flow: '0' };
+  const config = configManager.getConfig();
+  publicInfo.userType = config.status === 'admin' ? 'admin' : 'user';
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -16,7 +18,7 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', ($mdDialog, $http) => {
   };
   publicInfo.hide = hide;
   const getSubscribe = () => {
-    return $http.get(`/api/user/account/${ publicInfo.accountId }/subscribe`);
+    return $http.get(`/api/${publicInfo.userType}/account/${ publicInfo.accountId }/subscribe`);
   };
   publicInfo.getSubscribe = getSubscribe;
   const updateSubscribe = () => {

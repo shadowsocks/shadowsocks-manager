@@ -121,8 +121,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     };
   }
 ])
-.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog', 'ipDialog', '$mdBottomSheet', 'wireGuardConfigDialog', '$filter',
-  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog, $mdBottomSheet, wireGuardConfigDialog, $filter) => {
+.controller('AdminAccountPageController', ['$scope', '$state', '$stateParams', '$http', '$mdMedia', '$q', 'adminApi', '$timeout', '$interval', 'qrcodeDialog', 'ipDialog', '$mdBottomSheet', 'wireGuardConfigDialog', '$filter', 'subscribeDialog',
+  ($scope, $state, $stateParams, $http, $mdMedia, $q, adminApi, $timeout, $interval, qrcodeDialog, ipDialog, $mdBottomSheet, wireGuardConfigDialog, $filter, subscribeDialog) => {
     $scope.setTitle('账号');
     $scope.setMenuButton('arrow_back', 'admin.account');
     $scope.accountId = +$stateParams.accountId;
@@ -427,6 +427,9 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     $scope.isWG = server => server.type === 'WireGuard';
     $scope.showWireGuard = (server, account) => {
       wireGuardConfigDialog.show(server, account);
+    };
+    $scope.subscribe = accountId => {
+      subscribeDialog.show(accountId);
     };
   }
 ])

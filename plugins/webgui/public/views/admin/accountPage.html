@@ -132,6 +132,8 @@
                     </div>
                     <div flex-lg="10"></div>
                 </div>
+                <!-- <md-button class="md-primary">{{ '修改密码' | translate }}</md-button> -->
+                <md-button class="md-primary" ng-click="subscribe(account.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
                 <div flex="100" layout="row" layout-xs="column" layout-warp layout-align="center center">
                     <div flex flex="100" style="margin: 15px 0px 25px 0px;">
                         <div layout="column" layout-align="center center">

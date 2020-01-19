@@ -636,6 +636,31 @@ exports.getAccountSubscribe = async (req, res) => {
   }
 };
 
+exports.getAdminAccountSubscribe = async (req, res) => {
+  try {
+    const accountId = +req.params.accountId;
+    const account = await knex('account_plugin').select([
+      'id',
+      'subscribe'
+    ]).where({
+      id: accountId,
+    }).then(s => s[0]);
+    if(!account.subscribe) {
+      const subscribeToken = crypto.randomBytes(16).toString('hex');;
+      await await knex('account_plugin').update({
+        subscribe: subscribeToken
+      }).where({
+        id: accountId,
+      });
+      account.subscribe = subscribeToken;
+    }
+    res.send(account);
+  } catch(err) {
+    console.log(err);
+    res.status(403).end();
+  }
+};
+
 exports.updateAccountSubscribe = async (req, res) => {
   try {
     const userId = req.session.user;

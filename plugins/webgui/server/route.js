@@ -207,6 +207,7 @@ app.post('/api/user/account/mac', isUser, user.addMacAccount);
 app.get('/api/user/account/:accountId(\\d+)', isUser, user.getOneAccount);
 app.put('/api/user/account/:accountId(\\d+)/active', isUser, user.activeAccount);
 app.get('/api/user/account/:accountId(\\d+)/subscribe', isUser, user.getAccountSubscribe);
+app.get('/api/admin/account/:accountId(\\d+)/subscribe', isAdmin, user.getAdminAccountSubscribe);
 app.put('/api/user/account/:accountId(\\d+)/subscribe', isUser, user.updateAccountSubscribe);
 app.get('/api/user/server', isUser, user.getServers);
 app.get('/api/user/flow/:serverId(\\d+)/:accountId(\\d+)', isUser, user.getServerPortFlow);
