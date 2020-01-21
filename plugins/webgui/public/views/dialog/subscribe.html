@@ -1,26 +1,35 @@
 <md-dialog aria-label="subscribe dialog">
     <md-dialog-content>
         <div class="md-dialog-content">
-            <div style="word-wrap: break-word; color: #666; font-size: 0.8em; max-width: 480px; height: 55px;">{{ publicInfo.subscribeLink }}</div>
-            <div style="margin-top: 15px; margin-bottom: 15px;" translate>请选择订阅链接类型：</div>
-            <md-radio-group ng-model="publicInfo.linkType" layout="row" layout-wrap layout-align="start center" ng-change="{{ changeLinkType() }}">
-                <md-radio-button ng-repeat="type in publicInfo.types" value="{{ type }}">
-                    <div style="margin: 3px;">{{ type }}</div>
-                </md-radio-button>
-            </md-radio-group>
-            <md-checkbox style="margin-top: 15px;" ng-model="publicInfo.ip" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">{{ '将域名转换为IP地址' | translate }}</md-checkbox>
-            <md-checkbox ng-model="publicInfo.flow" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">{{ '显示流量信息' | translate }}</md-checkbox>
-            <div layout="row" layout-align="start center" style="margin-top: 25px;">
-                <div>
+            <div ng-if="!publicInfo.updateSubscribePage">
+                <div style="word-wrap: break-word; color: #666; font-size: 0.8em; max-width: 480px; height: 55px;">{{ publicInfo.subscribeLink }}</div>
+                <div style="margin-top: 15px; margin-bottom: 15px;" translate>请选择订阅链接类型：</div>
+                <md-radio-group ng-model="publicInfo.linkType" layout="row" layout-wrap layout-align="start center" ng-change="{{ changeLinkType() }}">
+                    <md-radio-button ng-repeat="type in publicInfo.types" value="{{ type }}">
+                        <div style="margin: 3px;">{{ type }}</div>
+                    </md-radio-button>
+                </md-radio-group>
+                <md-checkbox style="margin-top: 15px;" ng-model="publicInfo.ip" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">{{ '将域名转换为IP地址' | translate }}</md-checkbox>
+                <md-checkbox ng-model="publicInfo.flow" ng-change="changeLinkType()" ng-true-value="1" ng-false-value="0">{{ '显示流量信息' | translate }}</md-checkbox>
+                <md-dialog-actions layout="row" layout-align="center center" style="margin-top: 25px;">
                     <md-button class="md-primary" ngclipboard data-clipboard-text="{{ publicInfo.subscribeLink }}" ngclipboard-success="toast(e);">
                         复制链接
                     </md-button>
-                </div>
-                <div ng-hide="publicInfo.userType === 'admin'">
-                    <md-button class="md-primary" ng-click="publicInfo.updateLink()">
+                    <md-button ng-if="publicInfo.userType === 'user'" class="md-primary" ng-click="publicInfo.toUpdateSubscribePage()">
                         更换链接
                     </md-button>
-                </div>
+                </md-dialog-actions>
+            </div>
+            <div ng-if="publicInfo.updateSubscribePage">
+                若更换链接，原有的订阅链接将失效，是否继续？
+                <md-dialog-actions layout="row" layout-align="center center" style="margin-top: 25px;">
+                    <md-button class="md-primary" ng-click="publicInfo.updateSubscribePage = false">
+                        取消
+                    </md-button>
+                    <md-button class="md-primary" ng-click="publicInfo.updateLink()">
+                        继续
+                    </md-button>
+                </md-dialog-actions>
             </div>
         </div>
     </md-dialog-content>

@@ -6,6 +6,7 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', 'configManager', ($mdDial
   const publicInfo = { linkType: 'android', ip: '0', flow: '0' };
   const config = configManager.getConfig();
   publicInfo.userType = config.status === 'admin' ? 'admin' : 'user';
+  publicInfo.updateSubscribePage = false;
   const hide = () => {
     return $mdDialog.hide()
     .then(success => {
@@ -43,6 +44,9 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', 'configManager', ($mdDial
         'android', 'shadowrocket', 'potatso', 'ssr', 'ssd', 'clash', 'mellow',
       ];
       const config = configManager.getConfig();
+      $scope.publicInfo.toUpdateSubscribePage = () => {
+        $scope.publicInfo.updateSubscribePage = true;
+      };
       $scope.changeLinkType = () => {
         $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }?type=${ $scope.publicInfo.linkType }&ip=${ $scope.publicInfo.ip}&flow=${ $scope.publicInfo.flow}`;
       };
@@ -54,6 +58,7 @@ app.factory('subscribeDialog', [ '$mdDialog', '$http', 'configManager', ($mdDial
         $scope.publicInfo.updateSubscribe().then(success => {
           $scope.publicInfo.token = success.data.subscribe;
           $scope.publicInfo.subscribeLink = `${ config.site }/api/user/account/subscribe/${ $scope.publicInfo.token }?type=${ $scope.publicInfo.linkType }&ip=${ $scope.publicInfo.ip}&flow=${ $scope.publicInfo.flow}`;
+          $scope.publicInfo.updateSubscribePage = false;
         });
       };
       $scope.toast = () => {
