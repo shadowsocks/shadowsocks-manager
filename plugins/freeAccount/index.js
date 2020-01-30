@@ -185,10 +185,19 @@ cron.minute(() => {
 
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
+const sessionParser = session({
+  secret: '8d24f7b0d358a923',
+  rolling: true,
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: true, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000 },
+});
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(sessionParser);
 app.engine('.html', require('ejs').__express);
 app.set('view engine', 'html');
 app.set('views', path.resolve('./plugins/freeAccount/views'));
