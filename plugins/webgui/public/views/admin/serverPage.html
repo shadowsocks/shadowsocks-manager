@@ -47,7 +47,7 @@
                     <div width="{{getChartSize().pie[0]}}">
                         <div layout="row" layout-align="center center">
                             <div style="position: relative;">
-                                <div style="position: absolute; bottom: 3px; color: #666;" ng-style="{ 'right': (getChartSize().pie[0] - getChartSize().pie[1])/2 + 'px' }">{{ pieChart.data.length }}</div>
+                                <div ng-show="pieChart.data.length" style="position: absolute; bottom: 3px; color: #666;" ng-style="{ 'right': (getChartSize().pie[0] - getChartSize().pie[1])/2 + 'px' }">{{ pieChart.data.length }}</div>
                                 <canvas id="pie" class="chart chart-pie"
                                     width="{{getChartSize().pie[0]}}"
                                     height="{{getChartSize().pie[1]}}"
