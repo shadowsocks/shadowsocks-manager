@@ -66,7 +66,32 @@ email:
   apiKey: 'key-f1e6a7558c7c5a37a33fdba53a87ea82'
 ```
 
-!> mailgun 每月都有一定的免费额度，需绑定信用卡
+## 使用 sendgrid 发送邮件
+
+将配置文件的 email 部分替换成下面的格式：
+
+```yaml
+email:
+  type: 'sendgrid'
+  name: 'ssmgr'
+  email: 'admin@your.domain.com'
+  apiKey: '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'
+```
+
+# 转发 smtp 协议
+
+对于一些不支持 smtp 协议的 VPS，可通过代理转发的方式转到一台支持的 VPS 上面去发邮件，加上一个`proxy`参数即可：
+
+```yaml
+plugins:
+  email:
+    use: true
+    type: 'smtp'
+    username: 'username'
+    password: 'password'
+    host: 'smtp.your-email.com'
+    proxy: 'socks://127.0.0.1:1234/'
+```
 
 # 随节点运行 shadowsocks
 
@@ -96,21 +121,6 @@ plugins:
   webgui:
     use: true
     icon: 'icon.png'
-```
-
-# 转发 smtp 协议
-
-对于一些不支持 smtp 协议的 VPS，可通过代理转发的方式转到一台支持的 VPS 上面去发邮件，加上一个`proxy`参数即可：
-
-```yaml
-plugins:
-  email:
-    use: true
-    type: 'smtp'
-    username: 'username'
-    password: 'password'
-    host: 'smtp.your-email.com'
-    proxy: 'socks://127.0.0.1:1234/'
 ```
 
 # 使用充值码功能
