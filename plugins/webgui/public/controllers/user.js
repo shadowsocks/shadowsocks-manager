@@ -246,7 +246,7 @@ app
     const getUserAccountInfo = (first) => {
       userApi.getUserAccount().then(success => {
         $scope.servers = success.servers;
-        let setDefaultTab = false;
+        let setDefaultTab = !!first; //false;
         if(success.account.map(m => m.id).join('') === $scope.account.map(m => m.id).join('')) {
           success.account.forEach((a, index) => {
             $scope.account[index].data = a.data;
