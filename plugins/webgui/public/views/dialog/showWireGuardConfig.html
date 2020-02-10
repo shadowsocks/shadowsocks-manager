@@ -1,19 +1,28 @@
 <md-dialog aria-label="wireguard dialog" ng-style="setDialogWidth()">
   <md-toolbar hide-gt-sm>
-      <div class="md-toolbar-tools">
-          <h2>{{ server.name }}</h2>
-          <span flex></span>
-          <md-button class="md-icon-button" ng-click="publicInfo.hide()">
-              <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
-          </md-button>
-      </div>
+    <div class="md-toolbar-tools">
+      <h2>{{ publicInfo.server.name }}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="publicInfo.hide()">
+        <md-icon class="material-icons" aria-label="Close dialog">close</md-icon>
+      </md-button>
+    </div>
   </md-toolbar>
   <md-dialog-content>
-      <div class="md-dialog-content">
+    <div class="md-dialog-content" ng-show="publicInfo.page === 'config'">
+      <div layout="column" layout-align="center center">
         <md-input-container class="md-block">
           <label>WireGuard配置</label>
-          <textarea style="word-break: break-all;" readonly ng-model="publicInfo.config" rows="7" md-select-on-focus></textarea>
+          <textarea style="word-break: break-all; min-width: 300px; min-height: 400px;" readonly ng-model="publicInfo.config" rows="7" md-select-on-focus></textarea>
         </md-input-container>
+        <md-button class="md-primary" ng-click="publicInfo.page = 'qrcode'">{{ '返回' | translate }}</md-button>
       </div>
+    </div>
+    <div class="md-dialog-content" ng-show="publicInfo.page === 'qrcode'">
+      <div layout="column" layout-align="center center">
+        <qr layout-margin text="publicInfo.config" image="true"></qr>
+        <md-button class="md-primary" ng-click="publicInfo.page = 'config'">{{ '配置文件' | translate }}</md-button>
+      </div>
+    </div>
   </md-dialog-content>
 </md-dialog>

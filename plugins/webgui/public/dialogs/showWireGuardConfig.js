@@ -57,6 +57,7 @@ app.factory('wireGuardConfigDialog', [ '$mdDialog', ($mdDialog) => {
     }
     publicInfo.server = server;
     publicInfo.account = account;
+    publicInfo.page = 'qrcode';
     dialogPromise = $mdDialog.show(dialog);
     return dialogPromise;
   };
