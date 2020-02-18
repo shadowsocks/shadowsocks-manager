@@ -20,18 +20,18 @@
                     </md-select>
                 </div>
                 <md-input-container class="md-block">
-                    <label>名称</label>
+                    <label translate>名称</label>
                     <input type="text" required name="name" ng-model="order.name">
                     <div ng-messages="orderForm.name.$error">
                         <div ng-message="required">名称不能为空</div>
                     </div>
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>短备注</label>
+                    <label translate>短备注</label>
                     <input type="text" name="shortComment" ng-model="order.shortComment">
                 </md-input-container>
                 <md-input-container class="md-block">
-                    <label>备注</label>
+                    <label translate>备注</label>
                     <textarea ng-model="order.comment" rows="3" md-no-autogrow md-select-on-focus></textarea>
                 </md-input-container>
                 <div layout="row" layout-align="space-between start" ng-hide="order.baseId">
@@ -44,43 +44,43 @@
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>周期</label>
+                        <label translate>周期</label>
                         <input type="number" name="cycle" ng-model="order.cycle" style="margin: 20px 0 20px 0;">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center">
                     <md-input-container class="md-block" flex="45">
-                        <label>支付宝</label>
+                        <label translate>支付宝</label>
                         <input type="number" step="any" name="alipay" ng-model="order.alipay">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>Paypal</label>
+                        <label translate>Paypal</label>
                         <input type="number" step="any" name="paypal" ng-model="order.paypal">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center" ng-hide="order.baseId">
                     <md-input-container class="md-block" flex="45">
-                        <label>流量</label>
+                        <label translate>流量</label>
                         <input type="text" name="flow" ng-model="order.flowStr">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>邀请获得时长</label>
+                        <label translate>邀请获得时长</label>
                         <input type="text" name="refTime" ng-model="order.refTimeStr">
                     </md-input-container>
                 </div>
                 <div layout="row" layout-align="space-between center" ng-show="order.baseId">
                         <md-input-container class="md-block" flex="100">
-                            <label>流量</label>
+                            <label translate>流量</label>
                             <input type="text" name="flow" ng-model="order.flowStr">
                         </md-input-container>
                     </div>
                 <div layout="row" layout-align="space-between center" ng-hide="order.baseId">
                     <md-input-container class="md-block" flex="45">
-                        <label>自动删除延迟</label>
+                        <label translate>自动删除延迟</label>
                         <input type="text" name="autoRemoveDelay" ng-model="order.autoRemoveDelayStr" ng-disabled="!order.autoRemove">
                     </md-input-container>
                     <md-input-container class="md-block" flex="45">
-                        <label>端口分配范围</label>
+                        <label translate>端口分配范围</label>
                         <input type="text" name="portRange" ng-model="order.portRange">
                     </md-input-container>
                 </div>

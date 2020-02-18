@@ -12,14 +12,14 @@
         <div flex layout="column" layout-align="space-around stretch">
             <div style="height: 30px;"></div>
             <div style="width: 100%;" layout="row" layout-align="space-between center">
-                <div flex="75">从订单中选择类型</div>
+                <div flex="75" translate>从订单中选择类型</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.fromOrder" aria-label="fromOrder" ng-true-value="1" ng-false-value="0">
                     </md-switch>
                 </div>
             </div>
             <div style="width: 100%;" layout="row" layout-align="space-between center" ng-if="account.fromOrder === 1">
-                <div flex="75">更改类型时保持过期时间不变</div>
+                <div flex="75" translate>更改类型时保持过期时间不变</div>
                 <div flex layout="row" layout-align="end center">
                     <md-switch ng-model="account.fixedExpire" aria-label="fixedExpire">
                     </md-switch>
