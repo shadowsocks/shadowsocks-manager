@@ -67,7 +67,7 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
         env, // production or sandbox
         commit: true,
         payment: function() {
-          var CREATE_URL = '/api/user/paypal/create';
+          const CREATE_URL = '/api/user/paypal/create';
           return paypal.request.post(CREATE_URL, {
             accountId: publicInfo.accountId,
             orderId: publicInfo.orderId,
@@ -77,8 +77,8 @@ app.factory('payDialog' , [ '$mdDialog', '$interval', '$timeout', '$http', '$loc
           });
         },
         onAuthorize: function(data, actions) {
-          var EXECUTE_URL = '/api/user/paypal/execute/';
-          var data = {
+          const EXECUTE_URL = '/api/user/paypal/execute/';
+          const data = {
             paymentID: data.paymentID,
             payerID: data.payerID
           };

@@ -64,7 +64,7 @@ const createOrder = async (user, account, orderId) => {
       orderType: orderId,
       amount: orderInfo.paypal + '',
       user,
-      account: (account !== 'undefined' && account) ? account : null,
+      account: (account !== 'undefined' && account !== 'null' && account) ? account : null,
       status: 'created',
       createTime: Date.now(),
       expireTime: Date.now() + 2 * 60 * 60 * 1000,
