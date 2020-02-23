@@ -492,29 +492,29 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     });
     $scope.confirm = () => {
       alertDialog.loading();
-      $q.all([
-        $http.put('/api/admin/tag', {
+      return $http.post('/api/admin/server', {
+        type: $scope.server.type,
+        name: $scope.server.name,
+        address: $scope.server.address,
+        port: +$scope.server.port,
+        password: $scope.server.password,
+        method: $scope.server.method,
+        comment: $scope.server.comment,
+        scale: $scope.server.scale,
+        shift: $scope.server.shift,
+        key: $scope.server.key,
+        net: $scope.server.net,
+        wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
+      }, {
+        timeout: 15000,
+      }).then(success => {
+        const serverId = success.data.serverId;
+        return $http.put('/api/admin/tag', {
           type: 'server',
-          key: $stateParams.serverId,
+          key: serverId,
           tags: $scope.tags,
-        }),
-        $http.post('/api/admin/server', {
-          type: $scope.server.type,
-          name: $scope.server.name,
-          address: $scope.server.address,
-          port: +$scope.server.port,
-          password: $scope.server.password,
-          method: $scope.server.method,
-          comment: $scope.server.comment,
-          scale: $scope.server.scale,
-          shift: $scope.server.shift,
-          key: $scope.server.key,
-          net: $scope.server.net,
-          wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
-        }, {
-          timeout: 15000,
-        }),
-      ]).then(success => {
+        })
+      }).then(success => {
         alertDialog.show('添加服务器成功', '确定');
         $state.go('admin.server');
       }).catch(() => {

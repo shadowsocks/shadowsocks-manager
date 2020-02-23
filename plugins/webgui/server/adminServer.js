@@ -75,7 +75,7 @@ exports.addServer = async (req, res) => {
       port,
       password,
     });
-    await serverManager.add({
+    const [ serverId ] = await serverManager.add({
       type,
       name,
       host: address,
@@ -89,7 +89,7 @@ exports.addServer = async (req, res) => {
       net,
       wgPort,
     });
-    res.send('success');
+    res.send({ serverId });
   } catch(err) {
     console.log(err);
     res.status(403).end();
