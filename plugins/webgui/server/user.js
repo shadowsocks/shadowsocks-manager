@@ -20,8 +20,8 @@ const alipayPlugin = appRequire('plugins/alipay/index');
 const macAccountPlugin = appRequire('plugins/macAccount/index');
 const accountFlow = appRequire('plugins/account/accountFlow');
 const webguiTag = appRequire('plugins/webgui_tag');
-
 const alipay = appRequire('plugins/alipay/index');
+const webguiFreeAccount = appRequire('plugins/webgui_free_account/index');
 
 exports.getAccount = async (req, res) => {
   try {
@@ -80,7 +80,8 @@ exports.getAccountUsage = async (req, res) => {
   try {
     const userId = req.session.user;
     const accounts = await account.getAccount({ userId });
-    const servers = await knex('server').where({}).then(s => s.map(m => m.id));
+    // const servers = await knex('server').where({}).then(s => s.map(m => m.id));
+    webguiFreeAccount.setAccount(userId);
     const day = [
       moment().hour(0).minute(0).second(0).millisecond(0).toDate().valueOf(),
       moment().hour(24).minute(0).second(0).millisecond(0).toDate().valueOf(),

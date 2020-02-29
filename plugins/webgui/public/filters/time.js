@@ -141,7 +141,7 @@ app.filter('timeStr2Num', function() {
       return +input.substr(0, input.length - 1) * h;
     } else if(input.match(/^\d{1,}.?\d{0,}d$/)) {
       return +input.substr(0, input.length - 1) * d;
-    } else  {
+    } else {
       return 1;
     }
   };
