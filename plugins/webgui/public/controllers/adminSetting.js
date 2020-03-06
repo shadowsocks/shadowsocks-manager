@@ -595,7 +595,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
         page: $scope.currentPage,
         pageSize: getPageSize(),
       } }).then(success => success.data).then(success => {
-        $scope.total = success.total;
+        $scope.setFabNumber(success.total);
         success.user.forEach(f => {
           $scope.user.push(f);
         });
