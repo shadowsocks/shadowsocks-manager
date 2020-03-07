@@ -15,14 +15,17 @@ const run = async () => {
   if(typeof runParams === 'boolean' && runParams) {
     runParams = '';
   }
-  if(runParams.indexOf(':') >= 0) {
+  if(runParams.includes(':')) {
     method = runParams.split(':')[1];
   }
   let shadowsocks;
-  if(runParams.indexOf('python') >= 0) {
+  if(runParams.includes('python')) {
     type = 'python';
     const tempPassword = 'qwerASDF' + Math.random().toString().substr(2, 8);
     shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address]);
+  } else if(runParams.includes('rust')) {
+    type = 'rust';
+    shadowsocks = spawn('ssmanager', [ '-m', method, '--manager-address', config.shadowsocks.address]);
   } else {
     shadowsocks = spawn('ss-manager', [ '-v', '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
   }
