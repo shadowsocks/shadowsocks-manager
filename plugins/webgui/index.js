@@ -16,7 +16,7 @@ const sessionParser = session({
   rolling: true,
   resave: true,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000, sameSite: 'none', },
+  cookie: { secure: false, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000, samesite: "lax" },
   store,
 });
 const bodyParser = require('body-parser');
