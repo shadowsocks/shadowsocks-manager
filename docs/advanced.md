@@ -102,6 +102,7 @@ ssmgr -c xxx.yml -r
 ssmgr -c xxx.yml -r libev
 ssmgr -c xxx.yml -r libev:aes-256-gcm
 ssmgr -c xxx.yml -r python:aes-256-gcm
+ssmgr -c xxx.yml -r rust:aes-256-gcm
 ```
 
 # 自定义服务器显示地址

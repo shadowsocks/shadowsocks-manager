@@ -50,10 +50,11 @@ db: 'db.sqlite'
 
 2. 运行 shadowsocks
 
-  两种版本的命令有一些差异，都要保证`--manager-address`的参数和上一步配置文件一致
+  不同版本的命令有一些差异，都要保证`--manager-address`的参数和上一步配置文件一致
 
   - libev `ss-manager -m aes-256-cfb -u --manager-address 127.0.0.1:6001`
   - python `ssserver -m aes-256-cfb -p 12345 -k abcedf --manager-address 127.0.0.1:6001`
+  - rust `ssmanager -m aes-256-cfb --manager-address 127.0.0.1:6001`
 
 
 3. 调用刚刚的配置文件运行 ssmgr
