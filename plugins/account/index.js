@@ -107,7 +107,8 @@ const getAccount = async (options = {}) => {
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
-  .where(where);
+  .where(where)
+  .orderBy('account_plugin.id', options.orderById ? 'desc' : 'asc');
   return account;
 };
 

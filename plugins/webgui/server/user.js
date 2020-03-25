@@ -26,7 +26,7 @@ const webguiFreeAccount = appRequire('plugins/webgui_free_account/index');
 exports.getAccount = async (req, res) => {
   try {
     const userId = req.session.user;
-    const accounts = await account.getAccount({ userId });
+    const accounts = await account.getAccount({ userId, orderById: true });
     for(const account of accounts) {
       account.data = JSON.parse(account.data);
       if (account.type >= 2 && account.type <= 5) {
