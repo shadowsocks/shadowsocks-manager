@@ -151,10 +151,10 @@
                         <div hide-xs></div>
                     </div> -->
                 </div>
-                <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)">{{ '修改密码' | translate }}</md-button>
+                <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)" ng-if="!config.simple">{{ '修改密码' | translate }}</md-button>
                 <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
-                <md-button class="md-primary" ng-click="showQrcodeDialog(a.serverInfo, a)" ng-hide="isWG(a.serverInfo)">{{ '账号二维码' | translate }}</md-button>
-                <md-button class="md-primary" ng-click="showWireGuard(a.serverInfo, a)" ng-show="isWG(a.serverInfo)">{{ '账号二维码' | translate }}</md-button>
+                <md-button class="md-primary" ng-click="showQrcodeDialog(a.serverInfo, a)" ng-hide="isWG(a.serverInfo)" ng-if="!config.simple">{{ '账号二维码' | translate }}</md-button>
+                <md-button class="md-primary" ng-click="showWireGuard(a.serverInfo, a)" ng-show="isWG(a.serverInfo)" ng-if="!config.simple">{{ '账号二维码' | translate }}</md-button>
                 <md-button class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
             </md-card-content>
         </md-card>
