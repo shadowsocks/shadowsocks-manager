@@ -194,6 +194,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.toUser = id => {
       $state.go('admin.userPage', { userId: id });
     };
+    $scope.toRecentLogin = id => {
+      $state.go('admin.recentLogin');
+    };
     const updateIndexInfo = () => {
       adminApi.getIndexInfo().then(success => {
         $localStorage.admin.indexInfo = {
@@ -232,6 +235,17 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
   }
 ])
+.controller('AdminRecentLoginController', ['$scope', '$http', ($scope, $http) => {
+  $scope.setTitle('最近登录用户');
+  $scope.setMenuButton('arrow_back', 'admin.index');
+  $scope.recentUsers = [];
+  $http.get('/api/admin/user/recentLogin?number=100').then(success => {
+    $scope.recentUsers = success.data;
+  });
+  $scope.toUser = id => {
+    $state.go('admin.userPage', { userId: id });
+  };
+}])
 .controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout', '$state',
   ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog, $timeout, $state) => {
     $scope.setTitle('订单');

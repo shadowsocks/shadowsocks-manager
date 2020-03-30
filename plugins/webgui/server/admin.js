@@ -237,7 +237,8 @@ exports.getRecentSignUpUsers = (req, res) => {
 
 exports.getRecentLoginUsers = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
-  user.getRecentLogin(5, group).then(success => {
+  const number = req.query.number ? +req.query.number : 5;
+  user.getRecentLogin(number, group).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
