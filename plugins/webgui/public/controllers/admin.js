@@ -235,10 +235,10 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     };
   }
 ])
-.controller('AdminRecentLoginController', ['$scope', '$http', ($scope, $http) => {
+.controller('AdminRecentLoginController', ['$scope', '$http', '$state', ($scope, $http, $state) => {
   $scope.setTitle('最近登录用户');
   $scope.setMenuButton('arrow_back', 'admin.index');
-  $scope.recentUsers = [];
+  $scope.recentUsers = null;
   $http.get('/api/admin/user/recentLogin?number=100').then(success => {
     $scope.recentUsers = success.data;
   });
