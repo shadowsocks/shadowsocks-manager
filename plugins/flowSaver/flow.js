@@ -533,7 +533,7 @@ const getAccountServerFlow = (accountId, timeArray) => {
   .whereBetween(`${ tableName }.time`, timeArray);
 };
 
-const getTopFlow = groupId => {
+const getTopFlow = (number, groupId) => {
   const startTime = moment().hour(0).minute(0).second(0).millisecond(0).toDate().getTime();
   const endTime = Date.now();
   const where = {};
@@ -541,7 +541,7 @@ const getTopFlow = groupId => {
   return knex('saveFlow').sum('saveFlow.flow as sumFlow')
   .groupBy('user.id')
   .orderBy('sumFlow', 'desc')
-  .limit(5)
+  .limit(number)
   .select([
     'user.id as userId',
     'user.username as email',

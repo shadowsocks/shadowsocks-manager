@@ -32,6 +32,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminRecentLoginController',
       templateUrl: `${ cdn }/public/views/admin/recentLogin.html`,
     })
+    .state('admin.topFlow', {
+      url: '/topFlow',
+      controller: 'AdminTopFlowController',
+      templateUrl: `${ cdn }/public/views/admin/topFlow.html`,
+    })
     .state('admin.unfinished', {
       url: '/unfinished',
       templateUrl: `${ cdn }/public/views/admin/unfinished.html`,

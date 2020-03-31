@@ -171,7 +171,8 @@ exports.getServerPortLastConnect = (req, res) => {
 
 exports.getTopFlow = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
-  flow.getTopFlow(group)
+  const number = req.query.number ? +req.query.number : 5;
+  flow.getTopFlow(number, group)
   .then(success => {
     res.send(success);
   }).catch(err => {

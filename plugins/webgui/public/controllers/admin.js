@@ -194,8 +194,11 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.toUser = id => {
       $state.go('admin.userPage', { userId: id });
     };
-    $scope.toRecentLogin = id => {
+    $scope.toRecentLogin = () => {
       $state.go('admin.recentLogin');
+    };
+    $scope.toTopFlow = () => {
+      $state.go('admin.topFlow');
     };
     const updateIndexInfo = () => {
       adminApi.getIndexInfo().then(success => {
@@ -244,6 +247,21 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   });
   $scope.toUser = id => {
     $state.go('admin.userPage', { userId: id });
+  };
+}])
+.controller('AdminTopFlowController', ['$scope', '$http', '$state', ($scope, $http, $state) => {
+  $scope.setTitle('今日流量排行');
+  $scope.setMenuButton('arrow_back', 'admin.index');
+  $scope.topUsers = null;
+  $http.get('/api/admin/flow/top?number=150').then(success => {
+    $scope.topUsers = success.data;
+  });
+  $scope.toUser = user => {
+    if(user.email) {
+      $state.go('admin.userPage', { userId: user.userId });
+    } else {
+      $state.go('admin.accountPage', { accountId: user.accountId });
+    }
   };
 }])
 .controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout', '$state',
