@@ -27,6 +27,11 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminPayController',
       templateUrl: `${ cdn }/public/views/admin/pay.html`,
     })
+    .state('admin.recentSignup', {
+      url: '/recentSignup',
+      controller: 'AdminRecentSignupController',
+      templateUrl: `${ cdn }/public/views/admin/recentSignup.html`,
+    })
     .state('admin.recentLogin', {
       url: '/recentLogin',
       controller: 'AdminRecentLoginController',

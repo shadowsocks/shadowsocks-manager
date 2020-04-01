@@ -227,7 +227,8 @@ exports.changeAccountTime = (req, res) => {
 
 exports.getRecentSignUpUsers = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
-  user.getRecentSignUp(5, group).then(success => {
+  const number = req.query.number ? +req.query.number : 5;
+  user.getRecentSignUp(number, group).then(success => {
     return res.send(success);
   }).catch(err => {
     console.log(err);
