@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const redis = appRequire('init/redis').redis;
 const crypto = require('crypto');
+const moment = require('moment');
 // const macAccount = appRequire('plugins/macAccount/index');
 
 const checkPasswordLimit = {
@@ -145,7 +146,15 @@ const getRecentSignUpUsers = async (number, group) => {
 const getRecentLoginUsers = async (number, group) => {
   const where = { type: 'normal' };
   if(group >= 0) { where.group = group; }
-  const users = await knex('user').select().where(where).orderBy('lastLogin', 'desc').limit(number);
+  if(number > 0) {
+    return knex('user').select().where(where).orderBy('lastLogin', 'desc').limit(number);
+  }
+  const now = Date.now();
+  const time = moment(now).hour(0).minute(0).second(0).millisecond(0).valueOf();
+  let users = await knex('user').select().where(where).where('lastLogin', '>', time).orderBy('lastLogin', 'desc');
+  if(users.length < 100) {
+    users = [...users, ...await knex('user').select().where(where).where('lastLogin', '<=', time).orderBy('lastLogin', 'desc').limit(100 - users.length)];
+  }
   return users;
 };
 

@@ -4,11 +4,11 @@
             <md-divider></md-divider>
             <md-list-item ng-repeat="user in recentUsers track by $index" ng-click="toUser(user.id)">
                 <div flex layout="row" layout-align="space-between center">
-                    <div flex="70" flex-xs="60" flex layout="row">
-                        <div style="color: #aaa; width: 40px;">{{ $index + 1 }}.</div>
-                        <span>{{ user.email }}</span>
+                    <div flex="70" flex layout="row">
+                        <div style="color: #aaa; width: 40px; min-width: 40px;">{{ $index + 1 }}.</div>
+                        <div style="word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ user.email }}</div>
                     </div>
-                    <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;"
+                    <div flex="30" style="text-align: right; color: #aaa; font-size: 0.8em;"
                         ng-if="user.lastLogin">
                         {{user.lastLogin | timeagoshort | translateTime}}
                     </div>
