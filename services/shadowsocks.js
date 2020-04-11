@@ -168,7 +168,7 @@ const resend = async () => {
   }
 };
 
-let restartFlow = 300;
+const restart = {};
 const compareWithLastFlow = async (flow, lastFlow) => {
   if(shadowsocksType === 'python') {
     return flow;
@@ -180,17 +180,20 @@ const compareWithLastFlow = async (flow, lastFlow) => {
     }
     return flow;
   }
-  // if(restartFlow > 50) { restartFlow--; }
   for(const f in flow) {
     if(lastFlow[f]) {
       realFlow[f] = flow[f] - lastFlow[f];
-      if(realFlow[f] === 0 && flow[f] > restartFlow * 1000 * 1000 * 10) {
-        // restartFlow += 10;
+      if(realFlow[f] === 0 && flow[f] > 5 * 1000 * 1000 * 1000) {
+        if(!restart[f]) { restart[f] = 1; }
+        if(restart[f] < 30) { restart[f] += 1; continue; }
         const account = await knex('account').where({ port: +f }).then(s => s[0]);
         if(account) {
           await sendMessage(`remove: {"server_port": ${ account.port }}`);
           await sendMessage(`add: {"server_port": ${ account.port }, "password": "${ account.password }"}`);
+          delete restart[f];
         }
+      } else {
+        delete restart[f];
       }
     } else {
       realFlow[f] = flow[f];
