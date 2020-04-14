@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER gyteng <igyteng@gmail.com>
+LABEL maintainer="Gyteng <igyteng@gmail.com>"
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get install tzdata iproute2 curl git sudo software-properties-common python-pip -y && \

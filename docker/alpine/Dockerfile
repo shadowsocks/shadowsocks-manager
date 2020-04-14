@@ -1,5 +1,5 @@
 FROM node:12-alpine
-LABEL maintainer="gyteng <igyteng@gmail.com>"
+LABEL maintainer="Gyteng <igyteng@gmail.com>"
 COPY ./shadowsocks-libev /tmp/repo
 RUN set -ex \
   && apk add --no-cache --virtual .build-deps \

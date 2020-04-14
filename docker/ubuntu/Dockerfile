@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-MAINTAINER gyteng <igyteng@gmail.com>
+LABEL maintainer="Gyteng <igyteng@gmail.com>"
 RUN apt-get update && \
     export DEBIAN_FRONTEND=noninteractive && \
     apt-get install tzdata iproute2 curl wget git sudo software-properties-common python-pip -y && \
@@ -8,9 +8,9 @@ RUN apt-get update && \
     apt-get install -y nodejs shadowsocks-libev && \
     npm i -g shadowsocks-manager --unsafe-perm && \
     cd /tmp && \
-    wget https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.8.9/shadowsocks-v1.8.9-stable.x86_64-unknown-linux-musl.tar.xz && \
-    xz -d shadowsocks-v1.8.9-stable.x86_64-unknown-linux-musl.tar.xz && \
-    tar -xvf shadowsocks-v1.8.9-stable.x86_64-unknown-linux-musl.tar && \
+    wget https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.8.10/shadowsocks-v1.8.10-stable.x86_64-unknown-linux-musl.tar.xz && \
+    xz -d shadowsocks-v1.8.10-stable.x86_64-unknown-linux-musl.tar.xz && \
+    tar -xvf shadowsocks-v1.8.10-stable.x86_64-unknown-linux-musl.tar && \
     mv /tmp/ssmanager /usr/bin/ && \
     rm -rf /tmp/* && \
     echo "Asia/Shanghai" > /etc/timezone && \
