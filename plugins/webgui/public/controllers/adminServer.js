@@ -470,6 +470,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     };
     $scope.server = {
       type: 'Shadowsocks',
+      name: $stateParams.name || '',
       method: 'aes-256-cfb',
       scale: 1,
       shift: 0,
@@ -533,6 +534,12 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const serverId = $stateParams.serverId;
     $scope.setMenuButton('arrow_back', function() {
       $state.go('admin.serverPage', { serverId: $stateParams.serverId });
+    });
+    $scope.setMenuRightButton('add');
+    $scope.$on('RightButtonClick', () => {
+      $state.go('admin.addServer', {
+        name: $scope.server.name,
+      });
     });
     $scope.server = { check: 1 };
     $scope.methods = [

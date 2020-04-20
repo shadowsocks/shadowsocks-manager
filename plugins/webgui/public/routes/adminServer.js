@@ -18,6 +18,9 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/addServer',
       controller: 'AdminAddServerController',
       templateUrl: `${ cdn }/public/views/admin/addServer.html`,
+      params: {
+        name: null,
+      },
     })
     .state('admin.editServer', {
       url: '/server/:serverId/edit',
