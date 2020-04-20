@@ -469,11 +469,18 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.method = $scope.methodSearch;
     };
     $scope.server = {
-      type: 'Shadowsocks',
-      name: $stateParams.name || '',
-      method: 'aes-256-cfb',
-      scale: 1,
-      shift: 0,
+      type: $stateParams.type || 'Shadowsocks',
+      name: $stateParams.name ? $stateParams.name + ' copy' :'',
+      comment: $stateParams.comment,
+      address: $stateParams.address,
+      port: $stateParams.port,
+      password: $stateParams.password,
+      method: $stateParams.method || 'aes-256-cfb',
+      scale: $stateParams.scale || 1,
+      shift: $stateParams.shift || 0,
+      key: $stateParams.key,
+      net: $stateParams.net,
+      wgPort: $stateParams.wgPort,
     };
     $scope.tagsAutoComplete = {
       searchText: '',
@@ -538,7 +545,18 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.setMenuRightButton('add');
     $scope.$on('RightButtonClick', () => {
       $state.go('admin.addServer', {
+        type: $scope.server.type,
         name: $scope.server.name,
+        comment: $scope.server.comment,
+        address: $scope.server.address,
+        port: $scope.server.port,
+        password: $scope.server.password,
+        method: $scope.server.method,
+        scale: $scope.server.scale,
+        shift: $scope.server.shift,
+        key: $scope.server.key,
+        net: $scope.server.net,
+        wgPort: $scope.server.wgPort,
       });
     });
     $scope.server = { check: 1 };

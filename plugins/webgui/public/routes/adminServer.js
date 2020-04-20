@@ -19,7 +19,18 @@ app.config(['$stateProvider', $stateProvider => {
       controller: 'AdminAddServerController',
       templateUrl: `${ cdn }/public/views/admin/addServer.html`,
       params: {
+        type: 'Shadowsocks',
         name: null,
+        comment: null,
+        address: null,
+        port: null,
+        password: null,
+        method: 'aes-256-cfb',
+        scale: 1,
+        shift: 0,
+        key: null,
+        net: null,
+        wgPort: null,
       },
     })
     .state('admin.editServer', {
