@@ -60,8 +60,8 @@
     <div flex-xs="100" flex-sm="100" flex-gt-sm="50" ng-show="orders.length">
         <md-card>
             <md-card-header>
-                <md-card-header-text>
-                    <span class="md-headline" translate>支付宝订单</span>
+                <md-card-header-text ng-click="toPay('支付宝')">
+                    <span class="md-headline" translate style="cursor: pointer;">支付宝订单</span>
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>
@@ -87,8 +87,8 @@
     <div flex-xs="100" flex-sm="100" flex-gt-sm="50" ng-show="paypalOrders.length">
         <md-card>
             <md-card-header>
-                <md-card-header-text>
-                    <span class="md-headline" translate>PayPal订单</span>
+                <md-card-header-text ng-click="toPay('Paypal')">
+                    <span class="md-headline" translate style="cursor: pointer;">PayPal订单</span>
                 </md-card-header-text>
             </md-card-header>
             <md-card-content>

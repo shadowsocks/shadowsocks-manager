@@ -203,6 +203,9 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     $scope.toTopFlow = () => {
       $state.go('admin.topFlow');
     };
+    $scope.toPay = type => {
+      $state.go('admin.pay', { myPayType: type });
+    };
     const updateIndexInfo = () => {
       adminApi.getIndexInfo().then(success => {
         $localStorage.admin.indexInfo = {
@@ -278,8 +281,8 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     }
   };
 }])
-.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout', '$state',
-  ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog, $timeout, $state) => {
+.controller('AdminPayController', ['$scope', 'adminApi', 'orderDialog', '$mdMedia', '$localStorage', 'orderFilterDialog', '$timeout', '$state', '$stateParams',
+  ($scope, adminApi, orderDialog, $mdMedia, $localStorage, orderFilterDialog, $timeout, $state, $stateParams) => {
     $scope.setTitle('订单');
     $scope.setMenuSearchButton('search');
     $scope.showOrderInfo = order => {
@@ -292,7 +295,17 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
     if($scope.config.paypal) { $scope.payTypes.push({ name: 'Paypal' }); }
     if($scope.config.giftcard) { $scope.payTypes.push({ name: '充值码' }); }
     if($scope.config.refCode) { $scope.payTypes.push({ name: '邀请码' }); }
-    if($scope.payTypes.length) { $scope.myPayType = $scope.payTypes[0].name; }
+    if($scope.payTypes.length) {
+      $scope.myPayType = $stateParams.myPayType || $scope.payTypes[0].name;
+      $scope.defaultTabIndex = 0;
+      for(const pt of $scope.payTypes) {
+        if(pt.name === $scope.myPayType) {
+          break;
+        }
+        $scope.defaultTabIndex += 1;
+      }
+    }
+    
     $scope.selectPayType = type => {
       tabSwitchTime = Date.now();
       $scope.myPayType = type;
