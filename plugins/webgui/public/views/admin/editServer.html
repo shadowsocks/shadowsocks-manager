@@ -56,6 +56,10 @@
                     <label translate>WireGuard端口</label>
                     <input type="number" required name="wgPort" ng-model="server.wgPort">
                 </md-input-container>
+                <md-input-container class="md-block" ng-if="server.type === 'Trojan'">
+                    <label>Trojan端口</label>
+                    <input type="number" required name="tjPort" ng-model="server.tjPort">
+                </md-input-container>
                 <div ng-if="server.type === 'Shadowsocks'" class="md-block" layout="column" layout-align="center stretch" style="margin-bottom: 25px;">
                     <label flex style="color: rgba(0,0,0, 0.54); font-size: 13px;" translate>加密方式</label>
                     <md-autocomplete flex

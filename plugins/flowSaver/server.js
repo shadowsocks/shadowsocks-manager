@@ -16,6 +16,7 @@ const add = async options => {
     key,
     net,
     wgPort,
+    tjPort,
   } = options;
   const [ serverId ] = await knex('server').insert({
     type,
@@ -30,6 +31,7 @@ const add = async options => {
     key,
     net,
     wgPort,
+    tjPort,
   });
   accountFlow.addServer(serverId);
   return [ serverId ];
@@ -49,7 +51,7 @@ const edit = async options => {
     id,
     type = 'Shadowsocks',
     name, host, port, password, method, scale = 1, comment = '', shift = 0,
-    key, net, wgPort,
+    key, net, wgPort, tjPort,
     check,
   } = options;
   const serverInfo = await knex('server').where({ id }).then(s => s[0]);
@@ -82,6 +84,7 @@ const edit = async options => {
     key,
     net,
     wgPort,
+    tjPort,
   });
 };
 
@@ -100,6 +103,7 @@ const list = async (options = {}) => {
     'key',
     'net',
     'wgPort',
+    'tjPort',
   ]).orderBy('name');
   if(options.status) {
     const serverStatus = [];

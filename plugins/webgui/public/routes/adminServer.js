@@ -31,6 +31,7 @@ app.config(['$stateProvider', $stateProvider => {
         key: null,
         net: null,
         wgPort: null,
+        tjPort: null,
       },
     })
     .state('admin.editServer', {

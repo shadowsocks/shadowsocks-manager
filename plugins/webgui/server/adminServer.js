@@ -56,6 +56,7 @@ exports.addServer = async (req, res) => {
     if(!result.isEmpty()) { return Promise.reject(result.array()); }
     const type = req.body.type;
     const isWG = type === 'WireGuard';
+    const isTj = type === 'Trojan';
     const name = req.body.name;
     const comment = req.body.comment;
     const address = req.body.address;
@@ -67,6 +68,7 @@ exports.addServer = async (req, res) => {
     const key = isWG ? req.body.key : null;
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
+    const tjPort = isTj ? req.body.tjPort : null;
     await manager.send({
       command: 'flow',
       options: { clear: false, },
@@ -88,6 +90,7 @@ exports.addServer = async (req, res) => {
       key,
       net,
       wgPort,
+      tjPort,
     });
     res.send({ serverId });
   } catch(err) {
@@ -111,6 +114,7 @@ exports.editServer = async (req, res) => {
     const serverId = req.params.serverId;
     const type = req.body.type;
     const isWG = type === 'WireGuard';
+    const isTj = type === 'Trojan';
     const name = req.body.name;
     const comment = req.body.comment;
     const address = req.body.address;
@@ -122,6 +126,7 @@ exports.editServer = async (req, res) => {
     const key = isWG ? req.body.key : null;
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
+    const tjPort = isTj ? req.body.tjPort : null;
     const check = +req.body.check;
     await manager.send({
       command: 'flow',
@@ -145,6 +150,7 @@ exports.editServer = async (req, res) => {
       key,
       net,
       wgPort,
+      tjPort,
       check,
     });
     res.send('success');

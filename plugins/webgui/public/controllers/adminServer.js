@@ -481,6 +481,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       key: $stateParams.key,
       net: $stateParams.net,
       wgPort: $stateParams.wgPort,
+      tjPort: $stateParams.tjPort,
     };
     $scope.tagsAutoComplete = {
       searchText: '',
@@ -513,6 +514,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         key: $scope.server.key,
         net: $scope.server.net,
         wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
+        wgPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
       }, {
         timeout: 15000,
       }).then(success => {
@@ -522,7 +524,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           key: serverId,
           tags: $scope.tags,
         })
-      }).then(success => {
+      }).then(() => {
         alertDialog.show('添加服务器成功', '确定');
         $state.go('admin.server');
       }).catch(() => {
@@ -557,6 +559,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         key: $scope.server.key,
         net: $scope.server.net,
         wgPort: $scope.server.wgPort,
+        tjPort: $scope.server.tjPort,
       });
     });
     $scope.server = { check: 1 };
@@ -628,6 +631,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.key = success.data.key;
       $scope.server.net = success.data.net;
       $scope.server.wgPort = success.data.wgPort;
+      $scope.server.tjPort = success.data.tjPort;
     });
     $scope.confirm = () => {
       alertDialog.loading();
@@ -650,9 +654,10 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           key: $scope.server.key,
           net: $scope.server.net,
           wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
+          tjPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
           check: $scope.server.check,
         }),
-      ]).then(success => {
+      ]).then(() => {
         alertDialog.show('修改服务器成功', '确定');
         $state.go('admin.serverPage', { serverId: $stateParams.serverId });
       }).catch(() => {
