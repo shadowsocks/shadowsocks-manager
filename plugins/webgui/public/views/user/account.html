@@ -40,10 +40,22 @@
                                 </div>
                             </md-list-item>
                             <md-divider ng-hide="config.simple"></md-divider>
-                            <md-list-item ng-hide="config.simple">
+                            <md-list-item ng-hide="config.simple || !isSS(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>端口：</div>
-                                    <div flex="60" style="text-align:right">{{ isWG(a.serverInfo) ? a.serverInfo.wgPort : a.port + a.serverInfo.shift}}</div>
+                                    <div flex="60" style="text-align:right">{{ a.port + a.serverInfo.shift }}</div>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-hide="config.simple || !isWG(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>端口：</div>
+                                    <div flex="60" style="text-align:right">{{ a.serverInfo.wgPort }}</div>
+                                </div>
+                            </md-list-item>
+                            <md-list-item ng-hide="config.simple || !isTJ(a.serverInfo)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>端口：</div>
+                                    <div flex="60" style="text-align:right">{{ a.serverInfo.tjPort }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-hide="config.simple"></md-divider>

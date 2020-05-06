@@ -154,7 +154,7 @@ exports.getServers = async (req, res) => {
         return server;
       });
     };
-    let servers = await knex('server').select(['id', 'type' ,'host', 'name', 'method', 'scale', 'comment', 'shift', 'key', 'net', 'wgPort']).orderBy('name');
+    let servers = await knex('server').select(['id', 'type' ,'host', 'name', 'method', 'scale', 'comment', 'shift', 'key', 'net', 'wgPort', 'tjPort']).orderBy('name');
     servers = serverAliasFilter(servers);
     let accounts = await account.getAccount({
       userId,

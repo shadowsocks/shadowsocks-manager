@@ -425,9 +425,9 @@ app
     $scope.clipboardSuccess = event => {
       $scope.toast($filter('translate')('二维码链接已复制到剪贴板'));
     };
-    $scope.isWG = server => {
-      return (server && server.type === 'WireGuard');
-    };
+    $scope.isWG = server => { return (server && server.type === 'WireGuard'); };
+    $scope.isSS = server => { return (server && server.type === 'Shadowsocks'); };
+    $scope.isTJ = server => { return (server && server.type === 'Trojan'); };
     $scope.showWireGuard = (server, account) => {
       wireGuardConfigDialog.show(server, account);
     };
