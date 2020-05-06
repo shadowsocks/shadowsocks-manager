@@ -9,6 +9,7 @@ const flow = appRequire('plugins/flowSaver/flow');
 const manager = appRequire('services/manager');
 const config = appRequire('services/config').all();
 const webguiTag = appRequire('plugins/webgui_tag');
+const { createHash } = require('crypto');
 let acConfig = {};
 if(config.plugins.account_checker && config.plugins.account_checker.use) {
   acConfig = config.plugins.account_checker;
@@ -267,8 +268,21 @@ const addPort = async (server, account) => {
       port: server.port,
       password: server.password,
     }).catch();
-    
-  } else {
+  } else if(server.type === 'Trojan') {
+    const portNumber = account.port;
+    const pwd = createHash('sha224')
+      .update(`${portNumber}:${account.password}`, 'utf8')
+      .digest('hex');
+    await manager.send({
+      command: 'add',
+      port: portNumber,
+      password: pwd,
+    }, {
+      host: server.host,
+      port: server.port,
+      password: server.password,
+    }).catch();
+  } else if(server.type === 'Shadowsocks') {
     const portNumber = server.shift + account.port;
     await manager.send({
       command: 'add',

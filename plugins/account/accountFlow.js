@@ -1,5 +1,6 @@
 const knex = appRequire('init/knex').knex;
 const manager = appRequire('services/manager');
+const { createHash } = require('crypto');
 
 const add = async accountId => {
   const servers = await knex('server').select();
@@ -52,7 +53,20 @@ const pwd = async (accountId, password) => {
         port: server.port,
         password: server.password,
       });
-    } else {
+    } else if(server.type === 'Trojan') {
+      const pwd = createHash('sha224')
+        .update(`${accountInfo.port}:${password}`, 'utf8')
+        .digest('hex');
+      manager.send({
+        command: 'pwd',
+        port: accountInfo.port,
+        password: pwd,
+      }, {
+        host: server.host,
+        port: server.port,
+        password: server.password,
+      });
+    } else if(server.type === 'Shadowsocks'){
       manager.send({
         command: 'pwd',
         port: accountInfo.port + server.shift,
