@@ -414,7 +414,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
         $http.put(`/api/admin/account/${ $scope.accountId }/time`, {
           time: $scope.expireTimeShift,
           check: true,
-        }).then(success => {
+        }).then(() => {
           $http.get(`/api/admin/account/${ $scope.accountId }`).then(success => {
             $scope.account = success.data;
           });
@@ -425,6 +425,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       $scope.toast($filter('translate')('二维码链接已复制到剪贴板'));
     };
     $scope.isWG = server => server.type === 'WireGuard';
+    $scope.isSS = server => server.type === 'Shadowsocks';
+    $scope.isTJ = server => server.type === 'Trojan';
     $scope.showWireGuard = (server, account) => {
       wireGuardConfigDialog.show(server, account);
     };
