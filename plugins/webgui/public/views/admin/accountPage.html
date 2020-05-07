@@ -146,8 +146,9 @@
                     <div flex-lg="10"></div>
                     <div flex="70" flex-md="80" flex-sm="100" flex-xs="100">
                         <md-button class="md-primary" ng-click="subscribe(account.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
-                        <md-button ng-hide="isWG(server)" class="md-primary" ng-click="showQrcodeDialog(server, account)">{{ '账号二维码' | translate }}</md-button>
+                        <md-button ng-show="isSS(server)" class="md-primary" ng-click="showQrcodeDialog(server, account)">{{ '账号二维码' | translate }}</md-button>
                         <md-button ng-show="isWG(server)" class="md-primary" ng-click="showWireGuard(server, account)">{{ '账号二维码' | translate }}</md-button>
+                        <md-button ng-show="isTJ(server)" class="md-primary" ng-click="showQrcodeDialog(server, account)">{{ '账号二维码' | translate }}</md-button>
                     </div>
                     <div flex-lg="10"></div>
                 </div>
