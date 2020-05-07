@@ -155,24 +155,10 @@
                     </div>
                     <div ng-if="account.length > 1" flex-gt-lg="5"></div>
                     <div ng-if="account.length === 1" flex-gt-lg="15" flex-lg="10" flex-md="5" flex-sm="0" flex-xs="0"></div>
-                    <!-- <div flex flex-xs="100" layout="row" layout-align-xs="center center" layout-align-gt-xs="space-between center" ng-hide="config.simple" ng-if="a.defaultTab >= 0">
-                        <div hide-xs></div>
-                        <div ng-hide="isWG(a.serverInfo)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
-                            <qr ng-if="a.serverInfo" ng-click="showQrcodeDialog(a.serverInfo, a)" size="getQrCodeSize()"
-                            layout-margin text="createQrCode(a.serverInfo, a)"
-                            image="true"></qr>
-                            <md-button class="md-primary" ngclipboard data-clipboard-text="{{ createQrCode(a.serverInfo, a) }}" ngclipboard-success="clipboardSuccess(e);">{{ '复制二维码链接' | translate }}</md-button>
-                        </div>
-                        <div ng-show="isWG(a.serverInfo)" ng-click="showWireGuard(a.serverInfo, a)" layout="column" layout-align-xs="center center" style="background-color: #eee;">
-                            <qr size="getQrCodeSize()" layout-margin text="createQrCode(a.serverInfo, a)" image="true"></qr>
-                            <md-button class="md-primary">显示WireGuard配置</md-button>
-                        </div>
-                        <div hide-xs></div>
-                    </div> -->
                 </div>
                 <md-button class="md-primary" ng-click="showChangePasswordDialog(a.id, a.password)" ng-if="!config.simple">{{ '修改密码' | translate }}</md-button>
                 <md-button class="md-primary" ng-show="config.alipay || config.paypal || config.giftcard" ng-if="a.type >= 2 && a.type <= 5" ng-click="createOrder(a)">{{ '续费' | translate }}</md-button>
-                <md-button class="md-primary" ng-click="showQrcodeDialog(a.serverInfo, a)" ng-hide="isWG(a.serverInfo)" ng-if="!config.simple">{{ '账号二维码' | translate }}</md-button>
+                <md-button class="md-primary" ng-click="showQrcodeDialog(a.serverInfo, a)" ng-show="isSS(a.serverInfo)" ng-if="!config.simple">{{ '账号二维码' | translate }}</md-button>
                 <md-button class="md-primary" ng-click="showWireGuard(a.serverInfo, a)" ng-show="isWG(a.serverInfo)" ng-if="!config.simple">{{ '账号二维码' | translate }}</md-button>
                 <md-button class="md-primary" ng-click="subscribe(a.id)" ng-if="config.subscribe">{{ '订阅链接' | translate }}</md-button>
             </md-card-content>
