@@ -59,13 +59,20 @@
                                 </div>
                             </md-list-item>
                             <md-divider ng-hide="config.simple"></md-divider>
-                            <md-list-item ng-hide="isWG(a.serverInfo) || config.simple">
+                            <md-list-item ng-show="isSS(a.serverInfo) && !config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>密码：</div>
                                     <div flex="60" style="text-align:right">{{a.password}}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider ng-hide="isWG(a.serverInfo) || config.simple"></md-divider>
+                            <md-divider ng-show="isSS(a.serverInfo) && !config.simple"></md-divider>
+                            <md-list-item ng-show="isTJ(a.serverInfo) && !config.simple">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>密码：</div>
+                                    <div flex="60" style="text-align:right">{{a.port + ':' + a.password}}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isTJ(a.serverInfo) && !config.simple"></md-divider>
                             <md-list-item ng-hide="isWG(a.serverInfo) || config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '加密方式：' | translate }}</div>

@@ -47,12 +47,18 @@
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
-                            <md-list-item ng-hide="isWG(server)">
+                            <md-list-item ng-show="isSS(server)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{ account.password }}</div>
                                 </div>
                             </md-list-item>
-                            <md-divider ng-hide="isWG(server)"></md-divider>
+                            <md-divider ng-show="isSS(server)"></md-divider>
+                            <md-list-item ng-show="isTJ(server)">
+                                <div flex layout="row" layout-align="space-between center">
+                                    <div flex="40" translate>密码：</div><div flex="60" style="text-align:right">{{ account.port + ':' + account.password }}</div>
+                                </div>
+                            </md-list-item>
+                            <md-divider ng-show="isTJ(server)"></md-divider>
                             <md-list-item ng-show="isTJ(server)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>加密方式：</div><div flex="60" style="text-align:right">Trojan</div>
