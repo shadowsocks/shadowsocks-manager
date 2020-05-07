@@ -183,7 +183,9 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     const getServerInfo = () => {
       $http.get(`/api/admin/server/${ serverId }`).then(success => {
         $scope.server = success.data;
-        $scope.isWg = $scope.server.type === 'WireGuard';
+        $scope.isSS = $scope.server.type === 'Shadowsocks';
+        $scope.isWG = $scope.server.type === 'WireGuard';
+        $scope.isTJ = $scope.server.type === 'Trojan';
         $scope.currentPorts = {};
         $scope.server.ports.forEach(f => {
           $scope.currentPorts[f.port] = {
@@ -239,11 +241,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         return $http.delete(`/api/admin/server/${ serverId }`);
       }).then(() => {
         $state.go('admin.server');
-      }).catch(() => {
-
-      });
+      }).catch(() => {});
     };
-
     $scope.flowType = 'day';
     const flowTime = {
       hour: Date.now(),
