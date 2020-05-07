@@ -290,7 +290,6 @@ app
       }));
     };
     $scope.createQrCode = (server, account) => {
-      // console.log(server, account);
       if(!server) { return ''; }
       if(server.type === 'WireGuard') {
         const a = account.port % 254;
@@ -305,8 +304,10 @@ app
           `Endpoint = ${ server.host }:${ server.wgPort }`,
           `AllowedIPs = 0.0.0.0/0`,
         ].join('\n');
-      } else {
+      } else if(server.type === 'Shadowsocks') {
         return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));
+      } else if(server.type === 'Trojan') {
+        return 'trojan://' + account.port + ':' + account.password + '@' + server.host + ':' + server.tjPort;
       }
     };
 
