@@ -513,7 +513,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         key: $scope.server.key,
         net: $scope.server.net,
         wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
-        wgPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
+        tjPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
       }, {
         timeout: 15000,
       }).then(success => {
