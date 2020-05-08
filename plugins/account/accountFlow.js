@@ -58,7 +58,7 @@ const pwd = async (accountId, password) => {
         .update(`${accountInfo.port}:${password}`, 'utf8')
         .digest('hex');
       manager.send({
-        command: 'pwd',
+        command: 'add',
         port: accountInfo.port,
         password: pwd,
       }, {
