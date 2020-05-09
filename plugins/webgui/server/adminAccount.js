@@ -342,7 +342,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       const tjServers = trojanServers.map(s => 
         `trojan://${encodeURIComponent(`${subscribeAccount.account.port}:${subscribeAccount.account.password}`)}@${s.host}:${s.tjPort}#${encodeURIComponent(s.subscribeName || s.name)}`
       )
-      return res.send(Buffer.from([...ssServers, ...tjServers]).toString('base64'))
+      return res.send(Buffer.from([...ssServers, ...tjServers].join('\r\n')).toString('base64'))
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'potatso') {
