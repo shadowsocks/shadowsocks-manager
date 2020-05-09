@@ -334,10 +334,18 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         servers,
       });
     }
+    if(type === 'shadowrocket') {
+      const ssServers = subscribeAccount.server.map(s => {
+        const base64string = `${s.method}:${subscribeAccount.account.password}@${s.host}:${subscribeAccount.account.port + s.shift}`
+        return `ss://${Buffer.from(base64string).toString('base64')}#${encodeURIComponent(s.subscribeName || s.name)}`
+      })
+      const tjServers = trojanServers.map(s => 
+        `trojan://${encodeURIComponent(`${subscribeAccount.account.port}:${subscribeAccount.account.password}`)}@${s.host}:${s.tjPort}#${encodeURIComponent(s.subscribeName || s.name)}`
+      )
+      return res.send(Buffer.from([...ssServers, ...tjServers]).toString('base64'))
+    }
     const result = subscribeAccount.server.map(s => {
-      if(type === 'shadowrocket') {
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
-      } else if(type === 'potatso') {
+      if(type === 'potatso') {
         return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'ssr') {
         return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.subscribeName || s.name) + '&group=' + urlsafeBase64(baseSetting.title));
