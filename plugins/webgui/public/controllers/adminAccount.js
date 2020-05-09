@@ -215,7 +215,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       } else if(server.type === 'Shadowsocks') {
         return 'ss://' + base64Encode(server.method + ':' + account.password + '@' + server.host + ':' + (account.port + server.shift));
       } else if(server.type === 'Trojan') {
-        return 'trojan://' + encodeURIComponent(account.port + ':' + account.password) + '@' + server.host + ':' + server.tjPort;
+        return 'trojan://' + encodeURIComponent(account.port + ':' + account.password) + '@' + server.host + ':' + server.tjPort + '#' + encodeURIComponent(server.name);
       }
     };
     $scope.showQrcodeDialog = (server, account) => {
