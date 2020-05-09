@@ -799,7 +799,7 @@ const getAccountForSubscribe = async (token, ip) => {
   if(account.server) {
     account.server = JSON.parse(account.server);
   }
-  const servers = (await serverManager.list({ status: false })).filter(server => server.type === 'Shadowsocks');
+  const servers = await serverManager.list({ status: false });
   const validServers = servers.filter(server => {
     if(!account.server) { return true; }
     return account.server.indexOf(server.id) >= 0;
