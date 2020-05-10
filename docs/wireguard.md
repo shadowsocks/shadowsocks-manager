@@ -55,7 +55,7 @@ sudo wg-quick up ./wg0.conf
 
 ## 启动 s 端
 
-使用[此项目](https://github.com/gyteng/shadowsocks-manager-wireguard)作为 s 端即可
+使用[shadowsocks-manager-wireguard](https://github.com/gyteng/shadowsocks-manager-wireguard)作为 s 端即可
 ```
 node index --gateway 10.100.0.1 \
            --manager 0.0.0.0:6789 \
