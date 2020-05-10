@@ -156,7 +156,8 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     const showFlow = req.query.flow || 0;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
-    let subscribeAccount;
+    let subscribeAccount = {};
+    let trojanServers = [];
     if(isMacAddress(token)) {
       subscribeAccount = await macAccount.getMacAccountForSubscribe(token, ip);
     } else {
@@ -164,7 +165,12 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         key: 'account'
       }).then(s => s[0]).then(s => JSON.parse(s.value).subscribe);
       if(!isSubscribeOn) { return res.status(404).end(); }
-      subscribeAccount = await account.getAccountForSubscribe(token, ip);
+      const accounts = await account.getAccountForSubscribe(token, ip)
+      subscribeAccount = {
+        ...accounts,
+        server: accounts.server.filter(server => server.type === 'Shadowsocks'),
+      }
+      trojanServers = accounts.server.filter(server => server.type === 'Trojan');
     }
     for(const s of subscribeAccount.server) {
       s.host = await getAddress(s.host, +resolveIp);
@@ -257,22 +263,30 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     if(type === 'clash') {
       const yaml = require('js-yaml');
       const clashConfig = appRequire('plugins/webgui/server/clash');
-      clashConfig.Proxy = subscribeAccount.server.map(server => {
-        return {
+      clashConfig.Proxy = [
+        ...subscribeAccount.server.map(server => ({
           cipher: server.method,
           name: server.subscribeName || server.name,
           password: String(subscribeAccount.account.password),
           port: subscribeAccount.account.port + server.shift,
           server: server.host,
           type: 'ss'
-        };
-      });
+        })),
+        ...trojanServers.map(server => ({
+          name: server.subscribeName || server.name,
+          type: 'trojan',
+          server: server.host,
+          port: server.tjPort,
+          password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
+        }))
+      ];
       clashConfig['Proxy Group'][0] = {
         name: 'Proxy',
         type: 'select',
-        proxies: subscribeAccount.server.map(server => {
-          return server.subscribeName || server.name;
-        }),
+        proxies: [
+          ...subscribeAccount.server.map(server => server.subscribeName || server.name),
+          ...trojanServers.map(server => server.subscribeName || server.name),
+        ]
       };
       return res.send(yaml.safeDump(clashConfig));
     }
@@ -320,10 +334,18 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         servers,
       });
     }
+    if(type === 'shadowrocket') {
+      const ssServers = subscribeAccount.server.map(s => {
+        const base64string = `${s.method}:${subscribeAccount.account.password}@${s.host}:${subscribeAccount.account.port + s.shift}`
+        return `ss://${Buffer.from(base64string).toString('base64')}#${encodeURIComponent(s.subscribeName || s.name)}`
+      })
+      const tjServers = trojanServers.map(s => 
+        `trojan://${encodeURIComponent(`${subscribeAccount.account.port}:${subscribeAccount.account.password}`)}@${s.host}:${s.tjPort}#${encodeURIComponent(s.subscribeName || s.name)}`
+      )
+      return res.send(Buffer.from([...ssServers, ...tjServers].join('\r\n')).toString('base64'))
+    }
     const result = subscribeAccount.server.map(s => {
-      if(type === 'shadowrocket') {
-        return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
-      } else if(type === 'potatso') {
+      if(type === 'potatso') {
         return 'ss://' + Buffer.from(s.method + ':' + subscribeAccount.account.password + '@' + s.host + ':' + (subscribeAccount.account.port + s.shift)).toString('base64') + '#' + (s.subscribeName || s.name);
       } else if(type === 'ssr') {
         return 'ssr://' + urlsafeBase64(s.host + ':' + (subscribeAccount.account.port + s.shift) + ':origin:' + s.method + ':plain:' + urlsafeBase64(subscribeAccount.account.password) +  '/?obfsparam=&remarks=' + urlsafeBase64(s.subscribeName || s.name) + '&group=' + urlsafeBase64(baseSetting.title));
