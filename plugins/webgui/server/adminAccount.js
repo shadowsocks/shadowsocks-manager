@@ -177,7 +177,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     }
     for(const s of trojanServers) {
       if (s.host.split(':').length !== 1) {
-        const hosts = address.split(':');
+        const hosts = s.host.split(':');
         const number = Math.ceil(Math.random() * (hosts.length - 1));
         s.host = hosts[number];
       }
