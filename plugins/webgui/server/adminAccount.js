@@ -175,6 +175,13 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     for(const s of subscribeAccount.server) {
       s.host = await getAddress(s.host, +resolveIp);
     }
+    for(const s of trojanServers) {
+      if (s.host.split(':').length !== 1) {
+        const hosts = address.split(':');
+        const number = Math.ceil(Math.random() * (hosts.length - 1));
+        s.host = hosts[number];
+      }
+    }
     const baseSetting = await knex('webguiSetting').where({
       key: 'base'
     }).then(s => s[0]).then(s => JSON.parse(s.value));
