@@ -291,12 +291,18 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
         }))
       ];
-      clashConfig['Proxy Group'] = clashConfig['Proxy Group'].map(group => ({
-        ...group,
-        proxies: group.proxies.includes('placeholder') 
-          ? group.proxies.splice(group.proxies.indexOf('placeholder'), 1, ...proxyNames) 
-          : group.proxies.slice()
-      }));
+      clashConfig['Proxy Group'] = clashConfig['Proxy Group'].map(group => {
+        if (!group.proxies.includes('placeholder')) {
+          return group;
+        } else {
+          let proxies = group.proxies.slice();
+          proxies.splice(group.proxies.indexOf('placeholder'), 1, ...proxyNames);
+          return {
+            ...group,
+            proxies
+          };
+        }
+      });
       return res.send(yaml.safeDump(clashConfig));
     }
     if(type === 'mellow') {
