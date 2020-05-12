@@ -165,11 +165,11 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         key: 'account'
       }).then(s => s[0]).then(s => JSON.parse(s.value).subscribe);
       if(!isSubscribeOn) { return res.status(404).end(); }
-      const accounts = await account.getAccountForSubscribe(token, ip)
+      const accounts = await account.getAccountForSubscribe(token, ip);
       subscribeAccount = {
         ...accounts,
         server: accounts.server.filter(server => server.type === 'Shadowsocks'),
-      }
+      };
       trojanServers = accounts.server.filter(server => server.type === 'Trojan');
     }
     for(const s of subscribeAccount.server) {
@@ -270,6 +270,10 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     if(type === 'clash') {
       const yaml = require('js-yaml');
       const clashConfig = appRequire('plugins/webgui/server/clash');
+      const proxyNames = [
+        ...subscribeAccount.server.map(server => server.subscribeName || server.name),
+        ...trojanServers.map(server => server.subscribeName || server.name),
+      ];
       clashConfig.Proxy = [
         ...subscribeAccount.server.map(server => ({
           cipher: server.method,
@@ -287,14 +291,12 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
         }))
       ];
-      clashConfig['Proxy Group'][0] = {
-        name: 'Proxy',
-        type: 'select',
-        proxies: [
-          ...subscribeAccount.server.map(server => server.subscribeName || server.name),
-          ...trojanServers.map(server => server.subscribeName || server.name),
-        ]
-      };
+      clashConfig['Proxy Group'] = clashConfig['Proxy Group'].map(group => ({
+        ...group,
+        proxies: group.proxies.includes('placeholder') 
+          ? group.proxies.splice(group.proxies.indexOf('placeholder'), 1, ...proxyNames) 
+          : group.proxies.slice()
+      }));
       return res.send(yaml.safeDump(clashConfig));
     }
     if(type === 'mellow') {
@@ -343,13 +345,13 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     }
     if(type === 'shadowrocket') {
       const ssServers = subscribeAccount.server.map(s => {
-        const base64string = `${s.method}:${subscribeAccount.account.password}@${s.host}:${subscribeAccount.account.port + s.shift}`
-        return `ss://${Buffer.from(base64string).toString('base64')}#${encodeURIComponent(s.subscribeName || s.name)}`
-      })
+        const base64string = `${s.method}:${subscribeAccount.account.password}@${s.host}:${subscribeAccount.account.port + s.shift}`;
+        return `ss://${Buffer.from(base64string).toString('base64')}#${encodeURIComponent(s.subscribeName || s.name)}`;
+      });
       const tjServers = trojanServers.map(s => 
         `trojan://${encodeURIComponent(`${subscribeAccount.account.port}:${subscribeAccount.account.password}`)}@${s.host}:${s.tjPort}#${encodeURIComponent(s.subscribeName || s.name)}`
-      )
-      return res.send(Buffer.from([...ssServers, ...tjServers].join('\r\n')).toString('base64'))
+      );
+      return res.send(Buffer.from([...ssServers, ...tjServers].join('\r\n')).toString('base64'));
     }
     const result = subscribeAccount.server.map(s => {
       if(type === 'potatso') {
