@@ -5,6 +5,7 @@ const config = appRequire('services/config').all();
 const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
+const webguiTag = appRequire('plugins/webgui_tag');
 
 const runCommand = async cmd => {
   const exec = require('child_process').exec;
@@ -800,10 +801,17 @@ const getAccountForSubscribe = async (token, ip) => {
     account.server = JSON.parse(account.server);
   }
   const servers = await serverManager.list({ status: false });
-  const validServers = servers.filter(server => {
-    if(!account.server) { return true; }
-    return account.server.indexOf(server.id) >= 0;
-  });
+  const validServers = [];
+  for(const server of servers) {
+    const tags = await webguiTag.getTags('server', server.id);
+    if(tags.includes('#_hide') || tags.includes('#hide')) {
+      continue;
+    }
+    if(!account.server || account.server.includes(server.id)) {
+      validServers.push(server);
+      continue;
+    }
+  }
   return { server: validServers, account };
 };
 
