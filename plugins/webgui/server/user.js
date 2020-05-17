@@ -59,15 +59,22 @@ exports.getAccount = async (req, res) => {
       await accountFlow.edit(account.id);
 
       const onlines = await accountPlugin.getOnlineAccount();
-      const serversWithoutWireGuard = await knex('server').select(['id']).where({ type: 'Shadowsocks' }).then(s => s.map(m => m.id));
-      account.idle = serversWithoutWireGuard.filter(server => {
+      const shadowsocksServers = await knex('server').select(['id']).where({ type: 'Shadowsocks' });
+      for(const server of shadowsocksServers) {
+        const serverTags = await webguiTag.getTags('server', server.id);
+        server.tags = serverTags;
+      }
+      account.idle = shadowsocksServers.filter(server => {
+        if(server.tags.includes('#hide') || server.tags.includes('#_hide')) {
+          return false;
+        }
         if(account.server) {
-          return account.server.includes(server);
+          return account.server.includes(server.id);
         }
         return true;
       }).sort((a, b) => {
-        return (onlines[a] || 0)  - (onlines[b] || 0);
-      })[0];
+        return (onlines[a.id] || 0)  - (onlines[b.id] || 0);
+      })[0].id;
     }
     res.send(accounts);
   } catch (err) {

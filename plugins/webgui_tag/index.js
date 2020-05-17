@@ -41,12 +41,6 @@ const addTags = async (type, key, tags) => {
 };
 
 const delTags = async (type, key, tags) => {
-  // const currentTags = await knex('tag').select(['id', 'name']).where({ type, key });
-  // for(const ct of currentTags) {
-  //   if(!tags.includes(ct.name)) {
-  //     await knex('tag').delete().where({ id: ct.id });
-  //   }
-  // }
   for(const tag of tags) {
     await knex('tag').delete().where({ type, key, name: tag });
   }

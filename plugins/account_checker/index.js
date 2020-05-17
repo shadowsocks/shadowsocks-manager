@@ -452,27 +452,21 @@ cron.minute(async () => {
         password: server.password,
       });
       if(result.isGfw && !tags.includes('#_hide') && tags.includes('#autohide')) {
-        // await webguiTag.setTags('server', server.id, [...tags, '#_hide']);
         await webguiTag.addTags('server', server.id, ['#_hide']);
       } else if (tags.includes('#_hide')) {
-        // await webguiTag.setTags('server', server.id, tags.filter(f => f !== '#_hide'));
         await webguiTag.delTags('server', server.id, ['#_hide']);
       }
       if(result.isGfw && !tags.includes('#_pause') && tags.includes('#autopause')) {
-        // await webguiTag.setTags('server', server.id, [...tags, '#_pause']);
         await webguiTag.addTags('server', server.id, ['#_pause']);
       } else if (tags.includes('#_pause')) {
-        // await webguiTag.setTags('server', server.id, tags.filter(f => f !== '#_pause'));
         await webguiTag.delTags('server', server.id, ['#_pause']);
       }
     } catch(err) {
       if(!tags.includes('#_hide') && tags.includes('#autohide')) {
-        // await webguiTag.setTags('server', server.id, [...tags, '#_hide']);
         await webguiTag.addTags('server', server.id, ['#_hide']);
       }
       if(!tags.includes('#_pause') && tags.includes('#autopause')) {
-        // await webguiTag.setTags('server', server.id, [...tags, '#_pause']);
-        await webguiTag.delTags('server', server.id, ['#_pause']);
+        await webguiTag.addTags('server', server.id, ['#_pause']);
       }
     }
   }
