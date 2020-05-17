@@ -134,11 +134,11 @@ const getAddress = (address, ip) => {
     return Promise.resolve(myAddress);
   }
   return new Promise((resolve, reject) => {
-    dns.lookup(myAddress, (err, myAddress, family) => {
+    dns.lookup(myAddress, (err, ip, family) => {
       if(err) {
-        return reject(err);
+        return resolve(myAddress);
       }
-      return resolve(myAddress);
+      return resolve(ip);
     });
   });
 };

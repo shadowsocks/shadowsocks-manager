@@ -109,7 +109,7 @@ const getIps = async address => {
   return new Promise((resolve, reject) => {
     dns.resolve4(address, (err, ips) => {
       if(err) {
-        return reject(err);
+        return resolve([]);
       }
       if(ips.sort) {
         ips = ips.sort();
@@ -128,7 +128,7 @@ const send = async (data, options) => {
   }
   const ips = await getIps(options.host);
   if(ips.length === 0) {
-    return Promise.reject('invalid ip');
+    return Promise.reject(`${options.host} invalid ip`);
   } else if(ips.length === 1) {
     return sendMessage(data, options);
   } else {
