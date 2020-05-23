@@ -269,11 +269,12 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     }
     if(type === 'clash') {
       const yaml = require('js-yaml');
-      const clashConfig = appRequire('plugins/webgui/server/clash');
+      const clashConfig = JSON.parse(JSON.stringify(appRequire('plugins/webgui/server/clash')));
       const proxyNames = [
         ...subscribeAccount.server.map(server => server.subscribeName || server.name),
         ...trojanServers.map(server => server.subscribeName || server.name),
       ];
+      console.log(proxyNames);
       clashConfig.Proxy = [
         ...subscribeAccount.server.map(server => ({
           cipher: server.method,
