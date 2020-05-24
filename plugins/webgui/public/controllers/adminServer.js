@@ -482,6 +482,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       wgPort: $stateParams.wgPort,
       tjPort: $stateParams.tjPort,
     };
+    $scope.tags = ($stateParams.tags || []);
     $scope.tagsAutoComplete = {
       searchText: '',
       selectedItem: '',
@@ -533,7 +534,6 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.cancel = () => {
       $state.go('admin.server');
     };
-    $scope.tags = [];
   }
 ])
 .controller('AdminEditServerController', ['$scope', '$state', '$stateParams', '$http', 'confirmDialog', 'alertDialog', '$q',
@@ -559,6 +559,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         net: $scope.server.net,
         wgPort: $scope.server.wgPort,
         tjPort: $scope.server.tjPort,
+        tags: $scope.tags,
       });
     });
     $scope.server = { check: 1 };
