@@ -269,42 +269,44 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     }
     if(type === 'clash') {
       const yaml = require('js-yaml');
-      const clashConfig = JSON.parse(JSON.stringify(appRequire('plugins/webgui/server/clash')));
+      const clashConfig = appRequire('plugins/webgui/server/clash');
       const proxyNames = [
         ...subscribeAccount.server.map(server => server.subscribeName || server.name),
         ...trojanServers.map(server => server.subscribeName || server.name),
       ];
-      console.log(proxyNames);
-      clashConfig.Proxy = [
-        ...subscribeAccount.server.map(server => ({
-          cipher: server.method,
-          name: server.subscribeName || server.name,
-          password: String(subscribeAccount.account.password),
-          port: subscribeAccount.account.port + server.shift,
-          server: server.host,
-          type: 'ss'
-        })),
-        ...trojanServers.map(server => ({
-          name: server.subscribeName || server.name,
-          type: 'trojan',
-          server: server.host,
-          port: server.tjPort,
-          password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
-        }))
-      ];
-      clashConfig['Proxy Group'] = clashConfig['Proxy Group'].map(group => {
-        if (!group.proxies.includes('placeholder')) {
-          return group;
-        } else {
-          let proxies = group.proxies.slice();
-          proxies.splice(group.proxies.indexOf('placeholder'), 1, ...proxyNames);
-          return {
-            ...group,
-            proxies
-          };
-        }
-      });
-      return res.send(yaml.safeDump(clashConfig));
+      const generatedConfig = {
+        ...clashConfig,
+        Proxy: [
+          ...subscribeAccount.server.map(server => ({
+            cipher: server.method,
+            name: server.subscribeName || server.name,
+            password: String(subscribeAccount.account.password),
+            port: subscribeAccount.account.port + server.shift,
+            server: server.host,
+            type: 'ss'
+          })),
+          ...trojanServers.map(server => ({
+            name: server.subscribeName || server.name,
+            type: 'trojan',
+            server: server.host,
+            port: server.tjPort,
+            password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
+          }))
+        ],
+        'Proxy Group': clashConfig['Proxy Group'].map(group => {
+          if (!group.proxies.includes('placeholder')) {
+            return group;
+          } else {
+            let proxies = group.proxies.slice();
+            proxies.splice(group.proxies.indexOf('placeholder'), 1, ...proxyNames);
+            return {
+              ...group,
+              proxies
+            };
+          }
+        })
+      };
+      return res.send(yaml.safeDump(generatedConfig));
     }
     if(type === 'mellow') {
       const template = [
