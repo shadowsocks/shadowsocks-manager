@@ -201,6 +201,7 @@ const getUserAndPaging = async (opt = {}) => {
     'user.telegram as telegram',
     'user.password as password',
     'user.type as type',
+    'user.comment as comment',
     'user.createTime as createTime',
     'user.lastLogin as lastLogin',
     'user.resetPasswordId as resetPasswordId',
@@ -215,8 +216,8 @@ const getUserAndPaging = async (opt = {}) => {
     users = users.where({ 'user.group': group });
   }
   if(search) {
-    count = count.where('username', 'like', `%${ search }%`);
-    users = users.where('username', 'like', `%${ search }%`);
+    count = count.where('username', 'like', `%${ search }%`).orWhere('comment', 'like', `%${ search }%`);
+    users = users.where('username', 'like', `%${ search }%`).orWhere('comment', 'like', `%${ search }%`);
   }
 
   count = await count.count('id as count').then(success => success[0].count);
