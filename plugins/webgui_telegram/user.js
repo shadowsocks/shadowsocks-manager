@@ -6,6 +6,7 @@ const knex = appRequire('init/knex').knex;
 const user = appRequire('plugins/user/index');
 const emailPlugin = appRequire('plugins/email/index');
 const account = appRequire('plugins/account/index');
+const redis = appRequire('init/redis').redis;
 
 const isUserBindMessage = message => {
   if(!message.message || !message.message.text) { return false; }
@@ -14,26 +15,29 @@ const isUserBindMessage = message => {
   return true;
 };
 
-const codes = {};
-let fails = [];
-
-telegram.on('message', message => {
+telegram.on('message', async message => {
   if(isUserBindMessage(message)) {
     let isFailed = true;
     const telegramId = message.message.chat.id.toString();
-    fails = fails.filter(f => { return Date.now() - f.time <= 10 * 60 * 1000; });
-    if(fails.filter(f => { return f.id === telegramId; }).length >= 10) {
-      console.log('telegram id is blocked in 10 mins');
+    const failNumber = await redis.get(`Temp:TelegramFail:${ telegramId }`);
+    if(+failNumber >= 10) {
+      console.log(`telegram id[${telegramId}] is blocked in 10 mins`);
       return;
     }
-    for(const code in codes) {
-      if(codes[code].code === message.message.text.trim()) {
+    const keys = await redis.keys('Temp:TelegramBind:*');
+    for(const key of keys) {
+      const code =  await redis.get(key);
+      if(code === message.message.text.trim()) {
         isFailed = false;
-        bindUser(code, message);
+        const userId = key.split(':')[2];
+        bindUser(userId, message);
       }
     }
     if(isFailed) {
-      fails.push({ id: telegramId, time: Date.now() });
+      const failNumber = await redis.incr(`Temp:TelegramFail:${ telegramId }`);
+      if(+failNumber === 1) {
+        await redis.expire(`Temp:TelegramFail:${ telegramId }`, 120);
+      }
     }
   }
 });
@@ -78,24 +82,18 @@ exports.getCode = async (userId) => {
       user: exists.telegram,
     };
   }
-  for(const code in codes) {
-    if(Date.now() - codes[code].time > 10 * 60 * 1000) {
-      delete codes[code];
-    }
-  }
   const botInfo = await getMe();
-  if(codes[userId]) {
+  let code = await redis.get(`Temp:TelegramBind:${userId}`);
+  if(code) {
     return {
-      code: codes[userId].code,
+      code,
       telegram: botInfo.result.username,
     };
   } else {
-    codes[userId] = {
-      code: Math.random().toString().substr(2, 8),
-      time: Date.now(),
-    };
+    code = Math.random().toString().substr(2, 8);
+    await redis.set(`Temp:TelegramBind:${userId}`, code, 'EX', 120);
     return {
-      code: codes[userId].code,
+      code,
       telegram: botInfo.result.username,
     };
   }
