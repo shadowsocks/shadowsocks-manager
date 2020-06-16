@@ -22,7 +22,7 @@
             </form>
             <div layout="row" flex layout-align="space-around center">
                 <div flex="60"></div>
-                <md-button class="md-raised md-primary" ng-click="publicInfo.send(publicInfo.email.title, publicInfo.email.content)">发送</md-button>
+                <md-button class="md-raised md-primary" ng-click="publicInfo.send(publicInfo.email.title, publicInfo.email.content)" ng-disabled="!publicInfo.email.title || !publicInfo.email.content">发送</md-button>
             </div>
         </div>
         <div class="md-dialog-content" ng-show="publicInfo.isLoading" layout="row" layout-align="center center" layout-margin layout-padding>
