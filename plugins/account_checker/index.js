@@ -17,6 +17,7 @@ if(config.plugins.account_checker && config.plugins.account_checker.use) {
 const speed = acConfig.speed || 5;
 const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
+const accountPlugin = appRequire('plugins/account');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -89,7 +90,8 @@ const isExpired = (server, account) => {
     }
     if(expireTime <= Date.now() || data.create >= Date.now()) {
       if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay < Date.now()) {
-        knex('account_plugin').delete().where({ id: account.id }).then();
+        // knex('account_plugin').delete().where({ id: account.id }).then();
+        accountPlugin.delAccount(account.id);
       } else if(account.active && account.autoRemove && expireTime + account.autoRemoveDelay >= Date.now()) {
         modifyAccountFlow(server.id, account.id, expireTime + account.autoRemoveDelay);
       } else if(account.active && !account.autoRemove) {

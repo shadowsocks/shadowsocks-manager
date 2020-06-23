@@ -1,6 +1,7 @@
 const knex = appRequire('init/knex').knex;
 const config = appRequire('services/config').all();
 const account = appRequire('plugins/account/index');
+const redis = appRequire('init/redis').redis;
 
 const getNewPort = async () => {
   return knex('webguiSetting').select().where({
@@ -73,6 +74,21 @@ const timeStr2Num = input => {
   }
 };
 
+const getPrevPort = async userId => {
+  const prevInfo = await redis.get(`Account:${userId}`);
+  let port;
+  let password;
+  if (prevInfo) {
+    port = prevInfo.split(':')[0];
+    password = prevInfo.split(':').slice(1).join(':');
+    const ifExists = await knex('account_plugin').select().where({ port }).then(s => s[0]);
+    if (ifExists) {
+      port = null;
+    }
+  }
+  return { port, password };
+};
+
 const setAccount = async userId => {
   if(!config.plugins.webgui_free_account || !config.plugins.webgui_free_account.use) {
     return;
@@ -86,9 +102,12 @@ const setAccount = async userId => {
   if(hasAccount) { return; }
   const orderInfo = await knex('webgui_order').where({ id: orderId, baseId: 0 }).then(s => s[0]);
   if(!orderInfo) { return; }
-  const port = await getNewPort();
-  let password = Math.random().toString().substr(2,10);
-  if(password[0] === '0') { password = '1' + password.substr(1); }
+  let { port, password } = await getPrevPort(userId);
+  if (!port) {
+    port = await getNewPort();
+    password = Math.random().toString().substr(2,10);
+    if(password[0] === '0') { password = '1' + password.substr(1); }
+  }
   await account.addAccount(orderInfo.type || 5, {
     user: userId,
     orderId: orderInfo.id,

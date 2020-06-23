@@ -6,6 +6,7 @@ const macAccount = appRequire('plugins/macAccount/index');
 const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 const webguiTag = appRequire('plugins/webgui_tag');
+const redis = appRequire('init/redis').redis;
 
 const runCommand = async cmd => {
   const exec = require('child_process').exec;
@@ -159,6 +160,10 @@ const delAccount = async id => {
     });
   });
   await accountFlow.del(id);
+  if (accountInfo.userId) {
+    await redis.setnx(`Account:${accountInfo.userId}`, `${accountInfo.port}:${accountInfo.password}`);
+    await redis.expire(`Account:${accountInfo.userId}`, 86400);
+  }
   return result;
 };
 
