@@ -64,7 +64,7 @@ app.factory('userApi', ['$q', '$http', ($q, $http) => {
     const Promises = [
       $http.get(`/api/user/flow/${ serverId }/${ account.id }/lastConnect`),
     ];
-    if(account.type >= 2 && account.type <= 5) {
+    if(account.type >= 1 && account.type <= 5) {
       Promises.push(
         $http.get(`/api/user/flow/${ serverId }/${ account.id }`)
       );
