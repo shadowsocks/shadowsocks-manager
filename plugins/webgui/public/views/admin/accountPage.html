@@ -87,7 +87,7 @@
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>流量：</div>
                                     <div flex="60" style="text-align:right">
-                                        <span ng-if="account.type === 1" translate>不限量</span>
+                                        <span ng-if="account.type === 1" translate><span style="color: #333">{{ serverPortFlow | flow }}</span> / 不限量</span>
                                         <span ng-if="account.type >=2 && account.type <= 5"><span ng-style="server.isFlowOutOfLimit ? {color: '#a33'} : {color: '#333'}">{{ serverPortFlow | flow }}</span> / {{ account.data.flow + account.data.flowPack | flow}}</span>
                                     </div>
                                 </div>

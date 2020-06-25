@@ -199,7 +199,7 @@ const splitTime = async (start, end) => {
   let timeEnd = end;
   let last = 'origin';
   let i = 0;
-  while(timeStart < timeEnd && i < 50) {
+  while(timeStart < timeEnd && i < 10000) {
     if(isDay(timeStart) && next(timeStart, 'day') <= splitEnd.day && next(timeStart, 'day') <= end) {
       if(last === 'day' && time.day.length) {
         const length = time.day.length;
@@ -394,38 +394,6 @@ const getServerPortFlowWithScale = async (serverId, accountId, timeArray, isMult
     sumFlow += Math.ceil(flow * serverObj[s].scale);
   }
   return [ sumFlow ];
-  
-  // const getOneServerFlow = async (serverId, accountId, timeArray) => {
-  //   const result = [];
-  //   timeArray.forEach((time, index) => {
-  //     if(index === timeArray.length - 1) {
-  //       return;
-  //     }
-  //     const startTime = +time;
-  //     const endTime = +timeArray[index + 1];
-  //     result.push(getFlowFromSplitTime(serverId, accountId, startTime, endTime));
-  //   });
-  //   return Promise.all(result);
-  // };
-
-  // const flows = await Promise.all(servers.map(server => {
-  //   return getOneServerFlow(server.id, accountId, timeArray).then(success => {
-  //     return success.map(m => Math.ceil(m * server.scale));
-  //   });
-  // }));
-
-  // const result = [];
-  // flows.forEach(flow => {
-  //   flow.forEach((f, index) => {
-  //     if(!result[index]) {
-  //       result[index] = f;
-  //     } else {
-  //       result[index] += f;
-  //     }
-  //   });
-  // });
-  // console.log(result, sumFlow, result - sumFlow);
-  // return result;
 };
 
 const getlastConnectTime = async (serverId, accountId) => {
