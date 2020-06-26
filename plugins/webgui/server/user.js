@@ -236,7 +236,7 @@ exports.getServerPortFlow = (req, res) => {
       }
       return flow.getServerPortFlowWithScale(serverId, accountId, timeArray, account.multiServerFlow);
     } else if(account.type === 1) {
-      return flow.getServerPortFlowWithScale(serverId, accountId, [Date.now() - 24 * 60 * 60 * 1000 * 365 * 3, Date.now()], 1);
+      return flow.getServerPortFlowWithScale(serverId, accountId, [Date.now() - 24 * 60 * 60 * 1000 * 365 * 3, Date.now()], account.multiServerFlow);
     } else {
       return [0];
     }
