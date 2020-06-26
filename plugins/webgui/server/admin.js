@@ -81,6 +81,7 @@ exports.getOneAccount = async (req, res) => {
       return Promise.reject('account not found');
     }
     accountInfo.data = JSON.parse(accountInfo.data);
+    accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
     if(accountInfo.type >= 2 && accountInfo.type <= 5) {
       const time = {
         '2': 7 * 24 * 3600000,
@@ -95,7 +96,6 @@ exports.getOneAccount = async (req, res) => {
         accountInfo.data.from = accountInfo.data.to;
         accountInfo.data.to = accountInfo.data.from + time[accountInfo.type];
       }
-      accountInfo.server = accountInfo.server ? JSON.parse(accountInfo.server) : accountInfo.server;
       accountInfo.data.flowPack = await flowPack.getFlowPack(accountId, accountInfo.data.from, accountInfo.data.to);
     }
     accountInfo.publicKey = '';
@@ -120,7 +120,6 @@ exports.getOneAccount = async (req, res) => {
     }).sort((a, b) => {
       return (onlines[a] || 0)  - (onlines[b] || 0);
     })[0];
-
     return res.send(accountInfo);
   } catch(err) {
     console.log(err);

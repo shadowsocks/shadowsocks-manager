@@ -572,7 +572,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     const setServers = () => {
       if(!$scope.account.accountServerObj) { return; }
       const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
-      $scope.account.server = ($scope.account.accountServer && +$scope.account.type > 1) ? server : null;
+      $scope.account.server = $scope.account.accountServer ? server : null;
     };
     $scope.$watch('account.accountServerObj', () => {
       setServers();
@@ -751,7 +751,7 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
     const setServers = () => {
       if(!$scope.account.accountServerObj) { return; }
       const server = Object.keys($scope.account.accountServerObj).map(m => $scope.account.accountServerObj[m] ? +m : null).filter(f => f);
-      $scope.account.server = ($scope.account.accountServer && +$scope.account.type > 1) ? server : null;
+      $scope.account.server = $scope.account.accountServer ? server : null;
     };
     $scope.$watch('account.accountServerObj', () => {
       setServers();
