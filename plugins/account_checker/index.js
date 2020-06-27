@@ -151,16 +151,21 @@ const isOverFlow = async (server, account) => {
       accountId
     }).whereNotIn('serverId', [ serverId ]);
   };
-  if(account.type >= 2 && account.type <= 5) {
+  if((account.type >= 2 && account.type <= 5) || (account.type === 1 && account.data)) {
     let timePeriod = 0;
     if(account.type === 2) { timePeriod = 7 * 86400 * 1000; }
     if(account.type === 3) { timePeriod = 30 * 86400 * 1000; }
     if(account.type === 4) { timePeriod = 1 * 86400 * 1000; }
     if(account.type === 5) { timePeriod = 3600 * 1000; }
     const data = JSON.parse(account.data);
+    if(data.flow <= 0) { return false; }
     let startTime = data.create;
-    while(startTime + timePeriod <= Date.now()) {
-      startTime += timePeriod;
+    if (account.type === 1) {
+      startTime = Date.now() - 24 * 60 * 60 * 1000 * 365 * 3;
+    } else {
+      while(startTime + timePeriod <= Date.now()) {
+        startTime += timePeriod;
+      }
     }
     const endTime = Date.now();
 
@@ -174,7 +179,6 @@ const isOverFlow = async (server, account) => {
     }
 
     const flows = await flow.getFlowFromSplitTimeWithScale(servers.map(m => m.id), account.id, startTime, endTime);
-
     const serverObj = {};
     servers.forEach(server => {
       serverObj[server.id] = server;

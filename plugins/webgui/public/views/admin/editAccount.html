@@ -66,7 +66,7 @@
                         <div ng-message="required">密码不能为空</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" ng-if="account.fromOrder === 1 || +account.type !== 1">
+                <md-input-container class="md-block" ng-if="account.fromOrder === 1 || +account.type >= 1">
                     <label translate>流量</label>
                     <input type="text" required name="flow" ng-model="account.flowStr">
                     <div ng-messages="accountForm.flow.$error">
@@ -117,7 +117,7 @@
             <div layout="row" flex layout-align="space-around center">
                 <md-button class="md-primary" ng-click="cancel()">取消</md-button>
                 <md-button class="md-warn" ng-click="deleteAccount()">删除</md-button>
-                <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!account.port">确认</md-button>
+                <md-button class="md-raised md-primary" ng-click="confirm()" ng-disabled="!account.port || !account.flowStr">确认</md-button>
             </div>
             <div flex="10" flex-gt-sm="30"></div>
         </div>

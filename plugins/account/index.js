@@ -39,6 +39,9 @@ const addAccount = async (type, options) => {
       userId: options.user,
       port: options.port,
       password: options.password,
+      data: options.flow > 0 ? JSON.stringify({
+        flow: options.flow,
+      }) : null,
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: 0,
@@ -186,7 +189,13 @@ const editAccount = async (id, options) => {
     update.server = options.server ? JSON.stringify(options.server) : null;
   }
   if(options.type === 1) {
-    update.data = null;
+    if(options.flow && options.flow > 0) {
+      update.data = JSON.stringify({
+        flow: options.flow,
+      });
+    } else {
+      update.data = null;
+    }
   } else if(options.type >= 2 && options.type <= 5) {
     update.data = JSON.stringify({
       create: options.time || Date.now(),
