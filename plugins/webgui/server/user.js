@@ -60,21 +60,40 @@ exports.getAccount = async (req, res) => {
 
       const onlines = await accountPlugin.getOnlineAccount();
       const shadowsocksServers = await knex('server').select(['id']).where({ type: 'Shadowsocks' });
+      const wireguardServers = await knex('server').select(['id']).where({ type: 'WireGuard' });
+      const trojanServers = await knex('server').select(['id']).where({ type: 'Trojan' });
       for(const server of shadowsocksServers) {
         const serverTags = await webguiTag.getTags('server', server.id);
         server.tags = serverTags;
       }
-      account.idle = shadowsocksServers.filter(server => {
-        if(server.tags.includes('#hide') || server.tags.includes('#_hide')) {
-          return false;
-        }
-        if(account.server) {
-          return account.server.includes(server.id);
-        }
-        return true;
-      }).sort((a, b) => {
-        return (onlines[a.id] || 0)  - (onlines[b.id] || 0);
-      })[0].id;
+      for(const server of wireguardServers) {
+        const serverTags = await webguiTag.getTags('server', server.id);
+        server.tags = serverTags;
+      }
+      for(const server of trojanServers) {
+        const serverTags = await webguiTag.getTags('server', server.id);
+        server.tags = serverTags;
+      }
+      const getIdleServer = servers => {
+        return servers.filter(server => {
+          if(server.tags.includes('#hide') || server.tags.includes('#_hide')) {
+            return false;
+          }
+          if(account.server) {
+            return account.server.includes(server.id);
+          }
+          return true;
+        }).sort((a, b) => {
+          return (onlines[a.id] || 0)  - (onlines[b.id] || 0);
+        })[0];
+      };
+      if(getIdleServer(shadowsocksServers)) {
+        account.idle = getIdleServer(shadowsocksServers).id;
+      } else if(getIdleServer(wireguardServers)) {
+        account.idle = getIdleServer(wireguardServers).id;
+      } else if(getIdleServer(trojanServers)) {
+        account.idle = getIdleServer(trojanServers).id;
+      }
     }
     res.send(accounts);
   } catch (err) {
