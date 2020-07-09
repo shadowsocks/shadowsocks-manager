@@ -607,12 +607,12 @@ exports.status = async (req, res) => {
     { value: 'grey', color: '#9E9E9E' },
   ];
   try {
-    const base = (await knex('webguiSetting').select().where({
+    const base = await knex('webguiSetting').select().where({
       key: 'base',
-    }).then(success => {
-      success[0].value = JSON.parse(success[0].value);
-      return success[0].value;
-    }));
+    }).then(success => JSON.parse(success[0].value));
+    const account = await knex('webguiSetting').select().where({
+      key: 'account',
+    }).then(success => JSON.parse(success[0].value));
     const themePrimary = base.themePrimary;
     const themeAccent = base.themeAccent;
     const filterColor = colors.filter(f => f.value === base.themePrimary);
@@ -640,6 +640,7 @@ exports.status = async (req, res) => {
     let multiAccount;
     let simple;
     let macAccount;
+    let showAllServer;
     if(status) {
       email = (await knex('user').select(['email']).where({ id }).then(s => s[0])).email;
       alipay = config.plugins.alipay && config.plugins.alipay.use;
@@ -676,6 +677,7 @@ exports.status = async (req, res) => {
       knex('user').update({ lastLogin: Date.now() }).where({ id }).then();
       const groupId = (await knex('user').select(['group']).where({ id }).then(s => s[0])).group;
       multiAccount = (await knex('group').where({ id: groupId }).then(s => s[0])).multiAccount;
+      showAllServer = account.showAllServer;
     }
     res.send({
       status,
@@ -703,6 +705,7 @@ exports.status = async (req, res) => {
       github_login_client_id,
       twitter_login_client_id,
       crisp,
+      showAllServer,
     });
   } catch(err) {
     logger.error(err);

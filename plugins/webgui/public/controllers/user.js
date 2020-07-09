@@ -237,8 +237,14 @@ app
     const setAccountServerList = (account, server) => {
       account.forEach(a => {
         a.serverList = $scope.servers.filter(f => {
-          return !a.server || a.server.indexOf(f.id) >= 0;
+          return !a.server || a.server.indexOf(f.id) >= 0 || $scope.config.showAllServer;
         });
+        if(a.server && $scope.config.showAllServer) {
+          a.serverList.sort((f, e) => {
+            if(a.server.indexOf(f.id) >= 0 && a.server.indexOf(e.id) < 0) { return -1; }
+            return 1;
+          });
+        }
       });
     };
     setAccountServerList($scope.account, $scope.servers);

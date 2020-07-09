@@ -195,7 +195,14 @@ exports.getServers = async (req, res) => {
     const isAll = accounts.some(account => {
       if (!account.server) { return true; }
     });
-    if (!isAll) {
+    const showAllServer = await knex('webguiSetting').select().where({
+      key: 'account',
+    }).then(success => {
+      if(!success.length) { return Promise.reject('settings not found'); }
+      const result = JSON.parse(success[0].value);
+      return result.showAllServer;
+    });
+    if (!isAll && !showAllServer) {
       let accountArray = [];
       accounts.forEach(account => {
         account.server.forEach(s => {

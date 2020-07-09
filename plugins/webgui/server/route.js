@@ -323,7 +323,7 @@ const colors = [
   { value: 'blue-grey', color: '#607D8B' },
   { value: 'grey', color: '#9E9E9E' },
 ];
-const homePage = (req, res) => {
+const homePage = async (req, res) => {
   res.set({
     Link: [
       '</libs/style.css>; rel=preload; as=style,',
@@ -332,7 +332,7 @@ const homePage = (req, res) => {
       '</libs/bundle.js>; rel=preload; as=script',
     ].join(' ')
   });
-  return knex('webguiSetting').where({
+  const base = await knex('webguiSetting').where({
     key: 'base',
   }).then(success => {
     if (!success.length) {
@@ -340,20 +340,19 @@ const homePage = (req, res) => {
     }
     success[0].value = JSON.parse(success[0].value);
     return success[0].value;
-  }).then(success => {
-    configForFrontend.themePrimary = success.themePrimary;
-    configForFrontend.themeAccent = success.themeAccent;
-    const filterColor = colors.filter(f => f.value === success.themePrimary);
-    configForFrontend.browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
-    return res.render('index', {
-      title: success.title,
-      cdn,
-      keywords,
-      description,
-      analytics,
-      config: configForFrontend,
-      paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
-    });
+  });
+  configForFrontend.themePrimary = base.themePrimary;
+  configForFrontend.themeAccent = base.themeAccent;
+  const filterColor = colors.filter(f => f.value === base.themePrimary);
+  configForFrontend.browserColor = filterColor[0] ? filterColor[0].color : '#3F51B5';
+  return res.render('index', {
+    title: base.title,
+    cdn,
+    keywords,
+    description,
+    analytics,
+    config: configForFrontend,
+    paypal: !!(config.plugins.paypal && config.plugins.paypal.use),
   });
 };
 app.get('/', homePage);
