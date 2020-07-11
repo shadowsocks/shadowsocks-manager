@@ -1,6 +1,6 @@
 module.exports = {
-  Proxy: [],
-  "Proxy Group": [
+  proxies: [],
+  "proxy-groups": [
     {
       "name": "🔰国外流量",
       "type": "select",
@@ -65,7 +65,7 @@ module.exports = {
       ]
     }
   ],
-  "Rule": [
+  rules: [
     "DOMAIN-SUFFIX,smtp,DIRECT",
     "DOMAIN-KEYWORD,aria2,DIRECT",
     "DOMAIN-SUFFIX,ampproject.org,🔰国外流量",

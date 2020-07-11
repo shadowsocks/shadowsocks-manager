@@ -276,7 +276,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       ];
       const generatedConfig = {
         ...clashConfig,
-        Proxy: [
+        proxies: [
           ...subscribeAccount.server.map(server => ({
             cipher: server.method,
             name: server.subscribeName || server.name,
@@ -293,7 +293,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             password: `${subscribeAccount.account.port}:${subscribeAccount.account.password}`,
           }))
         ],
-        'Proxy Group': clashConfig['Proxy Group'].map(group => {
+        'proxy-groups': clashConfig['proxy-groups'].map(group => {
           if (!group.proxies.includes('placeholder')) {
             return group;
           } else {
