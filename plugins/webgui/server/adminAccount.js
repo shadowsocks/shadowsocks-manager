@@ -152,8 +152,8 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     const ssr = req.query.ssr;
     let type = req.query.type || 'shadowrocket';
     if(ssr === '1') { type = 'ssr'; }
-    const resolveIp = req.query.ip;
-    const showFlow = req.query.flow || 0;
+    const resolveIp = !!req.query.ip;
+    const showFlow = !!req.query.flow;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     let subscribeAccount = {};
@@ -173,7 +173,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       trojanServers = accounts.server.filter(server => server.type === 'Trojan');
     }
     for(const s of subscribeAccount.server) {
-      s.host = await getAddress(s.host, +resolveIp);
+      s.host = await getAddress(s.host, resolveIp);
     }
     for(const s of trojanServers) {
       if (s.host.split(':').length !== 1) {
@@ -200,9 +200,15 @@ exports.getSubscribeAccountForUser = async (req, res) => {
         };
       }),
     };
-    if(subscribeAccount.account.type !== 1 && +showFlow) {
-      const random = Math.floor(Math.random() * 9999) % (subscribeAccount.server.length - 1);
-      const insert = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
+    if(subscribeAccount.account.type !== 1 && showFlow) {
+      const template = {
+        subscribeName: '',
+        name: '',
+        host: 'localhost',
+        method: 'chacha20-ietf-poly1305',
+        shift: 0,
+        id: 0,
+      };
       const time = {
         '2': 7 * 24 * 3600000,
         '3': 30 * 24 * 3600000,
@@ -211,18 +217,21 @@ exports.getSubscribeAccountForUser = async (req, res) => {
       };
       const expire = subscribeAccount.account.data.create + subscribeAccount.account.data.limit * time[subscribeAccount.account.type];
       ssdInfo.expiry = moment(expire).format('YYYY-MM-DD HH:mm:ss');
-      if(Date.now() >= expire) {
-        insert.subscribeName = '已过期';
-      } else if((expire - Date.now()) >= 48 * 3600 * 1000) {
-        insert.subscribeName = moment(expire).format('YYYY-MM-DD过期');
-      } else if((expire - Date.now()) >= 3600 * 1000) {
-        insert.subscribeName = (Math.floor((expire - Date.now())/(3600 * 1000))) + '小时后过期';
-      } else if((expire - Date.now()) > 0) {
-        insert.subscribeName = (Math.floor((expire - Date.now())/(60 * 1000))) + '分钟后过期';
-      }
-      let insertFlow;
+
+      const remain = expire - Date.now();
+      const insert = { 
+        ...template,
+        subscribeName: remain <= 0
+                      ? '已过期'
+                      : remain >= 48 * 3600 * 1000
+                      ? moment(expire).format('YYYY-MM-DD过期')
+                      : remain >= 3600 * 1000
+                      ? `${Math.floor(remain / (3600 * 1000))}小时后过期`
+                      : `${Math.floor(remain / (60 * 1000))}分钟后过期`,
+      };
+
+      const insertFlow = { ...template };
       if(subscribeAccount.account.multiServerFlow) {
-        insertFlow = JSON.parse(JSON.stringify(subscribeAccount.server[random]));
         const flow = subscribeAccount.account.data.flow;
         const time = {
           '2': 7 * 24 * 3600000,
@@ -236,7 +245,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
           from = to;
           to = from + time[subscribeAccount.account.type];
         }
-        const [ currentFlow ] = await flowPlugin.getServerPortFlowWithScale(insertFlow.id, subscribeAccount.account.id, [from, to], true);
+        const [ currentFlow ] = await flowPlugin.getServerPortFlowWithScale(0, subscribeAccount.account.id, [from, to], true);
         ssdInfo.traffic_used = currentFlow / (1000 * 1000 * 1000);
         ssdInfo.traffic_total = flow / (1000 * 1000 * 1000);
         const toFlowString = input => {
@@ -259,10 +268,13 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             return input;
           }
         };
-        insertFlow.subscribeName = toFlowString(currentFlow) + '/' + toFlowString(flow);
+        insertFlow.subscribeName = `${toFlowString(currentFlow)}/${toFlowString(flow)}`;
       }
-      subscribeAccount.server.unshift(insert);
-      if(insertFlow) { subscribeAccount.server.unshift(insertFlow); }
+      subscribeAccount.server = [
+        ...(insertFlow.subscribeName ? [insertFlow] : []),
+        insert,
+        ...subscribeAccount.server,
+      ];
     }
     if(type === 'ssd') {
       return res.send('ssd://' + Buffer.from(JSON.stringify(ssdInfo)).toString('base64'));
