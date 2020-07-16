@@ -45,6 +45,7 @@ const addAccount = async (type, options) => {
       status: 0,
       server: options.server ? options.server : null,
       autoRemove: 0,
+      multiServerFlow: options.multiServerFlow || 0,
       key,
     });
     await accountFlow.add(accountId);
