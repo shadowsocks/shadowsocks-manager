@@ -175,6 +175,7 @@ app
   ($scope, $state, userApi, markdownDialog, $sessionStorage, autopopDialog) => {
     $scope.setTitle('首页');
     $scope.notices = [];
+    $scope.otherNotices = {};
     userApi.getNotice().then(success => {
       $scope.notices = success;
       if(!$sessionStorage.showNotice) {
@@ -184,6 +185,16 @@ app
           autopopDialog.show(autopopNotice);
         }
       }
+      $scope.notices.forEach(notice => {
+        if(notice.title.match(/^\[([\s\S]{1,})\]([\s\S]{1,})/)) {
+          const [ match, category, title ] = notice.title.match(/^\[([\s\S]{1,})\]([\s\S]{1,})/);
+          if(!$scope.otherNotices[category]) {
+            $scope.otherNotices[category] = [];
+          }
+          $scope.otherNotices[category].push({ ...notice, ...{ title } });
+        }
+      });
+      $scope.notices = $scope.notices.filter(f => !f.title.match(/^\[([\s\S]{1,})\]([\s\S]{1,})/));
     });
     userApi.getUsage().then(success => {
       $scope.usage = success;
