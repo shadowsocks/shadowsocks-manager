@@ -1,6 +1,6 @@
 # VPS推荐
 
-* [Vultr](https://www.vultr.com/?ref=7772032-4F)
+* [Vultr](https://www.vultr.com/?ref=8377991-6G)
 
 * [Linode](https://www.linode.com/?r=bbc24323b3adaf3d74f242fd958d91b55cc6fdea)
 

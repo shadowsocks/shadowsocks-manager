@@ -179,7 +179,7 @@ Join the group if you have some problem: [https://t.me/ssmgr](https://t.me/ssmgr
 
 * [DigitalOcean](https://m.do.co/c/d43891b79a52)
 
-* [Vultr](https://www.vultr.com/?ref=6926595)
+* [Vultr](https://www.vultr.com/?ref=8377991-6G)
 
 * [AlibabaCloud](https://account-intl.aliyun.com/register/intl_register.htm?biz_params=%7B%22intl%22%3A%22%7B%5C%22referralCode%5C%22%3A%5C%22koa26v%5C%22%7D%22%7D)
 

@@ -15,7 +15,7 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     $state.go('admin.editNotice', { noticeId: id });
   };
 }])
-.controller('AdminEditNoticeController', ['$scope', '$http', '$state', '$stateParams', 'markdownDialog', 'setNoticeGroupDialog', ($scope, $http, $state, $stateParams, markdownDialog, setNoticeGroupDialog) => {
+.controller('AdminEditNoticeController', ['$scope', '$http', '$state', '$stateParams', 'markdownDialog', 'setNoticeGroupDialog', 'confirmDialog', ($scope, $http, $state, $stateParams, markdownDialog, setNoticeGroupDialog, confirmDialog) => {
   $scope.setTitle('编辑公告');
   $scope.setMenuButton('arrow_back', 'admin.notice');
   $http.get('/api/admin/notice/' + $stateParams.noticeId).then(success => {
@@ -28,7 +28,13 @@ app.controller('AdminNoticeController', ['$scope', '$http', '$state', ($scope, $
     }
   });
   $scope.delete = () => {
-    $http.delete('/api/admin/notice/' + $stateParams.noticeId).then(success => {
+    confirmDialog.show({
+      text: '真的要删除公告吗？',
+      cancel: '取消',
+      confirm: '删除',
+      error: '删除公告失败',
+      fn: function () { return $http.delete('/api/admin/notice/' + $stateParams.noticeId); },
+    }).then(() => {
       $state.go('admin.notice');
     });
   };
