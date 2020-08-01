@@ -2,7 +2,7 @@ const app = angular.module('app');
 const window = require('window');
 const cdn = window.cdn || '';
 
-app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
+app.factory('qrcodeDialog', [ '$mdDialog', '$mdToast', ($mdDialog, $mdToast) => {
   const publicInfo = {};
   const hide = () => {
     return $mdDialog.hide()
@@ -14,7 +14,16 @@ app.factory('qrcodeDialog', [ '$mdDialog', ($mdDialog) => {
       return;
     });
   };
+  const toast = (delay = 3000) => {
+    $mdToast.show(
+      $mdToast.simple()
+        .textContent('链接已复制')
+        .position('top right')
+        .hideDelay(delay)
+    );
+  };
   publicInfo.hide = hide;
+  publicInfo.toast = toast;
   let dialogPromise = null;
   const isDialogShow = () => {
     if(dialogPromise && !dialogPromise.$$state.status) {
