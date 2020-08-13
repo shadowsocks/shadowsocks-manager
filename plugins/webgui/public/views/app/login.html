@@ -1,0 +1,27 @@
+<div layout-fill>
+  <div flex layout="column" layout-align="center center" layout-fill>
+    <form name="userForm">
+      <md-input-container class="md-block">
+        <label translate>邮箱</label>
+        <input type="email" required name="email" ng-model="user.email">
+        <div ng-messages="userForm.email.$error">
+          <div ng-message="required">{{ '邮箱不能为空' | translate }}</div>
+          <div ng-message="email">{{ '必须填写一个有效邮箱地址' | translate }}</div>
+        </div>
+      </md-input-container>
+      <div layout="row">
+        <md-input-container class="md-block" flex="65">
+          <label>{{ '密码' | translate }}</label>
+          <input type="password" required name="password" ng-model="user.password" ng-keypress="enterKey($event)">
+        </md-input-container>
+        <div flex layout="row" layout-align="space-between center">
+          <div flex="5"></div>
+          <div style="margin-bottom: 25px;">
+            <md-button class="md-raised md-primary" ng-click="login()" ng-disabled="!user.email || !user.password">
+              {{ '登录' | translate }}</md-button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

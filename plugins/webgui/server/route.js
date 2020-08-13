@@ -359,6 +359,7 @@ app.get('/', homePage);
 app.get(/^\/home\//, homePage);
 app.get(/^\/admin\//, homePage);
 app.get(/^\/user\//, homePage);
+app.get(/^\/app\//, homePage);
 
 app.get('/serviceworker.js', async (req, res) => {
   try {

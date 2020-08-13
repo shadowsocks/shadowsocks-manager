@@ -1,0 +1,51 @@
+<div layout-fill>
+  <md-list>
+    <md-list-item>
+      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+        <div flex="75">开启代理</div>
+        <md-switch ng-model="proxy.status" aria-label="proxy" ng-change="changeStatus()">
+        </md-switch>
+      </div>
+    </md-list-item>
+    <md-list-item>
+      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
+        <div flex="50">模式</div>
+        <md-radio-group ng-model="proxy.mode" layout="row" ng-change="changeMode()">
+          <md-radio-button value="Rule" class="text-capitalize">
+            规则
+          </md-radio-button>
+          <md-radio-button value="Global" class="text-capitalize">
+            全局
+          </md-radio-button>
+        </md-radio-group>
+        </md-switch>
+      </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item>
+      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
+        <div flex="100" layout="row" layout-align="space-between center">
+          <div>流量</div>
+          <div>{{ currentFlow | flow }} / {{ account.data.flow + account.data.flowPack | flow }}</div>
+        </div>
+      </div>
+    </md-list-item>
+    <md-list-item>
+      <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
+        <div flex="100" layout="row" layout-align="space-between center">
+          <div>节点选择</div>
+          <div ng-show="account.data.expire">{{ account.data.expire | date : 'yyyy-MM-dd HH:mm' }} 到期</div>
+        </div>
+      </div>
+    </md-list-item>
+    <md-list-item>
+      <div class="md-list-item-text" style="width: 100%" layout="row" layout-wrap layout-align="space-between center">
+        <div flex="100" layout="row" layout-wrap style="max-height: 440px; overflow-y: scroll;" class="hide-scrollbar">
+          <md-card ng-repeat="server in servers" flex="20" layout-align="center center" class="hover-mouse" ng-click="setProxy(server)" ng-style="serverStyle(server)">
+            <md-card-content>{{server.name}}</md-card-content>
+          </md-card>
+        </div>
+      </div>
+    </md-list-item>
+  </md-list>
+</div>
