@@ -46,6 +46,18 @@ app
       let account = {};
       let servers = [];
       const compareAccountInfo = () => {
+        const oldAccount = JSON.stringify(Object.assign({}, {
+          id: $scope.account.id,
+          port: $scope.account.port,
+          password: $scope.account.password,
+          expire: $scope.account.data ? $scope.account.data.expire : null,
+        }));
+        const newAccount = JSON.stringify(Object.assign({}, {
+          id: account.id,
+          port: account.port,
+          password: account.password,
+          expire: account.data ? account.data.expire : null,
+        }));
         const oldServers = JSON.stringify($scope.servers.map(server => ({
           id: server.id,
           name: server.name,
@@ -56,7 +68,7 @@ app
           name: server.name,
           disabled: server.disabled,
         })));
-        return oldServers === newServers;
+        return oldServers === newServers && newAccount === oldAccount;
       };
       return userApi.getUserAccount().then(success => {
         account = success.account[0] || {};
@@ -111,42 +123,12 @@ app
           }
         }
         $localStorage.app.selectedServerId = selectedServer.id;
+        getCurrentFlow();
       });
     };
     refreshAccountData();
     $interval(() => { refreshAccountData(); }, 60 * 1000);
 
-    // userApi.getUserAccount().then(success => {
-    //   if(success.account.length) {
-    //     $scope.account = success.account[0];
-    //   } else {
-
-    //   }
-    //   $scope.servers = success.servers;
-    //   if($scope.account.server) {
-    //     $scope.servers.forEach(server => {
-    //       if(!$scope.account.server.includes(server.id)) {
-    //         server.disabled = true;
-    //       }
-    //     });
-    //   }
-    //   $scope.servers = $scope.servers.filter(f => f.type !== 'WireGuard').sort((a, b) => {
-    //     if(a.disabled) { return 1; }
-    //     if(b.disabled) { return -1; }
-    //     return 0;
-    //   });
-    //   $scope.selectedServerId = $scope.servers[0].id;
-    //   return $http.get(`/api/user/account/${$scope.account.id}/subscribe`).then(s => s.data);
-    // }).then(success => {
-    //   $scope.subscribe = `${window.location.origin}/api/user/account/subscribe/${success.subscribe}?type=clash&ip=0&flow=0`;
-    //   getCurrentFlow();
-    //   $interval(() => {
-    //     getCurrentFlow();
-    //   }, 90 * 1000);
-    //   return window.saveConfigToFile($scope.subscribe);
-    // }).then(success => {
-    //   $scope.setProxy($scope.servers[0]);
-    // });
     $scope.serverStyle = server => {
       if(server.id === $scope.selectedServerId) {
         return {

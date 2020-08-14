@@ -40,10 +40,12 @@
     </md-list-item>
     <md-list-item>
       <div class="md-list-item-text" style="width: 100%" layout="row" layout-wrap layout-align="space-between center">
-        <div flex="100" layout="row" layout-wrap style="max-height: 440px; overflow-y: scroll;" class="hide-scrollbar">
-          <md-card ng-repeat="server in servers" flex="20" layout-align="center center" ng-click="setProxy(server)" ng-style="serverStyle(server)" class="no-focus-outline">
-            <md-card-content>{{server.name}}</md-card-content>
-          </md-card>
+        <div layout="row" layout-wrap style="max-height: 440px; overflow-y: scroll;" class="hide-scrollbar">
+          <div flex="25" ng-repeat="server in servers">
+            <md-card layout-align="center center" ng-click="setProxy(server)" ng-style="serverStyle(server)" class="no-focus-outline">
+              <md-card-content>{{server.name}}</md-card-content>
+            </md-card>
+          </div>
         </div>
       </div>
     </md-list-item>
