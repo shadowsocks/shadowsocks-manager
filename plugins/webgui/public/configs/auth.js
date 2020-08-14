@@ -9,6 +9,7 @@ app
       $localStorage.home = {};
       $localStorage.admin = {};
       $localStorage.user = {};
+      $localStorage.app = {};
       window.location = '/';
     }
     return $q.reject(response);
