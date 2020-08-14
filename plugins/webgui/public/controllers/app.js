@@ -1,7 +1,7 @@
 const app = angular.module('app');
 
 app
-.controller('AppController', [, () => {}])
+.controller('AppController', [() => {}])
 .controller('AppLoadingController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager', '$window',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager, $window) => {
     const config = configManager.getConfig();
@@ -28,6 +28,7 @@ app
       window.setProxyStatus($scope.proxy.status);
     };
     $scope.setProxy = server => {
+      if(server.disabled) { return; }
       $scope.selectedServerId = server.id;
       window.setProxyServer(server.name);
     };
@@ -42,14 +43,19 @@ app
       } else {
 
       }
+      $scope.servers = success.servers;
       if($scope.account.server) {
-        $scope.servers = success.servers.filter(server => {
-          return $scope.account.server.includes(server.id);
+        $scope.servers.forEach(server => {
+          if(!$scope.account.server.includes(server.id)) {
+            server.disabled = true;
+          }
         });
-      } else {
-        $scope.servers = success.servers;
       }
-      $scope.servers = $scope.servers.filter(f => f.type !== 'WireGuard');
+      $scope.servers = $scope.servers.filter(f => f.type !== 'WireGuard').sort((a, b) => {
+        if(a.disabled) { return 1; }
+        if(b.disabled) { return -1; }
+        return 0;
+      });
       $scope.selectedServerId = $scope.servers[0].id;
       $scope.setProxy($scope.servers[0]);
       return $http.get(`/api/user/account/${$scope.account.id}/subscribe`).then(s => s.data);
@@ -64,10 +70,25 @@ app
     $scope.serverStyle = server => {
       if(server.id === $scope.selectedServerId) {
         return {
-          background: 'rgba(0, 0, 0, 0.25)',
+          background: 'rgba(0, 0, 0, 0.05)',
+          border: '1px solid #E91E63',
+          height: '44px',
+          'box-sizing': 'border-box',
+          cursor: 'pointer',
         };
       }
-      return {};
+      if(server.disabled) {
+        return {
+          background: 'rgba(230, 230, 230, 0.35)',
+          height: '44px',
+          cursor: 'not-allowed',
+          color: '#aaa',
+        };
+      }
+      return {
+        height: '44px',
+        cursor: 'pointer',
+      };
     };
     const getCurrentFlow = () => {
       userApi.getServerPortData($scope.account, $scope.selectedServerId).then(success => {

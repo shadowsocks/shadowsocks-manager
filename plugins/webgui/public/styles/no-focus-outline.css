@@ -1,0 +1,3 @@
+.no-focus-outline:focus {
+  outline: 0;
+}
