@@ -1,3 +1,9 @@
-<div ng-controller="AppController" layout="column" ng-cloak layout-fill>
-  <div ui-view flex autoscroll="true"></div>
+<div ng-controller="AppController" layout="column" ng-cloak layout-fill class="app-radius">
+  <div class="draggable" layout="row" layout-align="space-between center" style="width: 100%;">
+    <div style="padding: 3px;">ShadowGhost</div>
+    <div>
+      <md-icon class="material-icons hide-app-button no-focus-outline" ng-click="hide()">close</md-icon>
+    </div>
+  </div>
+  <div ui-view flex autoscroll="true" style="user-select: none;"></div>
 </div>

@@ -1,7 +1,20 @@
 const app = angular.module('app');
 
 app
-.controller('AppController', [() => {}])
+.controller('AppController', ['$scope', '$state', '$http', '$localStorage', 'configManager', ($scope, $state, $http, $localStorage, configManager) => {
+  const handleLogout = () => {
+    $http.post('/api/home/logout').then(() => {
+      window.setProxyStatus();
+      $localStorage.app = {};
+      configManager.deleteConfig();
+      $state.go('app.loading');
+    });
+  };
+  window.addEventListener('ssmgr_logout', handleLogout);
+  $scope.hide = () => {
+    window.hideApp();
+  };
+}])
 .controller('AppLoadingController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager', '$window',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager, $window) => {
     const config = configManager.getConfig();

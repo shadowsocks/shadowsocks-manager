@@ -1,0 +1,18 @@
+.draggable {
+  -webkit-app-region: drag;
+}
+
+.app-radius {
+  border-radius: 5px;
+}
+
+.hide-app-button {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+  padding: 3px;
+}
+
+.hide-app-button:hover {
+  background: #e25;
+  color: #ccc;
+}

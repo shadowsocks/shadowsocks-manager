@@ -10,6 +10,10 @@ app
       $localStorage.admin = {};
       $localStorage.user = {};
       $localStorage.app = {};
+      if(window.location.pathname.startsWith('/app')) {
+        window.location = '/app/loading';
+        return;
+      }
       window.location = '/';
     }
     return $q.reject(response);
