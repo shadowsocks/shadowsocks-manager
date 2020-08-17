@@ -94,4 +94,4 @@ cron.cron(() => {
 },'GenerateHourFlow', '1 * * * *', 3600);
 cron.cron(() => {
   generateFlow('day');
-}, 'GenerateDayFlow', '1 0 * * *', 24 * 3600);
+}, 'GenerateDayFlow', '10 0 * * *', 24 * 3600);

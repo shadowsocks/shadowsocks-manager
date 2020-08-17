@@ -29,11 +29,16 @@ app
     $scope.setMainLoading(false);
   }
 ])
-.controller('AppIndexController', ['$scope', '$state', 'userApi', '$http', '$interval', '$localStorage',
-  ($scope, $state, userApi, $http, $interval, $localStorage) => {
+.controller('AppIndexController', ['$scope', '$q', 'userApi', '$http', '$interval', '$localStorage',
+  ($scope, $q, userApi, $http, $interval, $localStorage) => {
     $scope.proxy = {
       status: false,
       mode: 'Rule',
+    };
+    $scope.orders = [];
+    $scope.pay = {
+      status: 'choose',
+      qrcode: '',
     };
     $scope.changeMode = () => {
       window.setProxyMode($scope.proxy.mode);
@@ -100,6 +105,12 @@ app
         });
         $localStorage.app.account = account;
         $localStorage.app.servers = servers;
+        if(!account.id) {
+          $scope.account = account;
+          $scope.servers = servers;
+          return $q.reject('no account');
+        }
+        $scope.pay.status = 'choose';
         return $http.get(`/api/user/account/${account.id}/subscribe`).then(s => s.data);
       }).then(success => {
         $scope.subscribe = `${window.location.origin}/api/user/account/subscribe/${success.subscribe}?type=clash&ip=0&flow=0`;
@@ -137,6 +148,9 @@ app
         }
         $localStorage.app.selectedServerId = selectedServer.id;
         getCurrentFlow();
+      }, (err) => {
+        $scope.proxy.status = false;
+        $scope.changeStatus();
       });
     };
     refreshAccountData();
@@ -173,6 +187,22 @@ app
     $interval(() => {
       getCurrentFlow();
     }, 90 * 1000);
+
+    const getPriceList = () => {
+      $http.get('/api/user/order/price').then(success => {
+        $scope.orders = success.data.sort((a, b) => a.alipay - b.alipay);
+      });
+    };
+    getPriceList();
+
+    $scope.getQrcode = (orderId) => {
+      $http.post('/api/user/order/qrcode', {
+        orderId,
+      }).then(success => {
+        $scope.pay.qrcode = success.data.qrCode;
+        $scope.pay.status = 'pay';
+      });
+    };
   }
 ])
 .controller('AppLoginController', ['$scope', '$state', 'alertDialog', 'homeApi', 'configManager', '$http', '$localStorage',

@@ -22,15 +22,17 @@
       </div>
     </md-list-item>
     <md-divider></md-divider>
-    <md-list-item>
+    <md-list-item ng-if="account.id">
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
         <div flex="100" layout="row" layout-align="space-between center">
           <div>流量</div>
-          <div>{{ currentFlow | flow }} / {{ account.data.flow + account.data.flowPack | flow }}</div>
+          <div ng-show="account.data && account.data.flow">{{ currentFlow | flow }} /
+            {{ account.data.flow + account.data.flowPack | flow }}</div>
+          <div ng-show="!account.data || !account.data.flow">{{ currentFlow | flow }} / ∞</div>
         </div>
       </div>
     </md-list-item>
-    <md-list-item>
+    <md-list-item ng-if="account.id">
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
         <div flex="100" layout="row" layout-align="space-between center">
           <div>节点选择</div>
@@ -38,14 +40,36 @@
         </div>
       </div>
     </md-list-item>
-    <md-list-item>
+    <md-list-item ng-if="account.id">
       <div class="md-list-item-text" style="width: 100%" layout="row" layout-wrap layout-align="space-between center">
         <div layout="row" layout-wrap style="max-height: 440px; overflow-y: scroll;" class="hide-scrollbar">
           <div flex="25" ng-repeat="server in servers">
-            <md-card layout-align="center center" ng-click="setProxy(server)" ng-style="serverStyle(server)" class="no-focus-outline">
+            <md-card layout-align="center center" ng-click="setProxy(server)" ng-style="serverStyle(server)"
+              class="no-focus-outline">
               <md-card-content>{{server.name}}</md-card-content>
             </md-card>
           </div>
+        </div>
+      </div>
+    </md-list-item>
+    <md-list-item ng-if="!account.id">
+      <div flex class="pay-elements" layout="column" layout-align="center center" ng-show="pay.status === 'choose'">
+        <div layout="row" class="pay-element" layout-align="space-between center" ng-repeat="order in orders" ng-show="order.alipay > 0" style="width: 300px;" ng-click="getQrcode(order.id)">
+          <div layout="column">
+            <span>{{ order.name }}</span>
+            <span style="color: #666;">{{ order.shortComment }}</span>
+          </div>
+          <div layout="column" style="font-size: 1.35em;">
+            ￥{{ order.alipay }}
+          </div>
+        </div>
+      </div>
+      <div flex class="pay-elements" ng-show="pay.status === 'pay'" layout="column" layout-align="center center">
+        <qr size="280" layout-margin text="pay.qrcode" image="true" style="margin-top: 35px;"></qr>
+        <div>请使用支付宝扫码付款</div>
+        <div>付款成功后将自动生效</div>
+        <div>
+          <md-button md-no-ink class="md-primary" ng-click="pay.status = 'choose'">返回</md-button>
         </div>
       </div>
     </md-list-item>

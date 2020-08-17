@@ -13,6 +13,21 @@
 }
 
 .hide-app-button:hover {
-  background: #e25;
+  background: #E91E63;
   color: #ccc;
+}
+
+.pay-elements {
+  height: 460px;
+}
+
+.pay-element {
+  margin: 7px 0;
+  cursor: pointer;
+  padding: 5px 7px;
+  border-radius: 5px;
+}
+
+.pay-element:hover {
+  background: #ccc;
 }
