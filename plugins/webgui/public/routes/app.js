@@ -31,8 +31,7 @@ app.config(['$stateProvider', $stateProvider => {
       url: '/login',
       controller: 'AppLoginController',
       templateUrl: `${ cdn }/public/views/app/login.html`,
-    })
-    ;
+    });
   }
 ]);
 

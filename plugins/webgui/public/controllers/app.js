@@ -31,6 +31,7 @@ app
 ])
 .controller('AppIndexController', ['$scope', '$q', 'userApi', '$http', '$interval', '$localStorage',
   ($scope, $q, userApi, $http, $interval, $localStorage) => {
+    $scope.isInit = false;
     $scope.proxy = {
       status: false,
       mode: 'Rule',
@@ -111,7 +112,7 @@ app
           return $q.reject('no account');
         }
         $scope.pay.status = 'choose';
-        return $http.get(`/api/user/account/${account.id}/subscribe`).then(s => s.data);
+        return $http.get(`/api/user/account/${account.id}/subscribe?from=app`).then(s => s.data);
       }).then(success => {
         $scope.subscribe = `${window.location.origin}/api/user/account/subscribe/${success.subscribe}?type=clash&ip=0&flow=0`;
         return compareAccountInfo();
@@ -148,8 +149,10 @@ app
         }
         $localStorage.app.selectedServerId = selectedServer.id;
         getCurrentFlow();
+        $scope.isInit = true;
       }, (err) => {
         $scope.proxy.status = false;
+        $scope.isInit = true;
         $scope.changeStatus();
       });
     };
@@ -236,6 +239,19 @@ app
       if(key.keyCode === 13) {
         $scope.login();
       }
+    };
+    $scope.findPassword = () => {
+      alertDialog.loading().then(() => {
+        return homeApi.findPassword($scope.user.email);
+      })
+      .then(success => {
+        alertDialog.show(success, '确定');
+      }).catch(err => {
+        alertDialog.show(err, '确定');
+      });
+    };
+    $scope.toSignupPage = () => {
+      window.toSignupPage();
     };
   }
 ])

@@ -1,5 +1,8 @@
 <div layout-fill>
-  <div flex layout="column" layout-align="center center" layout-fill>
+  <div flex layout="column" layout-align="center center">
+    <div>
+      <img src="/favicon.png" style="margin: 10vw 5vw; width: 210px;">
+    </div>   
     <form name="userForm">
       <md-input-container class="md-block">
         <label translate>邮箱</label>
@@ -23,5 +26,11 @@
         </div>
       </div>
     </form>
+    <div flex layout="row" layout-align="center center">
+      <div layout="row" flex layout-align="space-between center" style="width: 100%;">
+        <md-button class="md-primary" ng-click="findPassword()">{{ '找回密码' | translate }}</md-button>
+        <md-button class="md-primary" ng-click="toSignupPage()">{{ '注册账号' | translate }}</md-button>
+      </div>
+    </div>
   </div>
 </div>

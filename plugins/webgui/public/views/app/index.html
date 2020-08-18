@@ -3,14 +3,14 @@
     <md-list-item>
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
         <div flex="75">开启代理</div>
-        <md-switch ng-model="proxy.status" aria-label="proxy" ng-change="changeStatus()">
+        <md-switch ng-model="proxy.status" aria-label="proxy" ng-change="changeStatus()" ng-disabled="!account.id">
         </md-switch>
       </div>
     </md-list-item>
     <md-list-item>
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-align="space-between center">
         <div flex="50">模式</div>
-        <md-radio-group ng-model="proxy.mode" layout="row" ng-change="changeMode()">
+        <md-radio-group ng-model="proxy.mode" layout="row" ng-change="changeMode()" ng-disabled="!account.id">
           <md-radio-button value="Rule" class="text-capitalize">
             规则
           </md-radio-button>
@@ -22,7 +22,7 @@
       </div>
     </md-list-item>
     <md-divider></md-divider>
-    <md-list-item ng-if="account.id">
+    <md-list-item ng-if="account.id && isInit">
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
         <div flex="100" layout="row" layout-align="space-between center">
           <div>流量</div>
@@ -32,7 +32,7 @@
         </div>
       </div>
     </md-list-item>
-    <md-list-item ng-if="account.id">
+    <md-list-item ng-if="account.id && isInit">
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
         <div flex="100" layout="row" layout-align="space-between center">
           <div>节点选择</div>
@@ -40,7 +40,7 @@
         </div>
       </div>
     </md-list-item>
-    <md-list-item ng-if="account.id">
+    <md-list-item ng-if="account.id && isInit">
       <div class="md-list-item-text" style="width: 100%" layout="row" layout-wrap layout-align="space-between center">
         <div layout="row" layout-wrap style="max-height: 440px; overflow-y: scroll;" class="hide-scrollbar">
           <div flex="25" ng-repeat="server in servers">
@@ -52,7 +52,7 @@
         </div>
       </div>
     </md-list-item>
-    <md-list-item ng-if="!account.id">
+    <md-list-item ng-if="!account.id && isInit">
       <div flex class="pay-elements" layout="column" layout-align="center center" ng-show="pay.status === 'choose'">
         <div layout="row" class="pay-element" layout-align="space-between center" ng-repeat="order in orders" ng-show="order.alipay > 0" style="width: 300px;" ng-click="getQrcode(order.id)">
           <div layout="column">
