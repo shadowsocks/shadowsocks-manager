@@ -149,11 +149,16 @@ app
         }
         $localStorage.app.selectedServerId = selectedServer.id;
         getCurrentFlow();
+        startGetCurrentFlow();
         $scope.isInit = true;
       }, (err) => {
-        $scope.proxy.status = false;
         $scope.isInit = true;
-        $scope.changeStatus();
+        if(err === 'no account') {
+          $scope.proxy.status = false;
+          $scope.changeStatus();
+          $interval.cancel(getCurrentFlowInterval);
+          getCurrentFlowInterval = null;
+        }
       });
     };
     refreshAccountData();
@@ -187,9 +192,16 @@ app
         $scope.currentFlow = success.flow;
       });
     };
-    $interval(() => {
-      getCurrentFlow();
-    }, 90 * 1000);
+
+    let getCurrentFlowInterval;
+    const startGetCurrentFlow = () => {
+      if(getCurrentFlowInterval) {
+        $interval.cancel(getCurrentFlowInterval);
+      }
+      getCurrentFlowInterval = $interval(() => {
+        getCurrentFlow();
+      }, 90 * 1000);
+    };
 
     const getPriceList = () => {
       $http.get('/api/user/order/price').then(success => {
