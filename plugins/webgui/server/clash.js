@@ -1176,10 +1176,4 @@ module.exports = {
     "GEOIP,CN,DIRECT",
     "MATCH,⚓️其他流量"
   ],
-  'allow-lan': false,
-  'external-controller': '127.0.0.1:9090',
-  'log-level': 'info',
-  mode: 'Rule',
-  port: 7890,
-  'socks-port': 1080,
 };
