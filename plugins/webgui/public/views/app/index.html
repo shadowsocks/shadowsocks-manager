@@ -21,7 +21,8 @@
         </md-switch>
       </div>
     </md-list-item>
-    <md-divider></md-divider>
+    <md-divider ng-if="isInit"></md-divider>
+    <md-progress-linear md-mode="indeterminate" ng-if="!isInit"></md-progress-linear>
     <md-list-item ng-if="account.id && isInit">
       <div class="md-list-item-text" style="width: 100%;" layout="row" layout-wrap layout-align="space-between center">
         <div flex="100" layout="row" layout-align="space-between center">
