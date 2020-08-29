@@ -1,6 +1,6 @@
 .account-server-checkbox .md-label{width:100%}
 .add-card{border:1px dashed transparent;background:linear-gradient(white,#fff) padding-box,repeating-linear-gradient(-45deg,#ccc 0,#ccc .25em,#fff 0,#fff .55em);box-shadow:none!important}
-.draggable{-webkit-app-region:drag}.app-radius{border-radius:5px}.hide-app-button{-webkit-app-region:no-drag;cursor:pointer;padding:3px}.hide-app-button:hover{background:#e91e63;color:#ccc}.pay-elements{height:460px}.pay-element{margin:7px 0;cursor:pointer;padding:5px 7px;border-radius:5px}.pay-element:hover{background:#ccc}
+.draggable{-webkit-app-region:drag}.hide-app-button{-webkit-app-region:no-drag;cursor:pointer;padding:3px}.hide-app-button:hover{background:#e91e63;color:#ccc}.pay-elements{height:460px}.pay-element{margin:7px 0;cursor:pointer;padding:5px 7px;border-radius:5px}.pay-element:hover{background:#ccc}
 @media (max-width:960px){.auto-pop-dialog-size{height:100%}.auto-pop-content-size{height:100%}}
 .bottom-nav{background-color:#fafafa;overflow:hidden;position:sticky;position:-webkit-sticky;bottom:0;width:100%;z-index:10}
 .default-cursor{cursor:default}
