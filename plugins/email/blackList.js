@@ -1,4 +1,5 @@
 const blackList = [
+  'powerencry.com',
   '@027168.com',
   '@spam4.me',
   '@hostguru.top',
