@@ -1,5 +1,7 @@
 const blackList = [
-  'powerencry.com',
+  '@chasefreedomactivate.com',
+  '@truthfinderlogin.com',
+  '@powerencry.com',
   '@027168.com',
   '@spam4.me',
   '@hostguru.top',
