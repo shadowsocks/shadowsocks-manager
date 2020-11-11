@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.36.46",
+  "version": "0.36.47",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "@babel/preset-env": "^7.12.1",
     "ajv": "^6.12.6",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.1.0",
+    "babel-loader": "^8.2.1",
     "del": "^3.0.0",
     "eslint": "^5.16.0",
     "gulp": "^4.0.2",
