@@ -27,6 +27,13 @@ exports.getAccount = async (req, res) => {
   try {
     const userId = req.session.user;
     const accounts = await account.getAccount({ userId, orderById: true });
+    const showAccountOrderName = await knex('webguiSetting').select().where({
+      key: 'account',
+    }).then(success => {
+      if(!success.length) { return false; }
+      const result = JSON.parse(success[0].value);
+      return !!result.showAccountOrderName;
+    });
     for(const account of accounts) {
       account.data = JSON.parse(account.data);
       if (account.type >= 2 && account.type <= 5) {
@@ -93,6 +100,9 @@ exports.getAccount = async (req, res) => {
         account.idle = getIdleServer(wireguardServers).id;
       } else if(getIdleServer(trojanServers)) {
         account.idle = getIdleServer(trojanServers).id;
+      }
+      if(!showAccountOrderName) {
+        delete account.orderName;
       }
     }
     res.send(accounts);

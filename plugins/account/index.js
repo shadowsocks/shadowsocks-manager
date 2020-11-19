@@ -98,6 +98,7 @@ const getAccount = async (options = {}) => {
     'account_plugin.id',
     'account_plugin.type',
     'account_plugin.orderId',
+    'webgui_order.name as orderName',
     'account_plugin.userId',
     'account_plugin.server',
     'account_plugin.port',
@@ -113,6 +114,7 @@ const getAccount = async (options = {}) => {
     'user.email as user',
   ])
   .leftJoin('user', 'user.id', 'account_plugin.userId')
+  .leftJoin('webgui_order', 'webgui_order.id', 'account_plugin.orderId')
   .where(where)
   .orderBy('account_plugin.id', options.orderById ? 'desc' : 'asc');
   return account;
