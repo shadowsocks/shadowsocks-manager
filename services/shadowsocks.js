@@ -340,7 +340,7 @@ const getGfwStatus = () => {
     method: 'GET',
     timeout: 8000 + isGfw * 2000,
   }, res => {
-    if(res.statusCode === 200) {
+    if(res.statusCode >= 200 && res.statusCode < 400) {
       isGfw = 0;
     }
     res.setEncoding('utf8');

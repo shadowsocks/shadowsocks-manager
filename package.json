@@ -20,10 +20,10 @@
     "gfw"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
+    "@babel/cli": "^7.12.7",
+    "@babel/core": "^7.12.7",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
     "ajv": "^6.12.6",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.1",
@@ -58,7 +58,7 @@
     "log4js": "^4.5.1",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.4.15",
+    "nodemailer": "^6.4.16",
     "oauth-1.0a": "^2.2.6",
     "paypal-rest-sdk": "^1.8.1",
     "qr-image": "^3.2.0",
