@@ -14,6 +14,8 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
           unlimit: true,
           mac: true,
           orderId: 0,
+          hasUser: true,
+          noUser: true,
         },
       };
     }
