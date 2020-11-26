@@ -19,8 +19,8 @@
             <md-card-header ng-style="isBlur(a)">
                 <md-card-header-text>
                     <span class="md-title">{{a.port}}
-                        <span ng-show="a.orderName" style="color: #666; font-size: 0.8em;">{{ a.orderName }}</span>
-                        <span ng-show="isAccountOutOfDate(a)" style="color: #a33;">&nbsp;{{ '已过期' | translate }}</span>
+                        <span ng-show="a.orderName" style="color: #666; font-size: 0.8em;">&nbsp;{{ a.orderName }}</span>
+                        <span ng-show="isAccountOutOfDate(a)" style="color: #a33; font-size: 0.8em;">&nbsp;{{ '已过期' | translate }}</span>
                     </span>
                 </md-card-header-text>
             </md-card-header>
