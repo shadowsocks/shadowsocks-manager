@@ -2,6 +2,18 @@
     <md-card>
         <md-list>
             <md-divider></md-divider>
+            <md-list-item>
+                <div flex layout="row" layout-align="space-between center">
+                    <div flex="70" flex-xs="60" flex layout="row">
+                        <div style="color: #aaa; width: 40px;">∑</div>
+                        <span>合计</span>
+                    </div>
+                    <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;">
+                        <span>{{ allFlow | flow }}</span>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+            </md-list-item>
             <md-list-item ng-repeat="user in topUsers track by $index" ng-click="toUser(user)">
                 <div flex layout="row" layout-align="space-between center">
                     <div flex="70" flex-xs="60" flex layout="row">

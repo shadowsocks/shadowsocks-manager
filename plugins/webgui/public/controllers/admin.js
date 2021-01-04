@@ -270,8 +270,12 @@ app.controller('AdminController', ['$scope', '$mdMedia', '$mdSidenav', '$state',
   $scope.setTitle('今日流量排行');
   $scope.setMenuButton('arrow_back', 'admin.index');
   $scope.topUsers = null;
+  $scope.allFlow = 0;
   $http.get('/api/admin/flow/top?number=150').then(success => {
     $scope.topUsers = success.data;
+    $scope.allFlow = success.data.reduce((a, b) => ({
+      sumFlow: a.sumFlow + b.sumFlow,
+    }), { sumFlow: 0 }).sumFlow;
   });
   $scope.toUser = user => {
     if(user.email) {
