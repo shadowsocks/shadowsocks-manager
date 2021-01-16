@@ -1,6 +1,9 @@
 <div ng-controller="AppController" layout="column" ng-cloak layout-fill class="app-radius" style="overflow: hidden;">
   <div class="draggable" layout="row" layout-align="space-between center" style="width: 100%;">
-    <div style="padding: 3px 7px;">ShadowGhost</div>
+    <div layout="row" style="padding: 3px 7px;" layout-align="space-between end">
+      <div>ShadowGhost</div>
+      <div style="font-size: 0.7em; color: #333; margin-left: 5px">{{ appVersion }}</div>
+    </div>
     <div>
       <md-icon class="material-icons hide-app-button no-focus-outline" ng-click="hide()">close</md-icon>
     </div>

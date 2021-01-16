@@ -14,6 +14,9 @@ app
   $scope.hide = () => {
     window.hideApp();
   };
+  if(window.getAppVersion) {
+    $scope.appVersion = window.getAppVersion();
+  }
 }])
 .controller('AppLoadingController', ['$scope', '$mdMedia', '$mdSidenav', '$state', '$http', '$interval', '$localStorage', 'userApi', 'configManager', '$window',
   ($scope, $mdMedia, $mdSidenav, $state, $http, $interval, $localStorage, userApi, configManager, $window) => {
