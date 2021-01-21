@@ -57,3 +57,5 @@ plugins/webgui/libs/angular-inview.js
 plugins/webgui/public/*
 !plugins/webgui/public/views
 plugins/*/screenshot
+
+package-lock.json

@@ -47,3 +47,5 @@ plugins/webgui/libs/lib.js
 plugins/webgui/libs/style.css
 *.yml
 *.sqlite
+
+package-lock.json

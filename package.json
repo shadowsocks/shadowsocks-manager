@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.36.56",
+  "version": "0.36.57",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -20,10 +20,10 @@
     "gfw"
   ],
   "devDependencies": {
-    "@babel/cli": "^7.12.8",
-    "@babel/core": "^7.12.9",
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-env": "^7.12.11",
     "ajv": "^6.12.6",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
@@ -34,7 +34,7 @@
     "gulp-clean-css": "^3.10.0",
     "gulp-concat": "^2.6.1",
     "terser-webpack-plugin": "^2.3.8",
-    "webpack": "^4.44.2",
+    "webpack": "^4.46.0",
     "webpack-stream": "^5.2.1"
   },
   "dependencies": {
@@ -50,7 +50,7 @@
     "express-validator": "^5.3.1",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.5.2",
-    "ioredis": "^4.19.2",
+    "ioredis": "^4.19.4",
     "js-yaml": "^3.14.1",
     "knex": "0.20.9",
     "later": "^1.2.0",
@@ -58,7 +58,7 @@
     "log4js": "^4.5.1",
     "moment": "^2.29.1",
     "mysql": "^2.18.1",
-    "nodemailer": "^6.4.16",
+    "nodemailer": "^6.4.17",
     "oauth-1.0a": "^2.2.6",
     "paypal-rest-sdk": "^1.8.1",
     "qr-image": "^3.2.0",
