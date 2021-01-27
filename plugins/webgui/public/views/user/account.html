@@ -96,14 +96,14 @@
                             <md-list-item ng-show="isWG(a.serverInfo) && !config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>公钥：</div>
-                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em;">{{a.publicKey}}</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em; font-family: 'Courier New', Consolas, monospace;">{{a.publicKey}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-show="isWG(a.serverInfo) && !config.simple"></md-divider>
                             <md-list-item ng-show="isWG(a.serverInfo) && !config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '私钥：' | translate }}</div>
-                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em;">{{a.privateKey}}</div>
+                                    <div flex="60" style="text-align:right; overflow: hidden; text-overflow: ellipsis; color: #666; font-size: 0.8em; font-family: 'Courier New', Consolas, monospace;">{{a.privateKey}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-show="isWG(a.serverInfo) && !config.simple"></md-divider>
