@@ -54,6 +54,8 @@ db:
 
 !> 当使用5.7或更高版本的 MySQL 时，必须关闭`only_full_group_by`这个特性
 
+!> 当使用8.x版本的 MySQL 时，请加上`--default-authentication-plugin=mysql_native_password`参数
+
 ## 使用 mailgun 发送邮件
 
 将配置文件的 email 部分替换成下面的格式：
