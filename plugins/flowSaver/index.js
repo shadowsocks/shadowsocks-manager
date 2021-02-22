@@ -10,6 +10,9 @@ const manager = appRequire('services/manager');
 const minute = 1;
 const time = minute * 60 * 1000;
 
+const config = appRequire('services/config').all();
+const isSQLite = typeof config.db === 'string';
+
 let accountInfo = {};
 
 const updateAccountInfo = async () => {
@@ -58,8 +61,9 @@ const saveFlow = async () => {
         flow.forEach(async f => {
           await accountFlow.updateFlow(f.id, f.accountId, f.flow);
         });
-        for(let i = 0; i < Math.ceil(flow.length / 50); i++) {
-          const insertFlow = flow.slice(i * 50, i * 50 + 50);
+        const splitNumber = isSQLite ? 25 : 75;
+        for(let i = 0; i < Math.ceil(flow.length / splitNumber); i++) {
+          const insertFlow = flow.slice(i * splitNumber, i * splitNumber + splitNumber);
           await knex('saveFlow').insert(insertFlow).catch();
           logger.info(`[server: ${ server.id }] insert ${ insertFlow.length } flow`);
         }
