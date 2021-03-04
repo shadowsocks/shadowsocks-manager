@@ -1,4 +1,6 @@
 const blackList = [
+  '@suiyongsuiqi.com',
+  '@willbe.vip',
   '@mail.mjj.edu.ge',
   '@ze-zha.com',
   '@wellsfargocomcardholders.com',

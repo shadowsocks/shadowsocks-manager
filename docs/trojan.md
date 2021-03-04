@@ -20,3 +20,5 @@
 npm i -g ssmgr-trojan-client
 ssmgr-trojan-client -k yourpassword
 ```
+
+!> Trojan 密码格式是 `端口号:密码`
