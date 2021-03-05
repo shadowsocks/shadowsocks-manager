@@ -2,6 +2,7 @@ const knex = appRequire('init/knex').knex;
 const redis = appRequire('init/redis').redis;
 const crypto = require('crypto');
 const moment = require('moment');
+const config = appRequire('services/config').all();
 // const macAccount = appRequire('plugins/macAccount/index');
 
 const checkPasswordLimit = {
@@ -194,7 +195,8 @@ const getUserAndPaging = async (opt = {}) => {
   .where('id', '>', 1)
   .whereIn('type', type);
 
-  let users = knex('user').select([
+  const hasAlipay = !!config.plugins.alipay && !!config.plugins.alipay.use;
+  const columns = [
     'user.id as id',
     'user.username as username',
     'user.email as email',
@@ -207,8 +209,19 @@ const getUserAndPaging = async (opt = {}) => {
     'user.resetPasswordId as resetPasswordId',
     'user.resetPasswordTime as resetPasswordTime',
     'account_plugin.port as port',
-  ])
-  .leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
+  ];
+  if(hasAlipay) {
+    columns.push('alipay.orderId as alipay');
+  }
+
+  let users = knex('user').select(columns)
+  .leftJoin('account_plugin', 'user.id', 'account_plugin.userId');
+
+  if(hasAlipay) {
+    users.leftJoin('alipay', 'user.id', 'alipay.user');
+  }
+
+  users = users
   .where('user.id', '>', 1)
   .whereIn('user.type', type).groupBy('user.id');
 

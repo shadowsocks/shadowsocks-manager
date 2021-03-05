@@ -152,8 +152,8 @@ exports.getSubscribeAccountForUser = async (req, res) => {
     const ssr = req.query.ssr;
     let type = req.query.type || 'shadowrocket';
     if(ssr === '1') { type = 'ssr'; }
-    const resolveIp = !!req.query.ip;
-    const showFlow = !!req.query.flow;
+    const resolveIp = +req.query.ip;
+    const showFlow = +req.query.flow;
     const token = req.params.token;
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     let subscribeAccount = {};

@@ -55,6 +55,7 @@ exports.getUsers = async (req, res) => {
         lastLogin: m.lastLogin,
         username: m.username,
         port: m.port,
+        alipay: m.alipay,
       };
     });
     return res.send(result);

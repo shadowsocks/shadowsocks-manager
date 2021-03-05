@@ -106,7 +106,11 @@ app.controller('AdminUserController', ['$scope', '$state', '$stateParams', 'admi
       $scope.userSortDialog();
     });
     $scope.userColor = user => {
-      if(!user.port) {
+      if(!user.port && !user.alipay) {
+        return {
+          background: 'red-100', 'border-color': 'blue-300',
+        };
+      } else if(!user.port) {
         return {
           background: 'red-50', 'border-color': 'blue-300',
         };
