@@ -145,16 +145,30 @@ const getRecentSignUpUsers = async (number, group) => {
 };
 
 const getRecentLoginUsers = async (number, group) => {
-  const where = { type: 'normal' };
+  const where = {};
+  where['user.type'] = 'normal';
+  const columns = [
+    'user.id as id',
+    'user.username as username',
+    'user.email as email',
+    'user.lastLogin as lastLogin',
+    'account_plugin.port as port',
+  ];
   if(group >= 0) { where.group = group; }
   if(number > 0) {
-    return knex('user').select().where(where).orderBy('lastLogin', 'desc').limit(number);
+    return knex('user').select(columns)
+    .leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
+    .where(where).orderBy('lastLogin', 'desc').groupBy('user.id').limit(number);
   }
   const now = Date.now();
   const time = moment(now).hour(0).minute(0).second(0).millisecond(0).valueOf();
-  let users = await knex('user').select().where(where).where('lastLogin', '>', time).orderBy('lastLogin', 'desc');
+  let users = await knex('user').select(columns)
+  .leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
+  .where(where).where('lastLogin', '>', time).orderBy('lastLogin', 'desc').groupBy('user.id');
   if(users.length < 100) {
-    users = [...users, ...await knex('user').select().where(where).where('lastLogin', '<=', time).orderBy('lastLogin', 'desc').limit(100 - users.length)];
+    users = [...users, ...await knex('user').select(columns)
+    .leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
+    .where(where).where('lastLogin', '<=', time).orderBy('lastLogin', 'desc').groupBy('user.id').limit(100 - users.length)];
   }
   return users;
 };

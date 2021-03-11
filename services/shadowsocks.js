@@ -176,7 +176,7 @@ const compareWithLastFlow = async (flow, lastFlow) => {
   const realFlow = {};
   if(!lastFlow) {
     for(const f in flow) {
-      if(flow[f] <= 100) { delete flow[f]; }
+      if(flow[f] <= 768) { delete flow[f]; }
     }
     return flow;
   }
@@ -203,7 +203,7 @@ const compareWithLastFlow = async (flow, lastFlow) => {
     return flow;
   }
   for(const r in realFlow) {
-    if(realFlow[r] <= 100) { delete realFlow[r]; }
+    if(realFlow[r] <= 768) { delete realFlow[r]; }
   }
   return realFlow;
 };
