@@ -8,9 +8,11 @@
                         <div style="color: #aaa; width: 40px;">{{ $index + 1 }}.</div>
                         <span>{{ user.email }}</span>
                     </div>
-                    <div flex="30" flex-xs="40" style="text-align: right; color: #aaa; font-size: 0.8em;"
-                        ng-if="user.lastLogin">
-                        {{user.createTime | timeagoshort | translateTime}}
+                    <div flex="30" layout="row" layout-align="end center"
+                    style="text-align: right; color: #aaa;"
+                        ng-if="user.createTime">
+                        <div hide-xs hide-sm style="font-size: 0.9em;">{{user.port}}</div>
+                        <div style="min-width: 75px; font-size: 0.8em;">{{user.createTime | timeagoshort | translateTime}}</div>
                     </div>
                 </div>
                 <md-divider></md-divider>

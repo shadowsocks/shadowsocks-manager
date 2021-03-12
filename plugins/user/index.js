@@ -138,9 +138,22 @@ const getUsers = async () => {
 };
 
 const getRecentSignUpUsers = async (number, group) => {
-  const where = { type: 'normal' };
+  const where = {};
+  where['user.type'] = 'normal';
   if(group >= 0) { where.group = group; }
-  const users = await knex('user').select().where(where).orderBy('createTime', 'desc').limit(number);
+  const columns = [
+    'user.id as id',
+    'user.username as username',
+    'user.email as email',
+    'user.createTime as createTime',
+    'account_plugin.port as port',
+  ];
+  const users = await knex('user').select(columns)
+  .leftJoin('account_plugin', 'user.id', 'account_plugin.userId')
+  .where(where)
+  .orderBy('createTime', 'desc')
+  .groupBy('user.id')
+  .limit(number);
   return users;
 };
 
