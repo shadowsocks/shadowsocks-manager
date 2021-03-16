@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.36.65",
+  "version": "0.36.66",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -50,7 +50,7 @@
     "express-validator": "^5.3.1",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.5.2",
-    "ioredis": "^4.23.0",
+    "ioredis": "^4.24.2",
     "js-yaml": "^3.14.1",
     "knex": "0.20.9",
     "later": "^1.2.0",

@@ -18,6 +18,11 @@ const speed = acConfig.speed || 5;
 const sleepTime = 100;
 const accountFlow = appRequire('plugins/account/accountFlow');
 const accountPlugin = appRequire('plugins/account');
+const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
+let telegram;
+if(isTelegram) {
+  telegram = appRequire('plugins/webgui_telegram/admin');
+}
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -461,6 +466,7 @@ cron.minute(async () => {
         await webguiTag.addTags('server', server.id, ['#_hide']);
       } else if (tags.includes('#_hide')) {
         await webguiTag.delTags('server', server.id, ['#_hide']);
+        isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已重新上线`);
       }
       if(result.isGfw && !tags.includes('#_pause') && tags.includes('#autopause')) {
         await webguiTag.addTags('server', server.id, ['#_pause']);
@@ -470,6 +476,7 @@ cron.minute(async () => {
     } catch(err) {
       if(!tags.includes('#_hide') && tags.includes('#autohide')) {
         await webguiTag.addTags('server', server.id, ['#_hide']);
+        isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已离线`);
       }
       if(!tags.includes('#_pause') && tags.includes('#autopause')) {
         await webguiTag.addTags('server', server.id, ['#_pause']);
