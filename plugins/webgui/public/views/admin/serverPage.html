@@ -95,10 +95,12 @@
         </md-card>
     </div>
 </div>
-<div ng-hide="server">
+<div layout="row" layout-wrap ng-show="getServerInfoError" layout-align="center center">
+    <div style="color: #999; font-size: 1.5em; margin-top: 20px;">服务器连接失败</div>
+</div>
+<div>
     <div flex layout="row" class="zero-element" layout-align="center center">
-        <md-progress-circular ng-show="!getServerInfoError" md-mode="indeterminate" class="md-accent"></md-progress-circular>
-        <div ng-show="getServerInfoError">服务器连接失败</div>
+        <md-progress-circular ng-show="!getServerInfoError && !server" md-mode="indeterminate" class="md-accent"></md-progress-circular>
     </div>
 </div>
 <div style="height: 100px;"></div>

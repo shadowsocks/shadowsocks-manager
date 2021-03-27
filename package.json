@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.36.66",
+  "version": "0.36.67",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {

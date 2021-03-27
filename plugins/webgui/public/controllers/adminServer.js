@@ -231,6 +231,16 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         $scope.getServerInfoError = false;
       }).catch(() => {
         $scope.getServerInfoError = true;
+        $http.get(`/api/admin/server/${ serverId }`, {
+          params: {
+            noPort: true,
+          },
+        }).then(success => {
+          $scope.server = success.data;
+          $scope.isSS = $scope.server.type === 'Shadowsocks';
+          $scope.isWG = $scope.server.type === 'WireGuard';
+          $scope.isTJ = $scope.server.type === 'Trojan';
+        });
       });
     };
     getServerInfo();
