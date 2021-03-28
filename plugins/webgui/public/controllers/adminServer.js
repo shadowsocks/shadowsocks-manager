@@ -183,6 +183,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
   ($scope, $state, $stateParams, $http, moment, $mdDialog, adminApi, $localStorage, $mdMedia, $interval, banDialog) => {
     $scope.setTitle('服务器');
     $scope.setMenuButton('arrow_back', 'admin.server');
+    $scope.visiblePortNumber = 60;
     const serverId = $stateParams.serverId;
     if(!$localStorage.admin.serverPortFilter) {
       $localStorage.admin.serverPortFilter = {
@@ -193,11 +194,18 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
     $scope.onlineAccount = [];
     $scope.getServerInfoError = false;
     const getServerInfo = () => {
-      $http.get(`/api/admin/server/${ serverId }`).then(success => {
+      $http.get(`/api/admin/server/${ serverId }`, {
+        params: {
+          noPort: true,
+        },
+      }).then(success => {
         $scope.server = success.data;
         $scope.isSS = $scope.server.type === 'Shadowsocks';
         $scope.isWG = $scope.server.type === 'WireGuard';
         $scope.isTJ = $scope.server.type === 'Trojan';
+        return $http.get(`/api/admin/server/${ serverId }`);
+      }).then(success => {
+        $scope.server = success.data;
         $scope.currentPorts = {};
         $scope.server.ports.forEach(f => {
           $scope.currentPorts[f.port] = {
@@ -229,18 +237,8 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           return $scope.currentPorts[f].exists;
         }).length;
         $scope.getServerInfoError = false;
-      }).catch(() => {
+      }).catch(err => {
         $scope.getServerInfoError = true;
-        $http.get(`/api/admin/server/${ serverId }`, {
-          params: {
-            noPort: true,
-          },
-        }).then(success => {
-          $scope.server = success.data;
-          $scope.isSS = $scope.server.type === 'Shadowsocks';
-          $scope.isWG = $scope.server.type === 'WireGuard';
-          $scope.isTJ = $scope.server.type === 'Trojan';
-        });
       });
     };
     getServerInfo();
@@ -458,6 +456,12 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       const currentIndex = serverIds.indexOf(+serverId);
       const prevServerId = serverIds[(currentIndex - 1 + serverIds.length) % serverIds.length];
       $state.go('admin.serverPage', { serverId: prevServerId });
+    };
+    $scope.view = (inview) => {
+      if(!inview) { return; }
+      const maxLength = Object.keys($scope.currentPorts || {}).length;
+      if ($scope.visiblePortNumber < maxLength)
+      $scope.visiblePortNumber = Math.min(maxLength, $scope.visiblePortNumber + 30);
     };
   }
 ])

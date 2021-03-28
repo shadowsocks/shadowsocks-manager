@@ -1,4 +1,4 @@
-const ONLINE_CACHE_NAME = '2021-03-27 15:07:21 <%= serviceWorkerTime%>';
+const ONLINE_CACHE_NAME = '2021-03-28 09:41:35 <%= serviceWorkerTime%>';
 const isSWOpen = JSON.parse('<%= serviceWorker%>');
 
 const emptyCacheUrl = [];
