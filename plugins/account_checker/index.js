@@ -456,32 +456,40 @@ cron.minute(async () => {
   const servers = await knex('server').select();
   for(const server of servers) {
     const tags = await webguiTag.getTags('server', server.id);
-    try {
-      const result = await manager.send({ command: 'version' }, {
-        host: server.host,
-        port: server.port + server.shift,
-        password: server.password,
-      });
-      if(result.isGfw && !tags.includes('#_hide') && tags.includes('#autohide')) {
-        await webguiTag.addTags('server', server.id, ['#_hide']);
-      } else if (tags.includes('#_hide')) {
-        await webguiTag.delTags('server', server.id, ['#_hide']);
-        isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已重新上线`);
+    const checkServerStatus = async (server, retry = 0) => {
+      try {
+        const result = await manager.send({ command: 'version' }, {
+          host: server.host,
+          port: server.port + server.shift,
+          password: server.password,
+        });
+        if(result.isGfw && !tags.includes('#_hide') && tags.includes('#autohide')) {
+          await webguiTag.addTags('server', server.id, ['#_hide']);
+          isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已离线`);
+        } else if (tags.includes('#_hide')) {
+          await webguiTag.delTags('server', server.id, ['#_hide']);
+          isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已重新上线`);
+        }
+        if(result.isGfw && !tags.includes('#_pause') && tags.includes('#autopause')) {
+          await webguiTag.addTags('server', server.id, ['#_pause']);
+        } else if (tags.includes('#_pause')) {
+          await webguiTag.delTags('server', server.id, ['#_pause']);
+        }
+      } catch(err) {
+        if(retry < 3) {
+          checkServerStatus(server, retry + 1);
+          return;
+        }
+        if(!tags.includes('#_hide') && tags.includes('#autohide')) {
+          await webguiTag.addTags('server', server.id, ['#_hide']);
+          isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已离线`);
+        }
+        if(!tags.includes('#_pause') && tags.includes('#autopause')) {
+          await webguiTag.addTags('server', server.id, ['#_pause']);
+        }
       }
-      if(result.isGfw && !tags.includes('#_pause') && tags.includes('#autopause')) {
-        await webguiTag.addTags('server', server.id, ['#_pause']);
-      } else if (tags.includes('#_pause')) {
-        await webguiTag.delTags('server', server.id, ['#_pause']);
-      }
-    } catch(err) {
-      if(!tags.includes('#_hide') && tags.includes('#autohide')) {
-        await webguiTag.addTags('server', server.id, ['#_hide']);
-        isTelegram && telegram.push(`服务器[${ server.id }][${ server.name }]已离线`);
-      }
-      if(!tags.includes('#_pause') && tags.includes('#autopause')) {
-        await webguiTag.addTags('server', server.id, ['#_pause']);
-      }
-    }
+    };
+    checkServerStatus(server);
   }
 }, 'CheckServerStatus', 3);
 
