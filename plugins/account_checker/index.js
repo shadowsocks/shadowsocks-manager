@@ -477,7 +477,9 @@ cron.minute(async () => {
         }
       } catch(err) {
         if(retry < 3) {
-          checkServerStatus(server, retry + 1);
+          logger.error('server', server.id, server.name, 'retry', retry, err);
+          await sleep(10 * 1000);
+          await checkServerStatus(server, retry + 1);
           return;
         }
         if(!tags.includes('#_hide') && tags.includes('#autohide')) {
