@@ -7,6 +7,7 @@ const orderPlugin = appRequire('plugins/webgui_order');
 const accountFlow = appRequire('plugins/account/accountFlow');
 const webguiTag = appRequire('plugins/webgui_tag');
 const redis = appRequire('init/redis').redis;
+const crypto = require('crypto');
 
 const runCommand = async cmd => {
   const exec = require('child_process').exec;
@@ -32,6 +33,7 @@ const addAccount = async (type, options) => {
   if(type === 6 || type === 7) {
     type = 3;
   }
+  const subscribeToken = crypto.randomBytes(16).toString('hex');
   if(type === 1) {
     const [ accountId ] = await knex('account_plugin').insert({
       type,
@@ -47,6 +49,7 @@ const addAccount = async (type, options) => {
       autoRemove: 0,
       multiServerFlow: options.multiServerFlow || 0,
       key,
+      subscribe: subscribeToken,
     });
     await accountFlow.add(accountId);
     return accountId;
@@ -69,6 +72,7 @@ const addAccount = async (type, options) => {
       multiServerFlow: options.multiServerFlow || 0,
       active: options.active,
       key,
+      subscribe: subscribeToken,
     });
     await accountFlow.add(accountId);
     return accountId;

@@ -666,9 +666,9 @@ exports.getAccountSubscribe = async (req, res) => {
       userId,
     }).then(s => s[0]);
     if(!account.subscribe) {
-      const subscribeToken = crypto.randomBytes(16).toString('hex');;
+      const subscribeToken = crypto.randomBytes(16).toString('hex');
       await await knex('account_plugin').update({
-        subscribe: subscribeToken
+        subscribe: subscribeToken,
       }).where({
         id: accountId,
         userId,
@@ -692,7 +692,7 @@ exports.getAdminAccountSubscribe = async (req, res) => {
       id: accountId,
     }).then(s => s[0]);
     if(!account.subscribe) {
-      const subscribeToken = crypto.randomBytes(16).toString('hex');;
+      const subscribeToken = crypto.randomBytes(16).toString('hex');
       await await knex('account_plugin').update({
         subscribe: subscribeToken
       }).where({
