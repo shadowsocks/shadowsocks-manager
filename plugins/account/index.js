@@ -675,6 +675,7 @@ const addAccountTime = async (userId, accountId, accountType, accountPeriod = 1)
     const port = await getNewPort();
     let password = Math.random().toString().substr(2,10);
     if(password[0] === '0') { password = '1' + password.substr(1); }
+    const subscribeToken = crypto.randomBytes(16).toString('hex');
     await knex('account_plugin').insert({
       type: accountType,
       userId,
@@ -688,6 +689,7 @@ const addAccountTime = async (userId, accountId, accountType, accountPeriod = 1)
       }),
       autoRemove: getPaymentInfo(accountType).autoRemove,
       multiServerFlow: getPaymentInfo(accountType).multiServerFlow,
+      subscribe: subscribeToken,
     });
     return;
   }
