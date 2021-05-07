@@ -31,7 +31,8 @@ const getUserOrders = async userId => {
   ])
   .leftJoin('user', 'user.id', 'webgui_ref_time.user')
   .leftJoin('account_plugin', 'account_plugin.id', 'webgui_ref_time.account')
-  .where({ 'user.id': userId });
+  .where({ 'user.id': userId })
+  .orderBy('webgui_ref_time.createTime', 'DESC');
   return orders;
 };
 
