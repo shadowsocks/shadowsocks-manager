@@ -104,8 +104,8 @@
         <md-card>
             <md-card-content>
                 <div layout="row" layout-align="space-between center">
-                    <div flex="70" ng-click="toRefUser(user.id)">
-                        <span>{{ user.email }}</span>
+                    <div flex="70" style="font-size: 0.9em;" ng-click="toRefUser(user.id)">
+                        <span>{{ user.email }}</span><br><span style="font-size: 0.9em;">{{ user.time | timeago }}</span>
                     </div>
                     <div flex="30" layout="row" layout-align="space-between center">
                         <div></div>

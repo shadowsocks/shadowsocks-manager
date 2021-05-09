@@ -80,7 +80,6 @@ gulp.task('webguiBuild', () => {
     },
     optimization: {
       minimize: true,
-      minimizer: [new TerserPlugin()],
     },
     mode: 'production',
     performance: { hints: false },
