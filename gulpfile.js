@@ -3,7 +3,6 @@ const gulp = require('gulp');
 const path = require('path');
 const webpackStream = require('webpack-stream');
 const concat = require('gulp-concat');
-const TerserPlugin = require('terser-webpack-plugin');
 const cleanCSS = require('gulp-clean-css');
 
 gulp.task('clean', () => {
