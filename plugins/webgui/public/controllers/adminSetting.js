@@ -482,6 +482,7 @@ app.controller('AdminSettingsController', ['$scope', '$state',
       } }).then(success => success.data)
       .then(success => {
         $scope.total = success.total;
+        $scope.setFabNumber(success.total);
         if(!search && $scope.menuSearch.text) { return; }
         if(search && search !== $scope.menuSearch.text) { return; }
         success.code.forEach(f => {
