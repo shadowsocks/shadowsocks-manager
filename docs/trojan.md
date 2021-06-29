@@ -9,7 +9,7 @@
 * [p4gefau1t/trojan-go](https://github.com/p4gefau1t/trojan-go)
 * [trojan-gfw/trojan](https://github.com/trojan-gfw/trojan)
 * [DenrianWeiss/trojan-cluster](https://github.com/DenrianWeiss/trojan-cluster)
-* [trojan-rust](https://github.com/llc1123/trojan-rust)
+* [llc1123/trojan-rust](https://github.com/llc1123/trojan-rust)
 
 ## 安装 MySQL 或 Redis
 
