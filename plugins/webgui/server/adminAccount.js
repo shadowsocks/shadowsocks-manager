@@ -268,7 +268,7 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             return input;
           }
         };
-        insertFlow.subscribeName = `${toFlowString(currentFlow)}/${toFlowString(flow)}`;
+        insertFlow.subscribeName = `${toFlowString(currentFlow)} / ${toFlowString(flow)} (${(currentFlow*100/flow).toFixed(1)}%)`;
       }
       subscribeAccount.server = [
         ...(insertFlow.subscribeName ? [insertFlow] : []),
@@ -295,7 +295,8 @@ exports.getSubscribeAccountForUser = async (req, res) => {
             password: String(subscribeAccount.account.password),
             port: subscribeAccount.account.port + server.shift,
             server: server.host,
-            type: 'ss'
+            type: 'ss',
+            ...(server.pluginOptions ? JSON.parse(server.pluginOptions.replace(/\${port}/g, subscribeAccount.account.port+server.shift))['clash'] : {})
           })),
           ...trojanServers.map(server => ({
             name: server.subscribeName || server.name,

@@ -69,6 +69,7 @@ exports.addServer = async (req, res) => {
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
     const tjPort = isTj ? req.body.tjPort : null;
+    const pluginOptions = req.body.pluginOptions;
     await manager.send({
       command: 'flow',
       options: { clear: false, },
@@ -91,6 +92,7 @@ exports.addServer = async (req, res) => {
       net,
       wgPort,
       tjPort,
+      pluginOptions,
     });
     res.send({ serverId });
   } catch(err) {
@@ -127,6 +129,7 @@ exports.editServer = async (req, res) => {
     const net = isWG ? req.body.net: null;
     const wgPort = isWG ? req.body.wgPort : null;
     const tjPort = isTj ? req.body.tjPort : null;
+    const pluginOptions = req.body.pluginOptions;
     const check = +req.body.check;
     await manager.send({
       command: 'flow',
@@ -151,6 +154,7 @@ exports.editServer = async (req, res) => {
       net,
       wgPort,
       tjPort,
+      pluginOptions,
       check,
     });
     res.send('success');
