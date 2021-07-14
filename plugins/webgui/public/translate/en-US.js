@@ -193,6 +193,8 @@ module.exports = {
   '密码': 'Password',
   '加密方式': 'Encryption Method',
   '流量倍率': 'Traffic Multiplier',
+  '端口偏移': 'Port Shift',
+  '插件参数': 'Plugin Parameters',
 
   '取消': 'Cancel',
   '删除': 'Delete',

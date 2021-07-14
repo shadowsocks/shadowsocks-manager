@@ -2,9 +2,19 @@ module.exports = {
   proxies: [],
   "proxy-groups": [
     {
+      "name": "✈自动选优",
+      "type": "url-test",
+      "proxies": [
+        "placeholder",
+      ],
+      "url": "http://google.com/generate_204",
+      "interval": 3600
+    },
+    {
       "name": "🔰国外流量",
       "type": "select",
       "proxies": [
+        "✈自动选优",
         "placeholder",
         "🚀直接连接"
       ]
@@ -14,6 +24,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🔰国外流量",
+        "✈自动选优",
         "🚀直接连接"
       ]
     },
@@ -22,6 +33,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🔰国外流量",
+        "✈自动选优",
         "placeholder"
       ]
     },
@@ -30,6 +42,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🔰国外流量",
+        "✈自动选优",
         "placeholder"
       ]
     },
@@ -38,6 +51,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🔰国外流量",
+        "✈自动选优",
         "placeholder"
       ]
     },
@@ -46,6 +60,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🔰国外流量",
+        "✈自动选优",
         "placeholder"
       ]
     },
@@ -54,6 +69,7 @@ module.exports = {
       "type": "select",
       "proxies": [
         "🚀直接连接",
+        "✈自动选优",
         "🔰国外流量"
       ]
     },

@@ -507,6 +507,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       net: $stateParams.net,
       wgPort: $stateParams.wgPort,
       tjPort: $stateParams.tjPort,
+      pluginOptions: $stateParams.pluginOptions,
     };
     $scope.tags = ($stateParams.tags || []);
     $scope.tagsAutoComplete = {
@@ -541,6 +542,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         net: $scope.server.net,
         wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
         tjPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
+        pluginOptions: $scope.server.pluginOptions,
       }, {
         timeout: 15000,
       }).then(success => {
@@ -585,6 +587,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
         net: $scope.server.net,
         wgPort: $scope.server.wgPort,
         tjPort: $scope.server.tjPort,
+        pluginOptions: $scope.server.pluginOptions,
         tags: $scope.tags,
       });
     });
@@ -658,6 +661,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
       $scope.server.net = success.data.net;
       $scope.server.wgPort = success.data.wgPort;
       $scope.server.tjPort = success.data.tjPort;
+      $scope.server.pluginOptions = success.data.pluginOptions;
     });
     $scope.confirm = () => {
       alertDialog.loading();
@@ -681,6 +685,7 @@ app.controller('AdminServerController', ['$scope', '$http', '$state', 'moment', 
           net: $scope.server.net,
           wgPort: $scope.server.wgPort ? +$scope.server.wgPort : null,
           tjPort: $scope.server.tjPort ? +$scope.server.tjPort : null,
+          pluginOptions: $scope.server.pluginOptions,
           check: $scope.server.check,
         }),
       ]).then(() => {

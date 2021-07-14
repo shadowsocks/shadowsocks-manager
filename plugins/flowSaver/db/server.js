@@ -14,6 +14,13 @@ const createTable = async () => {
         table.integer('tjPort');
       });
     }
+
+    const hasPluginOptions = await knex.schema.hasColumn(tableName, 'pluginOptions');
+    if(!hasPluginOptions) {
+      await knex.schema.table(tableName, function(table) {
+        table.string('pluginOptions');
+      });
+    }
   } else {
     await knex.schema.createTable(tableName, function(table) {
       table.increments('id');
@@ -30,6 +37,7 @@ const createTable = async () => {
       table.string('net');
       table.integer('wgPort');
       table.integer('tjPort');
+      table.string('pluginOptions');
     });
   }
   const list = await knex('server').select(['name', 'host', 'port', 'password']);
