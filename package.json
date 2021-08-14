@@ -1,6 +1,6 @@
 {
   "name": "shadowsocks-manager",
-  "version": "0.37.4",
+  "version": "0.38.0",
   "description": "A shadowsocks manager tool for multi user and traffic control.",
   "main": "server.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "request-promise": "^4.2.6",
     "simple-get": "^3.1.0",
     "socks": "^2.6.1",
-    "sqlite3": "^4.2.0",
+    "sqlite3": "^5.0.0",
     "uuid": "^3.4.0",
     "web-push": "^3.4.4",
     "ws": "^6.2.1"
