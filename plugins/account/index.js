@@ -934,7 +934,7 @@ const getAccountAndPaging = async (opt) => {
   if(search) {
     account = account.filter(f => {
       return (
-        (f.user && f.user.includes(search)) ||
+        (f.user && f.user.toLowerCase().includes(search.toLowerCase())) ||
         (f.port && f.port.toString().includes(search)) ||
         (f.password && f.password.includes(search)) ||
         (f.mac && f.mac.includes(search))
