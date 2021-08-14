@@ -18,16 +18,21 @@ const run = async () => {
   if(runParams.includes(':')) {
     method = runParams.split(':')[1];
   }
+  const pluginOptions = [
+    ...(config.shadowsocks['plugin'] ? ['--plugin', config.shadowsocks['plugin']] : []),
+    ...(config.shadowsocks['plugin-opts'] ? ['--plugin-opts', config.shadowsocks['plugin-opts']] : []),
+  ];
   let shadowsocks;
   if(runParams.includes('python')) {
     type = 'python';
     const tempPassword = 'qwerASDF' + Math.random().toString().substr(2, 8);
+    // there is no SIP003 support in the python port, so just ignore the pluginOptions
     shadowsocks = spawn('ssserver', ['-m', method, '-p', '65535', '-k', tempPassword, '--manager-address', config.shadowsocks.address]);
   } else if(runParams.includes('rust')) {
     type = 'rust';
-    shadowsocks = spawn('ssmanager', [ '-m', method, '-U', '--manager-address', config.shadowsocks.address]);
+    shadowsocks = spawn('ssmanager', [ '-m', method, '-U', '--manager-address', config.shadowsocks.address, ...pluginOptions]);
   } else {
-    shadowsocks = spawn('ss-manager', [ '-v', '-m', method, '-u', '--manager-address', config.shadowsocks.address]);
+    shadowsocks = spawn('ss-manager', [ '-v', '-m', method, '-u', '--manager-address', config.shadowsocks.address, ...pluginOptions]);
   }
 
   shadowsocks.stdout.on('data', (data) => {
@@ -41,7 +46,7 @@ const run = async () => {
   shadowsocks.on('close', (code) => {
     logger.error(`child process exited with code ${code}`);
   });
-  logger.info(`Run shadowsocks (${ type === 'python' ? 'python' : 'libev'})`);
+  logger.info(`Run shadowsocks (${type})`);
   return;
 };
 
