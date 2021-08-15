@@ -3,6 +3,7 @@ const logger = log4js.getLogger('email');
 
 const nodemailer = require('nodemailer');
 const rp = require('request-promise');
+const axios = require('axios');
 const config = appRequire('services/config').all();
 const knex = appRequire('init/knex').knex;
 const isInBlackList = appRequire('plugins/email/blackList').isInBlackList;
@@ -62,15 +63,14 @@ if(config.plugins.email.type === 'smtp') {
   const uri = 'https://api.sendgrid.com/v3/mail/send';
   transporter = {};
   transporter.sendMail = (options, cb) => {
-    rp({
-      uri,
+    axios({
+      url: uri,
       method: 'POST',
-      json: true,
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${ emailConfig.apiKey }`,
       },
-      body: {
+      data: {
         personalizations: [
           {
             to: [{
