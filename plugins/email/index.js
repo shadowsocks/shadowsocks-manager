@@ -2,7 +2,8 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('email');
 
 const nodemailer = require('nodemailer');
-const rp = require('request-promise');
+const FormData = require('form-data');
+// const rp = require('request-promise');
 const axios = require('axios');
 const config = appRequire('services/config').all();
 const knex = appRequire('init/knex').knex;
@@ -41,20 +42,35 @@ if(config.plugins.email.type === 'smtp') {
   const uri = 'https://api:' + emailConfig.apiKey + '@' + emailConfig.baseUrl.split('https://')[1] + '/messages';
   transporter = {};
   transporter.sendMail = (options, cb) => {
-    rp({
-      uri,
+    const form = new FormData();
+    form.append('from', options.from);
+    form.append('to', options.to);
+    form.append('subject', options.subject);
+    form.append('text', options.text);
+    axios({
+      url: uri,
       method: 'POST',
-      form: {
-        from: options.from,
-        to: options.to,
-        subject: options.subject,
-        text: options.text,
-      },
+      headers: form.getHeaders(),
+      data: form,
     }).then(success => {
       cb(null);
     }).catch(err => {
       cb(err);
     });
+    // rp({
+    //   uri,
+    //   method: 'POST',
+    //   form: {
+    //     from: options.from,
+    //     to: options.to,
+    //     subject: options.subject,
+    //     text: options.text,
+    //   },
+    // }).then(success => {
+    //   cb(null);
+    // }).catch(err => {
+    //   cb(err);
+    // });
   };
 } else if (config.plugins.email.type === 'sendgrid') {
   emailConfig = {
