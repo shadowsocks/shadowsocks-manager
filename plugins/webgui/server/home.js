@@ -13,6 +13,7 @@ const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 const ref = appRequire('plugins/webgui_ref/index');
 const rp = require('request-promise');
+const axios = require('axios');
 const TwitterLogin = appRequire('plugins/webgui/server/twitterLogin');
 const redis = appRequire('init/redis').redis;
 
@@ -296,17 +297,16 @@ exports.googleLogin = async (req, res) => {
     if(!code || !client_id) {
       return await Promise.reject();
     }
-    const result = await rp({
-      uri: 'https://www.googleapis.com/oauth2/v4/token',
+    const { data: result } = await axios({
+      url: 'https://www.googleapis.com/oauth2/v4/token',
       method: 'POST',
-      body: {
+      data: {
         code,
         client_id,
         client_secret,
         redirect_uri,
         grant_type: 'authorization_code',
       },
-      json: true,
     });
     if(!result.access_token) { return await Promise.reject(); }
     const userInfo = await rp({
