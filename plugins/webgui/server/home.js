@@ -309,16 +309,15 @@ exports.googleLogin = async (req, res) => {
       },
     });
     if(!result.access_token) { return await Promise.reject(); }
-    const userInfo = await rp({
-      uri: 'https://www.googleapis.com/oauth2/v1/userinfo',
+    const { data: userInfo } = await axios({
+      url: 'https://www.googleapis.com/oauth2/v1/userinfo',
       method: 'GET',
-      qs: {
+      params: {
         alt: 'json',
       },
       headers: {
         Authorization: `Bearer ${ result.access_token }`,
       },
-      json: true,
     });
     if(userInfo.verified_email && userInfo.email) {
       const email = userInfo.email;
