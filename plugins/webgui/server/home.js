@@ -461,14 +461,13 @@ exports.githubLogin = async (req, res) => {
       },
       json: true,
     });
-    const emails = await rp({
-      uri: 'https://api.github.com/user/emails',
+    const { data: emails } = await axios({
+      url: 'https://api.github.com/user/emails',
       method: 'GET',
       headers: {
         'User-Agent': 'ssmgr',
         Authorization: `token ${ result.access_token }`,
       },
-      json: true,
     });
     const emailInfo = emails.filter(f => f.primary === true)[0];
     if(emailInfo.email && emailInfo.verified) {
