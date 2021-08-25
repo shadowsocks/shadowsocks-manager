@@ -439,17 +439,19 @@ exports.githubLogin = async (req, res) => {
     if(!code || !client_id) {
       return await Promise.reject();
     }
-    const result = await rp({
-      uri: 'https://github.com/login/oauth/access_token',
+    const { data: result } = await axios({
+      url: 'https://github.com/login/oauth/access_token',
       method: 'POST',
-      body: {
+      headers: {
+        Accept: 'application/json',
+      },
+      data: {
         code,
         client_id,
         client_secret,
         redirect_uri,
         state,
       },
-      json: true,
     });
     if(!result.access_token) { return await Promise.reject(); }
     const userInfo = await rp({
