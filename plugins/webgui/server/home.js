@@ -373,38 +373,44 @@ exports.facebookLogin = async (req, res) => {
     if(!code || !client_id) {
       return Promise.reject();
     }
-    const result = await rp({
-      uri: 'https://graph.facebook.com/v3.3/oauth/access_token',
+    const { data: result } = await axios({
+      url: 'https://graph.facebook.com/v3.3/oauth/access_token',
       method: 'GET',
-      qs: {
+      headers: {
+        Accept: 'application/json',
+      },
+      params: {
         code,
         client_id,
         client_secret,
         redirect_uri,
       },
-      json: true,
     });
     if(!result.access_token) { return Promise.reject(); }
-    const checkToken = await rp({
-      uri: 'https://graph.facebook.com/debug_token',
+    const { data: checkToken } = await axios({
+      url: 'https://graph.facebook.com/debug_token',
       method: 'GET',
-      qs: {
+      headers: {
+        Accept: 'application/json',
+      },
+      params: {
         input_token: result.access_token,
         access_token: await getFacebookAppToken(),
       },
-      json: true,
     });
     if(!checkToken.data || checkToken.data.app_id !== client_id || !checkToken.data.is_valid) {
       return Promise.reject();
     }
-    const userInfo = await rp({
-      uri: 'https://graph.facebook.com/me',
+    const { data: userInfo } = await axios({
+      url: 'https://graph.facebook.com/me',
       method: 'POST',
-      qs: {
+      headers: {
+        Accept: 'application/json',
+      },
+      params: {
         fields: 'email',
         access_token: result.access_token,
       },
-      json: true,
     });
     if(userInfo.email) {
       const email = userInfo.email;
@@ -454,14 +460,13 @@ exports.githubLogin = async (req, res) => {
       },
     });
     if(!result.access_token) { return await Promise.reject(); }
-    const userInfo = await rp({
-      uri: 'https://api.github.com/user',
+    const { data: userInfo } = await axios({
+      url: 'https://api.github.com/user',
       method: 'GET',
       headers: {
         'User-Agent': 'ssmgr',
         Authorization: `token ${ result.access_token }`,
       },
-      json: true,
     });
     const { data: emails } = await axios({
       url: 'https://api.github.com/user/emails',
