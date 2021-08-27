@@ -8,9 +8,9 @@ RUN apt-get update && \
     apt-get install -y nodejs shadowsocks-libev && \
     npm i -g shadowsocks-manager --unsafe-perm && \
     cd /tmp && \
-    wget https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.11.1/shadowsocks-v1.11.1.x86_64-unknown-linux-musl.tar.xz && \
-    xz -d shadowsocks-v1.11.1.x86_64-unknown-linux-musl.tar.xz && \
-    tar -xvf shadowsocks-v1.11.1.x86_64-unknown-linux-musl.tar && \
+    wget https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.11.2/shadowsocks-v1.11.2.x86_64-unknown-linux-musl.tar.xz && \
+    xz -d shadowsocks-v1.11.2.x86_64-unknown-linux-musl.tar.xz && \
+    tar -xvf shadowsocks-v1.11.2.x86_64-unknown-linux-musl.tar && \
     mv /tmp/ssmanager /usr/bin/ && \
     rm -rf /tmp/* && \
     echo "Asia/Shanghai" > /etc/timezone && \
