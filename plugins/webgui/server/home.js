@@ -12,7 +12,6 @@ const groupPlugin = appRequire('plugins/group/index');
 const push = appRequire('plugins/webgui/server/push');
 const macAccount = appRequire('plugins/macAccount/index');
 const ref = appRequire('plugins/webgui_ref/index');
-const rp = require('request-promise');
 const axios = require('axios');
 const TwitterLogin = appRequire('plugins/webgui/server/twitterLogin');
 const redis = appRequire('init/redis').redis;
@@ -349,14 +348,16 @@ const getFacebookAppToken = async () => {
     facebook_login_client_id: client_id,
     facebook_login_client_secret: client_secret,
   } = config.plugins.webgui;
-  const result = await rp({
-    uri: 'https://graph.facebook.com/oauth/access_token',
-    qs: {
+  const { data: result } = await axios({
+    url: 'https://graph.facebook.com/oauth/access_token',
+    headers: {
+      Accept: 'application/json',
+    },
+    params: {
       client_id,
       client_secret,
       grant_type: 'client_credentials',
     },
-    json: true,
   });
   if(!result.access_token) { return Promise.reject(); }
   facebookAppToken = result.access_token;

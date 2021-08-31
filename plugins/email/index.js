@@ -3,7 +3,6 @@ const logger = log4js.getLogger('email');
 
 const nodemailer = require('nodemailer');
 const FormData = require('form-data');
-// const rp = require('request-promise');
 const axios = require('axios');
 const config = appRequire('services/config').all();
 const knex = appRequire('init/knex').knex;

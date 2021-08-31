@@ -578,7 +578,7 @@ exports.getAccountIpFromAllServer = (req, res) => {
   }).then(ips => {
     const result = [];
     ips.forEach(ip => {
-      ip.forEach(i => {
+      (ip || []).forEach(i => {
         if(result.indexOf(i) < 0) { result.push(i); }
       });
     });
