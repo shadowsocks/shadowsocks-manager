@@ -9,6 +9,12 @@ const webguiTag = appRequire('plugins/webgui_tag');
 const redis = appRequire('init/redis').redis;
 const crypto = require('crypto');
 
+const getRandomPassword = passowrdLength => {
+  const passwordChars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+  const password = Array(passowrdLength).fill(passwordChars).map(function(x) { return x[Math.floor(Math.random() * x.length)]; }).join('');
+  return password;
+};
+
 const runCommand = async cmd => {
   const exec = require('child_process').exec;
   return new Promise((resolve, reject) => {
@@ -332,12 +338,10 @@ const addAccountLimitToMonth = async (userId, accountId, number = 1) => {
         return 50000;
       }
     });
-    let password = Math.random().toString().substr(2,10);
-    if(password[0] === '0') { password = '1' + password.substr(1); }
     await addAccount(3, {
       user: userId,
       port,
-      password,
+      password: getRandomPassword(10),
       time: Date.now(),
       limit: number,
       flow: 200 * 1000 * 1000 * 1000,
@@ -502,13 +506,11 @@ const setAccountLimit = async (userId, accountId, orderId) => {
       });
     };
     const port = await getNewPort();
-    let password = Math.random().toString().substr(2,10);
-    if(password[0] === '0') { password = '1' + password.substr(1); }
     await addAccount(orderType, {
       orderId,
       user: userId,
       port,
-      password,
+      password: getRandomPassword(10),
       time: Date.now(),
       limit,
       flow: orderInfo.flow,
@@ -673,15 +675,13 @@ const addAccountTime = async (userId, accountId, accountType, accountPeriod = 1)
       }
     };
     const port = await getNewPort();
-    let password = Math.random().toString().substr(2,10);
-    if(password[0] === '0') { password = '1' + password.substr(1); }
     const subscribeToken = crypto.randomBytes(16).toString('hex');
     await knex('account_plugin').insert({
       type: accountType,
       userId,
       server: getPaymentInfo(accountType).server ? JSON.stringify(getPaymentInfo(accountType).server) : null,
       port,
-      password,
+      password: getRandomPassword(10),
       data: JSON.stringify({
         create: Date.now(),
         flow: getPaymentInfo(accountType).flow * 1000 * 1000,

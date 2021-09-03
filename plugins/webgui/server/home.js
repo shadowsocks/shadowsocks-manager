@@ -26,6 +26,12 @@ const formatMacAddress = mac => {
   return mac.replace(/-/g, '').replace(/:/g, '').toLowerCase();
 };
 
+const getRandomPassword = passowrdLength => {
+  const passwordChars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+  const password = Array(passowrdLength).fill(passwordChars).map(function(x) { return x[Math.floor(Math.random() * x.length)]; }).join('');
+  return password;
+};
+
 const getNewPort = async () => {
   return knex('webguiSetting').select().where({
     key: 'account',
@@ -111,13 +117,11 @@ const createUser = async (email, password, from = '') => {
     if(newUserAccount.fromOrder) {
       const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
       if(orderInfo) {
-        let password = Math.random().toString().substr(2,10);
-        if(password[0] === '0') { password = '1' + password.substr(1); }
         await account.addAccount(orderInfo.type || 5, {
           user: userId,
           orderId: orderInfo.id,
           port,
-          password,
+          password: getRandomPassword(10),
           time: Date.now(),
           limit: orderInfo.cycle,
           flow: orderInfo.flow,
@@ -127,13 +131,11 @@ const createUser = async (email, password, from = '') => {
         });
       }
     } else {
-      let password = Math.random().toString().substr(2,10);
-      if(password[0] === '0') { password = '1' + password.substr(1); }
       await account.addAccount(newUserAccount.type || 5, {
         user: userId,
         orderId: 0,
         port,
-        password,
+        password: getRandomPassword(10),
         time: Date.now(),
         limit: newUserAccount.limit || 8,
         flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
@@ -201,13 +203,11 @@ exports.signup = async (req, res) => {
       if(newUserAccount.fromOrder) {
         const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
         if(orderInfo) {
-          let password = Math.random().toString().substr(2,10);
-          if(password[0] === '0') { password = '1' + password.substr(1); }
           await account.addAccount(orderInfo.type || 5, {
             user: userId,
             orderId: orderInfo.id,
             port,
-            password,
+            password: getRandomPassword(10),
             time: Date.now(),
             limit: orderInfo.cycle,
             flow: orderInfo.flow,
@@ -217,13 +217,11 @@ exports.signup = async (req, res) => {
           });
         }
       } else {
-        let password = Math.random().toString().substr(2,10);
-        if(password[0] === '0') { password = '1' + password.substr(1); }
         await account.addAccount(newUserAccount.type || 5, {
           user: userId,
           orderId: 0,
           port,
-          password,
+          password: getRandomPassword(10),
           time: Date.now(),
           limit: newUserAccount.limit || 8,
           flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,

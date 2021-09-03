@@ -52,6 +52,12 @@ const getNewPort = async () => {
   });
 };
 
+const getRandomPassword = passowrdLength => {
+  const passwordChars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+  const password = Array(passowrdLength).fill(passwordChars).map(function(x) { return x[Math.floor(Math.random() * x.length)]; }).join('');
+  return password;
+};
+
 const timeStr2Num = input => {
   const s = 1000;
   const m = 60 * 1000;
@@ -105,8 +111,7 @@ const setAccount = async userId => {
   let { port, password } = await getPrevPort(userId);
   if (!port) {
     port = await getNewPort();
-    password = Math.random().toString().substr(2,10);
-    if(password[0] === '0') { password = '1' + password.substr(1); }
+    password = getRandomPassword(10);
   }
   await account.addAccount(orderInfo.type || 5, {
     user: userId,

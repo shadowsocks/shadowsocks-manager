@@ -450,8 +450,13 @@ app.controller('AdminAccountController', ['$scope', '$state', '$mdMedia', '$http
       $scope.account.orderId = $scope.orders[0].id;
     });
     $http.get('/api/admin/account/newPort').then(success => {
+      const getRandomPassword = passowrdLength => {
+        const passwordChars = '23456789ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
+        const password = Array(passowrdLength).fill(passwordChars).map(function(x) { return x[Math.floor(Math.random() * x.length)]; }).join('');
+        return password;
+      };
       $scope.account.port = success.data.port;
-      $scope.account.password = Math.random().toString().substr(2, 10);
+      $scope.account.password = getRandomPassword(10);
     });
     $scope.typeList = [
       {key: '不限量', value: 1},
