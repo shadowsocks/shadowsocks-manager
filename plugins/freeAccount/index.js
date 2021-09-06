@@ -29,6 +29,7 @@ const address = config.plugins.freeAccount.address;
 const method = config.plugins.freeAccount.method;
 const analytics = config.plugins.freeAccount.analytics || '';
 const password = config.plugins.freeAccount.password || '';
+const plugin = config.plugins.freeAccount.plugin ? `/?plugin=${config.plugins.freeAccount.plugin};${(config.plugins.freeAccount['plugin-opts'] || '').split(';').map(i=>encodeURIComponent(i)).join(';')}#` : '';
 
 let currentPassword = '';
 let updateTime = Date.now();
@@ -173,7 +174,7 @@ const checkPort = async () => {
       await manager.send({ command: 'add', port: randomPort(), password: randomPassword() });
       await setKey('create', { time: Date.now() });
       await setKey('flow', { flow: 0 });
-      qrcode = 'ss://' + Buffer.from(`${ method }:${ currentPassword }@${ address }:${ currentPort }`).toString('base64');
+      qrcode = 'ss://' + Buffer.from(`${ method }:${ currentPassword }`).toString('base64') + `@${ address }:${ currentPort }${ plugin }`;
     }
   }
 };
@@ -214,7 +215,7 @@ if(config.plugins.freeAccount.ad) {
 
 app.get('/', (req, res) => {
   logger.info(`[${ req.ip }] /`);
-  qrcode = 'ss://' + Buffer.from(`${ method }:${ currentPassword }@${ address }:${ currentPort }`).toString('base64');
+  qrcode = 'ss://' + Buffer.from(`${ method }:${ currentPassword }`).toString('base64') + `@${ address }:${ currentPort }${ plugin }`;
   return res.render('index', {
     recaptcha: config.plugins.freeAccount.recaptcha ? config.plugins.freeAccount.recaptcha.site : '',
     analytics,

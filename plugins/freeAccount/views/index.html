@@ -58,6 +58,20 @@
     <div class="row">
       <div class="address col-md-12 col-lg-12"></div>
     </div>
+    <div class="row">
+      <div class="qrcode col-md-12 col-lg-12">
+        软件下载：
+        <a href="https://github.com/shadowsocks/ShadowsocksX-NG/releases">macOS</a>
+        |
+        <a href="https://github.com/shadowsocks/shadowsocks-windows/releases">Windows</a>
+        |
+        <a href="https://github.com/shadowsocks/shadowsocks-qt5/releases">Linux GUI</a>
+        |
+        <a href="https://github.com/shadowsocks/shadowsocks-libev/releases">Linux CLI</a>
+        |
+        <a href="https://github.com/shadowsocks/shadowsocks-android/releases">Android</a>
+      </div>
+    </div>
     <script>
       var i = 0;
       var getToken = function() {
@@ -77,7 +91,7 @@
           }, function(data) {
             window.ssqrcode = data.qrcode;
             window.ssscore = data.score;
-            var qr = qrcode(8, 'Q');
+            var qr = qrcode(8, 'M');
             qr.addData(window.ssqrcode);
             qr.make();
             document.getElementById('qrcode').innerHTML = qr.createImgTag(6);
