@@ -169,30 +169,3 @@ First, ssmgr will read the config file in `--config`, and other parameters(`-det
 ### Translate
 
 If your want to help to translate it to other languages, please edit files [here](https://github.com/shadowsocks/shadowsocks-manager/tree/dev/plugins/webgui/public/translate) and give me a pull request.
-
-### Telegram Group
-Join the group if you have some problem: [https://t.me/ssmgr](https://t.me/ssmgr)
-
-### VPS recommendation
-
-* [Linode](https://www.linode.com/?r=bbc24323b3adaf3d74f242fd958d91b55cc6fdea)
-
-* [DigitalOcean](https://m.do.co/c/d43891b79a52)
-
-* [Vultr](https://www.vultr.com/?ref=8377991-6G)
-
-* [AlibabaCloud](https://account-intl.aliyun.com/register/intl_register.htm?biz_params=%7B%22intl%22%3A%22%7B%5C%22referralCode%5C%22%3A%5C%22koa26v%5C%22%7D%22%7D)
-
-* [BandwagonHost](https://bandwagonhost.com/aff.php?aff=19999)
-
-### Donate
-If you find this project helpful, please consider making a donation:  
-
-* Alipay  
-<img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/alipay.jpg" width="160">
-
-* WeChat Pay  
-<img src="https://github.com/gyteng/gyteng.github.com/raw/master/media/pic/wechat.png" width="160">
-
-* Paypal  
-[Donate link](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8UQZLYGCTSLGQ&source=url)
