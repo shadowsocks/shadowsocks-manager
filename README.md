@@ -15,14 +15,6 @@ For more details, you can see [docs](https://shadowsocks.github.io/shadowsocks-m
 
 If you want to use the old version, please switch to [this branch](https://github.com/shadowsocks/shadowsocks-manager/tree/version1).
 
-## WebGUI Demo:
-
-[https://app.3840x2160.work](https://app.3840x2160.work)
-
-## FreeAccount Demo:
-
-[https://free.gyteng.com](https://free2.gyteng.com)
-
 
 ## Dependencies
 
