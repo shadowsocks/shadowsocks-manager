@@ -89,7 +89,7 @@ ssserver -m aes-256-cfb -p 12345 -k abcedf --manager-address 127.0.0.1:6001
   db: 'ss.sqlite'
   ```
 
-  If you want to use MySQL, the `db` must like this:
+  If you want to use MySQL, the `db` must look like this:
 
   ```
   db:
