@@ -95,6 +95,7 @@ if(config.plugins.email.type === 'smtp') {
         ],
         from: {
           email: options.from,
+          name: 'FlyBird 2024',
         },
         subject: options.subject,
         content: [{
@@ -118,7 +119,7 @@ const sendMail = async (to, subject, text, options = {}) => {
   const send = (to, subject, text) => {
     return new Promise((resolve, reject) => {
       transporter.sendMail({
-        from: `"${ config.plugins.email.name || '' }" <${ config.plugins.email.email || config.plugins.email.username }>`,
+        from: `"FlyBird 2024" <${ config.plugins.email.name || config.plugins.email.username }>`,
         to,
         subject,
         text,

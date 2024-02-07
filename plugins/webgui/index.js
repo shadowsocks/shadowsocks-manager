@@ -6,7 +6,6 @@ const config = appRequire('services/config').all();
 const os = require('os');
 const path = require('path');
 const express = require('express');
-// const WebSocketServer = require('ws').Server;
 const session = require('express-session');
 const knex = appRequire('init/knex').knex;
 const KnexSessionStore = require('connect-session-knex')(session);
@@ -16,12 +15,12 @@ const sessionParser = session({
   rolling: true,
   resave: true,
   saveUninitialized: true,
-  cookie: { secure: false, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000, sameSite: 'lax', },
+  cookie: { secure: false, httpOnly: true, maxAge: 7 * 24 * 3600 * 1000, sameSite: 'lax' },
   store,
 });
 const bodyParser = require('body-parser');
 const compression = require('compression');
-const expressValidator = require('express-validator');
+// express-validator is now used directly in route handlers, not imported here as middleware
 const app = express();
 const cors = require('cors');
 
@@ -43,7 +42,6 @@ if(config.plugins.webgui.cors) {
 }
 
 app.use(bodyParser.json());
-app.use(expressValidator());
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(sessionParser);
@@ -69,32 +67,14 @@ app.use('/api/*', (req, res, next) => {
 const port = config.plugins.webgui.port || 8080;
 const host = config.plugins.webgui.host || '0.0.0.0';
 app.listen(port, host, () => {
-  logger.info(`server start at ${ host }:${ port }`);
+  logger.info(`server start at ${host}:${port}`);
 }).on('error', err => {
   logger.error('express server error: ' + err);
   process.exit(1);
 });
 
-// const wss = new WebSocketServer({
-//   server,
-//   path: '/user',
-//   verifyClient: function (info, done){
-//     sessionParser(info.req, {}, function (){
-//       // console.log(info.req.session);
-//       if(info.req.session.user && info.req.session.type === 'normal') {
-//         done(true);
-//       } else {
-//         done(false);
-//       }
-//     });
-//   }
-// });
-
 app.use((err, req, res, next) => res.render('error'));
 
 exports.app = app;
-// exports.wss = wss;
-// exports.sessionParser = sessionParser;
-// exports.dependence = ['webgui_ref', 'group', 'macAccount', 'webgui_order'];
 
 appRequire('plugins/webgui/server/route');

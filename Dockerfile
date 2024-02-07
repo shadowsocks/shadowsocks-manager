@@ -25,4 +25,4 @@ RUN cd /shadowsocks-manager && \
 # Example: RUN npm install -g some-global-package
 
 # Set the command to run your application
-CMD ["/usr/bin/ssmgr"]
+CMD ["node", "/shadowsocks-manager/bin/ssmgr"]

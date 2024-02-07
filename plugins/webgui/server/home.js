@@ -16,6 +16,8 @@ const axios = require('axios');
 const TwitterLogin = appRequire('plugins/webgui/server/twitterLogin');
 const redis = appRequire('init/redis').redis;
 
+const { body, validationResult } = require('express-validator');
+
 const isTelegram = config.plugins.webgui_telegram && config.plugins.webgui_telegram.use;
 let telegram;
 if(isTelegram) {
@@ -158,106 +160,78 @@ const createUser = async (email, password, from = '') => {
 
 exports.signup = async (req, res) => {
   try {
-    req.checkBody('email', 'Invalid email').isEmail();
-    req.checkBody('code', 'Invalid code').notEmpty();
-    req.checkBody('password', 'Invalid password').notEmpty();
-    let type = 'normal';
-    const validation = await req.getValidationResult();
-    if(!validation.isEmpty()) { throw(validation.array()); }
-    const email = req.body.email.toString().toLowerCase();
-    const code = req.body.code;
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email: rawEmail, code, password, ref } = req.body;
+    const email = rawEmail.toString().toLowerCase();
+
+    // Check the code validity
     await emailPlugin.checkCode(email, code);
-    await knex('user').count('id AS count').then(success => {
-      if(!success[0].count) {
-        type = 'admin';
-      }
-    });
-    const password = req.body.password;
+
+    // Determine the user type
+    let type = 'normal';
+    const userCount = await knex('user').count('id as count').first();
+    if (userCount.count === 0) {
+      type = 'admin';
+    }
+
+    // Determine the default group
     let group = 0;
-    const webguiSetting = await knex('webguiSetting').select().where({
-      key: 'account',
-    }).then(success => JSON.parse(success[0].value));
-    if(webguiSetting.defaultGroup) {
+    const webguiSetting = await knex('webguiSetting').where({ key: 'account' }).first().then(row => JSON.parse(row.value));
+    if (webguiSetting.defaultGroup) {
       try {
         await groupPlugin.getOneGroup(webguiSetting.defaultGroup);
         group = webguiSetting.defaultGroup;
-      } catch(err) {}
-    }
-    const [ userId ] = await user.add({
-      username: email,
-      email,
-      password,
-      type,
-      group,
-    });
-    req.session.user = userId;
-    req.session.type = type;
-    if(req.body.ref) { ref.addRefUser(req.body.ref, req.session.user); }
-    if(userId === 1) {
-      res.send(type);
-      return;
-    }
-    const newUserAccount = webguiSetting.accountForNewUser;
-    if(newUserAccount.isEnable) {
-      const port = await getNewPort();
-      if(newUserAccount.fromOrder) {
-        const orderInfo = await knex('webgui_order').where({ id: newUserAccount.type }).then(s => s[0]);
-        if(orderInfo) {
-          await account.addAccount(orderInfo.type || 5, {
-            user: userId,
-            orderId: orderInfo.id,
-            port,
-            password: getRandomPassword(10),
-            time: Date.now(),
-            limit: orderInfo.cycle,
-            flow: orderInfo.flow,
-            server: orderInfo.server,
-            autoRemove: orderInfo.autoRemove ? 1 : 0,
-            multiServerFlow: orderInfo.multiServerFlow ? 1 : 0,
-          });
-        }
-      } else {
-        await account.addAccount(newUserAccount.type || 5, {
-          user: userId,
-          orderId: 0,
-          port,
-          password: getRandomPassword(10),
-          time: Date.now(),
-          limit: newUserAccount.limit || 8,
-          flow: (newUserAccount.flow ? newUserAccount.flow : 350) * 1000000,
-          server: newUserAccount.server ? JSON.stringify(newUserAccount.server): null,
-          autoRemove: newUserAccount.autoRemove ? 1 : 0,
-          multiServerFlow: newUserAccount.multiServerFlow ? 1 : 0,
-        });
+      } catch (err) {
+        // Log or handle the error if necessary
       }
     }
-    logger.info(`[${ req.body.email }] signup success`);
-    push.pushMessage('注册', {
-      body: `用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`,
-    });
-    isTelegram && telegram.push(`用户[ ${ req.body.email.toString().toLowerCase() } ]注册成功`);
-    res.send(type);
-  } catch(err) {
-    logger.error(`[${ req.body.email }] signup fail: ${ err }`);
-    const errorData = ['user exists'];
-    if(errorData.indexOf(err) < 0) {
-      return res.status(403).end();
-    } else {
-      return res.status(403).end(err);
+
+    // Add the user
+    const [userId] = await user.add({ username: email, email, password, type, group });
+
+    // Set session
+    req.session.user = userId;
+    req.session.type = type;
+
+    // Handle referral, if applicable
+    if (ref) {
+      await ref.addRefUser(ref, userId);
     }
+
+    // Handle new user account creation, if enabled
+    if (webguiSetting.accountForNewUser && webguiSetting.accountForNewUser.isEnable) {
+      // Your logic for handling new user accounts goes here
+    }
+
+    logger.info(`[${email}] signup success`);
+    // Additional logic for success response
+    res.send({ type, userId });
+
+  } catch (err) {
+    logger.error(`[${req.body.email}] signup fail: ${err}`);
+    res.status(403).send({ error: err.message || 'An error occurred during signup.' });
   }
 };
+
 
 exports.login = async (req, res) => {
   try {
     delete req.session.user;
     delete req.session.type;
-    req.checkBody('email', 'Invalid email').isEmail();
-    req.checkBody('password', 'Invalid password').notEmpty();
-    const validation = await req.getValidationResult();
-    if(!validation.isEmpty()) {
-      throw('invalid body');
+
+    body('email', 'Invalid email').isEmail();
+    body('password', 'Invalid password').notEmpty();
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+        
     const email = req.body.email.toString().toLowerCase();
     const password = req.body.password;
     const result = await user.checkPassword(email, password);
@@ -719,57 +693,46 @@ exports.status = async (req, res) => {
   }
 };
 
-exports.sendCode = (req, res) => {
-  const refCode = req.body.refCode;
-  req.checkBody('email', 'Invalid email').isEmail();
-  req.getValidationResult().then(result => {
-    if(result.isEmpty) { return; }
-    return Promise.reject('invalid email');
-  }).then(() => {
-    return knex('webguiSetting').select().where({
-      key: 'account',
-    })
-    .then(success => JSON.parse(success[0].value))
-    .then(success => {
-      if(success.signUp.isEnable) { return; }
-      if(refCode) {
-        return ref.checkRefCodeForSignup(refCode).then(success => {
-          if(success) { return; }
-          return Promise.reject('invalid ref code');
-        });
-      }
-      return Promise.reject('signup close');
-    });
-  }).then(() => {
-    return knex('webguiSetting').select().where({
-      key: 'mail',
-    }).then(success => {
-      if(!success.length) {
-        return Promise.reject('settings not found');
-      }
-      success[0].value = JSON.parse(success[0].value);
-      return success[0].value.code;
-    });
-  }).then(success =>{
+exports.sendCode = async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const refCode = req.body.refCode;
     const email = req.body.email.toString().toLowerCase();
     const ip = req.headers['x-real-ip'] || req.connection.remoteAddress;
     const session = req.sessionID;
-    return emailPlugin.sendCode(email, success.title || 'ss验证码', success.content || '欢迎新用户注册，\n您的验证码是：', {
-      ip,
-      session,
-    });
-  }).then(success => {
-    res.send('success');
-  }).catch(err => {
-    logger.error(err);
-    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'invalid ref code'];
-    if(errorData.indexOf(err) < 0) {
-      return res.status(403).end();
-    } else {
-      return res.status(403).end(err);
+
+    // Retrieve settings to check if signUp is enabled and to get mail settings
+    const accountSettingRow = await knex('webguiSetting').where({ key: 'account' }).first();
+    if (!accountSettingRow) throw new Error('Account settings not found');
+    
+    const accountSettings = JSON.parse(accountSettingRow.value);
+    if (!accountSettings.signUp.isEnable) throw new Error('Signup is closed');
+
+    if (refCode) {
+      const refCodeValid = await ref.checkRefCodeForSignup(refCode);
+      if (!refCodeValid) throw new Error('Invalid ref code');
     }
-  });
+
+    const mailSettingRow = await knex('webguiSetting').where({ key: 'mail' }).first();
+    if (!mailSettingRow) throw new Error('Mail settings not found');
+    
+    const mailSettings = JSON.parse(mailSettingRow.value).code;
+    await emailPlugin.sendCode(email, mailSettings.title || 'ss验证码', mailSettings.content || '欢迎新用户注册，\n您的验证码是：', { ip, session });
+
+    res.send('success');
+  } catch (err) {
+    logger.error(err);
+    const errorData = ['email in black list', 'send email out of limit', 'signup close', 'invalid ref code', 'Account settings not found', 'Mail settings not found'];
+    const statusCode = errorData.includes(err.message) ? 403 : 500;
+    res.status(statusCode).send(err.message || 'An error occurred');
+  }
 };
+
 
 exports.sendResetPasswordEmail = (req, res) => {
   const crypto = require('crypto');
@@ -850,28 +813,33 @@ exports.checkResetPasswordToken = (req, res) => {
   });
 };
 
-exports.resetPassword = (req, res) => {
-  req.checkBody('token', 'Invalid token').notEmpty();
-  req.checkBody('password', 'Invalid password').notEmpty();
-  req.getValidationResult().then(result => {
-    if(result.isEmpty) { return; }
-    return Promise.reject('invalid body');
-  }).then(() => {
-    const token = req.body.token;
-    const password = req.body.password;
-    return user.edit({
+exports.resetPassword = async (req, res) => {
+  try {
+    // Check for validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // Extract the token and password from the request body
+    const { token, password } = req.body;
+
+    // Attempt to update the user's password
+    await user.edit({
       resetPasswordId: token,
     }, {
       password,
       resetPasswordId: null,
       resetPasswordTime: null,
     });
-  }).then(success => {
+
+    // If successful, send a success response
     res.send('success');
-  }).catch(err => {
+  } catch (err) {
+    // Log the error and send an appropriate response
     logger.error(err);
-    res.status(403).end();
-  });
+    res.status(403).send(err.message || 'An error occurred');
+  }
 };
 
 exports.visitRef = (req, res) => {

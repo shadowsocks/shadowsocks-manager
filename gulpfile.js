@@ -61,17 +61,15 @@ gulp.task('webguiBuild', () => {
         test: /\.js$/,
         use: [{
           loader: 'babel-loader',
-          query: {
+          options: { // Changed from 'query' to 'options'
             presets: [
-              [
-                '@babel/env', {
-                  targets: {
-                    browsers: [
-                      'last 3 versions'
-                    ]
-                  }
+              ['@babel/env', {
+                targets: {
+                  browsers: [
+                    'last 3 versions'
+                  ]
                 }
-              ]
+              }]
             ]
           }
         }]

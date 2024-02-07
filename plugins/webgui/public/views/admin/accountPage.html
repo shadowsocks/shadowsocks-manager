@@ -27,13 +27,13 @@
                         <md-list>
                             <md-list-item>
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{ server.host }}</div>
+                                    <div flex="40" translate>地址：</div><div flex="60" style="text-align:right">{{ account.port + '.flybird2024.com' || server.host }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider></md-divider>
                             <md-list-item ng-show="isSS(server)">
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{ account.port + server.shift }}</div>
+                                    <div flex="40" translate>端口：</div><div flex="60" style="text-align:right">{{ 443 || account.port + server.shift }}</div>
                                 </div>
                             </md-list-item>
                             <md-list-item ng-show="isWG(server)">
@@ -67,7 +67,7 @@
                             <md-divider ng-show="isTJ(server)"></md-divider>
                             <md-list-item ng-show="isSS(server)">
                                 <div flex layout="row" layout-align="space-between center">
-                                    <div flex="40" translate>加密方式：</div><div flex="60" style="text-align:right">{{ server.method }}</div>
+                                    <div flex="40" translate>加密方式：</div><div flex="60" style="text-align:right">{{ 'aes-256-gcm' || server.method }}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-show="isSS(server)"></md-divider>

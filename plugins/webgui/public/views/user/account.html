@@ -42,14 +42,14 @@
                             <md-list-item ng-hide="config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>地址：</div>
-                                    <div flex="60" style="text-align:right">{{a.serverInfo.host}}</div>
+                                    <div flex="60" style="text-align:right">{{ a.port + '.flybird2024.com' || a.serverInfo.host}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-hide="config.simple"></md-divider>
                             <md-list-item ng-hide="config.simple || !isSS(a.serverInfo)">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40" translate>端口：</div>
-                                    <div flex="60" style="text-align:right">{{ a.port + a.serverInfo.shift }}</div>
+                                    <div flex="60" style="text-align:right">{{ 443 || a.port + a.serverInfo.shift }}</div>
                                 </div>
                             </md-list-item>
                             <md-list-item ng-hide="config.simple || !isWG(a.serverInfo)">
@@ -82,7 +82,7 @@
                             <md-list-item ng-show="isSS(a.serverInfo) && !config.simple">
                                 <div flex layout="row" layout-align="space-between center">
                                     <div flex="40">{{ '加密方式：' | translate }}</div>
-                                    <div flex="60" style="text-align:right">{{a.serverInfo.method}}</div>
+                                    <div flex="60" style="text-align:right">{{ 'aes-256-gcm' || a.serverInfo.method}}</div>
                                 </div>
                             </md-list-item>
                             <md-divider ng-show="isSS(a.serverInfo) && !config.simple"></md-divider>

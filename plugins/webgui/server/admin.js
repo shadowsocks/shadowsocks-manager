@@ -16,6 +16,7 @@ const refOrder = appRequire('plugins/webgui_ref/order');
 const refUser = appRequire('plugins/webgui_ref/user');
 const flowPack = appRequire('plugins/webgui_order/flowPack');
 const accountFlow = appRequire('plugins/account/accountFlow');
+const { body, validationResult } = require('express-validator');
 
 exports.getAccount = (req, res) => {
   const group = req.adminInfo.id === 1 ? -1 : req.adminInfo.group;
@@ -127,36 +128,35 @@ exports.getOneAccount = async (req, res) => {
   };
 };
 
-exports.addAccount = (req, res) => {
-  req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
-  req.checkBody('password', 'Invalid password').notEmpty();
-  req.checkBody('time', 'Invalid time').notEmpty();
-  req.getValidationResult().then(result => {
-    if(result.isEmpty()) {
-      const type = +req.body.type;
-      const orderId = +req.body.orderId;
-      const port = +req.body.port;
-      const password = req.body.password;
-      const time = req.body.time;
-      const limit = +req.body.limit;
-      const flow = +req.body.flow;
-      const autoRemove = +req.body.autoRemove || 0;
-      const autoRemoveDelay = +req.body.autoRemoveDelay || 0;
-      const multiServerFlow = +req.body.multiServerFlow || 0;
-      const server = req.body.server ? JSON.stringify(req.body.server) : null;
-      const user = req.body.user || null;
-      return account.addAccount(type, {
-        port, password, time, limit, flow, autoRemove, autoRemoveDelay, server, multiServerFlow, orderId,
-        user,
-      });
-    }
-    result.throw();
-  }).then(success => {
+exports.addAccount = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  
+  try {
+    const type = +req.body.type;
+    const orderId = +req.body.orderId;
+    const port = +req.body.port;
+    const password = req.body.password;
+    const time = req.body.time;
+    const limit = +req.body.limit;
+    const flow = +req.body.flow;
+    const autoRemove = +req.body.autoRemove || 0;
+    const autoRemoveDelay = +req.body.autoRemoveDelay || 0;
+    const multiServerFlow = +req.body.multiServerFlow || 0;
+    const server = req.body.server ? JSON.stringify(req.body.server) : null;
+    const user = req.body.user || null;
+
+    const success = await account.addAccount(type, {
+      port, password, time, limit, flow, autoRemove, autoRemoveDelay, server, multiServerFlow, orderId, user,
+    });
+
     res.send({ id: success });
-  }).catch(err => {
-    console.log(err);
+  } catch (err) {
+    console.error(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.deleteAccount = (req, res) => {
@@ -169,21 +169,22 @@ exports.deleteAccount = (req, res) => {
   });
 };
 
-exports.changeAccountPort = (req, res) => {
-  req.checkBody('port', 'Invalid port').isInt({min: 1, max: 65535});
-  req.getValidationResult().then(result => {
-    if(result.isEmpty()) {
-      const accountId = req.params.accountId;
-      const port = +req.body.port;
-      return account.changePort(accountId, port);
-    }
-    result.throw();
-  }).then(success => {
+exports.changeAccountPort = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const accountId = req.params.accountId;
+    const port = +req.body.port;
+
+    const success = await account.changePort(accountId, port);
     res.send('success');
-  }).catch(err => {
-    console.log(err);
+  } catch (err) {
+    console.error(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.changeAccountData = (req, res) => {
@@ -500,27 +501,26 @@ exports.getUserPortLastConnect = (req, res) => {
   });
 };
 
-exports.sendUserEmail = (req, res) => {
-  const userId = +req.params.userId;
-  const title = req.body.title;
-  const content = req.body.content;
-  req.checkBody('title', 'Invalid title').notEmpty();
-  req.checkBody('content', 'Invalid content').notEmpty();
-  req.getValidationResult().then(result => {
-    if(result.isEmpty()) {
-      return user.getOne(userId).then(user => user.email);
-    }
-    result.throw();
-  }).then(emailAddress => {
-    return email.sendMail(emailAddress, title, content, {
-      type: 'user',
-    });
-  }).then(success => {
-    return res.send(success);
-  }).catch(err => {
-    console.log(err);
+exports.sendUserEmail = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  try {
+    const userId = +req.params.userId;
+    const title = req.body.title;
+    const content = req.body.content;
+    
+    const user = await user.getOne(userId);
+    if (!user) throw new Error('User not found');
+
+    const success = await email.sendMail(user.email, title, content, { type: 'user' });
+    res.send(success);
+  } catch (err) {
+    console.error(err);
     res.status(403).end();
-  });
+  }
 };
 
 exports.getAccountIp = (req, res) => {
